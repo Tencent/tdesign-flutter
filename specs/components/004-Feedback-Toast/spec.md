@@ -66,6 +66,12 @@ TDesign Flutter 的 TToast 组件在与 TDesign Mobile 对齐时存在两处默�
 - 旧 infiniteDuration 迁移为 duration: Duration.zero；加载默认从长期展示改为 2000ms，需要长期加载时显式传零时长。
 - preventTap 迁移为 preventScrollThrough；默认 middle 从 50% 调整为 45%。这些属于可感知行为变化，不能以整理文档重新声明为兼容。
 
+## 自定义文案默认值
+
+showText / showLoading 的 customWidget 文案槽整个子树接入与各自内置文案相同的默认字体和反色文字，使用相同主题/实例配置解析。Row、Padding、Builder 不切断传递；显式字段及内容内部更近的 TTextThemeData 优先，全局隔离保持。自定义内容仍自行布局，不强加内置文案的一行/三行限制；不更改其他 Toast 类型或图标。
+
+属于默认行为变更：未配置或仅部分配置的自定义文字可能改变字体、颜色、字距、换行和尺寸。自带背景仍需调用方保证对比度；不新增配置。
+
 ## 验收标准
 
 - 全部 show 方法验证 2000ms 默认值、正/零/负时长及显式关闭；加载提示同样遵循该规则。

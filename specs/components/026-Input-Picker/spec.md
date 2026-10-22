@@ -62,7 +62,7 @@ TPickerThemeData 的 height 必须为有限正数、itemCount 必须大于零（
 
 联动滚轮在父级接受 onChanged 回传值时，保留变更列及其前置列的滚动控制器和 Widget 身份，仅重建后续联动列，保证连续拖动和松手惯性不被受控回传中断。外部主动修改值或替换数据源仍同步到指定选项。语义信息随滚动更新，但不逐帧重建完整滚轮子树；不增加 API 或改变主题样式。
 
-- 内置文字优先使用明确的实例/组件 TDesign 样式和 Token；不从外部 Material TextTheme 或 DefaultTextStyle 反推配置，自定义内容保留其原上下文。
+- 内置文字优先使用明确的实例/组件 TDesign 样式和 Token；不从外部 Material TextTheme 或 DefaultTextStyle 反推配置，自定义文字槽接入组件默认样式，显式样式与内容内部更近的局部主题优先；其他自定义能力保留。
 
 ### 示例代码展示契约
 
@@ -70,7 +70,7 @@ TPickerThemeData 的 height 必须为有限正数、itemCount 必须大于零（
 
 代码面板必须通过真实打开验证；现有双版本 Demo 套件覆盖四个入口。Android 真机与 iOS 模拟器共用 `example/integration_test/picker_example_test.dart`，通过 Flutter SDK 自带 integration_test 验证实际应用路由、五个触发器的取消/确认、深浅色展开态和代码面板；它是需设备的手动验收入口，不计入普通 CI 已通过证据。
 
-显式 height 仍优先；未配置时默认视窗至少 200dp，并按最终文字自然行高与 itemCount 增长，不将大字体裁切为固定 200dp。自定义 itemBuilder 的内容高度由构建器契约负责，不推测其布局。
+显式 height 仍优先；使用内置选项且未配置时默认视窗至少 200dp，并按最终文字自然行高与 itemCount 增长，不将大字体裁切为固定 200dp。自定义 itemBuilder 的内容高度由构建器契约负责，不推测其布局。
 
 ## 关键决策与取舍
 
@@ -99,3 +99,11 @@ TPickerThemeData 的 height 必须为有限正数、itemCount 必须大于零（
 验收标准描述应满足的行为，不表示已执行或通过；执行范围与证据见 [acceptance.md](./acceptance.md)，剩余事项只在 [tasks.md](./tasks.md) 维护。
 
 跨组件配置职责见 [Theme 契约](../../engineering/048-Theme-configuration-contracts/spec.md)，视觉方法见 [Golden 规范](../../engineering/044-Testing-golden-regression/spec.md)。
+
+## 自定义文字槽一致性
+
+自定义 itemBuilder 的整个子树提供与内置选项一致的选中/未选中/禁用文字默认值。构建器收到的 context 位于默认样式之下；Row、Padding、Builder 不改变文字默认值。保持固定滚轮与既有自定义高度职责，不推测任意 Widget 的高度，不强制单行或省略。
+
+保留 TText 全局隔离，不读取外部 Material 文字默认值，不新增公开配置。显式文字样式按字段覆盖，内容内部更近的局部 TTextThemeData（原生 Text 可用 DefaultTextStyle）优先。布局约束仍由自定义内容遵守。
+
+兼容性：这会改变原先未显式配置的自定义文字默认行为，属于用户可感知的默认行为变化（minor 交付）；迁移时显式指定需保留的字号、字重、颜色、行高或在内容内部设置局部文字主题。仅指定部分样式的用户仍会接入其余默认字段。

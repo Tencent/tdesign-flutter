@@ -76,7 +76,7 @@
   Theme 优先于全局 Token。
 - Theme 动画中 nullable 尺寸按运行时内置默认值插值；nullable 颜色保持
   “未覆盖”语义，不得插值出透明色污染低优先级 Token。
-- 内置文字优先使用明确的实例/组件 TDesign 样式和 Token；不从外部 Material TextTheme 或 DefaultTextStyle 反推配置，自定义内容保留其原上下文。
+- 内置文字优先使用明确的实例/组件 TDesign 样式和 Token；不从外部 Material TextTheme 或 DefaultTextStyle 反推配置，自定义弹出菜单文字槽接入组件默认样式，显式样式与内容内部更近的局部主题优先；其他自定义能力保留。
 - 二级菜单通过 InheritedTheme 捕获触发处的局部 Theme；菜单背景配置同时作用于面板和菜单行，不被内部容器背景遮挡。
 - 路由、弹层 Widget、State、绘制器及带徽标的内部单项均为私有实现，不再从包入口公开；使用者通过 TTabBar 和菜单配置组合，属于 breaking 迁移。
 - 双层级 Demo 初始选中“我的”，菜单内容为“基本信息 / 个人主页 / 设置”，选择后反馈所选内容。
@@ -85,7 +85,6 @@
   显式 `popUpWidth` 继续拥有最高优先级，Demo 不传固定宽度掩盖默认行为。
 - 所有 Demo 的受控值由页面 State 持有，代码面板和主题重建不重置选择。核心片段写明状态字段、初始值与 build 接入方式，并由实际 Demo 源码生成。
 - 九个公开 Demo 的每次标签点击都显示“第 N 项”的 Toast（N 从 1 开始）；重复点击已选中项也提示。Toast 由 Demo 的单项 `onTap` 提供，`onChanged` 只更新受控选中值，不修改组件默认回调语义。
-- 内置文字优先使用明确的实例/组件 TDesign 样式和 Token；不从外部 Material TextTheme 或 DefaultTextStyle 反推配置，自定义内容保留其原上下文。
 
 ### 2026-09-25 胶囊布局补充
 
@@ -164,7 +163,7 @@
 
 ## 兼容性与迁移
 
-本次只整理设计记录，不据此新增 API、改变默认值或判断全部兼容。后续接口删除、类型收紧或默认行为变化按最终源码和迁移指南核对。
+此前设计记录整理未改变运行行为。本轮自定义文字槽默认值调整按 minor 交付，见下文；不新增公开参数，兼容性按最终源码、回归和迁移指南核对。
 
 ## 验收标准
 
@@ -173,3 +172,11 @@
 验收标准描述应满足的行为，不表示已执行或通过；执行范围与证据见 [acceptance.md](./acceptance.md)，剩余事项只在 [tasks.md](./tasks.md) 维护。
 
 跨组件配置职责见 [Theme 契约](../../engineering/048-Theme-configuration-contracts/spec.md)，视觉方法见 [Golden 规范](../../engineering/044-Testing-golden-regression/spec.md)。
+
+## 自定义文字槽一致性
+
+弹出菜单 itemWidget 子树接入内置 value 的文字默认值。默认自适应时，含自定义项的菜单按实际布局高度取最大值（至少 48），所有项等高，布局包装、局部主题与文字缩放参与测量；超出视口的菜单可纵向滚动。显式 popUpItemHeight 仍固定，不擅自增长。不递归推测任意 Widget 的文字。自适应测量要求内容能确定有限自然高度；依赖有界高度的 Column + Expanded 等内容应通过既有 popUpItemHeight 显式提供高度。
+
+保留 TText 全局隔离，不读取外部 Material 文字默认值，不新增公开配置。显式文字样式按字段覆盖，内容内部更近的局部 TTextThemeData（原生 Text 可用 DefaultTextStyle）优先。布局约束仍由自定义内容遵守。
+
+兼容性：这会改变原先未显式配置的自定义文字默认行为，属于用户可感知的默认行为变化（minor 交付）；迁移时显式指定需保留的字号、字重、颜色、行高或在内容内部设置局部文字主题。仅指定部分样式的用户仍会接入其余默认字段。

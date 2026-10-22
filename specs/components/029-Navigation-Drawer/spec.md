@@ -65,6 +65,12 @@
 - `placement`、`showOverlay`、`closeOnOverlayClick`、`onOverlayClick`、`useSafeArea`、`destroyOnClose`、`onClose` 从组件构造器移动到 `showTDrawer(...)`。
 - `drawerTop` 删除，由 `showTDrawer.topInset` 替代。
 
+## 自定义文案默认值
+
+菜单项 content 是正文替换槽，整个子树的 Text/TText 接入与内置 title 相同的默认字体和颜色；Row、Padding、Builder 不切断传递。实例显式字段及内容内部更近的 TTextThemeData 优先，TText 全局隔离保持。自定义内容仍自行布局，不强加内置 title 的单行/省略约束；完整 Drawer.child、footer、icon 不新增文字默认值。
+
+属于默认行为变更：未配置或仅部分配置的自定义文字可能改变字体、颜色、字距、换行和尺寸。自带背景仍需调用方保证对比度；不新增配置。
+
 ## 验收标准
 
 - 公开 Demo 的分组、按钮文案与构建内容一一对应，7 个 Figma 入口完整，基础与图标示例保留小程序的左侧 8 项模式。

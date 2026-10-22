@@ -33,3 +33,7 @@
 未绑定唯一候选的结果不作为当前通过证明；旧命令与流水由Git历史追溯。
 
 当前待办见 [tasks.md](./tasks.md)；实际执行入口见[贡献规范](../../../CONTRIBUTING.md#组件测试与-ci-回归门禁)。清理不关闭未完成项。
+
+## 自定义文字槽 minor 本地验收（2026-10-22）
+
+选中/未选中/禁用、滚动状态、builder 槽内上下文、包装、显式/局部样式及原生段落。原有 Golden 通过。 Flutter 3.32.0 / 3.47.7 相关组件、覆盖率、页面与严格分析通过。最终候选输入摘要、完整范围及已知差异统一见 [Theme 契约本轮验收](../../engineering/048-Theme-configuration-contracts/acceptance.md#自定义文字槽-minor-验收2026-10-22)。不以本地结果代替远端 CI 或设备验收；本轮未更新 Golden 基线，截图仅在工作区 artifacts。

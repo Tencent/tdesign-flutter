@@ -4,6 +4,7 @@ import '../../theme/t_colors.dart';
 import '../../theme/t_fonts.dart';
 import '../../theme/t_theme.dart';
 import '../text/t_text.dart';
+import '../text/t_text_style_scope.dart';
 import '../text/t_text_styled.dart';
 import '../text/t_text_theme_data.dart';
 import 't_picker_types.dart';
@@ -70,15 +71,30 @@ class PickerItemWidget extends StatelessWidget {
                 ? theme.textColorPrimary
                 : theme.textColorSecondary,
           ).merge(textTheme?.textStyle);
+          final defaultLabel = TTextStyled(
+            option.label,
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
+            style: style,
+          );
           return Center(
-            child:
-                itemBuilder?.call(context, option, colIndex, index, distance) ??
-                TTextStyled(
-                  option.label,
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
-                  style: style,
-                ),
+            child: itemBuilder != null
+                ? TTextStyleScope(
+                    style: style,
+                    // Builder lookup uses the same state defaults as its text.
+                    child: Builder(
+                      builder: (context) =>
+                          itemBuilder!(
+                            context,
+                            option,
+                            colIndex,
+                            index,
+                            distance,
+                          ) ??
+                          defaultLabel,
+                    ),
+                  )
+                : defaultLabel,
           );
         },
       ),

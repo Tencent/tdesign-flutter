@@ -8,7 +8,7 @@
 
 | 名称 | 类型 | 默认值 | 说明 | 必传 |
 | --- | --- | --- | --- | --- |
-| itemBuilder | TPickerItemBuilder? | - | 自定义选项构建器。 | 否 |
+| itemBuilder | TPickerItemBuilder? | - | 自定义选项构建器。 内容子树默认使用当前选中、未选中或禁用选项的文字样式，布局包装不影响继承。 显式文字样式和内容内部更近的局部文字主题优先。 不强制行数或省略；内容须适配滚轮项高度，自定义高度职责保持不变。 | 否 |
 | items | TPickerItems | - | 不可变数据源；更新选项时创建新的数据源与列表，不原地修改。 | 是 |
 | key | Key? | - | 组件标识，用于区分或保留组件状态。 | 否 |
 | onChanged | ValueChanged&lt;TPickerValue&gt;? | - | 值变化回调；为 null 时禁用。 | 否 |

@@ -10,6 +10,7 @@ import '../../theme/t_shadows.dart';
 import '../../theme/t_theme.dart';
 import '../text/t_text.dart';
 import '../text/t_text_resolve.dart';
+import '../text/t_text_style_scope.dart';
 import 't_popover_theme_data.dart';
 import 't_popover_types.dart';
 
@@ -369,7 +370,19 @@ class _TPopoverWidgetState extends State<TPopoverWidget> {
   }
 
   Widget _getContainerWidget() {
-    final plainTextSize = _resolvedPlainTextSize();
+    // Layout wrappers do not change slot defaults; explicit child styles and
+    // nearer TD text themes retain control of custom content typography.
+    return TTextStyleScope(
+      style: TTextResolve.resolve(
+        context: context,
+        style: _defaultContentTextStyle,
+      ),
+      child: Builder(builder: _contentContainer),
+    );
+  }
+
+  Widget _contentContainer(BuildContext slotContext) {
+    final plainTextSize = _resolvedPlainTextSize(slotContext);
     final minWidth =
         plainTextSize?.width ?? widget.width ?? _theme.minWidth ?? 0;
     final maxWidth = plainTextSize?.width ?? widget.width ?? _effectiveMaxWidth;
@@ -379,16 +392,6 @@ class _TPopoverWidgetState extends State<TPopoverWidget> {
         widget.height ??
         _theme.maxHeight ??
         double.infinity;
-    final content = widget.content;
-    final styledContent = content is Text
-        ? DefaultTextStyle.merge(
-            style: TTextResolve.resolve(
-              context: context,
-              style: _defaultContentTextStyle,
-            ),
-            child: content,
-          )
-        : content;
     return Container(
       key: const Key('t-popover-content'),
       constraints: BoxConstraints(
@@ -405,11 +408,11 @@ class _TPopoverWidgetState extends State<TPopoverWidget> {
         color: _backgroundColor,
         boxShadow: _theme.boxShadow ?? context.tTheme.shadow3 ?? const [],
       ),
-      child: styledContent,
+      child: widget.content,
     );
   }
 
-  Size? _resolvedPlainTextSize() {
+  Size? _resolvedPlainTextSize(BuildContext slotContext) {
     final content = widget.content;
     final Text text;
     final TextStyle style;
@@ -417,22 +420,18 @@ class _TPopoverWidgetState extends State<TPopoverWidget> {
         content.data != null &&
         content.style == null &&
         content.font == null) {
-      // Measurement follows TText's existing theme; this does not supply bubble
-      // typography to direct or composed custom content.
-      text = content.getRawText(context: context);
+      text = content.getRawText(context: slotContext);
       style = text.style!;
     } else if (content is Text &&
         content.data != null &&
         content.style == null &&
         content.textSpan == null) {
       text = content;
-      // Keep the existing native glyph metrics; this patch only corrects
-      // paragraph measurement and does not introduce subtree typography.
       style = _defaultContentTextStyle;
     } else {
       return null;
     }
-    final defaults = DefaultTextStyle.of(context);
+    final defaults = DefaultTextStyle.of(slotContext);
     final overflow = text.overflow ?? defaults.overflow;
     final softWrap = text.softWrap ?? defaults.softWrap;
     final contentMaxWidth =
@@ -441,22 +440,22 @@ class _TPopoverWidgetState extends State<TPopoverWidget> {
         TextPainter(
           text: TextSpan(
             text: text.data,
-            style: MediaQuery.boldTextOf(context)
+            style: MediaQuery.boldTextOf(slotContext)
                 ? style.merge(const TextStyle(fontWeight: FontWeight.bold))
                 : style,
           ),
           strutStyle: text.strutStyle,
-          locale: text.locale ?? Localizations.localeOf(context),
-          textDirection: text.textDirection ?? Directionality.of(context),
+          locale: text.locale ?? Localizations.localeOf(slotContext),
+          textDirection: text.textDirection ?? Directionality.of(slotContext),
           textAlign: text.textAlign ?? defaults.textAlign ?? TextAlign.start,
           maxLines: text.maxLines ?? defaults.maxLines,
           ellipsis: overflow == TextOverflow.ellipsis ? '\u2026' : null,
-          textScaler: text.textScaler ?? MediaQuery.textScalerOf(context),
+          textScaler: text.textScaler ?? MediaQuery.textScalerOf(slotContext),
           textWidthBasis: text.textWidthBasis ?? defaults.textWidthBasis,
           textHeightBehavior:
               text.textHeightBehavior ??
               defaults.textHeightBehavior ??
-              DefaultTextHeightBehavior.maybeOf(context),
+              DefaultTextHeightBehavior.maybeOf(slotContext),
         )..layout(
           maxWidth: softWrap || overflow == TextOverflow.ellipsis
               ? contentMaxWidth.clamp(0, double.infinity)

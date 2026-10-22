@@ -1,8 +1,28 @@
+import 'package:flutter/rendering.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:tdesign_flutter/src/components/picker/picker_item.dart';
 import 'package:tdesign_flutter/tdesign_flutter.dart';
 
+import '../../helpers/text_slot_regression.dart';
+
 void main() {
+  registerNativeParagraphContractTests(
+    'Picker custom item',
+    (child) => SizedBox(
+      height: 300,
+      width: 400,
+      child: TPicker(
+        items: const TPickerColumns([
+          [TPickerOption(label: 'option', value: 'option')],
+        ]),
+        value: const ['option'],
+        onChanged: (_) {},
+        itemBuilder: (_, option, col, index, distance) => child,
+      ),
+    ),
+    reset: false,
+  );
+  _textSlotRegression();
   Widget wrap(Widget child, {TPickerThemeData? pickerTheme}) {
     return MaterialApp(
       theme: ThemeData(
@@ -495,7 +515,10 @@ void main() {
         ),
       );
       expect(find.text('selected-A'), findsOneWidget);
-      await tester.drag(find.byType(ListWheelScrollView), const Offset(0, -40));
+      final wheel = tester.widget<ListWheelScrollView>(
+        find.byType(ListWheelScrollView),
+      );
+      (wheel.controller! as FixedExtentScrollController).jumpToItem(1);
       await tester.pumpAndSettle();
       expect(ended, isTrue);
     });
@@ -720,5 +743,329 @@ void main() {
       ),
     );
     expect(find.byType(ListWheelScrollView), findsNothing);
+  });
+}
+
+RenderParagraph _slotParagraph(WidgetTester tester, String label) =>
+    tester.renderObject<RenderParagraph>(
+      find.byWidgetPredicate(
+        (widget) => widget is RichText && widget.text.toPlainText() == label,
+      ),
+    );
+
+Widget _slotContent(String label, String variant, String wrapper) {
+  Widget child = variant == 'native'
+      ? Text(label)
+      : TText(
+          label,
+          style: variant == 'partial'
+              ? const TextStyle(color: Colors.orange)
+              : variant == 'explicit'
+              ? const TextStyle(
+                  fontSize: 19,
+                  height: 1.4,
+                  fontWeight: FontWeight.w500,
+                  color: Colors.pink,
+                  letterSpacing: 1,
+                  wordSpacing: 0,
+                )
+              : null,
+          maxLines: variant == 'paragraph' ? 2 : null,
+          overflow: variant == 'paragraph' ? TextOverflow.fade : null,
+          softWrap: variant == 'paragraph' ? false : null,
+        );
+  if (variant == 'nativeExplicit') {
+    child = Text(
+      label,
+      style: const TextStyle(
+        fontSize: 19,
+        height: 1.4,
+        fontWeight: FontWeight.w500,
+        color: Colors.pink,
+        letterSpacing: 1,
+        wordSpacing: 0,
+      ),
+    );
+  }
+  if (variant == 'nativeLocal') {
+    child = DefaultTextStyle.merge(
+      style: const TextStyle(
+        fontSize: 21,
+        height: 1.3,
+        fontWeight: FontWeight.w500,
+        color: Colors.purple,
+      ),
+      child: Text(label),
+    );
+  }
+  if (variant == 'local') {
+    final labelWidget = child;
+    child = Builder(
+      builder: (context) => Theme(
+        data: Theme.of(context).mergeExtension(
+          const TTextThemeData(
+            textStyle: TextStyle(
+              fontSize: 21,
+              height: 1.3,
+              fontWeight: FontWeight.w500,
+              color: Colors.purple,
+            ),
+          ),
+        ),
+        child: labelWidget,
+      ),
+    );
+  }
+  return switch (wrapper) {
+    'row' => Row(
+      mainAxisSize: MainAxisSize.min,
+      children: [Flexible(child: child)],
+    ),
+    'padding' => Padding(padding: const EdgeInsets.all(2), child: child),
+    'builder' => Builder(builder: (_) => child),
+    _ => child,
+  };
+}
+
+void _expectSlotStyle(
+  WidgetTester tester,
+  String subject,
+  String reference,
+  String variant,
+) {
+  final paragraph = _slotParagraph(tester, subject);
+  final actual = paragraph.text.style!;
+  final base = _slotParagraph(tester, reference).text.style!;
+  final override = switch (variant) {
+    'partial' => const TextStyle(color: Colors.orange),
+    'explicit' || 'nativeExplicit' => const TextStyle(
+      fontSize: 19,
+      height: 1.4,
+      fontWeight: FontWeight.w500,
+      color: Colors.pink,
+      letterSpacing: 1,
+      wordSpacing: 0,
+    ),
+    'local' || 'nativeLocal' => const TextStyle(
+      fontSize: 21,
+      height: 1.3,
+      fontWeight: FontWeight.w500,
+      color: Colors.purple,
+    ),
+    _ => const TextStyle(),
+  };
+  expect(actual.fontSize, override.fontSize ?? base.fontSize, reason: subject);
+  expect(actual.height, override.height ?? base.height, reason: subject);
+  expect(
+    actual.fontWeight,
+    override.fontWeight ?? base.fontWeight,
+    reason: subject,
+  );
+  expect(actual.color, override.color ?? base.color, reason: subject);
+  expect(
+    actual.letterSpacing,
+    override.letterSpacing ?? base.letterSpacing,
+    reason: subject,
+  );
+  if (variant == 'paragraph') {
+    expect(paragraph.maxLines, 2);
+    expect(paragraph.overflow, TextOverflow.fade);
+    expect(paragraph.softWrap, isFalse);
+  }
+}
+
+Widget _slotHost(
+  Widget child,
+  bool dark,
+  double scale, {
+  TextStyle? outerStyle,
+}) {
+  final token = TThemeData.defaultData();
+  var theme = dark ? TThemeBuilder.dark(token) : TThemeBuilder.light(token);
+  if (outerStyle != null) {
+    theme = theme.mergeExtension(TTextThemeData(textStyle: outerStyle));
+  }
+  return MaterialApp(
+    theme: theme,
+    home: MediaQuery(
+      data: MediaQueryData(textScaler: TextScaler.linear(scale)),
+      child: DefaultTextStyle(
+        style: const TextStyle(fontSize: 32, color: Colors.red),
+        child: Scaffold(body: SingleChildScrollView(child: child)),
+      ),
+    ),
+  );
+}
+
+void _textSlotRegression() {
+  testWidgets('slot picker nullable builder retains built-in fallback', (
+    tester,
+  ) async {
+    final control = FixedExtentScrollController();
+    addTearDown(control.dispose);
+    await tester.pumpWidget(
+      _slotHost(
+        PickerItemWidget(
+          fixedExtentScrollController: control,
+          colIndex: 0,
+          index: 0,
+          option: const TPickerOption(label: 'fallback', value: 'a'),
+          itemHeight: 40,
+          itemBuilder: (_, option, col, index, distance) => null,
+        ),
+        false,
+        1,
+      ),
+    );
+    expect(_slotParagraph(tester, 'fallback').text.style!.fontSize, 16);
+    expect(
+      _slotParagraph(tester, 'fallback').text.style!.fontWeight,
+      FontWeight.w600,
+    );
+  });
+  testWidgets('slot picker selection defaults update while scrolling', (
+    tester,
+  ) async {
+    const items = TPickerColumns([
+      [
+        TPickerOption(label: 'A', value: 'a'),
+        TPickerOption(label: 'B', value: 'b'),
+        TPickerOption(label: 'C', value: 'c'),
+      ],
+    ]);
+    var value = <Object?>['a'];
+    await tester.pumpWidget(
+      _slotHost(
+        StatefulBuilder(
+          builder: (context, setState) => TPicker(
+            items: items,
+            value: value,
+            onChanged: (next) => setState(() => value = next.values),
+            itemBuilder: (_, option, col, index, distance) => Padding(
+              padding: const EdgeInsets.all(1),
+              child: TText(option.label),
+            ),
+          ),
+        ),
+        false,
+        1,
+      ),
+    );
+    expect(_slotParagraph(tester, 'A').text.style!.fontWeight, FontWeight.w600);
+    final wheel = tester.widget<ListWheelScrollView>(
+      find.byType(ListWheelScrollView),
+    );
+    (wheel.controller! as FixedExtentScrollController).jumpToItem(1);
+    await tester.pumpAndSettle();
+    expect(_slotParagraph(tester, 'A').text.style!.fontWeight, FontWeight.w400);
+    expect(_slotParagraph(tester, 'B').text.style!.fontWeight, FontWeight.w600);
+    expect(tester.takeException(), isNull);
+  });
+
+  for (final dark in [false, true]) {
+    for (final state in ['selected', 'unselected', 'disabled']) {
+      for (final wrapper in ['direct', 'row', 'padding', 'builder']) {
+        for (final scale in [1.0, 2.0]) {
+          testWidgets('slot picker $state $wrapper dark=$dark scale=$scale', (
+            tester,
+          ) async {
+            final control = FixedExtentScrollController(initialItem: 0);
+            addTearDown(control.dispose);
+            final index = state == 'unselected' ? 1 : 0;
+            Widget item(String label, TPickerItemBuilder? builder) => SizedBox(
+              height: 100,
+              width: 280,
+              child: PickerItemWidget(
+                fixedExtentScrollController: control,
+                colIndex: 0,
+                index: index,
+                option: TPickerOption(label: label, value: label),
+                itemHeight: 40,
+                disabled: state == 'disabled',
+                itemBuilder: builder,
+              ),
+            );
+            final seenStyles = <TextStyle?>[];
+            await tester.pumpWidget(
+              _slotHost(
+                Column(
+                  children: [
+                    item('reference', null),
+                    for (final variant in [
+                      'default',
+                      'native',
+                      'nativeLocal',
+                      'nativeExplicit',
+                      'partial',
+                      'explicit',
+                      'local',
+                      'paragraph',
+                    ])
+                      item(variant, (context, option, col, row, distance) {
+                        seenStyles.add(
+                          Theme.of(
+                            context,
+                          ).extension<TTextThemeData>()?.textStyle,
+                        );
+                        return _slotContent(option.label, variant, wrapper);
+                      }),
+                  ],
+                ),
+                dark,
+                scale,
+              ),
+            );
+            for (final variant in [
+              'default',
+              'native',
+              'nativeLocal',
+              'nativeExplicit',
+              'partial',
+              'explicit',
+              'local',
+              'paragraph',
+            ]) {
+              _expectSlotStyle(tester, variant, 'reference', variant);
+            }
+            expect(seenStyles.every((style) => style?.fontSize == 16), isTrue);
+            expect(tester.takeException(), isNull);
+          });
+        }
+      }
+    }
+  }
+  testWidgets('slot picker shared TD theme overrides state defaults', (
+    tester,
+  ) async {
+    final control = FixedExtentScrollController();
+    addTearDown(control.dispose);
+    await tester.pumpWidget(
+      _slotHost(
+        Column(
+          children: [
+            for (final custom in [false, true])
+              PickerItemWidget(
+                fixedExtentScrollController: control,
+                colIndex: 0,
+                index: 0,
+                option: TPickerOption(
+                  label: custom ? 'subject' : 'reference',
+                  value: 'a',
+                ),
+                itemHeight: 40,
+                itemBuilder: custom
+                    ? (context, option, col, index, distance) =>
+                          _slotContent(option.label, 'default', 'builder')
+                    : null,
+              ),
+          ],
+        ),
+        false,
+        1,
+        outerStyle: const TextStyle(fontSize: 23, color: Colors.teal),
+      ),
+    );
+    _expectSlotStyle(tester, 'subject', 'reference', 'default');
+    expect(_slotParagraph(tester, 'subject').text.style!.fontSize, 23);
   });
 }

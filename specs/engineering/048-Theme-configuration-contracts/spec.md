@@ -130,7 +130,7 @@ Token 真实消费、覆盖路径和视觉证据属于本契约的验收，不�
 
 验收标准描述应满足的行为，不表示已执行或通过；执行范围与证据见 [acceptance.md](./acceptance.md)，剩余事项只在 [tasks.md](./tasks.md) 维护。
 
-## 组件文字槽遗漏修复（patch 边界）
+## 组件文字槽遗漏修复（patch 提交边界）
 
 沿用已发布 1.0.0 的组合文字槽契约：组件已有文字默认值同时提供给 Text/TText；修复 Avatar、Calendar 副标题、Collapse、Divider、Link、Progress、Table 和内部 Toolbar 的 TD 样式漏接。Drawer 标题已接入 TD 样式，仅修复替换主题时丢失既有 TD 段落配置。
 
@@ -138,4 +138,12 @@ Token 真实消费、覆盖路径和视觉证据属于本契约的验收，不�
 
 Popover 仅修复依据实际样式、支柱、缩放与段落参数的自然尺寸测量。直接 Text 保留既有气泡样式，TText 保留自身文字主题，组合内容仍自行定制；不新增内容子树默认样式。测量不会改变显式尺寸或显式样式的布局路径。
 
-自定义内容默认值统一留给独立 minor 事项；不修改全局 TText、工具链、工作流、既有 Golden 基线，不把 minor 的两张已审阅截图带入本 patch。
+本节仅描述 patch 提交；自定义内容默认值统一由后文 minor 增量提供。patch 不修改全局 TText、工具链、工作流、既有 Golden 基线，不把 minor 的两张已审阅截图带入本 patch。
+
+## 自定义文字槽统一（minor）
+
+在 patch 修复之上，将 Popover 内容子树、Drawer 菜单正文、Toast 自定义文案、Picker itemBuilder、Steps 自定义标题/说明、TabBar 弹出菜单自定义项统一为“组件拥有文字槽默认字体”。不改变全局 TText 隔离、不新增配置；显式字段与内容内部更近的文字主题优先。仅设置颜色的实例仍继承其余组件字体字段。
+
+只传递字体，保留原生 Text 的段落语义及业务自定义内容的换行/溢出控制。TabBar 自定义项自动高度按真实内容测量，至少保留原 48dp 行高；原生内置项及显式高度继续沿用原布局。自定义 Column/Expanded 等需要确定高度的内容继续使用既有 popUpItemHeight。
+
+本节扩展原来的自定义默认值，按 minor 交付并提供迁移说明；不将其冒充既有契约的 patch。发布日期与包版本号由正式发布流程决定。
