@@ -204,32 +204,230 @@ void main() {
     },
   );
 
-  testWidgets('Popover complex content retains caller typography', (
-    tester,
-  ) async {
-    await tester.pumpWidget(
-      MaterialApp(
-        theme: TThemeBuilder.light(TThemeData.defaultData()),
-        home: Scaffold(
-          body: Builder(
-            builder: (context) => Center(
-              child: TPopoverWidget(
-                context: context,
-                content: const Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [TText('custom')],
+  for (final wrapper in ['Row', 'Column', 'Padding', 'Builder']) {
+    registerTextSlotParityTests(
+      'Popover wrapped $wrapper text slot',
+      (child) => Builder(
+        builder: (context) {
+          final Widget content;
+          switch (wrapper) {
+            case 'Row':
+              content = Row(mainAxisSize: MainAxisSize.min, children: [child]);
+            case 'Column':
+              content = Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [child],
+              );
+            case 'Padding':
+              content = Padding(padding: const EdgeInsets.all(4), child: child);
+            default:
+              content = Builder(builder: (_) => child);
+          }
+          return TPopoverWidget(context: context, content: content);
+        },
+      ),
+    );
+  }
+
+  testWidgets(
+    'Popover wrapped content merges partial styles and keeps explicit fonts',
+    (tester) async {
+      await tester.pumpWidget(
+        MaterialApp(
+          theme: TThemeBuilder.light(TThemeData.defaultData()),
+          home: Scaffold(
+            body: Builder(
+              builder: (context) => Center(
+                child: TPopoverWidget(
+                  context: context,
+                  content: const Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      TText('partial', style: TextStyle(color: Colors.orange)),
+                      TText(
+                        'explicit',
+                        style: TextStyle(
+                          fontSize: 20,
+                          height: 1.4,
+                          color: Colors.pink,
+                        ),
+                      ),
+                      Text(
+                        'native partial',
+                        style: TextStyle(color: Colors.orange),
+                      ),
+                    ],
+                  ),
                 ),
               ),
             ),
           ),
         ),
-      ),
-    );
-    await tester.pumpAndSettle();
-    final text = tester.widget<Text>(find.text('custom'));
-    expect(text.style!.fontSize, 14);
-    expect(text.style!.color, TThemeData.defaultData().textColorPrimary);
-  });
+      );
+      await tester.pumpAndSettle();
+      TextStyle style(String label) => tester
+          .widget<RichText>(
+            find.descendant(
+              of: find.text(label),
+              matching: find.byType(RichText),
+            ),
+          )
+          .text
+          .style!;
+      for (final label in ['partial', 'native partial']) {
+        expect(style(label).fontSize, 16);
+        expect(style(label).height, 1.5);
+        expect(style(label).color, Colors.orange);
+      }
+      expect(style('explicit').fontSize, 20);
+      expect(style('explicit').height, 1.4);
+      expect(style('explicit').color, Colors.pink);
+      expect(tester.takeException(), isNull);
+    },
+  );
+
+  for (final scale in [1.0, 2.0]) {
+    testWidgets('Popover constrained Row keeps wrapping scale=$scale', (
+      tester,
+    ) async {
+      await tester.pumpWidget(
+        MaterialApp(
+          theme: TThemeBuilder.light(TThemeData.defaultData()),
+          home: Scaffold(
+            body: MediaQuery(
+              data: MediaQueryData(textScaler: TextScaler.linear(scale)),
+              child: Builder(
+                builder: (context) => Center(
+                  child: TPopoverWidget(
+                    context: context,
+                    width: 240,
+                    content: const Row(
+                      children: [
+                        Expanded(
+                          child: TText(
+                            'Long words Long words Long words Long words Long words',
+                            maxLines: 2,
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+            ),
+          ),
+        ),
+      );
+      await tester.pumpAndSettle();
+      final paragraph = tester.renderObject<RenderParagraph>(
+        find.descendant(
+          of: find.byType(TText),
+          matching: find.byType(RichText),
+        ),
+      );
+      final panel = tester.getSize(find.byKey(const Key('t-popover-content')));
+      expect(panel.width, 240);
+      expect(panel.height, closeTo(paragraph.size.height + 24, .01));
+      expect(paragraph.maxLines, 2);
+      expect(paragraph.overflow, TextOverflow.ellipsis);
+      expect(paragraph.text.style!.fontSize, 16);
+      expect(paragraph.text.style!.color, Colors.white);
+      expect(tester.takeException(), isNull);
+    });
+  }
+
+  for (final dark in [false, true]) {
+    for (final scale in [1.0, 2.0]) {
+      testWidgets(
+        'Popover wrappers preserve direct typography dark=$dark scale=$scale',
+        (tester) async {
+          for (final native in [true, false]) {
+            TextStyle? expected;
+            for (final wrapper in [
+              'direct',
+              'Row',
+              'Column',
+              'Padding',
+              'Builder',
+            ]) {
+              final Widget label = native
+                  ? const Text('Slot')
+                  : const TText('Slot');
+              final Widget content;
+              switch (wrapper) {
+                case 'Row':
+                  content = Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [label],
+                  );
+                case 'Column':
+                  content = Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [label],
+                  );
+                case 'Padding':
+                  content = Padding(
+                    padding: const EdgeInsets.all(4),
+                    child: label,
+                  );
+                case 'Builder':
+                  content = Builder(builder: (_) => label);
+                default:
+                  content = label;
+              }
+              await tester.pumpWidget(
+                MaterialApp(
+                  theme: dark
+                      ? TThemeBuilder.dark(TThemeData.defaultData())
+                      : TThemeBuilder.light(TThemeData.defaultData()),
+                  home: Scaffold(
+                    body: MediaQuery(
+                      data: MediaQueryData(
+                        textScaler: TextScaler.linear(scale),
+                      ),
+                      child: Builder(
+                        builder: (context) => Center(
+                          child: TPopoverWidget(
+                            context: context,
+                            content: content,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              );
+              await tester.pumpAndSettle();
+              final actual = tester
+                  .widget<RichText>(
+                    find.descendant(
+                      of: find.text('Slot'),
+                      matching: find.byType(RichText),
+                    ),
+                  )
+                  .text
+                  .style!;
+              if (expected == null) {
+                expected = actual;
+              } else {
+                expect(actual.fontSize, expected.fontSize, reason: wrapper);
+                expect(actual.height, expected.height, reason: wrapper);
+                expect(actual.color, expected.color, reason: wrapper);
+                expect(actual.fontWeight, expected.fontWeight, reason: wrapper);
+                expect(
+                  actual.letterSpacing,
+                  expected.letterSpacing,
+                  reason: wrapper,
+                );
+              }
+              expect(tester.takeException(), isNull);
+            }
+          }
+        },
+      );
+    }
+  }
 
   /// 构建带主题的测试壳
   Widget wrapWithTheme(

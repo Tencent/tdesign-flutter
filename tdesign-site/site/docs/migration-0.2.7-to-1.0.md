@@ -387,6 +387,8 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 
   **需要调整**：锚点内容使用 `TPopoverAnchor`，一次性展示使用 `TPopover.showPopover`；旧 Widget/回调与命令方式需按实际触发方式拆分。`theme` 的配色意图迁到 `colorPreset`，间距、箭头和圆角迁 `TPopoverThemeData`。
 
+  **文字默认值变化**：`content` 整个子树的 Text/TText 统一接收气泡默认字体与颜色，外包 Row、Column、Padding 或 Builder 不再改变默认值。旧版组合内容中未设置的样式字段会变化，可能影响换行和尺寸；部分显式样式只固定已设置字段。需要保持独立外观时，显式设置字体、行高、颜色，或在内容内部提供较近的 `TTextThemeData`；原生 Text 可用内部 `DefaultTextStyle`。内容自己的背景与文字对比度仍由调用方负责，TText 全局隔离规则不变。
+
 <a id="migration-component-popup"></a>
 - **[Popup 弹出层](https://tdesign.tencent.com/flutter/components/popup?tab=api)**：`TDPopup*Panel / TDSlidePopupRoute` → `TPopup.show + TPopupOptions + TPopupHandle`。
 

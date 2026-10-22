@@ -370,19 +370,15 @@ class _TPopoverWidgetState extends State<TPopoverWidget> {
   }
 
   Widget _getContainerWidget() {
-    final content = widget.content;
-    // Only text content receives Popover typography; arbitrary custom layouts
-    // retain their own defaults. Measure TD text under the same slot theme.
-    if (content is Text || content is TText) {
-      return TTextStyleScope(
-        style: TTextResolve.resolve(
-          context: context,
-          style: _defaultContentTextStyle,
-        ),
-        child: Builder(builder: _contentContainer),
-      );
-    }
-    return _contentContainer(null);
+    // Layout wrappers do not change slot defaults; explicit child styles and
+    // nearer TD text themes retain control of custom content typography.
+    return TTextStyleScope(
+      style: TTextResolve.resolve(
+        context: context,
+        style: _defaultContentTextStyle,
+      ),
+      child: Builder(builder: _contentContainer),
+    );
   }
 
   Widget _contentContainer(BuildContext? slotContext) {
