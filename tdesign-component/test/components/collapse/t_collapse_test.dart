@@ -8,6 +8,77 @@ import '../../helpers/text_slot_regression.dart';
 /// 覆盖统一 value/onChanged 状态、multiple/accordion、组级与单项禁用、
 /// Header 扩展点、Theme、布局和契约断言。
 void main() {
+  registerNativeParagraphContractTests(
+    'Collapse header slot',
+    (child) => TCollapse<int>(
+      value: const [1],
+      onChanged: (_) {},
+      children: [
+        TCollapsePanel(
+          value: 1,
+          headerBuilder: (_, __) => child,
+          body: const Text('body'),
+        ),
+      ],
+    ),
+    theme: (theme) => theme.mergeExtension(
+      const TCollapseThemeData(
+        headerTextStyle: TextStyle(fontSize: 20, color: Colors.purple),
+      ),
+    ),
+    reset: true,
+  );
+  registerNativeParagraphContractTests(
+    'Collapse body slot',
+    (child) => TCollapse<int>(
+      value: const [1],
+      onChanged: (_) {},
+      children: [
+        TCollapsePanel(
+          value: 1,
+          headerBuilder: (_, __) => const Text('header'),
+          body: child,
+        ),
+      ],
+    ),
+    theme: (theme) => theme.mergeExtension(
+      const TCollapseThemeData(
+        contentTextStyle: TextStyle(fontSize: 18, color: Colors.teal),
+      ),
+    ),
+    reset: true,
+  );
+  registerNativeParagraphContractTests(
+    'Collapse trailing slot',
+    (child) => TCollapse<int>(
+      value: const [1],
+      onChanged: (_) {},
+      children: [
+        TCollapsePanel(
+          value: 1,
+          headerBuilder: (_, __) => const Text('header'),
+          trailingBuilder: (_, __) => child,
+          body: const Text('body'),
+        ),
+      ],
+    ),
+    reset: true,
+  );
+  registerNativeParagraphContractTests(
+    'Collapse disabled header slot',
+    (child) => TCollapse<int>(
+      value: const [1],
+      children: [
+        TCollapsePanel(
+          value: 1,
+          headerBuilder: (_, __) => child,
+          body: const Text('body'),
+        ),
+      ],
+    ),
+    reset: true,
+  );
+
   registerTextSlotParityTests(
     'Collapse header slot',
     (child) => TCollapse<int>(

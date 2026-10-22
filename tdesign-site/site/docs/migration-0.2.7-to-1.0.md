@@ -387,8 +387,6 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 
   **需要调整**：锚点内容使用 `TPopoverAnchor`，一次性展示使用 `TPopover.showPopover`；旧 Widget/回调与命令方式需按实际触发方式拆分。`theme` 的配色意图迁到 `colorPreset`，间距、箭头和圆角迁 `TPopoverThemeData`。
 
-  **文字默认值变化**：`content` 整个子树的 Text/TText 统一接收气泡默认字体与颜色，外包 Row、Column、Padding 或 Builder 不再改变默认值。旧版组合内容中未设置的样式字段会变化，可能影响换行和尺寸；部分显式样式只固定已设置字段。需要保持独立外观时，显式设置字体、行高、颜色，或在内容内部提供较近的 `TTextThemeData`；原生 Text 可用内部 `DefaultTextStyle`。内容自己的背景与文字对比度仍由调用方负责，TText 全局隔离规则不变。
-
 <a id="migration-component-popup"></a>
 - **[Popup 弹出层](https://tdesign.tencent.com/flutter/components/popup?tab=api)**：`TDPopup*Panel / TDSlidePopupRoute` → `TPopup.show + TPopupOptions + TPopupHandle`。
 
@@ -1325,3 +1323,9 @@ Widget migratedIndexes() {
 | `slideTransitionFromToAlignment` | 旧声明已移除 | 不保留此类型的继承或调用契约；按该组件的公开参数、回调或内容槽改写；[具体改法](#migration-component-popup) |
 
 </details>
+
+### 已有文字槽遗漏修复
+
+Avatar、Calendar 副标题、Collapse、Divider、Link、Progress、Table 及内部操作文字槽为 TText 补齐既有组件默认值；Drawer 标题继续保留已有 TD 段落设置。未设置样式的 TText 外观可能随组件字体或状态色修正；显式字段及内容内部更近的主题仍优先。原生 Text 的段落 reset/merge 边界不改变。
+
+Popover 的测量修复不新增组合内容默认样式，也不改变 TText 全局隔离。自定义文字槽统一作为独立行为升级交付，不纳入本 patch。

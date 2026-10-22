@@ -89,19 +89,7 @@ TPopover 已公开点击、长按、主题背景色、最小/最大尺寸和十�
 - 配色参数与枚举由旧 colorScheme/TPopoverColorScheme 迁移为 colorPreset/TPopoverColorPreset；内容改为必填 Widget，placement 非空，内容回调为 VoidCallback，底层布局类不再公开导出。
 - radius/overlayColor 的同义实例覆盖迁移为局部 TPopoverThemeData.borderRadius/barrierColor；Anchor/Controller 增量能力不改变单次 showPopover 的叠加语义。
 
-## 文字槽布局补充
-
-直接的 Text/TText 内容按有效的 softWrap、maxLines、overflow 和段落高度规则测量；不换行且不省略时仅计算单行高度，容器仍遵守宽度限制。显式宽高和直接文字的测量边界保持；组合内容仍由自身布局决定尺寸。
-
-## 内容子树统一文字默认值
-
-Popover 为整个 content 子树提供气泡文字默认样式，Row、Column、Padding、Builder 等布局包装不改变继承。TText 保持全局隔离，通过 TTextStyleScope 获取组件默认值；实例显式字段及内容内部更近的 TTextThemeData 继续优先，不新增配置。
-
-这是自定义内容默认行为的兼容性变化：未设置或仅部分设置样式的 Text/TText 将按缺失字段接入气泡样式，可能改变颜色、字体、换行和尺寸。完全自绘内容应使用显式样式或内部局部主题；不扫描子树，也不对组合内容套用直接文字的自然尺寸测量。
-
 ## 验收标准
-
-- Demo Golden 使用统一视觉入口（或显式传入 `--dart-define=TDESIGN_DEMO_TEST_MODULES=false`），隐藏内部测试模块；本地 debug 额外模块造成的差异不作为组件缺陷或基线更新依据。
 
 - 验证 Widget 内容、显式尺寸、padding 与宽高约束的真实布局，无负测量或空气泡。
 - 验证十二种 placement、翻转、clamp、箭头边距、安全区、键盘及锚点卸载。
@@ -111,3 +99,7 @@ Popover 为整个 content 子树提供气泡文字默认样式，Row、Column、
 验收标准描述应满足的行为，不表示已执行或通过；执行范围与证据见 [acceptance.md](./acceptance.md)，剩余事项只在 [tasks.md](./tasks.md) 维护。
 
 跨组件配置职责见 [Theme 契约](../../engineering/048-Theme-configuration-contracts/spec.md)，视觉方法见 [Golden 规范](../../engineering/044-Testing-golden-regression/spec.md)。
+
+## 自然尺寸测量修复
+
+保留原生 Text 既有气泡字体的测量路径；修正测量时遗漏的显式/继承段落设置、缩放和支柱。softWrap=false 且无 ellipsis 时按单行自然高度测量；显式 width/height 继续控制外框。不改变既有直接 Text 气泡样式和组合内容自行定制契约；TText 测量使用其现有 TD 主题，不借测量提供气泡默认字体。

@@ -4,6 +4,30 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 import '../../helpers/text_slot_regression.dart';
 
 void main() {
+  registerNativeParagraphContractTests(
+    'Link brand slot',
+    (child) => TLink(
+      colorPreset: TLinkColorPreset.primary,
+      onPressed: () {},
+      child: child,
+    ),
+    reset: false,
+  );
+  registerNativeParagraphContractTests(
+    'Link disabled slot',
+    (child) => TLink(colorPreset: TLinkColorPreset.primary, child: child),
+    reset: false,
+  );
+  registerNativeParagraphContractTests(
+    'Link danger slot',
+    (child) => TLink(
+      colorPreset: TLinkColorPreset.danger,
+      onPressed: () {},
+      child: child,
+    ),
+    reset: false,
+  );
+
   registerTextSlotParityTests(
     'Link brand slot',
     (child) => TLink(

@@ -10,6 +10,15 @@ import '../../helpers/text_slot_regression.dart';
 import '../../support/token_consumption_evidence.dart';
 
 void main() {
+  registerNativeParagraphContractTests(
+    'Avatar foreground slot',
+    (child) => TAvatar(child: child),
+    theme: (theme) => theme.mergeExtension(
+      const TAvatarThemeData(foregroundColor: Colors.purple),
+    ),
+    reset: false,
+  );
+
   registerTextSlotParityTests(
     'Avatar foreground slot',
     (child) => TAvatar(child: child),

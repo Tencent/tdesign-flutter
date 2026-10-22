@@ -129,3 +129,13 @@ TD 内置视觉和行为只接受受支持的实例参数/style、TD ThemeExtens
 Token 真实消费、覆盖路径和视觉证据属于本契约的验收，不另设 Spec。见 [Token 运行验证](./acceptance.md#token-runtime-verification)、[未关闭事项](./tasks.md#token-逐项缺口) 与 `evidence/`。主题输入与同步由独立的 ThemeController Spec 负责。
 
 验收标准描述应满足的行为，不表示已执行或通过；执行范围与证据见 [acceptance.md](./acceptance.md)，剩余事项只在 [tasks.md](./tasks.md) 维护。
+
+## 组件文字槽遗漏修复（patch 边界）
+
+沿用已发布 1.0.0 的组合文字槽契约：组件已有文字默认值同时提供给 Text/TText；修复 Avatar、Calendar 副标题、Collapse、Divider、Link、Progress、Table 和内部 Toolbar 的 TD 样式漏接。Drawer 标题已接入 TD 样式，仅修复替换主题时丢失既有 TD 段落配置。
+
+保留每处原生 Text 的段落边界：原先 merge 的位置继续合并祖先段落设置，原先 DefaultTextStyle 构造的位置继续使用组件的段落回退。不以提供字体默认值为由改变 maxLines、softWrap、overflow、textAlign、textWidthBasis 或 textHeightBehavior。显式子样式与内容内部更近主题优先。
+
+Popover 仅修复依据实际样式、支柱、缩放与段落参数的自然尺寸测量。直接 Text 保留既有气泡样式，TText 保留自身文字主题，组合内容仍自行定制；不新增内容子树默认样式。测量不会改变显式尺寸或显式样式的布局路径。
+
+自定义内容默认值统一留给独立 minor 事项；不修改全局 TText、工具链、工作流、既有 Golden 基线，不把 minor 的两张已审阅截图带入本 patch。

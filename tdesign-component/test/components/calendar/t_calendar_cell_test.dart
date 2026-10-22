@@ -6,6 +6,31 @@ import '../../helpers/text_slot_regression.dart';
 
 void main() {
   for (final selected in [false, true]) {
+    registerNativeParagraphContractTests(
+      'Calendar subtitle slot selected=$selected',
+      (child) {
+        final model = TCalendarCellModel(
+          date: DateTime(2024, 1, 8),
+          selectType: selected ? DateSelectType.selected : DateSelectType.empty,
+          isLastDayOfMonth: false,
+        );
+        return SizedBox(
+          width: 320,
+          child: TCalendarCell(
+            cell: model,
+            height: 120,
+            padding: 4,
+            rowIndex: 0,
+            colIndex: 0,
+            dateList: [model],
+            subtitleBuilder: (_, __) => child,
+          ),
+        );
+      },
+      reset: false,
+    );
+  }
+  for (final selected in [false, true]) {
     registerTextSlotParityTests('Calendar subtitle slot selected=$selected', (
       child,
     ) {

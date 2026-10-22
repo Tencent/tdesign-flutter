@@ -267,7 +267,8 @@ class _TCollapseState<T extends Object> extends State<TCollapse<T>> {
     Duration animationDuration,
     TCollapseThemeData? theme,
   ) {
-    Widget content = TTextStyleScope(
+    var content = _textSlot(
+      context,
       style: TTextResolve.resolve(
         context: context,
         style: _contentTextStyle(context, theme),
@@ -321,7 +322,8 @@ class _TCollapseState<T extends Object> extends State<TCollapse<T>> {
               data: IconThemeData(color: iconColor),
               child: child.leadingBuilder!(context, isExpanded),
             ),
-      title: TTextStyleScope(
+      title: _textSlot(
+        context,
         style: TTextResolve.resolve(context: context, style: style),
         child: child.headerBuilder(context, isExpanded),
       ),
@@ -342,7 +344,8 @@ class _TCollapseState<T extends Object> extends State<TCollapse<T>> {
     final color = isDisabled
         ? theme?.disabledIconColor ?? context.tTheme.textColorDisabled
         : theme?.iconColor ?? context.tTheme.textColorPlaceholder;
-    return TTextStyleScope(
+    return _textSlot(
+      context,
       style: TTextResolve.resolve(
         context: context,
         style: _contentTextStyle(context, theme).copyWith(color: color),
@@ -443,6 +446,18 @@ class _TCollapseState<T extends Object> extends State<TCollapse<T>> {
     assert(
       !_isAccordion || widget.value.length <= 1,
       'TCollapseMode.accordion allows at most one expanded value.',
+    );
+  }
+
+  Widget _textSlot(
+    BuildContext context, {
+    required TextStyle style,
+    required Widget child,
+  }) {
+    return TTextStyleScope(
+      style: style,
+      // Native text keeps the component's existing paragraph reset boundary.
+      child: DefaultTextStyle(style: style, child: child),
     );
   }
 }

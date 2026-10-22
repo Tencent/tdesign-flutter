@@ -4,6 +4,15 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 import '../../helpers/text_slot_regression.dart';
 
 void main() {
+  registerNativeParagraphContractTests(
+    'Drawer title slot',
+    (child) => SizedBox(
+      height: 400,
+      child: TDrawer(title: child, items: const []),
+    ),
+    reset: true,
+  );
+
   registerTextSlotParityTests(
     'Drawer title slot',
     (child) => SizedBox(

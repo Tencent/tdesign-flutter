@@ -1,9 +1,0 @@
-# 其余组件文字槽遗漏修复
-
-仅修复Avatar、Calendar副标题、Collapse、Divider、Drawer标题、Link、Popover文字与自然尺寸、Progress标签、Table表头/单元格及内部TToolbarPressable的确认遗漏。既有相关视觉入口修复前后均通过，但新增TText使用路径仍可能改变视觉。
-
-基线d0de29e8。复用既有TTextStyleScope，保留全局TText隔离、实例显式样式和内容内部更近TD文字主题优先，以及段落配置。修复既有组件文字槽样式契约，不引入新配置或API；对依赖错误正文默认的调用仍有可见影响，不以PNG不变宣称零风险。
-
-不含Button/NavBar（#1180）、ActionSheet居中问题、另一组修复、CI优化或工具链升级。不更新Golden。验证阶段仅本地操作；后续按用户授权独立提交和创建PR。
-
-验收：先功能门禁与严格分析，双Flutter3.32.0/3.47.7完整受影响组件、逐组件95%覆盖率、Demo和生成产物检查；稳定后Linux3.32原基线精确比较。静态全组件清单不等于全57组件运行或所有TText用法像素覆盖。

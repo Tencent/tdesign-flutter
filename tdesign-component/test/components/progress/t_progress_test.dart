@@ -10,6 +10,26 @@ import '../../support/token_consumption_evidence.dart';
 /// 覆盖 variant 四档（linear/circular/micro/button）、value 边界、
 /// label 位置、Theme 各字段、copyWith/lerp、边界情况。
 void main() {
+  registerNativeParagraphContractTests(
+    'Progress plump slot',
+    (child) => TProgress.plump(value: 0.8, label: child),
+    reset: true,
+  );
+  registerNativeParagraphContractTests(
+    'Progress circular slot',
+    (child) => TProgress.circular(value: 0.8, label: child),
+    reset: true,
+  );
+  registerNativeParagraphContractTests(
+    'Progress warning slot',
+    (child) => TProgress.linear(
+      value: 0.8,
+      status: TProgressStatus.warning,
+      label: child,
+    ),
+    reset: true,
+  );
+
   registerTextSlotParityTests(
     'Progress plump slot',
     (child) => TProgress.plump(value: 0.8, label: child),
