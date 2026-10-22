@@ -1,0 +1,66 @@
+[
+  {
+    "file": "tab_bar_custom_mixed_dark.png",
+    "previewToGoldenPixels": 0,
+    "size": [
+      375,
+      812
+    ]
+  },
+  {
+    "file": "tab_bar_custom_mixed_light.png",
+    "previewToGoldenPixels": 0,
+    "size": [
+      375,
+      812
+    ]
+  },
+  {
+    "file": "tab_bar_custom_multiline_dark.png",
+    "previewToGoldenPixels": 0,
+    "size": [
+      375,
+      812
+    ]
+  },
+  {
+    "file": "tab_bar_custom_multiline_light.png",
+    "previewToGoldenPixels": 0,
+    "size": [
+      375,
+      812
+    ]
+  },
+  {
+    "file": "tab_bar_custom_scroll_bottom_dark.png",
+    "previewToGoldenPixels": 0,
+    "size": [
+      375,
+      812
+    ]
+  },
+  {
+    "file": "tab_bar_custom_scroll_bottom_light.png",
+    "previewToGoldenPixels": 0,
+    "size": [
+      375,
+      812
+    ]
+  },
+  {
+    "file": "tab_bar_custom_scroll_dark.png",
+    "previewToGoldenPixels": 0,
+    "size": [
+      375,
+      812
+    ]
+  },
+  {
+    "file": "tab_bar_custom_scroll_light.png",
+    "previewToGoldenPixels": 0,
+    "size": [
+      375,
+      812
+    ]
+  }
+]
