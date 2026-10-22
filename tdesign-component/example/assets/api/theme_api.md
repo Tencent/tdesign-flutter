@@ -148,7 +148,7 @@ t 为 0 或 1 时返回对应端点；目标为空时返回当前主题。
 
 | 名称 | 类型 | 默认值 | 说明 | 必传 |
 | --- | --- | --- | --- | --- |
-| map | Map&lt;String, dynamic&gt; | - | 字体 JSON 配置，包含 size、lineHeight 和可选的 fontWeight（1 至 9，默认 4）。 | 是 |
+| map | Map&lt;String, dynamic&gt; | - | 字体 JSON 配置。size 为正、lineHeight 为非负的有限整数或小数，保留精度； fontWeight 为 1 至 9 的整数，默认 4。非法配置抛出 FormatException。 | 是 |
 
 
 #### 属性

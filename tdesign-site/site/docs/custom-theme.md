@@ -125,4 +125,42 @@ Widget documentationThemeApp(ThemeMode mode, Widget home) {
 
 [Theme 主题](/flutter/components/theme)展示功能色、文字与图标颜色、中性色板，并提供主题 API 查询。页面中的色板会根据当前上下文重新读取主题。
 
-官网主题工具的 CSS 转换使用仓库内[css2token](https://github.com/Tencent/tdesign-flutter/tree/develop/packages/css2token)和[Web 主题接收适配](https://github.com/Tencent/tdesign-flutter/blob/develop/tdesign-component/example/lib/util/web_theme_message.dart)。它们负责 CSS Token 转换与默认值合并，不是组件包中的公开 CSS 导入 API。业务接入优先使用上面的 JSON 配置；不要把旧颜色转换脚本当作能处理所有字体、间距和阴影的通用转换器。
+从主题工具下载完整的 `theme.css` 后，可以在仓库中离线转换为组件包支持的 JSON。无需手动拆分明暗规则，也无需删除字体配置或将小数字号取整：
+
+```sh
+git clone https://github.com/Tencent/tdesign-flutter.git
+cd tdesign-flutter/tdesign-component/example
+flutter pub get
+dart run tool/convert_theme.dart /path/to/theme.css /path/to/theme.json --name ocean
+```
+
+工具从完整 CSS 读取浅色、深色和共享结构变量，复用 `css2token` 映射，保留字体小数精度；缺失的复合字体字段按对应明暗默认主题补齐（含字重）。模式专属规则优先于共享 `:root`，相同类型规则按源码顺序覆盖。输出主题名称为 `ocean` 和 `oceanDark`，可用 `--dark-name night` 指定深色名称；加载时须传相同的 `darkName`。
+
+将输出文件加入业务应用的 `assets/theme.json`，在业务 `pubspec.yaml` 注册：
+
+```yaml
+flutter:
+  assets:
+    - assets/theme.json
+```
+
+然后加载并传给明暗构建器（需导入 `package:flutter/material.dart`、`package:flutter/services.dart` 和 `package:tdesign_flutter/tdesign_flutter.dart`）：
+
+```dart
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  final json = await rootBundle.loadString('assets/theme.json');
+  final tokens = TThemeData.fromJson('ocean', json, darkName: 'oceanDark');
+  if (tokens == null) throw const FormatException('Invalid theme.json');
+  runApp(MaterialApp(
+    theme: TThemeBuilder.light(tokens),
+    darkTheme: TThemeBuilder.dark(tokens),
+    themeMode: ThemeMode.system,
+    home: const Scaffold(body: Center(child: TText('主题已加载'))),
+  ));
+}
+```
+
+业务运行时只依赖组件包和生成后的 JSON，不需要复制转换器、依赖 `css2token` 或站点 Web 消息接收适配。已有整数 JSON 配置继续可用。该字体小数修复需要使用包含 #1173 修复的组件版本；旧 1.0.0 不具备该能力，仅更新转换工具不能修复旧版解析器。
+
+转换工具位于[Example/tool/convert_theme.dart](https://github.com/Tencent/tdesign-flutter/blob/develop/tdesign-component/example/tool/convert_theme.dart)，映射复用仓库内[css2token](https://github.com/Tencent/tdesign-flutter/tree/develop/packages/css2token)。这是构建时的生成器导出接入工具，不是组件包中的运行时 CSS 导入 API。当前支持生成器的根选择器规则；嵌套规则、媒体查询或其他选择器会报错。仅转换已有映射支持的 Token，未知或不支持的 CSS 值沿用转换器的忽略规则；未提供的非字体 Token 继续继承业务组件版本默认值，不承诺浏览器 CSS 与 Flutter 逐像素一致。
