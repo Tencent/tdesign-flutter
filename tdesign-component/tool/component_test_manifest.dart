@@ -599,7 +599,10 @@ const componentTestManifests = <ComponentTestManifest>[
       VisualTestManifest(
         name: 'TabBar Demo',
         workingDirectory: 'example',
-        testFiles: ['test/tab_bar/tab_bar_demo_golden_test.dart'],
+        testFiles: [
+          'test/tab_bar/tab_bar_demo_golden_test.dart',
+          'test/tab_bar/tab_bar_custom_menu_golden_test.dart',
+        ],
       ),
     ],
   ),

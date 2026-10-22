@@ -36,12 +36,8 @@
 
 当前待办见 [tasks.md](./tasks.md)；实际执行入口见[贡献规范](../../../CONTRIBUTING.md#组件测试与-ci-回归门禁)。清理不关闭未完成项。
 
-## 自定义文字槽统一本地验收（2026-10-22）
+## 文字槽验收
 
-内容子树字体默认值、布局包装、显式/局部样式、段落和支柱的既有范围保留。仅更新 `popover_type_custom_content_opened_light.png` / `dark.png`，与已审阅候选渲染像素完全一致；其余 PNG 不变。Flutter 3.32.0 / 3.47.7 各 196 项 Popover/文字契约、15 项页面测试及严格分析通过，Popover 覆盖率两版均≥95%。固定 Linux Flutter 3.32.0 的 19 个受影响登记视觉套件共 217 项无更新比较通过，其中 Popover 50 项。生产 Dart、测试源码、工具链与 CI 配置未改；Spec 不存放截图，PR 保留基线更新前后 diff。远端结果以推送后最终 head 为准。
+范围：内容子树默认字体、布局包装、显式与局部样式、原生段落以及单行/省略/支柱测量。此前获授权更新的两张自定义菜单基线保留，本轮不再修改。
 
-完整范围和既有整体回归见 [Theme 契约验收](../../engineering/048-Theme-configuration-contracts/acceptance.md#自定义文字槽统一验收2026-10-22)。设备验收未新增。
-
-## #1184 合并复验（2026-10-22）
-
-候选 `0cbe78168`：双版本组件/共享回归各 1,472 项、页面各 85 项，Linux 登记视觉套件 217 项（含 Popover 50 项）通过。保留 #1182 单行/省略/支柱修复，按 #1184 内容作用域解析默认字体；本轮未新增 Golden 基线改动。三阶段专项渲染及 Toolbar 复验见 [Theme 验收](../../engineering/048-Theme-configuration-contracts/acceptance.md#1184-合并验收2026-10-22)。截图不存 Spec，设备和最终 head CI 单独核对。
+最终候选、双版本功能与视觉结果集中记录在 [Theme 文字槽验收](../../engineering/048-Theme-configuration-contracts/acceptance.md#自定义文字槽统一验收2026-10-22)，本组件不重复保存验证流水。既有设备及设计待办继续保留；本地结果不替代当前候选的远端 CI 或真机验证，截图不存 Spec。

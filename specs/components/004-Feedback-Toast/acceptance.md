@@ -32,6 +32,8 @@
 
 当前待办见 [tasks.md](./tasks.md)；实际执行入口见[贡献规范](../../../CONTRIBUTING.md#组件测试与-ci-回归门禁)。清理不关闭未完成项。
 
-## 自定义文字槽统一本地验收（2026-10-22）
+## 文字槽验收
 
-普通/加载自定义文案、布局包装、显式/局部样式及实际 Overlay 调用点的原生段落继承。原有 Demo Golden 通过。 Flutter 3.32.0 / 3.47.7 相关组件、覆盖率、页面与严格分析通过。最终候选输入摘要、完整范围及已知差异统一见 [Theme 契约本轮验收](../../engineering/048-Theme-configuration-contracts/acceptance.md#自定义文字槽统一验收2026-10-22)。不以本地结果代替远端 CI 或设备验收；本轮未更新 Golden 基线，截图仅在工作区 artifacts。
+范围：普通/加载自定义文案、布局包装、显式与局部样式，以及实际 Overlay 调用点的原生段落继承。
+
+最终候选、双版本功能与视觉结果集中记录在 [Theme 文字槽验收](../../engineering/048-Theme-configuration-contracts/acceptance.md#自定义文字槽统一验收2026-10-22)，本组件不重复保存验证流水。既有设备及设计待办继续保留；本地结果不替代当前候选的远端 CI 或真机验证，截图不存 Spec。
