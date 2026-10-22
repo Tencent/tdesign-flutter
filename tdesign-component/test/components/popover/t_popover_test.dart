@@ -11,6 +11,42 @@ import '../../helpers/text_slot_regression.dart';
 ///
 /// 覆盖 TPopoverColorPreset、TPopoverPlacement、内容渲染、箭头、回调等。
 void main() {
+  for (final wrapped in [false, true]) {
+    testWidgets(
+      'Popover subtree supplies bubble defaults to TText wrapped=$wrapped',
+      (tester) async {
+        final token = TThemeData.defaultData();
+        await tester.pumpWidget(
+          MaterialApp(
+            theme: TThemeBuilder.light(token),
+            home: Scaffold(
+              body: Builder(
+                builder: (context) => Center(
+                  child: TPopoverWidget(
+                    context: context,
+                    content: wrapped
+                        ? const Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [TText('custom')],
+                          )
+                        : const TText('custom'),
+                  ),
+                ),
+              ),
+            ),
+          ),
+        );
+        await tester.pumpAndSettle();
+        final paragraph = tester.renderObject<RenderParagraph>(
+          find.text('custom'),
+        );
+        expect(paragraph.text.style!.fontSize, 16);
+        expect(paragraph.text.style!.color, token.textColorAnti);
+        expect(tester.takeException(), isNull);
+      },
+    );
+  }
+
   registerNativeParagraphContractTests(
     'Popover custom subtree',
     (child) => Builder(
