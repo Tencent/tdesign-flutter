@@ -56,10 +56,8 @@ TDesign Flutter 的 TToast 组件在与 TDesign Mobile 对齐时存在两处默�
 曾使用公开 infiniteDuration 哨兵并为加载默认无限展示；最终采用所有入口同一时长规则，以零或负时长显式表达持续显示，减少特殊常量与入口差异。
 
 - `Colors.black.withValues(alpha:)` 需 Flutter 3.27+；项目基线 3.32.0 满足，latest 满足。
-- placement 采用垂直百分比偏移（25% / 50% / 75%），与小程序 / mobile-vue 一致。旧实现为固定 `Center` 居中（并未叠加 SafeArea），新实现改为百分比定位，同样天然避让安全区（刘海屏 / 挖孔屏 / 底部手势条），无需叠加 SafeArea。
-- **breaking change**：移除 `bool? preventTap` 参数，更新日志使用 `breaking` commit type（`- breaking(toast): 移除 preventTap 参数，改用 overlay`）提醒用户迁移。
-
-独立验证目录，主工作区已有修改未触碰。Linux 一次性容器通过 --no-hardlinks 修复缓存 Git 克隆故障；切换 Flutter SDK 后清理构建缓存，避免 shader 版本污染。远端最终提交 CI 等待推送后核对，不沿用旧 head 的通过结论。
+- 早期方案按剩余空间百分比定位，并曾将 middle 定为 50%；最终按 Overlay 全高中的实际内容中心定位，top/middle/bottom 为 25%/45%/75%。百分比定位不保证自动避让安全区。
+- 最终遮罩参数为 `TOverlayConfig.preventScrollThrough`，替代 `preventTap`，同时控制背景点击和滚动；并非改成仅提供 `overlay` 就完成迁移。
 
 ## 兼容性与迁移
 
