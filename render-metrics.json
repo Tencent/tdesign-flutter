@@ -1,0 +1,6360 @@
+{
+  "rows": [
+    {
+      "phase": "patch",
+      "name": "avatar_dark",
+      "pixels": 178,
+      "changes": [
+        {
+          "subject": "td",
+          "fields": {
+            "字号": [
+              14.0,
+              16.0
+            ],
+            "行高": [
+              22.0,
+              16.0
+            ],
+            "字重": [
+              "FontWeight.w400",
+              "FontWeight.w600"
+            ],
+            "颜色": [
+              "Color(alpha: 0.9020, red: 1.0000, green: 1.0000, blue: 1.0000, colorSpace: ColorSpace.sRGB)",
+              "Color(alpha: 1.0000, red: 0.2706, green: 0.5098, blue: 0.9020, colorSpace: ColorSpace.sRGB)"
+            ],
+            "文字盒": [
+              [
+                16.748046875,
+                22.0
+              ],
+              [
+                19.140625,
+                16.0
+              ]
+            ]
+          }
+        }
+      ],
+      "before": {
+        "name": "avatar",
+        "dark": true,
+        "errors": [],
+        "native": {
+          "font": 16.0,
+          "height": 1.0,
+          "weight": "FontWeight.w600",
+          "color": "Color(alpha: 1.0000, red: 0.2706, green: 0.5098, blue: 0.9020, colorSpace: ColorSpace.sRGB)",
+          "size": [
+            19.140625,
+            16.0
+          ],
+          "maxLines": null,
+          "softWrap": true,
+          "align": "TextAlign.start",
+          "overflow": "TextOverflow.clip",
+          "natural_height": 16.0,
+          "line_count": 1
+        },
+        "td": {
+          "font": 14.0,
+          "height": 1.5714285714285714,
+          "weight": "FontWeight.w400",
+          "color": "Color(alpha: 0.9020, red: 1.0000, green: 1.0000, blue: 1.0000, colorSpace: ColorSpace.sRGB)",
+          "size": [
+            16.748046875,
+            22.0
+          ],
+          "maxLines": null,
+          "softWrap": true,
+          "align": "TextAlign.start",
+          "overflow": "TextOverflow.clip",
+          "natural_height": 22.0,
+          "line_count": 1
+        },
+        "explicit": {
+          "font": 14.0,
+          "height": 1.5714285714285714,
+          "weight": "FontWeight.w400",
+          "color": "MaterialColor(primary value: Color(alpha: 1.0000, red: 0.9137, green: 0.1176, blue: 0.3882, colorSpace: ColorSpace.sRGB))",
+          "size": [
+            16.748046875,
+            22.0
+          ],
+          "maxLines": null,
+          "softWrap": true,
+          "align": "TextAlign.start",
+          "overflow": "TextOverflow.clip",
+          "natural_height": 22.0,
+          "line_count": 1
+        }
+      },
+      "after": {
+        "name": "avatar",
+        "dark": true,
+        "errors": [],
+        "native": {
+          "font": 16.0,
+          "height": 1.0,
+          "weight": "FontWeight.w600",
+          "color": "Color(alpha: 1.0000, red: 0.2706, green: 0.5098, blue: 0.9020, colorSpace: ColorSpace.sRGB)",
+          "size": [
+            19.140625,
+            16.0
+          ],
+          "maxLines": null,
+          "softWrap": true,
+          "align": "TextAlign.start",
+          "overflow": "TextOverflow.clip",
+          "natural_height": 16.0,
+          "line_count": 1
+        },
+        "td": {
+          "font": 16.0,
+          "height": 1.0,
+          "weight": "FontWeight.w600",
+          "color": "Color(alpha: 1.0000, red: 0.2706, green: 0.5098, blue: 0.9020, colorSpace: ColorSpace.sRGB)",
+          "size": [
+            19.140625,
+            16.0
+          ],
+          "maxLines": null,
+          "softWrap": true,
+          "align": "TextAlign.start",
+          "overflow": "TextOverflow.clip",
+          "natural_height": 16.0,
+          "line_count": 1
+        },
+        "explicit": {
+          "font": 14.0,
+          "height": 1.5714285714285714,
+          "weight": "FontWeight.w400",
+          "color": "MaterialColor(primary value: Color(alpha: 1.0000, red: 0.9137, green: 0.1176, blue: 0.3882, colorSpace: ColorSpace.sRGB))",
+          "size": [
+            16.748046875,
+            22.0
+          ],
+          "maxLines": null,
+          "softWrap": true,
+          "align": "TextAlign.start",
+          "overflow": "TextOverflow.clip",
+          "natural_height": 22.0,
+          "line_count": 1
+        }
+      }
+    },
+    {
+      "phase": "patch",
+      "name": "avatar_light",
+      "pixels": 178,
+      "changes": [
+        {
+          "subject": "td",
+          "fields": {
+            "字号": [
+              14.0,
+              16.0
+            ],
+            "行高": [
+              22.0,
+              16.0
+            ],
+            "字重": [
+              "FontWeight.w400",
+              "FontWeight.w600"
+            ],
+            "颜色": [
+              "Color(alpha: 0.8980, red: 0.0000, green: 0.0000, blue: 0.0000, colorSpace: ColorSpace.sRGB)",
+              "Color(alpha: 1.0000, red: 0.0000, green: 0.3216, blue: 0.8510, colorSpace: ColorSpace.sRGB)"
+            ],
+            "文字盒": [
+              [
+                16.748046875,
+                22.0
+              ],
+              [
+                19.140625,
+                16.0
+              ]
+            ]
+          }
+        }
+      ],
+      "before": {
+        "name": "avatar",
+        "dark": false,
+        "errors": [],
+        "native": {
+          "font": 16.0,
+          "height": 1.0,
+          "weight": "FontWeight.w600",
+          "color": "Color(alpha: 1.0000, red: 0.0000, green: 0.3216, blue: 0.8510, colorSpace: ColorSpace.sRGB)",
+          "size": [
+            19.140625,
+            16.0
+          ],
+          "maxLines": null,
+          "softWrap": true,
+          "align": "TextAlign.start",
+          "overflow": "TextOverflow.clip",
+          "natural_height": 16.0,
+          "line_count": 1
+        },
+        "td": {
+          "font": 14.0,
+          "height": 1.5714285714285714,
+          "weight": "FontWeight.w400",
+          "color": "Color(alpha: 0.8980, red: 0.0000, green: 0.0000, blue: 0.0000, colorSpace: ColorSpace.sRGB)",
+          "size": [
+            16.748046875,
+            22.0
+          ],
+          "maxLines": null,
+          "softWrap": true,
+          "align": "TextAlign.start",
+          "overflow": "TextOverflow.clip",
+          "natural_height": 22.0,
+          "line_count": 1
+        },
+        "explicit": {
+          "font": 14.0,
+          "height": 1.5714285714285714,
+          "weight": "FontWeight.w400",
+          "color": "MaterialColor(primary value: Color(alpha: 1.0000, red: 0.9137, green: 0.1176, blue: 0.3882, colorSpace: ColorSpace.sRGB))",
+          "size": [
+            16.748046875,
+            22.0
+          ],
+          "maxLines": null,
+          "softWrap": true,
+          "align": "TextAlign.start",
+          "overflow": "TextOverflow.clip",
+          "natural_height": 22.0,
+          "line_count": 1
+        }
+      },
+      "after": {
+        "name": "avatar",
+        "dark": false,
+        "errors": [],
+        "native": {
+          "font": 16.0,
+          "height": 1.0,
+          "weight": "FontWeight.w600",
+          "color": "Color(alpha: 1.0000, red: 0.0000, green: 0.3216, blue: 0.8510, colorSpace: ColorSpace.sRGB)",
+          "size": [
+            19.140625,
+            16.0
+          ],
+          "maxLines": null,
+          "softWrap": true,
+          "align": "TextAlign.start",
+          "overflow": "TextOverflow.clip",
+          "natural_height": 16.0,
+          "line_count": 1
+        },
+        "td": {
+          "font": 16.0,
+          "height": 1.0,
+          "weight": "FontWeight.w600",
+          "color": "Color(alpha: 1.0000, red: 0.0000, green: 0.3216, blue: 0.8510, colorSpace: ColorSpace.sRGB)",
+          "size": [
+            19.140625,
+            16.0
+          ],
+          "maxLines": null,
+          "softWrap": true,
+          "align": "TextAlign.start",
+          "overflow": "TextOverflow.clip",
+          "natural_height": 16.0,
+          "line_count": 1
+        },
+        "explicit": {
+          "font": 14.0,
+          "height": 1.5714285714285714,
+          "weight": "FontWeight.w400",
+          "color": "MaterialColor(primary value: Color(alpha: 1.0000, red: 0.9137, green: 0.1176, blue: 0.3882, colorSpace: ColorSpace.sRGB))",
+          "size": [
+            16.748046875,
+            22.0
+          ],
+          "maxLines": null,
+          "softWrap": true,
+          "align": "TextAlign.start",
+          "overflow": "TextOverflow.clip",
+          "natural_height": 22.0,
+          "line_count": 1
+        }
+      }
+    },
+    {
+      "phase": "patch",
+      "name": "calendar_dark",
+      "pixels": 446,
+      "changes": [
+        {
+          "subject": "td",
+          "fields": {
+            "字号": [
+              14.0,
+              10.0
+            ],
+            "行高": [
+              22.0,
+              16.0
+            ],
+            "文字盒": [
+              [
+                41.99981689453125,
+                22.0
+              ],
+              [
+                29.999954223632812,
+                16.0
+              ]
+            ]
+          }
+        }
+      ],
+      "before": {
+        "name": "calendar",
+        "dark": true,
+        "errors": [],
+        "native": {
+          "font": 10.0,
+          "height": 1.6,
+          "weight": "FontWeight.w400",
+          "color": "Color(alpha: 0.9020, red: 1.0000, green: 1.0000, blue: 1.0000, colorSpace: ColorSpace.sRGB)",
+          "size": [
+            29.999954223632812,
+            16.0
+          ],
+          "maxLines": null,
+          "softWrap": true,
+          "align": "TextAlign.start",
+          "overflow": "TextOverflow.clip",
+          "natural_height": 16.0,
+          "line_count": 1
+        },
+        "td": {
+          "font": 14.0,
+          "height": 1.5714285714285714,
+          "weight": "FontWeight.w400",
+          "color": "Color(alpha: 0.9020, red: 1.0000, green: 1.0000, blue: 1.0000, colorSpace: ColorSpace.sRGB)",
+          "size": [
+            41.99981689453125,
+            22.0
+          ],
+          "maxLines": null,
+          "softWrap": true,
+          "align": "TextAlign.start",
+          "overflow": "TextOverflow.clip",
+          "natural_height": 22.0,
+          "line_count": 1
+        },
+        "explicit": {
+          "font": 14.0,
+          "height": 1.5714285714285714,
+          "weight": "FontWeight.w400",
+          "color": "MaterialColor(primary value: Color(alpha: 1.0000, red: 0.9137, green: 0.1176, blue: 0.3882, colorSpace: ColorSpace.sRGB))",
+          "size": [
+            41.99981689453125,
+            22.0
+          ],
+          "maxLines": null,
+          "softWrap": true,
+          "align": "TextAlign.start",
+          "overflow": "TextOverflow.clip",
+          "natural_height": 22.0,
+          "line_count": 1
+        }
+      },
+      "after": {
+        "name": "calendar",
+        "dark": true,
+        "errors": [],
+        "native": {
+          "font": 10.0,
+          "height": 1.6,
+          "weight": "FontWeight.w400",
+          "color": "Color(alpha: 0.9020, red: 1.0000, green: 1.0000, blue: 1.0000, colorSpace: ColorSpace.sRGB)",
+          "size": [
+            29.999954223632812,
+            16.0
+          ],
+          "maxLines": null,
+          "softWrap": true,
+          "align": "TextAlign.start",
+          "overflow": "TextOverflow.clip",
+          "natural_height": 16.0,
+          "line_count": 1
+        },
+        "td": {
+          "font": 10.0,
+          "height": 1.6,
+          "weight": "FontWeight.w400",
+          "color": "Color(alpha: 0.9020, red: 1.0000, green: 1.0000, blue: 1.0000, colorSpace: ColorSpace.sRGB)",
+          "size": [
+            29.999954223632812,
+            16.0
+          ],
+          "maxLines": null,
+          "softWrap": true,
+          "align": "TextAlign.start",
+          "overflow": "TextOverflow.clip",
+          "natural_height": 16.0,
+          "line_count": 1
+        },
+        "explicit": {
+          "font": 14.0,
+          "height": 1.5714285714285714,
+          "weight": "FontWeight.w400",
+          "color": "MaterialColor(primary value: Color(alpha: 1.0000, red: 0.9137, green: 0.1176, blue: 0.3882, colorSpace: ColorSpace.sRGB))",
+          "size": [
+            41.99981689453125,
+            22.0
+          ],
+          "maxLines": null,
+          "softWrap": true,
+          "align": "TextAlign.start",
+          "overflow": "TextOverflow.clip",
+          "natural_height": 22.0,
+          "line_count": 1
+        }
+      }
+    },
+    {
+      "phase": "patch",
+      "name": "calendar_light",
+      "pixels": 446,
+      "changes": [
+        {
+          "subject": "td",
+          "fields": {
+            "字号": [
+              14.0,
+              10.0
+            ],
+            "行高": [
+              22.0,
+              16.0
+            ],
+            "颜色": [
+              "Color(alpha: 0.8980, red: 0.0000, green: 0.0000, blue: 0.0000, colorSpace: ColorSpace.sRGB)",
+              "Color(alpha: 1.0000, red: 1.0000, green: 1.0000, blue: 1.0000, colorSpace: ColorSpace.sRGB)"
+            ],
+            "文字盒": [
+              [
+                41.99981689453125,
+                22.0
+              ],
+              [
+                29.999954223632812,
+                16.0
+              ]
+            ]
+          }
+        }
+      ],
+      "before": {
+        "name": "calendar",
+        "dark": false,
+        "errors": [],
+        "native": {
+          "font": 10.0,
+          "height": 1.6,
+          "weight": "FontWeight.w400",
+          "color": "Color(alpha: 1.0000, red: 1.0000, green: 1.0000, blue: 1.0000, colorSpace: ColorSpace.sRGB)",
+          "size": [
+            29.999954223632812,
+            16.0
+          ],
+          "maxLines": null,
+          "softWrap": true,
+          "align": "TextAlign.start",
+          "overflow": "TextOverflow.clip",
+          "natural_height": 16.0,
+          "line_count": 1
+        },
+        "td": {
+          "font": 14.0,
+          "height": 1.5714285714285714,
+          "weight": "FontWeight.w400",
+          "color": "Color(alpha: 0.8980, red: 0.0000, green: 0.0000, blue: 0.0000, colorSpace: ColorSpace.sRGB)",
+          "size": [
+            41.99981689453125,
+            22.0
+          ],
+          "maxLines": null,
+          "softWrap": true,
+          "align": "TextAlign.start",
+          "overflow": "TextOverflow.clip",
+          "natural_height": 22.0,
+          "line_count": 1
+        },
+        "explicit": {
+          "font": 14.0,
+          "height": 1.5714285714285714,
+          "weight": "FontWeight.w400",
+          "color": "MaterialColor(primary value: Color(alpha: 1.0000, red: 0.9137, green: 0.1176, blue: 0.3882, colorSpace: ColorSpace.sRGB))",
+          "size": [
+            41.99981689453125,
+            22.0
+          ],
+          "maxLines": null,
+          "softWrap": true,
+          "align": "TextAlign.start",
+          "overflow": "TextOverflow.clip",
+          "natural_height": 22.0,
+          "line_count": 1
+        }
+      },
+      "after": {
+        "name": "calendar",
+        "dark": false,
+        "errors": [],
+        "native": {
+          "font": 10.0,
+          "height": 1.6,
+          "weight": "FontWeight.w400",
+          "color": "Color(alpha: 1.0000, red: 1.0000, green: 1.0000, blue: 1.0000, colorSpace: ColorSpace.sRGB)",
+          "size": [
+            29.999954223632812,
+            16.0
+          ],
+          "maxLines": null,
+          "softWrap": true,
+          "align": "TextAlign.start",
+          "overflow": "TextOverflow.clip",
+          "natural_height": 16.0,
+          "line_count": 1
+        },
+        "td": {
+          "font": 10.0,
+          "height": 1.6,
+          "weight": "FontWeight.w400",
+          "color": "Color(alpha: 1.0000, red: 1.0000, green: 1.0000, blue: 1.0000, colorSpace: ColorSpace.sRGB)",
+          "size": [
+            29.999954223632812,
+            16.0
+          ],
+          "maxLines": null,
+          "softWrap": true,
+          "align": "TextAlign.start",
+          "overflow": "TextOverflow.clip",
+          "natural_height": 16.0,
+          "line_count": 1
+        },
+        "explicit": {
+          "font": 14.0,
+          "height": 1.5714285714285714,
+          "weight": "FontWeight.w400",
+          "color": "MaterialColor(primary value: Color(alpha: 1.0000, red: 0.9137, green: 0.1176, blue: 0.3882, colorSpace: ColorSpace.sRGB))",
+          "size": [
+            41.99981689453125,
+            22.0
+          ],
+          "maxLines": null,
+          "softWrap": true,
+          "align": "TextAlign.start",
+          "overflow": "TextOverflow.clip",
+          "natural_height": 22.0,
+          "line_count": 1
+        }
+      }
+    },
+    {
+      "phase": "patch",
+      "name": "collapse_body_dark",
+      "pixels": 0,
+      "changes": [],
+      "before": {
+        "name": "collapse_body",
+        "dark": true,
+        "errors": [],
+        "native": {
+          "font": 14.0,
+          "height": 1.5714285714285714,
+          "weight": "FontWeight.w400",
+          "color": "Color(alpha: 0.9020, red: 1.0000, green: 1.0000, blue: 1.0000, colorSpace: ColorSpace.sRGB)",
+          "size": [
+            296.0,
+            22.0
+          ],
+          "maxLines": null,
+          "softWrap": true,
+          "align": "TextAlign.start",
+          "overflow": "TextOverflow.clip",
+          "natural_height": 22.0,
+          "line_count": 1
+        },
+        "td": {
+          "font": 14.0,
+          "height": 1.5714285714285714,
+          "weight": "FontWeight.w400",
+          "color": "Color(alpha: 0.9020, red: 1.0000, green: 1.0000, blue: 1.0000, colorSpace: ColorSpace.sRGB)",
+          "size": [
+            296.0,
+            22.0
+          ],
+          "maxLines": null,
+          "softWrap": true,
+          "align": "TextAlign.start",
+          "overflow": "TextOverflow.clip",
+          "natural_height": 22.0,
+          "line_count": 1
+        },
+        "explicit": {
+          "font": 14.0,
+          "height": 1.5714285714285714,
+          "weight": "FontWeight.w400",
+          "color": "MaterialColor(primary value: Color(alpha: 1.0000, red: 0.9137, green: 0.1176, blue: 0.3882, colorSpace: ColorSpace.sRGB))",
+          "size": [
+            296.0,
+            22.0
+          ],
+          "maxLines": null,
+          "softWrap": true,
+          "align": "TextAlign.start",
+          "overflow": "TextOverflow.clip",
+          "natural_height": 22.0,
+          "line_count": 1
+        }
+      },
+      "after": {
+        "name": "collapse_body",
+        "dark": true,
+        "errors": [],
+        "native": {
+          "font": 14.0,
+          "height": 1.5714285714285714,
+          "weight": "FontWeight.w400",
+          "color": "Color(alpha: 0.9020, red: 1.0000, green: 1.0000, blue: 1.0000, colorSpace: ColorSpace.sRGB)",
+          "size": [
+            296.0,
+            22.0
+          ],
+          "maxLines": null,
+          "softWrap": true,
+          "align": "TextAlign.start",
+          "overflow": "TextOverflow.clip",
+          "natural_height": 22.0,
+          "line_count": 1
+        },
+        "td": {
+          "font": 14.0,
+          "height": 1.5714285714285714,
+          "weight": "FontWeight.w400",
+          "color": "Color(alpha: 0.9020, red: 1.0000, green: 1.0000, blue: 1.0000, colorSpace: ColorSpace.sRGB)",
+          "size": [
+            296.0,
+            22.0
+          ],
+          "maxLines": null,
+          "softWrap": true,
+          "align": "TextAlign.start",
+          "overflow": "TextOverflow.clip",
+          "natural_height": 22.0,
+          "line_count": 1
+        },
+        "explicit": {
+          "font": 14.0,
+          "height": 1.5714285714285714,
+          "weight": "FontWeight.w400",
+          "color": "MaterialColor(primary value: Color(alpha: 1.0000, red: 0.9137, green: 0.1176, blue: 0.3882, colorSpace: ColorSpace.sRGB))",
+          "size": [
+            296.0,
+            22.0
+          ],
+          "maxLines": null,
+          "softWrap": true,
+          "align": "TextAlign.start",
+          "overflow": "TextOverflow.clip",
+          "natural_height": 22.0,
+          "line_count": 1
+        }
+      }
+    },
+    {
+      "phase": "patch",
+      "name": "collapse_body_light",
+      "pixels": 0,
+      "changes": [],
+      "before": {
+        "name": "collapse_body",
+        "dark": false,
+        "errors": [],
+        "native": {
+          "font": 14.0,
+          "height": 1.5714285714285714,
+          "weight": "FontWeight.w400",
+          "color": "Color(alpha: 0.8980, red: 0.0000, green: 0.0000, blue: 0.0000, colorSpace: ColorSpace.sRGB)",
+          "size": [
+            296.0,
+            22.0
+          ],
+          "maxLines": null,
+          "softWrap": true,
+          "align": "TextAlign.start",
+          "overflow": "TextOverflow.clip",
+          "natural_height": 22.0,
+          "line_count": 1
+        },
+        "td": {
+          "font": 14.0,
+          "height": 1.5714285714285714,
+          "weight": "FontWeight.w400",
+          "color": "Color(alpha: 0.8980, red: 0.0000, green: 0.0000, blue: 0.0000, colorSpace: ColorSpace.sRGB)",
+          "size": [
+            296.0,
+            22.0
+          ],
+          "maxLines": null,
+          "softWrap": true,
+          "align": "TextAlign.start",
+          "overflow": "TextOverflow.clip",
+          "natural_height": 22.0,
+          "line_count": 1
+        },
+        "explicit": {
+          "font": 14.0,
+          "height": 1.5714285714285714,
+          "weight": "FontWeight.w400",
+          "color": "MaterialColor(primary value: Color(alpha: 1.0000, red: 0.9137, green: 0.1176, blue: 0.3882, colorSpace: ColorSpace.sRGB))",
+          "size": [
+            296.0,
+            22.0
+          ],
+          "maxLines": null,
+          "softWrap": true,
+          "align": "TextAlign.start",
+          "overflow": "TextOverflow.clip",
+          "natural_height": 22.0,
+          "line_count": 1
+        }
+      },
+      "after": {
+        "name": "collapse_body",
+        "dark": false,
+        "errors": [],
+        "native": {
+          "font": 14.0,
+          "height": 1.5714285714285714,
+          "weight": "FontWeight.w400",
+          "color": "Color(alpha: 0.8980, red: 0.0000, green: 0.0000, blue: 0.0000, colorSpace: ColorSpace.sRGB)",
+          "size": [
+            296.0,
+            22.0
+          ],
+          "maxLines": null,
+          "softWrap": true,
+          "align": "TextAlign.start",
+          "overflow": "TextOverflow.clip",
+          "natural_height": 22.0,
+          "line_count": 1
+        },
+        "td": {
+          "font": 14.0,
+          "height": 1.5714285714285714,
+          "weight": "FontWeight.w400",
+          "color": "Color(alpha: 0.8980, red: 0.0000, green: 0.0000, blue: 0.0000, colorSpace: ColorSpace.sRGB)",
+          "size": [
+            296.0,
+            22.0
+          ],
+          "maxLines": null,
+          "softWrap": true,
+          "align": "TextAlign.start",
+          "overflow": "TextOverflow.clip",
+          "natural_height": 22.0,
+          "line_count": 1
+        },
+        "explicit": {
+          "font": 14.0,
+          "height": 1.5714285714285714,
+          "weight": "FontWeight.w400",
+          "color": "MaterialColor(primary value: Color(alpha: 1.0000, red: 0.9137, green: 0.1176, blue: 0.3882, colorSpace: ColorSpace.sRGB))",
+          "size": [
+            296.0,
+            22.0
+          ],
+          "maxLines": null,
+          "softWrap": true,
+          "align": "TextAlign.start",
+          "overflow": "TextOverflow.clip",
+          "natural_height": 22.0,
+          "line_count": 1
+        }
+      }
+    },
+    {
+      "phase": "patch",
+      "name": "collapse_disabled_dark",
+      "pixels": 695,
+      "changes": [
+        {
+          "subject": "td",
+          "fields": {
+            "字号": [
+              14.0,
+              16.0
+            ],
+            "行高": [
+              22.0,
+              24.0
+            ],
+            "颜色": [
+              "Color(alpha: 0.9020, red: 1.0000, green: 1.0000, blue: 1.0000, colorSpace: ColorSpace.sRGB)",
+              "Color(alpha: 0.2196, red: 1.0000, green: 1.0000, blue: 1.0000, colorSpace: ColorSpace.sRGB)"
+            ],
+            "文字盒": [
+              [
+                232.0,
+                22.0
+              ],
+              [
+                232.0,
+                24.0
+              ]
+            ]
+          }
+        }
+      ],
+      "before": {
+        "name": "collapse_disabled",
+        "dark": true,
+        "errors": [],
+        "native": {
+          "font": 16.0,
+          "height": 1.5,
+          "weight": "FontWeight.w400",
+          "color": "Color(alpha: 0.2196, red: 1.0000, green: 1.0000, blue: 1.0000, colorSpace: ColorSpace.sRGB)",
+          "size": [
+            232.0,
+            24.0
+          ],
+          "maxLines": null,
+          "softWrap": true,
+          "align": "TextAlign.start",
+          "overflow": "TextOverflow.clip",
+          "natural_height": 24.0,
+          "line_count": 1
+        },
+        "td": {
+          "font": 14.0,
+          "height": 1.5714285714285714,
+          "weight": "FontWeight.w400",
+          "color": "Color(alpha: 0.9020, red: 1.0000, green: 1.0000, blue: 1.0000, colorSpace: ColorSpace.sRGB)",
+          "size": [
+            232.0,
+            22.0
+          ],
+          "maxLines": null,
+          "softWrap": true,
+          "align": "TextAlign.start",
+          "overflow": "TextOverflow.clip",
+          "natural_height": 22.0,
+          "line_count": 1
+        },
+        "explicit": {
+          "font": 14.0,
+          "height": 1.5714285714285714,
+          "weight": "FontWeight.w400",
+          "color": "MaterialColor(primary value: Color(alpha: 1.0000, red: 0.9137, green: 0.1176, blue: 0.3882, colorSpace: ColorSpace.sRGB))",
+          "size": [
+            232.0,
+            22.0
+          ],
+          "maxLines": null,
+          "softWrap": true,
+          "align": "TextAlign.start",
+          "overflow": "TextOverflow.clip",
+          "natural_height": 22.0,
+          "line_count": 1
+        }
+      },
+      "after": {
+        "name": "collapse_disabled",
+        "dark": true,
+        "errors": [],
+        "native": {
+          "font": 16.0,
+          "height": 1.5,
+          "weight": "FontWeight.w400",
+          "color": "Color(alpha: 0.2196, red: 1.0000, green: 1.0000, blue: 1.0000, colorSpace: ColorSpace.sRGB)",
+          "size": [
+            232.0,
+            24.0
+          ],
+          "maxLines": null,
+          "softWrap": true,
+          "align": "TextAlign.start",
+          "overflow": "TextOverflow.clip",
+          "natural_height": 24.0,
+          "line_count": 1
+        },
+        "td": {
+          "font": 16.0,
+          "height": 1.5,
+          "weight": "FontWeight.w400",
+          "color": "Color(alpha: 0.2196, red: 1.0000, green: 1.0000, blue: 1.0000, colorSpace: ColorSpace.sRGB)",
+          "size": [
+            232.0,
+            24.0
+          ],
+          "maxLines": null,
+          "softWrap": true,
+          "align": "TextAlign.start",
+          "overflow": "TextOverflow.clip",
+          "natural_height": 24.0,
+          "line_count": 1
+        },
+        "explicit": {
+          "font": 14.0,
+          "height": 1.5714285714285714,
+          "weight": "FontWeight.w400",
+          "color": "MaterialColor(primary value: Color(alpha: 1.0000, red: 0.9137, green: 0.1176, blue: 0.3882, colorSpace: ColorSpace.sRGB))",
+          "size": [
+            232.0,
+            22.0
+          ],
+          "maxLines": null,
+          "softWrap": true,
+          "align": "TextAlign.start",
+          "overflow": "TextOverflow.clip",
+          "natural_height": 22.0,
+          "line_count": 1
+        }
+      }
+    },
+    {
+      "phase": "patch",
+      "name": "collapse_disabled_light",
+      "pixels": 687,
+      "changes": [
+        {
+          "subject": "td",
+          "fields": {
+            "字号": [
+              14.0,
+              16.0
+            ],
+            "行高": [
+              22.0,
+              24.0
+            ],
+            "颜色": [
+              "Color(alpha: 0.8980, red: 0.0000, green: 0.0000, blue: 0.0000, colorSpace: ColorSpace.sRGB)",
+              "Color(alpha: 0.2588, red: 0.0000, green: 0.0000, blue: 0.0000, colorSpace: ColorSpace.sRGB)"
+            ],
+            "文字盒": [
+              [
+                232.0,
+                22.0
+              ],
+              [
+                232.0,
+                24.0
+              ]
+            ]
+          }
+        }
+      ],
+      "before": {
+        "name": "collapse_disabled",
+        "dark": false,
+        "errors": [],
+        "native": {
+          "font": 16.0,
+          "height": 1.5,
+          "weight": "FontWeight.w400",
+          "color": "Color(alpha: 0.2588, red: 0.0000, green: 0.0000, blue: 0.0000, colorSpace: ColorSpace.sRGB)",
+          "size": [
+            232.0,
+            24.0
+          ],
+          "maxLines": null,
+          "softWrap": true,
+          "align": "TextAlign.start",
+          "overflow": "TextOverflow.clip",
+          "natural_height": 24.0,
+          "line_count": 1
+        },
+        "td": {
+          "font": 14.0,
+          "height": 1.5714285714285714,
+          "weight": "FontWeight.w400",
+          "color": "Color(alpha: 0.8980, red: 0.0000, green: 0.0000, blue: 0.0000, colorSpace: ColorSpace.sRGB)",
+          "size": [
+            232.0,
+            22.0
+          ],
+          "maxLines": null,
+          "softWrap": true,
+          "align": "TextAlign.start",
+          "overflow": "TextOverflow.clip",
+          "natural_height": 22.0,
+          "line_count": 1
+        },
+        "explicit": {
+          "font": 14.0,
+          "height": 1.5714285714285714,
+          "weight": "FontWeight.w400",
+          "color": "MaterialColor(primary value: Color(alpha: 1.0000, red: 0.9137, green: 0.1176, blue: 0.3882, colorSpace: ColorSpace.sRGB))",
+          "size": [
+            232.0,
+            22.0
+          ],
+          "maxLines": null,
+          "softWrap": true,
+          "align": "TextAlign.start",
+          "overflow": "TextOverflow.clip",
+          "natural_height": 22.0,
+          "line_count": 1
+        }
+      },
+      "after": {
+        "name": "collapse_disabled",
+        "dark": false,
+        "errors": [],
+        "native": {
+          "font": 16.0,
+          "height": 1.5,
+          "weight": "FontWeight.w400",
+          "color": "Color(alpha: 0.2588, red: 0.0000, green: 0.0000, blue: 0.0000, colorSpace: ColorSpace.sRGB)",
+          "size": [
+            232.0,
+            24.0
+          ],
+          "maxLines": null,
+          "softWrap": true,
+          "align": "TextAlign.start",
+          "overflow": "TextOverflow.clip",
+          "natural_height": 24.0,
+          "line_count": 1
+        },
+        "td": {
+          "font": 16.0,
+          "height": 1.5,
+          "weight": "FontWeight.w400",
+          "color": "Color(alpha: 0.2588, red: 0.0000, green: 0.0000, blue: 0.0000, colorSpace: ColorSpace.sRGB)",
+          "size": [
+            232.0,
+            24.0
+          ],
+          "maxLines": null,
+          "softWrap": true,
+          "align": "TextAlign.start",
+          "overflow": "TextOverflow.clip",
+          "natural_height": 24.0,
+          "line_count": 1
+        },
+        "explicit": {
+          "font": 14.0,
+          "height": 1.5714285714285714,
+          "weight": "FontWeight.w400",
+          "color": "MaterialColor(primary value: Color(alpha: 1.0000, red: 0.9137, green: 0.1176, blue: 0.3882, colorSpace: ColorSpace.sRGB))",
+          "size": [
+            232.0,
+            22.0
+          ],
+          "maxLines": null,
+          "softWrap": true,
+          "align": "TextAlign.start",
+          "overflow": "TextOverflow.clip",
+          "natural_height": 22.0,
+          "line_count": 1
+        }
+      }
+    },
+    {
+      "phase": "patch",
+      "name": "collapse_header_dark",
+      "pixels": 693,
+      "changes": [
+        {
+          "subject": "td",
+          "fields": {
+            "字号": [
+              14.0,
+              16.0
+            ],
+            "行高": [
+              22.0,
+              24.0
+            ],
+            "文字盒": [
+              [
+                232.0,
+                22.0
+              ],
+              [
+                232.0,
+                24.0
+              ]
+            ]
+          }
+        }
+      ],
+      "before": {
+        "name": "collapse_header",
+        "dark": true,
+        "errors": [],
+        "native": {
+          "font": 16.0,
+          "height": 1.5,
+          "weight": "FontWeight.w400",
+          "color": "Color(alpha: 0.9020, red: 1.0000, green: 1.0000, blue: 1.0000, colorSpace: ColorSpace.sRGB)",
+          "size": [
+            232.0,
+            24.0
+          ],
+          "maxLines": null,
+          "softWrap": true,
+          "align": "TextAlign.start",
+          "overflow": "TextOverflow.clip",
+          "natural_height": 24.0,
+          "line_count": 1
+        },
+        "td": {
+          "font": 14.0,
+          "height": 1.5714285714285714,
+          "weight": "FontWeight.w400",
+          "color": "Color(alpha: 0.9020, red: 1.0000, green: 1.0000, blue: 1.0000, colorSpace: ColorSpace.sRGB)",
+          "size": [
+            232.0,
+            22.0
+          ],
+          "maxLines": null,
+          "softWrap": true,
+          "align": "TextAlign.start",
+          "overflow": "TextOverflow.clip",
+          "natural_height": 22.0,
+          "line_count": 1
+        },
+        "explicit": {
+          "font": 14.0,
+          "height": 1.5714285714285714,
+          "weight": "FontWeight.w400",
+          "color": "MaterialColor(primary value: Color(alpha: 1.0000, red: 0.9137, green: 0.1176, blue: 0.3882, colorSpace: ColorSpace.sRGB))",
+          "size": [
+            232.0,
+            22.0
+          ],
+          "maxLines": null,
+          "softWrap": true,
+          "align": "TextAlign.start",
+          "overflow": "TextOverflow.clip",
+          "natural_height": 22.0,
+          "line_count": 1
+        }
+      },
+      "after": {
+        "name": "collapse_header",
+        "dark": true,
+        "errors": [],
+        "native": {
+          "font": 16.0,
+          "height": 1.5,
+          "weight": "FontWeight.w400",
+          "color": "Color(alpha: 0.9020, red: 1.0000, green: 1.0000, blue: 1.0000, colorSpace: ColorSpace.sRGB)",
+          "size": [
+            232.0,
+            24.0
+          ],
+          "maxLines": null,
+          "softWrap": true,
+          "align": "TextAlign.start",
+          "overflow": "TextOverflow.clip",
+          "natural_height": 24.0,
+          "line_count": 1
+        },
+        "td": {
+          "font": 16.0,
+          "height": 1.5,
+          "weight": "FontWeight.w400",
+          "color": "Color(alpha: 0.9020, red: 1.0000, green: 1.0000, blue: 1.0000, colorSpace: ColorSpace.sRGB)",
+          "size": [
+            232.0,
+            24.0
+          ],
+          "maxLines": null,
+          "softWrap": true,
+          "align": "TextAlign.start",
+          "overflow": "TextOverflow.clip",
+          "natural_height": 24.0,
+          "line_count": 1
+        },
+        "explicit": {
+          "font": 14.0,
+          "height": 1.5714285714285714,
+          "weight": "FontWeight.w400",
+          "color": "MaterialColor(primary value: Color(alpha: 1.0000, red: 0.9137, green: 0.1176, blue: 0.3882, colorSpace: ColorSpace.sRGB))",
+          "size": [
+            232.0,
+            22.0
+          ],
+          "maxLines": null,
+          "softWrap": true,
+          "align": "TextAlign.start",
+          "overflow": "TextOverflow.clip",
+          "natural_height": 22.0,
+          "line_count": 1
+        }
+      }
+    },
+    {
+      "phase": "patch",
+      "name": "collapse_header_light",
+      "pixels": 694,
+      "changes": [
+        {
+          "subject": "td",
+          "fields": {
+            "字号": [
+              14.0,
+              16.0
+            ],
+            "行高": [
+              22.0,
+              24.0
+            ],
+            "文字盒": [
+              [
+                232.0,
+                22.0
+              ],
+              [
+                232.0,
+                24.0
+              ]
+            ]
+          }
+        }
+      ],
+      "before": {
+        "name": "collapse_header",
+        "dark": false,
+        "errors": [],
+        "native": {
+          "font": 16.0,
+          "height": 1.5,
+          "weight": "FontWeight.w400",
+          "color": "Color(alpha: 0.8980, red: 0.0000, green: 0.0000, blue: 0.0000, colorSpace: ColorSpace.sRGB)",
+          "size": [
+            232.0,
+            24.0
+          ],
+          "maxLines": null,
+          "softWrap": true,
+          "align": "TextAlign.start",
+          "overflow": "TextOverflow.clip",
+          "natural_height": 24.0,
+          "line_count": 1
+        },
+        "td": {
+          "font": 14.0,
+          "height": 1.5714285714285714,
+          "weight": "FontWeight.w400",
+          "color": "Color(alpha: 0.8980, red: 0.0000, green: 0.0000, blue: 0.0000, colorSpace: ColorSpace.sRGB)",
+          "size": [
+            232.0,
+            22.0
+          ],
+          "maxLines": null,
+          "softWrap": true,
+          "align": "TextAlign.start",
+          "overflow": "TextOverflow.clip",
+          "natural_height": 22.0,
+          "line_count": 1
+        },
+        "explicit": {
+          "font": 14.0,
+          "height": 1.5714285714285714,
+          "weight": "FontWeight.w400",
+          "color": "MaterialColor(primary value: Color(alpha: 1.0000, red: 0.9137, green: 0.1176, blue: 0.3882, colorSpace: ColorSpace.sRGB))",
+          "size": [
+            232.0,
+            22.0
+          ],
+          "maxLines": null,
+          "softWrap": true,
+          "align": "TextAlign.start",
+          "overflow": "TextOverflow.clip",
+          "natural_height": 22.0,
+          "line_count": 1
+        }
+      },
+      "after": {
+        "name": "collapse_header",
+        "dark": false,
+        "errors": [],
+        "native": {
+          "font": 16.0,
+          "height": 1.5,
+          "weight": "FontWeight.w400",
+          "color": "Color(alpha: 0.8980, red: 0.0000, green: 0.0000, blue: 0.0000, colorSpace: ColorSpace.sRGB)",
+          "size": [
+            232.0,
+            24.0
+          ],
+          "maxLines": null,
+          "softWrap": true,
+          "align": "TextAlign.start",
+          "overflow": "TextOverflow.clip",
+          "natural_height": 24.0,
+          "line_count": 1
+        },
+        "td": {
+          "font": 16.0,
+          "height": 1.5,
+          "weight": "FontWeight.w400",
+          "color": "Color(alpha: 0.8980, red: 0.0000, green: 0.0000, blue: 0.0000, colorSpace: ColorSpace.sRGB)",
+          "size": [
+            232.0,
+            24.0
+          ],
+          "maxLines": null,
+          "softWrap": true,
+          "align": "TextAlign.start",
+          "overflow": "TextOverflow.clip",
+          "natural_height": 24.0,
+          "line_count": 1
+        },
+        "explicit": {
+          "font": 14.0,
+          "height": 1.5714285714285714,
+          "weight": "FontWeight.w400",
+          "color": "MaterialColor(primary value: Color(alpha: 1.0000, red: 0.9137, green: 0.1176, blue: 0.3882, colorSpace: ColorSpace.sRGB))",
+          "size": [
+            232.0,
+            22.0
+          ],
+          "maxLines": null,
+          "softWrap": true,
+          "align": "TextAlign.start",
+          "overflow": "TextOverflow.clip",
+          "natural_height": 22.0,
+          "line_count": 1
+        }
+      }
+    },
+    {
+      "phase": "patch",
+      "name": "collapse_paragraph_dark",
+      "pixels": 3112,
+      "changes": [
+        {
+          "subject": "td",
+          "fields": {
+            "字号": [
+              14.0,
+              16.0
+            ],
+            "行高": [
+              22.0,
+              24.0
+            ],
+            "文字盒": [
+              [
+                232.0,
+                44.0
+              ],
+              [
+                232.0,
+                48.0
+              ]
+            ]
+          }
+        }
+      ],
+      "before": {
+        "name": "collapse_paragraph",
+        "dark": true,
+        "errors": [],
+        "native": {
+          "font": 16.0,
+          "height": 1.5,
+          "weight": "FontWeight.w400",
+          "color": "Color(alpha: 0.9020, red: 1.0000, green: 1.0000, blue: 1.0000, colorSpace: ColorSpace.sRGB)",
+          "size": [
+            232.0,
+            48.0
+          ],
+          "maxLines": null,
+          "softWrap": true,
+          "align": "TextAlign.start",
+          "overflow": "TextOverflow.clip",
+          "natural_height": 48.0,
+          "line_count": 2
+        },
+        "td": {
+          "font": 14.0,
+          "height": 1.5714285714285714,
+          "weight": "FontWeight.w400",
+          "color": "Color(alpha: 0.9020, red: 1.0000, green: 1.0000, blue: 1.0000, colorSpace: ColorSpace.sRGB)",
+          "size": [
+            232.0,
+            44.0
+          ],
+          "maxLines": null,
+          "softWrap": true,
+          "align": "TextAlign.start",
+          "overflow": "TextOverflow.clip",
+          "natural_height": 44.0,
+          "line_count": 2
+        },
+        "explicit": {
+          "font": 14.0,
+          "height": 1.5714285714285714,
+          "weight": "FontWeight.w400",
+          "color": "MaterialColor(primary value: Color(alpha: 1.0000, red: 0.9137, green: 0.1176, blue: 0.3882, colorSpace: ColorSpace.sRGB))",
+          "size": [
+            232.0,
+            44.0
+          ],
+          "maxLines": null,
+          "softWrap": true,
+          "align": "TextAlign.start",
+          "overflow": "TextOverflow.clip",
+          "natural_height": 44.0,
+          "line_count": 2
+        }
+      },
+      "after": {
+        "name": "collapse_paragraph",
+        "dark": true,
+        "errors": [],
+        "native": {
+          "font": 16.0,
+          "height": 1.5,
+          "weight": "FontWeight.w400",
+          "color": "Color(alpha: 0.9020, red: 1.0000, green: 1.0000, blue: 1.0000, colorSpace: ColorSpace.sRGB)",
+          "size": [
+            232.0,
+            48.0
+          ],
+          "maxLines": null,
+          "softWrap": true,
+          "align": "TextAlign.start",
+          "overflow": "TextOverflow.clip",
+          "natural_height": 48.0,
+          "line_count": 2
+        },
+        "td": {
+          "font": 16.0,
+          "height": 1.5,
+          "weight": "FontWeight.w400",
+          "color": "Color(alpha: 0.9020, red: 1.0000, green: 1.0000, blue: 1.0000, colorSpace: ColorSpace.sRGB)",
+          "size": [
+            232.0,
+            48.0
+          ],
+          "maxLines": null,
+          "softWrap": true,
+          "align": "TextAlign.start",
+          "overflow": "TextOverflow.clip",
+          "natural_height": 48.0,
+          "line_count": 2
+        },
+        "explicit": {
+          "font": 14.0,
+          "height": 1.5714285714285714,
+          "weight": "FontWeight.w400",
+          "color": "MaterialColor(primary value: Color(alpha: 1.0000, red: 0.9137, green: 0.1176, blue: 0.3882, colorSpace: ColorSpace.sRGB))",
+          "size": [
+            232.0,
+            44.0
+          ],
+          "maxLines": null,
+          "softWrap": true,
+          "align": "TextAlign.start",
+          "overflow": "TextOverflow.clip",
+          "natural_height": 44.0,
+          "line_count": 2
+        }
+      }
+    },
+    {
+      "phase": "patch",
+      "name": "collapse_paragraph_light",
+      "pixels": 3111,
+      "changes": [
+        {
+          "subject": "td",
+          "fields": {
+            "字号": [
+              14.0,
+              16.0
+            ],
+            "行高": [
+              22.0,
+              24.0
+            ],
+            "文字盒": [
+              [
+                232.0,
+                44.0
+              ],
+              [
+                232.0,
+                48.0
+              ]
+            ]
+          }
+        }
+      ],
+      "before": {
+        "name": "collapse_paragraph",
+        "dark": false,
+        "errors": [],
+        "native": {
+          "font": 16.0,
+          "height": 1.5,
+          "weight": "FontWeight.w400",
+          "color": "Color(alpha: 0.8980, red: 0.0000, green: 0.0000, blue: 0.0000, colorSpace: ColorSpace.sRGB)",
+          "size": [
+            232.0,
+            48.0
+          ],
+          "maxLines": null,
+          "softWrap": true,
+          "align": "TextAlign.start",
+          "overflow": "TextOverflow.clip",
+          "natural_height": 48.0,
+          "line_count": 2
+        },
+        "td": {
+          "font": 14.0,
+          "height": 1.5714285714285714,
+          "weight": "FontWeight.w400",
+          "color": "Color(alpha: 0.8980, red: 0.0000, green: 0.0000, blue: 0.0000, colorSpace: ColorSpace.sRGB)",
+          "size": [
+            232.0,
+            44.0
+          ],
+          "maxLines": null,
+          "softWrap": true,
+          "align": "TextAlign.start",
+          "overflow": "TextOverflow.clip",
+          "natural_height": 44.0,
+          "line_count": 2
+        },
+        "explicit": {
+          "font": 14.0,
+          "height": 1.5714285714285714,
+          "weight": "FontWeight.w400",
+          "color": "MaterialColor(primary value: Color(alpha: 1.0000, red: 0.9137, green: 0.1176, blue: 0.3882, colorSpace: ColorSpace.sRGB))",
+          "size": [
+            232.0,
+            44.0
+          ],
+          "maxLines": null,
+          "softWrap": true,
+          "align": "TextAlign.start",
+          "overflow": "TextOverflow.clip",
+          "natural_height": 44.0,
+          "line_count": 2
+        }
+      },
+      "after": {
+        "name": "collapse_paragraph",
+        "dark": false,
+        "errors": [],
+        "native": {
+          "font": 16.0,
+          "height": 1.5,
+          "weight": "FontWeight.w400",
+          "color": "Color(alpha: 0.8980, red: 0.0000, green: 0.0000, blue: 0.0000, colorSpace: ColorSpace.sRGB)",
+          "size": [
+            232.0,
+            48.0
+          ],
+          "maxLines": null,
+          "softWrap": true,
+          "align": "TextAlign.start",
+          "overflow": "TextOverflow.clip",
+          "natural_height": 48.0,
+          "line_count": 2
+        },
+        "td": {
+          "font": 16.0,
+          "height": 1.5,
+          "weight": "FontWeight.w400",
+          "color": "Color(alpha: 0.8980, red: 0.0000, green: 0.0000, blue: 0.0000, colorSpace: ColorSpace.sRGB)",
+          "size": [
+            232.0,
+            48.0
+          ],
+          "maxLines": null,
+          "softWrap": true,
+          "align": "TextAlign.start",
+          "overflow": "TextOverflow.clip",
+          "natural_height": 48.0,
+          "line_count": 2
+        },
+        "explicit": {
+          "font": 14.0,
+          "height": 1.5714285714285714,
+          "weight": "FontWeight.w400",
+          "color": "MaterialColor(primary value: Color(alpha: 1.0000, red: 0.9137, green: 0.1176, blue: 0.3882, colorSpace: ColorSpace.sRGB))",
+          "size": [
+            232.0,
+            44.0
+          ],
+          "maxLines": null,
+          "softWrap": true,
+          "align": "TextAlign.start",
+          "overflow": "TextOverflow.clip",
+          "natural_height": 44.0,
+          "line_count": 2
+        }
+      }
+    },
+    {
+      "phase": "patch",
+      "name": "collapse_trailing_dark",
+      "pixels": 411,
+      "changes": [
+        {
+          "subject": "td",
+          "fields": {
+            "颜色": [
+              "Color(alpha: 0.9020, red: 1.0000, green: 1.0000, blue: 1.0000, colorSpace: ColorSpace.sRGB)",
+              "Color(alpha: 0.3490, red: 1.0000, green: 1.0000, blue: 1.0000, colorSpace: ColorSpace.sRGB)"
+            ]
+          }
+        }
+      ],
+      "before": {
+        "name": "collapse_trailing",
+        "dark": true,
+        "errors": [],
+        "native": {
+          "font": 14.0,
+          "height": 1.5714285714285714,
+          "weight": "FontWeight.w400",
+          "color": "Color(alpha: 0.3490, red: 1.0000, green: 1.0000, blue: 1.0000, colorSpace: ColorSpace.sRGB)",
+          "size": [
+            55.999755859375,
+            22.0
+          ],
+          "maxLines": null,
+          "softWrap": true,
+          "align": "TextAlign.start",
+          "overflow": "TextOverflow.clip",
+          "natural_height": 22.0,
+          "line_count": 1
+        },
+        "td": {
+          "font": 14.0,
+          "height": 1.5714285714285714,
+          "weight": "FontWeight.w400",
+          "color": "Color(alpha: 0.9020, red: 1.0000, green: 1.0000, blue: 1.0000, colorSpace: ColorSpace.sRGB)",
+          "size": [
+            55.999755859375,
+            22.0
+          ],
+          "maxLines": null,
+          "softWrap": true,
+          "align": "TextAlign.start",
+          "overflow": "TextOverflow.clip",
+          "natural_height": 22.0,
+          "line_count": 1
+        },
+        "explicit": {
+          "font": 14.0,
+          "height": 1.5714285714285714,
+          "weight": "FontWeight.w400",
+          "color": "MaterialColor(primary value: Color(alpha: 1.0000, red: 0.9137, green: 0.1176, blue: 0.3882, colorSpace: ColorSpace.sRGB))",
+          "size": [
+            55.999755859375,
+            22.0
+          ],
+          "maxLines": null,
+          "softWrap": true,
+          "align": "TextAlign.start",
+          "overflow": "TextOverflow.clip",
+          "natural_height": 22.0,
+          "line_count": 1
+        }
+      },
+      "after": {
+        "name": "collapse_trailing",
+        "dark": true,
+        "errors": [],
+        "native": {
+          "font": 14.0,
+          "height": 1.5714285714285714,
+          "weight": "FontWeight.w400",
+          "color": "Color(alpha: 0.3490, red: 1.0000, green: 1.0000, blue: 1.0000, colorSpace: ColorSpace.sRGB)",
+          "size": [
+            55.999755859375,
+            22.0
+          ],
+          "maxLines": null,
+          "softWrap": true,
+          "align": "TextAlign.start",
+          "overflow": "TextOverflow.clip",
+          "natural_height": 22.0,
+          "line_count": 1
+        },
+        "td": {
+          "font": 14.0,
+          "height": 1.5714285714285714,
+          "weight": "FontWeight.w400",
+          "color": "Color(alpha: 0.3490, red: 1.0000, green: 1.0000, blue: 1.0000, colorSpace: ColorSpace.sRGB)",
+          "size": [
+            55.999755859375,
+            22.0
+          ],
+          "maxLines": null,
+          "softWrap": true,
+          "align": "TextAlign.start",
+          "overflow": "TextOverflow.clip",
+          "natural_height": 22.0,
+          "line_count": 1
+        },
+        "explicit": {
+          "font": 14.0,
+          "height": 1.5714285714285714,
+          "weight": "FontWeight.w400",
+          "color": "MaterialColor(primary value: Color(alpha: 1.0000, red: 0.9137, green: 0.1176, blue: 0.3882, colorSpace: ColorSpace.sRGB))",
+          "size": [
+            55.999755859375,
+            22.0
+          ],
+          "maxLines": null,
+          "softWrap": true,
+          "align": "TextAlign.start",
+          "overflow": "TextOverflow.clip",
+          "natural_height": 22.0,
+          "line_count": 1
+        }
+      }
+    },
+    {
+      "phase": "patch",
+      "name": "collapse_trailing_light",
+      "pixels": 411,
+      "changes": [
+        {
+          "subject": "td",
+          "fields": {
+            "颜色": [
+              "Color(alpha: 0.8980, red: 0.0000, green: 0.0000, blue: 0.0000, colorSpace: ColorSpace.sRGB)",
+              "Color(alpha: 0.4000, red: 0.0000, green: 0.0000, blue: 0.0000, colorSpace: ColorSpace.sRGB)"
+            ]
+          }
+        }
+      ],
+      "before": {
+        "name": "collapse_trailing",
+        "dark": false,
+        "errors": [],
+        "native": {
+          "font": 14.0,
+          "height": 1.5714285714285714,
+          "weight": "FontWeight.w400",
+          "color": "Color(alpha: 0.4000, red: 0.0000, green: 0.0000, blue: 0.0000, colorSpace: ColorSpace.sRGB)",
+          "size": [
+            55.999755859375,
+            22.0
+          ],
+          "maxLines": null,
+          "softWrap": true,
+          "align": "TextAlign.start",
+          "overflow": "TextOverflow.clip",
+          "natural_height": 22.0,
+          "line_count": 1
+        },
+        "td": {
+          "font": 14.0,
+          "height": 1.5714285714285714,
+          "weight": "FontWeight.w400",
+          "color": "Color(alpha: 0.8980, red: 0.0000, green: 0.0000, blue: 0.0000, colorSpace: ColorSpace.sRGB)",
+          "size": [
+            55.999755859375,
+            22.0
+          ],
+          "maxLines": null,
+          "softWrap": true,
+          "align": "TextAlign.start",
+          "overflow": "TextOverflow.clip",
+          "natural_height": 22.0,
+          "line_count": 1
+        },
+        "explicit": {
+          "font": 14.0,
+          "height": 1.5714285714285714,
+          "weight": "FontWeight.w400",
+          "color": "MaterialColor(primary value: Color(alpha: 1.0000, red: 0.9137, green: 0.1176, blue: 0.3882, colorSpace: ColorSpace.sRGB))",
+          "size": [
+            55.999755859375,
+            22.0
+          ],
+          "maxLines": null,
+          "softWrap": true,
+          "align": "TextAlign.start",
+          "overflow": "TextOverflow.clip",
+          "natural_height": 22.0,
+          "line_count": 1
+        }
+      },
+      "after": {
+        "name": "collapse_trailing",
+        "dark": false,
+        "errors": [],
+        "native": {
+          "font": 14.0,
+          "height": 1.5714285714285714,
+          "weight": "FontWeight.w400",
+          "color": "Color(alpha: 0.4000, red: 0.0000, green: 0.0000, blue: 0.0000, colorSpace: ColorSpace.sRGB)",
+          "size": [
+            55.999755859375,
+            22.0
+          ],
+          "maxLines": null,
+          "softWrap": true,
+          "align": "TextAlign.start",
+          "overflow": "TextOverflow.clip",
+          "natural_height": 22.0,
+          "line_count": 1
+        },
+        "td": {
+          "font": 14.0,
+          "height": 1.5714285714285714,
+          "weight": "FontWeight.w400",
+          "color": "Color(alpha: 0.4000, red: 0.0000, green: 0.0000, blue: 0.0000, colorSpace: ColorSpace.sRGB)",
+          "size": [
+            55.999755859375,
+            22.0
+          ],
+          "maxLines": null,
+          "softWrap": true,
+          "align": "TextAlign.start",
+          "overflow": "TextOverflow.clip",
+          "natural_height": 22.0,
+          "line_count": 1
+        },
+        "explicit": {
+          "font": 14.0,
+          "height": 1.5714285714285714,
+          "weight": "FontWeight.w400",
+          "color": "MaterialColor(primary value: Color(alpha: 1.0000, red: 0.9137, green: 0.1176, blue: 0.3882, colorSpace: ColorSpace.sRGB))",
+          "size": [
+            55.999755859375,
+            22.0
+          ],
+          "maxLines": null,
+          "softWrap": true,
+          "align": "TextAlign.start",
+          "overflow": "TextOverflow.clip",
+          "natural_height": 22.0,
+          "line_count": 1
+        }
+      }
+    },
+    {
+      "phase": "patch",
+      "name": "divider_dark",
+      "pixels": 540,
+      "changes": [
+        {
+          "subject": "td",
+          "fields": {
+            "字号": [
+              14.0,
+              12.0
+            ],
+            "行高": [
+              22.0,
+              20.0
+            ],
+            "颜色": [
+              "Color(alpha: 0.9020, red: 1.0000, green: 1.0000, blue: 1.0000, colorSpace: ColorSpace.sRGB)",
+              "Color(alpha: 0.3490, red: 1.0000, green: 1.0000, blue: 1.0000, colorSpace: ColorSpace.sRGB)"
+            ],
+            "文字盒": [
+              [
+                55.999755859375,
+                22.0
+              ],
+              [
+                48.0003662109375,
+                20.0
+              ]
+            ]
+          }
+        }
+      ],
+      "before": {
+        "name": "divider",
+        "dark": true,
+        "errors": [],
+        "native": {
+          "font": 12.0,
+          "height": 1.6666666666666667,
+          "weight": "FontWeight.w400",
+          "color": "Color(alpha: 0.3490, red: 1.0000, green: 1.0000, blue: 1.0000, colorSpace: ColorSpace.sRGB)",
+          "size": [
+            48.0003662109375,
+            20.0
+          ],
+          "maxLines": null,
+          "softWrap": true,
+          "align": "TextAlign.start",
+          "overflow": "TextOverflow.clip",
+          "natural_height": 20.0,
+          "line_count": 1
+        },
+        "td": {
+          "font": 14.0,
+          "height": 1.5714285714285714,
+          "weight": "FontWeight.w400",
+          "color": "Color(alpha: 0.9020, red: 1.0000, green: 1.0000, blue: 1.0000, colorSpace: ColorSpace.sRGB)",
+          "size": [
+            55.999755859375,
+            22.0
+          ],
+          "maxLines": null,
+          "softWrap": true,
+          "align": "TextAlign.start",
+          "overflow": "TextOverflow.clip",
+          "natural_height": 22.0,
+          "line_count": 1
+        },
+        "explicit": {
+          "font": 14.0,
+          "height": 1.5714285714285714,
+          "weight": "FontWeight.w400",
+          "color": "MaterialColor(primary value: Color(alpha: 1.0000, red: 0.9137, green: 0.1176, blue: 0.3882, colorSpace: ColorSpace.sRGB))",
+          "size": [
+            55.999755859375,
+            22.0
+          ],
+          "maxLines": null,
+          "softWrap": true,
+          "align": "TextAlign.start",
+          "overflow": "TextOverflow.clip",
+          "natural_height": 22.0,
+          "line_count": 1
+        }
+      },
+      "after": {
+        "name": "divider",
+        "dark": true,
+        "errors": [],
+        "native": {
+          "font": 12.0,
+          "height": 1.6666666666666667,
+          "weight": "FontWeight.w400",
+          "color": "Color(alpha: 0.3490, red: 1.0000, green: 1.0000, blue: 1.0000, colorSpace: ColorSpace.sRGB)",
+          "size": [
+            48.0003662109375,
+            20.0
+          ],
+          "maxLines": null,
+          "softWrap": true,
+          "align": "TextAlign.start",
+          "overflow": "TextOverflow.clip",
+          "natural_height": 20.0,
+          "line_count": 1
+        },
+        "td": {
+          "font": 12.0,
+          "height": 1.6666666666666667,
+          "weight": "FontWeight.w400",
+          "color": "Color(alpha: 0.3490, red: 1.0000, green: 1.0000, blue: 1.0000, colorSpace: ColorSpace.sRGB)",
+          "size": [
+            48.0003662109375,
+            20.0
+          ],
+          "maxLines": null,
+          "softWrap": true,
+          "align": "TextAlign.start",
+          "overflow": "TextOverflow.clip",
+          "natural_height": 20.0,
+          "line_count": 1
+        },
+        "explicit": {
+          "font": 14.0,
+          "height": 1.5714285714285714,
+          "weight": "FontWeight.w400",
+          "color": "MaterialColor(primary value: Color(alpha: 1.0000, red: 0.9137, green: 0.1176, blue: 0.3882, colorSpace: ColorSpace.sRGB))",
+          "size": [
+            55.999755859375,
+            22.0
+          ],
+          "maxLines": null,
+          "softWrap": true,
+          "align": "TextAlign.start",
+          "overflow": "TextOverflow.clip",
+          "natural_height": 22.0,
+          "line_count": 1
+        }
+      }
+    },
+    {
+      "phase": "patch",
+      "name": "divider_light",
+      "pixels": 537,
+      "changes": [
+        {
+          "subject": "td",
+          "fields": {
+            "字号": [
+              14.0,
+              12.0
+            ],
+            "行高": [
+              22.0,
+              20.0
+            ],
+            "颜色": [
+              "Color(alpha: 0.8980, red: 0.0000, green: 0.0000, blue: 0.0000, colorSpace: ColorSpace.sRGB)",
+              "Color(alpha: 0.4000, red: 0.0000, green: 0.0000, blue: 0.0000, colorSpace: ColorSpace.sRGB)"
+            ],
+            "文字盒": [
+              [
+                55.999755859375,
+                22.0
+              ],
+              [
+                48.0003662109375,
+                20.0
+              ]
+            ]
+          }
+        }
+      ],
+      "before": {
+        "name": "divider",
+        "dark": false,
+        "errors": [],
+        "native": {
+          "font": 12.0,
+          "height": 1.6666666666666667,
+          "weight": "FontWeight.w400",
+          "color": "Color(alpha: 0.4000, red: 0.0000, green: 0.0000, blue: 0.0000, colorSpace: ColorSpace.sRGB)",
+          "size": [
+            48.0003662109375,
+            20.0
+          ],
+          "maxLines": null,
+          "softWrap": true,
+          "align": "TextAlign.start",
+          "overflow": "TextOverflow.clip",
+          "natural_height": 20.0,
+          "line_count": 1
+        },
+        "td": {
+          "font": 14.0,
+          "height": 1.5714285714285714,
+          "weight": "FontWeight.w400",
+          "color": "Color(alpha: 0.8980, red: 0.0000, green: 0.0000, blue: 0.0000, colorSpace: ColorSpace.sRGB)",
+          "size": [
+            55.999755859375,
+            22.0
+          ],
+          "maxLines": null,
+          "softWrap": true,
+          "align": "TextAlign.start",
+          "overflow": "TextOverflow.clip",
+          "natural_height": 22.0,
+          "line_count": 1
+        },
+        "explicit": {
+          "font": 14.0,
+          "height": 1.5714285714285714,
+          "weight": "FontWeight.w400",
+          "color": "MaterialColor(primary value: Color(alpha: 1.0000, red: 0.9137, green: 0.1176, blue: 0.3882, colorSpace: ColorSpace.sRGB))",
+          "size": [
+            55.999755859375,
+            22.0
+          ],
+          "maxLines": null,
+          "softWrap": true,
+          "align": "TextAlign.start",
+          "overflow": "TextOverflow.clip",
+          "natural_height": 22.0,
+          "line_count": 1
+        }
+      },
+      "after": {
+        "name": "divider",
+        "dark": false,
+        "errors": [],
+        "native": {
+          "font": 12.0,
+          "height": 1.6666666666666667,
+          "weight": "FontWeight.w400",
+          "color": "Color(alpha: 0.4000, red: 0.0000, green: 0.0000, blue: 0.0000, colorSpace: ColorSpace.sRGB)",
+          "size": [
+            48.0003662109375,
+            20.0
+          ],
+          "maxLines": null,
+          "softWrap": true,
+          "align": "TextAlign.start",
+          "overflow": "TextOverflow.clip",
+          "natural_height": 20.0,
+          "line_count": 1
+        },
+        "td": {
+          "font": 12.0,
+          "height": 1.6666666666666667,
+          "weight": "FontWeight.w400",
+          "color": "Color(alpha: 0.4000, red: 0.0000, green: 0.0000, blue: 0.0000, colorSpace: ColorSpace.sRGB)",
+          "size": [
+            48.0003662109375,
+            20.0
+          ],
+          "maxLines": null,
+          "softWrap": true,
+          "align": "TextAlign.start",
+          "overflow": "TextOverflow.clip",
+          "natural_height": 20.0,
+          "line_count": 1
+        },
+        "explicit": {
+          "font": 14.0,
+          "height": 1.5714285714285714,
+          "weight": "FontWeight.w400",
+          "color": "MaterialColor(primary value: Color(alpha: 1.0000, red: 0.9137, green: 0.1176, blue: 0.3882, colorSpace: ColorSpace.sRGB))",
+          "size": [
+            55.999755859375,
+            22.0
+          ],
+          "maxLines": null,
+          "softWrap": true,
+          "align": "TextAlign.start",
+          "overflow": "TextOverflow.clip",
+          "natural_height": 22.0,
+          "line_count": 1
+        }
+      }
+    },
+    {
+      "phase": "patch",
+      "name": "drawer_dark",
+      "pixels": 0,
+      "changes": [],
+      "before": {
+        "name": "drawer",
+        "dark": true,
+        "errors": [],
+        "native": {
+          "font": 18.0,
+          "height": 1.4444444444444444,
+          "weight": "FontWeight.w600",
+          "color": "Color(alpha: 0.9020, red: 1.0000, green: 1.0000, blue: 1.0000, colorSpace: ColorSpace.sRGB)",
+          "size": [
+            71.99957275390625,
+            26.0
+          ],
+          "maxLines": null,
+          "softWrap": true,
+          "align": "TextAlign.start",
+          "overflow": "TextOverflow.clip",
+          "natural_height": 26.0,
+          "line_count": 1
+        },
+        "td": {
+          "font": 18.0,
+          "height": 1.4444444444444444,
+          "weight": "FontWeight.w600",
+          "color": "Color(alpha: 0.9020, red: 1.0000, green: 1.0000, blue: 1.0000, colorSpace: ColorSpace.sRGB)",
+          "size": [
+            71.99957275390625,
+            26.0
+          ],
+          "maxLines": null,
+          "softWrap": true,
+          "align": "TextAlign.start",
+          "overflow": "TextOverflow.clip",
+          "natural_height": 26.0,
+          "line_count": 1
+        },
+        "explicit": {
+          "font": 14.0,
+          "height": 1.5714285714285714,
+          "weight": "FontWeight.w400",
+          "color": "MaterialColor(primary value: Color(alpha: 1.0000, red: 0.9137, green: 0.1176, blue: 0.3882, colorSpace: ColorSpace.sRGB))",
+          "size": [
+            55.999755859375,
+            22.0
+          ],
+          "maxLines": null,
+          "softWrap": true,
+          "align": "TextAlign.start",
+          "overflow": "TextOverflow.clip",
+          "natural_height": 22.0,
+          "line_count": 1
+        }
+      },
+      "after": {
+        "name": "drawer",
+        "dark": true,
+        "errors": [],
+        "native": {
+          "font": 18.0,
+          "height": 1.4444444444444444,
+          "weight": "FontWeight.w600",
+          "color": "Color(alpha: 0.9020, red: 1.0000, green: 1.0000, blue: 1.0000, colorSpace: ColorSpace.sRGB)",
+          "size": [
+            71.99957275390625,
+            26.0
+          ],
+          "maxLines": null,
+          "softWrap": true,
+          "align": "TextAlign.start",
+          "overflow": "TextOverflow.clip",
+          "natural_height": 26.0,
+          "line_count": 1
+        },
+        "td": {
+          "font": 18.0,
+          "height": 1.4444444444444444,
+          "weight": "FontWeight.w600",
+          "color": "Color(alpha: 0.9020, red: 1.0000, green: 1.0000, blue: 1.0000, colorSpace: ColorSpace.sRGB)",
+          "size": [
+            71.99957275390625,
+            26.0
+          ],
+          "maxLines": null,
+          "softWrap": true,
+          "align": "TextAlign.start",
+          "overflow": "TextOverflow.clip",
+          "natural_height": 26.0,
+          "line_count": 1
+        },
+        "explicit": {
+          "font": 14.0,
+          "height": 1.5714285714285714,
+          "weight": "FontWeight.w400",
+          "color": "MaterialColor(primary value: Color(alpha: 1.0000, red: 0.9137, green: 0.1176, blue: 0.3882, colorSpace: ColorSpace.sRGB))",
+          "size": [
+            55.999755859375,
+            22.0
+          ],
+          "maxLines": null,
+          "softWrap": true,
+          "align": "TextAlign.start",
+          "overflow": "TextOverflow.clip",
+          "natural_height": 22.0,
+          "line_count": 1
+        }
+      }
+    },
+    {
+      "phase": "patch",
+      "name": "drawer_light",
+      "pixels": 0,
+      "changes": [],
+      "before": {
+        "name": "drawer",
+        "dark": false,
+        "errors": [],
+        "native": {
+          "font": 18.0,
+          "height": 1.4444444444444444,
+          "weight": "FontWeight.w600",
+          "color": "Color(alpha: 0.8980, red: 0.0000, green: 0.0000, blue: 0.0000, colorSpace: ColorSpace.sRGB)",
+          "size": [
+            71.99957275390625,
+            26.0
+          ],
+          "maxLines": null,
+          "softWrap": true,
+          "align": "TextAlign.start",
+          "overflow": "TextOverflow.clip",
+          "natural_height": 26.0,
+          "line_count": 1
+        },
+        "td": {
+          "font": 18.0,
+          "height": 1.4444444444444444,
+          "weight": "FontWeight.w600",
+          "color": "Color(alpha: 0.8980, red: 0.0000, green: 0.0000, blue: 0.0000, colorSpace: ColorSpace.sRGB)",
+          "size": [
+            71.99957275390625,
+            26.0
+          ],
+          "maxLines": null,
+          "softWrap": true,
+          "align": "TextAlign.start",
+          "overflow": "TextOverflow.clip",
+          "natural_height": 26.0,
+          "line_count": 1
+        },
+        "explicit": {
+          "font": 14.0,
+          "height": 1.5714285714285714,
+          "weight": "FontWeight.w400",
+          "color": "MaterialColor(primary value: Color(alpha: 1.0000, red: 0.9137, green: 0.1176, blue: 0.3882, colorSpace: ColorSpace.sRGB))",
+          "size": [
+            55.999755859375,
+            22.0
+          ],
+          "maxLines": null,
+          "softWrap": true,
+          "align": "TextAlign.start",
+          "overflow": "TextOverflow.clip",
+          "natural_height": 22.0,
+          "line_count": 1
+        }
+      },
+      "after": {
+        "name": "drawer",
+        "dark": false,
+        "errors": [],
+        "native": {
+          "font": 18.0,
+          "height": 1.4444444444444444,
+          "weight": "FontWeight.w600",
+          "color": "Color(alpha: 0.8980, red: 0.0000, green: 0.0000, blue: 0.0000, colorSpace: ColorSpace.sRGB)",
+          "size": [
+            71.99957275390625,
+            26.0
+          ],
+          "maxLines": null,
+          "softWrap": true,
+          "align": "TextAlign.start",
+          "overflow": "TextOverflow.clip",
+          "natural_height": 26.0,
+          "line_count": 1
+        },
+        "td": {
+          "font": 18.0,
+          "height": 1.4444444444444444,
+          "weight": "FontWeight.w600",
+          "color": "Color(alpha: 0.8980, red: 0.0000, green: 0.0000, blue: 0.0000, colorSpace: ColorSpace.sRGB)",
+          "size": [
+            71.99957275390625,
+            26.0
+          ],
+          "maxLines": null,
+          "softWrap": true,
+          "align": "TextAlign.start",
+          "overflow": "TextOverflow.clip",
+          "natural_height": 26.0,
+          "line_count": 1
+        },
+        "explicit": {
+          "font": 14.0,
+          "height": 1.5714285714285714,
+          "weight": "FontWeight.w400",
+          "color": "MaterialColor(primary value: Color(alpha: 1.0000, red: 0.9137, green: 0.1176, blue: 0.3882, colorSpace: ColorSpace.sRGB))",
+          "size": [
+            55.999755859375,
+            22.0
+          ],
+          "maxLines": null,
+          "softWrap": true,
+          "align": "TextAlign.start",
+          "overflow": "TextOverflow.clip",
+          "natural_height": 22.0,
+          "line_count": 1
+        }
+      }
+    },
+    {
+      "phase": "patch",
+      "name": "drawer_strut_dark",
+      "pixels": 1140,
+      "changes": [
+        {
+          "subject": "td",
+          "fields": {
+            "文字盒": [
+              [
+                71.99957275390625,
+                26.0
+              ],
+              [
+                71.99957275390625,
+                36.0
+              ]
+            ]
+          }
+        }
+      ],
+      "before": {
+        "name": "drawer_strut",
+        "dark": true,
+        "errors": [],
+        "native": {
+          "font": 18.0,
+          "height": 1.4444444444444444,
+          "weight": "FontWeight.w600",
+          "color": "Color(alpha: 0.9020, red: 1.0000, green: 1.0000, blue: 1.0000, colorSpace: ColorSpace.sRGB)",
+          "size": [
+            71.99957275390625,
+            36.0
+          ],
+          "maxLines": null,
+          "softWrap": true,
+          "align": "TextAlign.start",
+          "overflow": "TextOverflow.clip",
+          "natural_height": 36.0,
+          "line_count": 1
+        },
+        "td": {
+          "font": 18.0,
+          "height": 1.4444444444444444,
+          "weight": "FontWeight.w600",
+          "color": "Color(alpha: 0.9020, red: 1.0000, green: 1.0000, blue: 1.0000, colorSpace: ColorSpace.sRGB)",
+          "size": [
+            71.99957275390625,
+            26.0
+          ],
+          "maxLines": null,
+          "softWrap": true,
+          "align": "TextAlign.start",
+          "overflow": "TextOverflow.clip",
+          "natural_height": 26.0,
+          "line_count": 1
+        },
+        "explicit": {
+          "font": 14.0,
+          "height": 1.5714285714285714,
+          "weight": "FontWeight.w400",
+          "color": "MaterialColor(primary value: Color(alpha: 1.0000, red: 0.9137, green: 0.1176, blue: 0.3882, colorSpace: ColorSpace.sRGB))",
+          "size": [
+            55.999755859375,
+            36.0
+          ],
+          "maxLines": null,
+          "softWrap": true,
+          "align": "TextAlign.start",
+          "overflow": "TextOverflow.clip",
+          "natural_height": 36.0,
+          "line_count": 1
+        }
+      },
+      "after": {
+        "name": "drawer_strut",
+        "dark": true,
+        "errors": [],
+        "native": {
+          "font": 18.0,
+          "height": 1.4444444444444444,
+          "weight": "FontWeight.w600",
+          "color": "Color(alpha: 0.9020, red: 1.0000, green: 1.0000, blue: 1.0000, colorSpace: ColorSpace.sRGB)",
+          "size": [
+            71.99957275390625,
+            36.0
+          ],
+          "maxLines": null,
+          "softWrap": true,
+          "align": "TextAlign.start",
+          "overflow": "TextOverflow.clip",
+          "natural_height": 36.0,
+          "line_count": 1
+        },
+        "td": {
+          "font": 18.0,
+          "height": 1.4444444444444444,
+          "weight": "FontWeight.w600",
+          "color": "Color(alpha: 0.9020, red: 1.0000, green: 1.0000, blue: 1.0000, colorSpace: ColorSpace.sRGB)",
+          "size": [
+            71.99957275390625,
+            36.0
+          ],
+          "maxLines": null,
+          "softWrap": true,
+          "align": "TextAlign.start",
+          "overflow": "TextOverflow.clip",
+          "natural_height": 36.0,
+          "line_count": 1
+        },
+        "explicit": {
+          "font": 14.0,
+          "height": 1.5714285714285714,
+          "weight": "FontWeight.w400",
+          "color": "MaterialColor(primary value: Color(alpha: 1.0000, red: 0.9137, green: 0.1176, blue: 0.3882, colorSpace: ColorSpace.sRGB))",
+          "size": [
+            55.999755859375,
+            36.0
+          ],
+          "maxLines": null,
+          "softWrap": true,
+          "align": "TextAlign.start",
+          "overflow": "TextOverflow.clip",
+          "natural_height": 36.0,
+          "line_count": 1
+        }
+      }
+    },
+    {
+      "phase": "patch",
+      "name": "drawer_strut_light",
+      "pixels": 1141,
+      "changes": [
+        {
+          "subject": "td",
+          "fields": {
+            "文字盒": [
+              [
+                71.99957275390625,
+                26.0
+              ],
+              [
+                71.99957275390625,
+                36.0
+              ]
+            ]
+          }
+        }
+      ],
+      "before": {
+        "name": "drawer_strut",
+        "dark": false,
+        "errors": [],
+        "native": {
+          "font": 18.0,
+          "height": 1.4444444444444444,
+          "weight": "FontWeight.w600",
+          "color": "Color(alpha: 0.8980, red: 0.0000, green: 0.0000, blue: 0.0000, colorSpace: ColorSpace.sRGB)",
+          "size": [
+            71.99957275390625,
+            36.0
+          ],
+          "maxLines": null,
+          "softWrap": true,
+          "align": "TextAlign.start",
+          "overflow": "TextOverflow.clip",
+          "natural_height": 36.0,
+          "line_count": 1
+        },
+        "td": {
+          "font": 18.0,
+          "height": 1.4444444444444444,
+          "weight": "FontWeight.w600",
+          "color": "Color(alpha: 0.8980, red: 0.0000, green: 0.0000, blue: 0.0000, colorSpace: ColorSpace.sRGB)",
+          "size": [
+            71.99957275390625,
+            26.0
+          ],
+          "maxLines": null,
+          "softWrap": true,
+          "align": "TextAlign.start",
+          "overflow": "TextOverflow.clip",
+          "natural_height": 26.0,
+          "line_count": 1
+        },
+        "explicit": {
+          "font": 14.0,
+          "height": 1.5714285714285714,
+          "weight": "FontWeight.w400",
+          "color": "MaterialColor(primary value: Color(alpha: 1.0000, red: 0.9137, green: 0.1176, blue: 0.3882, colorSpace: ColorSpace.sRGB))",
+          "size": [
+            55.999755859375,
+            36.0
+          ],
+          "maxLines": null,
+          "softWrap": true,
+          "align": "TextAlign.start",
+          "overflow": "TextOverflow.clip",
+          "natural_height": 36.0,
+          "line_count": 1
+        }
+      },
+      "after": {
+        "name": "drawer_strut",
+        "dark": false,
+        "errors": [],
+        "native": {
+          "font": 18.0,
+          "height": 1.4444444444444444,
+          "weight": "FontWeight.w600",
+          "color": "Color(alpha: 0.8980, red: 0.0000, green: 0.0000, blue: 0.0000, colorSpace: ColorSpace.sRGB)",
+          "size": [
+            71.99957275390625,
+            36.0
+          ],
+          "maxLines": null,
+          "softWrap": true,
+          "align": "TextAlign.start",
+          "overflow": "TextOverflow.clip",
+          "natural_height": 36.0,
+          "line_count": 1
+        },
+        "td": {
+          "font": 18.0,
+          "height": 1.4444444444444444,
+          "weight": "FontWeight.w600",
+          "color": "Color(alpha: 0.8980, red: 0.0000, green: 0.0000, blue: 0.0000, colorSpace: ColorSpace.sRGB)",
+          "size": [
+            71.99957275390625,
+            36.0
+          ],
+          "maxLines": null,
+          "softWrap": true,
+          "align": "TextAlign.start",
+          "overflow": "TextOverflow.clip",
+          "natural_height": 36.0,
+          "line_count": 1
+        },
+        "explicit": {
+          "font": 14.0,
+          "height": 1.5714285714285714,
+          "weight": "FontWeight.w400",
+          "color": "MaterialColor(primary value: Color(alpha: 1.0000, red: 0.9137, green: 0.1176, blue: 0.3882, colorSpace: ColorSpace.sRGB))",
+          "size": [
+            55.999755859375,
+            36.0
+          ],
+          "maxLines": null,
+          "softWrap": true,
+          "align": "TextAlign.start",
+          "overflow": "TextOverflow.clip",
+          "natural_height": 36.0,
+          "line_count": 1
+        }
+      }
+    },
+    {
+      "phase": "patch",
+      "name": "link_dark",
+      "pixels": 411,
+      "changes": [
+        {
+          "subject": "td",
+          "fields": {
+            "颜色": [
+              "Color(alpha: 0.9020, red: 1.0000, green: 1.0000, blue: 1.0000, colorSpace: ColorSpace.sRGB)",
+              "Color(alpha: 1.0000, red: 0.2706, green: 0.5098, blue: 0.9020, colorSpace: ColorSpace.sRGB)"
+            ]
+          }
+        }
+      ],
+      "before": {
+        "name": "link",
+        "dark": true,
+        "errors": [],
+        "native": {
+          "font": 14.0,
+          "height": 1.5714285714285714,
+          "weight": "FontWeight.w400",
+          "color": "Color(alpha: 1.0000, red: 0.2706, green: 0.5098, blue: 0.9020, colorSpace: ColorSpace.sRGB)",
+          "size": [
+            55.999755859375,
+            22.0
+          ],
+          "maxLines": null,
+          "softWrap": true,
+          "align": "TextAlign.start",
+          "overflow": "TextOverflow.clip",
+          "natural_height": 22.0,
+          "line_count": 1
+        },
+        "td": {
+          "font": 14.0,
+          "height": 1.5714285714285714,
+          "weight": "FontWeight.w400",
+          "color": "Color(alpha: 0.9020, red: 1.0000, green: 1.0000, blue: 1.0000, colorSpace: ColorSpace.sRGB)",
+          "size": [
+            55.999755859375,
+            22.0
+          ],
+          "maxLines": null,
+          "softWrap": true,
+          "align": "TextAlign.start",
+          "overflow": "TextOverflow.clip",
+          "natural_height": 22.0,
+          "line_count": 1
+        },
+        "explicit": {
+          "font": 14.0,
+          "height": 1.5714285714285714,
+          "weight": "FontWeight.w400",
+          "color": "MaterialColor(primary value: Color(alpha: 1.0000, red: 0.9137, green: 0.1176, blue: 0.3882, colorSpace: ColorSpace.sRGB))",
+          "size": [
+            55.999755859375,
+            22.0
+          ],
+          "maxLines": null,
+          "softWrap": true,
+          "align": "TextAlign.start",
+          "overflow": "TextOverflow.clip",
+          "natural_height": 22.0,
+          "line_count": 1
+        }
+      },
+      "after": {
+        "name": "link",
+        "dark": true,
+        "errors": [],
+        "native": {
+          "font": 14.0,
+          "height": 1.5714285714285714,
+          "weight": "FontWeight.w400",
+          "color": "Color(alpha: 1.0000, red: 0.2706, green: 0.5098, blue: 0.9020, colorSpace: ColorSpace.sRGB)",
+          "size": [
+            55.999755859375,
+            22.0
+          ],
+          "maxLines": null,
+          "softWrap": true,
+          "align": "TextAlign.start",
+          "overflow": "TextOverflow.clip",
+          "natural_height": 22.0,
+          "line_count": 1
+        },
+        "td": {
+          "font": 14.0,
+          "height": 1.5714285714285714,
+          "weight": "FontWeight.w400",
+          "color": "Color(alpha: 1.0000, red: 0.2706, green: 0.5098, blue: 0.9020, colorSpace: ColorSpace.sRGB)",
+          "size": [
+            55.999755859375,
+            22.0
+          ],
+          "maxLines": null,
+          "softWrap": true,
+          "align": "TextAlign.start",
+          "overflow": "TextOverflow.clip",
+          "natural_height": 22.0,
+          "line_count": 1
+        },
+        "explicit": {
+          "font": 14.0,
+          "height": 1.5714285714285714,
+          "weight": "FontWeight.w400",
+          "color": "MaterialColor(primary value: Color(alpha: 1.0000, red: 0.9137, green: 0.1176, blue: 0.3882, colorSpace: ColorSpace.sRGB))",
+          "size": [
+            55.999755859375,
+            22.0
+          ],
+          "maxLines": null,
+          "softWrap": true,
+          "align": "TextAlign.start",
+          "overflow": "TextOverflow.clip",
+          "natural_height": 22.0,
+          "line_count": 1
+        }
+      }
+    },
+    {
+      "phase": "patch",
+      "name": "link_disabled_dark",
+      "pixels": 411,
+      "changes": [
+        {
+          "subject": "td",
+          "fields": {
+            "颜色": [
+              "Color(alpha: 0.9020, red: 1.0000, green: 1.0000, blue: 1.0000, colorSpace: ColorSpace.sRGB)",
+              "Color(alpha: 1.0000, red: 0.0784, green: 0.2235, blue: 0.4588, colorSpace: ColorSpace.sRGB)"
+            ]
+          }
+        }
+      ],
+      "before": {
+        "name": "link_disabled",
+        "dark": true,
+        "errors": [],
+        "native": {
+          "font": 14.0,
+          "height": 1.5714285714285714,
+          "weight": "FontWeight.w400",
+          "color": "Color(alpha: 1.0000, red: 0.0784, green: 0.2235, blue: 0.4588, colorSpace: ColorSpace.sRGB)",
+          "size": [
+            55.999755859375,
+            22.0
+          ],
+          "maxLines": null,
+          "softWrap": true,
+          "align": "TextAlign.start",
+          "overflow": "TextOverflow.clip",
+          "natural_height": 22.0,
+          "line_count": 1
+        },
+        "td": {
+          "font": 14.0,
+          "height": 1.5714285714285714,
+          "weight": "FontWeight.w400",
+          "color": "Color(alpha: 0.9020, red: 1.0000, green: 1.0000, blue: 1.0000, colorSpace: ColorSpace.sRGB)",
+          "size": [
+            55.999755859375,
+            22.0
+          ],
+          "maxLines": null,
+          "softWrap": true,
+          "align": "TextAlign.start",
+          "overflow": "TextOverflow.clip",
+          "natural_height": 22.0,
+          "line_count": 1
+        },
+        "explicit": {
+          "font": 14.0,
+          "height": 1.5714285714285714,
+          "weight": "FontWeight.w400",
+          "color": "MaterialColor(primary value: Color(alpha: 1.0000, red: 0.9137, green: 0.1176, blue: 0.3882, colorSpace: ColorSpace.sRGB))",
+          "size": [
+            55.999755859375,
+            22.0
+          ],
+          "maxLines": null,
+          "softWrap": true,
+          "align": "TextAlign.start",
+          "overflow": "TextOverflow.clip",
+          "natural_height": 22.0,
+          "line_count": 1
+        }
+      },
+      "after": {
+        "name": "link_disabled",
+        "dark": true,
+        "errors": [],
+        "native": {
+          "font": 14.0,
+          "height": 1.5714285714285714,
+          "weight": "FontWeight.w400",
+          "color": "Color(alpha: 1.0000, red: 0.0784, green: 0.2235, blue: 0.4588, colorSpace: ColorSpace.sRGB)",
+          "size": [
+            55.999755859375,
+            22.0
+          ],
+          "maxLines": null,
+          "softWrap": true,
+          "align": "TextAlign.start",
+          "overflow": "TextOverflow.clip",
+          "natural_height": 22.0,
+          "line_count": 1
+        },
+        "td": {
+          "font": 14.0,
+          "height": 1.5714285714285714,
+          "weight": "FontWeight.w400",
+          "color": "Color(alpha: 1.0000, red: 0.0784, green: 0.2235, blue: 0.4588, colorSpace: ColorSpace.sRGB)",
+          "size": [
+            55.999755859375,
+            22.0
+          ],
+          "maxLines": null,
+          "softWrap": true,
+          "align": "TextAlign.start",
+          "overflow": "TextOverflow.clip",
+          "natural_height": 22.0,
+          "line_count": 1
+        },
+        "explicit": {
+          "font": 14.0,
+          "height": 1.5714285714285714,
+          "weight": "FontWeight.w400",
+          "color": "MaterialColor(primary value: Color(alpha: 1.0000, red: 0.9137, green: 0.1176, blue: 0.3882, colorSpace: ColorSpace.sRGB))",
+          "size": [
+            55.999755859375,
+            22.0
+          ],
+          "maxLines": null,
+          "softWrap": true,
+          "align": "TextAlign.start",
+          "overflow": "TextOverflow.clip",
+          "natural_height": 22.0,
+          "line_count": 1
+        }
+      }
+    },
+    {
+      "phase": "patch",
+      "name": "link_disabled_light",
+      "pixels": 411,
+      "changes": [
+        {
+          "subject": "td",
+          "fields": {
+            "颜色": [
+              "Color(alpha: 0.8980, red: 0.0000, green: 0.0000, blue: 0.0000, colorSpace: ColorSpace.sRGB)",
+              "Color(alpha: 1.0000, red: 0.7098, green: 0.7804, blue: 1.0000, colorSpace: ColorSpace.sRGB)"
+            ]
+          }
+        }
+      ],
+      "before": {
+        "name": "link_disabled",
+        "dark": false,
+        "errors": [],
+        "native": {
+          "font": 14.0,
+          "height": 1.5714285714285714,
+          "weight": "FontWeight.w400",
+          "color": "Color(alpha: 1.0000, red: 0.7098, green: 0.7804, blue: 1.0000, colorSpace: ColorSpace.sRGB)",
+          "size": [
+            55.999755859375,
+            22.0
+          ],
+          "maxLines": null,
+          "softWrap": true,
+          "align": "TextAlign.start",
+          "overflow": "TextOverflow.clip",
+          "natural_height": 22.0,
+          "line_count": 1
+        },
+        "td": {
+          "font": 14.0,
+          "height": 1.5714285714285714,
+          "weight": "FontWeight.w400",
+          "color": "Color(alpha: 0.8980, red: 0.0000, green: 0.0000, blue: 0.0000, colorSpace: ColorSpace.sRGB)",
+          "size": [
+            55.999755859375,
+            22.0
+          ],
+          "maxLines": null,
+          "softWrap": true,
+          "align": "TextAlign.start",
+          "overflow": "TextOverflow.clip",
+          "natural_height": 22.0,
+          "line_count": 1
+        },
+        "explicit": {
+          "font": 14.0,
+          "height": 1.5714285714285714,
+          "weight": "FontWeight.w400",
+          "color": "MaterialColor(primary value: Color(alpha: 1.0000, red: 0.9137, green: 0.1176, blue: 0.3882, colorSpace: ColorSpace.sRGB))",
+          "size": [
+            55.999755859375,
+            22.0
+          ],
+          "maxLines": null,
+          "softWrap": true,
+          "align": "TextAlign.start",
+          "overflow": "TextOverflow.clip",
+          "natural_height": 22.0,
+          "line_count": 1
+        }
+      },
+      "after": {
+        "name": "link_disabled",
+        "dark": false,
+        "errors": [],
+        "native": {
+          "font": 14.0,
+          "height": 1.5714285714285714,
+          "weight": "FontWeight.w400",
+          "color": "Color(alpha: 1.0000, red: 0.7098, green: 0.7804, blue: 1.0000, colorSpace: ColorSpace.sRGB)",
+          "size": [
+            55.999755859375,
+            22.0
+          ],
+          "maxLines": null,
+          "softWrap": true,
+          "align": "TextAlign.start",
+          "overflow": "TextOverflow.clip",
+          "natural_height": 22.0,
+          "line_count": 1
+        },
+        "td": {
+          "font": 14.0,
+          "height": 1.5714285714285714,
+          "weight": "FontWeight.w400",
+          "color": "Color(alpha: 1.0000, red: 0.7098, green: 0.7804, blue: 1.0000, colorSpace: ColorSpace.sRGB)",
+          "size": [
+            55.999755859375,
+            22.0
+          ],
+          "maxLines": null,
+          "softWrap": true,
+          "align": "TextAlign.start",
+          "overflow": "TextOverflow.clip",
+          "natural_height": 22.0,
+          "line_count": 1
+        },
+        "explicit": {
+          "font": 14.0,
+          "height": 1.5714285714285714,
+          "weight": "FontWeight.w400",
+          "color": "MaterialColor(primary value: Color(alpha: 1.0000, red: 0.9137, green: 0.1176, blue: 0.3882, colorSpace: ColorSpace.sRGB))",
+          "size": [
+            55.999755859375,
+            22.0
+          ],
+          "maxLines": null,
+          "softWrap": true,
+          "align": "TextAlign.start",
+          "overflow": "TextOverflow.clip",
+          "natural_height": 22.0,
+          "line_count": 1
+        }
+      }
+    },
+    {
+      "phase": "patch",
+      "name": "link_light",
+      "pixels": 411,
+      "changes": [
+        {
+          "subject": "td",
+          "fields": {
+            "颜色": [
+              "Color(alpha: 0.8980, red: 0.0000, green: 0.0000, blue: 0.0000, colorSpace: ColorSpace.sRGB)",
+              "Color(alpha: 1.0000, red: 0.0000, green: 0.3216, blue: 0.8510, colorSpace: ColorSpace.sRGB)"
+            ]
+          }
+        }
+      ],
+      "before": {
+        "name": "link",
+        "dark": false,
+        "errors": [],
+        "native": {
+          "font": 14.0,
+          "height": 1.5714285714285714,
+          "weight": "FontWeight.w400",
+          "color": "Color(alpha: 1.0000, red: 0.0000, green: 0.3216, blue: 0.8510, colorSpace: ColorSpace.sRGB)",
+          "size": [
+            55.999755859375,
+            22.0
+          ],
+          "maxLines": null,
+          "softWrap": true,
+          "align": "TextAlign.start",
+          "overflow": "TextOverflow.clip",
+          "natural_height": 22.0,
+          "line_count": 1
+        },
+        "td": {
+          "font": 14.0,
+          "height": 1.5714285714285714,
+          "weight": "FontWeight.w400",
+          "color": "Color(alpha: 0.8980, red: 0.0000, green: 0.0000, blue: 0.0000, colorSpace: ColorSpace.sRGB)",
+          "size": [
+            55.999755859375,
+            22.0
+          ],
+          "maxLines": null,
+          "softWrap": true,
+          "align": "TextAlign.start",
+          "overflow": "TextOverflow.clip",
+          "natural_height": 22.0,
+          "line_count": 1
+        },
+        "explicit": {
+          "font": 14.0,
+          "height": 1.5714285714285714,
+          "weight": "FontWeight.w400",
+          "color": "MaterialColor(primary value: Color(alpha: 1.0000, red: 0.9137, green: 0.1176, blue: 0.3882, colorSpace: ColorSpace.sRGB))",
+          "size": [
+            55.999755859375,
+            22.0
+          ],
+          "maxLines": null,
+          "softWrap": true,
+          "align": "TextAlign.start",
+          "overflow": "TextOverflow.clip",
+          "natural_height": 22.0,
+          "line_count": 1
+        }
+      },
+      "after": {
+        "name": "link",
+        "dark": false,
+        "errors": [],
+        "native": {
+          "font": 14.0,
+          "height": 1.5714285714285714,
+          "weight": "FontWeight.w400",
+          "color": "Color(alpha: 1.0000, red: 0.0000, green: 0.3216, blue: 0.8510, colorSpace: ColorSpace.sRGB)",
+          "size": [
+            55.999755859375,
+            22.0
+          ],
+          "maxLines": null,
+          "softWrap": true,
+          "align": "TextAlign.start",
+          "overflow": "TextOverflow.clip",
+          "natural_height": 22.0,
+          "line_count": 1
+        },
+        "td": {
+          "font": 14.0,
+          "height": 1.5714285714285714,
+          "weight": "FontWeight.w400",
+          "color": "Color(alpha: 1.0000, red: 0.0000, green: 0.3216, blue: 0.8510, colorSpace: ColorSpace.sRGB)",
+          "size": [
+            55.999755859375,
+            22.0
+          ],
+          "maxLines": null,
+          "softWrap": true,
+          "align": "TextAlign.start",
+          "overflow": "TextOverflow.clip",
+          "natural_height": 22.0,
+          "line_count": 1
+        },
+        "explicit": {
+          "font": 14.0,
+          "height": 1.5714285714285714,
+          "weight": "FontWeight.w400",
+          "color": "MaterialColor(primary value: Color(alpha: 1.0000, red: 0.9137, green: 0.1176, blue: 0.3882, colorSpace: ColorSpace.sRGB))",
+          "size": [
+            55.999755859375,
+            22.0
+          ],
+          "maxLines": null,
+          "softWrap": true,
+          "align": "TextAlign.start",
+          "overflow": "TextOverflow.clip",
+          "natural_height": 22.0,
+          "line_count": 1
+        }
+      }
+    },
+    {
+      "phase": "patch",
+      "name": "popover_custom_dark",
+      "pixels": 0,
+      "changes": [],
+      "before": {
+        "name": "popover_custom",
+        "dark": true,
+        "errors": [],
+        "native": {
+          "font": 14.0,
+          "height": 1.5714285714285714,
+          "weight": "FontWeight.w400",
+          "color": "Color(alpha: 0.9020, red: 1.0000, green: 1.0000, blue: 1.0000, colorSpace: ColorSpace.sRGB)",
+          "size": [
+            56.999755859375,
+            22.0
+          ],
+          "maxLines": null,
+          "softWrap": true,
+          "align": "TextAlign.start",
+          "overflow": "TextOverflow.clip",
+          "natural_height": 22.0,
+          "line_count": 1,
+          "panel": [
+            80.999755859375,
+            46.0
+          ]
+        },
+        "td": {
+          "font": 14.0,
+          "height": 1.5714285714285714,
+          "weight": "FontWeight.w400",
+          "color": "Color(alpha: 0.9020, red: 1.0000, green: 1.0000, blue: 1.0000, colorSpace: ColorSpace.sRGB)",
+          "size": [
+            55.999755859375,
+            22.0
+          ],
+          "maxLines": null,
+          "softWrap": true,
+          "align": "TextAlign.start",
+          "overflow": "TextOverflow.clip",
+          "natural_height": 22.0,
+          "line_count": 1,
+          "panel": [
+            79.999755859375,
+            46.0
+          ]
+        },
+        "explicit": {
+          "font": 14.0,
+          "height": 1.5714285714285714,
+          "weight": "FontWeight.w400",
+          "color": "MaterialColor(primary value: Color(alpha: 1.0000, red: 0.9137, green: 0.1176, blue: 0.3882, colorSpace: ColorSpace.sRGB))",
+          "size": [
+            55.999755859375,
+            22.0
+          ],
+          "maxLines": null,
+          "softWrap": true,
+          "align": "TextAlign.start",
+          "overflow": "TextOverflow.clip",
+          "natural_height": 22.0,
+          "line_count": 1,
+          "panel": [
+            79.999755859375,
+            46.0
+          ]
+        }
+      },
+      "after": {
+        "name": "popover_custom",
+        "dark": true,
+        "errors": [],
+        "native": {
+          "font": 14.0,
+          "height": 1.5714285714285714,
+          "weight": "FontWeight.w400",
+          "color": "Color(alpha: 0.9020, red: 1.0000, green: 1.0000, blue: 1.0000, colorSpace: ColorSpace.sRGB)",
+          "size": [
+            56.999755859375,
+            22.0
+          ],
+          "maxLines": null,
+          "softWrap": true,
+          "align": "TextAlign.start",
+          "overflow": "TextOverflow.clip",
+          "natural_height": 22.0,
+          "line_count": 1,
+          "panel": [
+            80.999755859375,
+            46.0
+          ]
+        },
+        "td": {
+          "font": 14.0,
+          "height": 1.5714285714285714,
+          "weight": "FontWeight.w400",
+          "color": "Color(alpha: 0.9020, red: 1.0000, green: 1.0000, blue: 1.0000, colorSpace: ColorSpace.sRGB)",
+          "size": [
+            55.999755859375,
+            22.0
+          ],
+          "maxLines": null,
+          "softWrap": true,
+          "align": "TextAlign.start",
+          "overflow": "TextOverflow.clip",
+          "natural_height": 22.0,
+          "line_count": 1,
+          "panel": [
+            79.999755859375,
+            46.0
+          ]
+        },
+        "explicit": {
+          "font": 14.0,
+          "height": 1.5714285714285714,
+          "weight": "FontWeight.w400",
+          "color": "MaterialColor(primary value: Color(alpha: 1.0000, red: 0.9137, green: 0.1176, blue: 0.3882, colorSpace: ColorSpace.sRGB))",
+          "size": [
+            55.999755859375,
+            22.0
+          ],
+          "maxLines": null,
+          "softWrap": true,
+          "align": "TextAlign.start",
+          "overflow": "TextOverflow.clip",
+          "natural_height": 22.0,
+          "line_count": 1,
+          "panel": [
+            79.999755859375,
+            46.0
+          ]
+        }
+      }
+    },
+    {
+      "phase": "patch",
+      "name": "popover_custom_light",
+      "pixels": 0,
+      "changes": [],
+      "before": {
+        "name": "popover_custom",
+        "dark": false,
+        "errors": [],
+        "native": {
+          "font": 14.0,
+          "height": 1.5714285714285714,
+          "weight": "FontWeight.w400",
+          "color": "Color(alpha: 0.8980, red: 0.0000, green: 0.0000, blue: 0.0000, colorSpace: ColorSpace.sRGB)",
+          "size": [
+            56.999755859375,
+            22.0
+          ],
+          "maxLines": null,
+          "softWrap": true,
+          "align": "TextAlign.start",
+          "overflow": "TextOverflow.clip",
+          "natural_height": 22.0,
+          "line_count": 1,
+          "panel": [
+            80.999755859375,
+            46.0
+          ]
+        },
+        "td": {
+          "font": 14.0,
+          "height": 1.5714285714285714,
+          "weight": "FontWeight.w400",
+          "color": "Color(alpha: 0.8980, red: 0.0000, green: 0.0000, blue: 0.0000, colorSpace: ColorSpace.sRGB)",
+          "size": [
+            55.999755859375,
+            22.0
+          ],
+          "maxLines": null,
+          "softWrap": true,
+          "align": "TextAlign.start",
+          "overflow": "TextOverflow.clip",
+          "natural_height": 22.0,
+          "line_count": 1,
+          "panel": [
+            79.999755859375,
+            46.0
+          ]
+        },
+        "explicit": {
+          "font": 14.0,
+          "height": 1.5714285714285714,
+          "weight": "FontWeight.w400",
+          "color": "MaterialColor(primary value: Color(alpha: 1.0000, red: 0.9137, green: 0.1176, blue: 0.3882, colorSpace: ColorSpace.sRGB))",
+          "size": [
+            55.999755859375,
+            22.0
+          ],
+          "maxLines": null,
+          "softWrap": true,
+          "align": "TextAlign.start",
+          "overflow": "TextOverflow.clip",
+          "natural_height": 22.0,
+          "line_count": 1,
+          "panel": [
+            79.999755859375,
+            46.0
+          ]
+        }
+      },
+      "after": {
+        "name": "popover_custom",
+        "dark": false,
+        "errors": [],
+        "native": {
+          "font": 14.0,
+          "height": 1.5714285714285714,
+          "weight": "FontWeight.w400",
+          "color": "Color(alpha: 0.8980, red: 0.0000, green: 0.0000, blue: 0.0000, colorSpace: ColorSpace.sRGB)",
+          "size": [
+            56.999755859375,
+            22.0
+          ],
+          "maxLines": null,
+          "softWrap": true,
+          "align": "TextAlign.start",
+          "overflow": "TextOverflow.clip",
+          "natural_height": 22.0,
+          "line_count": 1,
+          "panel": [
+            80.999755859375,
+            46.0
+          ]
+        },
+        "td": {
+          "font": 14.0,
+          "height": 1.5714285714285714,
+          "weight": "FontWeight.w400",
+          "color": "Color(alpha: 0.8980, red: 0.0000, green: 0.0000, blue: 0.0000, colorSpace: ColorSpace.sRGB)",
+          "size": [
+            55.999755859375,
+            22.0
+          ],
+          "maxLines": null,
+          "softWrap": true,
+          "align": "TextAlign.start",
+          "overflow": "TextOverflow.clip",
+          "natural_height": 22.0,
+          "line_count": 1,
+          "panel": [
+            79.999755859375,
+            46.0
+          ]
+        },
+        "explicit": {
+          "font": 14.0,
+          "height": 1.5714285714285714,
+          "weight": "FontWeight.w400",
+          "color": "MaterialColor(primary value: Color(alpha: 1.0000, red: 0.9137, green: 0.1176, blue: 0.3882, colorSpace: ColorSpace.sRGB))",
+          "size": [
+            55.999755859375,
+            22.0
+          ],
+          "maxLines": null,
+          "softWrap": true,
+          "align": "TextAlign.start",
+          "overflow": "TextOverflow.clip",
+          "natural_height": 22.0,
+          "line_count": 1,
+          "panel": [
+            79.999755859375,
+            46.0
+          ]
+        }
+      }
+    },
+    {
+      "phase": "patch",
+      "name": "popover_dark",
+      "pixels": 0,
+      "changes": [],
+      "before": {
+        "name": "popover",
+        "dark": true,
+        "errors": [],
+        "native": {
+          "font": 16.0,
+          "height": 1.5,
+          "weight": "FontWeight.w400",
+          "color": "Color(alpha: 0.9020, red: 1.0000, green: 1.0000, blue: 1.0000, colorSpace: ColorSpace.sRGB)",
+          "size": [
+            64.0,
+            24.0
+          ],
+          "maxLines": null,
+          "softWrap": true,
+          "align": "TextAlign.start",
+          "overflow": "TextOverflow.clip",
+          "natural_height": 24.0,
+          "line_count": 1,
+          "panel": [
+            88.0,
+            48.0
+          ]
+        },
+        "td": {
+          "font": 14.0,
+          "height": 1.5714285714285714,
+          "weight": "FontWeight.w400",
+          "color": "Color(alpha: 0.9020, red: 1.0000, green: 1.0000, blue: 1.0000, colorSpace: ColorSpace.sRGB)",
+          "size": [
+            55.999755859375,
+            22.0
+          ],
+          "maxLines": null,
+          "softWrap": true,
+          "align": "TextAlign.start",
+          "overflow": "TextOverflow.clip",
+          "natural_height": 22.0,
+          "line_count": 1,
+          "panel": [
+            79.999755859375,
+            46.0
+          ]
+        },
+        "explicit": {
+          "font": 14.0,
+          "height": 1.5714285714285714,
+          "weight": "FontWeight.w400",
+          "color": "MaterialColor(primary value: Color(alpha: 1.0000, red: 0.9137, green: 0.1176, blue: 0.3882, colorSpace: ColorSpace.sRGB))",
+          "size": [
+            55.999755859375,
+            22.0
+          ],
+          "maxLines": null,
+          "softWrap": true,
+          "align": "TextAlign.start",
+          "overflow": "TextOverflow.clip",
+          "natural_height": 22.0,
+          "line_count": 1,
+          "panel": [
+            79.999755859375,
+            46.0
+          ]
+        }
+      },
+      "after": {
+        "name": "popover",
+        "dark": true,
+        "errors": [],
+        "native": {
+          "font": 16.0,
+          "height": 1.5,
+          "weight": "FontWeight.w400",
+          "color": "Color(alpha: 0.9020, red: 1.0000, green: 1.0000, blue: 1.0000, colorSpace: ColorSpace.sRGB)",
+          "size": [
+            64.0,
+            24.0
+          ],
+          "maxLines": null,
+          "softWrap": true,
+          "align": "TextAlign.start",
+          "overflow": "TextOverflow.clip",
+          "natural_height": 24.0,
+          "line_count": 1,
+          "panel": [
+            88.0,
+            48.0
+          ]
+        },
+        "td": {
+          "font": 14.0,
+          "height": 1.5714285714285714,
+          "weight": "FontWeight.w400",
+          "color": "Color(alpha: 0.9020, red: 1.0000, green: 1.0000, blue: 1.0000, colorSpace: ColorSpace.sRGB)",
+          "size": [
+            55.999755859375,
+            22.0
+          ],
+          "maxLines": null,
+          "softWrap": true,
+          "align": "TextAlign.start",
+          "overflow": "TextOverflow.clip",
+          "natural_height": 22.0,
+          "line_count": 1,
+          "panel": [
+            79.999755859375,
+            46.0
+          ]
+        },
+        "explicit": {
+          "font": 14.0,
+          "height": 1.5714285714285714,
+          "weight": "FontWeight.w400",
+          "color": "MaterialColor(primary value: Color(alpha: 1.0000, red: 0.9137, green: 0.1176, blue: 0.3882, colorSpace: ColorSpace.sRGB))",
+          "size": [
+            55.999755859375,
+            22.0
+          ],
+          "maxLines": null,
+          "softWrap": true,
+          "align": "TextAlign.start",
+          "overflow": "TextOverflow.clip",
+          "natural_height": 22.0,
+          "line_count": 1,
+          "panel": [
+            79.999755859375,
+            46.0
+          ]
+        }
+      }
+    },
+    {
+      "phase": "patch",
+      "name": "popover_inherited_single_dark",
+      "pixels": 26349,
+      "changes": [
+        {
+          "subject": "native",
+          "fields": {
+            "文字盒": [
+              [
+                276.0,
+                96.0
+              ],
+              [
+                276.0,
+                24.0
+              ]
+            ],
+            "弹层": [
+              [
+                300.0,
+                120.0
+              ],
+              [
+                300.0,
+                48.0
+              ]
+            ]
+          }
+        }
+      ],
+      "before": {
+        "name": "popover_inherited_single",
+        "dark": true,
+        "errors": [],
+        "native": {
+          "font": 16.0,
+          "height": 1.5,
+          "weight": "FontWeight.w400",
+          "color": "Color(alpha: 0.9020, red: 1.0000, green: 1.0000, blue: 1.0000, colorSpace: ColorSpace.sRGB)",
+          "size": [
+            276.0,
+            96.0
+          ],
+          "maxLines": 1,
+          "softWrap": true,
+          "align": "TextAlign.right",
+          "overflow": "TextOverflow.ellipsis",
+          "natural_height": 24.0,
+          "line_count": 1,
+          "panel": [
+            300.0,
+            120.0
+          ]
+        },
+        "td": {
+          "font": 14.0,
+          "height": 1.5714285714285714,
+          "weight": "FontWeight.w400",
+          "color": "Color(alpha: 0.9020, red: 1.0000, green: 1.0000, blue: 1.0000, colorSpace: ColorSpace.sRGB)",
+          "size": [
+            276.0,
+            22.0
+          ],
+          "maxLines": 1,
+          "softWrap": true,
+          "align": "TextAlign.right",
+          "overflow": "TextOverflow.ellipsis",
+          "natural_height": 22.0,
+          "line_count": 1,
+          "panel": [
+            300.0,
+            46.0
+          ]
+        },
+        "explicit": {
+          "font": 14.0,
+          "height": 1.5714285714285714,
+          "weight": "FontWeight.w400",
+          "color": "MaterialColor(primary value: Color(alpha: 1.0000, red: 0.9137, green: 0.1176, blue: 0.3882, colorSpace: ColorSpace.sRGB))",
+          "size": [
+            276.0,
+            22.0
+          ],
+          "maxLines": 1,
+          "softWrap": true,
+          "align": "TextAlign.right",
+          "overflow": "TextOverflow.ellipsis",
+          "natural_height": 22.0,
+          "line_count": 1,
+          "panel": [
+            300.0,
+            46.0
+          ]
+        }
+      },
+      "after": {
+        "name": "popover_inherited_single",
+        "dark": true,
+        "errors": [],
+        "native": {
+          "font": 16.0,
+          "height": 1.5,
+          "weight": "FontWeight.w400",
+          "color": "Color(alpha: 0.9020, red: 1.0000, green: 1.0000, blue: 1.0000, colorSpace: ColorSpace.sRGB)",
+          "size": [
+            276.0,
+            24.0
+          ],
+          "maxLines": 1,
+          "softWrap": true,
+          "align": "TextAlign.right",
+          "overflow": "TextOverflow.ellipsis",
+          "natural_height": 24.0,
+          "line_count": 1,
+          "panel": [
+            300.0,
+            48.0
+          ]
+        },
+        "td": {
+          "font": 14.0,
+          "height": 1.5714285714285714,
+          "weight": "FontWeight.w400",
+          "color": "Color(alpha: 0.9020, red: 1.0000, green: 1.0000, blue: 1.0000, colorSpace: ColorSpace.sRGB)",
+          "size": [
+            276.0,
+            22.0
+          ],
+          "maxLines": 1,
+          "softWrap": true,
+          "align": "TextAlign.right",
+          "overflow": "TextOverflow.ellipsis",
+          "natural_height": 22.0,
+          "line_count": 1,
+          "panel": [
+            300.0,
+            46.0
+          ]
+        },
+        "explicit": {
+          "font": 14.0,
+          "height": 1.5714285714285714,
+          "weight": "FontWeight.w400",
+          "color": "MaterialColor(primary value: Color(alpha: 1.0000, red: 0.9137, green: 0.1176, blue: 0.3882, colorSpace: ColorSpace.sRGB))",
+          "size": [
+            276.0,
+            22.0
+          ],
+          "maxLines": 1,
+          "softWrap": true,
+          "align": "TextAlign.right",
+          "overflow": "TextOverflow.ellipsis",
+          "natural_height": 22.0,
+          "line_count": 1,
+          "panel": [
+            300.0,
+            46.0
+          ]
+        }
+      }
+    },
+    {
+      "phase": "patch",
+      "name": "popover_inherited_single_light",
+      "pixels": 27725,
+      "changes": [
+        {
+          "subject": "native",
+          "fields": {
+            "文字盒": [
+              [
+                276.0,
+                96.0
+              ],
+              [
+                276.0,
+                24.0
+              ]
+            ],
+            "弹层": [
+              [
+                300.0,
+                120.0
+              ],
+              [
+                300.0,
+                48.0
+              ]
+            ]
+          }
+        }
+      ],
+      "before": {
+        "name": "popover_inherited_single",
+        "dark": false,
+        "errors": [],
+        "native": {
+          "font": 16.0,
+          "height": 1.5,
+          "weight": "FontWeight.w400",
+          "color": "Color(alpha: 1.0000, red: 1.0000, green: 1.0000, blue: 1.0000, colorSpace: ColorSpace.sRGB)",
+          "size": [
+            276.0,
+            96.0
+          ],
+          "maxLines": 1,
+          "softWrap": true,
+          "align": "TextAlign.right",
+          "overflow": "TextOverflow.ellipsis",
+          "natural_height": 24.0,
+          "line_count": 1,
+          "panel": [
+            300.0,
+            120.0
+          ]
+        },
+        "td": {
+          "font": 14.0,
+          "height": 1.5714285714285714,
+          "weight": "FontWeight.w400",
+          "color": "Color(alpha: 0.8980, red: 0.0000, green: 0.0000, blue: 0.0000, colorSpace: ColorSpace.sRGB)",
+          "size": [
+            276.0,
+            22.0
+          ],
+          "maxLines": 1,
+          "softWrap": true,
+          "align": "TextAlign.right",
+          "overflow": "TextOverflow.ellipsis",
+          "natural_height": 22.0,
+          "line_count": 1,
+          "panel": [
+            300.0,
+            46.0
+          ]
+        },
+        "explicit": {
+          "font": 14.0,
+          "height": 1.5714285714285714,
+          "weight": "FontWeight.w400",
+          "color": "MaterialColor(primary value: Color(alpha: 1.0000, red: 0.9137, green: 0.1176, blue: 0.3882, colorSpace: ColorSpace.sRGB))",
+          "size": [
+            276.0,
+            22.0
+          ],
+          "maxLines": 1,
+          "softWrap": true,
+          "align": "TextAlign.right",
+          "overflow": "TextOverflow.ellipsis",
+          "natural_height": 22.0,
+          "line_count": 1,
+          "panel": [
+            300.0,
+            46.0
+          ]
+        }
+      },
+      "after": {
+        "name": "popover_inherited_single",
+        "dark": false,
+        "errors": [],
+        "native": {
+          "font": 16.0,
+          "height": 1.5,
+          "weight": "FontWeight.w400",
+          "color": "Color(alpha: 1.0000, red: 1.0000, green: 1.0000, blue: 1.0000, colorSpace: ColorSpace.sRGB)",
+          "size": [
+            276.0,
+            24.0
+          ],
+          "maxLines": 1,
+          "softWrap": true,
+          "align": "TextAlign.right",
+          "overflow": "TextOverflow.ellipsis",
+          "natural_height": 24.0,
+          "line_count": 1,
+          "panel": [
+            300.0,
+            48.0
+          ]
+        },
+        "td": {
+          "font": 14.0,
+          "height": 1.5714285714285714,
+          "weight": "FontWeight.w400",
+          "color": "Color(alpha: 0.8980, red: 0.0000, green: 0.0000, blue: 0.0000, colorSpace: ColorSpace.sRGB)",
+          "size": [
+            276.0,
+            22.0
+          ],
+          "maxLines": 1,
+          "softWrap": true,
+          "align": "TextAlign.right",
+          "overflow": "TextOverflow.ellipsis",
+          "natural_height": 22.0,
+          "line_count": 1,
+          "panel": [
+            300.0,
+            46.0
+          ]
+        },
+        "explicit": {
+          "font": 14.0,
+          "height": 1.5714285714285714,
+          "weight": "FontWeight.w400",
+          "color": "MaterialColor(primary value: Color(alpha: 1.0000, red: 0.9137, green: 0.1176, blue: 0.3882, colorSpace: ColorSpace.sRGB))",
+          "size": [
+            276.0,
+            22.0
+          ],
+          "maxLines": 1,
+          "softWrap": true,
+          "align": "TextAlign.right",
+          "overflow": "TextOverflow.ellipsis",
+          "natural_height": 22.0,
+          "line_count": 1,
+          "panel": [
+            300.0,
+            46.0
+          ]
+        }
+      }
+    },
+    {
+      "phase": "patch",
+      "name": "popover_light",
+      "pixels": 0,
+      "changes": [],
+      "before": {
+        "name": "popover",
+        "dark": false,
+        "errors": [],
+        "native": {
+          "font": 16.0,
+          "height": 1.5,
+          "weight": "FontWeight.w400",
+          "color": "Color(alpha: 1.0000, red: 1.0000, green: 1.0000, blue: 1.0000, colorSpace: ColorSpace.sRGB)",
+          "size": [
+            64.0,
+            24.0
+          ],
+          "maxLines": null,
+          "softWrap": true,
+          "align": "TextAlign.start",
+          "overflow": "TextOverflow.clip",
+          "natural_height": 24.0,
+          "line_count": 1,
+          "panel": [
+            88.0,
+            48.0
+          ]
+        },
+        "td": {
+          "font": 14.0,
+          "height": 1.5714285714285714,
+          "weight": "FontWeight.w400",
+          "color": "Color(alpha: 0.8980, red: 0.0000, green: 0.0000, blue: 0.0000, colorSpace: ColorSpace.sRGB)",
+          "size": [
+            55.999755859375,
+            22.0
+          ],
+          "maxLines": null,
+          "softWrap": true,
+          "align": "TextAlign.start",
+          "overflow": "TextOverflow.clip",
+          "natural_height": 22.0,
+          "line_count": 1,
+          "panel": [
+            79.999755859375,
+            46.0
+          ]
+        },
+        "explicit": {
+          "font": 14.0,
+          "height": 1.5714285714285714,
+          "weight": "FontWeight.w400",
+          "color": "MaterialColor(primary value: Color(alpha: 1.0000, red: 0.9137, green: 0.1176, blue: 0.3882, colorSpace: ColorSpace.sRGB))",
+          "size": [
+            55.999755859375,
+            22.0
+          ],
+          "maxLines": null,
+          "softWrap": true,
+          "align": "TextAlign.start",
+          "overflow": "TextOverflow.clip",
+          "natural_height": 22.0,
+          "line_count": 1,
+          "panel": [
+            79.999755859375,
+            46.0
+          ]
+        }
+      },
+      "after": {
+        "name": "popover",
+        "dark": false,
+        "errors": [],
+        "native": {
+          "font": 16.0,
+          "height": 1.5,
+          "weight": "FontWeight.w400",
+          "color": "Color(alpha: 1.0000, red: 1.0000, green: 1.0000, blue: 1.0000, colorSpace: ColorSpace.sRGB)",
+          "size": [
+            64.0,
+            24.0
+          ],
+          "maxLines": null,
+          "softWrap": true,
+          "align": "TextAlign.start",
+          "overflow": "TextOverflow.clip",
+          "natural_height": 24.0,
+          "line_count": 1,
+          "panel": [
+            88.0,
+            48.0
+          ]
+        },
+        "td": {
+          "font": 14.0,
+          "height": 1.5714285714285714,
+          "weight": "FontWeight.w400",
+          "color": "Color(alpha: 0.8980, red: 0.0000, green: 0.0000, blue: 0.0000, colorSpace: ColorSpace.sRGB)",
+          "size": [
+            55.999755859375,
+            22.0
+          ],
+          "maxLines": null,
+          "softWrap": true,
+          "align": "TextAlign.start",
+          "overflow": "TextOverflow.clip",
+          "natural_height": 22.0,
+          "line_count": 1,
+          "panel": [
+            79.999755859375,
+            46.0
+          ]
+        },
+        "explicit": {
+          "font": 14.0,
+          "height": 1.5714285714285714,
+          "weight": "FontWeight.w400",
+          "color": "MaterialColor(primary value: Color(alpha: 1.0000, red: 0.9137, green: 0.1176, blue: 0.3882, colorSpace: ColorSpace.sRGB))",
+          "size": [
+            55.999755859375,
+            22.0
+          ],
+          "maxLines": null,
+          "softWrap": true,
+          "align": "TextAlign.start",
+          "overflow": "TextOverflow.clip",
+          "natural_height": 22.0,
+          "line_count": 1,
+          "panel": [
+            79.999755859375,
+            46.0
+          ]
+        }
+      }
+    },
+    {
+      "phase": "patch",
+      "name": "popover_nowrap_dark",
+      "pixels": 26349,
+      "changes": [
+        {
+          "subject": "native",
+          "fields": {
+            "文字盒": [
+              [
+                276.0,
+                96.0
+              ],
+              [
+                276.0,
+                24.0
+              ]
+            ],
+            "弹层": [
+              [
+                300.0,
+                120.0
+              ],
+              [
+                300.0,
+                48.0
+              ]
+            ]
+          }
+        }
+      ],
+      "before": {
+        "name": "popover_nowrap",
+        "dark": true,
+        "errors": [],
+        "native": {
+          "font": 16.0,
+          "height": 1.5,
+          "weight": "FontWeight.w400",
+          "color": "Color(alpha: 0.9020, red: 1.0000, green: 1.0000, blue: 1.0000, colorSpace: ColorSpace.sRGB)",
+          "size": [
+            276.0,
+            96.0
+          ],
+          "maxLines": null,
+          "softWrap": false,
+          "align": "TextAlign.start",
+          "overflow": "TextOverflow.clip",
+          "natural_height": 24.0,
+          "line_count": 1,
+          "panel": [
+            300.0,
+            120.0
+          ]
+        },
+        "td": {
+          "font": 14.0,
+          "height": 1.5714285714285714,
+          "weight": "FontWeight.w400",
+          "color": "Color(alpha: 0.9020, red: 1.0000, green: 1.0000, blue: 1.0000, colorSpace: ColorSpace.sRGB)",
+          "size": [
+            276.0,
+            22.0
+          ],
+          "maxLines": null,
+          "softWrap": false,
+          "align": "TextAlign.start",
+          "overflow": "TextOverflow.clip",
+          "natural_height": 22.0,
+          "line_count": 1,
+          "panel": [
+            300.0,
+            46.0
+          ]
+        },
+        "explicit": {
+          "font": 14.0,
+          "height": 1.5714285714285714,
+          "weight": "FontWeight.w400",
+          "color": "MaterialColor(primary value: Color(alpha: 1.0000, red: 0.9137, green: 0.1176, blue: 0.3882, colorSpace: ColorSpace.sRGB))",
+          "size": [
+            276.0,
+            22.0
+          ],
+          "maxLines": null,
+          "softWrap": false,
+          "align": "TextAlign.start",
+          "overflow": "TextOverflow.clip",
+          "natural_height": 22.0,
+          "line_count": 1,
+          "panel": [
+            300.0,
+            46.0
+          ]
+        }
+      },
+      "after": {
+        "name": "popover_nowrap",
+        "dark": true,
+        "errors": [],
+        "native": {
+          "font": 16.0,
+          "height": 1.5,
+          "weight": "FontWeight.w400",
+          "color": "Color(alpha: 0.9020, red: 1.0000, green: 1.0000, blue: 1.0000, colorSpace: ColorSpace.sRGB)",
+          "size": [
+            276.0,
+            24.0
+          ],
+          "maxLines": null,
+          "softWrap": false,
+          "align": "TextAlign.start",
+          "overflow": "TextOverflow.clip",
+          "natural_height": 24.0,
+          "line_count": 1,
+          "panel": [
+            300.0,
+            48.0
+          ]
+        },
+        "td": {
+          "font": 14.0,
+          "height": 1.5714285714285714,
+          "weight": "FontWeight.w400",
+          "color": "Color(alpha: 0.9020, red: 1.0000, green: 1.0000, blue: 1.0000, colorSpace: ColorSpace.sRGB)",
+          "size": [
+            276.0,
+            22.0
+          ],
+          "maxLines": null,
+          "softWrap": false,
+          "align": "TextAlign.start",
+          "overflow": "TextOverflow.clip",
+          "natural_height": 22.0,
+          "line_count": 1,
+          "panel": [
+            300.0,
+            46.0
+          ]
+        },
+        "explicit": {
+          "font": 14.0,
+          "height": 1.5714285714285714,
+          "weight": "FontWeight.w400",
+          "color": "MaterialColor(primary value: Color(alpha: 1.0000, red: 0.9137, green: 0.1176, blue: 0.3882, colorSpace: ColorSpace.sRGB))",
+          "size": [
+            276.0,
+            22.0
+          ],
+          "maxLines": null,
+          "softWrap": false,
+          "align": "TextAlign.start",
+          "overflow": "TextOverflow.clip",
+          "natural_height": 22.0,
+          "line_count": 1,
+          "panel": [
+            300.0,
+            46.0
+          ]
+        }
+      }
+    },
+    {
+      "phase": "patch",
+      "name": "popover_nowrap_light",
+      "pixels": 27725,
+      "changes": [
+        {
+          "subject": "native",
+          "fields": {
+            "文字盒": [
+              [
+                276.0,
+                96.0
+              ],
+              [
+                276.0,
+                24.0
+              ]
+            ],
+            "弹层": [
+              [
+                300.0,
+                120.0
+              ],
+              [
+                300.0,
+                48.0
+              ]
+            ]
+          }
+        }
+      ],
+      "before": {
+        "name": "popover_nowrap",
+        "dark": false,
+        "errors": [],
+        "native": {
+          "font": 16.0,
+          "height": 1.5,
+          "weight": "FontWeight.w400",
+          "color": "Color(alpha: 1.0000, red: 1.0000, green: 1.0000, blue: 1.0000, colorSpace: ColorSpace.sRGB)",
+          "size": [
+            276.0,
+            96.0
+          ],
+          "maxLines": null,
+          "softWrap": false,
+          "align": "TextAlign.start",
+          "overflow": "TextOverflow.clip",
+          "natural_height": 24.0,
+          "line_count": 1,
+          "panel": [
+            300.0,
+            120.0
+          ]
+        },
+        "td": {
+          "font": 14.0,
+          "height": 1.5714285714285714,
+          "weight": "FontWeight.w400",
+          "color": "Color(alpha: 0.8980, red: 0.0000, green: 0.0000, blue: 0.0000, colorSpace: ColorSpace.sRGB)",
+          "size": [
+            276.0,
+            22.0
+          ],
+          "maxLines": null,
+          "softWrap": false,
+          "align": "TextAlign.start",
+          "overflow": "TextOverflow.clip",
+          "natural_height": 22.0,
+          "line_count": 1,
+          "panel": [
+            300.0,
+            46.0
+          ]
+        },
+        "explicit": {
+          "font": 14.0,
+          "height": 1.5714285714285714,
+          "weight": "FontWeight.w400",
+          "color": "MaterialColor(primary value: Color(alpha: 1.0000, red: 0.9137, green: 0.1176, blue: 0.3882, colorSpace: ColorSpace.sRGB))",
+          "size": [
+            276.0,
+            22.0
+          ],
+          "maxLines": null,
+          "softWrap": false,
+          "align": "TextAlign.start",
+          "overflow": "TextOverflow.clip",
+          "natural_height": 22.0,
+          "line_count": 1,
+          "panel": [
+            300.0,
+            46.0
+          ]
+        }
+      },
+      "after": {
+        "name": "popover_nowrap",
+        "dark": false,
+        "errors": [],
+        "native": {
+          "font": 16.0,
+          "height": 1.5,
+          "weight": "FontWeight.w400",
+          "color": "Color(alpha: 1.0000, red: 1.0000, green: 1.0000, blue: 1.0000, colorSpace: ColorSpace.sRGB)",
+          "size": [
+            276.0,
+            24.0
+          ],
+          "maxLines": null,
+          "softWrap": false,
+          "align": "TextAlign.start",
+          "overflow": "TextOverflow.clip",
+          "natural_height": 24.0,
+          "line_count": 1,
+          "panel": [
+            300.0,
+            48.0
+          ]
+        },
+        "td": {
+          "font": 14.0,
+          "height": 1.5714285714285714,
+          "weight": "FontWeight.w400",
+          "color": "Color(alpha: 0.8980, red: 0.0000, green: 0.0000, blue: 0.0000, colorSpace: ColorSpace.sRGB)",
+          "size": [
+            276.0,
+            22.0
+          ],
+          "maxLines": null,
+          "softWrap": false,
+          "align": "TextAlign.start",
+          "overflow": "TextOverflow.clip",
+          "natural_height": 22.0,
+          "line_count": 1,
+          "panel": [
+            300.0,
+            46.0
+          ]
+        },
+        "explicit": {
+          "font": 14.0,
+          "height": 1.5714285714285714,
+          "weight": "FontWeight.w400",
+          "color": "MaterialColor(primary value: Color(alpha: 1.0000, red: 0.9137, green: 0.1176, blue: 0.3882, colorSpace: ColorSpace.sRGB))",
+          "size": [
+            276.0,
+            22.0
+          ],
+          "maxLines": null,
+          "softWrap": false,
+          "align": "TextAlign.start",
+          "overflow": "TextOverflow.clip",
+          "natural_height": 22.0,
+          "line_count": 1,
+          "panel": [
+            300.0,
+            46.0
+          ]
+        }
+      }
+    },
+    {
+      "phase": "patch",
+      "name": "progress_circular_dark",
+      "pixels": 458,
+      "changes": [
+        {
+          "subject": "td",
+          "fields": {
+            "字号": [
+              14.0,
+              20.0
+            ],
+            "行高": [
+              22.0,
+              28.0
+            ],
+            "字重": [
+              "FontWeight.w400",
+              "FontWeight.w600"
+            ],
+            "文字盒": [
+              [
+                25.9765625,
+                22.0
+              ],
+              [
+                37.109375,
+                28.0
+              ]
+            ]
+          }
+        }
+      ],
+      "before": {
+        "name": "progress_circular",
+        "dark": true,
+        "errors": [],
+        "native": {
+          "font": 20.0,
+          "height": 1.4,
+          "weight": "FontWeight.w600",
+          "color": "Color(alpha: 0.9020, red: 1.0000, green: 1.0000, blue: 1.0000, colorSpace: ColorSpace.sRGB)",
+          "size": [
+            37.109375,
+            28.0
+          ],
+          "maxLines": null,
+          "softWrap": true,
+          "align": "TextAlign.start",
+          "overflow": "TextOverflow.clip",
+          "natural_height": 28.0,
+          "line_count": 1
+        },
+        "td": {
+          "font": 14.0,
+          "height": 1.5714285714285714,
+          "weight": "FontWeight.w400",
+          "color": "Color(alpha: 0.9020, red: 1.0000, green: 1.0000, blue: 1.0000, colorSpace: ColorSpace.sRGB)",
+          "size": [
+            25.9765625,
+            22.0
+          ],
+          "maxLines": null,
+          "softWrap": true,
+          "align": "TextAlign.start",
+          "overflow": "TextOverflow.clip",
+          "natural_height": 22.0,
+          "line_count": 1
+        },
+        "explicit": {
+          "font": 14.0,
+          "height": 1.5714285714285714,
+          "weight": "FontWeight.w400",
+          "color": "MaterialColor(primary value: Color(alpha: 1.0000, red: 0.9137, green: 0.1176, blue: 0.3882, colorSpace: ColorSpace.sRGB))",
+          "size": [
+            25.9765625,
+            22.0
+          ],
+          "maxLines": null,
+          "softWrap": true,
+          "align": "TextAlign.start",
+          "overflow": "TextOverflow.clip",
+          "natural_height": 22.0,
+          "line_count": 1
+        }
+      },
+      "after": {
+        "name": "progress_circular",
+        "dark": true,
+        "errors": [],
+        "native": {
+          "font": 20.0,
+          "height": 1.4,
+          "weight": "FontWeight.w600",
+          "color": "Color(alpha: 0.9020, red: 1.0000, green: 1.0000, blue: 1.0000, colorSpace: ColorSpace.sRGB)",
+          "size": [
+            37.109375,
+            28.0
+          ],
+          "maxLines": null,
+          "softWrap": true,
+          "align": "TextAlign.start",
+          "overflow": "TextOverflow.clip",
+          "natural_height": 28.0,
+          "line_count": 1
+        },
+        "td": {
+          "font": 20.0,
+          "height": 1.4,
+          "weight": "FontWeight.w600",
+          "color": "Color(alpha: 0.9020, red: 1.0000, green: 1.0000, blue: 1.0000, colorSpace: ColorSpace.sRGB)",
+          "size": [
+            37.109375,
+            28.0
+          ],
+          "maxLines": null,
+          "softWrap": true,
+          "align": "TextAlign.start",
+          "overflow": "TextOverflow.clip",
+          "natural_height": 28.0,
+          "line_count": 1
+        },
+        "explicit": {
+          "font": 14.0,
+          "height": 1.5714285714285714,
+          "weight": "FontWeight.w400",
+          "color": "MaterialColor(primary value: Color(alpha: 1.0000, red: 0.9137, green: 0.1176, blue: 0.3882, colorSpace: ColorSpace.sRGB))",
+          "size": [
+            25.9765625,
+            22.0
+          ],
+          "maxLines": null,
+          "softWrap": true,
+          "align": "TextAlign.start",
+          "overflow": "TextOverflow.clip",
+          "natural_height": 22.0,
+          "line_count": 1
+        }
+      }
+    },
+    {
+      "phase": "patch",
+      "name": "progress_circular_light",
+      "pixels": 458,
+      "changes": [
+        {
+          "subject": "td",
+          "fields": {
+            "字号": [
+              14.0,
+              20.0
+            ],
+            "行高": [
+              22.0,
+              28.0
+            ],
+            "字重": [
+              "FontWeight.w400",
+              "FontWeight.w600"
+            ],
+            "文字盒": [
+              [
+                25.9765625,
+                22.0
+              ],
+              [
+                37.109375,
+                28.0
+              ]
+            ]
+          }
+        }
+      ],
+      "before": {
+        "name": "progress_circular",
+        "dark": false,
+        "errors": [],
+        "native": {
+          "font": 20.0,
+          "height": 1.4,
+          "weight": "FontWeight.w600",
+          "color": "Color(alpha: 0.8980, red: 0.0000, green: 0.0000, blue: 0.0000, colorSpace: ColorSpace.sRGB)",
+          "size": [
+            37.109375,
+            28.0
+          ],
+          "maxLines": null,
+          "softWrap": true,
+          "align": "TextAlign.start",
+          "overflow": "TextOverflow.clip",
+          "natural_height": 28.0,
+          "line_count": 1
+        },
+        "td": {
+          "font": 14.0,
+          "height": 1.5714285714285714,
+          "weight": "FontWeight.w400",
+          "color": "Color(alpha: 0.8980, red: 0.0000, green: 0.0000, blue: 0.0000, colorSpace: ColorSpace.sRGB)",
+          "size": [
+            25.9765625,
+            22.0
+          ],
+          "maxLines": null,
+          "softWrap": true,
+          "align": "TextAlign.start",
+          "overflow": "TextOverflow.clip",
+          "natural_height": 22.0,
+          "line_count": 1
+        },
+        "explicit": {
+          "font": 14.0,
+          "height": 1.5714285714285714,
+          "weight": "FontWeight.w400",
+          "color": "MaterialColor(primary value: Color(alpha: 1.0000, red: 0.9137, green: 0.1176, blue: 0.3882, colorSpace: ColorSpace.sRGB))",
+          "size": [
+            25.9765625,
+            22.0
+          ],
+          "maxLines": null,
+          "softWrap": true,
+          "align": "TextAlign.start",
+          "overflow": "TextOverflow.clip",
+          "natural_height": 22.0,
+          "line_count": 1
+        }
+      },
+      "after": {
+        "name": "progress_circular",
+        "dark": false,
+        "errors": [],
+        "native": {
+          "font": 20.0,
+          "height": 1.4,
+          "weight": "FontWeight.w600",
+          "color": "Color(alpha: 0.8980, red: 0.0000, green: 0.0000, blue: 0.0000, colorSpace: ColorSpace.sRGB)",
+          "size": [
+            37.109375,
+            28.0
+          ],
+          "maxLines": null,
+          "softWrap": true,
+          "align": "TextAlign.start",
+          "overflow": "TextOverflow.clip",
+          "natural_height": 28.0,
+          "line_count": 1
+        },
+        "td": {
+          "font": 20.0,
+          "height": 1.4,
+          "weight": "FontWeight.w600",
+          "color": "Color(alpha: 0.8980, red: 0.0000, green: 0.0000, blue: 0.0000, colorSpace: ColorSpace.sRGB)",
+          "size": [
+            37.109375,
+            28.0
+          ],
+          "maxLines": null,
+          "softWrap": true,
+          "align": "TextAlign.start",
+          "overflow": "TextOverflow.clip",
+          "natural_height": 28.0,
+          "line_count": 1
+        },
+        "explicit": {
+          "font": 14.0,
+          "height": 1.5714285714285714,
+          "weight": "FontWeight.w400",
+          "color": "MaterialColor(primary value: Color(alpha: 1.0000, red: 0.9137, green: 0.1176, blue: 0.3882, colorSpace: ColorSpace.sRGB))",
+          "size": [
+            25.9765625,
+            22.0
+          ],
+          "maxLines": null,
+          "softWrap": true,
+          "align": "TextAlign.start",
+          "overflow": "TextOverflow.clip",
+          "natural_height": 22.0,
+          "line_count": 1
+        }
+      }
+    },
+    {
+      "phase": "patch",
+      "name": "progress_plump_dark",
+      "pixels": 234,
+      "changes": [
+        {
+          "subject": "td",
+          "fields": {
+            "字号": [
+              14.0,
+              12.0
+            ],
+            "行高": [
+              22.0,
+              20.0
+            ],
+            "字重": [
+              "FontWeight.w400",
+              "FontWeight.w600"
+            ],
+            "文字盒": [
+              [
+                25.9765625,
+                20.0
+              ],
+              [
+                22.265625,
+                20.0
+              ]
+            ]
+          }
+        }
+      ],
+      "before": {
+        "name": "progress_plump",
+        "dark": true,
+        "errors": [],
+        "native": {
+          "font": 12.0,
+          "height": 1.6666666666666667,
+          "weight": "FontWeight.w600",
+          "color": "Color(alpha: 0.9020, red: 1.0000, green: 1.0000, blue: 1.0000, colorSpace: ColorSpace.sRGB)",
+          "size": [
+            22.265625,
+            20.0
+          ],
+          "maxLines": null,
+          "softWrap": true,
+          "align": "TextAlign.start",
+          "overflow": "TextOverflow.clip",
+          "natural_height": 20.0,
+          "line_count": 1
+        },
+        "td": {
+          "font": 14.0,
+          "height": 1.5714285714285714,
+          "weight": "FontWeight.w400",
+          "color": "Color(alpha: 0.9020, red: 1.0000, green: 1.0000, blue: 1.0000, colorSpace: ColorSpace.sRGB)",
+          "size": [
+            25.9765625,
+            20.0
+          ],
+          "maxLines": null,
+          "softWrap": true,
+          "align": "TextAlign.start",
+          "overflow": "TextOverflow.clip",
+          "natural_height": 22.0,
+          "line_count": 1
+        },
+        "explicit": {
+          "font": 14.0,
+          "height": 1.5714285714285714,
+          "weight": "FontWeight.w400",
+          "color": "MaterialColor(primary value: Color(alpha: 1.0000, red: 0.9137, green: 0.1176, blue: 0.3882, colorSpace: ColorSpace.sRGB))",
+          "size": [
+            25.9765625,
+            20.0
+          ],
+          "maxLines": null,
+          "softWrap": true,
+          "align": "TextAlign.start",
+          "overflow": "TextOverflow.clip",
+          "natural_height": 22.0,
+          "line_count": 1
+        }
+      },
+      "after": {
+        "name": "progress_plump",
+        "dark": true,
+        "errors": [],
+        "native": {
+          "font": 12.0,
+          "height": 1.6666666666666667,
+          "weight": "FontWeight.w600",
+          "color": "Color(alpha: 0.9020, red: 1.0000, green: 1.0000, blue: 1.0000, colorSpace: ColorSpace.sRGB)",
+          "size": [
+            22.265625,
+            20.0
+          ],
+          "maxLines": null,
+          "softWrap": true,
+          "align": "TextAlign.start",
+          "overflow": "TextOverflow.clip",
+          "natural_height": 20.0,
+          "line_count": 1
+        },
+        "td": {
+          "font": 12.0,
+          "height": 1.6666666666666667,
+          "weight": "FontWeight.w600",
+          "color": "Color(alpha: 0.9020, red: 1.0000, green: 1.0000, blue: 1.0000, colorSpace: ColorSpace.sRGB)",
+          "size": [
+            22.265625,
+            20.0
+          ],
+          "maxLines": null,
+          "softWrap": true,
+          "align": "TextAlign.start",
+          "overflow": "TextOverflow.clip",
+          "natural_height": 20.0,
+          "line_count": 1
+        },
+        "explicit": {
+          "font": 14.0,
+          "height": 1.5714285714285714,
+          "weight": "FontWeight.w400",
+          "color": "MaterialColor(primary value: Color(alpha: 1.0000, red: 0.9137, green: 0.1176, blue: 0.3882, colorSpace: ColorSpace.sRGB))",
+          "size": [
+            25.9765625,
+            20.0
+          ],
+          "maxLines": null,
+          "softWrap": true,
+          "align": "TextAlign.start",
+          "overflow": "TextOverflow.clip",
+          "natural_height": 22.0,
+          "line_count": 1
+        }
+      }
+    },
+    {
+      "phase": "patch",
+      "name": "progress_plump_light",
+      "pixels": 235,
+      "changes": [
+        {
+          "subject": "td",
+          "fields": {
+            "字号": [
+              14.0,
+              12.0
+            ],
+            "行高": [
+              22.0,
+              20.0
+            ],
+            "字重": [
+              "FontWeight.w400",
+              "FontWeight.w600"
+            ],
+            "颜色": [
+              "Color(alpha: 0.8980, red: 0.0000, green: 0.0000, blue: 0.0000, colorSpace: ColorSpace.sRGB)",
+              "Color(alpha: 1.0000, red: 1.0000, green: 1.0000, blue: 1.0000, colorSpace: ColorSpace.sRGB)"
+            ],
+            "文字盒": [
+              [
+                25.9765625,
+                20.0
+              ],
+              [
+                22.265625,
+                20.0
+              ]
+            ]
+          }
+        }
+      ],
+      "before": {
+        "name": "progress_plump",
+        "dark": false,
+        "errors": [],
+        "native": {
+          "font": 12.0,
+          "height": 1.6666666666666667,
+          "weight": "FontWeight.w600",
+          "color": "Color(alpha: 1.0000, red: 1.0000, green: 1.0000, blue: 1.0000, colorSpace: ColorSpace.sRGB)",
+          "size": [
+            22.265625,
+            20.0
+          ],
+          "maxLines": null,
+          "softWrap": true,
+          "align": "TextAlign.start",
+          "overflow": "TextOverflow.clip",
+          "natural_height": 20.0,
+          "line_count": 1
+        },
+        "td": {
+          "font": 14.0,
+          "height": 1.5714285714285714,
+          "weight": "FontWeight.w400",
+          "color": "Color(alpha: 0.8980, red: 0.0000, green: 0.0000, blue: 0.0000, colorSpace: ColorSpace.sRGB)",
+          "size": [
+            25.9765625,
+            20.0
+          ],
+          "maxLines": null,
+          "softWrap": true,
+          "align": "TextAlign.start",
+          "overflow": "TextOverflow.clip",
+          "natural_height": 22.0,
+          "line_count": 1
+        },
+        "explicit": {
+          "font": 14.0,
+          "height": 1.5714285714285714,
+          "weight": "FontWeight.w400",
+          "color": "MaterialColor(primary value: Color(alpha: 1.0000, red: 0.9137, green: 0.1176, blue: 0.3882, colorSpace: ColorSpace.sRGB))",
+          "size": [
+            25.9765625,
+            20.0
+          ],
+          "maxLines": null,
+          "softWrap": true,
+          "align": "TextAlign.start",
+          "overflow": "TextOverflow.clip",
+          "natural_height": 22.0,
+          "line_count": 1
+        }
+      },
+      "after": {
+        "name": "progress_plump",
+        "dark": false,
+        "errors": [],
+        "native": {
+          "font": 12.0,
+          "height": 1.6666666666666667,
+          "weight": "FontWeight.w600",
+          "color": "Color(alpha: 1.0000, red: 1.0000, green: 1.0000, blue: 1.0000, colorSpace: ColorSpace.sRGB)",
+          "size": [
+            22.265625,
+            20.0
+          ],
+          "maxLines": null,
+          "softWrap": true,
+          "align": "TextAlign.start",
+          "overflow": "TextOverflow.clip",
+          "natural_height": 20.0,
+          "line_count": 1
+        },
+        "td": {
+          "font": 12.0,
+          "height": 1.6666666666666667,
+          "weight": "FontWeight.w600",
+          "color": "Color(alpha: 1.0000, red: 1.0000, green: 1.0000, blue: 1.0000, colorSpace: ColorSpace.sRGB)",
+          "size": [
+            22.265625,
+            20.0
+          ],
+          "maxLines": null,
+          "softWrap": true,
+          "align": "TextAlign.start",
+          "overflow": "TextOverflow.clip",
+          "natural_height": 20.0,
+          "line_count": 1
+        },
+        "explicit": {
+          "font": 14.0,
+          "height": 1.5714285714285714,
+          "weight": "FontWeight.w400",
+          "color": "MaterialColor(primary value: Color(alpha: 1.0000, red: 0.9137, green: 0.1176, blue: 0.3882, colorSpace: ColorSpace.sRGB))",
+          "size": [
+            25.9765625,
+            20.0
+          ],
+          "maxLines": null,
+          "softWrap": true,
+          "align": "TextAlign.start",
+          "overflow": "TextOverflow.clip",
+          "natural_height": 22.0,
+          "line_count": 1
+        }
+      }
+    },
+    {
+      "phase": "patch",
+      "name": "progress_warning_dark",
+      "pixels": 0,
+      "changes": [],
+      "before": {
+        "name": "progress_warning",
+        "dark": true,
+        "errors": [],
+        "native": {
+          "font": 14.0,
+          "height": 1.5714285714285714,
+          "weight": "FontWeight.w400",
+          "color": "Color(alpha: 0.9020, red: 1.0000, green: 1.0000, blue: 1.0000, colorSpace: ColorSpace.sRGB)",
+          "size": [
+            25.9765625,
+            22.0
+          ],
+          "maxLines": null,
+          "softWrap": true,
+          "align": "TextAlign.start",
+          "overflow": "TextOverflow.clip",
+          "natural_height": 22.0,
+          "line_count": 1
+        },
+        "td": {
+          "font": 14.0,
+          "height": 1.5714285714285714,
+          "weight": "FontWeight.w400",
+          "color": "Color(alpha: 0.9020, red: 1.0000, green: 1.0000, blue: 1.0000, colorSpace: ColorSpace.sRGB)",
+          "size": [
+            25.9765625,
+            22.0
+          ],
+          "maxLines": null,
+          "softWrap": true,
+          "align": "TextAlign.start",
+          "overflow": "TextOverflow.clip",
+          "natural_height": 22.0,
+          "line_count": 1
+        },
+        "explicit": {
+          "font": 14.0,
+          "height": 1.5714285714285714,
+          "weight": "FontWeight.w400",
+          "color": "MaterialColor(primary value: Color(alpha: 1.0000, red: 0.9137, green: 0.1176, blue: 0.3882, colorSpace: ColorSpace.sRGB))",
+          "size": [
+            25.9765625,
+            22.0
+          ],
+          "maxLines": null,
+          "softWrap": true,
+          "align": "TextAlign.start",
+          "overflow": "TextOverflow.clip",
+          "natural_height": 22.0,
+          "line_count": 1
+        }
+      },
+      "after": {
+        "name": "progress_warning",
+        "dark": true,
+        "errors": [],
+        "native": {
+          "font": 14.0,
+          "height": 1.5714285714285714,
+          "weight": "FontWeight.w400",
+          "color": "Color(alpha: 0.9020, red: 1.0000, green: 1.0000, blue: 1.0000, colorSpace: ColorSpace.sRGB)",
+          "size": [
+            25.9765625,
+            22.0
+          ],
+          "maxLines": null,
+          "softWrap": true,
+          "align": "TextAlign.start",
+          "overflow": "TextOverflow.clip",
+          "natural_height": 22.0,
+          "line_count": 1
+        },
+        "td": {
+          "font": 14.0,
+          "height": 1.5714285714285714,
+          "weight": "FontWeight.w400",
+          "color": "Color(alpha: 0.9020, red: 1.0000, green: 1.0000, blue: 1.0000, colorSpace: ColorSpace.sRGB)",
+          "size": [
+            25.9765625,
+            22.0
+          ],
+          "maxLines": null,
+          "softWrap": true,
+          "align": "TextAlign.start",
+          "overflow": "TextOverflow.clip",
+          "natural_height": 22.0,
+          "line_count": 1
+        },
+        "explicit": {
+          "font": 14.0,
+          "height": 1.5714285714285714,
+          "weight": "FontWeight.w400",
+          "color": "MaterialColor(primary value: Color(alpha: 1.0000, red: 0.9137, green: 0.1176, blue: 0.3882, colorSpace: ColorSpace.sRGB))",
+          "size": [
+            25.9765625,
+            22.0
+          ],
+          "maxLines": null,
+          "softWrap": true,
+          "align": "TextAlign.start",
+          "overflow": "TextOverflow.clip",
+          "natural_height": 22.0,
+          "line_count": 1
+        }
+      }
+    },
+    {
+      "phase": "patch",
+      "name": "progress_warning_light",
+      "pixels": 0,
+      "changes": [],
+      "before": {
+        "name": "progress_warning",
+        "dark": false,
+        "errors": [],
+        "native": {
+          "font": 14.0,
+          "height": 1.5714285714285714,
+          "weight": "FontWeight.w400",
+          "color": "Color(alpha: 0.8980, red: 0.0000, green: 0.0000, blue: 0.0000, colorSpace: ColorSpace.sRGB)",
+          "size": [
+            25.9765625,
+            22.0
+          ],
+          "maxLines": null,
+          "softWrap": true,
+          "align": "TextAlign.start",
+          "overflow": "TextOverflow.clip",
+          "natural_height": 22.0,
+          "line_count": 1
+        },
+        "td": {
+          "font": 14.0,
+          "height": 1.5714285714285714,
+          "weight": "FontWeight.w400",
+          "color": "Color(alpha: 0.8980, red: 0.0000, green: 0.0000, blue: 0.0000, colorSpace: ColorSpace.sRGB)",
+          "size": [
+            25.9765625,
+            22.0
+          ],
+          "maxLines": null,
+          "softWrap": true,
+          "align": "TextAlign.start",
+          "overflow": "TextOverflow.clip",
+          "natural_height": 22.0,
+          "line_count": 1
+        },
+        "explicit": {
+          "font": 14.0,
+          "height": 1.5714285714285714,
+          "weight": "FontWeight.w400",
+          "color": "MaterialColor(primary value: Color(alpha: 1.0000, red: 0.9137, green: 0.1176, blue: 0.3882, colorSpace: ColorSpace.sRGB))",
+          "size": [
+            25.9765625,
+            22.0
+          ],
+          "maxLines": null,
+          "softWrap": true,
+          "align": "TextAlign.start",
+          "overflow": "TextOverflow.clip",
+          "natural_height": 22.0,
+          "line_count": 1
+        }
+      },
+      "after": {
+        "name": "progress_warning",
+        "dark": false,
+        "errors": [],
+        "native": {
+          "font": 14.0,
+          "height": 1.5714285714285714,
+          "weight": "FontWeight.w400",
+          "color": "Color(alpha: 0.8980, red: 0.0000, green: 0.0000, blue: 0.0000, colorSpace: ColorSpace.sRGB)",
+          "size": [
+            25.9765625,
+            22.0
+          ],
+          "maxLines": null,
+          "softWrap": true,
+          "align": "TextAlign.start",
+          "overflow": "TextOverflow.clip",
+          "natural_height": 22.0,
+          "line_count": 1
+        },
+        "td": {
+          "font": 14.0,
+          "height": 1.5714285714285714,
+          "weight": "FontWeight.w400",
+          "color": "Color(alpha: 0.8980, red: 0.0000, green: 0.0000, blue: 0.0000, colorSpace: ColorSpace.sRGB)",
+          "size": [
+            25.9765625,
+            22.0
+          ],
+          "maxLines": null,
+          "softWrap": true,
+          "align": "TextAlign.start",
+          "overflow": "TextOverflow.clip",
+          "natural_height": 22.0,
+          "line_count": 1
+        },
+        "explicit": {
+          "font": 14.0,
+          "height": 1.5714285714285714,
+          "weight": "FontWeight.w400",
+          "color": "MaterialColor(primary value: Color(alpha: 1.0000, red: 0.9137, green: 0.1176, blue: 0.3882, colorSpace: ColorSpace.sRGB))",
+          "size": [
+            25.9765625,
+            22.0
+          ],
+          "maxLines": null,
+          "softWrap": true,
+          "align": "TextAlign.start",
+          "overflow": "TextOverflow.clip",
+          "natural_height": 22.0,
+          "line_count": 1
+        }
+      }
+    },
+    {
+      "phase": "patch",
+      "name": "table_cell_dark",
+      "pixels": 0,
+      "changes": [],
+      "before": {
+        "name": "table_cell",
+        "dark": true,
+        "errors": [],
+        "native": {
+          "font": 14.0,
+          "height": 1.5714285714285714,
+          "weight": "FontWeight.w400",
+          "color": "Color(alpha: 0.9020, red: 1.0000, green: 1.0000, blue: 1.0000, colorSpace: ColorSpace.sRGB)",
+          "size": [
+            55.999755859375,
+            22.0
+          ],
+          "maxLines": 1,
+          "softWrap": true,
+          "align": "TextAlign.start",
+          "overflow": "TextOverflow.ellipsis",
+          "natural_height": 22.0,
+          "line_count": 1
+        },
+        "td": {
+          "font": 14.0,
+          "height": 1.5714285714285714,
+          "weight": "FontWeight.w400",
+          "color": "Color(alpha: 0.9020, red: 1.0000, green: 1.0000, blue: 1.0000, colorSpace: ColorSpace.sRGB)",
+          "size": [
+            55.999755859375,
+            22.0
+          ],
+          "maxLines": 1,
+          "softWrap": true,
+          "align": "TextAlign.start",
+          "overflow": "TextOverflow.ellipsis",
+          "natural_height": 22.0,
+          "line_count": 1
+        },
+        "explicit": {
+          "font": 14.0,
+          "height": 1.5714285714285714,
+          "weight": "FontWeight.w400",
+          "color": "MaterialColor(primary value: Color(alpha: 1.0000, red: 0.9137, green: 0.1176, blue: 0.3882, colorSpace: ColorSpace.sRGB))",
+          "size": [
+            55.999755859375,
+            22.0
+          ],
+          "maxLines": 1,
+          "softWrap": true,
+          "align": "TextAlign.start",
+          "overflow": "TextOverflow.ellipsis",
+          "natural_height": 22.0,
+          "line_count": 1
+        }
+      },
+      "after": {
+        "name": "table_cell",
+        "dark": true,
+        "errors": [],
+        "native": {
+          "font": 14.0,
+          "height": 1.5714285714285714,
+          "weight": "FontWeight.w400",
+          "color": "Color(alpha: 0.9020, red: 1.0000, green: 1.0000, blue: 1.0000, colorSpace: ColorSpace.sRGB)",
+          "size": [
+            55.999755859375,
+            22.0
+          ],
+          "maxLines": 1,
+          "softWrap": true,
+          "align": "TextAlign.start",
+          "overflow": "TextOverflow.ellipsis",
+          "natural_height": 22.0,
+          "line_count": 1
+        },
+        "td": {
+          "font": 14.0,
+          "height": 1.5714285714285714,
+          "weight": "FontWeight.w400",
+          "color": "Color(alpha: 0.9020, red: 1.0000, green: 1.0000, blue: 1.0000, colorSpace: ColorSpace.sRGB)",
+          "size": [
+            55.999755859375,
+            22.0
+          ],
+          "maxLines": 1,
+          "softWrap": true,
+          "align": "TextAlign.start",
+          "overflow": "TextOverflow.ellipsis",
+          "natural_height": 22.0,
+          "line_count": 1
+        },
+        "explicit": {
+          "font": 14.0,
+          "height": 1.5714285714285714,
+          "weight": "FontWeight.w400",
+          "color": "MaterialColor(primary value: Color(alpha: 1.0000, red: 0.9137, green: 0.1176, blue: 0.3882, colorSpace: ColorSpace.sRGB))",
+          "size": [
+            55.999755859375,
+            22.0
+          ],
+          "maxLines": 1,
+          "softWrap": true,
+          "align": "TextAlign.start",
+          "overflow": "TextOverflow.ellipsis",
+          "natural_height": 22.0,
+          "line_count": 1
+        }
+      }
+    },
+    {
+      "phase": "patch",
+      "name": "table_cell_light",
+      "pixels": 0,
+      "changes": [],
+      "before": {
+        "name": "table_cell",
+        "dark": false,
+        "errors": [],
+        "native": {
+          "font": 14.0,
+          "height": 1.5714285714285714,
+          "weight": "FontWeight.w400",
+          "color": "Color(alpha: 0.8980, red: 0.0000, green: 0.0000, blue: 0.0000, colorSpace: ColorSpace.sRGB)",
+          "size": [
+            55.999755859375,
+            22.0
+          ],
+          "maxLines": 1,
+          "softWrap": true,
+          "align": "TextAlign.start",
+          "overflow": "TextOverflow.ellipsis",
+          "natural_height": 22.0,
+          "line_count": 1
+        },
+        "td": {
+          "font": 14.0,
+          "height": 1.5714285714285714,
+          "weight": "FontWeight.w400",
+          "color": "Color(alpha: 0.8980, red: 0.0000, green: 0.0000, blue: 0.0000, colorSpace: ColorSpace.sRGB)",
+          "size": [
+            55.999755859375,
+            22.0
+          ],
+          "maxLines": 1,
+          "softWrap": true,
+          "align": "TextAlign.start",
+          "overflow": "TextOverflow.ellipsis",
+          "natural_height": 22.0,
+          "line_count": 1
+        },
+        "explicit": {
+          "font": 14.0,
+          "height": 1.5714285714285714,
+          "weight": "FontWeight.w400",
+          "color": "MaterialColor(primary value: Color(alpha: 1.0000, red: 0.9137, green: 0.1176, blue: 0.3882, colorSpace: ColorSpace.sRGB))",
+          "size": [
+            55.999755859375,
+            22.0
+          ],
+          "maxLines": 1,
+          "softWrap": true,
+          "align": "TextAlign.start",
+          "overflow": "TextOverflow.ellipsis",
+          "natural_height": 22.0,
+          "line_count": 1
+        }
+      },
+      "after": {
+        "name": "table_cell",
+        "dark": false,
+        "errors": [],
+        "native": {
+          "font": 14.0,
+          "height": 1.5714285714285714,
+          "weight": "FontWeight.w400",
+          "color": "Color(alpha: 0.8980, red: 0.0000, green: 0.0000, blue: 0.0000, colorSpace: ColorSpace.sRGB)",
+          "size": [
+            55.999755859375,
+            22.0
+          ],
+          "maxLines": 1,
+          "softWrap": true,
+          "align": "TextAlign.start",
+          "overflow": "TextOverflow.ellipsis",
+          "natural_height": 22.0,
+          "line_count": 1
+        },
+        "td": {
+          "font": 14.0,
+          "height": 1.5714285714285714,
+          "weight": "FontWeight.w400",
+          "color": "Color(alpha: 0.8980, red: 0.0000, green: 0.0000, blue: 0.0000, colorSpace: ColorSpace.sRGB)",
+          "size": [
+            55.999755859375,
+            22.0
+          ],
+          "maxLines": 1,
+          "softWrap": true,
+          "align": "TextAlign.start",
+          "overflow": "TextOverflow.ellipsis",
+          "natural_height": 22.0,
+          "line_count": 1
+        },
+        "explicit": {
+          "font": 14.0,
+          "height": 1.5714285714285714,
+          "weight": "FontWeight.w400",
+          "color": "MaterialColor(primary value: Color(alpha: 1.0000, red: 0.9137, green: 0.1176, blue: 0.3882, colorSpace: ColorSpace.sRGB))",
+          "size": [
+            55.999755859375,
+            22.0
+          ],
+          "maxLines": 1,
+          "softWrap": true,
+          "align": "TextAlign.start",
+          "overflow": "TextOverflow.ellipsis",
+          "natural_height": 22.0,
+          "line_count": 1
+        }
+      }
+    },
+    {
+      "phase": "patch",
+      "name": "table_header_dark",
+      "pixels": 411,
+      "changes": [
+        {
+          "subject": "td",
+          "fields": {
+            "颜色": [
+              "Color(alpha: 0.9020, red: 1.0000, green: 1.0000, blue: 1.0000, colorSpace: ColorSpace.sRGB)",
+              "Color(alpha: 0.3490, red: 1.0000, green: 1.0000, blue: 1.0000, colorSpace: ColorSpace.sRGB)"
+            ]
+          }
+        }
+      ],
+      "before": {
+        "name": "table_header",
+        "dark": true,
+        "errors": [],
+        "native": {
+          "font": 14.0,
+          "height": 1.5714285714285714,
+          "weight": "FontWeight.w400",
+          "color": "Color(alpha: 0.3490, red: 1.0000, green: 1.0000, blue: 1.0000, colorSpace: ColorSpace.sRGB)",
+          "size": [
+            55.999755859375,
+            22.0
+          ],
+          "maxLines": 1,
+          "softWrap": true,
+          "align": "TextAlign.start",
+          "overflow": "TextOverflow.ellipsis",
+          "natural_height": 22.0,
+          "line_count": 1
+        },
+        "td": {
+          "font": 14.0,
+          "height": 1.5714285714285714,
+          "weight": "FontWeight.w400",
+          "color": "Color(alpha: 0.9020, red: 1.0000, green: 1.0000, blue: 1.0000, colorSpace: ColorSpace.sRGB)",
+          "size": [
+            55.999755859375,
+            22.0
+          ],
+          "maxLines": 1,
+          "softWrap": true,
+          "align": "TextAlign.start",
+          "overflow": "TextOverflow.ellipsis",
+          "natural_height": 22.0,
+          "line_count": 1
+        },
+        "explicit": {
+          "font": 14.0,
+          "height": 1.5714285714285714,
+          "weight": "FontWeight.w400",
+          "color": "MaterialColor(primary value: Color(alpha: 1.0000, red: 0.9137, green: 0.1176, blue: 0.3882, colorSpace: ColorSpace.sRGB))",
+          "size": [
+            55.999755859375,
+            22.0
+          ],
+          "maxLines": 1,
+          "softWrap": true,
+          "align": "TextAlign.start",
+          "overflow": "TextOverflow.ellipsis",
+          "natural_height": 22.0,
+          "line_count": 1
+        }
+      },
+      "after": {
+        "name": "table_header",
+        "dark": true,
+        "errors": [],
+        "native": {
+          "font": 14.0,
+          "height": 1.5714285714285714,
+          "weight": "FontWeight.w400",
+          "color": "Color(alpha: 0.3490, red: 1.0000, green: 1.0000, blue: 1.0000, colorSpace: ColorSpace.sRGB)",
+          "size": [
+            55.999755859375,
+            22.0
+          ],
+          "maxLines": 1,
+          "softWrap": true,
+          "align": "TextAlign.start",
+          "overflow": "TextOverflow.ellipsis",
+          "natural_height": 22.0,
+          "line_count": 1
+        },
+        "td": {
+          "font": 14.0,
+          "height": 1.5714285714285714,
+          "weight": "FontWeight.w400",
+          "color": "Color(alpha: 0.3490, red: 1.0000, green: 1.0000, blue: 1.0000, colorSpace: ColorSpace.sRGB)",
+          "size": [
+            55.999755859375,
+            22.0
+          ],
+          "maxLines": 1,
+          "softWrap": true,
+          "align": "TextAlign.start",
+          "overflow": "TextOverflow.ellipsis",
+          "natural_height": 22.0,
+          "line_count": 1
+        },
+        "explicit": {
+          "font": 14.0,
+          "height": 1.5714285714285714,
+          "weight": "FontWeight.w400",
+          "color": "MaterialColor(primary value: Color(alpha: 1.0000, red: 0.9137, green: 0.1176, blue: 0.3882, colorSpace: ColorSpace.sRGB))",
+          "size": [
+            55.999755859375,
+            22.0
+          ],
+          "maxLines": 1,
+          "softWrap": true,
+          "align": "TextAlign.start",
+          "overflow": "TextOverflow.ellipsis",
+          "natural_height": 22.0,
+          "line_count": 1
+        }
+      }
+    },
+    {
+      "phase": "patch",
+      "name": "table_header_light",
+      "pixels": 411,
+      "changes": [
+        {
+          "subject": "td",
+          "fields": {
+            "颜色": [
+              "Color(alpha: 0.8980, red: 0.0000, green: 0.0000, blue: 0.0000, colorSpace: ColorSpace.sRGB)",
+              "Color(alpha: 0.4000, red: 0.0000, green: 0.0000, blue: 0.0000, colorSpace: ColorSpace.sRGB)"
+            ]
+          }
+        }
+      ],
+      "before": {
+        "name": "table_header",
+        "dark": false,
+        "errors": [],
+        "native": {
+          "font": 14.0,
+          "height": 1.5714285714285714,
+          "weight": "FontWeight.w400",
+          "color": "Color(alpha: 0.4000, red: 0.0000, green: 0.0000, blue: 0.0000, colorSpace: ColorSpace.sRGB)",
+          "size": [
+            55.999755859375,
+            22.0
+          ],
+          "maxLines": 1,
+          "softWrap": true,
+          "align": "TextAlign.start",
+          "overflow": "TextOverflow.ellipsis",
+          "natural_height": 22.0,
+          "line_count": 1
+        },
+        "td": {
+          "font": 14.0,
+          "height": 1.5714285714285714,
+          "weight": "FontWeight.w400",
+          "color": "Color(alpha: 0.8980, red: 0.0000, green: 0.0000, blue: 0.0000, colorSpace: ColorSpace.sRGB)",
+          "size": [
+            55.999755859375,
+            22.0
+          ],
+          "maxLines": 1,
+          "softWrap": true,
+          "align": "TextAlign.start",
+          "overflow": "TextOverflow.ellipsis",
+          "natural_height": 22.0,
+          "line_count": 1
+        },
+        "explicit": {
+          "font": 14.0,
+          "height": 1.5714285714285714,
+          "weight": "FontWeight.w400",
+          "color": "MaterialColor(primary value: Color(alpha: 1.0000, red: 0.9137, green: 0.1176, blue: 0.3882, colorSpace: ColorSpace.sRGB))",
+          "size": [
+            55.999755859375,
+            22.0
+          ],
+          "maxLines": 1,
+          "softWrap": true,
+          "align": "TextAlign.start",
+          "overflow": "TextOverflow.ellipsis",
+          "natural_height": 22.0,
+          "line_count": 1
+        }
+      },
+      "after": {
+        "name": "table_header",
+        "dark": false,
+        "errors": [],
+        "native": {
+          "font": 14.0,
+          "height": 1.5714285714285714,
+          "weight": "FontWeight.w400",
+          "color": "Color(alpha: 0.4000, red: 0.0000, green: 0.0000, blue: 0.0000, colorSpace: ColorSpace.sRGB)",
+          "size": [
+            55.999755859375,
+            22.0
+          ],
+          "maxLines": 1,
+          "softWrap": true,
+          "align": "TextAlign.start",
+          "overflow": "TextOverflow.ellipsis",
+          "natural_height": 22.0,
+          "line_count": 1
+        },
+        "td": {
+          "font": 14.0,
+          "height": 1.5714285714285714,
+          "weight": "FontWeight.w400",
+          "color": "Color(alpha: 0.4000, red: 0.0000, green: 0.0000, blue: 0.0000, colorSpace: ColorSpace.sRGB)",
+          "size": [
+            55.999755859375,
+            22.0
+          ],
+          "maxLines": 1,
+          "softWrap": true,
+          "align": "TextAlign.start",
+          "overflow": "TextOverflow.ellipsis",
+          "natural_height": 22.0,
+          "line_count": 1
+        },
+        "explicit": {
+          "font": 14.0,
+          "height": 1.5714285714285714,
+          "weight": "FontWeight.w400",
+          "color": "MaterialColor(primary value: Color(alpha: 1.0000, red: 0.9137, green: 0.1176, blue: 0.3882, colorSpace: ColorSpace.sRGB))",
+          "size": [
+            55.999755859375,
+            22.0
+          ],
+          "maxLines": 1,
+          "softWrap": true,
+          "align": "TextAlign.start",
+          "overflow": "TextOverflow.ellipsis",
+          "natural_height": 22.0,
+          "line_count": 1
+        }
+      }
+    },
+    {
+      "phase": "patch",
+      "name": "table_outer_theme_dark",
+      "pixels": 938,
+      "changes": [
+        {
+          "subject": "td",
+          "fields": {
+            "字号": [
+              20.0,
+              14.0
+            ],
+            "行高": [
+              31.429,
+              22.0
+            ],
+            "颜色": [
+              "MaterialColor(primary value: Color(alpha: 1.0000, red: 0.6118, green: 0.1529, blue: 0.6902, colorSpace: ColorSpace.sRGB))",
+              "Color(alpha: 0.9020, red: 1.0000, green: 1.0000, blue: 1.0000, colorSpace: ColorSpace.sRGB)"
+            ],
+            "文字盒": [
+              [
+                79.99993896484375,
+                31.0
+              ],
+              [
+                55.999755859375,
+                22.0
+              ]
+            ]
+          }
+        }
+      ],
+      "before": {
+        "name": "table_outer_theme",
+        "dark": true,
+        "errors": [],
+        "native": {
+          "font": 14.0,
+          "height": 1.5714285714285714,
+          "weight": "FontWeight.w400",
+          "color": "Color(alpha: 0.9020, red: 1.0000, green: 1.0000, blue: 1.0000, colorSpace: ColorSpace.sRGB)",
+          "size": [
+            55.999755859375,
+            22.0
+          ],
+          "maxLines": 1,
+          "softWrap": true,
+          "align": "TextAlign.start",
+          "overflow": "TextOverflow.ellipsis",
+          "natural_height": 22.0,
+          "line_count": 1
+        },
+        "td": {
+          "font": 20.0,
+          "height": 1.5714285714285714,
+          "weight": "FontWeight.w400",
+          "color": "MaterialColor(primary value: Color(alpha: 1.0000, red: 0.6118, green: 0.1529, blue: 0.6902, colorSpace: ColorSpace.sRGB))",
+          "size": [
+            79.99993896484375,
+            31.0
+          ],
+          "maxLines": 1,
+          "softWrap": true,
+          "align": "TextAlign.start",
+          "overflow": "TextOverflow.ellipsis",
+          "natural_height": 31.0,
+          "line_count": 1
+        },
+        "explicit": {
+          "font": 14.0,
+          "height": 1.5714285714285714,
+          "weight": "FontWeight.w400",
+          "color": "MaterialColor(primary value: Color(alpha: 1.0000, red: 0.9137, green: 0.1176, blue: 0.3882, colorSpace: ColorSpace.sRGB))",
+          "size": [
+            55.999755859375,
+            22.0
+          ],
+          "maxLines": 1,
+          "softWrap": true,
+          "align": "TextAlign.start",
+          "overflow": "TextOverflow.ellipsis",
+          "natural_height": 22.0,
+          "line_count": 1
+        }
+      },
+      "after": {
+        "name": "table_outer_theme",
+        "dark": true,
+        "errors": [],
+        "native": {
+          "font": 14.0,
+          "height": 1.5714285714285714,
+          "weight": "FontWeight.w400",
+          "color": "Color(alpha: 0.9020, red: 1.0000, green: 1.0000, blue: 1.0000, colorSpace: ColorSpace.sRGB)",
+          "size": [
+            55.999755859375,
+            22.0
+          ],
+          "maxLines": 1,
+          "softWrap": true,
+          "align": "TextAlign.start",
+          "overflow": "TextOverflow.ellipsis",
+          "natural_height": 22.0,
+          "line_count": 1
+        },
+        "td": {
+          "font": 14.0,
+          "height": 1.5714285714285714,
+          "weight": "FontWeight.w400",
+          "color": "Color(alpha: 0.9020, red: 1.0000, green: 1.0000, blue: 1.0000, colorSpace: ColorSpace.sRGB)",
+          "size": [
+            55.999755859375,
+            22.0
+          ],
+          "maxLines": 1,
+          "softWrap": true,
+          "align": "TextAlign.start",
+          "overflow": "TextOverflow.ellipsis",
+          "natural_height": 22.0,
+          "line_count": 1
+        },
+        "explicit": {
+          "font": 14.0,
+          "height": 1.5714285714285714,
+          "weight": "FontWeight.w400",
+          "color": "MaterialColor(primary value: Color(alpha: 1.0000, red: 0.9137, green: 0.1176, blue: 0.3882, colorSpace: ColorSpace.sRGB))",
+          "size": [
+            55.999755859375,
+            22.0
+          ],
+          "maxLines": 1,
+          "softWrap": true,
+          "align": "TextAlign.start",
+          "overflow": "TextOverflow.ellipsis",
+          "natural_height": 22.0,
+          "line_count": 1
+        }
+      }
+    },
+    {
+      "phase": "patch",
+      "name": "table_outer_theme_light",
+      "pixels": 938,
+      "changes": [
+        {
+          "subject": "td",
+          "fields": {
+            "字号": [
+              20.0,
+              14.0
+            ],
+            "行高": [
+              31.429,
+              22.0
+            ],
+            "颜色": [
+              "MaterialColor(primary value: Color(alpha: 1.0000, red: 0.6118, green: 0.1529, blue: 0.6902, colorSpace: ColorSpace.sRGB))",
+              "Color(alpha: 0.8980, red: 0.0000, green: 0.0000, blue: 0.0000, colorSpace: ColorSpace.sRGB)"
+            ],
+            "文字盒": [
+              [
+                79.99993896484375,
+                31.0
+              ],
+              [
+                55.999755859375,
+                22.0
+              ]
+            ]
+          }
+        }
+      ],
+      "before": {
+        "name": "table_outer_theme",
+        "dark": false,
+        "errors": [],
+        "native": {
+          "font": 14.0,
+          "height": 1.5714285714285714,
+          "weight": "FontWeight.w400",
+          "color": "Color(alpha: 0.8980, red: 0.0000, green: 0.0000, blue: 0.0000, colorSpace: ColorSpace.sRGB)",
+          "size": [
+            55.999755859375,
+            22.0
+          ],
+          "maxLines": 1,
+          "softWrap": true,
+          "align": "TextAlign.start",
+          "overflow": "TextOverflow.ellipsis",
+          "natural_height": 22.0,
+          "line_count": 1
+        },
+        "td": {
+          "font": 20.0,
+          "height": 1.5714285714285714,
+          "weight": "FontWeight.w400",
+          "color": "MaterialColor(primary value: Color(alpha: 1.0000, red: 0.6118, green: 0.1529, blue: 0.6902, colorSpace: ColorSpace.sRGB))",
+          "size": [
+            79.99993896484375,
+            31.0
+          ],
+          "maxLines": 1,
+          "softWrap": true,
+          "align": "TextAlign.start",
+          "overflow": "TextOverflow.ellipsis",
+          "natural_height": 31.0,
+          "line_count": 1
+        },
+        "explicit": {
+          "font": 14.0,
+          "height": 1.5714285714285714,
+          "weight": "FontWeight.w400",
+          "color": "MaterialColor(primary value: Color(alpha: 1.0000, red: 0.9137, green: 0.1176, blue: 0.3882, colorSpace: ColorSpace.sRGB))",
+          "size": [
+            55.999755859375,
+            22.0
+          ],
+          "maxLines": 1,
+          "softWrap": true,
+          "align": "TextAlign.start",
+          "overflow": "TextOverflow.ellipsis",
+          "natural_height": 22.0,
+          "line_count": 1
+        }
+      },
+      "after": {
+        "name": "table_outer_theme",
+        "dark": false,
+        "errors": [],
+        "native": {
+          "font": 14.0,
+          "height": 1.5714285714285714,
+          "weight": "FontWeight.w400",
+          "color": "Color(alpha: 0.8980, red: 0.0000, green: 0.0000, blue: 0.0000, colorSpace: ColorSpace.sRGB)",
+          "size": [
+            55.999755859375,
+            22.0
+          ],
+          "maxLines": 1,
+          "softWrap": true,
+          "align": "TextAlign.start",
+          "overflow": "TextOverflow.ellipsis",
+          "natural_height": 22.0,
+          "line_count": 1
+        },
+        "td": {
+          "font": 14.0,
+          "height": 1.5714285714285714,
+          "weight": "FontWeight.w400",
+          "color": "Color(alpha: 0.8980, red: 0.0000, green: 0.0000, blue: 0.0000, colorSpace: ColorSpace.sRGB)",
+          "size": [
+            55.999755859375,
+            22.0
+          ],
+          "maxLines": 1,
+          "softWrap": true,
+          "align": "TextAlign.start",
+          "overflow": "TextOverflow.ellipsis",
+          "natural_height": 22.0,
+          "line_count": 1
+        },
+        "explicit": {
+          "font": 14.0,
+          "height": 1.5714285714285714,
+          "weight": "FontWeight.w400",
+          "color": "MaterialColor(primary value: Color(alpha: 1.0000, red: 0.9137, green: 0.1176, blue: 0.3882, colorSpace: ColorSpace.sRGB))",
+          "size": [
+            55.999755859375,
+            22.0
+          ],
+          "maxLines": 1,
+          "softWrap": true,
+          "align": "TextAlign.start",
+          "overflow": "TextOverflow.ellipsis",
+          "natural_height": 22.0,
+          "line_count": 1
+        }
+      }
+    },
+    {
+      "phase": "patch",
+      "name": "toolbar_dark",
+      "pixels": 946,
+      "changes": [
+        {
+          "subject": "td",
+          "fields": {
+            "字号": [
+              14.0,
+              20.0
+            ],
+            "行高": [
+              22.0,
+              28.0
+            ],
+            "颜色": [
+              "Color(alpha: 0.9020, red: 1.0000, green: 1.0000, blue: 1.0000, colorSpace: ColorSpace.sRGB)",
+              "MaterialColor(primary value: Color(alpha: 1.0000, red: 0.6118, green: 0.1529, blue: 0.6902, colorSpace: ColorSpace.sRGB))"
+            ],
+            "文字盒": [
+              [
+                55.999755859375,
+                22.0
+              ],
+              [
+                79.99993896484375,
+                28.0
+              ]
+            ]
+          }
+        }
+      ],
+      "before": {
+        "name": "toolbar",
+        "dark": true,
+        "errors": [],
+        "native": {
+          "font": 20.0,
+          "height": 1.4,
+          "weight": "FontWeight.w400",
+          "color": "MaterialColor(primary value: Color(alpha: 1.0000, red: 0.6118, green: 0.1529, blue: 0.6902, colorSpace: ColorSpace.sRGB))",
+          "size": [
+            80.99993896484375,
+            28.0
+          ],
+          "maxLines": null,
+          "softWrap": true,
+          "align": "TextAlign.start",
+          "overflow": "TextOverflow.clip",
+          "natural_height": 28.0,
+          "line_count": 1
+        },
+        "td": {
+          "font": 14.0,
+          "height": 1.5714285714285714,
+          "weight": "FontWeight.w400",
+          "color": "Color(alpha: 0.9020, red: 1.0000, green: 1.0000, blue: 1.0000, colorSpace: ColorSpace.sRGB)",
+          "size": [
+            55.999755859375,
+            22.0
+          ],
+          "maxLines": null,
+          "softWrap": true,
+          "align": "TextAlign.start",
+          "overflow": "TextOverflow.clip",
+          "natural_height": 22.0,
+          "line_count": 1
+        },
+        "explicit": {
+          "font": 14.0,
+          "height": 1.5714285714285714,
+          "weight": "FontWeight.w400",
+          "color": "MaterialColor(primary value: Color(alpha: 1.0000, red: 0.9137, green: 0.1176, blue: 0.3882, colorSpace: ColorSpace.sRGB))",
+          "size": [
+            55.999755859375,
+            22.0
+          ],
+          "maxLines": null,
+          "softWrap": true,
+          "align": "TextAlign.start",
+          "overflow": "TextOverflow.clip",
+          "natural_height": 22.0,
+          "line_count": 1
+        }
+      },
+      "after": {
+        "name": "toolbar",
+        "dark": true,
+        "errors": [],
+        "native": {
+          "font": 20.0,
+          "height": 1.4,
+          "weight": "FontWeight.w400",
+          "color": "MaterialColor(primary value: Color(alpha: 1.0000, red: 0.6118, green: 0.1529, blue: 0.6902, colorSpace: ColorSpace.sRGB))",
+          "size": [
+            80.99993896484375,
+            28.0
+          ],
+          "maxLines": null,
+          "softWrap": true,
+          "align": "TextAlign.start",
+          "overflow": "TextOverflow.clip",
+          "natural_height": 28.0,
+          "line_count": 1
+        },
+        "td": {
+          "font": 20.0,
+          "height": 1.4,
+          "weight": "FontWeight.w400",
+          "color": "MaterialColor(primary value: Color(alpha: 1.0000, red: 0.6118, green: 0.1529, blue: 0.6902, colorSpace: ColorSpace.sRGB))",
+          "size": [
+            79.99993896484375,
+            28.0
+          ],
+          "maxLines": null,
+          "softWrap": true,
+          "align": "TextAlign.start",
+          "overflow": "TextOverflow.clip",
+          "natural_height": 28.0,
+          "line_count": 1
+        },
+        "explicit": {
+          "font": 14.0,
+          "height": 1.5714285714285714,
+          "weight": "FontWeight.w400",
+          "color": "MaterialColor(primary value: Color(alpha: 1.0000, red: 0.9137, green: 0.1176, blue: 0.3882, colorSpace: ColorSpace.sRGB))",
+          "size": [
+            55.999755859375,
+            22.0
+          ],
+          "maxLines": null,
+          "softWrap": true,
+          "align": "TextAlign.start",
+          "overflow": "TextOverflow.clip",
+          "natural_height": 22.0,
+          "line_count": 1
+        }
+      }
+    },
+    {
+      "phase": "patch",
+      "name": "toolbar_inherited_dark",
+      "pixels": 411,
+      "changes": [
+        {
+          "subject": "td",
+          "fields": {
+            "颜色": [
+              "Color(alpha: 0.9020, red: 1.0000, green: 1.0000, blue: 1.0000, colorSpace: ColorSpace.sRGB)",
+              "MaterialColor(primary value: Color(alpha: 1.0000, red: 0.6118, green: 0.1529, blue: 0.6902, colorSpace: ColorSpace.sRGB))"
+            ]
+          }
+        }
+      ],
+      "before": {
+        "name": "toolbar_inherited",
+        "dark": true,
+        "errors": [],
+        "native": {
+          "font": 26.0,
+          "height": 1.8,
+          "weight": "FontWeight.w700",
+          "color": "MaterialColor(primary value: Color(alpha: 1.0000, red: 0.6118, green: 0.1529, blue: 0.6902, colorSpace: ColorSpace.sRGB))",
+          "size": [
+            116.0001220703125,
+            47.0
+          ],
+          "maxLines": null,
+          "softWrap": true,
+          "align": "TextAlign.start",
+          "overflow": "TextOverflow.clip",
+          "natural_height": 47.0,
+          "line_count": 1
+        },
+        "td": {
+          "font": 14.0,
+          "height": 1.5714285714285714,
+          "weight": "FontWeight.w400",
+          "color": "Color(alpha: 0.9020, red: 1.0000, green: 1.0000, blue: 1.0000, colorSpace: ColorSpace.sRGB)",
+          "size": [
+            55.999755859375,
+            22.0
+          ],
+          "maxLines": null,
+          "softWrap": true,
+          "align": "TextAlign.start",
+          "overflow": "TextOverflow.clip",
+          "natural_height": 22.0,
+          "line_count": 1
+        },
+        "explicit": {
+          "font": 14.0,
+          "height": 1.5714285714285714,
+          "weight": "FontWeight.w400",
+          "color": "MaterialColor(primary value: Color(alpha: 1.0000, red: 0.9137, green: 0.1176, blue: 0.3882, colorSpace: ColorSpace.sRGB))",
+          "size": [
+            55.999755859375,
+            22.0
+          ],
+          "maxLines": null,
+          "softWrap": true,
+          "align": "TextAlign.start",
+          "overflow": "TextOverflow.clip",
+          "natural_height": 22.0,
+          "line_count": 1
+        }
+      },
+      "after": {
+        "name": "toolbar_inherited",
+        "dark": true,
+        "errors": [],
+        "native": {
+          "font": 26.0,
+          "height": 1.8,
+          "weight": "FontWeight.w700",
+          "color": "MaterialColor(primary value: Color(alpha: 1.0000, red: 0.6118, green: 0.1529, blue: 0.6902, colorSpace: ColorSpace.sRGB))",
+          "size": [
+            116.0001220703125,
+            47.0
+          ],
+          "maxLines": null,
+          "softWrap": true,
+          "align": "TextAlign.start",
+          "overflow": "TextOverflow.clip",
+          "natural_height": 47.0,
+          "line_count": 1
+        },
+        "td": {
+          "font": 14.0,
+          "height": 1.5714285714285714,
+          "weight": "FontWeight.w400",
+          "color": "MaterialColor(primary value: Color(alpha: 1.0000, red: 0.6118, green: 0.1529, blue: 0.6902, colorSpace: ColorSpace.sRGB))",
+          "size": [
+            55.999755859375,
+            22.0
+          ],
+          "maxLines": null,
+          "softWrap": true,
+          "align": "TextAlign.start",
+          "overflow": "TextOverflow.clip",
+          "natural_height": 22.0,
+          "line_count": 1
+        },
+        "explicit": {
+          "font": 14.0,
+          "height": 1.5714285714285714,
+          "weight": "FontWeight.w400",
+          "color": "MaterialColor(primary value: Color(alpha: 1.0000, red: 0.9137, green: 0.1176, blue: 0.3882, colorSpace: ColorSpace.sRGB))",
+          "size": [
+            55.999755859375,
+            22.0
+          ],
+          "maxLines": null,
+          "softWrap": true,
+          "align": "TextAlign.start",
+          "overflow": "TextOverflow.clip",
+          "natural_height": 22.0,
+          "line_count": 1
+        }
+      }
+    },
+    {
+      "phase": "patch",
+      "name": "toolbar_inherited_light",
+      "pixels": 411,
+      "changes": [
+        {
+          "subject": "td",
+          "fields": {
+            "颜色": [
+              "Color(alpha: 0.8980, red: 0.0000, green: 0.0000, blue: 0.0000, colorSpace: ColorSpace.sRGB)",
+              "MaterialColor(primary value: Color(alpha: 1.0000, red: 0.6118, green: 0.1529, blue: 0.6902, colorSpace: ColorSpace.sRGB))"
+            ]
+          }
+        }
+      ],
+      "before": {
+        "name": "toolbar_inherited",
+        "dark": false,
+        "errors": [],
+        "native": {
+          "font": 26.0,
+          "height": 1.8,
+          "weight": "FontWeight.w700",
+          "color": "MaterialColor(primary value: Color(alpha: 1.0000, red: 0.6118, green: 0.1529, blue: 0.6902, colorSpace: ColorSpace.sRGB))",
+          "size": [
+            116.0001220703125,
+            47.0
+          ],
+          "maxLines": null,
+          "softWrap": true,
+          "align": "TextAlign.start",
+          "overflow": "TextOverflow.clip",
+          "natural_height": 47.0,
+          "line_count": 1
+        },
+        "td": {
+          "font": 14.0,
+          "height": 1.5714285714285714,
+          "weight": "FontWeight.w400",
+          "color": "Color(alpha: 0.8980, red: 0.0000, green: 0.0000, blue: 0.0000, colorSpace: ColorSpace.sRGB)",
+          "size": [
+            55.999755859375,
+            22.0
+          ],
+          "maxLines": null,
+          "softWrap": true,
+          "align": "TextAlign.start",
+          "overflow": "TextOverflow.clip",
+          "natural_height": 22.0,
+          "line_count": 1
+        },
+        "explicit": {
+          "font": 14.0,
+          "height": 1.5714285714285714,
+          "weight": "FontWeight.w400",
+          "color": "MaterialColor(primary value: Color(alpha: 1.0000, red: 0.9137, green: 0.1176, blue: 0.3882, colorSpace: ColorSpace.sRGB))",
+          "size": [
+            55.999755859375,
+            22.0
+          ],
+          "maxLines": null,
+          "softWrap": true,
+          "align": "TextAlign.start",
+          "overflow": "TextOverflow.clip",
+          "natural_height": 22.0,
+          "line_count": 1
+        }
+      },
+      "after": {
+        "name": "toolbar_inherited",
+        "dark": false,
+        "errors": [],
+        "native": {
+          "font": 26.0,
+          "height": 1.8,
+          "weight": "FontWeight.w700",
+          "color": "MaterialColor(primary value: Color(alpha: 1.0000, red: 0.6118, green: 0.1529, blue: 0.6902, colorSpace: ColorSpace.sRGB))",
+          "size": [
+            116.0001220703125,
+            47.0
+          ],
+          "maxLines": null,
+          "softWrap": true,
+          "align": "TextAlign.start",
+          "overflow": "TextOverflow.clip",
+          "natural_height": 47.0,
+          "line_count": 1
+        },
+        "td": {
+          "font": 14.0,
+          "height": 1.5714285714285714,
+          "weight": "FontWeight.w400",
+          "color": "MaterialColor(primary value: Color(alpha: 1.0000, red: 0.6118, green: 0.1529, blue: 0.6902, colorSpace: ColorSpace.sRGB))",
+          "size": [
+            55.999755859375,
+            22.0
+          ],
+          "maxLines": null,
+          "softWrap": true,
+          "align": "TextAlign.start",
+          "overflow": "TextOverflow.clip",
+          "natural_height": 22.0,
+          "line_count": 1
+        },
+        "explicit": {
+          "font": 14.0,
+          "height": 1.5714285714285714,
+          "weight": "FontWeight.w400",
+          "color": "MaterialColor(primary value: Color(alpha: 1.0000, red: 0.9137, green: 0.1176, blue: 0.3882, colorSpace: ColorSpace.sRGB))",
+          "size": [
+            55.999755859375,
+            22.0
+          ],
+          "maxLines": null,
+          "softWrap": true,
+          "align": "TextAlign.start",
+          "overflow": "TextOverflow.clip",
+          "natural_height": 22.0,
+          "line_count": 1
+        }
+      }
+    },
+    {
+      "phase": "patch",
+      "name": "toolbar_light",
+      "pixels": 946,
+      "changes": [
+        {
+          "subject": "td",
+          "fields": {
+            "字号": [
+              14.0,
+              20.0
+            ],
+            "行高": [
+              22.0,
+              28.0
+            ],
+            "颜色": [
+              "Color(alpha: 0.8980, red: 0.0000, green: 0.0000, blue: 0.0000, colorSpace: ColorSpace.sRGB)",
+              "MaterialColor(primary value: Color(alpha: 1.0000, red: 0.6118, green: 0.1529, blue: 0.6902, colorSpace: ColorSpace.sRGB))"
+            ],
+            "文字盒": [
+              [
+                55.999755859375,
+                22.0
+              ],
+              [
+                79.99993896484375,
+                28.0
+              ]
+            ]
+          }
+        }
+      ],
+      "before": {
+        "name": "toolbar",
+        "dark": false,
+        "errors": [],
+        "native": {
+          "font": 20.0,
+          "height": 1.4,
+          "weight": "FontWeight.w400",
+          "color": "MaterialColor(primary value: Color(alpha: 1.0000, red: 0.6118, green: 0.1529, blue: 0.6902, colorSpace: ColorSpace.sRGB))",
+          "size": [
+            80.99993896484375,
+            28.0
+          ],
+          "maxLines": null,
+          "softWrap": true,
+          "align": "TextAlign.start",
+          "overflow": "TextOverflow.clip",
+          "natural_height": 28.0,
+          "line_count": 1
+        },
+        "td": {
+          "font": 14.0,
+          "height": 1.5714285714285714,
+          "weight": "FontWeight.w400",
+          "color": "Color(alpha: 0.8980, red: 0.0000, green: 0.0000, blue: 0.0000, colorSpace: ColorSpace.sRGB)",
+          "size": [
+            55.999755859375,
+            22.0
+          ],
+          "maxLines": null,
+          "softWrap": true,
+          "align": "TextAlign.start",
+          "overflow": "TextOverflow.clip",
+          "natural_height": 22.0,
+          "line_count": 1
+        },
+        "explicit": {
+          "font": 14.0,
+          "height": 1.5714285714285714,
+          "weight": "FontWeight.w400",
+          "color": "MaterialColor(primary value: Color(alpha: 1.0000, red: 0.9137, green: 0.1176, blue: 0.3882, colorSpace: ColorSpace.sRGB))",
+          "size": [
+            55.999755859375,
+            22.0
+          ],
+          "maxLines": null,
+          "softWrap": true,
+          "align": "TextAlign.start",
+          "overflow": "TextOverflow.clip",
+          "natural_height": 22.0,
+          "line_count": 1
+        }
+      },
+      "after": {
+        "name": "toolbar",
+        "dark": false,
+        "errors": [],
+        "native": {
+          "font": 20.0,
+          "height": 1.4,
+          "weight": "FontWeight.w400",
+          "color": "MaterialColor(primary value: Color(alpha: 1.0000, red: 0.6118, green: 0.1529, blue: 0.6902, colorSpace: ColorSpace.sRGB))",
+          "size": [
+            80.99993896484375,
+            28.0
+          ],
+          "maxLines": null,
+          "softWrap": true,
+          "align": "TextAlign.start",
+          "overflow": "TextOverflow.clip",
+          "natural_height": 28.0,
+          "line_count": 1
+        },
+        "td": {
+          "font": 20.0,
+          "height": 1.4,
+          "weight": "FontWeight.w400",
+          "color": "MaterialColor(primary value: Color(alpha: 1.0000, red: 0.6118, green: 0.1529, blue: 0.6902, colorSpace: ColorSpace.sRGB))",
+          "size": [
+            79.99993896484375,
+            28.0
+          ],
+          "maxLines": null,
+          "softWrap": true,
+          "align": "TextAlign.start",
+          "overflow": "TextOverflow.clip",
+          "natural_height": 28.0,
+          "line_count": 1
+        },
+        "explicit": {
+          "font": 14.0,
+          "height": 1.5714285714285714,
+          "weight": "FontWeight.w400",
+          "color": "MaterialColor(primary value: Color(alpha: 1.0000, red: 0.9137, green: 0.1176, blue: 0.3882, colorSpace: ColorSpace.sRGB))",
+          "size": [
+            55.999755859375,
+            22.0
+          ],
+          "maxLines": null,
+          "softWrap": true,
+          "align": "TextAlign.start",
+          "overflow": "TextOverflow.clip",
+          "natural_height": 22.0,
+          "line_count": 1
+        }
+      }
+    }
+  ]
+}
