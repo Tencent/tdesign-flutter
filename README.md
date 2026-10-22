@@ -1,13 +1,3 @@
-# PR #1184 Golden review assets
+# PR #1184 合并验收截图
 
-Comparison images are hosted separately for the PR description. They are not added to the code branch, Specs or Golden baselines.
-
-Left: the unchanged baseline (matches the current PR's tracked PNG byte-for-byte).
-Middle: candidate rendering, whose Popover implementation and Golden test match the current PR.
-Right: magenta marks all nonzero RGB pixel differences.
-
-Full-page comparisons and 3x nearest-neighbor detail crops use the same coordinates. No source image is retouched.
-
-Environment: Linux/amd64 Flutter 3.32.0, DPR1, registered Golden fonts and CI Demo flags.
-Light: 1,848 different pixels. Dark: 1,853 different pixels.
-The test differences remain pending; publishing these images does not approve or update baselines.
+修复前 e02efbac → develop 077045a1（已含 #1182）→ #1184 合并后候选。三列均为实际渲染；light/dark 是页面主题，Popover 场景固定使用 defaultTheme 深色气泡。相同 Linux Flutter 3.32.0 / DPR 1 / 固定字体。图片独立用于 PR 审阅，不进入 Spec、生产代码或 Golden 基线。具体数值见 render-metrics.json。
