@@ -89,7 +89,13 @@ TPopover 已公开点击、长按、主题背景色、最小/最大尺寸和十�
 - 配色参数与枚举由旧 colorScheme/TPopoverColorScheme 迁移为 colorPreset/TPopoverColorPreset；内容改为必填 Widget，placement 非空，内容回调为 VoidCallback，底层布局类不再公开导出。
 - radius/overlayColor 的同义实例覆盖迁移为局部 TPopoverThemeData.borderRadius/barrierColor；Anchor/Controller 增量能力不改变单次 showPopover 的叠加语义。
 
+## 文字槽布局补充
+
+直接的 Text/TText 内容按有效的 softWrap、maxLines、overflow 和段落高度规则测量；不换行且不省略时仅计算单行高度，容器仍遵守宽度限制。显式宽高、文字样式及自定义 Widget 内容保留原契约。
+
 ## 验收标准
+
+- Demo Golden 使用统一视觉入口（或显式传入 `--dart-define=TDESIGN_DEMO_TEST_MODULES=false`），隐藏内部测试模块；本地 debug 额外模块造成的差异不作为组件缺陷或基线更新依据。
 
 - 验证 Widget 内容、显式尺寸、padding 与宽高约束的真实布局，无负测量或空气泡。
 - 验证十二种 placement、翻转、clamp、箭头边距、安全区、键盘及锚点卸载。

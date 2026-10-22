@@ -77,7 +77,22 @@ class _TToolbarPressableState extends State<TToolbarPressable> {
 
     var child = widget.child;
     if (widget.mergeTextStyle != null) {
-      child = TTextStyleScope(style: widget.mergeTextStyle!, child: child);
+      final defaults = DefaultTextStyle.of(context);
+      child = TTextStyleScope(
+        style: widget.mergeTextStyle!,
+        // Preserve native Text's partial merge without exposing Material
+        // defaults to TText, whose typography comes from the slot theme.
+        child: DefaultTextStyle(
+          style: defaults.style.merge(widget.mergeTextStyle),
+          textAlign: defaults.textAlign,
+          softWrap: defaults.softWrap,
+          overflow: defaults.overflow,
+          maxLines: defaults.maxLines,
+          textWidthBasis: defaults.textWidthBasis,
+          textHeightBehavior: defaults.textHeightBehavior,
+          child: child,
+        ),
+      );
     }
     if (widget.mergeIconTheme != null) {
       child = IconTheme.merge(data: widget.mergeIconTheme!, child: child);

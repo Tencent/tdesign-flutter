@@ -26,3 +26,9 @@ bottom 只提供 headerBuilder，center 只提供 closeBuilder；按钮业务回
 4. 结果绑定候选、环境和必要证据，更新 acceptance.md；真实剩余工作只在 tasks.md 维护。
 
 本次文档整理不执行上述实现或候选验收，不据旧命令流水推定当前检查通过。
+
+## 文字槽布局回归修复
+
+内部 TToolbarPressable 接入文字槽主题时，原生 Text 保留 DefaultTextStyle 的局部合并与段落参数；TText 继续隔离外层 Material 默认样式，并保留显式样式优先。
+
+在 Flutter 3.32.0、3.47.7 验证回归与组件测试，并以独立渲染产物比较修复前后；不更新现有 Golden 基线。

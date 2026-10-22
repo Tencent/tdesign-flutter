@@ -1,6 +1,7 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:tdesign_flutter/src/components/popup/t_popup.dart'
     show PopupLayout;
+import 'package:tdesign_flutter/src/components/text/t_text_resolve.dart';
 import 'package:tdesign_flutter/tdesign_flutter.dart';
 
 import '../../helpers/popup_test_helpers.dart';
@@ -9,12 +10,86 @@ import '../../helpers/popup_test_resource.dart';
 import '../../helpers/text_slot_regression.dart';
 
 void main() {
+  testWidgets(
+    'Toolbar partial style preserves native defaults and TText isolation',
+    (tester) async {
+      const ancestor = TextStyle(
+        fontSize: 26,
+        height: 1.8,
+        fontWeight: FontWeight.w700,
+        letterSpacing: 3,
+      );
+      const explicit = TextStyle(fontSize: 30, color: Colors.orange);
+      await tester.pumpWidget(
+        MaterialApp(
+          theme: TThemeBuilder.light(TThemeData.defaultData()),
+          home: const Scaffold(
+            body: DefaultTextStyle(
+              style: ancestor,
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+              softWrap: false,
+              textAlign: TextAlign.right,
+              textWidthBasis: TextWidthBasis.longestLine,
+              textHeightBehavior: TextHeightBehavior(
+                applyHeightToFirstAscent: false,
+              ),
+              child: TToolbarPressable(
+                mergeTextStyle: TextStyle(color: Colors.purple),
+                child: Column(
+                  children: [
+                    Text('native'),
+                    TText('td'),
+                    TText('explicit', style: explicit),
+                    Text('native explicit', style: explicit),
+                  ],
+                ),
+              ),
+            ),
+          ),
+        ),
+      );
+      RichText rich(String data) => tester.widget<RichText>(
+        find.descendant(of: find.text(data), matching: find.byType(RichText)),
+      );
+      final native = rich('native');
+      expect(native.text.style!.fontSize, 26);
+      expect(native.text.style!.height, 1.8);
+      expect(native.text.style!.fontWeight, FontWeight.w700);
+      expect(native.text.style!.letterSpacing, 3);
+      expect(native.text.style!.color, Colors.purple);
+      expect(native.maxLines, 1);
+      expect(native.overflow, TextOverflow.ellipsis);
+      expect(native.softWrap, false);
+      expect(native.textAlign, TextAlign.right);
+      expect(native.textWidthBasis, TextWidthBasis.longestLine);
+      expect(native.textHeightBehavior!.applyHeightToFirstAscent, false);
+      final td = rich('td');
+      expect(td.text.style!.fontSize, 14);
+      expect(td.text.style!.fontWeight, FontWeight.w400);
+      expect(td.text.style!.letterSpacing, 0);
+      expect(td.text.style!.color, Colors.purple);
+      for (final data in ['explicit', 'native explicit']) {
+        expect(rich(data).text.style!.fontSize, 30);
+        expect(rich(data).text.style!.color, Colors.orange);
+      }
+      expect(tester.takeException(), isNull);
+    },
+  );
+
   registerTextSlotParityTests(
     'Toolbar pressable text slot',
-    (child) => TToolbarPressable(
-      mergeTextStyle: const TextStyle(fontSize: 18, color: Colors.purple),
-      onTap: () {},
-      child: child,
+    (child) => Builder(
+      builder: (context) => TToolbarPressable(
+        // Compare complete slot styles here; partial native merges have their
+        // own assertions above because TText isolates Material typography.
+        mergeTextStyle: TTextResolve.resolve(
+          context: context,
+          style: const TextStyle(fontSize: 18, color: Colors.purple),
+        ),
+        onTap: () {},
+        child: child,
+      ),
     ),
   );
 

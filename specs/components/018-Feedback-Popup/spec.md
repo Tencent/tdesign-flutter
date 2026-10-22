@@ -77,7 +77,13 @@ Popup 是承载任意内容的基础浮层。小程序基础 Popup 默认只渲�
 - 蒙层散参统一迁移为 overlay 配置；独立 opacity/barrierOpacity、Theme 动画时长等同义入口移除。
 - title/cancel/confirm 专用 sentinel、onOpen/onClose 迁移为内容组合、headerBuilder/closeBuilder 和 onVisibleChange；onOpened/onClosed 保留动画完成语义。
 
+## 文字槽布局补充
+
+内部工具栏文字样式对原生 Text 维持局部 DefaultTextStyle 合并，对 TText 提供组件槽默认值；TText 不继承外层 Material 字体。原生段落参数、较近的局部 TText 主题和显式文字样式保持优先，不新增配置。
+
 ## 验收标准
+
+- Demo Golden 使用统一视觉入口（或显式传入 `--dart-define=TDESIGN_DEMO_TEST_MODULES=false`），隐藏内部测试模块；本地 debug 额外模块造成的差异不作为组件缺陷或基线更新依据。
 
 - 验证 showOverlay/preventTap 四种组合、颜色自身 alpha、点击回调与关闭条件，不再读取 opacity/barrierOpacity。
 - 验证五方向尺寸/圆角、安全区、默认 240ms 与显式时长，以及嵌套路由。

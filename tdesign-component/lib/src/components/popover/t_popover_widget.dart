@@ -435,23 +435,34 @@ class _TPopoverWidgetState extends State<TPopoverWidget> {
     } else {
       return null;
     }
+    final defaults = DefaultTextStyle.of(slotContext ?? context);
+    final overflow = text.overflow ?? defaults.overflow;
+    final softWrap = text.softWrap ?? defaults.softWrap;
     final contentMaxWidth =
         (widget.width ?? _effectiveMaxWidth) - _resolvedPadding.horizontal;
-    final textPainter = TextPainter(
-      text: TextSpan(
-        text: text.data,
-        style: content is TText ? text.style : _defaultContentTextStyle,
-      ),
-      strutStyle: text.strutStyle,
-      locale: text.locale ?? Localizations.localeOf(context),
-      textDirection: text.textDirection ?? Directionality.of(context),
-      textAlign: text.textAlign ?? TextAlign.start,
-      maxLines: text.maxLines,
-      ellipsis: text.overflow == TextOverflow.ellipsis ? '\u2026' : null,
-      textScaler: text.textScaler ?? MediaQuery.textScalerOf(context),
-      textWidthBasis: text.textWidthBasis ?? TextWidthBasis.parent,
-      textHeightBehavior: text.textHeightBehavior,
-    )..layout(maxWidth: contentMaxWidth.clamp(0, double.infinity));
+    final textPainter =
+        TextPainter(
+          text: TextSpan(
+            text: text.data,
+            style: content is TText ? text.style : _defaultContentTextStyle,
+          ),
+          strutStyle: text.strutStyle,
+          locale: text.locale ?? Localizations.localeOf(context),
+          textDirection: text.textDirection ?? Directionality.of(context),
+          textAlign: text.textAlign ?? defaults.textAlign ?? TextAlign.start,
+          maxLines: text.maxLines ?? defaults.maxLines,
+          ellipsis: overflow == TextOverflow.ellipsis ? '\u2026' : null,
+          textScaler: text.textScaler ?? MediaQuery.textScalerOf(context),
+          textWidthBasis: text.textWidthBasis ?? defaults.textWidthBasis,
+          textHeightBehavior:
+              text.textHeightBehavior ?? defaults.textHeightBehavior,
+        )..layout(
+          // Match RenderParagraph: a non-wrapping, non-ellipsis line is measured
+          // unconstrained, while the panel itself still respects its maximum width.
+          maxWidth: softWrap || overflow == TextOverflow.ellipsis
+              ? contentMaxWidth.clamp(0, double.infinity)
+              : double.infinity,
+        );
     final naturalWidth = textPainter.width + _resolvedPadding.horizontal;
     final resolvedWidth =
         widget.width ??
@@ -460,6 +471,7 @@ class _TPopoverWidgetState extends State<TPopoverWidget> {
           math.max(_theme.minWidth ?? 0, naturalWidth),
         );
     final naturalHeight = textPainter.height + _resolvedPadding.vertical;
+    textPainter.dispose();
     final resolvedHeight =
         widget.height ??
         (_theme.maxHeight == null

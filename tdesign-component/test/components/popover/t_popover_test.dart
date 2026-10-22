@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:math' as math;
+import 'package:flutter/rendering.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:tdesign_flutter/src/components/popover/t_popover_widget.dart';
 import 'package:tdesign_flutter/tdesign_flutter.dart';
@@ -10,6 +11,106 @@ import '../../helpers/text_slot_regression.dart';
 ///
 /// 覆盖 TPopoverColorPreset、TPopoverPlacement、内容渲染、箭头、回调等。
 void main() {
+  for (final native in [true, false]) {
+    for (final scale in [1.0, 2.0]) {
+      for (final mode in ['nowrap', 'inherited', 'ellipsis', 'explicit-size']) {
+        testWidgets(
+          'Popover paragraph sizing native=$native scale=$scale mode=$mode',
+          (tester) async {
+            const data =
+                'Long words Long words Long words Long words Long words';
+            await tester.pumpWidget(
+              MaterialApp(
+                theme: TThemeBuilder.light(TThemeData.defaultData()),
+                home: Scaffold(
+                  body: MediaQuery(
+                    data: MediaQueryData(textScaler: TextScaler.linear(scale)),
+                    child: Center(
+                      child: DefaultTextStyle.merge(
+                        maxLines: mode == 'inherited' ? 1 : null,
+                        overflow: mode == 'inherited'
+                            ? TextOverflow.ellipsis
+                            : null,
+                        child: Builder(
+                          builder: (context) => TPopoverWidget(
+                            context: context,
+                            width: mode == 'explicit-size' ? 240 : null,
+                            height: mode == 'explicit-size' ? 100 : null,
+                            content: native
+                                ? Text(
+                                    data,
+                                    softWrap: mode == 'inherited'
+                                        ? null
+                                        : false,
+                                    overflow: mode == 'ellipsis'
+                                        ? TextOverflow.ellipsis
+                                        : null,
+                                  )
+                                : TText(
+                                    data,
+                                    softWrap: mode == 'inherited'
+                                        ? null
+                                        : false,
+                                    overflow: mode == 'ellipsis'
+                                        ? TextOverflow.ellipsis
+                                        : null,
+                                  ),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+            );
+            await tester.pumpAndSettle();
+            final paragraph = tester.renderObject<RenderParagraph>(
+              find.descendant(
+                of: find.byKey(const Key('t-popover-content')),
+                matching: find.byType(RichText),
+              ),
+            );
+            final panel = tester.getSize(
+              find.byKey(const Key('t-popover-content')),
+            );
+            // Compare to the rendered paragraph's own layout rules, rather than
+            // comparing two implementations that could share the same mistake.
+            final painter =
+                TextPainter(
+                  text: paragraph.text,
+                  textDirection: paragraph.textDirection,
+                  textScaler: paragraph.textScaler,
+                  maxLines: paragraph.maxLines,
+                  strutStyle: paragraph.strutStyle,
+                  ellipsis: paragraph.overflow == TextOverflow.ellipsis
+                      ? '…'
+                      : null,
+                  textHeightBehavior: paragraph.textHeightBehavior,
+                )..layout(
+                  maxWidth:
+                      paragraph.softWrap ||
+                          paragraph.overflow == TextOverflow.ellipsis
+                      ? paragraph.size.width
+                      : double.infinity,
+                );
+            if (mode == 'explicit-size') {
+              expect(panel, const Size(240, 100));
+            } else {
+              expect(panel.height, closeTo(painter.height + 24, .01));
+              expect(panel.width, lessThanOrEqualTo(300));
+            }
+            if (mode == 'inherited') {
+              expect(paragraph.maxLines, 1);
+              expect(paragraph.overflow, TextOverflow.ellipsis);
+            }
+            painter.dispose();
+            expect(tester.takeException(), isNull);
+          },
+        );
+      }
+    }
+  }
+
   registerTextSlotParityTests(
     'Popover text slot',
     (child) => Builder(
