@@ -1,0 +1,22 @@
+{
+  "sourceHead": "bf06093a281bf01d2408e4c34ddb691a49c5c7ca",
+  "renderEnvironment": "Linux/amd64 Flutter 3.32.0, DPR1, registered Golden fonts, TDESIGN_DEMO_TEST_MODULES=false",
+  "baselinesUpdated": false,
+  "files": {
+    "popover_type_custom_content_opened_light_isolatedDiff.png": "352f1cb79abebde4f788e865a4607f19fe8ae85c6ca3d06a5890e26480bd4981",
+    "popover_menu_light_detail.png": "7c984ff571b298a3fef38cff42edcd33152d60d36764ae94aa83de9a6ac0520e",
+    "popover_type_custom_content_opened_light_testImage.png": "cfd9ef37b159a6040d1b7edcf659094897b9cb069b020314de8e7151f26a4db1",
+    "README.md": "4d27cd7b45a8c62d0f4b63bb55c5260bab7534ada3fa8acdd5899ba6b3b99c8f",
+    "popover_menu_light_comparison.png": "840ca146da8f9da5cd49d26bcdd0c46158c5da72cbf72a5162f2cbf093accc4c",
+    "popover_menu_dark_detail.png": "609095620b78f8b4f7f79d8972d751339d35b4527417862fcf083cf75b426047",
+    "popover_type_custom_content_opened_light_masterImage.png": "99c79301972be81d0039f2e6f912be4780a4b04d31a5b9c134ac33299fc21452",
+    "popover_type_custom_content_opened_dark_testImage.png": "1d375644cf3d76fa048e79dd2a5ae5f69b24b7938f29a5c5bf4bd233747d5523",
+    "popover_menu_dark_comparison.png": "a75f0d98af5646b6b763b88f77a4a3c01a348735d6e959ce51d8b04b2c5df6f0",
+    "popover_type_custom_content_opened_dark_masterImage.png": "584a9a3f05bc541c6313deb54bb3210a1ee4958191fb914797185674aa9a6799",
+    "popover_type_custom_content_opened_dark_isolatedDiff.png": "54add33b28e2a1ca0635a248f4181f1db548fb1ac1155314fc5821ed14958997"
+  },
+  "diffPixels": {
+    "light": 1848,
+    "dark": 1853
+  }
+}
