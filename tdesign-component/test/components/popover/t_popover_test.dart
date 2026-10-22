@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:math' as math;
+import 'package:flutter/rendering.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:tdesign_flutter/src/components/popover/t_popover_widget.dart';
 import 'package:tdesign_flutter/tdesign_flutter.dart';
@@ -8,6 +9,184 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 ///
 /// 覆盖 TPopoverColorPreset、TPopoverPlacement、内容渲染、箭头、回调等。
 void main() {
+  for (final wrapped in [false, true]) {
+    testWidgets(
+      'patch Popover keeps custom TText typography wrapped=$wrapped',
+      (tester) async {
+        final token = TThemeData.defaultData();
+        await tester.pumpWidget(
+          MaterialApp(
+            theme: TThemeBuilder.light(token),
+            home: Scaffold(
+              body: Builder(
+                builder: (context) => Center(
+                  child: TPopoverWidget(
+                    context: context,
+                    content: wrapped
+                        ? const Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [TText('custom')],
+                          )
+                        : const TText('custom'),
+                  ),
+                ),
+              ),
+            ),
+          ),
+        );
+        await tester.pumpAndSettle();
+        final paragraph = tester.renderObject<RenderParagraph>(
+          find.text('custom'),
+        );
+        expect(paragraph.text.style!.fontSize, 14);
+        expect(paragraph.text.style!.color, token.textColorPrimary);
+        expect(tester.takeException(), isNull);
+      },
+    );
+  }
+
+  for (final native in [true, false]) {
+    for (final scale in [1.0, 2.0]) {
+      for (final mode in ['nowrap', 'inherited', 'ellipsis', 'explicit-size']) {
+        testWidgets(
+          'Popover paragraph sizing native=$native scale=$scale mode=$mode',
+          (tester) async {
+            const data =
+                'Long words Long words Long words Long words Long words';
+            await tester.pumpWidget(
+              MaterialApp(
+                theme: TThemeBuilder.light(TThemeData.defaultData()),
+                home: Scaffold(
+                  body: MediaQuery(
+                    data: MediaQueryData(textScaler: TextScaler.linear(scale)),
+                    child: Center(
+                      child: DefaultTextStyle.merge(
+                        maxLines: mode == 'inherited' ? 1 : null,
+                        overflow: mode == 'inherited'
+                            ? TextOverflow.ellipsis
+                            : null,
+                        child: Builder(
+                          builder: (context) => TPopoverWidget(
+                            context: context,
+                            width: mode == 'explicit-size' ? 240 : null,
+                            height: mode == 'explicit-size' ? 100 : null,
+                            content: native
+                                ? Text(
+                                    data,
+                                    softWrap: mode == 'inherited'
+                                        ? null
+                                        : false,
+                                    overflow: mode == 'ellipsis'
+                                        ? TextOverflow.ellipsis
+                                        : null,
+                                  )
+                                : TText(
+                                    data,
+                                    softWrap: mode == 'inherited'
+                                        ? null
+                                        : false,
+                                    overflow: mode == 'ellipsis'
+                                        ? TextOverflow.ellipsis
+                                        : null,
+                                  ),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+            );
+            await tester.pumpAndSettle();
+            final paragraph = tester.renderObject<RenderParagraph>(
+              find.descendant(
+                of: find.byKey(const Key('t-popover-content')),
+                matching: find.byType(RichText),
+              ),
+            );
+            final panel = tester.getSize(
+              find.byKey(const Key('t-popover-content')),
+            );
+            // Compare to the rendered paragraph's own layout rules, rather than
+            // comparing two implementations that could share the same mistake.
+            final painter =
+                TextPainter(
+                  text: paragraph.text,
+                  textDirection: paragraph.textDirection,
+                  textScaler: paragraph.textScaler,
+                  maxLines: paragraph.maxLines,
+                  strutStyle: paragraph.strutStyle,
+                  ellipsis: paragraph.overflow == TextOverflow.ellipsis
+                      ? '…'
+                      : null,
+                  textHeightBehavior: paragraph.textHeightBehavior,
+                )..layout(
+                  maxWidth:
+                      paragraph.softWrap ||
+                          paragraph.overflow == TextOverflow.ellipsis
+                      ? paragraph.size.width
+                      : double.infinity,
+                );
+            if (mode == 'explicit-size') {
+              expect(panel, const Size(240, 100));
+            } else {
+              expect(panel.height, closeTo(painter.height + 24, .01));
+              expect(panel.width, lessThanOrEqualTo(300));
+            }
+            if (mode == 'inherited') {
+              expect(paragraph.maxLines, 1);
+              expect(paragraph.overflow, TextOverflow.ellipsis);
+            }
+            painter.dispose();
+            expect(tester.takeException(), isNull);
+          },
+        );
+      }
+    }
+  }
+
+  testWidgets(
+    'Popover natural height includes the configured paragraph strut',
+    (tester) async {
+      const strut = StrutStyle(fontSize: 18, height: 2, forceStrutHeight: true);
+      Size? expected;
+      for (final native in [true, false]) {
+        final theme = TThemeBuilder.light(
+          TThemeData.defaultData(),
+        ).mergeExtension(const TTextThemeData(strutStyle: strut));
+        await tester.pumpWidget(
+          MaterialApp(
+            theme: theme,
+            home: Scaffold(
+              body: Builder(
+                builder: (context) => Center(
+                  child: TPopoverWidget(
+                    context: context,
+                    content: native
+                        ? const Text('strut', strutStyle: strut)
+                        : const TText('strut'),
+                  ),
+                ),
+              ),
+            ),
+          ),
+        );
+        await tester.pumpAndSettle();
+        final panel = tester.getSize(
+          find.byKey(const Key('t-popover-content')),
+        );
+        final text = tester.getSize(find.text('strut'));
+        expect(panel.height, text.height + 24);
+        if (native) {
+          expected = panel;
+        } else {
+          expect(panel.height, expected!.height);
+        }
+        expect(tester.takeException(), isNull);
+      }
+    },
+  );
+
   /// 构建带主题的测试壳
   Widget wrapWithTheme(
     Widget child, {

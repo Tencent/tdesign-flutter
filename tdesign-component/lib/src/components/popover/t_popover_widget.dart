@@ -8,6 +8,7 @@ import '../../theme/t_fonts.dart';
 import '../../theme/t_radius.dart';
 import '../../theme/t_shadows.dart';
 import '../../theme/t_theme.dart';
+import '../text/t_text.dart';
 import '../text/t_text_resolve.dart';
 import 't_popover_theme_data.dart';
 import 't_popover_types.dart';
@@ -410,25 +411,57 @@ class _TPopoverWidgetState extends State<TPopoverWidget> {
 
   Size? _resolvedPlainTextSize() {
     final content = widget.content;
-    if (content is! Text ||
-        content.data == null ||
-        content.style != null ||
-        content.textSpan != null) {
+    final Text text;
+    final TextStyle style;
+    if (content is TText &&
+        content.data != null &&
+        content.style == null &&
+        content.font == null) {
+      // Measurement follows TText's existing theme; this does not supply bubble
+      // typography to direct or composed custom content.
+      text = content.getRawText(context: context);
+      style = text.style!;
+    } else if (content is Text &&
+        content.data != null &&
+        content.style == null &&
+        content.textSpan == null) {
+      text = content;
+      // Keep the existing native glyph metrics; this patch only corrects
+      // paragraph measurement and does not introduce subtree typography.
+      style = _defaultContentTextStyle;
+    } else {
       return null;
     }
+    final defaults = DefaultTextStyle.of(context);
+    final overflow = text.overflow ?? defaults.overflow;
+    final softWrap = text.softWrap ?? defaults.softWrap;
     final contentMaxWidth =
         (widget.width ?? _effectiveMaxWidth) - _resolvedPadding.horizontal;
-    final textPainter = TextPainter(
-      text: TextSpan(text: content.data, style: _defaultContentTextStyle),
-      locale: content.locale ?? Localizations.localeOf(context),
-      textDirection: content.textDirection ?? Directionality.of(context),
-      textAlign: content.textAlign ?? TextAlign.start,
-      maxLines: content.maxLines,
-      ellipsis: content.overflow == TextOverflow.ellipsis ? '\u2026' : null,
-      textScaler: content.textScaler ?? MediaQuery.textScalerOf(context),
-      textWidthBasis: content.textWidthBasis ?? TextWidthBasis.parent,
-      textHeightBehavior: content.textHeightBehavior,
-    )..layout(maxWidth: contentMaxWidth.clamp(0, double.infinity));
+    final textPainter =
+        TextPainter(
+          text: TextSpan(
+            text: text.data,
+            style: MediaQuery.boldTextOf(context)
+                ? style.merge(const TextStyle(fontWeight: FontWeight.bold))
+                : style,
+          ),
+          strutStyle: text.strutStyle,
+          locale: text.locale ?? Localizations.localeOf(context),
+          textDirection: text.textDirection ?? Directionality.of(context),
+          textAlign: text.textAlign ?? defaults.textAlign ?? TextAlign.start,
+          maxLines: text.maxLines ?? defaults.maxLines,
+          ellipsis: overflow == TextOverflow.ellipsis ? '\u2026' : null,
+          textScaler: text.textScaler ?? MediaQuery.textScalerOf(context),
+          textWidthBasis: text.textWidthBasis ?? defaults.textWidthBasis,
+          textHeightBehavior:
+              text.textHeightBehavior ??
+              defaults.textHeightBehavior ??
+              DefaultTextHeightBehavior.maybeOf(context),
+        )..layout(
+          maxWidth: softWrap || overflow == TextOverflow.ellipsis
+              ? contentMaxWidth.clamp(0, double.infinity)
+              : double.infinity,
+        );
     final naturalWidth = textPainter.width + _resolvedPadding.horizontal;
     final resolvedWidth =
         widget.width ??
@@ -437,6 +470,7 @@ class _TPopoverWidgetState extends State<TPopoverWidget> {
           math.max(_theme.minWidth ?? 0, naturalWidth),
         );
     final naturalHeight = textPainter.height + _resolvedPadding.vertical;
+    textPainter.dispose();
     final resolvedHeight =
         widget.height ??
         (_theme.maxHeight == null

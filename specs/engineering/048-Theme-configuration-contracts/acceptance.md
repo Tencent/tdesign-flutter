@@ -71,3 +71,9 @@
 | 2026-10-19 字体与默认值 Golden 补充，基于 f5d8df2f2bc43224406319b4944930454458930c，原检查点 ca5c7c61379e9ef850b7cc6866089d4d90468f6b | 原 98 张中 2 张 BackTop 字体基线替换，新增 6 张 Cell/Tabs，共 104 张变更；8 项授权更新后无更新比较通过 | [图片哈希、场景、环境与验证](./evidence/defaults/golden-completion-results.json)。保留 Linux 3.32/DPR1 与字体范围，非 57 页全状态视觉覆盖 |
 
 PR 拆分、重放、分支切换与重复推送记录已移除。影响最终实现的插值原因、配置优先级和视觉取舍并入 [设计说明](./spec.md#关键决策与取舍)。候选发布门槛仍由 [Release](../057-Release-readiness/readiness.md) 维护。
+
+## 文字槽 patch 最终验收（2026-10-22）
+
+本地候选基于 develop e02efbac；范围仅为已有组件文字槽漏接、Drawer 标题段落保留和 Popover 段落测量。Flutter 3.32.0 / 3.47.7 各通过 966 项组件/全局/清单测试、54 项页面测试，10 个相关覆盖率门槛≥95%，严格分析无诊断。Popover 收窄原生字体测量后另复跑两版相关 85 项测试；Linux 3.32 的 50 项 Popover Golden 通过，其他登记视觉套件全部通过。
+
+API 57 份、文档同步 6 份和文档工具 9 项检查通过。相同 Linux 字体环境生成 48 组明暗前后截图，截图与完整日志位于工作区 artifacts/text-slot-patch-minor-split-20261022，不存入 Spec。全局 TText/Resolve/Scope、原生段落 reset/merge 边界、显式文字优先级保持原契约；无既有 Golden PNG 改动。仅本地验证，未推送、不代表远端 CI 已执行。

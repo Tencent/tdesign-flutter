@@ -79,12 +79,11 @@ class _TDrawerContent extends StatelessWidget {
                     ),
                 child: Align(
                   alignment: AlignmentDirectional.centerStart,
-                  child: Theme(
-                    data: Theme.of(context).mergeExtension(
-                      TTextThemeData(
-                        textStyle: _titleTextStyle(context, drawerTheme),
-                      ),
-                    ),
+                  // Preserve inherited TD paragraph settings along with the title style.
+                  child: TTextStyleScope(
+                    style: _titleTextStyle(context, drawerTheme),
+                    // Keep native paragraph defaults; only TD theme settings
+                    // were accidentally discarded by the former Theme replacement.
                     child: DefaultTextStyle(
                       style: TTextResolve.resolve(
                         context: context,

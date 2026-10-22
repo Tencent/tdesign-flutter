@@ -99,3 +99,7 @@ TPopover 已公开点击、长按、主题背景色、最小/最大尺寸和十�
 验收标准描述应满足的行为，不表示已执行或通过；执行范围与证据见 [acceptance.md](./acceptance.md)，剩余事项只在 [tasks.md](./tasks.md) 维护。
 
 跨组件配置职责见 [Theme 契约](../../engineering/048-Theme-configuration-contracts/spec.md)，视觉方法见 [Golden 规范](../../engineering/044-Testing-golden-regression/spec.md)。
+
+## 自然尺寸测量修复
+
+保留原生 Text 既有气泡字体的测量路径；修正测量时遗漏的显式/继承段落设置、缩放和支柱。softWrap=false 且无 ellipsis 时按单行自然高度测量；显式 width/height 继续控制外框。不改变既有直接 Text 气泡样式和组合内容自行定制契约；TText 测量使用其现有 TD 主题，不借测量提供气泡默认字体。
