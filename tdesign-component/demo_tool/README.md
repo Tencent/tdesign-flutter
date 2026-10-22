@@ -34,7 +34,7 @@ dart run tool/audit_api_docs.dart
 dart run tool/audit_api_docs.dart --json
 ```
 
-`generate_api.mjs --check` 在临时目录生成并比较资产，不改写已提交文件；正式工具版本需支持当前清单。
+`generate_api.mjs --check` 在临时目录生成并比较资产，不改写已提交文件；正式工具版本需支持当前清单。生成时由单个 Dart 进程按清单顺序调用原工具包的生成器，每个组件新建实例，首个错误即中止；不缓存跨 SDK 解析结果。`--dry-run` 仅展示原 CLI 命令，不启动 Dart。
 
 `--sync` 可按公开导出更新组件归属和声明清单，但仍需 Review 注释语义和生成差异。
 站点通过 `{{ flutter-api <component-slug> }}` 读取同一份 API assets；示例和使用说明仍维护在站点 Markdown。

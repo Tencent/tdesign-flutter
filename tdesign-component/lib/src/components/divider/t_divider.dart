@@ -5,6 +5,7 @@ import '../../theme/t_fonts.dart';
 import '../../theme/t_spacers.dart';
 import '../../theme/t_theme.dart';
 import '../text/t_text_resolve.dart';
+import '../text/t_text_style_scope.dart';
 import 't_divider_painter.dart';
 import 't_divider_theme_data.dart';
 
@@ -174,7 +175,7 @@ class TDivider extends StatelessWidget {
             : double.infinity;
         final middleContent = ConstrainedBox(
           constraints: BoxConstraints(maxWidth: maxContentWidth),
-          child: DefaultTextStyle.merge(
+          child: TTextStyleScope(
             style: TTextResolve.resolve(
               context: context,
               style: effectiveTextStyle,

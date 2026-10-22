@@ -1,0 +1,31 @@
+# PullDownRefresh 验证范围与结论
+
+## 本次范围
+
+2026-10-20 原记录整理；未重跑组件、Golden、设备或远端CI。以下结论仅限原候选与范围。
+
+## 已有验证结论
+
+| 原记录范围 | 原文可追溯标识与环境 | 有界结论 |
+| --- | --- | --- |
+| 既有记录 | 未绑定唯一完整候选 SHA；Flutter 3.32.0 | 组件与布局：有明确通过记录（限原范围）；Demo 与消费：有明确通过记录（限原范围）；静态检查：有明确通过记录（限原范围）；Golden：有明确通过记录（限原范围）；设备：仅按下文的实际操作与未覆盖范围解释 |
+
+各标识可能对应不同阶段，不能合成一次完整验证；候选或日志缺失时仍需复核。
+
+## 验证范围与未覆盖项
+
+- `TPullDownRefresh` 默认渲染对齐官方（loadingBarHeight=50 / maxBarHeight=80 / 触发阈值=50）
+- 下拉 → 松手 → 刷新 → 完成四态文案正确（中文默认与官方一致）
+- 下拉过程中刷新头与页面内容同步下移，释放后回弹
+- 外部 `controller.refresh()`、`onStateChanged` 生效；`await controller.refresh()` 在成功、失败或超时后完成，不代表业务一定成功
+- `refreshTimeout` 默认 3000ms，超时通过 `onStateChanged(timeout)` 上报；传入 null 关闭超时
+- `onLoadMore` 非空时按 `lowerThreshold` 自动启用触底加载，且不渲染额外 Footer UI
+- `onRefresh == null` 时禁用下拉刷新并保留滚动
+- 暗色刷新文案默认使用 `textDisabledColor`，显式
+  `TLoadingThemeData.textColor` 可覆盖；独立 `TLoading` 默认值不变
+
+## 必要证据与追溯
+
+未绑定唯一候选的结果不作为当前通过证明；旧命令与流水由Git历史追溯。
+
+当前待办见 [tasks.md](./tasks.md)；实际执行入口见[贡献规范](../../../CONTRIBUTING.md#组件测试与-ci-回归门禁)。清理不关闭未完成项。

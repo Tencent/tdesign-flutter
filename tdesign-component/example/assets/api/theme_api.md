@@ -591,7 +591,7 @@ TD ThemeExtension 与 Token，不反向继承外部 Material/M2/M3 样式配置�
 | enabled | bool | true | 是否允许交互，默认 true；还需要 `onTap` 非空。 | 否 |
 | key | Key? | - | 组件标识，用于区分或保留组件状态。 | 否 |
 | mergeIconTheme | IconThemeData? | - | 为子树 `Icon` 提供默认样式。 | 否 |
-| mergeTextStyle | TextStyle? | - | 为子树 `Text` 提供默认样式（merge 语义，子控件已有样式优先）。 | 否 |
+| mergeTextStyle | TextStyle? | - | 为子树 Text/TText 提供默认样式（merge 语义，子控件已有样式优先）。 | 否 |
 | onTap | VoidCallback? | - | 点击回调；为空时不响应点击或显示按压反馈。 | 否 |
 | padding | EdgeInsetsGeometry? | - | 内容内边距；为空时使用全局 spacer 水平间距和 spacer1 垂直间距。 | 否 |
 | pressDuration | Duration | kToolbarPressDuration | 按压透明度动画时长，默认 100ms。 | 否 |

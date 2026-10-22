@@ -12,6 +12,7 @@ import '../empty/t_empty.dart';
 import '../icon/t_icon.dart';
 import '../loading/t_loading.dart';
 import '../text/t_text_resolve.dart';
+import '../text/t_text_style_scope.dart';
 import 't_table_col.dart';
 import 't_table_theme_data.dart';
 import 't_table_types.dart';
@@ -752,7 +753,7 @@ class _TTableState<T> extends State<TTable<T>> {
           ) ??
           EdgeInsets.symmetric(horizontal: context.tTheme.spacer1),
       child: ClipRect(
-        child: DefaultTextStyle.merge(
+        child: TTextStyleScope(
           style: TTextResolve.resolve(
             context: context,
             style: _textStyle(context, header: header),

@@ -79,12 +79,11 @@ class _TDrawerContent extends StatelessWidget {
                     ),
                 child: Align(
                   alignment: AlignmentDirectional.centerStart,
-                  child: Theme(
-                    data: Theme.of(context).mergeExtension(
-                      TTextThemeData(
-                        textStyle: _titleTextStyle(context, drawerTheme),
-                      ),
-                    ),
+                  // Preserve inherited TD paragraph settings along with the title style.
+                  child: TTextStyleScope(
+                    style: _titleTextStyle(context, drawerTheme),
+                    // Keep native paragraph defaults; only TD theme settings
+                    // were accidentally discarded by the former Theme replacement.
                     child: DefaultTextStyle(
                       style: TTextResolve.resolve(
                         context: context,
@@ -268,16 +267,20 @@ class _DrawerMenuItemState extends State<_DrawerMenuItem> {
             SizedBox(width: widget.iconGap),
           ],
           Expanded(
-            child:
-                widget.item.content ??
-                (widget.item.title == null
-                    ? const SizedBox.shrink()
-                    : TTextStyled(
-                        widget.item.title!,
-                        style: widget.textStyle,
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
-                      )),
+            child: widget.item.content != null
+                ? TTextStyleScope(
+                    // A layout wrapper does not change menu text defaults.
+                    style: widget.textStyle,
+                    child: widget.item.content!,
+                  )
+                : (widget.item.title == null
+                      ? const SizedBox.shrink()
+                      : TTextStyled(
+                          widget.item.title!,
+                          style: widget.textStyle,
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                        )),
           ),
         ],
       ),
@@ -329,5 +332,8 @@ class TDrawerItem {
   final Widget? icon;
 
   /// 自定义菜单项正文，优先于 [title]；仍与 [icon]、菜单项间距和分隔线组合。
+  ///
+  /// 整个子树的 Text/TText 使用菜单正文默认字体和颜色；布局包装不切断传递。
+  /// 显式文字样式和内容内部更近的 TD 文字主题优先；自定义内容自行控制换行。
   final Widget? content;
 }
