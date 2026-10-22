@@ -1,58 +1,417 @@
 {
-  "head": "1380e680a874f9e1d41c773f157a057d0c93c201",
-  "before": "e02efbac3a6b00b32b3d42b3cd278c81d9e9d1b2",
-  "sourceInputsSha256": "b4c505ff83ce4909a2f353f5ffd60fe248d8b4f9657e2ca84fae61a8bc868948",
-  "pairs": 48,
-  "changedPairs": 36,
-  "goldenBaselinesChanged": false,
-  "images": {
-    "patch-avatar_dark-comparison.png": "3ebce8374f7cd9fda00b95e6d62c22dad610333e122b7075a5b8adc58656261e",
-    "patch-avatar_light-comparison.png": "29b688c6f65ca9c5fbd94a80d4cfb7c15a63fa2fa23ab354f1aa1eab7dd05274",
-    "patch-calendar_dark-comparison.png": "d278edf4d2437d761a3b5e6c95bfe170ee1708c75f118c5dc210de3e43c8e5ec",
-    "patch-calendar_light-comparison.png": "ad76bf6098e250bb4df5c452c1bd390e13a14db7555b9e339173cd9ab23dec28",
-    "patch-collapse_body_dark-comparison.png": "14952bda0d6e76c895bd2dd361f0489348b8c91daf67f2f317a17fe79cfbbded",
-    "patch-collapse_body_light-comparison.png": "e094d61f573ca155e0b88954a449ab3d97a082d276e1de27a8a5f775eca73f55",
-    "patch-collapse_disabled_dark-comparison.png": "cafe1ccf0ad58a8c56ec72cf01e2960b2a4b49f0565cc25f02fd9caab3e974ed",
-    "patch-collapse_disabled_light-comparison.png": "64c14904f3c354f92a170ee76c76ca113ef0af5a568a3484d5ddeb92bc1a3913",
-    "patch-collapse_header_dark-comparison.png": "be0d99954879df7d43e3c8ca3b6d1273138597e4fef667efe56a1817ed031fa9",
-    "patch-collapse_header_light-comparison.png": "c9cd0ffc51fdd326fd714426ea852c9cc890c5469e54fdc18f3be6f0feed8c1a",
-    "patch-collapse_paragraph_dark-comparison.png": "2a0412ecbb8364365047a09d65cce0ab6e78cf529afe25ebf79e97f8cd65b406",
-    "patch-collapse_paragraph_light-comparison.png": "a2c25b0555bfeae06230570121f0f45203e7889b3d65d62aaed59aaea2e8abf5",
-    "patch-collapse_trailing_dark-comparison.png": "42f1c638fd45d1b6851b5a32ebb254e8a1e2defb6e9723c2f698f55f51f8222c",
-    "patch-collapse_trailing_light-comparison.png": "f24c0675ab6da01733fbcc044c4a73db92875af2c5b99d12c9d2f46633786920",
-    "patch-divider_dark-comparison.png": "6fa7cb596f888d427a2bb153190edcdbd0faaf7aa210a01eef7907da166b300f",
-    "patch-divider_light-comparison.png": "a3d653eb4c79fe490b0bee5f1357fb5499fa3ce90df48e011bfb2d816073ac6d",
-    "patch-drawer_dark-comparison.png": "b9bdc76f381de4e2ebc508abfdf8c3483c1036ce7aca4aba9fa44f1773e0fd50",
-    "patch-drawer_light-comparison.png": "715ac23b32524bc94d99929910611f44913378eac97b58fa233af6ba7e72d1f7",
-    "patch-drawer_strut_dark-comparison.png": "301fdfcaaaf0eaf01e1f68e26ca98f16f042d6b6c1a028737f8d75e2b4382f74",
-    "patch-drawer_strut_light-comparison.png": "eee312027dd1a8a07ee039a3c5544718992b4ffbdac373cf2489787949154b71",
-    "patch-link_dark-comparison.png": "a508f7d70b44b3fe520d2527c460e1dc8e7cae1b239b7b8a4f4a3336bde4102a",
-    "patch-link_disabled_dark-comparison.png": "985ff5c3f3548c04b11cbea1c9437928f1c0bfb1d250f6774fd09c2332743118",
-    "patch-link_disabled_light-comparison.png": "684e90a5df5e497d10a3a783f2aaa8f033b3432a4ea26eb72d21c692c9cfccb5",
-    "patch-link_light-comparison.png": "edf794134ebe7d61b05cafc7a6152db88976fbcd2b06507ebfb99d9c383e970b",
-    "patch-popover_custom_dark-comparison.png": "2b045cbc680dffe2ebae876e8e8d126f2fc4db5b1ef4a493690a85d13edd992b",
-    "patch-popover_custom_light-comparison.png": "5b86c0efb5f93dc983c8f345dc209799fb4ab93e0b127318cef9658f7e1f394b",
-    "patch-popover_dark-comparison.png": "6f9a07ce831451519438a2bcff93eca1ecef9ca82a9e96c462fbe6bd23919f51",
-    "patch-popover_inherited_single_dark-comparison.png": "ad949d07097d950b72efe7417554c5e4ea2b460985580ab72fdf7474eeec5cba",
-    "patch-popover_inherited_single_light-comparison.png": "259abf1a6742c99f5198fc82dc01eb547465e12a025bf4dbe4f03f44b9213aa3",
-    "patch-popover_light-comparison.png": "c5717f960d0f515ced488579f4e2df942e64109bfdb2ce60393eb9d6e1dd1065",
-    "patch-popover_nowrap_dark-comparison.png": "ab35c239b4c0105752b5a97d15ec75ee9967ea90828443f0dfe6f3310c73b71a",
-    "patch-popover_nowrap_light-comparison.png": "14f73e717f4fb4d43698326205c16355e4a8be1d97ff84a9a3583dd05e07cfb9",
-    "patch-progress_circular_dark-comparison.png": "5a705b3fb93e6cb11d9622239d2375302a8873fe5074f4df73a4c3e58909b0c3",
-    "patch-progress_circular_light-comparison.png": "87e696f35dc3e644c746d5bd5c7c9aed441d67ce8032445f9d81a1586a57258f",
-    "patch-progress_plump_dark-comparison.png": "d53b98f09643cfb27d83519dda3fa65da3924cf4a4d40818cea09fe638d5f340",
-    "patch-progress_plump_light-comparison.png": "ea741566f4ba8a49acbc5bece3241158eba3ae253b5d1887d2dc9c4f3aa922fe",
-    "patch-progress_warning_dark-comparison.png": "5305745d8ec656a1e74f347f1edf267a3e130c5949ad651976d9c8448755b415",
-    "patch-progress_warning_light-comparison.png": "5388e94d4761d58adf54d192f6527c3db7155806d10933ed4c77e9aee01b34c2",
-    "patch-table_cell_dark-comparison.png": "0d9e27670435396fdcf414ff06bd1937d95603e9e641bf0f8b7bb2f59bd87662",
-    "patch-table_cell_light-comparison.png": "fc93e487a27c0e1d87ee796261a5e415dfd23aecd0b93248afea2d20014486b9",
-    "patch-table_header_dark-comparison.png": "ccc363ca8d897e60c69136522feb57604085d34cfe2745789528fdace6d54698",
-    "patch-table_header_light-comparison.png": "fa9bac24a185275f0e777987dd6ede9cf73f7b219c1f238a94658cee5e8216f5",
-    "patch-table_outer_theme_dark-comparison.png": "cc34096fe9fba8c12ca6db34fc29c44b05740b91007de669fc9b9fd2c118cf82",
-    "patch-table_outer_theme_light-comparison.png": "7b816b7d3bc70084664b9d0c9967049ab5ee6993ee3b094121f069d05727fa42",
-    "patch-toolbar_dark-comparison.png": "c12d66668eb005e8596376c85d4ee47308c6dcaa894b93aa8fa67d3d4f70bf66",
-    "patch-toolbar_inherited_dark-comparison.png": "8e33459a59e5fed32d2a6394f0e0bcb363225b04c7c736b76ca4ceecbaa80aef",
-    "patch-toolbar_inherited_light-comparison.png": "f22d32b4fb95440d733b5702df30fc3c23cd0a6731540520a9fd8e212882a13a",
-    "patch-toolbar_light-comparison.png": "cce4ee81cbdfe52353c581e2f0b140f0d0a140c3cc3b6377c4eed520c54addb7"
-  }
+  "renderInputsSha256": "269fa926180aa70275998214a16e2a173b97055e3a740e51226082928e068509",
+  "frames": [
+    {
+      "mode": "light",
+      "files": [
+        "/Users/rs/.codex/.chatgpt-projects/g-p-6ad03a864eec81918724e40af37fbf26/artifacts/text-slot-patch-minor-split-20261022/base/popover_nowrap_light.png",
+        "/Users/rs/.codex/.chatgpt-projects/g-p-6ad03a864eec81918724e40af37fbf26/artifacts/text-slot-patch-minor-split-20261022/patch/popover_nowrap_light.png",
+        "/Users/rs/.codex/.chatgpt-projects/g-p-6ad03a864eec81918724e40af37fbf26/artifacts/text-slot-patch-minor-split-20261022/minor/popover_nowrap_light.png"
+      ],
+      "metrics": [
+        {
+          "name": "popover_nowrap",
+          "dark": false,
+          "errors": [],
+          "native": {
+            "font": 16.0,
+            "height": 1.5,
+            "weight": "FontWeight.w400",
+            "color": "Color(alpha: 1.0000, red: 1.0000, green: 1.0000, blue: 1.0000, colorSpace: ColorSpace.sRGB)",
+            "size": [
+              276.0,
+              96.0
+            ],
+            "maxLines": null,
+            "softWrap": false,
+            "align": "TextAlign.start",
+            "overflow": "TextOverflow.clip",
+            "natural_height": 24.0,
+            "line_count": 1,
+            "panel": [
+              300.0,
+              120.0
+            ]
+          },
+          "td": {
+            "font": 14.0,
+            "height": 1.5714285714285714,
+            "weight": "FontWeight.w400",
+            "color": "Color(alpha: 0.8980, red: 0.0000, green: 0.0000, blue: 0.0000, colorSpace: ColorSpace.sRGB)",
+            "size": [
+              276.0,
+              22.0
+            ],
+            "maxLines": null,
+            "softWrap": false,
+            "align": "TextAlign.start",
+            "overflow": "TextOverflow.clip",
+            "natural_height": 22.0,
+            "line_count": 1,
+            "panel": [
+              300.0,
+              46.0
+            ]
+          },
+          "explicit": {
+            "font": 14.0,
+            "height": 1.5714285714285714,
+            "weight": "FontWeight.w400",
+            "color": "MaterialColor(primary value: Color(alpha: 1.0000, red: 0.9137, green: 0.1176, blue: 0.3882, colorSpace: ColorSpace.sRGB))",
+            "size": [
+              276.0,
+              22.0
+            ],
+            "maxLines": null,
+            "softWrap": false,
+            "align": "TextAlign.start",
+            "overflow": "TextOverflow.clip",
+            "natural_height": 22.0,
+            "line_count": 1,
+            "panel": [
+              300.0,
+              46.0
+            ]
+          }
+        },
+        {
+          "name": "popover_nowrap",
+          "dark": false,
+          "errors": [],
+          "native": {
+            "font": 16.0,
+            "height": 1.5,
+            "weight": "FontWeight.w400",
+            "color": "Color(alpha: 1.0000, red: 1.0000, green: 1.0000, blue: 1.0000, colorSpace: ColorSpace.sRGB)",
+            "size": [
+              276.0,
+              24.0
+            ],
+            "maxLines": null,
+            "softWrap": false,
+            "align": "TextAlign.start",
+            "overflow": "TextOverflow.clip",
+            "natural_height": 24.0,
+            "line_count": 1,
+            "panel": [
+              300.0,
+              48.0
+            ]
+          },
+          "td": {
+            "font": 14.0,
+            "height": 1.5714285714285714,
+            "weight": "FontWeight.w400",
+            "color": "Color(alpha: 0.8980, red: 0.0000, green: 0.0000, blue: 0.0000, colorSpace: ColorSpace.sRGB)",
+            "size": [
+              276.0,
+              22.0
+            ],
+            "maxLines": null,
+            "softWrap": false,
+            "align": "TextAlign.start",
+            "overflow": "TextOverflow.clip",
+            "natural_height": 22.0,
+            "line_count": 1,
+            "panel": [
+              300.0,
+              46.0
+            ]
+          },
+          "explicit": {
+            "font": 14.0,
+            "height": 1.5714285714285714,
+            "weight": "FontWeight.w400",
+            "color": "MaterialColor(primary value: Color(alpha: 1.0000, red: 0.9137, green: 0.1176, blue: 0.3882, colorSpace: ColorSpace.sRGB))",
+            "size": [
+              276.0,
+              22.0
+            ],
+            "maxLines": null,
+            "softWrap": false,
+            "align": "TextAlign.start",
+            "overflow": "TextOverflow.clip",
+            "natural_height": 22.0,
+            "line_count": 1,
+            "panel": [
+              300.0,
+              46.0
+            ]
+          }
+        },
+        {
+          "name": "popover_nowrap",
+          "dark": false,
+          "errors": [],
+          "native": {
+            "font": 16.0,
+            "height": 1.5,
+            "weight": "FontWeight.w400",
+            "color": "Color(alpha: 1.0000, red: 1.0000, green: 1.0000, blue: 1.0000, colorSpace: ColorSpace.sRGB)",
+            "size": [
+              276.0,
+              24.0
+            ],
+            "maxLines": null,
+            "softWrap": false,
+            "align": "TextAlign.start",
+            "overflow": "TextOverflow.clip",
+            "natural_height": 24.0,
+            "line_count": 1,
+            "panel": [
+              300.0,
+              48.0
+            ]
+          },
+          "td": {
+            "font": 16.0,
+            "height": 1.5,
+            "weight": "FontWeight.w400",
+            "color": "Color(alpha: 1.0000, red: 1.0000, green: 1.0000, blue: 1.0000, colorSpace: ColorSpace.sRGB)",
+            "size": [
+              276.0,
+              24.0
+            ],
+            "maxLines": null,
+            "softWrap": false,
+            "align": "TextAlign.start",
+            "overflow": "TextOverflow.clip",
+            "natural_height": 24.0,
+            "line_count": 1,
+            "panel": [
+              300.0,
+              48.0
+            ]
+          },
+          "explicit": {
+            "font": 14.0,
+            "height": 1.5714285714285714,
+            "weight": "FontWeight.w400",
+            "color": "MaterialColor(primary value: Color(alpha: 1.0000, red: 0.9137, green: 0.1176, blue: 0.3882, colorSpace: ColorSpace.sRGB))",
+            "size": [
+              276.0,
+              22.0
+            ],
+            "maxLines": null,
+            "softWrap": false,
+            "align": "TextAlign.start",
+            "overflow": "TextOverflow.clip",
+            "natural_height": 22.0,
+            "line_count": 1,
+            "panel": [
+              300.0,
+              46.0
+            ]
+          }
+        }
+      ],
+      "outputSha256": "24e66a516a08c78b23cb428b87c7c313095a2f42a38d3d27957b3a1f6178d063"
+    },
+    {
+      "mode": "dark",
+      "files": [
+        "/Users/rs/.codex/.chatgpt-projects/g-p-6ad03a864eec81918724e40af37fbf26/artifacts/text-slot-patch-minor-split-20261022/base/popover_nowrap_dark.png",
+        "/Users/rs/.codex/.chatgpt-projects/g-p-6ad03a864eec81918724e40af37fbf26/artifacts/text-slot-patch-minor-split-20261022/patch/popover_nowrap_dark.png",
+        "/Users/rs/.codex/.chatgpt-projects/g-p-6ad03a864eec81918724e40af37fbf26/artifacts/text-slot-patch-minor-split-20261022/minor/popover_nowrap_dark.png"
+      ],
+      "metrics": [
+        {
+          "name": "popover_nowrap",
+          "dark": true,
+          "errors": [],
+          "native": {
+            "font": 16.0,
+            "height": 1.5,
+            "weight": "FontWeight.w400",
+            "color": "Color(alpha: 0.9020, red: 1.0000, green: 1.0000, blue: 1.0000, colorSpace: ColorSpace.sRGB)",
+            "size": [
+              276.0,
+              96.0
+            ],
+            "maxLines": null,
+            "softWrap": false,
+            "align": "TextAlign.start",
+            "overflow": "TextOverflow.clip",
+            "natural_height": 24.0,
+            "line_count": 1,
+            "panel": [
+              300.0,
+              120.0
+            ]
+          },
+          "td": {
+            "font": 14.0,
+            "height": 1.5714285714285714,
+            "weight": "FontWeight.w400",
+            "color": "Color(alpha: 0.9020, red: 1.0000, green: 1.0000, blue: 1.0000, colorSpace: ColorSpace.sRGB)",
+            "size": [
+              276.0,
+              22.0
+            ],
+            "maxLines": null,
+            "softWrap": false,
+            "align": "TextAlign.start",
+            "overflow": "TextOverflow.clip",
+            "natural_height": 22.0,
+            "line_count": 1,
+            "panel": [
+              300.0,
+              46.0
+            ]
+          },
+          "explicit": {
+            "font": 14.0,
+            "height": 1.5714285714285714,
+            "weight": "FontWeight.w400",
+            "color": "MaterialColor(primary value: Color(alpha: 1.0000, red: 0.9137, green: 0.1176, blue: 0.3882, colorSpace: ColorSpace.sRGB))",
+            "size": [
+              276.0,
+              22.0
+            ],
+            "maxLines": null,
+            "softWrap": false,
+            "align": "TextAlign.start",
+            "overflow": "TextOverflow.clip",
+            "natural_height": 22.0,
+            "line_count": 1,
+            "panel": [
+              300.0,
+              46.0
+            ]
+          }
+        },
+        {
+          "name": "popover_nowrap",
+          "dark": true,
+          "errors": [],
+          "native": {
+            "font": 16.0,
+            "height": 1.5,
+            "weight": "FontWeight.w400",
+            "color": "Color(alpha: 0.9020, red: 1.0000, green: 1.0000, blue: 1.0000, colorSpace: ColorSpace.sRGB)",
+            "size": [
+              276.0,
+              24.0
+            ],
+            "maxLines": null,
+            "softWrap": false,
+            "align": "TextAlign.start",
+            "overflow": "TextOverflow.clip",
+            "natural_height": 24.0,
+            "line_count": 1,
+            "panel": [
+              300.0,
+              48.0
+            ]
+          },
+          "td": {
+            "font": 14.0,
+            "height": 1.5714285714285714,
+            "weight": "FontWeight.w400",
+            "color": "Color(alpha: 0.9020, red: 1.0000, green: 1.0000, blue: 1.0000, colorSpace: ColorSpace.sRGB)",
+            "size": [
+              276.0,
+              22.0
+            ],
+            "maxLines": null,
+            "softWrap": false,
+            "align": "TextAlign.start",
+            "overflow": "TextOverflow.clip",
+            "natural_height": 22.0,
+            "line_count": 1,
+            "panel": [
+              300.0,
+              46.0
+            ]
+          },
+          "explicit": {
+            "font": 14.0,
+            "height": 1.5714285714285714,
+            "weight": "FontWeight.w400",
+            "color": "MaterialColor(primary value: Color(alpha: 1.0000, red: 0.9137, green: 0.1176, blue: 0.3882, colorSpace: ColorSpace.sRGB))",
+            "size": [
+              276.0,
+              22.0
+            ],
+            "maxLines": null,
+            "softWrap": false,
+            "align": "TextAlign.start",
+            "overflow": "TextOverflow.clip",
+            "natural_height": 22.0,
+            "line_count": 1,
+            "panel": [
+              300.0,
+              46.0
+            ]
+          }
+        },
+        {
+          "name": "popover_nowrap",
+          "dark": true,
+          "errors": [],
+          "native": {
+            "font": 16.0,
+            "height": 1.5,
+            "weight": "FontWeight.w400",
+            "color": "Color(alpha: 0.9020, red: 1.0000, green: 1.0000, blue: 1.0000, colorSpace: ColorSpace.sRGB)",
+            "size": [
+              276.0,
+              24.0
+            ],
+            "maxLines": null,
+            "softWrap": false,
+            "align": "TextAlign.start",
+            "overflow": "TextOverflow.clip",
+            "natural_height": 24.0,
+            "line_count": 1,
+            "panel": [
+              300.0,
+              48.0
+            ]
+          },
+          "td": {
+            "font": 16.0,
+            "height": 1.5,
+            "weight": "FontWeight.w400",
+            "color": "Color(alpha: 0.9020, red: 1.0000, green: 1.0000, blue: 1.0000, colorSpace: ColorSpace.sRGB)",
+            "size": [
+              276.0,
+              24.0
+            ],
+            "maxLines": null,
+            "softWrap": false,
+            "align": "TextAlign.start",
+            "overflow": "TextOverflow.clip",
+            "natural_height": 24.0,
+            "line_count": 1,
+            "panel": [
+              300.0,
+              48.0
+            ]
+          },
+          "explicit": {
+            "font": 14.0,
+            "height": 1.5714285714285714,
+            "weight": "FontWeight.w400",
+            "color": "MaterialColor(primary value: Color(alpha: 1.0000, red: 0.9137, green: 0.1176, blue: 0.3882, colorSpace: ColorSpace.sRGB))",
+            "size": [
+              276.0,
+              22.0
+            ],
+            "maxLines": null,
+            "softWrap": false,
+            "align": "TextAlign.start",
+            "overflow": "TextOverflow.clip",
+            "natural_height": 22.0,
+            "line_count": 1,
+            "panel": [
+              300.0,
+              46.0
+            ]
+          }
+        }
+      ],
+      "outputSha256": "8476d38ab0eab2fcb14ecb81d98f81a13efd0d4915ad98474ff9b9e9a6efef01"
+    }
+  ]
 }
