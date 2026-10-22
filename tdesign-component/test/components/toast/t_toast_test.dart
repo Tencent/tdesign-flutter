@@ -26,6 +26,328 @@ void expectToastCenter(WidgetTester tester, Finder content, double fraction) {
 }
 
 void main() {
+  for (final loading in [false, true]) {
+    for (final local in [false, true]) {
+      for (final scale in [1.0, 2.0]) {
+        testWidgets(
+          'Toast native paragraph loading=$loading local=$local scale=$scale',
+          (tester) async {
+            late BuildContext host;
+            const heightBehavior = TextHeightBehavior(
+              applyHeightToFirstAscent: false,
+            );
+            await tester.pumpWidget(
+              MaterialApp(
+                theme: TThemeBuilder.light(TThemeData.defaultData()),
+                builder: (context, child) => MediaQuery(
+                  data: MediaQuery.of(
+                    context,
+                  ).copyWith(textScaler: TextScaler.linear(scale)),
+                  child: DefaultTextStyle(
+                    style: const TextStyle(fontSize: 29, color: Colors.red),
+                    maxLines: 3,
+                    softWrap: false,
+                    overflow: TextOverflow.fade,
+                    textAlign: TextAlign.end,
+                    textWidthBasis: TextWidthBasis.longestLine,
+                    textHeightBehavior: heightBehavior,
+                    child: child!,
+                  ),
+                ),
+                home: Scaffold(
+                  body: DefaultTextStyle(
+                    style: const TextStyle(fontSize: 29, color: Colors.red),
+                    maxLines: 3,
+                    softWrap: false,
+                    overflow: TextOverflow.fade,
+                    textAlign: TextAlign.end,
+                    textWidthBasis: TextWidthBasis.longestLine,
+                    textHeightBehavior: heightBehavior,
+                    child: Builder(
+                      builder: (context) {
+                        host = context;
+                        return const SizedBox();
+                      },
+                    ),
+                  ),
+                ),
+              ),
+            );
+            const text = Text(
+              'First line\nSecond line',
+              key: Key('toast-native-paragraph'),
+            );
+            final custom = local
+                ? const DefaultTextStyle(
+                    style: TextStyle(fontSize: 21),
+                    maxLines: 2,
+                    softWrap: true,
+                    overflow: TextOverflow.ellipsis,
+                    textAlign: TextAlign.center,
+                    textWidthBasis: TextWidthBasis.longestLine,
+                    textHeightBehavior: heightBehavior,
+                    child: text,
+                  )
+                : text;
+            if (loading) {
+              TToast.showLoading(
+                context: host,
+                customWidget: custom,
+                duration: Duration.zero,
+              );
+            } else {
+              TToast.showText(
+                null,
+                context: host,
+                customWidget: custom,
+                duration: Duration.zero,
+              );
+            }
+            await tester.pump(const Duration(milliseconds: 400));
+            final rich = tester.widget<RichText>(
+              find.descendant(
+                of: find.byKey(const Key('toast-native-paragraph')),
+                matching: find.byType(RichText),
+              ),
+            );
+            expect(rich.maxLines, local ? 2 : 3);
+            expect(rich.softWrap, local);
+            expect(
+              rich.overflow,
+              local ? TextOverflow.ellipsis : TextOverflow.fade,
+            );
+            expect(rich.textAlign, local ? TextAlign.center : TextAlign.end);
+            expect(rich.textWidthBasis, TextWidthBasis.longestLine);
+            expect(rich.textHeightBehavior, heightBehavior);
+            expect(rich.textScaler.scale(1), scale);
+            expect(rich.text.style!.fontSize, local ? 21 : 14);
+            expect(tester.takeException(), isNull);
+            TToast.dismissAll();
+            await tester.pump(const Duration(milliseconds: 400));
+          },
+        );
+      }
+    }
+  }
+
+  for (final loading in [false, true]) {
+    for (final dark in [false, true]) {
+      for (final scale in [1.0, 2.0]) {
+        testWidgets(
+          'Toast custom typography loading=$loading dark=$dark scale=$scale',
+          (tester) async {
+            TextStyle? defaults;
+            for (final variant in [
+              'built-in',
+              'Text',
+              'TText',
+              'Row',
+              'Padding',
+              'Builder',
+              'partial',
+              'explicit',
+              'local',
+              'paragraph',
+            ]) {
+              late BuildContext host;
+              await tester.pumpWidget(
+                MaterialApp(
+                  theme: dark
+                      ? TThemeBuilder.dark(TThemeData.defaultData())
+                      : TThemeBuilder.light(TThemeData.defaultData()),
+                  builder: (context, child) => MediaQuery(
+                    data: MediaQuery.of(
+                      context,
+                    ).copyWith(textScaler: TextScaler.linear(scale)),
+                    child: child!,
+                  ),
+                  home: Scaffold(
+                    body: DefaultTextStyle(
+                      style: const TextStyle(fontSize: 32, color: Colors.red),
+                      child: Builder(
+                        builder: (context) {
+                          host = context;
+                          return const SizedBox();
+                        },
+                      ),
+                    ),
+                  ),
+                ),
+              );
+              const label = TText('Slot');
+              final custom = switch (variant) {
+                'built-in' => null,
+                'Text' => const Text('Slot'),
+                'Row' => const Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [label],
+                ),
+                'Padding' => const Padding(
+                  padding: EdgeInsets.all(3),
+                  child: label,
+                ),
+                'Builder' => Builder(builder: (_) => label),
+                'partial' => const TText(
+                  'Slot',
+                  style: TextStyle(color: Colors.orange),
+                ),
+                'explicit' => const TText(
+                  'Slot',
+                  style: TextStyle(
+                    fontSize: 23,
+                    height: 1.3,
+                    color: Colors.pink,
+                  ),
+                ),
+                'local' => Builder(
+                  builder: (context) => Theme(
+                    data: Theme.of(context).mergeExtension(
+                      (Theme.of(context).extension<TTextThemeData>() ??
+                              const TTextThemeData())
+                          .copyWith(
+                            textStyle: const TextStyle(
+                              fontSize: 21,
+                              height: 1.2,
+                              color: Colors.orange,
+                            ),
+                          ),
+                    ),
+                    child: label,
+                  ),
+                ),
+                'paragraph' => const TText(
+                  'Slot',
+                  maxLines: 2,
+                  overflow: TextOverflow.fade,
+                  softWrap: false,
+                ),
+                _ => label,
+              };
+              if (loading) {
+                TToast.showLoading(
+                  context: host,
+                  text: 'Slot',
+                  customWidget: custom,
+                  duration: Duration.zero,
+                );
+              } else {
+                TToast.showText(
+                  'Slot',
+                  context: host,
+                  customWidget: custom,
+                  duration: Duration.zero,
+                );
+              }
+              await tester.pump(const Duration(milliseconds: 400));
+              final rich = tester.widget<RichText>(
+                find.descendant(
+                  of: find.text('Slot'),
+                  matching: find.byType(RichText),
+                ),
+              );
+              final actual = rich.text.style!;
+              if (variant == 'built-in') {
+                defaults = actual;
+                expect(actual.fontSize, 14);
+              } else if (variant == 'local') {
+                expect(actual.fontSize, 21);
+                expect(actual.height, 1.2);
+                expect(actual.color, Colors.orange);
+              } else if (variant == 'explicit') {
+                expect(actual.fontSize, 23);
+                expect(actual.height, 1.3);
+                expect(actual.color, Colors.pink);
+              } else {
+                expect(actual.fontSize, defaults!.fontSize, reason: variant);
+                expect(actual.height, defaults.height, reason: variant);
+                expect(actual.fontWeight, defaults.fontWeight, reason: variant);
+                expect(
+                  actual.color,
+                  variant == 'partial' ? Colors.orange : defaults.color,
+                  reason: variant,
+                );
+                if (variant == 'paragraph') {
+                  expect(rich.maxLines, 2);
+                  expect(rich.overflow, TextOverflow.fade);
+                  expect(rich.softWrap, false);
+                } else {
+                  // Component typography is shared, not the built-in line limit.
+                  expect(rich.maxLines, isNull);
+                }
+              }
+              expect(rich.textScaler.scale(10), 10 * scale);
+              expect(tester.takeException(), isNull);
+              TToast.dismissAll();
+              await tester.pump(const Duration(milliseconds: 400));
+            }
+          },
+        );
+      }
+    }
+
+    testWidgets(
+      'Toast component and instance textStyle reach custom content loading=$loading',
+      (tester) async {
+        late BuildContext host;
+        await tester.pumpWidget(
+          MaterialApp(
+            theme: TThemeBuilder.light(TThemeData.defaultData()).mergeExtension(
+              const TToastThemeData(
+                textStyle: TextStyle(fontSize: 18, color: Colors.purple),
+              ),
+            ),
+            home: Scaffold(
+              body: Builder(
+                builder: (context) {
+                  host = context;
+                  return const SizedBox();
+                },
+              ),
+            ),
+          ),
+        );
+        for (final instance in [false, true]) {
+          if (loading) {
+            TToast.showLoading(
+              context: host,
+              text: 'Slot',
+              customWidget: const TText('Slot'),
+              duration: Duration.zero,
+              textStyle: instance
+                  ? const TextStyle(fontSize: 20, color: Colors.green)
+                  : null,
+            );
+          } else {
+            TToast.showText(
+              'Slot',
+              context: host,
+              customWidget: const TText('Slot'),
+              duration: Duration.zero,
+              textStyle: instance
+                  ? const TextStyle(fontSize: 20, color: Colors.green)
+                  : null,
+            );
+          }
+          await tester.pump(const Duration(milliseconds: 400));
+          final rich = tester.widget<RichText>(
+            find.descendant(
+              of: find.text('Slot'),
+              matching: find.byType(RichText),
+            ),
+          );
+          expect(rich.text.style!.fontSize, instance ? 20 : 18);
+          expect(
+            rich.text.style!.color,
+            instance ? Colors.green : Colors.purple,
+          );
+          expect(tester.takeException(), isNull);
+          TToast.dismissAll();
+          await tester.pump(const Duration(milliseconds: 400));
+        }
+      },
+    );
+  }
+
   for (final dark in [false, true]) {
     for (final kind in ['row', 'column', 'loading', 'loadingOnly']) {
       testWidgets('Toast $kind 图标实时尺寸与显式优先 dark=$dark', (tester) async {

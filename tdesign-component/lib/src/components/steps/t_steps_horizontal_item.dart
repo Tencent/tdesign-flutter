@@ -8,6 +8,7 @@ import '../../theme/t_fonts.dart';
 import '../../theme/t_internal_material.dart';
 import '../../theme/t_theme.dart';
 import '../text/t_text_resolve.dart';
+import '../text/t_text_style_scope.dart';
 import '../text/t_text_styled.dart';
 import 't_steps.dart';
 import 't_steps_mode.dart';
@@ -254,6 +255,17 @@ class TStepsHorizontalItem extends StatelessWidget {
   /// 构建标题组件
   Widget _buildTitleWidget(BuildContext context, Color stepsTitleColor) {
     final title = data.title ?? '';
+    final titleStyle = TTextResolve.resolve(
+      context: context,
+      defaults: TextStyle(
+        fontWeight: (activeIndex == index && mode != TStepsMode.display)
+            ? FontWeight.w600
+            : FontWeight.w400,
+        color: stepsTitleColor,
+        fontSize: context.tTheme.fontBodyMedium?.size ?? 14,
+        height: context.tTheme.fontBodyMedium?.height ?? (22 / 14),
+      ),
+    );
     if (data.customTitle == null && title.isEmpty) {
       return const SizedBox.shrink();
     }
@@ -261,48 +273,39 @@ class TStepsHorizontalItem extends StatelessWidget {
     return Container(
       margin: const EdgeInsets.only(top: 8),
       alignment: Alignment.center,
-      child:
-          data.customTitle ??
-          TTextStyled(
-            title,
-            style: TTextResolve.resolve(
-              context: context,
-              defaults: TextStyle(
-                fontWeight: (activeIndex == index && mode != TStepsMode.display)
-                    ? FontWeight.w600
-                    : FontWeight.w400,
-                color: stepsTitleColor,
-                fontSize: context.tTheme.fontBodyMedium?.size ?? 14,
-                height: context.tTheme.fontBodyMedium?.height ?? (22 / 14),
-              ),
+      child: data.customTitle != null
+          ? TTextStyleScope(style: titleStyle, child: data.customTitle!)
+          : TTextStyled(
+              title,
+              style: titleStyle,
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
             ),
-            maxLines: 1,
-            overflow: TextOverflow.ellipsis,
-          ),
     );
   }
 
   /// 构建内容组件
   Widget _buildContentWidget(BuildContext context) {
+    final contentStyle = TTextResolve.resolve(
+      context: context,
+      defaults: TextStyle(
+        fontWeight: FontWeight.w400,
+        color: context.tTheme.textColorPlaceholder,
+        fontSize: context.tTheme.fontBodySmall?.size ?? 12,
+        height: context.tTheme.fontBodySmall?.height ?? (20 / 12),
+      ),
+    );
     return Container(
       margin: const EdgeInsets.only(top: 4),
       alignment: Alignment.center,
-      child:
-          data.customContent ??
-          TTextStyled(
-            data.content ?? '',
-            style: TTextResolve.resolve(
-              context: context,
-              defaults: TextStyle(
-                fontWeight: FontWeight.w400,
-                color: context.tTheme.textColorPlaceholder,
-                fontSize: context.tTheme.fontBodySmall?.size ?? 12,
-                height: context.tTheme.fontBodySmall?.height ?? (20 / 12),
-              ),
+      child: data.customContent != null
+          ? TTextStyleScope(style: contentStyle, child: data.customContent!)
+          : TTextStyled(
+              data.content ?? '',
+              style: contentStyle,
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
             ),
-            maxLines: 1,
-            overflow: TextOverflow.ellipsis,
-          ),
     );
   }
 }

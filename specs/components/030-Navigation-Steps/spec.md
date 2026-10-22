@@ -34,10 +34,9 @@ Flutter Steps 的公开 Demo、状态命名及只读/可选择所有权与新版
 
 ### Theme 与尺寸
 
-- 内置文字优先使用明确的实例/组件 TDesign 样式和 Token；不从外部 Material TextTheme 或 DefaultTextStyle 反推配置，自定义内容保留其原上下文。
+- 内置文字优先使用明确的实例/组件 TDesign 样式和 Token；不从外部 Material TextTheme 或 DefaultTextStyle 反推配置，自定义文字槽接入组件默认样式，显式样式与内容内部更近的局部主题优先；其他自定义能力保留。
 - 22dp 默认节点、8dp 点节点、16/22dp 图标和 1dp 连线属于组件内固定设计尺寸，不作为业务状态或主题模式开放。
 - 明暗主题使用同一结构，由语义 Token 驱动颜色变化。
-- 内置文字优先使用明确的实例/组件 TDesign 样式和 Token；不从外部 Material TextTheme 或 DefaultTextStyle 反推配置，自定义内容保留其原上下文。
 
 ## 关键决策与取舍
 
@@ -65,3 +64,13 @@ Flutter Steps 的公开 Demo、状态命名及只读/可选择所有权与新版
 验收标准描述应满足的行为，不表示已执行或通过；执行范围与证据见 [acceptance.md](./acceptance.md)，剩余事项只在 [tasks.md](./tasks.md) 维护。
 
 跨组件配置职责见 [Theme 契约](../../engineering/048-Theme-configuration-contracts/spec.md)，视觉方法见 [Golden 规范](../../engineering/044-Testing-golden-regression/spec.md)。
+
+## 自定义文字槽一致性
+
+横向和纵向 customTitle/customContent 子树分别接入同方向内置标题/说明的文字默认值；当前、完成、未开始、错误、display/selectable 状态按既有逻辑解析。仅提供字体默认值，不强制内置标题的行数或溢出策略。自定义图标不在本次范围。
+
+保留 TText 全局隔离，不读取外部 Material 文字默认值，不新增公开配置。显式文字样式按字段覆盖，内容内部更近的局部 TTextThemeData（原生 Text 可用 DefaultTextStyle）优先。布局约束仍由自定义内容遵守。
+
+兼容性：这会改变原先未显式配置的自定义文字默认行为，属于用户可感知的默认行为变化（patch 发布归类，不代表默认行为完全兼容）；迁移时显式指定需保留的字号、字重、颜色、行高或在内容内部设置局部文字主题。仅指定部分样式的用户仍会接入其余默认字段。
+
+发布归类：本轮与 Button/NavBar 的默认文字槽调整采用同一 patch 策略。未配置、空样式或部分显式样式仍可能改变字体、颜色、换行、尺寸和省略位置；原生 Text 的字体也可能受新默认值影响，段落参数沿用既有语义。保留旧外观需在实例或内容内部主题中明确所需字段；不以参数签名不变或测试通过承诺零兼容风险。

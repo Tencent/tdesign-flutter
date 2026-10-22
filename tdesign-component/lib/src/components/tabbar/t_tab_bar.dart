@@ -1,7 +1,7 @@
 import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart' show OverflowBoxFit;
+import 'package:flutter/rendering.dart';
 import 'package:tdesign_flutter_icons/tdesign_flutter_icons.dart' show TIcons;
 
 import '../../theme/basic.dart';
@@ -16,6 +16,7 @@ import '../badge/t_badge.dart';
 import '../badge/t_badge_internal.dart';
 import '../badge/t_badge_layout.dart';
 import '../text/t_text_resolve.dart';
+import '../text/t_text_style_scope.dart';
 import '../text/t_text_styled.dart';
 import 't_tab_bar_theme_data.dart';
 
@@ -1161,7 +1162,8 @@ class TTabBarPopUpShapeConfig {
   /// 不设置时使用 `max(107, 标签项宽度 - 20)`；显式设置时覆盖该默认值。
   final double? popUpWidth;
 
-  /// 单个选项高度；所有选项等高。未设置时至少 48，可随内置文字增长。
+  /// 单个选项高度；所有选项等高。未设置时至少 48，可随内置文字或自定义内容增长。
+  /// 自适应菜单超过视口时可纵向滚动。
   /// 显式数值保持固定；构造后的默认公开值仍为 48。
   final double? popUpItemHeight;
 
@@ -1190,7 +1192,11 @@ class TTabBarMenuItem extends StatelessWidget {
     this.alignment = AlignmentDirectional.center,
   }) : super(key: key);
 
-  /// 选项widget
+  /// 自定义选项内容；优先于 value 的内置文案。
+  ///
+  /// 子树默认使用菜单文案样式；显式文字样式和内部更近的局部主题优先。
+  /// 不强制行数或省略。未设置 popUpItemHeight 时参与等高自适应，
+  /// 显式高度保持固定；内容仍须遵守有限宽度等布局约束。
   final Widget? itemWidget;
 
   /// 选项值
@@ -1201,25 +1207,29 @@ class TTabBarMenuItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final label = TTextStyled(
+      value,
+      centerLeading: true,
+      style: TTextResolve.resolve(
+        context: context,
+        defaults: TextStyle(
+          fontSize: context.tTheme.fontBodyLarge?.size ?? 16,
+          fontWeight: FontWeight.w400,
+        ),
+      ),
+    );
     return Container(
       constraints: const BoxConstraints(minHeight: _kMenuItemMinHeight),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(context.tTheme.radiusDefault),
       ),
       alignment: alignment,
-      child:
-          itemWidget ??
-          TTextStyled(
-            value,
-            centerLeading: true,
-            style: TTextResolve.resolve(
-              context: context,
-              defaults: TextStyle(
-                fontSize: context.tTheme.fontBodyLarge?.size ?? 16,
-                fontWeight: FontWeight.w400,
-              ),
+      child: itemWidget == null
+          ? label
+          : TTextStyleScope(
+              style: label.getTextStyle(context),
+              child: itemWidget!,
             ),
-          ),
     );
   }
 }
@@ -1324,6 +1334,11 @@ class _TabBarPopupDialogState extends State<_TabBarPopupDialog> {
   Widget build(BuildContext context) {
     if (position == null || size == null || widget.items.isEmpty) {
       return const SizedBox.shrink();
+    }
+    // Arbitrary custom content is measured by layout, not by guessing its text.
+    if ((widget.config?._adaptiveItemHeight ?? true) &&
+        widget.items.any((item) => item.itemWidget != null)) {
+      return _buildAdaptiveCustomPopup(context);
     }
     var popUpItemHeight =
         widget.config?.popUpItemHeight ?? _kDefaultMenuItemHeight;
@@ -1453,6 +1468,65 @@ class _TabBarPopupDialogState extends State<_TabBarPopupDialog> {
       ),
     );
   }
+
+  Widget _buildAdaptiveCustomPopup(BuildContext context) {
+    final viewport = MediaQuery.of(context).size;
+    final width = widget.config?.popUpWidth ?? widget.defaultPopUpWidth;
+    final arrowHeight = widget.config?.arrowHeight ?? _kArrowHeight;
+    final maxPanelHeight = math.max(
+      arrowHeight,
+      viewport.height - 2 * _kPopupViewportPadding,
+    );
+    return TInternalMaterial(
+      type: MaterialType.transparency,
+      child: GestureDetector(
+        onTap: () => Navigator.of(context).pop(),
+        child: ColoredBox(
+          color: Colors.transparent,
+          child: CustomSingleChildLayout(
+            delegate: _TabBarCustomPopupPosition(
+              anchor: Offset(position!.left + size!.width / 2, position!.top),
+              width: width,
+              maxHeight: maxPanelHeight,
+            ),
+            child: Container(
+              decoration: BoxDecoration(boxShadow: context.tTheme.shadow3),
+              child: CustomPaint(
+                painter: _TabBarPanelPainter(
+                  config: widget.config,
+                  backgroundColor:
+                      widget.config?.backgroundColor ??
+                      context.tTheme.bgColorContainer,
+                  radius: widget.config?.radius ?? context.tTheme.radiusDefault,
+                ),
+                child: Padding(
+                  padding: EdgeInsets.only(bottom: arrowHeight),
+                  child: SingleChildScrollView(
+                    primary: false,
+                    child: _TabBarEqualMenuRows(
+                      dividerColor: context.tTheme.componentStroke,
+                      children: widget.items
+                          .map(
+                            (item) => GestureDetector(
+                              behavior: HitTestBehavior.opaque,
+                              onTap: () {
+                                widget.onClickMenu(item.value);
+                                Navigator.of(context).pop();
+                              },
+                              child: item,
+                            ),
+                          )
+                          .toList(),
+                    ),
+                  ),
+                ),
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
+  }
 }
 
 /// 带下箭头的展开panel
@@ -1516,4 +1590,143 @@ class _TabBarPanelPainter extends CustomPainter {
         oldDelegate.config != config ||
         oldDelegate.radius != radius;
   }
+}
+
+// Position from the actual laid-out panel size, including custom rows and scrolling.
+class _TabBarCustomPopupPosition extends SingleChildLayoutDelegate {
+  const _TabBarCustomPopupPosition({
+    required this.anchor,
+    required this.width,
+    required this.maxHeight,
+  });
+
+  final Offset anchor;
+  final double width;
+  final double maxHeight;
+
+  @override
+  BoxConstraints getConstraintsForChild(BoxConstraints constraints) =>
+      BoxConstraints(minWidth: width, maxWidth: width, maxHeight: maxHeight);
+
+  @override
+  Offset getPositionForChild(Size size, Size childSize) => Offset(
+    (anchor.dx - childSize.width / 2).clamp(
+      _kPopupViewportPadding,
+      math.max(
+        _kPopupViewportPadding,
+        size.width - childSize.width - _kPopupViewportPadding,
+      ),
+    ),
+    (anchor.dy - childSize.height - _kPopupButtonPadding - _kPopupArrowGap)
+        .clamp(
+          _kPopupViewportPadding,
+          math.max(
+            _kPopupViewportPadding,
+            size.height - childSize.height - _kPopupViewportPadding,
+          ),
+        ),
+  );
+
+  @override
+  bool shouldRelayout(_TabBarCustomPopupPosition oldDelegate) =>
+      anchor != oldDelegate.anchor ||
+      width != oldDelegate.width ||
+      maxHeight != oldDelegate.maxHeight;
+}
+
+class _TabBarEqualMenuRows extends MultiChildRenderObjectWidget {
+  const _TabBarEqualMenuRows({
+    required this.dividerColor,
+    required super.children,
+  });
+
+  final Color dividerColor;
+
+  @override
+  RenderObject createRenderObject(BuildContext context) =>
+      _RenderTabBarEqualMenuRows(dividerColor);
+
+  @override
+  void updateRenderObject(
+    BuildContext context,
+    _RenderTabBarEqualMenuRows renderObject,
+  ) {
+    renderObject.dividerColor = dividerColor;
+  }
+}
+
+class _TabBarMenuParentData extends ContainerBoxParentData<RenderBox> {}
+
+// Measure mounted children at natural height, then align the row heights.
+// Stateful builders are not duplicated for offstage or intrinsic measurement.
+class _RenderTabBarEqualMenuRows extends RenderBox
+    with
+        ContainerRenderObjectMixin<RenderBox, _TabBarMenuParentData>,
+        RenderBoxContainerDefaultsMixin<RenderBox, _TabBarMenuParentData> {
+  _RenderTabBarEqualMenuRows(this._dividerColor);
+
+  Color _dividerColor;
+  double _rowHeight = _kDefaultMenuItemHeight;
+
+  Color get dividerColor => _dividerColor;
+
+  set dividerColor(Color value) {
+    if (value == _dividerColor) {
+      return;
+    }
+    _dividerColor = value;
+    markNeedsPaint();
+  }
+
+  @override
+  void setupParentData(RenderBox child) {
+    if (child.parentData is! _TabBarMenuParentData) {
+      child.parentData = _TabBarMenuParentData();
+    }
+  }
+
+  @override
+  void performLayout() {
+    final width = constraints.maxWidth;
+    _rowHeight = _kDefaultMenuItemHeight;
+    var child = firstChild;
+    while (child != null) {
+      child.layout(BoxConstraints.tightFor(width: width), parentUsesSize: true);
+      _rowHeight = math.max(_rowHeight, child.size.height);
+      child = childAfter(child);
+    }
+    var top = 0.0;
+    child = firstChild;
+    while (child != null) {
+      child.layout(
+        // A loose upper height keeps child updates visible to this parent.
+        BoxConstraints(minWidth: width, maxWidth: width, minHeight: _rowHeight),
+        parentUsesSize: true,
+      );
+      (child.parentData! as _TabBarMenuParentData).offset = Offset(0, top);
+      top += _rowHeight;
+      child = childAfter(child);
+    }
+    size = constraints.constrain(Size(width, top));
+  }
+
+  @override
+  void paint(PaintingContext context, Offset offset) {
+    defaultPaint(context, offset);
+    final paint = Paint()
+      ..color = _dividerColor
+      ..strokeWidth = 0.5;
+    for (var index = 1; index < childCount; index++) {
+      final y = offset.dy + index * _rowHeight;
+      context.canvas.drawLine(
+        Offset(offset.dx + 8, y),
+        Offset(offset.dx + size.width - 8, y),
+        paint,
+      );
+    }
+  }
+
+  @override
+  bool hitTestChildren(BoxHitTestResult result, {required Offset position}) =>
+      defaultHitTestChildren(result, position: position);
 }
