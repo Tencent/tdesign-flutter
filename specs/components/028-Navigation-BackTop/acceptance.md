@@ -46,3 +46,7 @@
 ### 文档字形检查补验
 
 远端 afba79c9 的两版 tooling 均为 170 passed / 1 failed，失败项为共享字体的源码字形覆盖检查：扫描包含 dartdoc，将注释新增的“史”“废”计入字体要求。已用同义措辞保留回调说明，未修改字体清单、字体资源或测试规则。两版 API 生成/检查通过，run_visual_regression_test.dart 各 14 项通过，包含实际失败的字形检查；本地结果不代替后续远端 CI。此前仅运行生成器未覆盖此约束，已补充本项验证。
+
+### 回调文档统一中文
+
+基于候选 `6ccb9900a67d43e2c33826ae003aa8efc9c578d6`，将 onPressed/onCompleted 的说明统一为中文，保留全部触发条件、完成时绑定检查、调用顺序及 2.0 迁移计划。去除 dartdoc 后生产代码逐字一致。Flutter 3.32.0 / 3.47.7 文档生成及一致性检查通过，BackTop API 产物相同；字体覆盖相关测试 run_visual_regression_test.dart 两版各 14 项通过。没有修改字体清单、字体资源、测试规则或运行行为；新提交完整 CI 由远端执行，本记录不代替其结果。日志见工作区外层 publication/pr1193-cn-doc-*.log。

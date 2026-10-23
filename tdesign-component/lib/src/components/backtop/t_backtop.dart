@@ -36,26 +36,28 @@ class TBackTop extends StatefulWidget {
   /// 控制器由调用方创建和释放，组件只管理自己的滚动监听。
   final ScrollController? controller;
 
-  /// Historical notification after the animation future settles.
+  /// 回顶操作结束后的通知。
   ///
-  /// Without an attached scroll position this runs immediately on tap.
-  /// An interrupted animation can still notify; use [onCompleted] for success.
+  /// 未绑定滚动位置时，点击后立即触发；已绑定时，等待回顶动画返回的
+  /// Future 结束后触发。动画被中断也可能通知，不代表成功回顶；
+  /// 成功回顶通知使用 [onCompleted]。
   ///
   /// 计划在 2.0 将本回调统一为点击时触发，成功回顶通知使用 [onCompleted]。
   ///
   /// `null` 不表示禁用；只要提供 [controller]，组件仍可点击并执行回顶。
   final VoidCallback? onPressed;
 
-  /// Called after this component successfully returns to the top.
+  /// 本组件成功回顶后触发的通知。
   ///
-  /// At completion the original scroll position must still be attached to the
-  /// original controller, which must remain the current [controller], and must
-  /// have reached its minimum scroll extent. Temporary detach/reattach before
-  /// completion is allowed. Does not run after disposal, position replacement,
-  /// or an interruption away from the top. An accepted return already at the
-  /// top completes once. This callback alone does not enable the button.
-  /// Success is recorded before the historical [onPressed] notification, which
-  /// runs first; lifecycle and binding identity are checked again afterwards.
+  /// 操作结束时，组件必须仍挂载；原滚动位置仍绑定于原控制器，且原控制器
+  /// 仍是当前 [controller]，原位置已到达最小滚动边界。
+  /// 允许完成前临时解绑再绑定原位置；完成时仍解绑、原位置被替换、
+  /// 未到顶的中断或组件卸载均不触发。
+  /// 已在顶部的有效回顶操作也触发一次；仅提供本回调不会启用按钮。
+  ///
+  /// 先记录回顶结果，再按原时机调用 [onPressed]；触发本回调前，
+  /// 再次检查组件挂载和原绑定是否有效。[onPressed] 改变偏移不会
+  /// 改写已记录的结果。
   ///
   /// 与 [onPressed] 的现有通知时机不同，不能等价替换。计划在 2.0
   /// 将 [onPressed] 统一为点击时触发，成功回顶通知继续使用本回调。
