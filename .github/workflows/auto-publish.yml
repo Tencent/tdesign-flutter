@@ -16,6 +16,17 @@ jobs:
     steps:
       - uses: actions/checkout@v7
 
+      - name: Validate release version
+        working-directory: ./tdesign-component
+        env:
+          RELEASE_TAG: ${{ github.ref_name }}
+        run: |
+          VERSION=$(sed -nE 's/^version:[[:space:]]*([^[:space:]#]+).*$/\1/p' pubspec.yaml)
+          if [ -z "$VERSION" ] || [ "$RELEASE_TAG" != "$VERSION" ]; then
+            echo "::error::Tag $RELEASE_TAG does not match pubspec.yaml version $VERSION"
+            exit 1
+          fi
+
       - uses: flutter-actions/setup-flutter@v4
         with:
           channel: stable
@@ -26,6 +37,10 @@ jobs:
       - name: install
         working-directory: ./tdesign-component
         run: flutter pub get
+
+      - name: Validate package
+        working-directory: ./tdesign-component
+        run: flutter pub publish --dry-run
 
       - name: publish
         working-directory: ./tdesign-component
