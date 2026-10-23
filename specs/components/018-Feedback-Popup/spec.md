@@ -90,7 +90,11 @@ Popup 是承载任意内容的基础浮层。小程序基础 Popup 默认只渲�
 
 ## 1.0.1 API 兼容迁移
 
-`TPopupOverlayConfig.onTap` 替代 `onClick`，不改变遮罩点击和关闭规则。`maintainState` 替代 `destroyOnClose`，两者取反；默认保持 true。该参数仅决定被不透明路由遮挡时是否保留状态，不改变关闭后释放。false 允许状态释放，不保证每次遮挡均释放。
+`TPopupOverlayConfig.onTap` 替代 `onClick`，不改变遮罩点击和关闭规则。
+
+1.0.0 的 `destroyOnClose` 实际已用于控制被不透明路由遮挡时的状态保留：路由返回 `maintainState = !options.destroyOnClose`，并非控制关闭后是否销毁。旧参数默认 false，遮挡时保留状态；true 时允许释放，不保证每次遮挡均释放。无论取值如何，关闭后均释放，再次打开创建新 State。依据见 [v1.0.0 路由实现](https://github.com/Tencent/tdesign-flutter/blob/v1.0.0/tdesign-component/lib/src/components/popup/_popup_route.dart#L68)及[当时的参数说明](https://github.com/Tencent/tdesign-flutter/blob/v1.0.0/tdesign-component/lib/src/components/popup/t_popup_options.dart#L228)。
+
+本次提供 `maintainState` 以纠正命名，并保留旧参数的取反映射和原生命周期行为；不是新增“关闭后保留”能力。新参数声明为 `bool? maintainState`，省略默认值时隐式为 null，表示未指定新值。构造/展示入口此时回退到 `!destroyOnClose`，因此两者均未传时实际仍为 true；不能将新参数直接默认设为 true，否则会覆盖旧参数显式 true 的调用。copyWith 的 null 回退规则见下文。继承签名适配是独立的源码兼容风险，与生命周期是否改变分别说明。
 
 新旧参数同时提供时，新参数优先，仅通知一次；没有新参数时保留旧公开 getter 的继承覆盖。旧入口及类型保留，标注推荐入口和 2.0.0 删除计划。普通旧 API 调用、默认行为及 Controller 绑定规则不变；copyWith 覆盖或实现的签名适配例外见下文。
 
