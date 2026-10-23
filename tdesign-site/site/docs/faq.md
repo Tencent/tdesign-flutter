@@ -26,11 +26,11 @@ TD内置外观使用全局Token、组件Theme及公开实例配置。Material的
 
 ## 输入内容为什么被过滤？如何调整高度？
 
-按所需规则配置Flutter的输入格式化器。`FilteringTextInputFormatter`执行文本过滤，复杂的整段输入校验应按输入法组合区和实际业务规则处理。输入框布局、内容间距和文字高度应通过当前组件API、Theme和合理的外部约束配置，不能假设给外层设置高度就会让内部全部等比缩放。参见[Input](/flutter/components/input)和[Textarea](/flutter/components/textarea)。
+按所需规则配置Flutter的输入格式化器。`FilteringTextInputFormatter.allow` 保留新编辑值中匹配的片段，过滤其余内容；不要使用 `^`、`$` 校验整个输入值。需要接受或拒绝完整编辑值时，使用 `TextInputFormatter.withFunction`，并按输入法组合区和实际业务规则处理。输入框布局、内容间距和文字高度应通过当前组件API、Theme和合理的外部约束配置，不能假设给外层设置高度就会让内部全部等比缩放。参见[Input](/flutter/components/input)和[Textarea](/flutter/components/textarea)。
 
 ## Toast应该使用哪个context？加载提示如何关闭？
 
-使用目标Navigator和Theme子树中的有效context，避免缓存已经卸载的页面context或用全局context绕过局部主题。持续加载需要显式 `Duration.zero` 并在业务结束后关闭；具体句柄和关闭方式见[Toast](/flutter/components/toast)及迁移指南。
+使用目标 Navigator 和 Theme 子树中仍处于挂载状态、能够访问 Overlay 的 context；异步操作后先检查 `context.mounted`。避免长期缓存页面 context 或用全局 context 绕过局部主题。持续加载需要显式 `Duration.zero` 并在业务结束后关闭；具体句柄和关闭方式见[Toast](/flutter/components/toast)及迁移指南。
 
 ## 图片是否有独立缓存配置？
 
