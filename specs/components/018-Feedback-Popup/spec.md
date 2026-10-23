@@ -95,3 +95,11 @@ Popup 是承载任意内容的基础浮层。小程序基础 Popup 默认只渲�
 新旧参数同时提供时，新参数优先，仅通知一次；没有新参数时保留旧公开 getter 的继承覆盖。旧入口及类型保留，标注推荐入口和 2.0.0 删除计划。旧 API、默认行为及 Controller 绑定规则不变。
 
 验收覆盖旧调用、继承覆盖、新参数优先级、空回调及实际交互；取反参数覆盖默认、真假组合、工厂、copyWith 和 normalized。
+
+### copyWith 继承兼容与独立状态复制
+
+旧 `TPopupOptions.copyWith` 的完整签名保持不变，不增加 `maintainState` 参数，以免旧子类覆盖产生 invalid_override。其兼容参数 `destroyOnClose` 非空时取反设置状态保留值，null 时保留当前有效值；该参数计划在 2.0.0 删除。
+
+新入口 `copyWithMaintainState(bool maintainState)` 只设置状态保留值，通过虚分派调用 `copyWith(destroyOnClose: !maintainState)`。因此保留旧子类的复制定制，沿用 copyWith 的返回类型与复制规则，不绕过其覆盖；子类应按既有 copyWith 契约处理参数。其他属性的复制仍使用原 copyWith；无需提供新旧参数的混合优先级。
+
+验收包含：完整旧签名的子类仍可编译与调用；新入口对旧覆盖只分派一次并传入取反值；显式 true/false、原值不变、其他配置保留、normalized、旧参数 null 及生成文档的迁移说明。旧设计向可覆盖方法增加可选参数不能保留继承兼容，已由独立入口取代。

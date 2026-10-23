@@ -319,14 +319,12 @@ class TPopupOptions {
     /// 不传时保留原值；显式 null 清除本字段，非空值须为 TPopupOverlayConfig。
     Object? overlay = _unset,
 
-    /// 非空值替换原配置；不传或 null 保留原值。
+    /// 兼容参数，非空时请改用 [copyWithMaintainState] 并传入取反值；2.0.0 删除。
+    /// 非空值取反后设置状态保留值；不传或 null 保留当前有效值。
     @Deprecated(
-      'Use maintainState with the old value inverted instead. Deprecated in 1.0.1; remove in 2.0.0.',
+      'Use copyWithMaintainState with the old non-null value inverted instead. Deprecated in 1.0.1; remove in 2.0.0.',
     )
     bool? destroyOnClose,
-
-    /// 非空值替换原配置，并优先于 destroyOnClose；不传或 null 保留原值。
-    bool? maintainState,
 
     /// 非空值替换原配置；不传或 null 保留原值。
     Duration? animationDuration,
@@ -368,9 +366,7 @@ class TPopupOptions {
       overlay: identical(overlay, _unset)
           ? this.overlay
           : overlay as TPopupOverlayConfig?,
-      maintainState:
-          maintainState ??
-          (destroyOnClose == null ? this.maintainState : !destroyOnClose),
+      maintainState: destroyOnClose == null ? maintainState : !destroyOnClose,
       animationDuration: animationDuration ?? this.animationDuration,
       headerBuilder: identical(headerBuilder, _unset)
           ? this.headerBuilder
@@ -390,6 +386,18 @@ class TPopupOptions {
       useSafeArea: useSafeArea ?? this.useSafeArea,
     );
   }
+
+  /// 复制配置并设置状态保留值，沿用 [copyWith] 的子类覆盖和复制规则。
+  ///
+  /// ## 返回值
+  ///
+  /// 设置状态保留值后的配置副本。
+  TPopupOptions copyWithMaintainState(
+    /// 被不透明路由覆盖时是否保留内容状态；false 时允许释放，关闭后始终释放。
+    bool maintainState,
+  ) =>
+      // ignore: deprecated_member_use_from_same_package
+      copyWith(destroyOnClose: !maintainState);
 
   /// 按方向整理配置。
   ///
