@@ -4,7 +4,7 @@
 - 分支：`rss1102/feat/api-compat-migration-1.0.1`。
 - 本地候选：`copywith-unified/candidate-source.patch` SHA-256 `fc618ff9a020da8094ae6c723eb1982ca722da87606f5d17cc63e2f1eda4ac4b`，包含基线以来组件源码、测试、生成产物及本轮 FAQ；不含本验收记录。
 - 原始日志、依赖锁文件、覆盖率和 PR 说明草稿位于工作区 `artifacts/pr1148-api-compat/copywith-unified/`。
-- 本轮仅本地验证及 Review；按用户要求不推送、不更新远端 PR、不合并。远端 CI 不作为本地新候选的通过证据。
+- 2026-10-24 按授权交付 #1196；本地双版本结果与远端新提交 CI 分别记录，暂不合并。远端旧提交的 CI 不作为新候选通过证据。
 
 ## API 取舍
 
@@ -22,9 +22,16 @@
 
 普通旧调用、旧 const 构造、旧 getter 覆盖、回调时机、默认行为和 Controller 绑定规则保留。新参数非空时优先，未传或 null 时兼容旧入口。旧入口继续标明替代名称及 2.0.0 删除计划。弃用提示可能影响将 info 视为失败的检查。
 
-**继承源码的破坏性变化：** `TPopupOptions.copyWith` 新增可选参数 `bool? maintainState`，覆盖或实现该方法的业务类必须在原签名中增加此参数并正确处理或转发。普通旧调用以及没有重写 copyWith 的继承无需修改；不能把这次变化描述为全部旧覆盖无须适配。FAQ 明确绑定 1.0.0 → 1.0.1，更新日志草稿使用 breaking 条目。
+**继承源码的破坏性变化：** `TPopupOptions.copyWith` 新增可选参数 `bool? maintainState`，覆盖或实现该方法的业务类必须在原签名中增加此参数并正确处理或转发。普通旧调用以及没有重写 copyWith 的继承无需修改；不能把这次变化描述为全部旧覆盖无须适配。FAQ 明确绑定 1.0.0 → 1.0.1，PR 更新日志使用 breaking 条目。
 
 `copyWith` 的规则为：maintainState 非空时优先（包含 false）；否则取非空 destroyOnClose 的反值；两者均为空时保留当前有效状态，包含旧 destroyOnClose getter 覆盖。支持一次复制同时修改状态和其他字段，原对象不变。旧参数计划在 2.0.0 删除。
+
+### 2.0.0 迁移影响
+
+- 已使用 `copyWith(maintainState: ...)` 的普通调用无需再次迁移，`copyWith()` 继续保留当前有效状态。
+- 旧 `destroyOnClose` 参数计划删除；非空旧值取反迁移到 `maintainState`。同时传新旧参数的调用删除旧参数即可。
+- 自定义子类须清理向 `super.copyWith` 转发的旧参数；若保留自身的旧兼容入口，须自行取反映射到新参数。依赖旧 getter 覆盖的类改为显式配置或覆盖 `maintainState`。
+- 这是未来 API 清理计划，不代表本轮已删除旧入口；默认有效值、遮挡保留和关闭释放契约不随命名清理改变。
 
 此前独立方法方案保留旧覆盖签名，但增加重复入口及未来迁移成本；本轮按用户确定的方案移除未发布的 copyWithMaintainState。旧方案和文档修正过程由 Git 历史及 `fix-copywith/`、`docs-steps-drawer/`、`docs-deprecation-wording/` 追溯，不作为当前签名兼容结论。
 
@@ -73,10 +80,10 @@ Popup、Drawer、Picker 原有 18 个路由场景保留，连同新增 6 个 cop
 
 ### 日志
 
-high/low-analyze.log、high/low-components.log、high/low-examples.log、high/low-tools.log、high/low-api-check.log、high/low-snippets.log 为本轮最终结果。high/low-legacy-override-risk.log 为预期旧消费者诊断。站点为 site-tests-final.log、site-docs.log、site-build.log。PR_BODY_DRAFT.md / PR_TITLE_DRAFT.txt 仅本地草稿。
+high/low-analyze.log、high/low-components.log、high/low-examples.log、high/low-tools.log、high/low-api-check.log、high/low-snippets.log 为本轮最终结果。high/low-legacy-override-risk.log 为预期旧消费者诊断。站点为 site-tests-final.log、site-docs.log、site-build.log。PR_BODY_DRAFT.md / PR_TITLE_DRAFT.txt 保存本轮 PR 说明与标题副本。
 
 ## 本地 Review 与范围
 
 按最终源码重新核对，统一参数优先级、null 回退、旧普通调用及 getter 覆盖、复制其他字段、生命周期和适配后子类转发符合当前 Spec。独立方法已从生产代码和生成 API 移除，旧方法覆盖不兼容已在 API、FAQ、Spec 及 breaking 日志草稿明确，没有用 FAQ 声称消除风险。未发现新的阻塞问题。
 
-本轮为 macOS Widget/工具验证及站点构建，不外推 Android/iOS 真机或 Web release。未改主题、布局、字体、Golden 基线或 Controller 绑定。未执行 Linux Golden 或新候选远端 CI，未推送、更新远端 PR 或合并。
+本地验证范围为 macOS Widget/工具及站点构建，不外推 Android/iOS 真机或 Web release。本轮未改主题、布局、字体、Golden 基线或 Controller 绑定，未在本地执行 Linux Golden。源码、FAQ、生成 API 及依赖与已通过的双版本检查点一致；本次只补充 Spec、验收与 PR 说明，因此复用该检查点，远端 CI 以推送后的实际 head 为准，暂不合并。
