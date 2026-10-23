@@ -1,5 +1,6 @@
 import 'dart:math' as math;
 
+import 'package:flutter/foundation.dart' show precisionErrorTolerance;
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart' show OverflowBoxFit;
 import 'package:tdesign_flutter_icons/tdesign_flutter_icons.dart' show TIcons;
@@ -19,6 +20,7 @@ class TBackTop extends StatefulWidget {
     Key? key,
     this.controller,
     this.onPressed,
+    this.onCompleted,
     this.showText = false,
     this.visibilityOffset = 200,
     this.tooltip,
@@ -34,10 +36,23 @@ class TBackTop extends StatefulWidget {
   /// 控制器由调用方创建和释放，组件只管理自己的滚动监听。
   final ScrollController? controller;
 
-  /// 回顶动画完成后的通知。
+  /// 点击后的通知。
   ///
-  /// `null` 不表示禁用；只要提供 [controller]，组件仍可点击并执行回顶。
+  /// 未绑定滚动位置时立即触发；已绑定时，在回顶动画的 Future 结束后
+  /// 触发，动画中断也可能通知。
+  ///
+  /// 计划在 2.0 统一为点击时触发，成功回顶通知使用 [onCompleted]。
+  ///
+  /// `null` 不表示禁用；提供 [controller] 时仍可点击回顶。
   final VoidCallback? onPressed;
+
+  /// 配合 [controller] 使用，在本组件成功回顶后通知。
+  ///
+  /// 完成时，组件仍挂载，原滚动位置已到最小边界且仍绑定原控制器，
+  /// 该控制器仍为当前 [controller]。
+  ///
+  /// 在 [onPressed] 之后通知，成功结果按 [onPressed] 执行前的状态判断。
+  final VoidCallback? onCompleted;
 
   /// 是否显示设计内置文案。
   ///
@@ -160,11 +175,20 @@ class _TBackTopState extends State<TBackTop> {
     }
 
     final controller = widget.controller;
+    ScrollPosition? position;
+
+    bool isCurrentBinding() =>
+        mounted &&
+        identical(controller, widget.controller) &&
+        position != null &&
+        controller!.positions.contains(position);
+
     if (controller != null && controller.hasClients) {
+      position = controller.position;
       _isAnimating = true;
       try {
         await controller.animateTo(
-          controller.position.minScrollExtent,
+          position.minScrollExtent,
           duration: const Duration(milliseconds: 500),
           curve: Curves.easeIn,
         );
@@ -173,8 +197,17 @@ class _TBackTopState extends State<TBackTop> {
       }
     }
 
+    // The legacy callback may change scroll pixels. Record this operation's
+    // result first, while keeping the historical notification order/timing.
+    final completed =
+        isCurrentBinding() &&
+        (position!.pixels - position.minScrollExtent).abs() <=
+            precisionErrorTolerance;
     if (mounted) {
       widget.onPressed?.call();
+      if (completed && isCurrentBinding()) {
+        widget.onCompleted?.call();
+      }
     }
   }
 
