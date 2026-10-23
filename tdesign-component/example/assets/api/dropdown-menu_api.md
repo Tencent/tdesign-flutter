@@ -353,14 +353,14 @@ DropdownMenu 的组件级视觉与布局默认值。
 | activeIconColor | Color? | - | 打开面板的触发项箭头颜色。 | 否 |
 | activeTextStyle | TextStyle? | - | 打开面板的触发项文本样式。 | 否 |
 | barBackgroundColor | Color? | - | 筛选栏背景色；为空时读取全局 bgColorContainer。 | 否 |
-| barHeight | double? | - | 筛选栏高度，默认 48 逻辑像素。 | 否 |
+| barHeight | double? | - | 筛选栏高度；未配置时最小高度读取 size13，默认 48 逻辑像素。 | 否 |
 | disabledIconColor | Color? | - | 禁用触发项箭头颜色。 | 否 |
 | disabledOptionColor | Color? | - | 多列选项禁用背景色。 | 否 |
 | disabledOptionTextStyle | TextStyle? | - | 禁用选项文本样式。 | 否 |
 | disabledTextStyle | TextStyle? | - | 禁用触发项文本样式。 | 否 |
 | dividerColor | Color? | - | 筛选栏底部分隔线颜色；为空时读取全局 componentStroke。 | 否 |
 | iconColor | Color? | - | 默认触发项箭头颜色。 | 否 |
-| iconSize | double? | - | 触发项箭头尺寸，默认 24 逻辑像素。 | 否 |
+| iconSize | double? | - | 触发项箭头尺寸；未设置时读取 size7，默认 20 逻辑像素。 | 否 |
 | optionBorderRadius | BorderRadius? | - | 多列选项圆角；为空时读取全局 radiusDefault。 | 否 |
 | optionColor | Color? | - | 多列选项默认背景色。 | 否 |
 | optionHeight | double? | - | 单选列表行高度，默认 56 逻辑像素。 | 否 |

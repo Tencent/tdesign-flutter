@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import '../../theme/t_colors.dart';
 import '../../theme/t_theme.dart';
 import '../../util/context_extension.dart';
-import '../button/t_button_types.dart';
 import 't_dialog.dart';
 
 /// 单操作确认弹窗，是 [TDialog] 的便捷封装。

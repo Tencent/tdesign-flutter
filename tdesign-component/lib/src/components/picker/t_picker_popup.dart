@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../popup/t_popup.dart';
 import 'picker_defaults.dart';
+import 't_picker.dart';
 import 't_picker_theme_data.dart';
 
 /// 构建 Picker 标准弹层头部。
@@ -27,7 +28,7 @@ final class TPickerPopup {
 
   /// 打开包含标准头部和 Picker 滚轮的底部弹层。
   ///
-  /// 弹层总高为当前 [TPickerThemeData.height]（默认 200）加
+  /// 弹层总高为当前 [TPickerThemeData.height]（默认至少 200，随内置文字增长）加
   /// [TPopupHeader.headerHeight]（58）。[child] 通常为 `TPicker` 或
   /// `TDateTimePicker`，其受控值、确认和取消状态仍由调用方管理。
   ///
@@ -86,8 +87,10 @@ final class TPickerPopup {
       useRootNavigator: useRootNavigator,
       options: TPopupOptions.bottom(
         height:
-            (Theme.of(context).extension<TPickerThemeData>()?.height ??
-                defaultPickerHeight) +
+            resolvePickerHeight(
+              context,
+              customContent: child is TPicker && child.itemBuilder != null,
+            ) +
             TPopupHeader.headerHeight,
         inset: inset,
         headerBuilder: headerBuilder,

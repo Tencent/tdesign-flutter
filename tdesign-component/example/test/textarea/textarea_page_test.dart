@@ -48,7 +48,10 @@ void main() {
     }
 
     expect(find.text('按字符权重限制'), findsNothing);
-    expect(find.text('单元测试'), findsNothing);
+    expect(
+      tester.widget<ExamplePage>(find.byType(ExamplePage)).showTestModule,
+      isTrue,
+    );
     expect(tester.getSize(find.byType(TextareaMaxLengthExample)).height, 128);
     await disposeDemoPage(tester);
   }, tags: 'demo');

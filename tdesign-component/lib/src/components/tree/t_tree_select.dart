@@ -1,3 +1,5 @@
+import 'dart:math' as math;
+
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:tdesign_flutter_icons/tdesign_flutter_icons.dart' show TIcons;
@@ -5,6 +7,7 @@ import 'package:tdesign_flutter_icons/tdesign_flutter_icons.dart' show TIcons;
 import '../../theme/t_colors.dart';
 import '../../theme/t_fonts.dart';
 import '../../theme/t_internal_material.dart';
+import '../../theme/t_sizes.dart';
 import '../../theme/t_theme.dart';
 import '../text/t_text_styled.dart';
 import 't_tree_select_theme_data.dart';
@@ -14,7 +17,6 @@ const _kRootColumnWidth = 103.0;
 const _kIntermediateColumnWidth = 103.0;
 const _kLeafColumnMinWidth = 169.0;
 const _kItemHeight = 56.0;
-const _kOutwardCornerRadius = 9.0;
 
 /// 不可变的树形选择选项。
 @immutable
@@ -195,22 +197,24 @@ class _TTreeSelectState extends State<TTreeSelect> {
         return Container(
           height: theme?.height ?? _kTreeSelectHeight,
           color: theme?.backgroundColor ?? context.tTheme.bgColorContainer,
-          child: TInternalScrollScope(child: SingleChildScrollView(
-            scrollDirection: Axis.horizontal,
-            child: Row(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
-                for (var level = 0; level < columns.length; level++)
-                  _buildColumn(
-                    context,
-                    columns[level],
-                    level,
-                    widths[level],
-                    theme,
-                  ),
-              ],
+          child: TInternalScrollScope(
+            child: SingleChildScrollView(
+              scrollDirection: Axis.horizontal,
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  for (var level = 0; level < columns.length; level++)
+                    _buildColumn(
+                      context,
+                      columns[level],
+                      level,
+                      widths[level],
+                      theme,
+                    ),
+                ],
+              ),
             ),
-          )),
+          ),
         );
       },
     );
@@ -306,47 +310,49 @@ class _TTreeSelectState extends State<TTreeSelect> {
     return Container(
       width: width,
       color: backgroundColor,
-      child: TInternalScrollScope(child: ListView.builder(
-        padding: EdgeInsets.zero,
-        itemCount: options.length,
-        itemBuilder: (context, index) {
-          final option = options[index];
-          final path = <Object?>[...activePath.take(level), option.value];
-          final isBranch = option.children.isNotEmpty;
-          final selected = isBranch
-              ? level < activePath.length && activePath[level] == option.value
-              : widget.value.any((value) => listEquals(value, path));
-          final previousSelected =
-              level == 0 &&
-              index > 0 &&
-              _isColumnOptionSelected(
-                options[index - 1],
-                [...activePath.take(level), options[index - 1].value],
-                level,
-                activePath,
-              );
-          final nextSelected =
-              level == 0 &&
-              index < options.length - 1 &&
-              _isColumnOptionSelected(
-                options[index + 1],
-                [...activePath.take(level), options[index + 1].value],
-                level,
-                activePath,
-              );
-          return _buildOption(
-            context,
-            option: option,
-            path: path,
-            level: level,
-            selected: selected,
-            isBranch: isBranch,
-            previousSelected: previousSelected,
-            nextSelected: nextSelected,
-            theme: theme,
-          );
-        },
-      )),
+      child: TInternalScrollScope(
+        child: ListView.builder(
+          padding: EdgeInsets.zero,
+          itemCount: options.length,
+          itemBuilder: (context, index) {
+            final option = options[index];
+            final path = <Object?>[...activePath.take(level), option.value];
+            final isBranch = option.children.isNotEmpty;
+            final selected = isBranch
+                ? level < activePath.length && activePath[level] == option.value
+                : widget.value.any((value) => listEquals(value, path));
+            final previousSelected =
+                level == 0 &&
+                index > 0 &&
+                _isColumnOptionSelected(
+                  options[index - 1],
+                  [...activePath.take(level), options[index - 1].value],
+                  level,
+                  activePath,
+                );
+            final nextSelected =
+                level == 0 &&
+                index < options.length - 1 &&
+                _isColumnOptionSelected(
+                  options[index + 1],
+                  [...activePath.take(level), options[index + 1].value],
+                  level,
+                  activePath,
+                );
+            return _buildOption(
+              context,
+              option: option,
+              path: path,
+              level: level,
+              selected: selected,
+              isBranch: isBranch,
+              previousSelected: previousSelected,
+              nextSelected: nextSelected,
+              theme: theme,
+            );
+          },
+        ),
+      ),
     );
   }
 
@@ -374,7 +380,7 @@ class _TTreeSelectState extends State<TTreeSelect> {
     required TTreeSelectThemeData? theme,
   }) {
     final isRoot = level == 0;
-    final itemHeight = theme?.itemHeight ?? _kItemHeight;
+    var itemHeight = theme?.itemHeight ?? _kItemHeight;
     final selectedBackgroundColor =
         theme?.selectedBackgroundColor ?? context.tTheme.bgColorContainer;
     final indicatorColor = theme?.indicatorColor ?? context.tTheme.brandColor;
@@ -395,6 +401,16 @@ class _TTreeSelectState extends State<TTreeSelect> {
         : selected && (isRoot || isBranch)
         ? selectedStyle
         : theme?.textStyle ?? defaultStyle;
+    if (theme?.itemHeight == null) {
+      itemHeight = math.max(
+        itemHeight,
+        TTextStyled(
+          option.label,
+          maxLines: 1,
+          style: effectiveTextStyle,
+        ).naturalSize(context).height,
+      );
+    }
     final showIndicator = selected && !isBranch;
     return Semantics(
       selected: selected,
@@ -517,7 +533,7 @@ class _TreeOptionTile extends StatelessWidget {
               top: 0,
               right: 0,
               child: CustomPaint(
-                size: const Size(_kOutwardCornerRadius, _kOutwardCornerRadius),
+                size: const Size(9, 9),
                 painter: _OutwardCornerPainter(
                   color: selectedBackgroundColor,
                   corner: _Corner.topRight,
@@ -529,7 +545,7 @@ class _TreeOptionTile extends StatelessWidget {
               right: 0,
               bottom: 0,
               child: CustomPaint(
-                size: const Size(_kOutwardCornerRadius, _kOutwardCornerRadius),
+                size: const Size(9, 9),
                 painter: _OutwardCornerPainter(
                   color: selectedBackgroundColor,
                   corner: _Corner.bottomRight,
@@ -542,7 +558,10 @@ class _TreeOptionTile extends StatelessWidget {
               children: [
                 Expanded(
                   child: Padding(
-                    padding: const EdgeInsets.only(left: 16, right: 12),
+                    padding: EdgeInsets.only(
+                      left: context.tTheme.size6,
+                      right: 12,
+                    ),
                     child: TTextStyled(
                       label,
                       maxLines: 1,

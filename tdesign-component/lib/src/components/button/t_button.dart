@@ -4,10 +4,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 
 import '../../theme/t_internal_material.dart';
-import '../../theme/t_radius.dart';
 import '../../theme/t_theme.dart';
 import '../icon/t_icon.dart';
 import '../loading/t_loading_theme_data.dart';
+import '../text/t_text_style_scope.dart';
 import 't_button_defaults.dart';
 import 't_button_resolve.dart';
 import 't_button_theme_data.dart';
@@ -30,7 +30,12 @@ class TButton extends StatefulWidget {
     this.style,
   }) : super(key: key);
 
-  /// 内容（纯文案用 `Text('...')`）
+  /// 按钮内容，纯文案可使用 `Text('...')` 或 `TText('...')`。
+  ///
+  /// 内容文字默认使用按钮尺寸、配色与当前状态解析的文案样式。
+  /// Text/TText 的实例显式样式优先；仅设置部分字段时，其余字段使用按钮默认值。
+  /// 内容内部可通过更近的 TTextThemeData 自行定制；其他调用方主题保持原有行为。
+  /// 外层通用 TTextThemeData 的同名字段由本槽默认覆盖；需保持旧外观时显式指定。
   final Widget? child;
 
   /// 尺寸，未传时使用 [TButtonSize.medium]。
@@ -70,10 +75,10 @@ class TButton extends StatefulWidget {
   ///
   /// 外部 Material 按钮主题不控制内置样式；请通过此实例 style 或 TD Theme 定制。
   /// [ButtonStyle.visualDensity] 不生效；内置布局始终使用标准密度，
-  /// 尺寸由 [size] 与显式内边距、宽高配置决定。
+  /// 尺寸由 [size] 规格、全局尺寸刻度与显式内边距、宽高配置决定。
   /// 反馈和鼠标指针仅由实例 style、TD Theme 或内置默认值控制。
   /// 状态属性返回 null 时回退该状态的 TD 默认值；不读取 Material 按钮主题。
-  /// 调用方内容仍继承原主题。
+  /// 调用方内容保留原主题；child 的默认文字样式由按钮提供，显式文字样式优先。
   ///
   /// 组件默认使用 [MaterialTapTargetSize.shrinkWrap] 保持 TDesign 精确尺寸；
   /// 需要至少 48dp 点击区时可将 [ButtonStyle.tapTargetSize] 设为
@@ -140,6 +145,7 @@ class _TButtonState extends State<TButton> {
     final sizeMetrics = TButtonResolve.sizeMetrics(
       effectiveSize,
       context.tTheme,
+      buttonTheme: theme,
     );
     final hasGradient = theme?.gradient != null;
 
@@ -187,7 +193,18 @@ class _TButtonState extends State<TButton> {
 
       // 内容
       if (hasChild) {
-        children.add(Flexible(child: widget.child!));
+        children.add(
+          Flexible(
+            child: Builder(
+              builder: (context) => TTextStyleScope(
+                // Read after the native button theme is restored (or gradient
+                // Material is built), retaining its resolved state/animation.
+                style: DefaultTextStyle.of(context).style,
+                child: widget.child!,
+              ),
+            ),
+          ),
+        );
       }
 
       // 右侧图标

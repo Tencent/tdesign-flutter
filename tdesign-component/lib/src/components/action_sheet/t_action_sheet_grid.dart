@@ -9,6 +9,7 @@ import '../../theme/t_radius.dart';
 import '../../theme/t_spacers.dart';
 import '../../theme/t_theme.dart';
 import '../text/t_text.dart';
+import '../text/t_text_styled.dart';
 import 't_action_sheet_item.dart';
 import 't_action_sheet_item_widget.dart';
 import 't_action_sheet_types.dart';
@@ -42,7 +43,9 @@ class TActionSheetGrid<T> extends StatefulWidget {
   /// 选择项目时的回调函数
   final TActionSheetOnSelected<T>? onSelected;
 
-  /// 项目的行高
+  final bool _adaptiveItemHeight;
+
+  /// 项目的行高；显式值固定，默认至少 96 并随内置文字增长。
   final double itemHeight;
 
   /// 是否使用安全区域
@@ -57,9 +60,10 @@ class TActionSheetGrid<T> extends StatefulWidget {
     this.showCancel = true,
     this.onCancel,
     this.onSelected,
-    this.itemHeight = 96.0,
+    double? itemHeight,
     this.useSafeArea = true,
-  });
+  }) : itemHeight = itemHeight ?? 96,
+       _adaptiveItemHeight = itemHeight == null;
 
   static double preferredPopupHeight(
     BuildContext context, {
@@ -67,32 +71,25 @@ class TActionSheetGrid<T> extends StatefulWidget {
     required TActionSheetGridLayout layout,
     required double itemHeight,
     required bool showCancel,
+    String? cancelText,
   }) {
     final token = context.tTheme;
     final showPagination = layout.mode == TActionSheetGridMode.paged;
     var height = token.spacer + layout.rows * itemHeight;
     if (subtitle?.isNotEmpty ?? false) {
-      final font = token.fontBodyMedium;
-      final painter =
-          TextPainter(
-            text: TextSpan(
-              text: subtitle,
-              style: TextStyle(
-                fontSize: font?.size,
-                height: font?.height,
-                fontWeight: font?.fontWeight,
-              ),
-            ),
-            textDirection: Directionality.of(context),
-            textScaler: MediaQuery.textScalerOf(context),
-          )..layout(
+      final measured =
+          TTextStyled(
+            subtitle!,
+            font: token.fontBodyMedium,
+            style: TextStyle(color: token.textColorPlaceholder),
+          ).naturalSize(
+            context,
             maxWidth: math.max(
               0,
               MediaQuery.sizeOf(context).width - token.spacer2 * 2,
             ),
           );
-      height += 4.0 + painter.height + token.spacer1;
-      painter.dispose();
+      height += 4.0 + measured.height + token.spacer1;
     }
     if (showPagination) {
       height += paginationIndicatorExtent;
@@ -100,7 +97,7 @@ class TActionSheetGrid<T> extends StatefulWidget {
     if (showCancel) {
       height +=
           (showPagination ? token.spacer2 : token.spacer) +
-          actionSheetCancelButtonHeight;
+          actionSheetCancelHeight(context, cancelText);
     }
     return height;
   }
@@ -111,6 +108,9 @@ class TActionSheetGrid<T> extends StatefulWidget {
 
 class _TActionSheetGridState<T> extends State<TActionSheetGrid<T>> {
   int currentPage = 0;
+  double get _itemHeight => widget._adaptiveItemHeight
+      ? actionSheetGridItemHeight(context, widget.items)
+      : widget.itemHeight;
 
   @override
   Widget build(BuildContext context) {
@@ -180,31 +180,30 @@ class _TActionSheetGridState<T> extends State<TActionSheetGrid<T>> {
   }
 
   Widget _gridWrap(Widget child) {
-    return SizedBox(
-      height: widget.layout.rows * widget.itemHeight,
-      child: child,
-    );
+    return SizedBox(height: widget.layout.rows * _itemHeight, child: child);
   }
 
   Widget _buildPaginationGrid(BuildContext context) {
     return _gridWrap(
-      TInternalScrollScope(child: PageView.builder(
-        itemCount: (widget.items.length / widget.layout.count).ceil(),
-        // 当页面改变时更新当前页码
-        onPageChanged: (index) {
-          setState(() {
-            currentPage = index;
-          });
-        },
-        itemBuilder: (context, pageIndex) {
-          // 获取当前页面的项目
-          final pageItems = widget.items
-              .skip(pageIndex * widget.layout.count)
-              .take(widget.layout.count)
-              .toList();
-          return _buildGrid(context, items: pageItems);
-        },
-      )),
+      TInternalScrollScope(
+        child: PageView.builder(
+          itemCount: (widget.items.length / widget.layout.count).ceil(),
+          // 当页面改变时更新当前页码
+          onPageChanged: (index) {
+            setState(() {
+              currentPage = index;
+            });
+          },
+          itemBuilder: (context, pageIndex) {
+            // 获取当前页面的项目
+            final pageItems = widget.items
+                .skip(pageIndex * widget.layout.count)
+                .take(widget.layout.count)
+                .toList();
+            return _buildGrid(context, items: pageItems);
+          },
+        ),
+      ),
     );
   }
 
@@ -226,38 +225,40 @@ class _TActionSheetGridState<T> extends State<TActionSheetGrid<T>> {
             widget.layout.itemMinWidth ?? 0,
           );
           final panelWidth = itemWidth * columnsPerPanel;
-          return TInternalScrollScope(child: ListView.builder(
-            itemCount: panelCount,
-            padding: EdgeInsets.zero,
-            scrollDirection: Axis.horizontal,
-            itemBuilder: (context, panel) {
-              return SizedBox(
-                width: panelWidth,
-                child: Column(
-                  children: List.generate(widget.layout.rows, (row) {
-                    return Row(
-                      children: List.generate(columnsPerPanel, (column) {
-                        final index =
-                            panel * widget.layout.count +
-                            row * columnsPerPanel +
-                            column;
-                        return SizedBox(
-                          width: itemWidth,
-                          height: widget.itemHeight,
-                          child: index < widget.items.length
-                              ? TActionSheetItemWidget<T>(
-                                  item: widget.items[index],
-                                  onSelected: widget.onSelected,
-                                )
-                              : const SizedBox.shrink(),
-                        );
-                      }),
-                    );
-                  }),
-                ),
-              );
-            },
-          ));
+          return TInternalScrollScope(
+            child: ListView.builder(
+              itemCount: panelCount,
+              padding: EdgeInsets.zero,
+              scrollDirection: Axis.horizontal,
+              itemBuilder: (context, panel) {
+                return SizedBox(
+                  width: panelWidth,
+                  child: Column(
+                    children: List.generate(widget.layout.rows, (row) {
+                      return Row(
+                        children: List.generate(columnsPerPanel, (column) {
+                          final index =
+                              panel * widget.layout.count +
+                              row * columnsPerPanel +
+                              column;
+                          return SizedBox(
+                            width: itemWidth,
+                            height: _itemHeight,
+                            child: index < widget.items.length
+                                ? TActionSheetItemWidget<T>(
+                                    item: widget.items[index],
+                                    onSelected: widget.onSelected,
+                                  )
+                                : const SizedBox.shrink(),
+                          );
+                        }),
+                      );
+                    }),
+                  ),
+                );
+              },
+            ),
+          );
         },
       ),
     );
@@ -272,28 +273,30 @@ class _TActionSheetGridState<T> extends State<TActionSheetGrid<T>> {
           final width = constraints.maxWidth.isFinite
               ? constraints.maxWidth
               : MediaQuery.sizeOf(context).width;
-          final childAspectRatio = width / itemsPerRow / widget.itemHeight;
+          final childAspectRatio = width / itemsPerRow / _itemHeight;
           final needsVerticalScroll =
               (items ?? widget.items).length > widget.layout.count ||
-              constraints.maxHeight < widget.layout.rows * widget.itemHeight;
-          return TInternalScrollScope(child: GridView.builder(
-            physics: needsVerticalScroll
-                ? const AlwaysScrollableScrollPhysics()
-                : const NeverScrollableScrollPhysics(),
-            padding: EdgeInsets.zero,
-            itemCount: (items ?? widget.items).length,
-            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-              crossAxisCount: itemsPerRow,
-              childAspectRatio: childAspectRatio,
+              constraints.maxHeight < widget.layout.rows * _itemHeight;
+          return TInternalScrollScope(
+            child: GridView.builder(
+              physics: needsVerticalScroll
+                  ? const AlwaysScrollableScrollPhysics()
+                  : const NeverScrollableScrollPhysics(),
+              padding: EdgeInsets.zero,
+              itemCount: (items ?? widget.items).length,
+              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                crossAxisCount: itemsPerRow,
+                childAspectRatio: childAspectRatio,
+              ),
+              itemBuilder: (context, index) {
+                final item = (items ?? widget.items)[index];
+                return TActionSheetItemWidget<T>(
+                  item: item,
+                  onSelected: widget.onSelected,
+                );
+              },
             ),
-            itemBuilder: (context, index) {
-              final item = (items ?? widget.items)[index];
-              return TActionSheetItemWidget<T>(
-                item: item,
-                onSelected: widget.onSelected,
-              );
-            },
-          ));
+          );
         },
       ),
     );
@@ -369,15 +372,34 @@ class TActionSheetSectionGrid<T> extends StatelessWidget {
   static double preferredPopupHeight(
     BuildContext context, {
     required int sectionCount,
+    Iterable<String>? titles,
     required double itemHeight,
     required bool showCancel,
+    String? cancelText,
   }) {
     final token = context.tTheme;
-    final titleHeight =
-        (token.fontBodyMedium?.size ?? 14) *
-        (token.fontBodyMedium?.height ?? (22 / 14));
-    final sectionHeight = token.spacer1 * 2 + titleHeight + itemHeight;
-    return sectionCount * sectionHeight +
+    final titleValues = titles ?? List.filled(sectionCount, 'Ag');
+    final sectionsHeight = titleValues.fold<double>(
+      0,
+      (sum, title) =>
+          sum +
+          token.spacer1 * 2 +
+          itemHeight +
+          TTextStyled(
+                title,
+                font: token.fontBodyMedium,
+                style: TextStyle(color: token.textColorPlaceholder),
+              )
+              .naturalSize(
+                context,
+                maxWidth: math.max(
+                  0,
+                  MediaQuery.sizeOf(context).width - token.spacer2 * 2,
+                ),
+              )
+              .height,
+    );
+    return sectionsHeight +
         (showCancel ? token.spacer + actionSheetCancelButtonHeight : 0);
   }
 
@@ -403,19 +425,21 @@ class TActionSheetSectionGrid<T> extends StatelessWidget {
             _buildSectionTitle(context, section.title),
             SizedBox(
               height: itemHeight,
-              child: TInternalScrollScope(child: ListView.builder(
-                padding: EdgeInsets.zero,
-                scrollDirection: Axis.horizontal,
-                itemCount: section.items.length,
-                itemBuilder: (context, index) => SizedBox(
-                  width: itemWidth,
-                  height: itemHeight,
-                  child: TActionSheetItemWidget<T>(
-                    item: section.items[index],
-                    onSelected: onSelected,
+              child: TInternalScrollScope(
+                child: ListView.builder(
+                  padding: EdgeInsets.zero,
+                  scrollDirection: Axis.horizontal,
+                  itemCount: section.items.length,
+                  itemBuilder: (context, index) => SizedBox(
+                    width: itemWidth,
+                    height: itemHeight,
+                    child: TActionSheetItemWidget<T>(
+                      item: section.items[index],
+                      onSelected: onSelected,
+                    ),
                   ),
                 ),
-              )),
+              ),
             ),
           ],
           if (showCancel)

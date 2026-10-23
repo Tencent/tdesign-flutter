@@ -3,16 +3,14 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
-import 'package:flutter/scheduler.dart';
 
+import '../../theme/basic.dart' show Font;
 import '../../theme/t_colors.dart';
 import '../../theme/t_fonts.dart';
+import '../../theme/t_internal_material.dart';
 import '../../theme/t_spacers.dart';
 import '../../theme/t_theme.dart';
-import '../../util/iterable_ext.dart';
-import '../text/t_text.dart';
-import 'sticky_header/sticky_header_widget.dart';
-import 't_indexes_anchor.dart';
+import '../text/t_text_styled.dart';
 import 't_indexes_theme_data.dart';
 
 /// 索引
@@ -33,13 +31,15 @@ class TIndexesList extends StatefulWidget {
   /// 索引字符列表，需显式传入实际展示的索引序列。本组件不自带默认值；通常由 TIndexes 装配并透传（TIndexes 未指定时默认使用 A-Z）
   final List<String> indexList;
 
-  /// 索引列表最大高度（父容器高度的百分比，默认0.8）
+  /// 索引列表最大高度（父容器高度的百分比，默认0.8）。
+  /// 超过该高度时竖向滚动；点击仍选中，未溢出时可拖动选中。
   final double indexListMaxHeight;
 
   /// 选中索引
   final ValueNotifier<String> activeIndex;
 
-  /// 用户点击或拖动侧边栏、激活索引发生变化时触发
+  /// 用户点击或在未溢出时拖动侧边栏、激活索引发生变化时触发。
+  /// 溢出索引条的滚动不会触发选择回调。
   final void Function(String newIndex, String oldIndex) onSelect;
 
   /// 索引文本自定义构建，包括索引激活左侧提示
@@ -53,7 +53,12 @@ class TIndexesList extends StatefulWidget {
 class _TIndexesListState extends State<TIndexesList> {
   late Map<String, GlobalKey> _containerKeys;
   Timer? _hideTipTimer;
+  final _indexScrollController = ScrollController();
   var _showTip = false;
+  String? _lastActiveIndex;
+  double? _lastIndexExtent;
+  double? _lastViewportHeight;
+  int? _lastActivePosition;
 
   @override
   void initState() {
@@ -86,6 +91,7 @@ class _TIndexesListState extends State<TIndexesList> {
   @override
   void dispose() {
     _hideTipTimer?.cancel();
+    _indexScrollController.dispose();
     super.dispose();
   }
 
@@ -94,9 +100,32 @@ class _TIndexesListState extends State<TIndexesList> {
     final theme =
         Theme.of(context).extension<TIndexesThemeData>() ??
         const TIndexesThemeData();
-    final indexSize = theme.indexItemSize ?? 20;
+    double lineHeight(Font? font) => TTextStyled(
+      'Ag',
+      centerLeading: true,
+      font: font,
+      style: null,
+    ).naturalSize(context).height;
+    final indexSize =
+        theme.indexItemSize ??
+        (widget.builderIndex != null
+            ? 20
+            : max(
+                20,
+                max(
+                  lineHeight(theme.indexFont ?? context.tTheme.fontBodySmall),
+                  lineHeight(
+                    theme.activeIndexFont ?? context.tTheme.fontBodySmall,
+                  ),
+                ),
+              ));
     final indexSpacing = theme.indexItemSpacing ?? 2;
-    final tipSize = theme.tipSize ?? context.tTheme.spacer5;
+    final tipSize =
+        theme.tipSize ??
+        max(
+          context.tTheme.spacer5,
+          lineHeight(theme.tipFont ?? context.tTheme.fontTitleExtraLarge),
+        );
     final tipMaxWidth = max(theme.tipMaxWidth ?? 99, tipSize);
     final tipGap = theme.tipGap ?? context.tTheme.spacer2;
     return Positioned(
@@ -122,7 +151,7 @@ class _TIndexesListState extends State<TIndexesList> {
               child: ValueListenableBuilder(
                 valueListenable: widget.activeIndex,
                 builder: (context, value, child) {
-                  return Column(
+                  final strip = Column(
                     mainAxisSize: MainAxisSize.min,
                     children: widget.indexList.map((e) {
                       final isActive = value == e;
@@ -197,8 +226,9 @@ class _TIndexesListState extends State<TIndexesList> {
                                           context.tTheme.brandColorLight,
                                     ),
                                     child: Center(
-                                      child: TText(
+                                      child: TTextStyled(
                                         e,
+                                        centerLeading: true,
                                         font:
                                             theme.tipFont ??
                                             context.tTheme.fontTitleExtraLarge,
@@ -237,8 +267,9 @@ class _TIndexesListState extends State<TIndexesList> {
                                           )
                                         : const BoxDecoration(),
                                     child: Center(
-                                      child: TText(
+                                      child: TTextStyled(
                                         e,
+                                        centerLeading: true,
                                         font: isActive
                                             ? theme.activeIndexFont ??
                                                   context.tTheme.fontBodySmall
@@ -263,6 +294,75 @@ class _TIndexesListState extends State<TIndexesList> {
                         ),
                       );
                     }).toList(),
+                  );
+                  return LayoutBuilder(
+                    builder: (context, constraints) {
+                      final contentHeight =
+                          widget.indexList.length * indexSize +
+                          max(0, widget.indexList.length - 1) * indexSpacing;
+                      if (!constraints.hasBoundedHeight ||
+                          contentHeight <= constraints.maxHeight) {
+                        _lastViewportHeight = null;
+                        return strip;
+                      }
+                      final activePosition = widget.indexList.indexOf(value);
+                      final extent = indexSize + indexSpacing;
+                      if (_lastActiveIndex != value ||
+                          _lastActivePosition != activePosition ||
+                          _lastIndexExtent != extent ||
+                          _lastViewportHeight != constraints.maxHeight) {
+                        _lastActiveIndex = value;
+                        _lastActivePosition = activePosition;
+                        _lastIndexExtent = extent;
+                        _lastViewportHeight = constraints.maxHeight;
+                        WidgetsBinding.instance.addPostFrameCallback((_) {
+                          if (!mounted ||
+                              !_indexScrollController.hasClients ||
+                              activePosition < 0 ||
+                              widget.activeIndex.value != value) {
+                            return;
+                          }
+                          final position = _indexScrollController.position;
+                          final start = activePosition * extent;
+                          final end = start + indexSize;
+                          final target = start < position.pixels
+                              ? start
+                              : end >
+                                    position.pixels + position.viewportDimension
+                              ? end - position.viewportDimension
+                              : position.pixels;
+                          if (target != position.pixels) {
+                            _indexScrollController.jumpTo(
+                              target.clamp(
+                                position.minScrollExtent,
+                                position.maxScrollExtent,
+                              ),
+                            );
+                          }
+                        });
+                      }
+                      final scroll = TInternalScrollScope(
+                        child: SingleChildScrollView(
+                          controller: _indexScrollController,
+                          primary: false,
+                          clipBehavior: Clip.none,
+                          child: strip,
+                        ),
+                      );
+                      return widget.builderIndex != null
+                          ? ClipRect(
+                              clipper: _IndexStripClipper(tipMaxWidth + tipGap),
+                              child: scroll,
+                            )
+                          : ClipPath(
+                              clipBehavior: Clip.hardEdge,
+                              clipper: _BuiltinIndexStripClipper(
+                                tipMaxWidth + tipGap,
+                                tipSize,
+                              ),
+                              child: scroll,
+                            );
+                    },
                   );
                 },
               ),
@@ -319,4 +419,30 @@ class _TIndexesListState extends State<TIndexesList> {
       });
     });
   }
+}
+
+// 保留左侧提示气泡，只裁切滚动条上、下边界外的索引。
+class _IndexStripClipper extends CustomClipper<Rect> {
+  const _IndexStripClipper(this.tipWidth);
+  final double tipWidth;
+  @override
+  Rect getClip(Size size) =>
+      Rect.fromLTRB(-tipWidth, 0, size.width, size.height);
+  @override
+  bool shouldReclip(_IndexStripClipper oldClipper) =>
+      oldClipper.tipWidth != tipWidth;
+}
+
+// 内置气泡位于 x < 0，允许它越过滚动条上下边界；索引本身仍裁切。
+class _BuiltinIndexStripClipper extends CustomClipper<Path> {
+  const _BuiltinIndexStripClipper(this.tipWidth, this.tipHeight);
+  final double tipWidth;
+  final double tipHeight;
+  @override
+  Path getClip(Size size) => Path()
+    ..addRect(Offset.zero & size)
+    ..addRect(Rect.fromLTRB(-tipWidth, -tipHeight, 0, size.height + tipHeight));
+  @override
+  bool shouldReclip(_BuiltinIndexStripClipper old) =>
+      old.tipWidth != tipWidth || old.tipHeight != tipHeight;
 }

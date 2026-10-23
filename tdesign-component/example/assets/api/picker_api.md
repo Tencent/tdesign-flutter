@@ -8,7 +8,7 @@
 
 | 名称 | 类型 | 默认值 | 说明 | 必传 |
 | --- | --- | --- | --- | --- |
-| itemBuilder | TPickerItemBuilder? | - | 自定义选项构建器。 | 否 |
+| itemBuilder | TPickerItemBuilder? | - | 自定义选项构建器。 内容子树默认使用当前选中、未选中或禁用选项的文字样式，布局包装不影响继承。 显式文字样式和内容内部更近的局部文字主题优先。 不强制行数或省略；内容须适配滚轮项高度，自定义高度职责保持不变。 | 否 |
 | items | TPickerItems | - | 不可变数据源；更新选项时创建新的数据源与列表，不原地修改。 | 是 |
 | key | Key? | - | 组件标识，用于区分或保留组件状态。 | 否 |
 | onChanged | ValueChanged&lt;TPickerValue&gt;? | - | 值变化回调；为 null 时禁用。 | 否 |
@@ -34,7 +34,7 @@ Picker 专用弹层入口。
 
 打开包含标准头部和 Picker 滚轮的底部弹层。
 
-弹层总高为当前 `TPickerThemeData.height`（默认 200）加
+弹层总高为当前 `TPickerThemeData.height`（默认至少 200，随内置文字增长）加
 `TPopupHeader.headerHeight`（58）。`child` 通常为 `TPicker` 或
 `TDateTimePicker`，其受控值、确认和取消状态仍由调用方管理。
 
@@ -216,5 +216,5 @@ TPicker 组件级 ThemeExtension
 
 | 名称 | 类型 | 默认值 | 说明 | 必传 |
 | --- | --- | --- | --- | --- |
-| height | double? | - | 滚轮视窗高度，单位为逻辑像素；null 时使用默认值 200。 必须为有限正数，行高由此高度除以 `itemCount`（默认 5）得到。 | 否 |
+| height | double? | - | 滚轮视窗高度，单位为逻辑像素；null 时至少为 200，并随内置文字的自然行高增长。 必须为有限正数，行高由此高度除以 `itemCount`（默认 5）得到。 | 否 |
 | itemCount | int? | - | 每屏显示项数，null 时使用默认值 5；必须大于零。 | 否 |

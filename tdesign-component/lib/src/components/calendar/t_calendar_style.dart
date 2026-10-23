@@ -23,6 +23,7 @@ class TCalendarStyle {
     this.subtitleStyle,
     this.cellHeight = 60,
     this.monthTitleHeight = 22,
+    this.weekdayHeight = _kDefaultWeekdayHeight,
     this.verticalGap,
     this.bodyPadding,
     this.weekdayGap,
@@ -69,7 +70,7 @@ class TCalendarStyle {
   final Color? centreColor;
 
   /// 星期标题高度
-  double get weekdayHeight => _kDefaultWeekdayHeight;
+  final double weekdayHeight;
 
   static const _kDefaultWeekdayHeight = 46.0;
 
@@ -91,6 +92,7 @@ class TCalendarStyle {
       ),
       monthTitleStyle: TextStyle(
         fontSize: context.tTheme.fontMarkMedium?.size,
+        height: context.tTheme.fontMarkMedium?.height,
         fontWeight: context.tTheme.fontMarkMedium?.fontWeight,
         color: context.tTheme.textColorPrimary,
       ),

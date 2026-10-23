@@ -1,6 +1,9 @@
 import 'dart:ui' show lerpDouble;
 
 import 'package:flutter/material.dart';
+import 'package:meta/meta.dart';
+
+import '../../theme/t_token_double_lerp.dart';
 
 /// 返回顶部结构形态。
 enum TBackTopShape {
@@ -29,6 +32,34 @@ enum TBackTopColorPreset {
 ///
 /// {@category ComponentTheme}
 class TBackTopThemeData extends ThemeExtension<TBackTopThemeData> {
+  TokenValueLerp<double>? get _roundSizeTransition => null;
+
+  @internal
+  double resolveRoundSize(double fallback) =>
+      _roundSizeTransition?.resolve(fallback) ?? roundSize ?? fallback;
+
+  TokenValueLerp<double>? get _halfCircleHeightTransition => null;
+
+  @internal
+  double resolveHalfCircleHeight(double fallback) =>
+      _halfCircleHeightTransition?.resolve(fallback) ??
+      halfCircleHeight ??
+      fallback;
+
+  TokenValueLerp<double>? get _halfCircleHorizontalPaddingTransition => null;
+
+  @internal
+  double resolveHalfCircleHorizontalPadding(double fallback) =>
+      _halfCircleHorizontalPaddingTransition?.resolve(fallback) ??
+      halfCircleHorizontalPadding ??
+      fallback;
+
+  TokenValueLerp<double>? get _contentGapTransition => null;
+
+  @internal
+  double resolveContentGap(double fallback) =>
+      _contentGapTransition?.resolve(fallback) ?? contentGap ?? fallback;
+
   /// 背景色；未设置时根据实例配色读取 TDesign 语义 Token。
   final Color? backgroundColor;
 
@@ -47,7 +78,7 @@ class TBackTopThemeData extends ThemeExtension<TBackTopThemeData> {
   /// 半圆形无文字时的最小宽度，默认 38。
   final double? halfCircleMinWidth;
 
-  /// 图标尺寸，默认 20。
+  /// 图标尺寸，默认 22；显式值优先。
   final double? iconSize;
 
   /// 边框宽度，默认 0.5。
@@ -97,19 +128,29 @@ class TBackTopThemeData extends ThemeExtension<TBackTopThemeData> {
     double? contentGap,
     TextStyle? textStyle,
   }) {
-    return TBackTopThemeData(
-      backgroundColor: backgroundColor ?? this.backgroundColor,
-      borderColor: borderColor ?? this.borderColor,
-      contentColor: contentColor ?? this.contentColor,
-      roundSize: roundSize ?? this.roundSize,
-      halfCircleHeight: halfCircleHeight ?? this.halfCircleHeight,
-      halfCircleMinWidth: halfCircleMinWidth ?? this.halfCircleMinWidth,
-      iconSize: iconSize ?? this.iconSize,
-      borderWidth: borderWidth ?? this.borderWidth,
-      halfCircleHorizontalPadding:
-          halfCircleHorizontalPadding ?? this.halfCircleHorizontalPadding,
-      contentGap: contentGap ?? this.contentGap,
-      textStyle: textStyle ?? this.textStyle,
+    return _InterpolatedTBackTopThemeData(
+      TBackTopThemeData(
+        backgroundColor: backgroundColor ?? this.backgroundColor,
+        borderColor: borderColor ?? this.borderColor,
+        contentColor: contentColor ?? this.contentColor,
+        roundSize: roundSize ?? this.roundSize,
+        halfCircleHeight: halfCircleHeight ?? this.halfCircleHeight,
+        halfCircleMinWidth: halfCircleMinWidth ?? this.halfCircleMinWidth,
+        iconSize: iconSize ?? this.iconSize,
+        borderWidth: borderWidth ?? this.borderWidth,
+        halfCircleHorizontalPadding:
+            halfCircleHorizontalPadding ?? this.halfCircleHorizontalPadding,
+        contentGap: contentGap ?? this.contentGap,
+        textStyle: textStyle ?? this.textStyle,
+      ),
+      roundSizeTransition: roundSize == null ? _roundSizeTransition : null,
+      halfCircleHeightTransition: halfCircleHeight == null
+          ? _halfCircleHeightTransition
+          : null,
+      halfCircleHorizontalPaddingTransition: halfCircleHorizontalPadding == null
+          ? _halfCircleHorizontalPaddingTransition
+          : null,
+      contentGapTransition: contentGap == null ? _contentGapTransition : null,
     );
   }
 
@@ -129,37 +170,76 @@ class TBackTopThemeData extends ThemeExtension<TBackTopThemeData> {
     if (other is! TBackTopThemeData) {
       return this;
     }
-    return TBackTopThemeData(
-      backgroundColor: _lerpOptionalColor(
-        backgroundColor,
-        other.backgroundColor,
-        t,
+    return _InterpolatedTBackTopThemeData(
+      TBackTopThemeData(
+        backgroundColor: _lerpOptionalColor(
+          backgroundColor,
+          other.backgroundColor,
+          t,
+        ),
+        borderColor: _lerpOptionalColor(borderColor, other.borderColor, t),
+        contentColor: _lerpOptionalColor(contentColor, other.contentColor, t),
+        roundSize: _lerpOptionalDouble(roundSize, other.roundSize, 48, t),
+        halfCircleHeight: _lerpOptionalDouble(
+          halfCircleHeight,
+          other.halfCircleHeight,
+          40,
+          t,
+        ),
+        halfCircleMinWidth: _lerpOptionalDouble(
+          halfCircleMinWidth,
+          other.halfCircleMinWidth,
+          38,
+          t,
+        ),
+        iconSize: _lerpOptionalDouble(iconSize, other.iconSize, 22, t),
+        borderWidth: _lerpOptionalDouble(
+          borderWidth,
+          other.borderWidth,
+          0.5,
+          t,
+        ),
+        halfCircleHorizontalPadding: _lerpOptionalDouble(
+          halfCircleHorizontalPadding,
+          other.halfCircleHorizontalPadding,
+          8,
+          t,
+        ),
+        contentGap: _lerpOptionalDouble(contentGap, other.contentGap, 2, t),
+        textStyle: _lerpOptionalTextStyle(textStyle, other.textStyle, t),
       ),
-      borderColor: _lerpOptionalColor(borderColor, other.borderColor, t),
-      contentColor: _lerpOptionalColor(contentColor, other.contentColor, t),
-      roundSize: _lerpOptionalDouble(roundSize, other.roundSize, 48, t),
-      halfCircleHeight: _lerpOptionalDouble(
+      roundSizeTransition: TokenValueLerp.between(
+        roundSize,
+        _roundSizeTransition,
+        other.roundSize,
+        other._roundSizeTransition,
+        t,
+        (a, b, t) => lerpDouble(a, b, t)!,
+      ),
+      halfCircleHeightTransition: TokenValueLerp.between(
         halfCircleHeight,
+        _halfCircleHeightTransition,
         other.halfCircleHeight,
-        40,
+        other._halfCircleHeightTransition,
         t,
+        (a, b, t) => lerpDouble(a, b, t)!,
       ),
-      halfCircleMinWidth: _lerpOptionalDouble(
-        halfCircleMinWidth,
-        other.halfCircleMinWidth,
-        38,
-        t,
-      ),
-      iconSize: _lerpOptionalDouble(iconSize, other.iconSize, 20, t),
-      borderWidth: _lerpOptionalDouble(borderWidth, other.borderWidth, 0.5, t),
-      halfCircleHorizontalPadding: _lerpOptionalDouble(
+      halfCircleHorizontalPaddingTransition: TokenValueLerp.between(
         halfCircleHorizontalPadding,
+        _halfCircleHorizontalPaddingTransition,
         other.halfCircleHorizontalPadding,
-        8,
+        other._halfCircleHorizontalPaddingTransition,
         t,
+        (a, b, t) => lerpDouble(a, b, t)!,
       ),
-      contentGap: _lerpOptionalDouble(contentGap, other.contentGap, 2, t),
-      textStyle: _lerpOptionalTextStyle(textStyle, other.textStyle, t),
+      contentGapTransition: TokenValueLerp.between(
+        contentGap,
+        _contentGapTransition,
+        other.contentGap,
+        other._contentGapTransition,
+        t,
+        (a, b, t) => lerpDouble(a, b, t)!,
+      ),
     );
   }
 }
@@ -191,4 +271,40 @@ TextStyle? _lerpOptionalTextStyle(TextStyle? a, TextStyle? b, double t) {
     fontWeight: FontWeight.w600,
   );
   return TextStyle.lerp(a ?? fallback, b ?? fallback, t);
+}
+
+class _InterpolatedTBackTopThemeData extends TBackTopThemeData {
+  _InterpolatedTBackTopThemeData(
+    TBackTopThemeData data, {
+    TokenValueLerp<double>? roundSizeTransition,
+    TokenValueLerp<double>? halfCircleHeightTransition,
+    TokenValueLerp<double>? halfCircleHorizontalPaddingTransition,
+    TokenValueLerp<double>? contentGapTransition,
+  }) : _roundSizeTransition = roundSizeTransition,
+       _halfCircleHeightTransition = halfCircleHeightTransition,
+       _halfCircleHorizontalPaddingTransition =
+           halfCircleHorizontalPaddingTransition,
+       _contentGapTransition = contentGapTransition,
+       super(
+         backgroundColor: data.backgroundColor,
+         borderColor: data.borderColor,
+         contentColor: data.contentColor,
+         roundSize: data.roundSize,
+         halfCircleHeight: data.halfCircleHeight,
+         halfCircleMinWidth: data.halfCircleMinWidth,
+         iconSize: data.iconSize,
+         borderWidth: data.borderWidth,
+         halfCircleHorizontalPadding: data.halfCircleHorizontalPadding,
+         contentGap: data.contentGap,
+         textStyle: data.textStyle,
+       );
+
+  @override
+  final TokenValueLerp<double>? _roundSizeTransition;
+  @override
+  final TokenValueLerp<double>? _halfCircleHeightTransition;
+  @override
+  final TokenValueLerp<double>? _halfCircleHorizontalPaddingTransition;
+  @override
+  final TokenValueLerp<double>? _contentGapTransition;
 }

@@ -54,7 +54,7 @@ void main() {
     }
 
     final page = tester.widget<ExamplePage>(find.byType(ExamplePage));
-    expect(page.showTestModule, isFalse);
+    expect(page.showTestModule, isTrue);
     expect(page.backgroundColor, isNull);
     expect(page.itemMargin, isNull);
 

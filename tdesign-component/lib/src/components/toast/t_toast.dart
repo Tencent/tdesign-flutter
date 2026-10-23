@@ -7,10 +7,13 @@ import 'package:tdesign_flutter_icons/tdesign_flutter_icons.dart';
 import '../../theme/t_colors.dart';
 import '../../theme/t_fonts.dart';
 import '../../theme/t_internal_material.dart';
+import '../../theme/t_overlay_themes.dart';
 import '../../theme/t_radius.dart';
+import '../../theme/t_sizes.dart';
 import '../../theme/t_theme.dart';
 import '../../util/context_extension.dart';
 import '../loading/t_circle_indicator.dart';
+import '../text/t_text_style_scope.dart';
 import '../text/t_text_styled.dart';
 import 't_toast_theme_data.dart';
 
@@ -133,7 +136,10 @@ class TToast {
     /// Toast 展示位置。
     TToastPlacement placement = TToastPlacement.middle,
 
-    /// 自定义内容；传入后优先展示。
+    /// 自定义文案内容；传入后优先展示。
+    ///
+    /// Text/TText 子树接入 Toast 默认字体和颜色，布局包装不切断传递。
+    /// 显式样式及内部更近的 TD 文字主题优先；自定义内容自行控制换行和布局。
     Widget? customWidget,
 
     /// Toast 背景色。
@@ -428,6 +434,9 @@ class TToast {
     TToastPlacement placement = TToastPlacement.middle,
 
     /// 自定义加载文案区域；传入后替换 text 对应内容，加载指示器仍显示。
+    ///
+    /// Text/TText 子树接入加载文案默认字体和颜色，布局包装不切断传递。
+    /// 显式样式及内部更近的 TD 文字主题优先；不强加内置文案的单行限制。
     Widget? customWidget,
 
     /// Toast 背景色。
@@ -548,7 +557,7 @@ class TToast {
       debugPrint('warn: TToast requires an Overlay ancestor.');
       return;
     }
-    final captured = InheritedTheme.capture(
+    final captured = TOverlayThemes.capture(
       from: context,
       to: overlayState.context,
     );
@@ -569,6 +578,7 @@ class TToast {
     if (blockBackground || showMask) {
       overlayEntry = OverlayEntry(
         builder: (BuildContext context) => captured.wrap(
+          context,
           Stack(
             children: [
               Positioned.fill(
@@ -584,7 +594,8 @@ class TToast {
       );
     } else {
       overlayEntry = OverlayEntry(
-        builder: (BuildContext context) => captured.wrap(positionedToast),
+        builder: (BuildContext context) =>
+            captured.wrap(context, positionedToast),
       );
     }
 
@@ -665,8 +676,9 @@ class _TIconTextToast extends StatelessWidget {
         maxHeight: 94,
       ),
       child: Container(
-        padding:
-            toastTheme.padding ?? const EdgeInsets.fromLTRB(22, 14, 22, 14),
+        padding: toastTheme.resolvePadding(
+          EdgeInsets.symmetric(horizontal: theme.size8, vertical: theme.size6),
+        ),
         decoration: BoxDecoration(
           color: toastTheme.backgroundColor ?? theme.fontGray2,
           borderRadius: BorderRadius.circular(
@@ -679,7 +691,7 @@ class _TIconTextToast extends StatelessWidget {
           children: [
             TInternalIcon(
               iconData,
-              size: toastTheme.iconSize ?? 24,
+              size: toastTheme.resolveIconSize(context.tTheme.size8),
               color: toastTheme.iconColor ?? theme.textColorAnti,
             ),
             const SizedBox(width: 8),
@@ -710,7 +722,9 @@ class _TIconTextToast extends StatelessWidget {
     return ConstrainedBox(
       constraints: BoxConstraints(maxWidth: toastTheme.maxWidth ?? 136),
       child: Container(
-        padding: toastTheme.padding ?? const EdgeInsets.all(24),
+        padding: toastTheme.resolvePadding(
+          EdgeInsets.all(context.tTheme.size8),
+        ),
         decoration: BoxDecoration(
           color: toastTheme.backgroundColor ?? theme.fontGray2,
           borderRadius: BorderRadius.circular(
@@ -723,7 +737,7 @@ class _TIconTextToast extends StatelessWidget {
           children: [
             TInternalIcon(
               iconData,
-              size: toastTheme.iconSize ?? 32,
+              size: toastTheme.resolveIconSize(context.tTheme.size10),
               color: toastTheme.iconColor ?? theme.textColorAnti,
             ),
             const SizedBox(height: 8),
@@ -764,6 +778,14 @@ class _TToastLoading extends StatelessWidget {
                 const TToastThemeData())
             .merge(config);
     final maxWidth = math.max(102.0, toastTheme.maxWidth ?? 185.0);
+    final defaultLabel = TTextStyled(
+      text ?? context.resource.loadingWithPoint,
+      font: toastTheme.textStyle != null ? null : theme.fontBodyMedium,
+      style: toastTheme.textStyle,
+      maxLines: 1,
+      overflow: TextOverflow.ellipsis,
+      textColor: toastTheme.textStyle?.color ?? theme.textColorAnti,
+    );
     return ConstrainedBox(
       constraints: BoxConstraints(
         minWidth: 102,
@@ -771,8 +793,9 @@ class _TToastLoading extends StatelessWidget {
         maxWidth: maxWidth,
       ),
       child: Container(
-        padding:
-            toastTheme.padding ?? const EdgeInsets.symmetric(horizontal: 24),
+        padding: toastTheme.resolvePadding(
+          EdgeInsets.symmetric(horizontal: context.tTheme.size8),
+        ),
         decoration: BoxDecoration(
           color: toastTheme.backgroundColor ?? theme.fontGray2,
           borderRadius: BorderRadius.circular(
@@ -785,21 +808,16 @@ class _TToastLoading extends StatelessWidget {
           children: [
             TCircleIndicator(
               color: toastTheme.iconColor ?? theme.textColorAnti,
-              size: toastTheme.iconSize ?? 32,
+              size: toastTheme.resolveIconSize(context.tTheme.size10),
               lineWidth: 4,
             ),
             const SizedBox(height: 8),
-            customWidget ??
-                TTextStyled(
-                  text ?? context.resource.loadingWithPoint,
-                  font: toastTheme.textStyle != null
-                      ? null
-                      : theme.fontBodyMedium,
-                  style: toastTheme.textStyle,
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
-                  textColor: toastTheme.textStyle?.color ?? theme.textColorAnti,
-                ),
+            customWidget == null
+                ? defaultLabel
+                : TTextStyleScope(
+                    style: defaultLabel.getTextStyle(context),
+                    child: customWidget!,
+                  ),
           ],
         ),
       ),
@@ -822,7 +840,9 @@ class _TToastLoadingWithoutText extends StatelessWidget {
     return ConstrainedBox(
       constraints: const BoxConstraints(minWidth: 80, minHeight: 80),
       child: Container(
-        padding: toastTheme.padding ?? const EdgeInsets.all(24),
+        padding: toastTheme.resolvePadding(
+          EdgeInsets.all(context.tTheme.size8),
+        ),
         decoration: BoxDecoration(
           color: toastTheme.backgroundColor ?? theme.fontGray2,
           borderRadius: BorderRadius.circular(
@@ -831,7 +851,7 @@ class _TToastLoadingWithoutText extends StatelessWidget {
         ),
         child: TCircleIndicator(
           color: toastTheme.iconColor ?? theme.textColorAnti,
-          size: toastTheme.iconSize ?? 32,
+          size: toastTheme.resolveIconSize(context.tTheme.size10),
           lineWidth: 4,
         ),
       ),
@@ -861,28 +881,34 @@ class _TTextToast extends StatelessWidget {
         (Theme.of(context).extension<TToastThemeData>() ??
                 const TToastThemeData())
             .merge(config);
+    final defaultLabel = TTextStyled(
+      text ?? '',
+      font: toastTheme.textStyle != null ? null : theme.fontBodyMedium,
+      style: toastTheme.textStyle,
+      maxLines: maxLines ?? 3,
+      overflow: TextOverflow.ellipsis,
+      textColor: toastTheme.textStyle?.color ?? theme.textColorAnti,
+    );
     return ConstrainedBox(
       constraints:
           constraints ?? BoxConstraints(maxWidth: toastTheme.maxWidth ?? 185),
       child: Container(
-        padding:
-            toastTheme.padding ?? const EdgeInsets.fromLTRB(22, 14, 22, 14),
+        padding: toastTheme.resolvePadding(
+          EdgeInsets.symmetric(horizontal: theme.size8, vertical: theme.size6),
+        ),
         decoration: BoxDecoration(
           color: toastTheme.backgroundColor ?? theme.fontGray2,
           borderRadius: BorderRadius.circular(
             toastTheme.borderRadius ?? theme.radiusDefault,
           ),
         ),
-        child:
-            customWidget ??
-            TTextStyled(
-              text ?? '',
-              font: toastTheme.textStyle != null ? null : theme.fontBodyMedium,
-              style: toastTheme.textStyle,
-              maxLines: maxLines ?? 3,
-              overflow: TextOverflow.ellipsis,
-              textColor: toastTheme.textStyle?.color ?? theme.textColorAnti,
-            ),
+        child: customWidget == null
+            ? defaultLabel
+            : TTextStyleScope(
+                // Share typography, while custom content keeps its own layout.
+                style: defaultLabel.getTextStyle(context),
+                child: customWidget!,
+              ),
       ),
     );
   }

@@ -6,7 +6,28 @@ import 'dart:typed_data';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:tdesign_flutter/tdesign_flutter.dart';
 
+import '../../helpers/text_slot_regression.dart';
+import '../../support/token_consumption_evidence.dart';
+
 void main() {
+  registerNativeParagraphContractTests(
+    'Avatar foreground slot',
+    (child) => TAvatar(child: child),
+    theme: (theme) => theme.mergeExtension(
+      const TAvatarThemeData(foregroundColor: Colors.purple),
+    ),
+    reset: false,
+  );
+
+  registerTextSlotParityTests(
+    'Avatar foreground slot',
+    (child) => TAvatar(child: child),
+    theme: (theme) => theme.mergeExtension(
+      const TAvatarThemeData(foregroundColor: Colors.purple),
+    ),
+  );
+
+  avatarTokenConsumptionTests();
   Widget app(
     Widget child, {
     TAvatarThemeData? avatarTheme,
@@ -21,6 +42,47 @@ void main() {
       theme: theme,
     );
   }
+
+  testWidgets('字符头像响应全局语义字号并保留子节点显式样式', (tester) async {
+    final token = TThemeData.defaultData().copyWith(
+      fontMap: {
+        'fontMarkLarge': Font(size: 41, lineHeight: 48),
+        'fontTitleMedium': Font(
+          size: 23,
+          lineHeight: 31,
+          fontWeight: FontWeight.w700,
+        ),
+      },
+    );
+    await tester.pumpWidget(
+      app(
+        const Row(
+          children: [
+            TAvatar(child: Text('A')),
+            TAvatar(
+              child: Text(
+                'B',
+                style: TextStyle(fontSize: 11, fontWeight: FontWeight.w300),
+              ),
+            ),
+          ],
+        ),
+        tokens: token,
+      ),
+    );
+    final a = find.descendant(
+      of: find.text('A'),
+      matching: find.byType(RichText),
+    );
+    final b = find.descendant(
+      of: find.text('B'),
+      matching: find.byType(RichText),
+    );
+    expect(tester.widget<RichText>(a).text.style!.fontSize, 23);
+    expect(tester.widget<RichText>(b).text.style!.fontSize, 11);
+    expect(tester.widget<RichText>(a).text.style!.fontWeight, FontWeight.w700);
+    expect(tester.widget<RichText>(b).text.style!.fontWeight, FontWeight.w300);
+  });
 
   group('TAvatar', () {
     testWidgets('默认渲染用户图标和中尺寸圆形头像', (tester) async {
@@ -901,4 +963,219 @@ void main() {
       );
     });
   });
+}
+
+void avatarTokenConsumptionTests() {
+  for (final brightness in Brightness.values) {
+    for (final custom in [false, true]) {
+      testWidgets(
+        'token consumption avatar ${brightness.name} custom=$custom',
+        (tester) async {
+          final token = evidenceTokens(brightness, custom: custom);
+          for (final entry in const [
+            (TAvatarSize.large, 'Large', 64.0, 32.0, 20.0, 3.0),
+            (TAvatarSize.medium, 'Medium', 48.0, 24.0, 16.0, 2.0),
+            (TAvatarSize.small, 'Small', 40.0, 20.0, 14.0, 1.0),
+          ]) {
+            final scenario =
+                '${brightness.name}/custom=$custom/${entry.$1.name}';
+            await tester.pumpWidget(
+              evidenceHost(
+                TAvatar(size: entry.$1),
+                brightness: brightness,
+                token: token,
+              ),
+            );
+            await tester.pumpAndSettle();
+            tokenObservation(
+              'avatar${entry.$2}Width',
+              scenario: scenario,
+              actual: tester.getSize(find.byType(TAvatar)).width,
+              expected: entry.$3,
+            );
+            final icon = tester.widget<Icon>(find.byIcon(TIcons.user));
+            tokenObservation(
+              'avatarIcon${entry.$2}FontSize',
+              scenario: scenario,
+              actual: icon.size,
+              expected: custom && entry.$1 == TAvatarSize.small
+                  ? token.fontSizeXl
+                  : entry.$4,
+              enforce: !custom || entry.$1 != TAvatarSize.small,
+            );
+            tokenObservation(
+              'avatarIcon${entry.$2}FontSize',
+              scenario: 'contract/$scenario/icon-preset',
+              actual: icon.size,
+              expected: entry.$4,
+            );
+            tokenObservation(
+              'avatarContentColor',
+              scenario: scenario,
+              actual: icon.color,
+              expected: token.brandColor,
+            );
+            tokenObservation(
+              'avatarBgColor',
+              scenario: scenario,
+              actual: tester
+                  .widget<ColoredBox>(
+                    find
+                        .descendant(
+                          of: find.byType(TAvatar),
+                          matching: find.byType(ColoredBox),
+                        )
+                        .first,
+                  )
+                  .color,
+              expected: token.brandColorLightActive,
+            );
+            final clip = tester.widget<ClipRRect>(
+              find
+                  .descendant(
+                    of: find.byType(TAvatar),
+                    matching: find.byType(ClipRRect),
+                  )
+                  .first,
+            );
+            tokenObservation(
+              'avatarCircleBorderRadius',
+              scenario: scenario,
+              actual: clip.borderRadius.resolve(TextDirection.ltr).topLeft.x,
+              expected: token.radiusCircle,
+            );
+            await tester.pumpWidget(
+              evidenceHost(
+                TAvatar(
+                  size: entry.$1,
+                  shape: TAvatarShape.square,
+                  child: const Text('token avatar'),
+                ),
+                brightness: brightness,
+                token: token,
+              ),
+            );
+            await tester.pumpAndSettle();
+            tokenObservation(
+              'avatarText${entry.$2}FontSize',
+              scenario: scenario,
+              actual: DefaultTextStyle.of(
+                tester.element(find.text('token avatar')),
+              ).style.fontSize,
+              expected: custom
+                  ? switch (entry.$1) {
+                      TAvatarSize.large => 20.0,
+                      TAvatarSize.medium => token.fontTitleMedium!.size,
+                      TAvatarSize.small => token.fontTitleSmall!.size,
+                    }
+                  : entry.$5,
+            );
+            tokenObservation(
+              'avatarText${entry.$2}FontSize',
+              scenario: 'contract/$scenario/text-preset',
+              actual: DefaultTextStyle.of(
+                tester.element(find.text('token avatar')),
+              ).style.fontSize,
+              expected: switch (entry.$1) {
+                TAvatarSize.large => 20.0,
+                TAvatarSize.medium => token.fontTitleMedium!.size,
+                TAvatarSize.small => token.fontTitleSmall!.size,
+              },
+            );
+            final square = tester.widget<ClipRRect>(
+              find
+                  .descendant(
+                    of: find.byType(TAvatar),
+                    matching: find.byType(ClipRRect),
+                  )
+                  .first,
+            );
+            tokenObservation(
+              'avatarRoundBorderRadius',
+              scenario: scenario,
+              actual: square.borderRadius.resolve(TextDirection.ltr).topLeft.x,
+              expected: token.radiusDefault,
+            );
+            await tester.pumpWidget(
+              evidenceHost(
+                TAvatarGroup(
+                  children: [
+                    TAvatar(size: entry.$1),
+                    TAvatar(size: entry.$1),
+                  ],
+                ),
+                brightness: brightness,
+                token: token,
+              ),
+            );
+            await tester.pumpAndSettle();
+            final boxes = tester
+                .widgetList<DecoratedBox>(
+                  find.descendant(
+                    of: find.byType(TAvatarGroup),
+                    matching: find.byType(DecoratedBox),
+                  ),
+                )
+                .map((box) => box.decoration)
+                .whereType<BoxDecoration>()
+                .where((box) => box.border != null)
+                .toList();
+            expect(boxes, hasLength(2));
+            for (final box in boxes) {
+              tokenObservation(
+                'avatarBorderColor',
+                scenario: 'contract/$scenario/group-border',
+                actual: box.border!.top.color,
+                expected: token.bgColorContainer,
+              );
+              tokenObservation(
+                'avatarBorderWidth${entry.$2}',
+                scenario: scenario,
+                actual: box.border!.top.width,
+                expected: entry.$6,
+              );
+              tokenObservation(
+                'avatarBorderColor',
+                scenario: scenario,
+                actual: box.border!.top.color,
+                expected: Colors.white,
+                enforce: brightness == Brightness.light && !custom,
+              );
+            }
+          }
+          await tester.pumpWidget(
+            evidenceHost(
+              const TAvatar(),
+              brightness: brightness,
+              token: token,
+              extensions: const [
+                TAvatarThemeData(
+                  backgroundColor: Colors.lime,
+                  foregroundColor: Colors.purple,
+                ),
+              ],
+            ),
+          );
+          await tester.pumpAndSettle();
+          expect(
+            tester.widget<Icon>(find.byIcon(TIcons.user)).color,
+            Colors.purple,
+          );
+          expect(
+            tester
+                .widget<ColoredBox>(
+                  find
+                      .descendant(
+                        of: find.byType(TAvatar),
+                        matching: find.byType(ColoredBox),
+                      )
+                      .first,
+                )
+                .color,
+            Colors.lime,
+          );
+        },
+      );
+    }
+  }
 }

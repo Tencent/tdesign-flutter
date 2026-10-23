@@ -14,6 +14,9 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 /// - 主题覆盖（ThemeExtension）
 /// - 边界场景
 void main() {
+  _perSizePaddingTokenTests();
+  _singleLineLeadingRegression();
+
   /// 完整包装，注入 TDesign 全局主题。
   Widget wrapWithTheme(
     Widget child, {
@@ -1448,4 +1451,333 @@ void main() {
       expect(find.byType(TTag), findsNWidgets(TTagVariant.values.length));
     });
   });
+}
+
+void _singleLineLeadingRegression() {
+  for (final m3 in [false, true]) {
+    for (final scale in [1.0, 1.5]) {
+      testWidgets('Tag default leading and line boxes m3=$m3 scale=$scale', (
+        tester,
+      ) async {
+        await tester.pumpWidget(
+          MaterialApp(
+            theme: ThemeData(
+              useMaterial3: m3,
+              extensions: [TThemeData.defaultData()],
+            ),
+            home: MediaQuery(
+              data: MediaQueryData(textScaler: TextScaler.linear(scale)),
+              child: Scaffold(
+                body: Column(
+                  children: [
+                    for (final size in TTagSize.values)
+                      if (size != TTagSize.custom)
+                        TTag('标签 Ag8 $size', size: size),
+                  ],
+                ),
+              ),
+            ),
+          ),
+        );
+        for (final element in find.byType(TTag).evaluate()) {
+          final tag = find.byElementPredicate((e) => identical(e, element));
+          final text = find.descendant(of: tag, matching: find.byType(Text));
+          expect(
+            tester.widget<Text>(text).style!.leadingDistribution,
+            TextLeadingDistribution.even,
+          );
+          final container = find.descendant(
+            of: tag,
+            matching: find.byWidgetPredicate(
+              (w) => w is Container && w.decoration is BoxDecoration,
+            ),
+          );
+          expect(
+            tester.getRect(text).center.dy,
+            closeTo(tester.getRect(container.first).center.dy, 0.01),
+          );
+        }
+      });
+    }
+    testWidgets('Tag respects explicit TD typography m3=$m3', (tester) async {
+      await tester.pumpWidget(
+        MaterialApp(
+          theme: ThemeData(
+            useMaterial3: m3,
+            extensions: [
+              TThemeData.defaultData().copyWith(
+                fontFamilyMap: {
+                  'fontFamily': FontFamily(fontFamily: 'Custom TD Font'),
+                },
+              ),
+              const TTextThemeData(
+                textStyle: TextStyle(
+                  leadingDistribution: TextLeadingDistribution.proportional,
+                  fontFamily: 'Custom TD Font',
+                  letterSpacing: 2,
+                ),
+              ),
+            ],
+          ),
+          home: const Scaffold(body: TTag('Explicit')),
+        ),
+      );
+      final text = tester.widget<Text>(find.text('Explicit'));
+      expect(
+        text.style!.leadingDistribution,
+        TextLeadingDistribution.proportional,
+      );
+      expect(text.style!.fontFamily, 'Custom TD Font');
+      expect(text.style!.letterSpacing, 2);
+    });
+  }
+  testWidgets('multiline Tag and ordinary Text keep paragraph leading', (
+    tester,
+  ) async {
+    await tester.pumpWidget(
+      MaterialApp(
+        theme: TThemeBuilder.light(
+          TThemeData.defaultData(),
+        ).mergeExtension(const TTagThemeData(maxLines: 2, fixedWidth: 80)),
+        home: const Scaffold(
+          body: Column(children: [TTag('标签多行文字 Ag8'), TText('正文 Ag8')]),
+        ),
+      ),
+    );
+    for (final label in ['标签多行文字 Ag8', '正文 Ag8']) {
+      expect(
+        tester.widget<Text>(find.text(label)).style!.leadingDistribution,
+        isNull,
+      );
+    }
+  });
+}
+
+void _perSizePaddingTokenTests() {
+  const sized = TTagThemeData(
+    smallPadding: EdgeInsets.fromLTRB(9, 3, 11, 4),
+    mediumPadding: EdgeInsets.fromLTRB(10, 4, 12, 5),
+    largePadding: EdgeInsets.fromLTRB(11, 5, 13, 6),
+    extraLargePadding: EdgeInsets.fromLTRB(12, 6, 14, 7),
+  );
+  final paddingBySize = <TTagSize, EdgeInsets>{
+    TTagSize.small: sized.smallPadding!,
+    TTagSize.medium: sized.mediumPadding!,
+    TTagSize.large: sized.largePadding!,
+    TTagSize.extraLarge: sized.extraLargePadding!,
+    TTagSize.custom: EdgeInsets.zero,
+  };
+  test(
+    'per-size padding interpolation covers default, uniform, copies and interrupted transitions',
+    () {
+      const a = TTagThemeData();
+      const uniform = TTagThemeData(padding: EdgeInsets.all(20));
+      expect(a.lerp(a, .5).smallPadding, isNull);
+      expect(sized.lerp(null, .5), same(sized));
+      for (final size in TTagSize.values) {
+        const fallback = EdgeInsets.symmetric(horizontal: 7, vertical: 1);
+        final end = size == TTagSize.custom ? fallback : paddingBySize[size]!;
+        for (final t in [0.0, .25, 1.0]) {
+          expect(
+            a.lerp(sized, t).resolvePadding(fallback, size: size),
+            EdgeInsets.lerp(fallback, end, t),
+          );
+          expect(
+            sized.lerp(a, t).resolvePadding(fallback, size: size),
+            EdgeInsets.lerp(end, fallback, t),
+          );
+          expect(
+            uniform.lerp(sized, t).resolvePadding(fallback, size: size),
+            EdgeInsets.lerp(const EdgeInsets.all(20), end, t),
+          );
+          expect(
+            sized.lerp(uniform, t).resolvePadding(fallback, size: size),
+            EdgeInsets.lerp(end, const EdgeInsets.all(20), t),
+          );
+        }
+        final mid = uniform.lerp(sized, .5);
+        expect(
+          mid
+              .copyWith(textColor: Colors.blue)
+              .resolvePadding(fallback, size: size),
+          mid.resolvePadding(fallback, size: size),
+        );
+        expect(
+          mid.lerp(a, .5).resolvePadding(fallback, size: size),
+          EdgeInsets.lerp(
+            mid.resolvePadding(fallback, size: size),
+            fallback,
+            .5,
+          ),
+        );
+        expect(
+          mid
+              .copyWith(padding: const EdgeInsets.all(2))
+              .resolvePadding(fallback, size: size),
+          const EdgeInsets.all(2),
+        );
+        expect(sized.lerp(sized, .5).resolvePadding(fallback, size: size), end);
+      }
+      final copy = sized.copyWith(
+        smallPadding: EdgeInsets.zero,
+        mediumPadding: EdgeInsets.zero,
+        largePadding: EdgeInsets.zero,
+        extraLargePadding: EdgeInsets.zero,
+      );
+      final mid = const TTagThemeData()
+          .lerp(sized, .5)
+          .copyWith(
+            smallPadding: EdgeInsets.zero,
+            mediumPadding: EdgeInsets.zero,
+            largePadding: EdgeInsets.zero,
+            extraLargePadding: EdgeInsets.zero,
+          );
+      for (final size in paddingBySize.keys.where(
+        (size) => size != TTagSize.custom,
+      )) {
+        expect(
+          copy.resolvePadding(const EdgeInsets.all(7), size: size),
+          EdgeInsets.zero,
+        );
+        expect(
+          mid.resolvePadding(const EdgeInsets.all(7), size: size),
+          EdgeInsets.zero,
+        );
+      }
+    },
+  );
+  test('a sized padding override survives a restarted uniform transition', () {
+    const fallback = EdgeInsets.all(7);
+    const uniform = TTagThemeData(padding: EdgeInsets.all(20));
+    const sized = TTagThemeData(smallPadding: EdgeInsets.all(10));
+    for (final middle in [uniform.lerp(sized, 0.5), sized.lerp(uniform, 0.5)]) {
+      final overridden = middle.copyWith(smallPadding: EdgeInsets.zero);
+      expect(
+        overridden.resolvePadding(fallback, size: TTagSize.small),
+        EdgeInsets.zero,
+      );
+      for (final t in [0.0, 0.25, 0.5, 1.0]) {
+        expect(
+          overridden
+              .lerp(const TTagThemeData(), t)
+              .resolvePadding(fallback, size: TTagSize.small),
+          EdgeInsets.lerp(EdgeInsets.zero, fallback, t),
+        );
+        expect(
+          const TTagThemeData()
+              .lerp(overridden, t)
+              .resolvePadding(fallback, size: TTagSize.small),
+          EdgeInsets.lerp(fallback, EdgeInsets.zero, t),
+        );
+      }
+      expect(
+        overridden
+            .lerp(const TTagThemeData(), 0)
+            .resolvePadding(fallback, size: TTagSize.medium),
+        middle.resolvePadding(fallback, size: TTagSize.medium),
+      );
+    }
+  });
+  for (final brightness in Brightness.values) {
+    testWidgets(
+      'Tag per-size net padding $brightness does not deduct border twice',
+      (tester) async {
+        for (final size in TTagSize.values) {
+          for (final variant in TTagVariant.values) {
+            Future<void> pump(
+              TTagThemeData component, {
+              bool select = false,
+            }) async {
+              final token = TThemeData.defaultData().copyWith(
+                sizeMap: {'size3': 30, 'size4': 40, 'size6': 60},
+              );
+              final theme =
+                  (brightness == Brightness.light
+                          ? TThemeBuilder.light(token)
+                          : TThemeBuilder.dark(token))
+                      .mergeExtension(component);
+              await tester.pumpWidget(
+                MaterialApp(
+                  theme: theme,
+                  home: Scaffold(
+                    body: select
+                        ? TSelectTag(
+                            'sized',
+                            size: size,
+                            variant: variant,
+                            value: true,
+                            onChanged: (_) {},
+                          )
+                        : TTag(
+                            'sized',
+                            key: const ValueKey('sized-padding'),
+                            size: size,
+                            variant: variant,
+                          ),
+                  ),
+                ),
+              );
+              await tester.pumpAndSettle();
+            }
+
+            EdgeInsets padding() =>
+                tester
+                        .widget<Container>(
+                          find
+                              .descendant(
+                                of: find.byType(TTag),
+                                matching: find.byWidgetPredicate(
+                                  (w) =>
+                                      w is Container &&
+                                      w.decoration is BoxDecoration,
+                                ),
+                              )
+                              .first,
+                        )
+                        .padding!
+                    as EdgeInsets;
+            final border =
+                variant == TTagVariant.outline ||
+                    variant == TTagVariant.lightOutline
+                ? 1.0
+                : 0.0;
+            final raw = switch (size) {
+              TTagSize.small => const EdgeInsets.symmetric(
+                horizontal: 6,
+                vertical: 2,
+              ),
+              TTagSize.medium => const EdgeInsets.symmetric(
+                horizontal: 8,
+                vertical: 2,
+              ),
+              TTagSize.large => const EdgeInsets.symmetric(
+                horizontal: 8,
+                vertical: 3,
+              ),
+              TTagSize.extraLarge => const EdgeInsets.symmetric(
+                horizontal: 16,
+                vertical: 9,
+              ),
+              TTagSize.custom => EdgeInsets.zero,
+            };
+            final fallback = size == TTagSize.custom
+                ? EdgeInsets.zero
+                : raw - EdgeInsets.all(border);
+            await pump(const TTagThemeData());
+            expect(padding(), fallback);
+            final element = tester.element(find.byType(TTag));
+            await pump(sized);
+            expect(padding(), paddingBySize[size]);
+            expect(tester.element(find.byType(TTag)), same(element));
+            await pump(sized.copyWith(padding: const EdgeInsets.all(2)));
+            expect(padding(), const EdgeInsets.all(2));
+            await pump(sized, select: true);
+            expect(padding(), paddingBySize[size]);
+            await pump(const TTagThemeData());
+            expect(padding(), fallback);
+          }
+        }
+      },
+    );
+  }
 }

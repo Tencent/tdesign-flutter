@@ -1,18 +1,20 @@
-import 'dart:math';
 import 'dart:ui' show FlutterView;
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_markdown/flutter_markdown.dart';
-import 'package:markdown/markdown.dart' as md;
 import 'package:provider/provider.dart';
 import 'package:tdesign_flutter/tdesign_flutter.dart';
 
 import '../provider/theme_mode_provider.dart';
 import 'example_base.dart';
+import 'example_code_viewer.dart';
 import 'example_route.dart';
 import 'notification_center.dart';
-import 'syntax_highlighter.dart';
+
+const _demoTestModulesEnabled = bool.fromEnvironment(
+  'TDESIGN_DEMO_TEST_MODULES',
+  defaultValue: true,
+);
 
 var navBarkey = GlobalKey();
 
@@ -79,9 +81,11 @@ class ExamplePage extends StatefulWidget {
   /// 悬浮按钮的位置过渡动画。
   final FloatingActionButtonAnimator? floatingActionButtonAnimator;
 
-  /// 是否在 debug 模式展示仅用于内部验证的单元测试模块。
+  /// 是否在 debug 模式展示仅用于内部验证的单元测试模块，默认展示。
   ///
   /// profile 和 release 构建中始终不展示。
+  /// 视觉测试通过 `--dart-define=TDESIGN_DEMO_TEST_MODULES=false` 统一隐藏，
+  /// 不改变本地 debug 的默认展示与页面开关。
   final bool showTestModule;
 
   /// 悬浮按钮
@@ -96,6 +100,7 @@ class _ExamplePageState extends State<ExamplePage> with WidgetsBindingObserver {
   bool apiVisible = false;
   ExamplePageModel? model;
   bool showAction = false;
+  bool _showingCode = false;
   late ScrollController _scrollController;
   late bool _ownsScrollController;
   FlutterView? _view;
@@ -252,7 +257,7 @@ class _ExamplePageState extends State<ExamplePage> with WidgetsBindingObserver {
   Widget _buildExampleList() {
     final modules = [
       ...widget.children,
-      if (kDebugMode && widget.showTestModule)
+      if (kDebugMode && _demoTestModulesEnabled && widget.showTestModule)
         ExampleModule(
           title: '单元测试',
           children: [_buildTestExampleItem(), ...widget.test],
@@ -416,6 +421,18 @@ class _ExamplePageState extends State<ExamplePage> with WidgetsBindingObserver {
     builder: (_) => const TDivider(),
   );
 
+  Future<void> _showExampleCode() async {
+    if (_showingCode) {
+      return;
+    }
+    _showingCode = true;
+    try {
+      await ExampleCodeViewer.showExamples(context, widget.exampleCodeGroup);
+    } finally {
+      _showingCode = false;
+    }
+  }
+
   Widget _buildNavBar() {
     var leftBarItems = <TNavBarItem>[];
     var rightBarItems = <TNavBarItem>[];
@@ -444,24 +461,12 @@ class _ExamplePageState extends State<ExamplePage> with WidgetsBindingObserver {
           },
         ),
       );
-      if (!PlatformUtil.isWeb) {
-        rightBarItems.add(
-          TNavBarItem(
-            icon: TIcons.code,
-            onTap: () {
-              setState(() {
-                apiVisible = !apiVisible;
-                if (model != null) {
-                  model!.apiVisible = apiVisible;
-                }
-              });
-              TNotification.postNotification('onApiVisibleChange', {
-                'apiVisible': apiVisible,
-              });
-            },
-          ),
-        );
-      }
+      rightBarItems.add(
+        TNavBarItem(
+          icon: TIcons.code,
+          onTap: _showExampleCode,
+        ),
+      );
     }
     if (!PlatformUtil.isWeb) {
       var themeModeProvider = Provider.of<ThemeModeProvider>(context);
@@ -756,7 +761,6 @@ class _CodeWrapperState extends State<CodeWrapper> {
 
   String? codeString;
 
-  Brightness brightness = Brightness.light;
   String? _observerId;
 
   @override
@@ -779,7 +783,6 @@ class _CodeWrapperState extends State<CodeWrapper> {
             .dependOnInheritedWidgetOfExactType<ExamplePageInheritedTheme>();
         exampleCodeGroup = modelTheme?.model.codePath ?? '';
         apiVisible = modelTheme?.model.apiVisible ?? false;
-        brightness = Theme.of(context).brightness;
       });
     });
   }
@@ -846,65 +849,9 @@ class _CodeWrapperState extends State<CodeWrapper> {
 
   void _showCodePanel() async {
     codeString ??= await loadCodeString();
-    await showModalBottomSheet(
-      isScrollControlled: true,
-      barrierColor: Colors.black.withValues(alpha: 0.5),
-      context: context,
-      builder: (_) {
-        if (codeString!.isEmpty) {
-          return Container(
-            alignment: Alignment.center,
-            decoration: BoxDecoration(
-              color: context.tTheme.bgColorSecondaryContainer,
-              borderRadius: BorderRadius.vertical(
-                top: Radius.circular(context.tTheme.radiusDefault),
-              ),
-            ),
-            child: TText(PlatformUtil.isWeb ? 'web不支持演示代码，请在移动端查看' : '暂无演示代码'),
-          );
-        }
-
-        var lines = codeString!.split('\n');
-        debugPrint('lines: ${lines.length}');
-        double height = min(
-          max(300, lines.length * 17 + 32),
-          MediaQuery.of(context).size.height - 150,
-        );
-        var mdText =
-            '''
-```dart
-${codeString}
-```
-                  ''';
-
-        var syntaxHighlighterStyle = brightness == Brightness.light
-            ? SyntaxHighlighterStyle.lightThemeStyle()
-            : SyntaxHighlighterStyle.darkThemeStyle();
-
-        return Container(
-          alignment: Alignment.center,
-          decoration: BoxDecoration(
-            color: context.tTheme.bgColorSecondaryContainer,
-            borderRadius: BorderRadius.vertical(
-              top: Radius.circular(context.tTheme.radiusDefault),
-            ),
-          ),
-          height: height,
-          child: Markdown(
-            physics: const BouncingScrollPhysics(),
-            padding: EdgeInsets.zero,
-            selectable: false,
-            shrinkWrap: true,
-            syntaxHighlighter: DartSyntaxHighlighter(syntaxHighlighterStyle),
-            data: mdText,
-            extensionSet: md.ExtensionSet(
-              md.ExtensionSet.gitHubWeb.blockSyntaxes,
-              [md.EmojiSyntax(), ...md.ExtensionSet.gitHubWeb.inlineSyntaxes],
-            ),
-          ),
-        );
-      },
-    );
+    if (mounted) {
+      await ExampleCodeViewer.showCodeString(context, codeString!);
+    }
   }
 
   Future<String> loadCodeString() async {

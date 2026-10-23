@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:io';
 
 import 'package:flutter/services.dart';
@@ -369,4 +370,30 @@ ThemeData withDemoGoldenFonts(ThemeData theme, DemoPageTestSpec spec) {
       ),
     ),
   );
+}
+
+Future<void> preloadDemoCodeGroup(String group) async {
+  final manifest =
+      jsonDecode(await rootBundle.loadString('assets/code/manifest.json'))
+          as Map<String, dynamic>;
+  final groups = manifest['groups'] as Map<String, dynamic>;
+  for (final module in groups[group] as List<dynamic>) {
+    await Future.wait([
+      for (final item in module['items'] as List<dynamic>)
+        rootBundle.loadString('assets/code/${item['assetKey']}.txt'),
+    ]);
+  }
+}
+
+Future<void> waitForDemoWidget(WidgetTester tester, Finder finder) async {
+  for (var attempt = 0; attempt < 100; attempt++) {
+    await tester.pumpAndSettle();
+    if (finder.evaluate().isNotEmpty) {
+      return;
+    }
+    await tester.runAsync(() async {
+      await Future<void>.delayed(const Duration(milliseconds: 50));
+    });
+  }
+  expect(finder, findsWidgets);
 }

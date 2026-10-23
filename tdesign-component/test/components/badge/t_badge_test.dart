@@ -5,6 +5,7 @@ import 'package:tdesign_flutter/src/components/badge/t_badge_resolved_style.dart
 import 'package:tdesign_flutter/tdesign_flutter.dart';
 
 void main() {
+  _bubbleComponentTokenTests();
   final token = TThemeData.defaultData();
 
   ThemeData fullTheme({TBadgeThemeData? badgeTheme}) {
@@ -444,6 +445,60 @@ void main() {
       );
     });
 
+    for (final dark in [false, true]) {
+      testWidgets('square 使用设计3px圆角并仅响应small刻度 dark=$dark', (tester) async {
+        final defaults = TThemeData.defaultData();
+        final tokens = ValueNotifier(dark ? defaults.dark! : defaults);
+        const key = ValueKey('design-square');
+        await tester.pumpWidget(
+          ValueListenableBuilder<TThemeData>(
+            valueListenable: tokens,
+            builder: (context, value, child) => MaterialApp(
+              themeAnimationDuration: Duration.zero,
+              theme: ThemeData(
+                brightness: dark ? Brightness.dark : Brightness.light,
+                extensions: [value],
+              ),
+              home: const Scaffold(
+                body: Center(
+                  child: TBadge(
+                    key: key,
+                    label: '8',
+                    variant: TBadgeVariant.square,
+                  ),
+                ),
+              ),
+            ),
+          ),
+        );
+        BorderRadiusGeometry? radius() =>
+            (tester
+                        .widget<DecoratedBox>(
+                          find.descendant(
+                            of: find.byKey(key),
+                            matching: find.byType(DecoratedBox),
+                          ),
+                        )
+                        .decoration
+                    as BoxDecoration)
+                .borderRadius;
+        expect(radius(), BorderRadius.circular(3));
+        final original = tester.element(find.byKey(key));
+        tokens.value = tokens.value.copyWith(
+          radiusMap: {'radiusDefault': 17, 'radiusLarge': 23},
+        );
+        await tester.pumpAndSettle();
+        expect(radius(), BorderRadius.circular(3));
+        tokens.value = tokens.value.copyWith(radiusMap: {'radiusSmall': 11});
+        await tester.pumpAndSettle();
+        expect(radius(), BorderRadius.circular(11));
+        expect(tester.element(find.byKey(key)), same(original));
+        expect(tester.takeException(), isNull);
+        await tester.pumpWidget(const SizedBox());
+        tokens.dispose();
+      });
+    }
+
     testWidgets('square 与 bubble 使用设计圆角且不经过 Material 胶囊裁剪', (tester) async {
       await tester.pumpWidget(
         app(
@@ -468,7 +523,7 @@ void main() {
       expect(
         decorations.map((decoration) => decoration.borderRadius),
         containsAll(<BorderRadius>[
-          BorderRadius.circular(2),
+          BorderRadius.circular(3),
           const BorderRadius.only(
             topLeft: Radius.circular(10),
             topRight: Radius.circular(10),
@@ -1154,4 +1209,128 @@ void main() {
       expect(renderedBorder(), Border.all(color: Colors.blue, width: 2.5));
     });
   });
+}
+
+void _bubbleComponentTokenTests() {
+  const custom = BorderRadiusDirectional.only(
+    topStart: Radius.circular(14),
+    topEnd: Radius.circular(12),
+    bottomStart: Radius.circular(2),
+    bottomEnd: Radius.circular(8),
+  );
+  const defaults = BorderRadius.only(
+    topLeft: Radius.circular(10),
+    topRight: Radius.circular(10),
+    bottomRight: Radius.circular(10),
+    bottomLeft: Radius.circular(1),
+  );
+  test(
+    'bubble token copy, default endpoints and interrupted interpolation',
+    () {
+      const a = TBadgeThemeData();
+      const b = TBadgeThemeData(bubbleBorderRadius: custom);
+      expect(a.lerp(a, .5).bubbleBorderRadius, isNull);
+      expect(
+        b.copyWith(backgroundColor: Colors.blue).bubbleBorderRadius,
+        custom,
+      );
+      expect(a.copyWith(bubbleBorderRadius: custom).bubbleBorderRadius, custom);
+      for (final t in [0.0, .25, 1.0]) {
+        final forward = a.lerp(b, t);
+        final reverse = b.lerp(a, t);
+        expect(
+          forward.bubbleBorderRadius!.resolve(TextDirection.rtl),
+          BorderRadiusGeometry.lerp(
+            defaults,
+            custom,
+            t,
+          )!.resolve(TextDirection.rtl),
+        );
+        expect(
+          reverse.bubbleBorderRadius!.resolve(TextDirection.ltr),
+          BorderRadiusGeometry.lerp(
+            custom,
+            defaults,
+            t,
+          )!.resolve(TextDirection.ltr),
+        );
+      }
+      final mid = a.lerp(b, .5).copyWith(borderWidth: 2);
+      expect(
+        mid.lerp(a, .5).bubbleBorderRadius!.resolve(TextDirection.ltr),
+        BorderRadiusGeometry.lerp(
+          custom,
+          defaults,
+          .75,
+        )!.resolve(TextDirection.ltr),
+      );
+    },
+  );
+  for (final brightness in Brightness.values) {
+    for (final direction in TextDirection.values) {
+      testWidgets(
+        'bubble component radius $brightness $direction updates in place',
+        (tester) async {
+          Future<void> pump(
+            TBadgeThemeData badgeTheme,
+            TBadgeVariant variant,
+          ) async {
+            final token = TThemeData.defaultData().copyWith(
+              radiusMap: {'radiusSmall': 7, 'radiusDefault': 40},
+            );
+            var theme = brightness == Brightness.light
+                ? TThemeBuilder.light(token)
+                : TThemeBuilder.dark(token);
+            theme = theme.mergeExtension(badgeTheme);
+            await tester.pumpWidget(
+              MaterialApp(
+                theme: theme,
+                home: Directionality(
+                  textDirection: direction,
+                  child: Scaffold(
+                    body: TBadge(
+                      key: const ValueKey('bubble-token'),
+                      variant: variant,
+                      label: '5',
+                    ),
+                  ),
+                ),
+              ),
+            );
+            await tester.pumpAndSettle();
+          }
+
+          BorderRadiusGeometry radius() =>
+              (tester
+                          .widget<DecoratedBox>(
+                            find
+                                .descendant(
+                                  of: find.byType(TBadge),
+                                  matching: find.byType(DecoratedBox),
+                                )
+                                .first,
+                          )
+                          .decoration
+                      as BoxDecoration)
+                  .borderRadius!;
+          await pump(const TBadgeThemeData(), TBadgeVariant.bubble);
+          expect(radius(), defaults);
+          final element = tester.element(find.byType(TBadge));
+          await pump(
+            const TBadgeThemeData(bubbleBorderRadius: custom),
+            TBadgeVariant.bubble,
+          );
+          expect(tester.element(find.byType(TBadge)), same(element));
+          expect(radius().resolve(direction), custom.resolve(direction));
+          await pump(
+            const TBadgeThemeData(bubbleBorderRadius: custom),
+            TBadgeVariant.square,
+          );
+          expect(radius(), BorderRadius.circular(7));
+          await pump(const TBadgeThemeData(), TBadgeVariant.bubble);
+          expect(radius(), defaults);
+        },
+      );
+    }
+  }
 }

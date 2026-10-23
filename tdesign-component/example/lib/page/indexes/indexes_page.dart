@@ -19,7 +19,6 @@ class TIndexesPage extends StatelessWidget {
       navBarKey: navBarkey,
       compactDemo: true,
       backgroundColor: context.tTheme.bgColorContainer,
-      showTestModule: false,
       children: [
         ExampleModule(
           title: '组件类型',

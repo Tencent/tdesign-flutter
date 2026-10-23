@@ -14,6 +14,8 @@ import '../../theme/t_colors.dart';
 import '../../theme/t_fonts.dart';
 import '../../theme/t_internal_material.dart';
 import '../../theme/t_radius.dart';
+import '../../theme/t_sizes.dart';
+import '../../theme/t_spacers.dart';
 import '../../theme/t_theme.dart';
 import '../icon/t_icon.dart';
 import '../text/t_text_resolve.dart';
@@ -24,8 +26,6 @@ import 't_tab_bar_theme_data.dart';
 const double _kTabHeight = 46.0;
 const double _kStartOffset = 52.0;
 const double _kTabIconSize = 18.0;
-const double _kTagHeight = 32.0;
-const double _kTagHorizontalPadding = 8.0;
 
 class _TabStyle extends AnimatedWidget {
   const _TabStyle({
@@ -791,13 +791,13 @@ class _THorizontalTabBarState extends State<THorizontalTabBar> {
     );
   }
 
-  BoxDecoration? _getContentDecorateInner(int index) {
+  Decoration? _getContentDecorateInner(int index) {
     if (widget.variant == TTabsBarVariant.tag) {
-      return BoxDecoration(
+      return ShapeDecoration(
+        shape: const StadiumBorder(),
         color: index == _currentIndex
             ? (widget.selectedTagBackgroundColor ?? context.tTheme.brandColor1)
             : (widget.tagBackgroundColor ?? context.tTheme.grayColor1),
-        borderRadius: BorderRadius.circular(_kTagHeight / 2),
       );
     }
     return null;
@@ -912,13 +912,11 @@ class _THorizontalTabBarState extends State<THorizontalTabBar> {
                           !widget.isScrollable
                       ? double.infinity
                       : null,
-                  height: widget.variant == TTabsBarVariant.tag
-                      ? _kTagHeight
+                  constraints: widget.variant == TTabsBarVariant.tag
+                      ? BoxConstraints(minHeight: context.tTheme.size10)
                       : null,
                   padding: widget.variant == TTabsBarVariant.tag
-                      ? const EdgeInsets.symmetric(
-                          horizontal: _kTagHorizontalPadding,
-                        )
+                      ? EdgeInsets.symmetric(horizontal: context.tTheme.spacer2)
                       : null,
                   decoration: _getContentDecorateInner(index),
                   child: widget.tabs[index],
@@ -1052,14 +1050,16 @@ class _THorizontalTabBarState extends State<THorizontalTabBar> {
             ).add(widget.padding ?? EdgeInsets.zero)
           : widget.padding;
       _scrollController ??= _TabBarScrollController(this);
-      tHorizontalTabBar = TInternalScrollScope(child: SingleChildScrollView(
-        dragStartBehavior: widget.dragStartBehavior,
-        scrollDirection: Axis.horizontal,
-        controller: _scrollController,
-        padding: effectivePadding,
-        physics: widget.physics,
-        child: tHorizontalTabBar,
-      ));
+      tHorizontalTabBar = TInternalScrollScope(
+        child: SingleChildScrollView(
+          dragStartBehavior: widget.dragStartBehavior,
+          scrollDirection: Axis.horizontal,
+          controller: _scrollController,
+          padding: effectivePadding,
+          physics: widget.physics,
+          child: tHorizontalTabBar,
+        ),
+      );
     } else if (widget.padding != null) {
       tHorizontalTabBar = Padding(
         padding: widget.padding!,
@@ -1529,14 +1529,16 @@ class _THorizontalTabBarViewState extends State<THorizontalTabBarView> {
     }());
     return NotificationListener<ScrollNotification>(
       onNotification: _handleScrollNotification,
-      child: TInternalScrollScope(child: PageView(
-        dragStartBehavior: widget.dragStartBehavior,
-        controller: _pageController,
-        physics: widget.physics == null
-            ? const PageScrollPhysics().applyTo(const ClampingScrollPhysics())
-            : const PageScrollPhysics().applyTo(widget.physics),
-        children: _childrenWithKey,
-      )),
+      child: TInternalScrollScope(
+        child: PageView(
+          dragStartBehavior: widget.dragStartBehavior,
+          controller: _pageController,
+          physics: widget.physics == null
+              ? const PageScrollPhysics().applyTo(const ClampingScrollPhysics())
+              : const PageScrollPhysics().applyTo(widget.physics),
+          children: _childrenWithKey,
+        ),
+      ),
     );
   }
 }

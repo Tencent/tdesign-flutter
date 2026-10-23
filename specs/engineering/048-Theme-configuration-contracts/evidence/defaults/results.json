@@ -1,0 +1,35 @@
+{
+  "originalHead": "af58482ed807dae1f3c052ec269dfd296831eb85",
+  "foundation": "590df49a6209d31978e70e2eb4ea26101c605a6f",
+  "originalTrackedFilesEqual": 3801,
+  "restoredGoldens": 98,
+  "sdks": {
+    "3.32.0": {
+      "componentTests": 565,
+      "exampleTests": 115,
+      "analyze": "passed --fatal-infos",
+      "apiAudit": "57 components / 370 declarations / 0 issues",
+      "coverage": {
+        "theme": "834/861 = 96.86%",
+        "badge": "300/307 = 97.72%",
+        "button": "542/546 = 99.27%",
+        "tag": "343/350 = 98.00%"
+      }
+    },
+    "3.47.7": {
+      "componentTests": 565,
+      "exampleTests": 115,
+      "analyze": "passed --fatal-infos",
+      "apiAudit": "57 components / 370 declarations / 0 issues",
+      "coverage": {
+        "theme": "830/861 = 96.40%",
+        "badge": "298/307 = 97.07%",
+        "button": "542/546 = 99.27%",
+        "tag": "343/350 = 98.00%"
+      }
+    }
+  },
+  "remoteCI": "Pending: retarget to develop after PR #1172 merges",
+  "historicalCI": "https://github.com/Tencent/tdesign-flutter/actions/runs/39055021982",
+  "scope": "Initial restoration checkpoint b374adc2 only; current follow-up results are in review-results.json"
+}

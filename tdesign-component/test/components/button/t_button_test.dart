@@ -3,10 +3,94 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:tdesign_flutter/src/components/loading/t_circle_indicator.dart';
 import 'package:tdesign_flutter/tdesign_flutter.dart';
 
+import '../../helpers/button_navbar_text_slots.dart';
+
+import '../../support/token_consumption_evidence.dart';
+
 /// TButton Widget 测试
 ///
 /// 覆盖所有公开 API 和关键行为路径，目标覆盖率 95%+。
 void main() {
+  registerButtonTextSlotTests();
+  _sizeIconComponentTokenTests();
+  testWidgets(
+    'base size token scales every size and preserves explicit styles',
+    (tester) async {
+      final token = TThemeData.defaultData().copyWith(
+        sizeMap: {'size13': 72, 'size12': 60, 'size10': 48, 'size9': 42},
+      );
+      for (final size in TButtonSize.values) {
+        await tester.pumpWidget(
+          MaterialApp(
+            theme: TThemeBuilder.light(token),
+            home: Scaffold(
+              body: TButton(
+                size: size,
+                onPressed: () {},
+                child: const Text('Scaled'),
+              ),
+            ),
+          ),
+        );
+        await tester.pumpAndSettle();
+        final button = tester.widget<ElevatedButton>(
+          find.byType(ElevatedButton),
+        );
+        final defaultHeight = [48, 40, 32, 28][size.index];
+        expect(
+          button.style!.minimumSize!.resolve({})!.height,
+          defaultHeight * 1.5,
+        );
+      }
+      await tester.pumpWidget(
+        MaterialApp(
+          theme: TThemeBuilder.light(token),
+          home: Scaffold(
+            body: TButton(
+              onPressed: () {},
+              style: const ButtonStyle(
+                minimumSize: WidgetStatePropertyAll(Size(80, 60)),
+                padding: WidgetStatePropertyAll(EdgeInsets.all(7)),
+              ),
+              child: const Text('Explicit'),
+            ),
+          ),
+        ),
+      );
+      await tester.pumpAndSettle();
+      final style = tester
+          .widget<ElevatedButton>(find.byType(ElevatedButton))
+          .style!;
+      expect(style.minimumSize!.resolve({}), const Size(80, 60));
+      expect(style.padding!.resolve({}), const EdgeInsets.all(7));
+    },
+  );
+  testWidgets('无关 size7 为零也不改变小按钮图标规格', (tester) async {
+    await tester.pumpWidget(
+      MaterialApp(
+        theme: TThemeBuilder.light(
+          TThemeData.defaultData().copyWith(sizeMap: {'size7': 0}),
+        ),
+        home: Scaffold(
+          body: TButton(
+            size: TButtonSize.small,
+            shape: TButtonShape.circle,
+            icon: const Icon(Icons.add),
+            onPressed: () {},
+          ),
+        ),
+      ),
+    );
+    await tester.pumpAndSettle();
+    final style = tester
+        .widget<ElevatedButton>(find.byType(ElevatedButton))
+        .style!;
+    expect(style.iconSize!.resolve({}), 18);
+    expect(style.padding!.resolve({}), const EdgeInsets.all(7));
+    expect(tester.takeException(), isNull);
+  });
+  buttonTokenConsumptionTests();
+  ghostSemanticTokenTests();
   gradientGeometryTests();
   partialStateOwnershipTests();
   nativeLayerThemeTests();
@@ -3050,5 +3134,554 @@ void gradientGeometryTests() {
         expect(paragraph.textScaler.scale(14), 28);
       }
     });
+  }
+}
+
+void buttonTokenConsumptionTests() {
+  for (final brightness in Brightness.values) {
+    for (final custom in [false, true]) {
+      for (final variant in TButtonVariant.values) {
+        testWidgets(
+          'token consumption button ${brightness.name} custom=$custom ${variant.name}',
+          (tester) async {
+            final token = evidenceTokens(brightness, custom: custom);
+            final dark = brightness == Brightness.dark;
+            for (final preset in TButtonColorPreset.values) {
+              final prefix = switch (preset) {
+                TButtonColorPreset.defaultTheme => 'Default',
+                TButtonColorPreset.primary => 'Primary',
+                TButtonColorPreset.danger => 'Danger',
+                TButtonColorPreset.light => 'Light',
+              };
+              final normal = switch (preset) {
+                TButtonColorPreset.defaultTheme => token.bgColorComponent,
+                TButtonColorPreset.primary => token.brandColor,
+                TButtonColorPreset.danger => token.errorColor,
+                TButtonColorPreset.light => token.brandColorLight,
+              };
+              final active = switch (preset) {
+                TButtonColorPreset.defaultTheme => token.bgColorComponentActive,
+                TButtonColorPreset.primary => token.brandColorActive,
+                TButtonColorPreset.danger => token.errorColorActive,
+                TButtonColorPreset.light => token.brandColorLightActive,
+              };
+              final disabled = switch (preset) {
+                TButtonColorPreset.defaultTheme =>
+                  token.bgColorComponentDisabled,
+                TButtonColorPreset.primary => token.brandColorDisabled,
+                TButtonColorPreset.danger => token.errorColorDisabled,
+                TButtonColorPreset.light => token.brandColorLight,
+              };
+              final ink = switch (preset) {
+                TButtonColorPreset.defaultTheme => token.textColorPrimary,
+                TButtonColorPreset.primary ||
+                TButtonColorPreset.light => token.brandColor,
+                TButtonColorPreset.danger => token.errorColor,
+              };
+              final disabledInk = switch (preset) {
+                TButtonColorPreset.defaultTheme => token.componentBorder,
+                TButtonColorPreset.primary ||
+                TButtonColorPreset.light => token.brandColorDisabled,
+                TButtonColorPreset.danger => token.errorColorDisabled,
+              };
+              for (final state in ['idle', 'pressed', 'disabled']) {
+                await tester.pumpWidget(
+                  evidenceHost(
+                    TButton(
+                      key: ValueKey('$preset-$state'),
+                      colorPreset: preset,
+                      variant: variant,
+                      onPressed: state == 'disabled' ? null : () {},
+                      child: const Text('token button'),
+                    ),
+                    brightness: brightness,
+                    token: token,
+                  ),
+                );
+                await tester.pumpAndSettle();
+                final gesture = state == 'pressed'
+                    ? await tester.startGesture(
+                        tester.getCenter(find.byType(TButton)),
+                      )
+                    : null;
+                await tester.pump(const Duration(milliseconds: 300));
+                await tester.pump(const Duration(milliseconds: 300));
+                final material = tester.widget<Material>(
+                  find
+                      .descendant(
+                        of: find.byType(TButton),
+                        matching: find.byType(Material),
+                      )
+                      .first,
+                );
+                final foreground = DefaultTextStyle.of(
+                  tester.element(find.text('token button')),
+                ).style.color;
+                final scenario =
+                    '${brightness.name}/custom=$custom/${variant.name}/${preset.name}/$state';
+                void check(
+                  String name,
+                  Object? value,
+                  Object? expected, {
+                  bool enforce = true,
+                }) => tokenObservation(
+                  name,
+                  scenario: scenario,
+                  actual: value,
+                  expected: expected,
+                  enforce: enforce,
+                );
+                final pressed = state == 'pressed';
+                final off = state == 'disabled';
+                switch (variant) {
+                  case TButtonVariant.fill:
+                    check(
+                      'button${prefix}${off
+                          ? 'DisabledBg'
+                          : pressed
+                          ? 'ActiveBgColor'
+                          : 'BgColor'}',
+                      material.color,
+                      off
+                          ? (preset == TButtonColorPreset.danger
+                                ? token.errorColor3
+                                : disabled)
+                          : pressed
+                          ? active
+                          : normal,
+                      enforce:
+                          !(off && preset == TButtonColorPreset.danger) &&
+                          (!pressed ||
+                              (preset != TButtonColorPreset.defaultTheme &&
+                                  preset != TButtonColorPreset.light)),
+                    );
+                    final expected = off
+                        ? switch (preset) {
+                            TButtonColorPreset.defaultTheme =>
+                              token.textColorDisabled,
+                            TButtonColorPreset.light =>
+                              token.brandColorDisabled,
+                            // Explicitly adjudicated in Spec048, not the old CSS alias.
+                            TButtonColorPreset.primary =>
+                              dark ? token.fontWhite4 : token.textColorAnti,
+                            TButtonColorPreset.danger => token.fontWhite1,
+                          }
+                        : (preset == TButtonColorPreset.defaultTheme ||
+                              preset == TButtonColorPreset.light)
+                        ? ink
+                        : token.textColorAnti;
+                    check(
+                      'button${prefix}${off ? 'DisabledColor' : 'Color'}',
+                      foreground,
+                      expected,
+                      enforce: !off || preset != TButtonColorPreset.danger,
+                    );
+                  case TButtonVariant.outline:
+                    if (pressed) {
+                      check(
+                        'button${prefix}OutlineActiveBgColor',
+                        material.color,
+                        preset == TButtonColorPreset.light
+                            ? token.brandColorLightActive
+                            : token.bgColorContainerActive,
+                      );
+                    } else if (!off && preset == TButtonColorPreset.light) {
+                      check(
+                        'buttonLightOutlineBgColor',
+                        material.color,
+                        token.brandColorLight,
+                      );
+                    }
+                    final border = (material.shape! as OutlinedBorder).side;
+                    final expectedBorder = off
+                        ? (preset == TButtonColorPreset.danger
+                              ? token.errorColor3
+                              : disabledInk)
+                        : preset == TButtonColorPreset.defaultTheme
+                        ? token.componentBorder
+                        : pressed
+                        ? (preset == TButtonColorPreset.danger
+                              ? token.errorColorActive
+                              : token.brandColorActive)
+                        : ink;
+                    check(
+                      'button${prefix}Outline${pressed
+                          ? 'ActiveBorderColor'
+                          : off
+                          ? 'DisabledColor'
+                          : 'BorderColor'}',
+                      border.color,
+                      expectedBorder,
+                      enforce: !(off && preset == TButtonColorPreset.danger),
+                    );
+                    check(
+                      'button${prefix}Outline${off ? 'DisabledColor' : 'Color'}',
+                      foreground,
+                      off
+                          ? (preset == TButtonColorPreset.danger
+                                ? token.errorColor3
+                                : disabledInk)
+                          : pressed && preset != TButtonColorPreset.defaultTheme
+                          ? expectedBorder
+                          : ink,
+                      enforce: !(off && preset == TButtonColorPreset.danger),
+                    );
+                    check('buttonBorderWidth', border.width, 1.0);
+                  case TButtonVariant.text:
+                    if (pressed) {
+                      check(
+                        'button${prefix}TextActiveBgColor',
+                        material.color,
+                        token.bgColorContainerActive,
+                      );
+                    }
+                    if (preset != TButtonColorPreset.defaultTheme) {
+                      if (!off) {
+                        check('button${prefix}TextColor', foreground, ink);
+                      }
+                      if (off && preset == TButtonColorPreset.primary) {
+                        check(
+                          'buttonPrimaryTextDisabledColor',
+                          foreground,
+                          token.brandColorDisabled,
+                        );
+                      }
+                      if (off && preset == TButtonColorPreset.danger) {
+                        // Report the frozen CSS target, without blessing the current discrepancy.
+                        check(
+                          'buttonDangerTextDisabledColor',
+                          foreground,
+                          token.fontWhite1,
+                          enforce: false,
+                        );
+                      }
+                    }
+                  case TButtonVariant.ghost:
+                    if (preset == TButtonColorPreset.light) {
+                      break;
+                    }
+                    final name = preset == TButtonColorPreset.defaultTheme
+                        ? 'buttonGhost'
+                        : 'buttonGhost$prefix';
+                    final expected = off
+                        ? token.fontWhite4
+                        : pressed
+                        ? (preset == TButtonColorPreset.defaultTheme
+                              ? token.fontWhite2
+                              : preset == TButtonColorPreset.primary
+                              ? token.brandColorActive
+                              : token.errorColorActive)
+                        : preset == TButtonColorPreset.defaultTheme
+                        ? token.textColorAnti
+                        : ink;
+                    check(
+                      off
+                          ? 'buttonGhostDisabledColor'
+                          : '$name${pressed ? 'HoverColor' : 'Color'}',
+                      foreground,
+                      expected,
+                      enforce: !pressed,
+                    );
+                    if (!pressed && !off) {
+                      check(
+                        '${name}BorderColor',
+                        (material.shape! as OutlinedBorder).side.color,
+                        expected,
+                      );
+                    }
+                }
+                await gesture?.up();
+                await tester.pumpAndSettle();
+              }
+            }
+          },
+        );
+      }
+      testWidgets(
+        'token consumption button geometry ${brightness.name} custom=$custom',
+        (tester) async {
+          final token = evidenceTokens(brightness, custom: custom);
+          for (final entry in const [
+            (TButtonSize.large, 'Large', 16.0, 24.0),
+            (TButtonSize.medium, 'Medium', 16.0, 24.0),
+            (TButtonSize.small, 'Small', 14.0, 22.0),
+            (TButtonSize.extraSmall, 'ExtraSmall', 14.0, 22.0),
+          ]) {
+            await tester.pumpWidget(
+              evidenceHost(
+                TButton(
+                  size: entry.$1,
+                  icon: const Icon(Icons.add),
+                  onPressed: () {},
+                  child: const Text('geometry'),
+                ),
+                brightness: brightness,
+                token: token,
+              ),
+            );
+            await tester.pumpAndSettle();
+            final material = tester.widget<Material>(
+              find
+                  .descendant(
+                    of: find.byType(TButton),
+                    matching: find.byType(Material),
+                  )
+                  .first,
+            );
+            final shape = material.shape! as RoundedRectangleBorder;
+            final text = DefaultTextStyle.of(
+              tester.element(find.text('geometry')),
+            ).style;
+            final scenario =
+                '${brightness.name}/custom=$custom/${entry.$1.name}';
+            tokenObservation(
+              'buttonBorderRadius',
+              scenario: scenario,
+              actual: shape.borderRadius.resolve(TextDirection.ltr).topLeft.x,
+              expected: token.radiusDefault,
+            );
+            tokenObservation(
+              'button${entry.$2}Font',
+              scenario: scenario,
+              actual:
+                  '${text.fontSize}/${text.height! * text.fontSize!}/${text.fontWeight}',
+              expected: custom
+                  ? (entry.$1 == TButtonSize.large ||
+                            entry.$1 == TButtonSize.medium
+                        ? '19.0/27.0/${FontWeight.w700}'
+                        : '17.0/25.0/${FontWeight.w700}')
+                  : '${entry.$3}/${entry.$4}/${FontWeight.w600}',
+            );
+            final iconRight = tester.getBottomRight(find.byIcon(Icons.add)).dx;
+            final textLeft = tester.getTopLeft(find.text('geometry')).dx;
+            tokenObservation(
+              'buttonIconSpacer',
+              scenario: scenario,
+              actual: textLeft - iconRight,
+              expected: token.spacer,
+              enforce: false,
+            );
+          }
+          await tester.pumpWidget(
+            evidenceHost(
+              TButton(
+                style: const ButtonStyle(
+                  backgroundColor: WidgetStatePropertyAll(Colors.lime),
+                  foregroundColor: WidgetStatePropertyAll(Colors.purple),
+                  shape: WidgetStatePropertyAll(
+                    RoundedRectangleBorder(
+                      borderRadius: BorderRadius.all(Radius.circular(17)),
+                    ),
+                  ),
+                ),
+                onPressed: () {},
+                child: const Text('instance'),
+              ),
+              brightness: brightness,
+              token: token,
+            ),
+          );
+          await tester.pumpAndSettle();
+          final material = tester.widget<Material>(
+            find
+                .descendant(
+                  of: find.byType(TButton),
+                  matching: find.byType(Material),
+                )
+                .first,
+          );
+          expect(material.color, Colors.lime);
+          expect(
+            (material.shape! as RoundedRectangleBorder).borderRadius,
+            const BorderRadius.all(Radius.circular(17)),
+          );
+          expect(
+            DefaultTextStyle.of(
+              tester.element(find.text('instance')),
+            ).style.color,
+            Colors.purple,
+          );
+        },
+      );
+    }
+  }
+}
+
+void ghostSemanticTokenTests() {
+  testWidgets(
+    'token consumption ghost semantic token and instance precedence',
+    (tester) async {
+      for (final brightness in Brightness.values) {
+        final base = TThemeData.defaultData();
+        final defaults = brightness == Brightness.dark ? base.dark! : base;
+        // Prove there is no default-theme pixel change.
+        expect(defaults.textColorAnti, defaults.fontWhite1);
+        final token = defaults.copyWith(
+          colorMap: {
+            'textColorAnti': Colors.teal,
+            'fontWhite1': Colors.orange,
+            'fontWhite4': Colors.grey,
+          },
+        );
+        for (final phase in ['enabled', 'disabled', 'instance']) {
+          await tester.pumpWidget(
+            evidenceHost(
+              TButton(
+                key: ValueKey('$brightness-$phase'),
+                variant: TButtonVariant.ghost,
+                onPressed: phase == 'disabled' ? null : () {},
+                style: phase == 'instance'
+                    ? const ButtonStyle(
+                        foregroundColor: WidgetStatePropertyAll(Colors.purple),
+                        side: WidgetStatePropertyAll(
+                          BorderSide(color: Colors.cyan, width: 2),
+                        ),
+                      )
+                    : null,
+                child: const Text('semantic ghost'),
+              ),
+              brightness: brightness,
+              token: token,
+            ),
+          );
+          await tester.pumpAndSettle();
+          final material = tester.widget<Material>(
+            find
+                .descendant(
+                  of: find.byType(TButton),
+                  matching: find.byType(Material),
+                )
+                .first,
+          );
+          final foreground = DefaultTextStyle.of(
+            tester.element(find.text('semantic ghost')),
+          ).style.color;
+          final side = (material.shape! as OutlinedBorder).side;
+          expect(
+            foreground,
+            phase == 'instance'
+                ? Colors.purple
+                : phase == 'disabled'
+                ? Colors.grey
+                : Colors.teal,
+          );
+          expect(
+            side.color,
+            phase == 'instance'
+                ? Colors.cyan
+                : phase == 'disabled'
+                ? Colors.grey
+                : Colors.teal,
+          );
+          expect(side.width, phase == 'instance' ? 2 : 1);
+        }
+      }
+    },
+  );
+}
+
+void _sizeIconComponentTokenTests() {
+  const configured = TButtonThemeData(
+    largeIconSize: 30,
+    mediumIconSize: 26,
+    smallIconSize: 22,
+    extraSmallIconSize: 21,
+  );
+  for (final brightness in Brightness.values) {
+    for (final gradient in [false, true]) {
+      testWidgets(
+        'per-size component icons $brightness gradient=$gradient preserve instance priority',
+        (tester) async {
+          for (final size in TButtonSize.values) {
+            Future<void> pump(
+              TButtonThemeData component, {
+              ButtonStyle? style,
+              bool iconOnly = false,
+            }) async {
+              final token = TThemeData.defaultData().copyWith(
+                sizeMap: {'size8': 28, 'size7': 23},
+              );
+              var theme = brightness == Brightness.light
+                  ? TThemeBuilder.light(token)
+                  : TThemeBuilder.dark(token);
+              theme = theme.mergeExtension(
+                component.copyWith(
+                  gradient: gradient
+                      ? const LinearGradient(colors: [Colors.red, Colors.blue])
+                      : null,
+                ),
+              );
+              await tester.pumpWidget(
+                MaterialApp(
+                  theme: theme,
+                  home: Scaffold(
+                    body: TButton(
+                      key: const ValueKey('sized-icon'),
+                      size: size,
+                      icon: const Icon(TIcons.add),
+                      shape: iconOnly
+                          ? TButtonShape.square
+                          : TButtonShape.rectangle,
+                      style: style,
+                      onPressed: () {},
+                      child: iconOnly ? null : const Text('icon'),
+                    ),
+                  ),
+                ),
+              );
+              await tester.pumpAndSettle();
+            }
+
+            double iconSize() => IconTheme.of(
+              tester.element(
+                find
+                    .descendant(
+                      of: find.byType(TButton),
+                      matching: find.byType(Icon),
+                    )
+                    .first,
+              ),
+            ).size!;
+            await pump(const TButtonThemeData());
+            expect(iconSize(), [28, 23, 18, 18][size.index]);
+            final element = tester.element(find.byType(TButton));
+            await pump(configured);
+            expect(iconSize(), [30, 26, 22, 21][size.index]);
+            expect(tester.element(find.byType(TButton)), same(element));
+            await pump(configured, iconOnly: true);
+            expect(iconSize(), [30, 26, 22, 21][size.index]);
+            final materialRect = tester.getRect(
+              find
+                  .descendant(
+                    of: find.byType(TButton),
+                    matching: find.byType(Material),
+                  )
+                  .first,
+            );
+            final iconRect = tester.getRect(
+              find
+                  .descendant(
+                    of: find.byType(TButton),
+                    matching: find.byType(Icon),
+                  )
+                  .first,
+            );
+            expect(iconRect.center.dx, closeTo(materialRect.center.dx, .01));
+            expect(iconRect.center.dy, closeTo(materialRect.center.dy, .01));
+            await pump(
+              configured,
+              style: ButtonStyle(
+                iconSize: WidgetStateProperty.resolveWith(
+                  (states) => states.contains(WidgetState.disabled) ? 15 : 16,
+                ),
+              ),
+            );
+            expect(iconSize(), 16);
+            await pump(const TButtonThemeData());
+            expect(iconSize(), [28, 23, 18, 18][size.index]);
+          }
+        },
+      );
+    }
   }
 }

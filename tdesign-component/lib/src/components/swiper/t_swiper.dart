@@ -7,6 +7,7 @@ import '../../theme/t_colors.dart';
 import '../../theme/t_fonts.dart';
 import '../../theme/t_internal_material.dart';
 import '../../theme/t_radius.dart';
+import '../../theme/t_sizes.dart';
 import '../../theme/t_theme.dart';
 import '../text/t_text_styled.dart';
 import 't_swiper_theme_data.dart';
@@ -832,14 +833,16 @@ class _TSwiperState extends State<TSwiper> with WidgetsBindingObserver {
             context.tTheme.textColorPlaceholder,
         borderRadius: BorderRadius.circular(context.tTheme.radiusRound),
       ),
-      child: SizedBox(
-        height: 24,
+      child: ConstrainedBox(
+        constraints: BoxConstraints(minHeight: context.tTheme.size8),
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 8),
           child: Center(
             widthFactor: 1,
+            heightFactor: 1,
             child: TTextStyled(
               '${_index + 1}/$_count',
+              centerLeading: true,
               style: defaultStyle.merge(theme?.fractionStyle),
             ),
           ),

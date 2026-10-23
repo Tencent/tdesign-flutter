@@ -13,7 +13,7 @@
 | loading | bool | false | 是否处于加载状态；加载时显示指示器并禁用交互。 | 否 |
 | onChanged | ValueChanged&lt;bool&gt;? | - | 开关状态变更回调；为 null 时禁用。 | 否 |
 | openText | String? | - | text 形态的开启文案。 null 时显示“开”；仅开启态文本内容形态使用。 | 否 |
-| size | TSwitchSize? | - | 开关尺寸；未传时为 `TSwitchSize.medium`。 | 否 |
+| size | TSwitchSize? | - | 开关尺寸；未传时以 `TSwitchSize.medium` 为最小尺寸，文字形态可随内容增长。 显式预设尺寸保持固定，滑块文字适配其内容槽。 | 否 |
 | value | bool | - | 受控开关状态。 | 是 |
 | variant | TSwitchVariant? | - | 开关内容形态；未传时为 `TSwitchVariant.filled`。 | 否 |
 

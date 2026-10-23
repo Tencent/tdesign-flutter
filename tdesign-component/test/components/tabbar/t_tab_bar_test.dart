@@ -1,7 +1,36 @@
+import 'dart:io';
+
+import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:tdesign_flutter/tdesign_flutter.dart';
 
+import '../../helpers/custom_text_slot_test_helpers.dart';
+import '../../helpers/text_slot_regression.dart';
+
 void main() {
+  registerNativeParagraphContractTests(
+    'TabBar custom menu',
+    (child) => TTabBarMenuItem(value: 'value', itemWidget: child),
+    reset: false,
+  );
+  _textSlotRegression();
+  setUpAll(() async {
+    final flutterBin = File(
+      Platform.resolvedExecutable,
+    ).parent.parent.parent.parent.parent;
+    await (FontLoader('Roboto')..addFont(
+          File(
+            '${flutterBin.path}/cache/artifacts/material_fonts/Roboto-Regular.ttf',
+          ).readAsBytes().then(ByteData.sublistView),
+        ))
+        .load();
+    await (FontLoader('TDesignGoldenCJK')..addFont(
+          File(
+            'example/test/fonts/TDesignGoldenCJK-Regular.otf',
+          ).readAsBytes().then(ByteData.sublistView),
+        ))
+        .load();
+  });
   Widget wrapWithTheme(
     Widget child, {
     TTabBarThemeData? tabBarTheme,
@@ -10,7 +39,15 @@ void main() {
     return MaterialApp(
       theme: ThemeData(
         extensions: [
-          themeData ?? TThemeData.defaultData(),
+          themeData ??
+              TThemeData.defaultData().copyWith(
+                fontFamilyMap: {
+                  'fontFamily': FontFamily(
+                    fontFamily: 'Roboto',
+                    fallback: ['TDesignGoldenCJK'],
+                  ),
+                },
+              ),
           if (tabBarTheme != null) tabBarTheme,
         ],
       ),
@@ -1563,4 +1600,324 @@ void main() {
       expect(find.byType(InkWell), findsNothing);
     });
   });
+}
+
+void _textSlotRegression() {
+  testWidgets('slot tabbar custom auto height preserves explicit popup width', (
+    tester,
+  ) async {
+    await tester.pumpWidget(
+      MaterialApp(
+        home: Scaffold(
+          body: Align(
+            alignment: Alignment.bottomCenter,
+            child: TTabBar(
+              type: TTabBarType.doubleLayer,
+              value: 0,
+              useSafeArea: false,
+              onChanged: (_) {},
+              navigationTabs: [
+                TTabBarItemConfig(
+                  tabText: 'open',
+                  onTap: () {},
+                  popUpButtonConfig: TTabBarPopUpBtnConfig(
+                    onChanged: (_) {},
+                    popUpDialogConfig: TTabBarPopUpShapeConfig(popUpWidth: 790),
+                    items: const [
+                      TTabBarMenuItem(
+                        value: 'custom',
+                        itemWidget: TText('custom'),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+    await tester.tap(find.text('open'));
+    await tester.pumpAndSettle();
+    expect(tester.getSize(find.byType(TTabBarMenuItem)).width, 790);
+    expect(tester.takeException(), isNull);
+  });
+
+  testWidgets('slot tabbar adaptive row responds to custom content updates', (
+    tester,
+  ) async {
+    late StateSetter update;
+    var height = 30.0;
+    await tester.pumpWidget(
+      MaterialApp(
+        home: Scaffold(
+          body: Align(
+            alignment: Alignment.bottomCenter,
+            child: TTabBar(
+              type: TTabBarType.doubleLayer,
+              value: 0,
+              useSafeArea: false,
+              onChanged: (_) {},
+              navigationTabs: [
+                TTabBarItemConfig(
+                  tabText: 'open',
+                  onTap: () {},
+                  popUpButtonConfig: TTabBarPopUpBtnConfig(
+                    onChanged: (_) {},
+                    items: [
+                      TTabBarMenuItem(
+                        value: 'dynamic',
+                        itemWidget: StatefulBuilder(
+                          builder: (context, setState) {
+                            update = setState;
+                            return SizedBox(
+                              height: height,
+                              child: const TText('dynamic'),
+                            );
+                          },
+                        ),
+                      ),
+                      const TTabBarMenuItem(value: 'plain'),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+    await tester.tap(find.text('open'));
+    await tester.pumpAndSettle();
+    expect(tester.getSize(find.byType(TTabBarMenuItem).first).height, 48);
+    update(() => height = 120);
+    await tester.pumpAndSettle();
+    expect(tester.getSize(find.byType(TTabBarMenuItem).first).height, 120);
+    expect(tester.getSize(find.byType(TTabBarMenuItem).last).height, 120);
+    update(() => height = 30);
+    await tester.pumpAndSettle();
+    expect(tester.getSize(find.byType(TTabBarMenuItem).first).height, 48);
+    expect(tester.getSize(find.byType(TTabBarMenuItem).last).height, 48);
+    expect(tester.takeException(), isNull);
+  });
+
+  for (final dark in [false, true]) {
+    for (final scale in [1.0, 2.0]) {
+      for (final wrapper in ['direct', 'row', 'padding', 'builder']) {
+        testWidgets('slot tabbar $wrapper dark=$dark scale=$scale', (
+          tester,
+        ) async {
+          await tester.pumpWidget(
+            slotHost(
+              Column(
+                children: [
+                  const TTabBarMenuItem(value: 'reference'),
+                  for (final variant in [
+                    'default',
+                    'native',
+                    'nativeLocal',
+                    'nativeExplicit',
+                    'partial',
+                    'explicit',
+                    'local',
+                    'paragraph',
+                  ])
+                    TTabBarMenuItem(
+                      value: variant,
+                      itemWidget: slotContent(variant, variant, wrapper),
+                    ),
+                ],
+              ),
+              dark,
+              scale,
+            ),
+          );
+          for (final variant in [
+            'default',
+            'native',
+            'nativeLocal',
+            'nativeExplicit',
+            'partial',
+            'explicit',
+            'local',
+            'paragraph',
+          ]) {
+            expectSlotStyle(tester, variant, 'reference', variant);
+          }
+          expect(tester.takeException(), isNull);
+        });
+      }
+    }
+  }
+  testWidgets('slot tabbar shared theme overrides defaults', (tester) async {
+    await tester.pumpWidget(
+      slotHost(
+        const Column(
+          children: [
+            TTabBarMenuItem(value: 'reference'),
+            TTabBarMenuItem(value: 'subject', itemWidget: TText('subject')),
+          ],
+        ),
+        false,
+        1,
+        outerStyle: const TextStyle(fontSize: 23, color: Colors.teal),
+      ),
+    );
+    expectSlotStyle(tester, 'subject', 'reference', 'default');
+    expect(slotParagraph(tester, 'subject').text.style!.fontSize, 23);
+  });
+  for (final scale in [1.0, 2.0]) {
+    for (final fixed in [false, true]) {
+      testWidgets(
+        'slot tabbar actual custom height scale=$scale fixed=$fixed',
+        (tester) async {
+          String? selected;
+          final key = GlobalKey();
+          await tester.pumpWidget(
+            MaterialApp(
+              theme: TThemeBuilder.light(TThemeData.defaultData()),
+              builder: (context, child) => MediaQuery(
+                data: MediaQuery.of(
+                  context,
+                ).copyWith(textScaler: TextScaler.linear(scale)),
+                child: child!,
+              ),
+
+              home: MediaQuery(
+                data: MediaQueryData(textScaler: TextScaler.linear(scale)),
+                child: Scaffold(
+                  body: Align(
+                    alignment: Alignment.bottomCenter,
+                    child: TTabBar(
+                      type: TTabBarType.doubleLayer,
+                      value: 0,
+                      useSafeArea: false,
+                      navigationTabs: [
+                        TTabBarItemConfig(
+                          tabText: 'open',
+                          onTap: () {},
+                          popUpButtonConfig: TTabBarPopUpBtnConfig(
+                            onChanged: (value) => selected = value,
+                            popUpDialogConfig: TTabBarPopUpShapeConfig(
+                              popUpWidth: 160,
+                              popUpItemHeight: fixed ? 48 : null,
+                            ),
+                            items: [
+                              TTabBarMenuItem(
+                                value: 'custom',
+                                itemWidget: Padding(
+                                  padding: const EdgeInsets.all(8),
+                                  child: Builder(
+                                    builder: (context) => TText(
+                                      'First line\nSecond line\nThird line',
+                                      key: key,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                              const TTabBarMenuItem(value: 'plain'),
+                            ],
+                          ),
+                        ),
+                      ],
+                      onChanged: (_) {},
+                    ),
+                  ),
+                ),
+              ),
+            ),
+          );
+          await tester.tap(find.text('open'));
+          await tester.pumpAndSettle();
+          final rows = find.byType(TTabBarMenuItem);
+          final first = tester.getSize(rows.first).height;
+          final second = tester.getSize(rows.last).height;
+          expect(first, second);
+          if (fixed) {
+            expect(first, 48);
+          } else {
+            expect(first, greaterThan(48));
+            expect(
+              tester.getSize(find.byKey(key)).height + 16,
+              lessThanOrEqualTo(first + 0.01),
+            );
+          }
+          expect(tester.takeException(), isNull);
+          await tester.tap(find.text('plain'));
+          await tester.pumpAndSettle();
+          expect(selected, 'plain');
+          expect(find.byType(TTabBarMenuItem), findsNothing);
+        },
+      );
+    }
+  }
+  testWidgets(
+    'slot tabbar tall custom menu scrolls without duplicating state',
+    (tester) async {
+      var mounts = 0;
+      await tester.pumpWidget(
+        MaterialApp(
+          home: Scaffold(
+            body: Align(
+              alignment: Alignment.bottomCenter,
+              child: TTabBar(
+                type: TTabBarType.doubleLayer,
+                value: 0,
+                useSafeArea: false,
+                onChanged: (_) {},
+                navigationTabs: [
+                  TTabBarItemConfig(
+                    tabText: 'open',
+                    onTap: () {},
+                    popUpButtonConfig: TTabBarPopUpBtnConfig(
+                      onChanged: (_) {},
+                      items: [
+                        TTabBarMenuItem(
+                          value: 'tall',
+                          itemWidget: _SlotMountProbe(onMount: () => mounts++),
+                        ),
+                        const TTabBarMenuItem(value: 'last'),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ),
+      );
+      await tester.tap(find.text('open'));
+      await tester.pumpAndSettle();
+      expect(mounts, 1);
+      final scroll = find.byType(SingleChildScrollView);
+      expect(scroll, findsOneWidget);
+      expect(tester.getTopLeft(scroll).dy, greaterThanOrEqualTo(0));
+      expect(tester.getBottomLeft(scroll).dy, lessThanOrEqualTo(600));
+      await tester.drag(scroll, const Offset(0, -1000));
+      await tester.pumpAndSettle();
+      expect(tester.takeException(), isNull);
+      await tester.tap(find.text('last'));
+      await tester.pumpAndSettle();
+      expect(find.byType(TTabBarMenuItem), findsNothing);
+    },
+  );
+}
+
+class _SlotMountProbe extends StatefulWidget {
+  const _SlotMountProbe({required this.onMount});
+  final VoidCallback onMount;
+  @override
+  State<_SlotMountProbe> createState() => _SlotMountProbeState();
+}
+
+class _SlotMountProbeState extends State<_SlotMountProbe> {
+  @override
+  void initState() {
+    super.initState();
+    widget.onMount();
+  }
+
+  @override
+  Widget build(BuildContext context) =>
+      const SizedBox(height: 400, child: Text('tall'));
 }

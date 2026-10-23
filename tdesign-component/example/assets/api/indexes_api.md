@@ -55,9 +55,9 @@
 | activeIndex | ValueNotifier&lt;String&gt; | - | 选中索引 | 是 |
 | builderIndex | Widget Function(BuildContext context, String index, bool isActive)? | - | 索引文本自定义构建，包括索引激活左侧提示 | 否 |
 | indexList | List&lt;String&gt; | - | 索引字符列表，需显式传入实际展示的索引序列。本组件不自带默认值；通常由 TIndexes 装配并透传（TIndexes 未指定时默认使用 A-Z） | 是 |
-| indexListMaxHeight | double | 0.8 | 索引列表最大高度（父容器高度的百分比，默认0.8） | 否 |
+| indexListMaxHeight | double | 0.8 | 索引列表最大高度（父容器高度的百分比，默认0.8）。 超过该高度时竖向滚动；点击仍选中，未溢出时可拖动选中。 | 否 |
 | key | Key? | - | 组件标识，用于区分或保留组件状态。 | 否 |
-| onSelect | void Function(String newIndex, String oldIndex) | - | 用户点击或拖动侧边栏、激活索引发生变化时触发 | 是 |
+| onSelect | void Function(String newIndex, String oldIndex) | - | 用户点击或在未溢出时拖动侧边栏、激活索引发生变化时触发。 溢出索引条的滚动不会触发选择回调。 | 是 |
 
 
 ### StickyHeaderController
@@ -259,7 +259,7 @@ Creates an element that uses the given widget as its configuration.
 | capsuleMargin | double? | - | 胶囊锚点的水平外边距。 | 否 |
 | indexColor | Color? | - | 普通索引文字颜色。 | 否 |
 | indexFont | Font? | - | 普通索引字体。 | 否 |
-| indexItemSize | double? | - | 单个索引的尺寸。 | 否 |
+| indexItemSize | double? | - | 单个索引的尺寸；显式值保持固定，默认至少 20 并随内置文字自然行高增长。 | 否 |
 | indexItemSpacing | double? | - | 相邻索引之间的距离。 | 否 |
 | indexListMaxHeight | double? | - | 索引列表最大高度占父容器高度的比例。 | 否 |
 | sidebarRight | double? | - | 侧栏距容器右侧的距离。 | 否 |
@@ -268,4 +268,4 @@ Creates an element that uses the given widget as its configuration.
 | tipFont | Font? | - | 按压提示字体。 | 否 |
 | tipGap | double? | - | 按压提示与索引之间的距离。 | 否 |
 | tipMaxWidth | double? | - | 按压提示的最大宽度。 | 否 |
-| tipSize | double? | - | 按压提示的最小尺寸。 | 否 |
+| tipSize | double? | - | 按压提示的最小尺寸；显式值保持固定，默认可随内置文字自然行高增长。 | 否 |

@@ -71,8 +71,8 @@
 | 名称 | 类型 | 默认值 | 说明 | 必传 |
 | --- | --- | --- | --- | --- |
 | content | String? | - | 内容 | 否 |
-| customContent | Widget? | - | 自定义内容 | 否 |
-| customTitle | Widget? | - | 自定义标题 | 否 |
+| customContent | Widget? | - | 自定义说明；优先于 content。 子树默认使用当前方向的说明文字样式，不强制内置行数/省略。 显式文字样式和内容内部更近的局部文字主题优先。 | 否 |
+| customTitle | Widget? | - | 自定义标题；优先于 title。 子树默认使用当前方向及步骤状态的标题文字样式，不强制内置行数/省略。 显式文字样式和内容内部更近的局部文字主题优先。 | 否 |
 | errorIcon | IconData? | - | 失败图标 | 否 |
 | icon | IconData? | - | 步骤图标；未设置时使用数字或状态图标。 | 否 |
 | title | String? | - | 标题 | 否 |

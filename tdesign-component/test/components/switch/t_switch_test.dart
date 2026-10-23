@@ -5,7 +5,10 @@ import 'package:tdesign_flutter/src/components/switch/t_cupertino_switch.dart';
 import 'package:tdesign_flutter/src/components/switch/t_switch_resolve.dart';
 import 'package:tdesign_flutter/tdesign_flutter.dart';
 
+import '../../support/token_consumption_evidence.dart';
+
 void main() {
+  switchTokenConsumptionTests();
   Widget wrap(
     Widget child, {
     TSwitchThemeData? switchTheme,
@@ -24,6 +27,46 @@ void main() {
       ),
     );
   }
+
+  testWidgets('设计高度 token 独立于轨道宽度，实际绘制和拖动同步更新', (tester) async {
+    final tokens = ValueNotifier(TThemeData.defaultData());
+    bool? changed;
+    await tester.pumpWidget(
+      ValueListenableBuilder<TThemeData>(
+        valueListenable: tokens,
+        builder: (context, value, child) => MaterialApp(
+          themeAnimationDuration: Duration.zero,
+          theme: TThemeBuilder.light(value),
+          home: Scaffold(
+            body: Center(
+              child: TSwitch(
+                value: true,
+                size: TSwitchSize.medium,
+                onChanged: (value) => changed = value,
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
+    final original = tester.getRect(find.byType(TCupertinoSwitch));
+    expect(original.size, const Size(45, 28));
+    tokens.value = tokens.value.copyWith(sizeMap: {'size9': 36, 'size8': 81});
+    await tester.pumpAndSettle();
+    final updated = tester.getRect(find.byType(TCupertinoSwitch));
+    expect(updated.width, closeTo(original.width, 0.001));
+    expect(updated.height, closeTo(36, 0.001));
+    expect(tester.getSize(find.byType(TSwitch)), const Size(45, 36));
+    await tester.drag(find.byType(TSwitch), const Offset(-50, 0));
+    await tester.pumpAndSettle();
+    expect(changed, false);
+    tokens.value = tokens.value.copyWith(sizeMap: {'size9': 0});
+    await tester.pumpAndSettle();
+    expect(tester.getSize(find.byType(TSwitch)).height, 0);
+    expect(tester.takeException(), isNull);
+    await tester.pumpWidget(const SizedBox());
+    tokens.dispose();
+  });
 
   group('TSwitch v1 controlled behavior', () {
     testWidgets('renders controlled values and reports the next value', (
@@ -658,3 +701,232 @@ void main() {
 }
 
 void _noop(bool _) {}
+
+void switchTokenConsumptionTests() {
+  for (final brightness in Brightness.values) {
+    for (final custom in [false, true]) {
+      testWidgets('token consumption switch ${brightness.name} custom=$custom', (
+        tester,
+      ) async {
+        final token = evidenceTokens(brightness, custom: custom);
+        final dark = brightness == Brightness.dark;
+        for (final enabled in [true, false]) {
+          for (final value in [false, true]) {
+            await tester.pumpWidget(
+              evidenceHost(
+                TSwitch(
+                  key: ValueKey('$enabled-$value'),
+                  value: value,
+                  onChanged: enabled ? _noop : null,
+                ),
+                brightness: brightness,
+                token: token,
+              ),
+            );
+            await tester.pumpAndSettle();
+            final control = tester.widget<TCupertinoSwitch>(
+              find.byType(TCupertinoSwitch),
+            );
+            final scenario =
+                '${brightness.name}/custom=$custom/enabled=$enabled/value=$value';
+            tokenObservation(
+              enabled ? 'switchCheckedColor' : 'switchCheckedDisabledColor',
+              scenario: scenario,
+              actual: control.activeColor,
+              expected: enabled ? token.brandColor : token.brandColorDisabled,
+            );
+            tokenObservation(
+              enabled ? 'switchUncheckedColor' : 'switchUncheckedDisabledColor',
+              scenario: scenario,
+              actual: control.trackColor,
+              expected: enabled
+                  ? token.bgColorSecondaryContainerActive
+                  : token.bgColorComponentDisabled,
+            );
+            if (!enabled) {
+              tokenObservation(
+                'switchDotDisabledColor',
+                scenario: scenario,
+                actual: control.thumbColor,
+                expected: dark ? token.fontWhite2 : token.fontWhite1,
+              );
+            }
+            expect(control.disabledOpacity, 1);
+          }
+        }
+        for (final variant in [TSwitchVariant.text, TSwitchVariant.icon]) {
+          for (final value in [false, true]) {
+            await tester.pumpWidget(
+              evidenceHost(
+                TSwitch(value: value, variant: variant, onChanged: _noop),
+                brightness: brightness,
+                token: token,
+              ),
+            );
+            await tester.pumpAndSettle();
+            final actual = variant == TSwitchVariant.text
+                ? tester.widget<Text>(find.text(value ? '开' : '关')).style?.color
+                : tester
+                      .widget<Icon>(
+                        find.byIcon(value ? TIcons.check : TIcons.close),
+                      )
+                      .color;
+            tokenObservation(
+              value ? 'switchLabelCheckedColor' : 'switchLabelColor',
+              scenario:
+                  '${brightness.name}/custom=$custom/$variant/value=$value',
+              actual: actual,
+              expected: value
+                  ? token.brandColor
+                  : token.bgColorSecondaryContainerActive,
+              enforce: value,
+            );
+          }
+        }
+        await tester.pumpWidget(
+          evidenceHost(
+            const TSwitch(value: true, loading: true),
+            brightness: brightness,
+            token: token,
+          ),
+        );
+        await tester.pump(const Duration(milliseconds: 300));
+        tokenObservation(
+          'switchLoadingColor',
+          scenario: '${brightness.name}/custom=$custom',
+          actual: tester
+              .widget<TCircleIndicator>(find.byType(TCircleIndicator))
+              .color,
+          expected: dark ? token.fontWhite1 : token.brandColor,
+        );
+        await tester.pumpWidget(
+          evidenceHost(
+            const TSwitch(
+              value: true,
+              variant: TSwitchVariant.text,
+              onChanged: _noop,
+            ),
+            brightness: brightness,
+            token: token,
+            extensions: const [
+              TSwitchThemeData(
+                trackOnColor: Colors.lime,
+                trackOffColor: Colors.purple,
+                thumbContentOnColor: Colors.cyan,
+              ),
+            ],
+          ),
+        );
+        await tester.pumpAndSettle();
+        final control = tester.widget<TCupertinoSwitch>(
+          find.byType(TCupertinoSwitch),
+        );
+        expect(control.activeColor, Colors.lime);
+        expect(control.trackColor, Colors.purple);
+        expect(tester.widget<Text>(find.text('开')).style?.color, Colors.cyan);
+      });
+    }
+    testWidgets('token consumption switch geometry ${brightness.name}', (
+      tester,
+    ) async {
+      final token = evidenceTokens(brightness, custom: false);
+      for (final entry in const [
+        (TSwitchSize.medium, '', 45.0, 28.0, 22.0, 18.0, 20.0, 14.0),
+        (TSwitchSize.large, 'Large', 52.0, 32.0, 26.0, 22.0, 24.0, 16.0),
+        (TSwitchSize.small, 'Small', 39.0, 24.0, 18.0, 14.0, 16.0, 12.0),
+      ]) {
+        for (final value in [false, true]) {
+          for (final variant in TSwitchVariant.values) {
+            await tester.pumpWidget(
+              evidenceHost(
+                TSwitch(
+                  key: ValueKey('$entry-$value-$variant'),
+                  value: value,
+                  size: entry.$1,
+                  variant: variant,
+                  onChanged: _noop,
+                ),
+                brightness: brightness,
+                token: token,
+              ),
+            );
+            await tester.pumpAndSettle();
+            final finder = find.byWidgetPredicate(
+              (widget) =>
+                  widget.runtimeType.toString() ==
+                  '_TCupertinoSwitchRenderObjectWidget',
+            );
+            final dynamic render = tester.renderObject(finder);
+            final scale = tester.getSize(find.byType(TSwitch)).height / 28;
+            final scenario =
+                '${brightness.name}/${entry.$1.name}/value=$value/${variant.name}';
+            tokenObservation(
+              'switch${entry.$2}Width',
+              scenario: scenario,
+              actual: tester.getRect(finder).width,
+              expected: entry.$3,
+              enforce: entry.$1 == TSwitchSize.medium,
+            );
+            tokenObservation(
+              'switch${entry.$2}Height',
+              scenario: scenario,
+              actual: tester.getSize(find.byType(TSwitch)).height,
+              expected: entry.$4,
+            );
+            expect(
+              render,
+              paints..rrect(
+                rrect: RRect.fromRectAndRadius(
+                  const Rect.fromLTWH(0, 0, 45, 28),
+                  const Radius.circular(14),
+                ),
+              ),
+            );
+            tokenObservation(
+              'switch${entry.$2}Radius',
+              scenario: scenario,
+              actual: tester.getRect(finder).height / 2,
+              expected: entry.$4 / 2,
+            );
+            // Reading the live RenderBox exposes the painted thumb radius, not a resolver copy.
+            final actualDot = (render.thumbRadius as double) * 2 * scale;
+            final plain = !value && variant == TSwitchVariant.filled;
+            tokenObservation(
+              'switchDot${plain ? 'Plain' : ''}${entry.$2}Size',
+              scenario: scenario,
+              actual: actualDot,
+              expected: plain ? entry.$6 : entry.$5,
+              enforce: !plain && entry.$1 == TSwitchSize.medium,
+            );
+            if (variant == TSwitchVariant.icon) {
+              final icon = find.byIcon(value ? TIcons.check : TIcons.close);
+              final actualSize = tester.getRect(icon).width;
+              tokenObservation(
+                'switchIcon${entry.$2}Size',
+                scenario: scenario,
+                actual: actualSize,
+                expected: entry.$7,
+                enforce: false,
+              );
+            }
+            if (variant == TSwitchVariant.text) {
+              final text = tester.widget<Text>(find.text(value ? '开' : '关'));
+              tokenObservation(
+                'switchLabel${entry.$2}FontSize',
+                scenario: scenario,
+                actual:
+                    text.style!.fontSize! *
+                    tester.getRect(find.text(value ? '开' : '关')).height /
+                    tester
+                        .renderObject<RenderBox>(find.text(value ? '开' : '关'))
+                        .size
+                        .height,
+                expected: entry.$8,
+              );
+            }
+          }
+        }
+      }
+    });
+  }
+}

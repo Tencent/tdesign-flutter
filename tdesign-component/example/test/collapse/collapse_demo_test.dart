@@ -22,7 +22,7 @@ void main() {
   testWidgets('实例顺序和初始状态与设计稿一致', (tester) async {
     await pumpFullDemoPage(tester, collapseDemoSpec, ThemeMode.light);
     final page = tester.widget<ExamplePage>(find.byType(ExamplePage));
-    expect(page.showTestModule, isFalse);
+    expect(page.showTestModule, isTrue);
     expect(page.children.map((module) => module.title), ['组件类型', '组件样式']);
     expect(page.children[0].children.map((item) => item.desc), [
       '基础折叠面板',
@@ -30,15 +30,14 @@ void main() {
       '手风琴式',
     ]);
 
-    final collapses = tester.widgetList<TCollapse>(
-      find.byWidgetPredicate((widget) => widget is TCollapse),
-    ).toList();
+    final collapses = tester
+        .widgetList<TCollapse>(
+          find.byWidgetPredicate((widget) => widget is TCollapse),
+        )
+        .toList();
     expect(collapses, hasLength(4));
     expect(collapses[0].value, ['basic']);
-    expect(
-      collapses[1].children.single.trailingBuilder,
-      isNotNull,
-    );
+    expect(collapses[1].children.single.trailingBuilder, isNotNull);
     final accordionCollapse = tester.widget<TCollapse>(
       find.byWidgetPredicate(
         (widget) =>

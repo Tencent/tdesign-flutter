@@ -1,4 +1,4 @@
-name: test-build
+name: CI / Validate
 
 on:
   pull_request:
@@ -17,8 +17,26 @@ concurrency:
   cancel-in-progress: ${{ github.ref_name != 'develop' }}
 
 jobs:
+  # 各平台复用同次运行生成的资源，避免矩阵内重复生成。
+  prepare-demo:
+    uses: ./.github/workflows/prepare-demo.yml
+
+  # PR 的 3.32.0 APK 由预览流程提供；develop 推送仍验证双版本。
+  apk:
+    name: Build / Android / Flutter ${{ matrix.flutter-version }}
+    needs: prepare-demo
+    strategy:
+      fail-fast: false
+      matrix:
+        flutter-version: ${{ fromJSON(github.event_name == 'pull_request' && '["latest"]' || '["3.32.0", "latest"]') }}
+    uses: ./.github/workflows/build-apk.yml
+    with:
+      flutter-version: ${{ matrix.flutter-version }}
+      version: ${{ needs.prepare-demo.outputs.version }}
+      build-number: ${{ needs.prepare-demo.outputs.build-number }}
+
   analyze:
-    name: analyze (flutter ${{ matrix.flutter-version }})
+    name: Analyze / Flutter ${{ matrix.flutter-version }}
     strategy:
       fail-fast: false
       matrix:
@@ -50,14 +68,21 @@ jobs:
         working-directory: ./tdesign-component
         run: dart run tool/audit_api_docs.dart
 
-  test:
-    name: test (flutter ${{ matrix.flutter-version }})
+  # 三类测试分别使用独立 runner，复用配置并保留逐组件覆盖率检查。
+  regression:
+    name: Tests / ${{ matrix.suite }} / Flutter ${{ matrix.flutter-version }}${{ matrix.shard && format(' / group {0} of 2', matrix.shard) || '' }}
     strategy:
       fail-fast: false
       matrix:
+        suite: [examples, tooling]
         flutter-version:
           - 3.32.0
           - latest
+        include:
+          - {suite: components, flutter-version: '3.32.0', shard: 1}
+          - {suite: components, flutter-version: '3.32.0', shard: 2}
+          - {suite: components, flutter-version: latest, shard: 1}
+          - {suite: components, flutter-version: latest, shard: 2}
 
     runs-on: ubuntu-latest
     steps:
@@ -76,40 +101,93 @@ jobs:
         run: flutter pub get ${{ runner.debug && '--verbose' || '' }}
 
       - name: Install example dependencies
+        if: matrix.suite == 'examples'
         working-directory: ./tdesign-component/example
         run: flutter pub get ${{ runner.debug && '--verbose' || '' }}
 
       - name: Run component regression tests with coverage
+        if: matrix.suite == 'components'
         working-directory: ./tdesign-component
-        run: dart run tool/run_component_regression.dart
+        run: dart run tool/run_component_regression.dart --shard=${{ matrix.shard }}
 
-      - name: Test and analyze standalone css2token package
-        working-directory: ./packages/css2token
-        run: |
-          dart pub get
-          dart test
-          dart analyze --fatal-infos
+      - name: Test and analyze css2token
+        if: matrix.suite == 'tooling'
+        run: bash scripts/run-tooling-checks.sh css2token
 
-      - name: Verify public API migration in an external consumer
-        working-directory: ./tdesign-component
-        run: dart run tool/run_migration_consumer.dart
+      - name: Verify external migration consumer
+        if: matrix.suite == 'tooling'
+        run: bash scripts/run-tooling-checks.sh migration
 
-      - name: Test regression tooling
-        working-directory: ./tdesign-component
-        run: flutter test --no-pub test/tool/check_component_coverage_test.dart test/tool/run_component_regression_test.dart test/tool/run_visual_regression_test.dart test/tool/audit_api_docs_test.dart test/tool/typedef_docs_test.dart test/tool/api_presentation_test.dart
+      - name: Run all Dart tooling tests
+        if: matrix.suite == 'tooling'
+        run: bash scripts/run-tooling-checks.sh tool-tests
 
-      - name: Check example structure and copied snippets
-        working-directory: ./tdesign-component
-        run: |
-          dart run tool/check_demo_structure.dart
-          dart run tool/check_demo_snippets.dart
+      - name: Test shared tooling entry
+        if: matrix.suite == 'tooling'
+        run: bash scripts/run-tooling-checks.sh runner-tests
+
+      - name: Test API generation
+        if: matrix.suite == 'tooling'
+        run: bash scripts/run-tooling-checks.sh api-generator-tests
+
+      - name: Check committed API documents
+        if: matrix.suite == 'tooling'
+        run: bash scripts/run-tooling-checks.sh api-docs
+
+      - name: Check committed example snippets
+        if: matrix.suite == 'tooling'
+        run: bash scripts/run-tooling-checks.sh snippets
+
+      - name: Check generated documentation copies
+        if: matrix.suite == 'tooling'
+        run: bash scripts/run-tooling-checks.sh docs-sync
+
+      - name: Check example structure
+        if: matrix.suite == 'tooling'
+        run: bash scripts/run-tooling-checks.sh structure
+
+      - name: Analyze example snippets
+        if: matrix.suite == 'tooling'
+        run: bash scripts/run-tooling-checks.sh snippet-analysis
+
+      - name: Check Flutter component contracts
+        if: matrix.suite == 'tooling'
+        run: bash scripts/run-tooling-checks.sh contracts
 
       - name: Run example shared functional tests
+        if: matrix.suite == 'examples'
         working-directory: ./tdesign-component
         run: dart run tool/run_example_regression.dart
 
-  visual-regression:
-    name: visual regression (flutter 3.32.0 linux)
+  # 保留原检查名称；两项均汇总所有 SDK，全部功能分支成功才通过。
+  test:
+    name: test (flutter ${{ matrix.flutter-version }})
+    needs: regression
+    if: always()
+    strategy:
+      fail-fast: false
+      matrix:
+        flutter-version:
+          - 3.32.0
+          - latest
+    runs-on: ubuntu-latest
+    steps:
+      - name: Require all regression jobs to succeed
+        env:
+          REGRESSION_RESULT: ${{ needs.regression.result }}
+        run: |
+          if [[ "$REGRESSION_RESULT" != "success" ]]; then
+            echo "::error::Regression jobs did not all succeed"
+            exit 1
+          fi
+
+  # Golden 按组件名固定分两组，使用独立目录和独立失败产物。
+  visual-shards:
+    name: Golden / Flutter 3.32.0 / Linux / group ${{ matrix.shard }} of 2
+    strategy:
+      fail-fast: false
+      matrix:
+        shard: [1, 2]
     runs-on: ubuntu-24.04
     steps:
       - uses: actions/checkout@v7
@@ -132,36 +210,51 @@ jobs:
 
       - name: Run visual regression tests
         working-directory: ./tdesign-component
-        run: dart run tool/run_visual_regression.dart
+        run: dart run tool/run_visual_regression.dart --shard=${{ matrix.shard }}
 
       - name: Upload golden failure images
         if: failure()
         uses: actions/upload-artifact@v4
         with:
-          name: golden-failures-flutter-3.32.0
+          name: golden-failures-flutter-3.32.0-group-${{ matrix.shard }}
           path: |
             tdesign-component/test/**/failures/
-            tdesign-component/example/test/failures/
+            tdesign-component/example/test/**/failures/
           if-no-files-found: ignore
           retention-days: 7
 
+  # 保留原视觉门禁名称，任一组失败、取消或跳过均不能通过。
+  visual-regression:
+    name: visual regression (flutter 3.32.0 linux)
+    needs: visual-shards
+    if: always()
+    runs-on: ubuntu-latest
+    steps:
+      - name: Require all visual groups to succeed
+        env:
+          VISUAL_RESULT: ${{ needs.visual-shards.result }}
+        run: |
+          if [[ "$VISUAL_RESULT" != "success" ]]; then
+            echo "::error::Visual groups did not all succeed"
+            exit 1
+          fi
+
+  # Web/iOS 保留双版本构建，APK 使用上方独立任务。
   build:
+    name: Build / ${{ matrix.platform }} / Flutter ${{ matrix.flutter-version }}
+    needs: prepare-demo
     strategy:
       fail-fast: false
       matrix:
         platform:
-          - apk
           - ios
           - web
         flutter-version:
           - 3.32.0
           - latest
         include:
-          - platform: apk
-            os: ubuntu-latest
-            build: flutter build apk -t ./lib/main.dart --release
           - platform: ios
-            os: macos-14
+            os: macos-15
             build: flutter build ios -t ./lib/main.dart --no-codesign --release
           - platform: web
             os: ubuntu-latest
@@ -175,7 +268,7 @@ jobs:
         if: matrix.platform == 'ios'
         uses: maxim-lobanov/setup-xcode@v1
         with:
-          xcode-version: "16"
+          xcode-version: "16.4"
 
       - name: Setup Flutter
         uses: flutter-actions/setup-flutter@v4
@@ -193,28 +286,21 @@ jobs:
           pod --version
           flutter --version
 
-      - name: generate api md
-        working-directory: ./tdesign-component
-        run: sh ./demo_tool/all_build.sh
-
-      - name: Check example code snippets
-        working-directory: ./tdesign-component
-        run: dart run tool/generate_example_code.dart --check
-
-      - name: Check Flutter component contracts
-        run: node scripts/check-flutter-component-contracts.mjs
-
-      - name: install component dependencies
+      - name: Install component dependencies
         working-directory: ./tdesign-component
         run: flutter pub get ${{ runner.debug && '--verbose' || '' }}
 
-      - name: install example dependencies
+      - name: Install example dependencies
         working-directory: ./tdesign-component/example
         run: flutter pub get ${{ runner.debug && '--verbose' || '' }}
 
-      - name: Diagnose iOS linker settings
-        if: matrix.platform == 'ios'
-        run: echo "Xcode ${{ matrix.platform }} ready"
-      - name: flutter build
+      - name: Download prepared resources
+        uses: actions/download-artifact@v4
+        with:
+          name: demo-assets
+          path: tdesign-component/example/assets
+
+      - name: Build release Demo
         working-directory: ./tdesign-component/example
-        run: ${{ matrix.build }} ${{ runner.debug && '--verbose' || '' }}
+        run: |
+          ${{ matrix.build }} ${{ runner.debug && '--verbose' || '' }}

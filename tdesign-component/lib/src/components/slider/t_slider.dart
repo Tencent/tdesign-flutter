@@ -83,6 +83,7 @@ SliderThemeData _sliderThemeFromTDesign(BuildContext context) {
     valueIndicatorStrokeColor: theme?.valueIndicatorColor ?? brand,
     valueIndicatorTextStyle: TTextResolve.resolve(
       context: context,
+      singleLine: true,
       style: TextStyle(
         color: theme?.valueIndicatorTextColor ?? token.textColorPrimary,
         fontSize: token.fontBodyMedium?.size,

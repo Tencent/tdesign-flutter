@@ -68,43 +68,63 @@ class TActionSheetList<T> extends StatelessWidget {
     required List<TActionSheetItem<V>> items,
     required String? subtitle,
     required bool showCancel,
+    String? cancelText,
   }) {
     final token = context.tTheme;
     var height = items.fold<double>(
       0,
-      (sum, item) =>
-          sum +
-          (item.subtitle == null || item.subtitle!.isEmpty
-              ? _itemExtent
-              : _itemWithSubtitleExtent),
+      (sum, item) => sum + _resolvedItemHeight(context, item),
     );
     if (subtitle?.isNotEmpty ?? false) {
-      final font = token.fontBodyMedium;
-      final painter =
-          TextPainter(
-            text: TextSpan(
-              text: subtitle,
-              style: TextStyle(
-                fontSize: font?.size,
-                height: font?.height,
-                fontWeight: font?.fontWeight,
-              ),
-            ),
-            textDirection: Directionality.of(context),
-            textScaler: MediaQuery.textScalerOf(context),
-          )..layout(
+      final measured =
+          TTextStyled(
+            subtitle!,
+            font: token.fontBodyMedium,
+            style: TextStyle(color: token.textColorPlaceholder),
+          ).naturalSize(
+            context,
             maxWidth: math.max(
               0,
               MediaQuery.sizeOf(context).width - token.spacer2 * 2,
             ),
           );
-      height += token.spacer1 * 2 + painter.height;
-      painter.dispose();
+      height += token.spacer1 * 2 + measured.height;
     }
     if (showCancel) {
-      height += token.spacer + actionSheetCancelButtonHeight;
+      height += token.spacer + actionSheetCancelHeight(context, cancelText);
     }
     return height;
+  }
+
+  static double _resolvedItemHeight<V>(
+    BuildContext context,
+    TActionSheetItem<V> item,
+  ) {
+    final theme = Theme.of(context).extension<TActionSheetThemeData>();
+    final labelHeight = TTextStyled(
+      item.label,
+      font: context.tTheme.fontBodyLarge,
+      style: item.textStyle,
+      maxLines: 1,
+    ).naturalSize(context).height;
+    final mainHeight = math.max(
+      labelHeight,
+      item.icon == null ? 0 : theme?.iconSize ?? 24,
+    );
+    final hasSubtitle = item.subtitle?.isNotEmpty ?? false;
+    final subtitleHeight = hasSubtitle
+        ? TTextStyled(
+                item.subtitle!,
+                font: context.tTheme.fontBodyMedium,
+                style: TextStyle(color: context.tTheme.textColorPlaceholder),
+                maxLines: 1,
+              ).naturalSize(context).height +
+              4
+        : 0;
+    return math.max(
+      hasSubtitle ? _itemWithSubtitleExtent : _itemExtent,
+      mainHeight + subtitleHeight + (hasSubtitle ? 34 : 32),
+    );
   }
 
   @override
@@ -179,90 +199,92 @@ class TActionSheetList<T> extends StatelessWidget {
     final iconSize = actionSheetTheme?.iconSize ?? 24;
     return Container(
       color: context.tTheme.bgColorContainer,
-      child: TInternalScrollScope(child: ListView.builder(
-        shrinkWrap: true,
-        physics: const AlwaysScrollableScrollPhysics(),
-        itemCount: items.length,
-        padding: EdgeInsets.zero,
-        itemBuilder: (context, index) {
-          final item = items[index];
-          return GestureDetector(
-            onTap: item.disabled
-                ? null // 如果项被禁用，则不设置点击事件
-                : () {
-                    onSelected?.call(item); // 触发选中回调
-                    Navigator.maybePop(context); // 关闭当前页面
-                  },
-            child: Container(
-              height: item.subtitle == null || item.subtitle!.isEmpty
-                  ? _itemExtent
-                  : _itemWithSubtitleExtent,
-              padding: EdgeInsets.symmetric(horizontal: context.tTheme.spacer2),
-              decoration: BoxDecoration(
-                border: Border(
-                  bottom: BorderSide(
-                    color: context.tTheme.componentStroke,
-                    width: 0.5,
+      child: TInternalScrollScope(
+        child: ListView.builder(
+          shrinkWrap: true,
+          physics: const AlwaysScrollableScrollPhysics(),
+          itemCount: items.length,
+          padding: EdgeInsets.zero,
+          itemBuilder: (context, index) {
+            final item = items[index];
+            return GestureDetector(
+              onTap: item.disabled
+                  ? null // 如果项被禁用，则不设置点击事件
+                  : () {
+                      onSelected?.call(item); // 触发选中回调
+                      Navigator.maybePop(context); // 关闭当前页面
+                    },
+              child: Container(
+                height: _resolvedItemHeight(context, item),
+                padding: EdgeInsets.symmetric(
+                  horizontal: context.tTheme.spacer2,
+                ),
+                decoration: BoxDecoration(
+                  border: Border(
+                    bottom: BorderSide(
+                      color: context.tTheme.componentStroke,
+                      width: 0.5,
+                    ),
                   ),
                 ),
-              ),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Row(
-                    mainAxisAlignment: getMainAxisAlignment(
-                      align,
-                      Directionality.of(context),
-                    ),
-                    children: [
-                      if (item.icon != null) ...[
-                        TInternalIconTheme(
-                          data: IconThemeData(
-                            color: item.disabled
-                                ? context.tTheme.textColorDisabled
-                                : (actionSheetTheme?.iconColor ??
-                                      context.tTheme.textColorPrimary),
-                            size: iconSize,
-                          ),
-                          child: SizedBox(
-                            width: iconSize,
-                            height: iconSize,
-                            child: Center(child: item.icon!),
-                          ),
-                        ),
-                        SizedBox(width: context.tTheme.spacer),
-                      ],
-                      Flexible(child: _buildLabel(context, item)),
-                    ],
-                  ),
-                  if (item.subtitle != null && item.subtitle!.isNotEmpty) ...[
-                    const SizedBox(height: 4.0),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
                     Row(
                       mainAxisAlignment: getMainAxisAlignment(
                         align,
                         Directionality.of(context),
                       ),
                       children: [
-                        Flexible(
-                          child: TText(
-                            item.subtitle!,
-                            font: context.tTheme.fontBodyMedium,
-                            maxLines: 1,
-                            overflow: TextOverflow.ellipsis,
-                            style: TextStyle(
-                              color: context.tTheme.textColorPlaceholder,
+                        if (item.icon != null) ...[
+                          TInternalIconTheme(
+                            data: IconThemeData(
+                              color: item.disabled
+                                  ? context.tTheme.textColorDisabled
+                                  : (actionSheetTheme?.iconColor ??
+                                        context.tTheme.textColorPrimary),
+                              size: iconSize,
+                            ),
+                            child: SizedBox(
+                              width: iconSize,
+                              height: iconSize,
+                              child: Center(child: item.icon!),
                             ),
                           ),
-                        ),
+                          SizedBox(width: context.tTheme.spacer),
+                        ],
+                        Flexible(child: _buildLabel(context, item)),
                       ],
                     ),
+                    if (item.subtitle != null && item.subtitle!.isNotEmpty) ...[
+                      const SizedBox(height: 4.0),
+                      Row(
+                        mainAxisAlignment: getMainAxisAlignment(
+                          align,
+                          Directionality.of(context),
+                        ),
+                        children: [
+                          Flexible(
+                            child: TTextStyled(
+                              item.subtitle!,
+                              font: context.tTheme.fontBodyMedium,
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
+                              style: TextStyle(
+                                color: context.tTheme.textColorPlaceholder,
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ],
                   ],
-                ],
+                ),
               ),
-            ),
-          );
-        },
-      )),
+            );
+          },
+        ),
+      ),
     );
   }
 

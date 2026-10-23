@@ -1,6 +1,9 @@
 import 'dart:ui' show lerpDouble;
 
 import 'package:flutter/material.dart';
+import 'package:meta/meta.dart';
+
+import '../../theme/t_token_double_lerp.dart';
 
 /// 底部标签栏 ThemeExtension
 ///
@@ -8,6 +11,12 @@ import 'package:flutter/material.dart';
 ///
 /// {@category ComponentTheme}
 class TTabBarThemeData extends ThemeExtension<TTabBarThemeData> {
+  TokenValueLerp<double>? get _barHeightTransition => null;
+
+  @internal
+  double resolveBarHeight(double fallback) =>
+      _barHeightTransition?.resolve(fallback) ?? barHeight ?? fallback;
+
   /// 默认高度
   final double? barHeight;
 
@@ -53,14 +62,17 @@ class TTabBarThemeData extends ThemeExtension<TTabBarThemeData> {
     double? dividerThickness,
     Color? dividerColor,
   }) {
-    return TTabBarThemeData(
-      barHeight: barHeight ?? this.barHeight,
-      selectedBgColor: selectedBgColor ?? this.selectedBgColor,
-      unselectedBgColor: unselectedBgColor ?? this.unselectedBgColor,
-      backgroundColor: backgroundColor ?? this.backgroundColor,
-      dividerHeight: dividerHeight ?? this.dividerHeight,
-      dividerThickness: dividerThickness ?? this.dividerThickness,
-      dividerColor: dividerColor ?? this.dividerColor,
+    return _InterpolatedTTabBarThemeData(
+      TTabBarThemeData(
+        barHeight: barHeight ?? this.barHeight,
+        selectedBgColor: selectedBgColor ?? this.selectedBgColor,
+        unselectedBgColor: unselectedBgColor ?? this.unselectedBgColor,
+        backgroundColor: backgroundColor ?? this.backgroundColor,
+        dividerHeight: dividerHeight ?? this.dividerHeight,
+        dividerThickness: dividerThickness ?? this.dividerThickness,
+        dividerColor: dividerColor ?? this.dividerColor,
+      ),
+      barHeightTransition: barHeight == null ? _barHeightTransition : null,
     );
   }
 
@@ -80,36 +92,46 @@ class TTabBarThemeData extends ThemeExtension<TTabBarThemeData> {
     if (other is! TTabBarThemeData) {
       return this;
     }
-    return TTabBarThemeData(
-      barHeight: _lerpDoubleWithDefault(barHeight, other.barHeight, 56, t),
-      selectedBgColor: _lerpOptionalColor(
-        selectedBgColor,
-        other.selectedBgColor,
-        t,
+    return _InterpolatedTTabBarThemeData(
+      TTabBarThemeData(
+        barHeight: _lerpDoubleWithDefault(barHeight, other.barHeight, 56, t),
+        selectedBgColor: _lerpOptionalColor(
+          selectedBgColor,
+          other.selectedBgColor,
+          t,
+        ),
+        unselectedBgColor: _lerpOptionalColor(
+          unselectedBgColor,
+          other.unselectedBgColor,
+          t,
+        ),
+        backgroundColor: _lerpOptionalColor(
+          backgroundColor,
+          other.backgroundColor,
+          t,
+        ),
+        dividerHeight: _lerpDoubleWithDefault(
+          dividerHeight,
+          other.dividerHeight,
+          32,
+          t,
+        ),
+        dividerThickness: _lerpDoubleWithDefault(
+          dividerThickness,
+          other.dividerThickness,
+          0.5,
+          t,
+        ),
+        dividerColor: _lerpOptionalColor(dividerColor, other.dividerColor, t),
       ),
-      unselectedBgColor: _lerpOptionalColor(
-        unselectedBgColor,
-        other.unselectedBgColor,
+      barHeightTransition: TokenValueLerp.between(
+        barHeight,
+        _barHeightTransition,
+        other.barHeight,
+        other._barHeightTransition,
         t,
+        (a, b, t) => lerpDouble(a, b, t)!,
       ),
-      backgroundColor: _lerpOptionalColor(
-        backgroundColor,
-        other.backgroundColor,
-        t,
-      ),
-      dividerHeight: _lerpDoubleWithDefault(
-        dividerHeight,
-        other.dividerHeight,
-        32,
-        t,
-      ),
-      dividerThickness: _lerpDoubleWithDefault(
-        dividerThickness,
-        other.dividerThickness,
-        0.5,
-        t,
-      ),
-      dividerColor: _lerpOptionalColor(dividerColor, other.dividerColor, t),
     );
   }
 
@@ -134,4 +156,23 @@ class TTabBarThemeData extends ThemeExtension<TTabBarThemeData> {
     }
     return Color.lerp(a, b, t);
   }
+}
+
+class _InterpolatedTTabBarThemeData extends TTabBarThemeData {
+  _InterpolatedTTabBarThemeData(
+    TTabBarThemeData data, {
+    TokenValueLerp<double>? barHeightTransition,
+  }) : _barHeightTransition = barHeightTransition,
+       super(
+         barHeight: data.barHeight,
+         selectedBgColor: data.selectedBgColor,
+         unselectedBgColor: data.unselectedBgColor,
+         backgroundColor: data.backgroundColor,
+         dividerHeight: data.dividerHeight,
+         dividerThickness: data.dividerThickness,
+         dividerColor: data.dividerColor,
+       );
+
+  @override
+  final TokenValueLerp<double>? _barHeightTransition;
 }

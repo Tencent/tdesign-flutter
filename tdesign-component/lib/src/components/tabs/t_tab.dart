@@ -59,7 +59,11 @@ class TTab extends Tab {
               children: <Widget>[icon!, const SizedBox(width: 4), label],
             );
     }
-    Widget content = Center(widthFactor: 1.0, child: label);
+    Widget content = Center(
+      widthFactor: 1.0,
+      heightFactor: child == null ? 1.0 : null,
+      child: label,
+    );
     if (!enabled) {
       final disabledStyle = TTextResolve.resolve(
         context: context,
@@ -88,6 +92,7 @@ class TTab extends Tab {
     }
     return TTextStyled(
       text!,
+      centerLeading: true,
       style: null,
       softWrap: false,
       overflow: TextOverflow.fade,

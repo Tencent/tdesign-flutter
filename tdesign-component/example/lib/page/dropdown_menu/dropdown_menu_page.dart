@@ -18,7 +18,6 @@ class TDropdownMenuPage extends StatelessWidget {
       desc: '菜单呈现数个并列的选项栏目，用于整个页面的内容筛选，由菜单面板和菜单选项组成。',
       exampleCodeGroup: 'dropdown_menu',
       compactDemo: true,
-      showTestModule: false,
       children: [
         ExampleModule(
           title: '组件类型',

@@ -1,0 +1,256 @@
+{
+  "sourcePolicy": "允许同属性同数值基础尺寸新映射，禁止拟合、字体借用、圆角替代及新增全局别名",
+  "scalesVerified": true,
+  "rows": [
+    {
+      "id": "M005",
+      "property": "Avatar大号内置图标",
+      "token": "size10",
+      "miniDefaultDp": 32,
+      "flutterDefaultDp": 32,
+      "source": "用户授权新增依赖",
+      "isIndependentVisibleProperty": true
+    },
+    {
+      "id": "M006",
+      "property": "Avatar中号内置图标",
+      "token": "size8",
+      "miniDefaultDp": 24,
+      "flutterDefaultDp": 24,
+      "source": "用户授权新增依赖",
+      "isIndependentVisibleProperty": true
+    },
+    {
+      "id": "M021",
+      "property": "Badge圆点直径",
+      "token": "size4",
+      "miniDefaultDp": 8,
+      "flutterDefaultDp": 8,
+      "source": "用户授权新增依赖",
+      "isIndependentVisibleProperty": true
+    },
+    {
+      "id": "M033",
+      "property": "Button大档图标",
+      "token": "size8",
+      "miniDefaultDp": 24,
+      "flutterDefaultDp": 24,
+      "source": "用户授权新增依赖",
+      "isIndependentVisibleProperty": true
+    },
+    {
+      "id": "M034",
+      "property": "Button中档图标",
+      "token": "size7",
+      "miniDefaultDp": 20,
+      "flutterDefaultDp": 20,
+      "source": "用户授权新增依赖",
+      "isIndependentVisibleProperty": true
+    },
+    {
+      "id": "M046",
+      "property": "Drawer菜单图标",
+      "token": "size8",
+      "miniDefaultDp": 24,
+      "flutterDefaultDp": 24,
+      "source": "用户授权新增依赖",
+      "isIndependentVisibleProperty": true
+    },
+    {
+      "id": "M049",
+      "property": "Dropdown栏最小高度",
+      "token": "size13",
+      "miniDefaultDp": 48,
+      "flutterDefaultDp": 48,
+      "source": "用户授权新增依赖",
+      "isIndependentVisibleProperty": true
+    },
+    {
+      "id": "M051",
+      "property": "Loading纵向图文间距",
+      "token": "size3",
+      "miniDefaultDp": 6,
+      "flutterDefaultDp": 6,
+      "source": "用户授权新增依赖",
+      "isIndependentVisibleProperty": true
+    },
+    {
+      "id": "M056",
+      "property": "Search默认最小高度",
+      "token": "size12",
+      "miniDefaultDp": 40,
+      "flutterDefaultDp": 40,
+      "source": "用户授权新增依赖",
+      "isIndependentVisibleProperty": true
+    },
+    {
+      "id": "M058",
+      "property": "Search图标主题默认字段；前缀自身20不受它接管",
+      "token": "size8",
+      "miniDefaultDp": 24,
+      "flutterDefaultDp": 24,
+      "source": "用户授权新增依赖",
+      "isIndependentVisibleProperty": false
+    },
+    {
+      "id": "M059",
+      "property": "Search清除图标",
+      "token": "size8",
+      "miniDefaultDp": 24,
+      "flutterDefaultDp": 24,
+      "source": "用户授权新增依赖",
+      "isIndependentVisibleProperty": true
+    },
+    {
+      "id": "M060",
+      "property": "Search搜索图标预留的布局回退",
+      "token": "size8",
+      "miniDefaultDp": 24,
+      "flutterDefaultDp": 24,
+      "source": "用户授权新增依赖",
+      "isIndependentVisibleProperty": false
+    },
+    {
+      "id": "M061",
+      "property": "Search清除图标预留的布局回退",
+      "token": "size8",
+      "miniDefaultDp": 24,
+      "flutterDefaultDp": 24,
+      "source": "用户授权新增依赖",
+      "isIndependentVisibleProperty": false
+    },
+    {
+      "id": "M079",
+      "property": "Swiper分数框最小高度",
+      "token": "size8",
+      "miniDefaultDp": 24,
+      "flutterDefaultDp": 24,
+      "source": "用户授权新增依赖",
+      "isIndependentVisibleProperty": true
+    },
+    {
+      "id": "M088",
+      "property": "Tabs tag最小高度",
+      "token": "size10",
+      "miniDefaultDp": 32,
+      "flutterDefaultDp": 32,
+      "source": "用户授权新增依赖",
+      "isIndependentVisibleProperty": true
+    },
+    {
+      "id": "M096",
+      "property": "CountDown小号背景块",
+      "token": "size7",
+      "miniDefaultDp": 20,
+      "flutterDefaultDp": 20,
+      "source": "用户授权新增依赖",
+      "isIndependentVisibleProperty": true
+    },
+    {
+      "id": "M097",
+      "property": "CountDown中号背景块",
+      "token": "size8",
+      "miniDefaultDp": 24,
+      "flutterDefaultDp": 24,
+      "source": "用户授权新增依赖",
+      "isIndependentVisibleProperty": true
+    },
+    {
+      "id": "M098",
+      "property": "CountDown大号背景块",
+      "token": "size9",
+      "miniDefaultDp": 28,
+      "flutterDefaultDp": 28,
+      "source": "用户授权新增依赖",
+      "isIndependentVisibleProperty": true
+    },
+    {
+      "id": "M100",
+      "property": "Toast横向图标",
+      "token": "size8",
+      "miniDefaultDp": 24,
+      "flutterDefaultDp": 24,
+      "source": "用户授权新增依赖",
+      "isIndependentVisibleProperty": true
+    },
+    {
+      "id": "M102",
+      "property": "Toast纵向图标",
+      "token": "size10",
+      "miniDefaultDp": 32,
+      "flutterDefaultDp": 32,
+      "source": "用户授权新增依赖",
+      "isIndependentVisibleProperty": true
+    },
+    {
+      "id": "M104",
+      "property": "Toast加载图标",
+      "token": "size10",
+      "miniDefaultDp": 32,
+      "flutterDefaultDp": 32,
+      "source": "用户授权新增依赖",
+      "isIndependentVisibleProperty": true
+    },
+    {
+      "id": "M106",
+      "property": "Toast无文字加载图标",
+      "token": "size10",
+      "miniDefaultDp": 32,
+      "flutterDefaultDp": 32,
+      "source": "用户授权新增依赖",
+      "isIndependentVisibleProperty": true
+    }
+  ],
+  "unmatched": [
+    "M020",
+    "M035",
+    "M090",
+    "M091",
+    "M092",
+    "M093"
+  ],
+  "alignedDefaultValues": {
+    "BackTop": 22,
+    "DropdownMenu": 20,
+    "Refresh": 25
+  },
+  "unmatchedClassification": {
+    "noMatchingGlobalScale": [
+      "M020",
+      "M035"
+    ],
+    "tagBorderCompensationPending": [
+      "M090",
+      "M091",
+      "M092",
+      "M093"
+    ]
+  },
+  "tagCorrection": {
+    "rawHorizontalPaddingSmallToExtraLarge": [
+      6,
+      8,
+      8,
+      16
+    ],
+    "matchingTokens": [
+      "size3",
+      "size4",
+      "size4",
+      "size6"
+    ],
+    "behavior": "尚未接入；保持现有常数及实际borderWidth扣减。原先净padding无匹配的结论已更正。"
+  },
+  "componentTokenFollowup": {
+    "implemented": [
+      "M020",
+      "M035",
+      "M090",
+      "M091",
+      "M092",
+      "M093"
+    ],
+    "globalMappingsUnchanged": true,
+    "reference": "component-token-mapping.md"
+  }
+}

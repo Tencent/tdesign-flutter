@@ -21,7 +21,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get version => 'Version';
 
   @override
-  String get publishDate => 'PublishDate';
+  String get publishDate => 'Build date';
 
   @override
   String get defaultTheme => 'defaultTheme';

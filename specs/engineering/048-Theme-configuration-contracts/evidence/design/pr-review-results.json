@@ -1,0 +1,104 @@
+{
+  "reviewedHead": "783aeaab8b6c4b113fdfcda1d508cdda1611d320",
+  "base": "3774df7de9647cf261fb0ec63062e0b363b23bcd",
+  "sourceSha256": {
+    "tdesign-component/lib/src/components/tag/t_tag_theme_data.dart": "4630ccb3be76c946c318078ab4932aca55190f21ecd39d47a60371da35a5c85b",
+    "tdesign-component/lib/src/theme/t_sizes.dart": "e3a028547e2d8ecde3bf8e628bd29720e1b98d1069b0683ffe951fddf2b6d704",
+    "tdesign-component/lib/src/theme/t_size_defaults.dart": "24991b59600e6ef7c5505041b07590cc9d0263e3cf6956feb516b124a4d5d124",
+    "tdesign-component/lib/src/theme/t_theme.dart": "d0f4365123cd244fca89da42f0b8ced0b37c431ec9278eeb31bf71ca050e7001",
+    "tdesign-component/test/components/tag/t_tag_test.dart": "89dfc39463897b1c67646502b12a8a1435b52a2ea1b9cf457fce53895b27963d",
+    "tdesign-component/test/theme/theme_test.dart": "b43946985677a59fb176579c283e56688e69ae1a99e8116c4359ecf23e9b64e2",
+    "tdesign-component/tool/component_test_manifest.dart": "554091112d8e44a8d47c66ef2d84e79cf42378d2616b531ddeb2a87838e3a907"
+  },
+  "testFiles": [
+    "test/acceptance/theme_acceptance_test.dart",
+    "test/theme/theme_test.dart",
+    "test/theme/overlay_themes_test.dart",
+    "test/theme/component_token_ownership_test.dart",
+    "test/theme/t_theme_extensions_test.dart",
+    "test/components/theme/t_colors_test.dart",
+    "test/components/theme/t_material_theme_priority_test.dart",
+    "test/components/theme/t_resource_delegate_test.dart",
+    "test/components/theme/t_theme_test.dart",
+    "test/components/theme/t_internal_material_test.dart",
+    "test/components/theme/t_strict_material_boundary_test.dart",
+    "test/components/badge/t_badge_test.dart",
+    "test/components/button/t_button_widget_test.dart",
+    "test/components/button/t_button_theme_test.dart",
+    "test/components/button/t_button_test.dart",
+    "test/components/button/t_button_theme_priority_test.dart",
+    "test/components/tag/t_tag_test.dart",
+    "test/components/tag/t_select_tag_test.dart",
+    "test/tool/run_component_regression_test.dart",
+    "test/tool/run_visual_regression_test.dart",
+    "test/tool/check_component_coverage_test.dart"
+  ],
+  "componentTestsPerSdk": 565,
+  "exampleTestsPerSdk": 115,
+  "pageModeCasesPerSdk": 114,
+  "exampleTestFiles": [
+    "test/theme/all_component_web_theme_test.dart"
+  ],
+  "coverage": {
+    "3.32.0": {
+      "theme": {
+        "LH": 834,
+        "LF": 861,
+        "percent": 96.86
+      },
+      "badge": {
+        "LH": 300,
+        "LF": 307,
+        "percent": 97.72
+      },
+      "button": {
+        "LH": 542,
+        "LF": 546,
+        "percent": 99.27
+      },
+      "tag": {
+        "LH": 343,
+        "LF": 350,
+        "percent": 98.0
+      }
+    },
+    "3.47.7": {
+      "theme": {
+        "LH": 830,
+        "LF": 861,
+        "percent": 96.4
+      },
+      "badge": {
+        "LH": 298,
+        "LF": 307,
+        "percent": 97.07
+      },
+      "button": {
+        "LH": 542,
+        "LF": 546,
+        "percent": 99.27
+      },
+      "tag": {
+        "LH": 343,
+        "LF": 350,
+        "percent": 98.0
+      }
+    }
+  },
+  "commands": [
+    "flutter pub get --offline",
+    "flutter test --no-pub <testFiles> --exclude-tags golden --coverage --reporter expanded",
+    "dart tool/check_component_coverage.dart <theme|badge|button|tag> --lcov <captured.lcov>",
+    "flutter analyze --fatal-infos",
+    "dart run tool/audit_api_docs.dart",
+    "cd example && flutter test --no-pub --dart-define=TDESIGN_DEMO_TEST_MODULES=false test/theme/all_component_web_theme_test.dart --exclude-tags golden --reporter expanded"
+  ],
+  "goldens": {
+    "count": 98,
+    "inventoryMatchesGitDiff": true,
+    "beforeAfterShaVerified": true,
+    "diffPixelsAndBoundsVerified": true,
+    "modifiedInThisReview": false,
+    "details": "ci-golden-review.json"
+  }
+}

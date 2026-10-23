@@ -152,6 +152,7 @@ void main() {
       'yunfu',
     ]);
 
+    await tester.runAsync(() => preloadDemoCodeGroup('tree-select'));
     const names = [
       'TreeSelectSingleExample',
       'TreeSelectMultipleExample',
@@ -159,9 +160,9 @@ void main() {
     ];
     final expectedSources = <String>[];
     for (final name in names) {
-      final source = await rootBundle.loadString(
-        'assets/code/tree-select.$name.txt',
-      );
+      final source = (await tester.runAsync(
+        () => rootBundle.loadString('assets/code/tree-select.$name.txt'),
+      ))!;
       expect(source, contains('class $name extends StatefulWidget'));
       expect(source, contains('static const _options'));
       expect(source, contains('List<List<Object?>> _value'));
@@ -169,12 +170,18 @@ void main() {
       expectedSources.add(source);
     }
 
-    await tester.tap(find.byIcon(TIcons.code));
-    await tester.pumpAndSettle();
-    expect(find.text('code'), findsNWidgets(3));
     for (var i = 0; i < names.length; i++) {
-      await tester.tap(find.text('code').at(i));
-      await tester.pumpAndSettle();
+      await tester.tap(find.byIcon(TIcons.code));
+      await waitForDemoWidget(tester, find.text('选择示例代码'));
+      final entry = find
+          .descendant(
+            of: find.byType(BottomSheet),
+            matching: find.byType(TCell),
+          )
+          .at(i);
+      await tester.ensureVisible(entry);
+      await tester.tap(entry);
+      await waitForDemoWidget(tester, find.byType(Markdown));
       final content = tester.widget<Markdown>(find.byType(Markdown)).data;
       expect(content, contains(expectedSources[i]));
       Navigator.of(tester.element(find.byType(Markdown))).pop();

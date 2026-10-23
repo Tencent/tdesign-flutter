@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import '../../theme/t_colors.dart';
 import '../../theme/t_fonts.dart';
 import '../../theme/t_internal_material.dart';
+import '../../theme/t_radius.dart';
 import '../../theme/t_theme.dart';
 import '../text/t_text_style_scope.dart';
 import 't_cell.dart';
@@ -90,7 +91,10 @@ class TCellGroup extends StatelessWidget {
                   )
                 : null,
             borderRadius: resolvedVariant == TCellGroupVariant.card
-                ? theme?.cardBorderRadius ?? BorderRadius.circular(8)
+                ? theme?.resolveCardBorderRadius(
+                        BorderRadius.circular(context.tTheme.radiusLarge),
+                      ) ??
+                      BorderRadius.circular(context.tTheme.radiusLarge)
                 : null,
           ),
           clipBehavior: resolvedVariant == TCellGroupVariant.card

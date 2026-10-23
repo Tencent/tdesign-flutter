@@ -1,9 +1,27 @@
 import 'package:flutter/material.dart';
+import 'package:meta/meta.dart';
+
+import '../../theme/t_token_double_lerp.dart';
 
 /// DropdownMenu 的组件级视觉与布局默认值。
 ///
 /// {@category ComponentTheme}
 class TDropdownThemeData extends ThemeExtension<TDropdownThemeData> {
+  TokenDoubleLerp? get _iconSizeLerp => null;
+
+  @internal
+  double resolveIconSize(double fallback) =>
+      _iconSizeLerp?.resolve(fallback) ?? iconSize ?? fallback;
+
+  TokenDoubleLerp? get _barHeightLerp => null;
+
+  @internal
+  bool get hasBarHeightOverride => barHeight != null || _barHeightLerp != null;
+
+  @internal
+  double resolveBarHeight(double fallback) =>
+      _barHeightLerp?.resolve(fallback) ?? barHeight ?? fallback;
+
   const TDropdownThemeData({
     this.barHeight,
     this.barBackgroundColor,
@@ -30,7 +48,7 @@ class TDropdownThemeData extends ThemeExtension<TDropdownThemeData> {
     this.actionGap,
   });
 
-  /// 筛选栏高度，默认 48 逻辑像素。
+  /// 筛选栏高度；未配置时最小高度读取 size13，默认 48 逻辑像素。
   final double? barHeight;
 
   /// 筛选栏背景色；为空时读取全局 bgColorContainer。
@@ -57,7 +75,7 @@ class TDropdownThemeData extends ThemeExtension<TDropdownThemeData> {
   /// 禁用触发项箭头颜色。
   final Color? disabledIconColor;
 
-  /// 触发项箭头尺寸，默认 24 逻辑像素。
+  /// 触发项箭头尺寸；未设置时读取 size7，默认 20 逻辑像素。
   final double? iconSize;
 
   /// 面板背景色；为空时读取全局 bgColorContainer。
@@ -110,30 +128,38 @@ class TDropdownThemeData extends ThemeExtension<TDropdownThemeData> {
     if (other == null) {
       return this;
     }
-    return copyWith(
-      barHeight: other.barHeight,
-      barBackgroundColor: other.barBackgroundColor,
-      dividerColor: other.dividerColor,
-      textStyle: other.textStyle,
-      activeTextStyle: other.activeTextStyle,
-      disabledTextStyle: other.disabledTextStyle,
-      iconColor: other.iconColor,
-      activeIconColor: other.activeIconColor,
-      disabledIconColor: other.disabledIconColor,
-      iconSize: other.iconSize,
-      panelBackgroundColor: other.panelBackgroundColor,
-      overlayColor: other.overlayColor,
-      optionHeight: other.optionHeight,
-      optionPadding: other.optionPadding,
-      optionTextStyle: other.optionTextStyle,
-      selectedOptionTextStyle: other.selectedOptionTextStyle,
-      disabledOptionTextStyle: other.disabledOptionTextStyle,
-      optionColor: other.optionColor,
-      selectedOptionColor: other.selectedOptionColor,
-      disabledOptionColor: other.disabledOptionColor,
-      optionBorderRadius: other.optionBorderRadius,
-      actionAreaPadding: other.actionAreaPadding,
-      actionGap: other.actionGap,
+    return _InterpolatedTDropdownThemeData(
+      copyWith(
+        barHeight: other.barHeight,
+        barBackgroundColor: other.barBackgroundColor,
+        dividerColor: other.dividerColor,
+        textStyle: other.textStyle,
+        activeTextStyle: other.activeTextStyle,
+        disabledTextStyle: other.disabledTextStyle,
+        iconColor: other.iconColor,
+        activeIconColor: other.activeIconColor,
+        disabledIconColor: other.disabledIconColor,
+        iconSize: other.iconSize,
+        panelBackgroundColor: other.panelBackgroundColor,
+        overlayColor: other.overlayColor,
+        optionHeight: other.optionHeight,
+        optionPadding: other.optionPadding,
+        optionTextStyle: other.optionTextStyle,
+        selectedOptionTextStyle: other.selectedOptionTextStyle,
+        disabledOptionTextStyle: other.disabledOptionTextStyle,
+        optionColor: other.optionColor,
+        selectedOptionColor: other.selectedOptionColor,
+        disabledOptionColor: other.disabledOptionColor,
+        optionBorderRadius: other.optionBorderRadius,
+        actionAreaPadding: other.actionAreaPadding,
+        actionGap: other.actionGap,
+      ),
+      iconSizeLerp:
+          other._iconSizeLerp ??
+          (other.iconSize == null ? _iconSizeLerp : null),
+      barHeightLerp:
+          other._barHeightLerp ??
+          (other.barHeight == null ? _barHeightLerp : null),
     );
   }
 
@@ -167,32 +193,36 @@ class TDropdownThemeData extends ThemeExtension<TDropdownThemeData> {
     EdgeInsetsGeometry? actionAreaPadding,
     double? actionGap,
   }) {
-    return TDropdownThemeData(
-      barHeight: barHeight ?? this.barHeight,
-      barBackgroundColor: barBackgroundColor ?? this.barBackgroundColor,
-      dividerColor: dividerColor ?? this.dividerColor,
-      textStyle: textStyle ?? this.textStyle,
-      activeTextStyle: activeTextStyle ?? this.activeTextStyle,
-      disabledTextStyle: disabledTextStyle ?? this.disabledTextStyle,
-      iconColor: iconColor ?? this.iconColor,
-      activeIconColor: activeIconColor ?? this.activeIconColor,
-      disabledIconColor: disabledIconColor ?? this.disabledIconColor,
-      iconSize: iconSize ?? this.iconSize,
-      panelBackgroundColor: panelBackgroundColor ?? this.panelBackgroundColor,
-      overlayColor: overlayColor ?? this.overlayColor,
-      optionHeight: optionHeight ?? this.optionHeight,
-      optionPadding: optionPadding ?? this.optionPadding,
-      optionTextStyle: optionTextStyle ?? this.optionTextStyle,
-      selectedOptionTextStyle:
-          selectedOptionTextStyle ?? this.selectedOptionTextStyle,
-      disabledOptionTextStyle:
-          disabledOptionTextStyle ?? this.disabledOptionTextStyle,
-      optionColor: optionColor ?? this.optionColor,
-      selectedOptionColor: selectedOptionColor ?? this.selectedOptionColor,
-      disabledOptionColor: disabledOptionColor ?? this.disabledOptionColor,
-      optionBorderRadius: optionBorderRadius ?? this.optionBorderRadius,
-      actionAreaPadding: actionAreaPadding ?? this.actionAreaPadding,
-      actionGap: actionGap ?? this.actionGap,
+    return _InterpolatedTDropdownThemeData(
+      TDropdownThemeData(
+        barHeight: barHeight ?? this.barHeight,
+        barBackgroundColor: barBackgroundColor ?? this.barBackgroundColor,
+        dividerColor: dividerColor ?? this.dividerColor,
+        textStyle: textStyle ?? this.textStyle,
+        activeTextStyle: activeTextStyle ?? this.activeTextStyle,
+        disabledTextStyle: disabledTextStyle ?? this.disabledTextStyle,
+        iconColor: iconColor ?? this.iconColor,
+        activeIconColor: activeIconColor ?? this.activeIconColor,
+        disabledIconColor: disabledIconColor ?? this.disabledIconColor,
+        iconSize: iconSize ?? this.iconSize,
+        panelBackgroundColor: panelBackgroundColor ?? this.panelBackgroundColor,
+        overlayColor: overlayColor ?? this.overlayColor,
+        optionHeight: optionHeight ?? this.optionHeight,
+        optionPadding: optionPadding ?? this.optionPadding,
+        optionTextStyle: optionTextStyle ?? this.optionTextStyle,
+        selectedOptionTextStyle:
+            selectedOptionTextStyle ?? this.selectedOptionTextStyle,
+        disabledOptionTextStyle:
+            disabledOptionTextStyle ?? this.disabledOptionTextStyle,
+        optionColor: optionColor ?? this.optionColor,
+        selectedOptionColor: selectedOptionColor ?? this.selectedOptionColor,
+        disabledOptionColor: disabledOptionColor ?? this.disabledOptionColor,
+        optionBorderRadius: optionBorderRadius ?? this.optionBorderRadius,
+        actionAreaPadding: actionAreaPadding ?? this.actionAreaPadding,
+        actionGap: actionGap ?? this.actionGap,
+      ),
+      iconSizeLerp: iconSize == null ? _iconSizeLerp : null,
+      barHeightLerp: barHeight == null ? _barHeightLerp : null,
     );
   }
 
@@ -212,82 +242,98 @@ class TDropdownThemeData extends ThemeExtension<TDropdownThemeData> {
     if (other is! TDropdownThemeData) {
       return this;
     }
-    return TDropdownThemeData(
-      barHeight: _lerpDouble(barHeight, other.barHeight, t),
-      barBackgroundColor: Color.lerp(
-        barBackgroundColor,
-        other.barBackgroundColor,
+    return _InterpolatedTDropdownThemeData(
+      TDropdownThemeData(
+        barHeight: _lerpDouble(barHeight, other.barHeight, t),
+        barBackgroundColor: Color.lerp(
+          barBackgroundColor,
+          other.barBackgroundColor,
+          t,
+        ),
+        dividerColor: Color.lerp(dividerColor, other.dividerColor, t),
+        textStyle: TextStyle.lerp(textStyle, other.textStyle, t),
+        activeTextStyle: TextStyle.lerp(
+          activeTextStyle,
+          other.activeTextStyle,
+          t,
+        ),
+        disabledTextStyle: TextStyle.lerp(
+          disabledTextStyle,
+          other.disabledTextStyle,
+          t,
+        ),
+        iconColor: Color.lerp(iconColor, other.iconColor, t),
+        activeIconColor: Color.lerp(activeIconColor, other.activeIconColor, t),
+        disabledIconColor: Color.lerp(
+          disabledIconColor,
+          other.disabledIconColor,
+          t,
+        ),
+        iconSize: _lerpDouble(iconSize, other.iconSize, t),
+        panelBackgroundColor: Color.lerp(
+          panelBackgroundColor,
+          other.panelBackgroundColor,
+          t,
+        ),
+        overlayColor: Color.lerp(overlayColor, other.overlayColor, t),
+        optionHeight: _lerpDouble(optionHeight, other.optionHeight, t),
+        optionPadding: EdgeInsetsGeometry.lerp(
+          optionPadding,
+          other.optionPadding,
+          t,
+        ),
+        optionTextStyle: TextStyle.lerp(
+          optionTextStyle,
+          other.optionTextStyle,
+          t,
+        ),
+        selectedOptionTextStyle: TextStyle.lerp(
+          selectedOptionTextStyle,
+          other.selectedOptionTextStyle,
+          t,
+        ),
+        disabledOptionTextStyle: TextStyle.lerp(
+          disabledOptionTextStyle,
+          other.disabledOptionTextStyle,
+          t,
+        ),
+        optionColor: Color.lerp(optionColor, other.optionColor, t),
+        selectedOptionColor: Color.lerp(
+          selectedOptionColor,
+          other.selectedOptionColor,
+          t,
+        ),
+        disabledOptionColor: Color.lerp(
+          disabledOptionColor,
+          other.disabledOptionColor,
+          t,
+        ),
+        optionBorderRadius: BorderRadius.lerp(
+          optionBorderRadius,
+          other.optionBorderRadius,
+          t,
+        ),
+        actionAreaPadding: EdgeInsetsGeometry.lerp(
+          actionAreaPadding,
+          other.actionAreaPadding,
+          t,
+        ),
+        actionGap: _lerpDouble(actionGap, other.actionGap, t),
+      ),
+      iconSizeLerp: TokenDoubleLerp.between(
+        iconSize,
+        _iconSizeLerp,
+        other.iconSize,
+        other._iconSizeLerp,
         t,
       ),
-      dividerColor: Color.lerp(dividerColor, other.dividerColor, t),
-      textStyle: TextStyle.lerp(textStyle, other.textStyle, t),
-      activeTextStyle: TextStyle.lerp(
-        activeTextStyle,
-        other.activeTextStyle,
+      barHeightLerp: TokenDoubleLerp.between(
+        barHeight,
+        _barHeightLerp,
+        other.barHeight,
+        other._barHeightLerp,
         t,
       ),
-      disabledTextStyle: TextStyle.lerp(
-        disabledTextStyle,
-        other.disabledTextStyle,
-        t,
-      ),
-      iconColor: Color.lerp(iconColor, other.iconColor, t),
-      activeIconColor: Color.lerp(activeIconColor, other.activeIconColor, t),
-      disabledIconColor: Color.lerp(
-        disabledIconColor,
-        other.disabledIconColor,
-        t,
-      ),
-      iconSize: _lerpDouble(iconSize, other.iconSize, t),
-      panelBackgroundColor: Color.lerp(
-        panelBackgroundColor,
-        other.panelBackgroundColor,
-        t,
-      ),
-      overlayColor: Color.lerp(overlayColor, other.overlayColor, t),
-      optionHeight: _lerpDouble(optionHeight, other.optionHeight, t),
-      optionPadding: EdgeInsetsGeometry.lerp(
-        optionPadding,
-        other.optionPadding,
-        t,
-      ),
-      optionTextStyle: TextStyle.lerp(
-        optionTextStyle,
-        other.optionTextStyle,
-        t,
-      ),
-      selectedOptionTextStyle: TextStyle.lerp(
-        selectedOptionTextStyle,
-        other.selectedOptionTextStyle,
-        t,
-      ),
-      disabledOptionTextStyle: TextStyle.lerp(
-        disabledOptionTextStyle,
-        other.disabledOptionTextStyle,
-        t,
-      ),
-      optionColor: Color.lerp(optionColor, other.optionColor, t),
-      selectedOptionColor: Color.lerp(
-        selectedOptionColor,
-        other.selectedOptionColor,
-        t,
-      ),
-      disabledOptionColor: Color.lerp(
-        disabledOptionColor,
-        other.disabledOptionColor,
-        t,
-      ),
-      optionBorderRadius: BorderRadius.lerp(
-        optionBorderRadius,
-        other.optionBorderRadius,
-        t,
-      ),
-      actionAreaPadding: EdgeInsetsGeometry.lerp(
-        actionAreaPadding,
-        other.actionAreaPadding,
-        t,
-      ),
-      actionGap: _lerpDouble(actionGap, other.actionGap, t),
     );
   }
 
@@ -297,4 +343,44 @@ class TDropdownThemeData extends ThemeExtension<TDropdownThemeData> {
     }
     return (a ?? b)! + ((b ?? a)! - (a ?? b)!) * t;
   }
+}
+
+class _InterpolatedTDropdownThemeData extends TDropdownThemeData {
+  _InterpolatedTDropdownThemeData(
+    TDropdownThemeData data, {
+    TokenDoubleLerp? iconSizeLerp,
+    TokenDoubleLerp? barHeightLerp,
+  }) : _iconSizeLerp = iconSizeLerp,
+       _barHeightLerp = barHeightLerp,
+       super(
+         barHeight: data.barHeight,
+         barBackgroundColor: data.barBackgroundColor,
+         dividerColor: data.dividerColor,
+         textStyle: data.textStyle,
+         activeTextStyle: data.activeTextStyle,
+         disabledTextStyle: data.disabledTextStyle,
+         iconColor: data.iconColor,
+         activeIconColor: data.activeIconColor,
+         disabledIconColor: data.disabledIconColor,
+         iconSize: data.iconSize,
+         panelBackgroundColor: data.panelBackgroundColor,
+         overlayColor: data.overlayColor,
+         optionHeight: data.optionHeight,
+         optionPadding: data.optionPadding,
+         optionTextStyle: data.optionTextStyle,
+         selectedOptionTextStyle: data.selectedOptionTextStyle,
+         disabledOptionTextStyle: data.disabledOptionTextStyle,
+         optionColor: data.optionColor,
+         selectedOptionColor: data.selectedOptionColor,
+         disabledOptionColor: data.disabledOptionColor,
+         optionBorderRadius: data.optionBorderRadius,
+         actionAreaPadding: data.actionAreaPadding,
+         actionGap: data.actionGap,
+       );
+
+  @override
+  final TokenDoubleLerp? _iconSizeLerp;
+
+  @override
+  final TokenDoubleLerp? _barHeightLerp;
 }

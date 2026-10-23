@@ -1,0 +1,47 @@
+# Source-only documentation changes must also verify generated copies.
+name: CI / Generated docs
+
+on:
+  pull_request:
+    branches: [develop]
+    paths:
+      - 'README*.md'
+      - 'tdesign-site/site/docs/**'
+      - 'tdesign-component/README*.md'
+      - 'tdesign-component/MIGRATION.md'
+      - 'tdesign-component/example/lib/documentation_examples.dart'
+      - 'tdesign-component/tool/fixtures/token_migration/lib/migration_027_to_100_examples.dart'
+      - 'scripts/documentation.mjs'
+      - 'scripts/sync-readme.mjs'
+      - 'scripts/run-tooling-checks*'
+      - '.github/workflows/docs-sync-check.yml'
+  push:
+    branches: [develop]
+    paths:
+      - 'README*.md'
+      - 'tdesign-site/site/docs/**'
+      - 'tdesign-component/README*.md'
+      - 'tdesign-component/MIGRATION.md'
+      - 'tdesign-component/example/lib/documentation_examples.dart'
+      - 'tdesign-component/tool/fixtures/token_migration/lib/migration_027_to_100_examples.dart'
+      - 'scripts/documentation.mjs'
+      - 'scripts/sync-readme.mjs'
+      - 'scripts/run-tooling-checks*'
+      - '.github/workflows/docs-sync-check.yml'
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  docs:
+    name: Verify generated documentation
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v7
+      - name: Check generated documentation copies
+        run: bash scripts/run-tooling-checks.sh docs-sync

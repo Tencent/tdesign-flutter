@@ -27,7 +27,6 @@ class _TRadioPageState extends State<TRadioPage> {
       desc: '用于在预设的一组选项中执行单项选择，并呈现选择结果。',
       exampleCodeGroup: 'radio',
       compactDemo: true,
-      showTestModule: false,
       children: [
         ExampleModule(
           title: '组件类型',

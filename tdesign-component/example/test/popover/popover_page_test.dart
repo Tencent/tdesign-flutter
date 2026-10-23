@@ -7,12 +7,23 @@ import 'package:tdesign_flutter_example/provider/theme_mode_provider.dart';
 void main() {
   tearDown(TToast.dismissAll);
 
-  Widget buildPage() {
+  Widget buildPage({
+    Brightness brightness = Brightness.light,
+    double textScale = 1,
+  }) {
     return ChangeNotifierProvider(
       create: (_) => ThemeModeProvider(),
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
-        theme: TThemeBuilder.light(TThemeData.defaultData()),
+        theme: brightness == Brightness.dark
+            ? TThemeBuilder.dark(TThemeData.defaultData())
+            : TThemeBuilder.light(TThemeData.defaultData()),
+        builder: (context, child) => MediaQuery(
+          data: MediaQuery.of(
+            context,
+          ).copyWith(textScaler: TextScaler.linear(textScale)),
+          child: child!,
+        ),
         home: const TPopoverPage(showInternalExamples: true),
       ),
     );
@@ -77,6 +88,42 @@ void main() {
       await tester.pump();
     }
   });
+
+  for (final brightness in Brightness.values) {
+    for (final textScale in [1.0, 1.2, 2.0]) {
+      testWidgets('自定义内容适应字体缩放 ${brightness.name} $textScale', (tester) async {
+        configurePhone(tester);
+        await tester.pumpWidget(
+          buildPage(brightness: brightness, textScale: textScale),
+        );
+        await tester.pumpAndSettle();
+
+        final trigger = find.byKey(const Key('popover-custom-content-trigger'));
+        await reveal(tester, trigger);
+        await tester.tap(trigger);
+        await tester.pumpAndSettle();
+
+        expect(tester.takeException(), isNull);
+        final contentRect = tester.getRect(
+          find.byKey(const Key('t-popover-content')),
+        );
+        for (var index = 1; index <= 3; index++) {
+          final option = find.byKey(Key('popover-custom-option-$index'));
+          final optionRect = tester.getRect(option);
+          expect(optionRect.top, greaterThanOrEqualTo(contentRect.top));
+          expect(optionRect.bottom, lessThanOrEqualTo(contentRect.bottom));
+          expect(option.hitTestable(), findsOneWidget);
+        }
+
+        await tester.tap(find.byKey(const Key('popover-custom-option-3')));
+        await tester.pumpAndSettle();
+        expect(find.byKey(const Key('t-popover-content')), findsNothing);
+        expect(find.text('已选择：选项3'), findsOneWidget);
+        TToast.dismissAll();
+        await tester.pump();
+      });
+    }
+  }
 
   testWidgets('公开 Demo 单击另一触发器时关闭旧气泡并打开新气泡', (tester) async {
     configurePhone(tester);

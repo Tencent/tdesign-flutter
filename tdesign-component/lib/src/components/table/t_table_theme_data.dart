@@ -1,6 +1,9 @@
 import 'dart:ui' show lerpDouble;
 
 import 'package:flutter/material.dart';
+import 'package:meta/meta.dart';
+
+import '../../theme/t_token_double_lerp.dart';
 
 /// 表格组件级 ThemeExtension。
 ///
@@ -8,6 +11,12 @@ import 'package:flutter/material.dart';
 ///
 /// {@category ComponentTheme}
 class TTableThemeData extends ThemeExtension<TTableThemeData> {
+  TokenValueLerp<EdgeInsetsGeometry>? get _cellPaddingTransition => null;
+
+  @internal
+  EdgeInsetsGeometry resolveCellPadding(EdgeInsetsGeometry fallback) =>
+      _cellPaddingTransition?.resolve(fallback) ?? cellPadding ?? fallback;
+
   const TTableThemeData({
     this.rowHeight,
     this.headerHeight,
@@ -47,7 +56,7 @@ class TTableThemeData extends ThemeExtension<TTableThemeData> {
   final Color? borderColor;
 
   /// 单元格内边距。
-  /// null 时左右各 16 逻辑像素。
+  /// null 时左右使用 spacer1 Token（默认各 12 逻辑像素），上下为 0。
   final EdgeInsetsGeometry? cellPadding;
 
   /// 复制主题配置。
@@ -65,15 +74,20 @@ class TTableThemeData extends ThemeExtension<TTableThemeData> {
     Color? borderColor,
     EdgeInsetsGeometry? cellPadding,
   }) {
-    return TTableThemeData(
-      rowHeight: rowHeight ?? this.rowHeight,
-      headerHeight: headerHeight ?? this.headerHeight,
-      width: width ?? this.width,
-      backgroundColor: backgroundColor ?? this.backgroundColor,
-      headerColor: headerColor ?? this.headerColor,
-      stripeColor: stripeColor ?? this.stripeColor,
-      borderColor: borderColor ?? this.borderColor,
-      cellPadding: cellPadding ?? this.cellPadding,
+    return _InterpolatedTTableThemeData(
+      TTableThemeData(
+        rowHeight: rowHeight ?? this.rowHeight,
+        headerHeight: headerHeight ?? this.headerHeight,
+        width: width ?? this.width,
+        backgroundColor: backgroundColor ?? this.backgroundColor,
+        headerColor: headerColor ?? this.headerColor,
+        stripeColor: stripeColor ?? this.stripeColor,
+        borderColor: borderColor ?? this.borderColor,
+        cellPadding: cellPadding ?? this.cellPadding,
+      ),
+      cellPaddingTransition: cellPadding == null
+          ? _cellPaddingTransition
+          : null,
     );
   }
 
@@ -93,15 +107,45 @@ class TTableThemeData extends ThemeExtension<TTableThemeData> {
     if (other == null) {
       return this;
     }
-    return TTableThemeData(
-      rowHeight: lerpDouble(rowHeight, other.rowHeight, t),
-      headerHeight: lerpDouble(headerHeight, other.headerHeight, t),
-      width: lerpDouble(width, other.width, t),
-      backgroundColor: Color.lerp(backgroundColor, other.backgroundColor, t),
-      headerColor: Color.lerp(headerColor, other.headerColor, t),
-      stripeColor: Color.lerp(stripeColor, other.stripeColor, t),
-      borderColor: Color.lerp(borderColor, other.borderColor, t),
-      cellPadding: EdgeInsetsGeometry.lerp(cellPadding, other.cellPadding, t),
+    return _InterpolatedTTableThemeData(
+      TTableThemeData(
+        rowHeight: lerpDouble(rowHeight, other.rowHeight, t),
+        headerHeight: lerpDouble(headerHeight, other.headerHeight, t),
+        width: lerpDouble(width, other.width, t),
+        backgroundColor: Color.lerp(backgroundColor, other.backgroundColor, t),
+        headerColor: Color.lerp(headerColor, other.headerColor, t),
+        stripeColor: Color.lerp(stripeColor, other.stripeColor, t),
+        borderColor: Color.lerp(borderColor, other.borderColor, t),
+        cellPadding: EdgeInsetsGeometry.lerp(cellPadding, other.cellPadding, t),
+      ),
+      cellPaddingTransition: TokenValueLerp.between(
+        cellPadding,
+        _cellPaddingTransition,
+        other.cellPadding,
+        other._cellPaddingTransition,
+        t,
+        (a, b, t) => EdgeInsetsGeometry.lerp(a, b, t)!,
+      ),
     );
   }
+}
+
+class _InterpolatedTTableThemeData extends TTableThemeData {
+  _InterpolatedTTableThemeData(
+    TTableThemeData data, {
+    TokenValueLerp<EdgeInsetsGeometry>? cellPaddingTransition,
+  }) : _cellPaddingTransition = cellPaddingTransition,
+       super(
+         rowHeight: data.rowHeight,
+         headerHeight: data.headerHeight,
+         width: data.width,
+         backgroundColor: data.backgroundColor,
+         headerColor: data.headerColor,
+         stripeColor: data.stripeColor,
+         borderColor: data.borderColor,
+         cellPadding: data.cellPadding,
+       );
+
+  @override
+  final TokenValueLerp<EdgeInsetsGeometry>? _cellPaddingTransition;
 }

@@ -51,7 +51,6 @@ class _TPopoverPage extends State<TPopoverPage> {
       title: tTitle(),
       desc: '用于文字提示的气泡框。',
       exampleCodeGroup: 'popover',
-      showTestModule: false,
       children: [
         ExampleModule(
           title: '组件类型',

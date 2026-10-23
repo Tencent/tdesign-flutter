@@ -1,3 +1,5 @@
+import 'dart:math' as math;
+
 import 'package:flutter/material.dart';
 import 'package:tdesign_flutter_icons/tdesign_flutter_icons.dart' show TIcons;
 
@@ -6,6 +8,7 @@ import '../../theme/t_fonts.dart';
 import '../../theme/t_internal_material.dart';
 import '../../theme/t_theme.dart';
 import '../text/t_text_resolve.dart';
+import '../text/t_text_style_scope.dart';
 import '../text/t_text_styled.dart';
 import 't_steps.dart';
 import 't_steps_mode.dart';
@@ -93,11 +96,13 @@ class TStepsVerticalItem extends StatelessWidget {
     }
 
     /// 步骤条icon图标组件，默认为索引文字
-    Widget? stepsIconWidget = Text(
+    final number = TTextStyled(
       (index + 1).toString(),
+      maxLines: 1,
       selectionColor: context.tTheme.brandColor.withValues(alpha: 0.4),
       style: TTextResolve.resolve(
         context: context,
+        singleLine: true,
         defaults: TextStyle(
           color: stepsNumberTextColor,
           fontWeight: FontWeight.w400,
@@ -105,6 +110,8 @@ class TStepsVerticalItem extends StatelessWidget {
         ),
       ),
     );
+
+    Widget? stepsIconWidget = number;
 
     /// 已完成的用 icon 图标显示
     if (completeIconWidget != null) {
@@ -147,7 +154,16 @@ class TStepsVerticalItem extends StatelessWidget {
         : null;
 
     /// icon组件容器大小
-    double iconContainerSize = 22;
+    // 序号槽按真实文字增长；图标仍保留各自显式尺寸。
+    final numberSize = TTextStyled(
+      stepsCount.toString(),
+      maxLines: 1,
+      style: number.style,
+    ).naturalSize(context);
+    double iconContainerSize = math.max(
+      22,
+      math.max(numberSize.width, numberSize.height),
+    );
 
     /// icon组件容器margin
     double iconMarginBottom = 8;
@@ -183,6 +199,17 @@ class TStepsVerticalItem extends StatelessWidget {
       iconWidgetDecoration = simpleDecoration;
     }
 
+    final titleStyle = TTextResolve.resolve(
+      context: context,
+      defaults: TextStyle(
+        fontWeight: (activeIndex == index && mode != TStepsMode.display)
+            ? FontWeight.w600
+            : FontWeight.w400,
+        color: stepsTitleColor,
+        fontSize: theme.fontBodyMedium?.size ?? 14,
+        height: 1.2,
+      ),
+    );
     final content = Container(
       margin: const EdgeInsets.only(bottom: 8),
       child: IntrinsicHeight(
@@ -193,7 +220,9 @@ class TStepsVerticalItem extends StatelessWidget {
             // 左侧图标、线条
             Container(
               margin: const EdgeInsets.only(right: 8),
-              width: 22,
+              width: indicator == TStepsIndicator.standard
+                  ? iconContainerSize
+                  : 22,
               child: ConstrainedBox(
                 constraints: const BoxConstraints(minHeight: 62),
                 child: Column(
@@ -201,7 +230,9 @@ class TStepsVerticalItem extends StatelessWidget {
                   children: [
                     Container(
                       width: iconContainerSize,
-                      height: 22,
+                      height: indicator == TStepsIndicator.standard
+                          ? iconContainerSize
+                          : 22,
                       alignment: Alignment.center,
                       margin: EdgeInsets.only(bottom: iconMarginBottom),
                       decoration: iconWidgetDecoration,
@@ -228,30 +259,19 @@ class TStepsVerticalItem extends StatelessWidget {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Expanded(
-                            child:
-                                data.customTitle ??
-                                (data.title != null && data.title!.isNotEmpty
-                                    ? TTextStyled(
-                                        data.title!,
-                                        style: TTextResolve.resolve(
-                                          context: context,
-                                          defaults: TextStyle(
-                                            fontWeight:
-                                                (activeIndex == index &&
-                                                    mode != TStepsMode.display)
-                                                ? FontWeight.w600
-                                                : FontWeight.w400,
-                                            color: stepsTitleColor,
-                                            fontSize:
-                                                theme.fontBodyMedium?.size ??
-                                                14,
-                                            height: 1.2,
-                                          ),
-                                        ),
-                                        softWrap: true,
-                                        overflow: TextOverflow.visible,
-                                      )
-                                    : const SizedBox.shrink()),
+                            child: data.customTitle != null
+                                ? TTextStyleScope(
+                                    style: titleStyle,
+                                    child: data.customTitle!,
+                                  )
+                                : (data.title != null && data.title!.isNotEmpty
+                                      ? TTextStyled(
+                                          data.title!,
+                                          style: titleStyle,
+                                          softWrap: true,
+                                          overflow: TextOverflow.visible,
+                                        )
+                                      : const SizedBox.shrink()),
                           ),
                           if (mode == TStepsMode.selectable)
                             TInternalIcon(
@@ -296,24 +316,22 @@ class TStepsVerticalItem extends StatelessWidget {
   }
 
   Widget _buildContentWidget(BuildContext context) {
+    final contentStyle = TTextResolve.resolve(
+      context: context,
+      defaults: TextStyle(
+        fontWeight: FontWeight.w400,
+        color: context.tTheme.textColorPlaceholder,
+        fontSize: context.tTheme.fontBodySmall?.size ?? 12,
+      ),
+    );
     return Column(
       mainAxisAlignment: MainAxisAlignment.start,
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         if (data.customContent != null)
-          data.customContent!
+          TTextStyleScope(style: contentStyle, child: data.customContent!)
         else if (data.content != null && data.content!.isNotEmpty)
-          TTextStyled(
-            data.content!,
-            style: TTextResolve.resolve(
-              context: context,
-              defaults: TextStyle(
-                fontWeight: FontWeight.w400,
-                color: context.tTheme.textColorPlaceholder,
-                fontSize: context.tTheme.fontBodySmall?.size ?? 12,
-              ),
-            ),
-          ),
+          TTextStyled(data.content!, style: contentStyle),
       ],
     );
   }

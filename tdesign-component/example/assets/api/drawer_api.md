@@ -48,7 +48,7 @@
 
 | 名称 | 类型 | 默认值 | 说明 | 必传 |
 | --- | --- | --- | --- | --- |
-| content | Widget? | - | 自定义菜单项正文，优先于 `title`；仍与 `icon`、菜单项间距和分隔线组合。 | 否 |
+| content | Widget? | - | 自定义菜单项正文，优先于 `title`；仍与 `icon`、菜单项间距和分隔线组合。 整个子树的 Text/TText 使用菜单正文默认字体和颜色；布局包装不切断传递。 显式文字样式和内容内部更近的 TD 文字主题优先；自定义内容自行控制换行。 | 否 |
 | icon | Widget? | - | 每列图标 | 否 |
 | title | String? | - | 每列标题 | 否 |
 
@@ -141,7 +141,7 @@
 | itemBackgroundColor | Color? | - | 菜单项背景色。 null 时沿用抽屉实际面板背景色。 | 否 |
 | itemIconColor | Color? | - | 菜单项图标颜色。 null 时使用 textColorPrimary Token。 | 否 |
 | itemIconGap | double? | - | 菜单项图标与正文间距，默认 8。 | 否 |
-| itemIconSize | double? | - | 菜单项图标尺寸，默认 24。 | 否 |
+| itemIconSize | double? | - | 菜单项图标尺寸；为空时读取 size8，默认 24。 | 否 |
 | itemPadding | EdgeInsetsGeometry? | - | 菜单项内边距，默认 `EdgeInsets.fromLTRB(16, 16, 0, 16)`。 | 否 |
 | itemPressedColor | Color? | - | 菜单项按压背景色。 null 时使用 bgColorSecondaryContainer Token。 | 否 |
 | itemTextStyle | TextStyle? | - | 菜单正文样式。 | 否 |

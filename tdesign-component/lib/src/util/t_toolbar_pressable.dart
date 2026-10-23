@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../../tdesign_flutter.dart' show TPicker, TPopup;
+import '../components/text/t_text_style_scope.dart';
 import '../theme/t_spacers.dart';
 import '../theme/t_theme.dart';
 
@@ -44,7 +45,7 @@ class TToolbarPressable extends StatefulWidget {
   /// 按下时整体透明度，默认 0.5。
   final double pressedOpacity;
 
-  /// 为子树 [Text] 提供默认样式（merge 语义，子控件已有样式优先）。
+  /// 为子树 Text/TText 提供默认样式（merge 语义，子控件已有样式优先）。
   final TextStyle? mergeTextStyle;
 
   /// 为子树 [Icon] 提供默认样式。
@@ -76,9 +77,21 @@ class _TToolbarPressableState extends State<TToolbarPressable> {
 
     var child = widget.child;
     if (widget.mergeTextStyle != null) {
-      child = DefaultTextStyle.merge(
+      final defaults = DefaultTextStyle.of(context);
+      child = TTextStyleScope(
         style: widget.mergeTextStyle!,
-        child: child,
+        // Preserve native Text's partial merge without exposing Material
+        // defaults to TText, whose typography comes from the slot theme.
+        child: DefaultTextStyle(
+          style: defaults.style.merge(widget.mergeTextStyle),
+          textAlign: defaults.textAlign,
+          softWrap: defaults.softWrap,
+          overflow: defaults.overflow,
+          maxLines: defaults.maxLines,
+          textWidthBasis: defaults.textWidthBasis,
+          textHeightBehavior: defaults.textHeightBehavior,
+          child: child,
+        ),
       );
     }
     if (widget.mergeIconTheme != null) {

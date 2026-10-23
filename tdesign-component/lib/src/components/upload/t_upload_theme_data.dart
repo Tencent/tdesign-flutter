@@ -39,7 +39,7 @@ class TUploadThemeData extends ThemeExtension<TUploadThemeData> {
   /// 上传项形状；null 时使用圆角方形。
   final TUploadVariant? variant;
 
-  /// 网格上传项的宽高，单位为逻辑像素；null 时为 80。
+  /// 网格上传项的宽高，单位为逻辑像素；显式值固定；默认至少 80，并随内置文件名和状态文字增长。
   final double? itemSize;
 
   /// 网格项横向间距；null 时使用全局 spacer Token。

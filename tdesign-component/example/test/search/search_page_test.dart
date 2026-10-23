@@ -45,7 +45,7 @@ void main() {
 
     final page = tester.widget<ExamplePage>(find.byType(ExamplePage));
     expect(page.compactDemo, isTrue);
-    expect(page.showTestModule, isFalse);
+    expect(page.showTestModule, isTrue);
     expect(page.children.map((module) => module.title), ['组件类型', '组件样式']);
     expect(page.children.last.children.map((item) => item.desc), [
       '搜索框形状',
@@ -96,10 +96,12 @@ void main() {
     await tester.pumpWidget(buildPage());
     await tester.pump();
 
-    final resultField = find.byWidgetPredicate(
-      (widget) =>
-          widget is TextField &&
-          widget.decoration?.hintText == '输入tdesign，有预览结果',
+    final resultField = find.descendant(
+      of: find.byWidgetPredicate(
+        (widget) =>
+            widget is TSearchBar && widget.hintText == '输入tdesign，有预览结果',
+      ),
+      matching: find.byType(TextField),
     );
     await tester.tap(resultField);
     await tester.pump();

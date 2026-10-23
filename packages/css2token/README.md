@@ -47,8 +47,10 @@ final theme = cssToFlutterTokens(
 - 颜色支持 #RGB/#RGBA/#RRGGBB/#RRGGBBAA、rgb/rgba 数值和百分比、transparent。CSS RGBA 转 Flutter ARGB；不支持命名色、hsl、color-mix。
 - 长度支持 px 和无单位数值；不计算 rem、em、calc。圆角 circle 百分比映射为 Flutter 的 9999；其他百分比长度不转换。
 - 品牌、功能色、primary/gray 色阶与现有语义色映射为 color/ref。直接语义颜色同时输出自引用。
-- 字体输出稀疏 font 字段（size / lineHeight）与独立 fontMetric。只输出实际提供且相对基线变化的维度，不补默认值、不输出字重；接收端从自己的当前默认字体补齐另一维和字重，小数字号与行高保留精度。mobile title-large 派生 TitleExtraLarge/TitleLarge(-2)，body-small 派生 BodySmall/BodyExtraSmall(-2)，mark-medium 派生 MarkMedium/MarkLarge(+2)，mark-small 派生 MarkSmall/MarkExtraSmall(-2)。其余支持层级按同名映射。
+- 字体输出稀疏 font 字段（size / lineHeight）与独立 fontMetric。只输出实际提供且相对基线变化的维度，不补默认值、不输出字重；接收端从自己的当前默认字体补齐另一维和字重，小数字号与行高保留精度。mobile 提供 title-extraLarge、body-extraSmall、mark-large、mark-extraSmall 等独立层级时优先按同名映射；旧 Web 主题缺失这些声明时才使用 title-large、body-small、mark-medium、mark-small 的派生规则。
 - 圆角支持 small/default/large/extraLarge/round/circle。shadow-1..4 支持多层外阴影与 none 清除；四方向 inset 仅支持单层、零 blur/spread 的边缘阴影，转成 color/width。
+- 字体族 `--td-font-family` / `--td-font-family-medium` 输出 `fontFamily`，保留主字体和有序 fallback，支持带引号和逗号的字体名。浏览器必须已具备对应字体；转换器不下载字体。
+- 全局尺寸 `--td-size-1..16` 输出独立 `size` 分组，与 `margin` 间距分开。接收端合并 sizeMap，未修改的尺寸保留 Flutter 默认值。
 - 显式 spacer/spacer-1..6 优先，否则使用 size-4/5/6/8/10/13/15，末项乘1.25。组件专属尺寸不机械扩展为 Flutter 全局 Token。
 
 ## 验证
@@ -68,3 +70,17 @@ python3 -m http.server 19002 --bind 127.0.0.1 --directory /tmp/css2token-browser
 
 打开 `http://127.0.0.1:19002/browser.html`。
 HTML 中的 JavaScript 仅加载样本与编译产物、切换页面展示模式；转换逻辑来自 Dart。
+
+## 完整生成器导出到应用
+
+`splitGeneratorCss(css)` 读取生成器下载的完整 CSS，返回可传给 `cssToFlutterTokens` 的浅/深声明集。共享根声明先合并，模式专属声明覆盖共享值；不支持的选择器或嵌套规则抛出 `FormatException`。
+
+业务接入使用仓库内 Example 的离线工具，补齐复合字体后输出公共命名主题 JSON：
+
+```sh
+cd tdesign-component/example
+flutter pub get
+dart run tool/convert_theme.dart theme.css theme.json --name ocean
+```
+
+命令从仓库根目录执行。组件包须包含 #1173 的字体小数解析修复；将生成的 `theme.json` 作为业务资产，使用 `TThemeData.fromJson('ocean', json, darkName: 'oceanDark')` 加载。运行时无需 `css2token`。参见[接入文档](../../tdesign-site/site/docs/custom-theme.md)。

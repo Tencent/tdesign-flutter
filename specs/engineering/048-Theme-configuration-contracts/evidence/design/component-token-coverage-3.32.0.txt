@@ -1,0 +1,21 @@
+badge matched files:
+  - lib/src/components/badge/t_badge.dart
+  - lib/src/components/badge/t_badge_internal.dart
+  - lib/src/components/badge/t_badge_layout.dart
+  - lib/src/components/badge/t_badge_resolved_style.dart
+  - lib/src/components/badge/t_badge_fallback.dart
+  - lib/src/components/badge/t_badge_label.dart
+  - lib/src/components/badge/t_badge_theme_data.dart
+badge production LH/LF = 300/307 = 97.72%
+
+button matched files:
+  - lib/src/components/button/t_button.dart
+  - lib/src/components/button/t_button_resolve.dart
+  - lib/src/components/button/t_button_theme_data.dart
+button production LH/LF = 542/546 = 99.27%
+
+tag matched files:
+  - lib/src/components/tag/t_select_tag.dart
+  - lib/src/components/tag/t_tag.dart
+  - lib/src/components/tag/t_tag_theme_data.dart
+tag production LH/LF = 343/350 = 98.00%

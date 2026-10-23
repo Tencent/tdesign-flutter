@@ -2,10 +2,6 @@ import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
 
-import '../../theme/t_colors.dart';
-import '../../theme/t_fonts.dart';
-import '../../theme/t_theme.dart';
-import '../text/t_text.dart';
 import '../text/t_text_styled.dart';
 import 't_badge_fallback.dart';
 import 't_badge_label.dart';
@@ -22,6 +18,7 @@ enum TBadgeVariant {
   dot,
 
   /// 小圆角方形文本徽标；多字符时随内容横向扩展为矩形。
+  /// 圆角读取全局 radiusSmall，默认3逻辑像素。
   square,
 
   /// 左下角收紧、其余角为圆角的气泡徽标。
@@ -270,12 +267,9 @@ class TBadge extends StatelessWidget {
           fit: BoxFit.scaleDown,
           child: TTextStyled(
             text,
-            style: textStyle.copyWith(
-              color: textColor,
-              leadingDistribution:
-                  textStyle.leadingDistribution ?? TextLeadingDistribution.even,
-            ),
-            textHeightBehavior: const TextHeightBehavior(
+            centerLeading: true,
+            style: textStyle.copyWith(color: textColor),
+            defaultTextHeightBehavior: const TextHeightBehavior(
               applyHeightToFirstAscent: false,
               applyHeightToLastDescent: false,
             ),

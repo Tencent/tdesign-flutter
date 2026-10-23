@@ -27,7 +27,6 @@ class _TTabBarPageState extends State<TTabBarPage> {
       desc: '用于在不同功能模块之间进行快速切换，位于页面底部。',
       exampleCodeGroup: 'tabBar',
       compactDemo: true,
-      showTestModule: false,
       children: [
         ExampleModule(
           title: '组件类型',

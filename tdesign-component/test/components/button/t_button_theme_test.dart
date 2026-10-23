@@ -1,9 +1,9 @@
-import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:tdesign_flutter/src/components/button/t_button_theme_data.dart';
+import 'package:tdesign_flutter/tdesign_flutter.dart';
 
 /// TButtonThemeData 纯函数覆盖（copyWith / lerp），用于提升覆盖率。
 void main() {
+  _perSizeThemeTests();
   group('TButtonThemeData 纯函数', () {
     const theme = TButtonThemeData(
       iconTextSpacing: 6,
@@ -42,5 +42,102 @@ void main() {
         throwsAssertionError,
       );
     });
+  });
+}
+
+void _perSizeThemeTests() {
+  const a = TButtonThemeData();
+  const b = TButtonThemeData(
+    largeIconSize: 30,
+    mediumIconSize: 26,
+    smallIconSize: 22,
+    extraSmallIconSize: 20,
+  );
+  test(
+    'per-size icon null/default, copy and interrupted transitions retain actual fallback',
+    () {
+      final unchanged = a.lerp(a, .5);
+      expect([
+        unchanged.largeIconSize,
+        unchanged.mediumIconSize,
+        unchanged.smallIconSize,
+        unchanged.extraSmallIconSize,
+      ], everyElement(isNull));
+      for (final size in TButtonSize.values) {
+        final end = [30.0, 26.0, 22.0, 20.0][size.index];
+        final fallback = [28.0, 23.0, 18.0, 18.0][size.index];
+        for (final t in [0.0, .25, 1.0]) {
+          expect(
+            a.lerp(b, t).resolveIconSize(size, fallback),
+            fallback + (end - fallback) * t,
+          );
+          expect(
+            b.lerp(a, t).resolveIconSize(size, fallback),
+            end + (fallback - end) * t,
+          );
+        }
+        final mid = a.lerp(b, .5);
+        expect(
+          mid.copyWith(iconTextSpacing: 9).resolveIconSize(size, fallback),
+          (fallback + end) / 2,
+        );
+        expect(
+          mid.lerp(a, .5).resolveIconSize(size, fallback),
+          fallback + (end - fallback) / 4,
+        );
+        expect(b.lerp(b, .5).resolveIconSize(size, fallback), end);
+        expect(unchanged.resolveIconSize(size, fallback), fallback);
+      }
+      final copy = a.copyWith(
+        largeIconSize: 33,
+        mediumIconSize: 29,
+        smallIconSize: 25,
+        extraSmallIconSize: 23,
+      );
+      expect(
+        [
+          copy.largeIconSize,
+          copy.mediumIconSize,
+          copy.smallIconSize,
+          copy.extraSmallIconSize,
+        ],
+        [33, 29, 25, 23],
+      );
+      final overridden = a
+          .lerp(b, .5)
+          .copyWith(
+            largeIconSize: 33,
+            mediumIconSize: 29,
+            smallIconSize: 25,
+            extraSmallIconSize: 23,
+          );
+      for (final size in TButtonSize.values) {
+        expect(
+          overridden.resolveIconSize(size, 18),
+          [33, 29, 25, 23][size.index],
+        );
+      }
+      expect(b.copyWith().largeIconSize, 30);
+    },
+  );
+  test('icon sizes reject negative, infinite and NaN values', () {
+    for (final invalid in [-1.0, double.infinity, double.nan]) {
+      expect(
+        () => TButtonThemeData(largeIconSize: invalid),
+        throwsAssertionError,
+      );
+      expect(
+        () => TButtonThemeData(mediumIconSize: invalid),
+        throwsAssertionError,
+      );
+      expect(
+        () => TButtonThemeData(smallIconSize: invalid),
+        throwsAssertionError,
+      );
+      expect(
+        () => TButtonThemeData(extraSmallIconSize: invalid),
+        throwsAssertionError,
+      );
+    }
   });
 }

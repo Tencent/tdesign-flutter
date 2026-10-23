@@ -1,6 +1,7 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:provider/provider.dart';
 import 'package:tdesign_flutter/tdesign_flutter.dart';
+import 'package:tdesign_flutter_example/base/example_widget.dart';
 import 'package:tdesign_flutter_example/page/dialog/dialog_page.dart';
 import 'package:tdesign_flutter_example/provider/theme_mode_provider.dart';
 
@@ -85,7 +86,10 @@ void main() {
     for (final label in ['文字按钮', '水平基础按钮', '垂直基础按钮', '多按钮', '带关闭按钮的对话框']) {
       expect(find.text(label), findsNWidgets(2), reason: label);
     }
-    expect(find.text('单元测试'), findsNothing);
+    expect(
+      tester.widget<ExamplePage>(find.byType(ExamplePage)).showTestModule,
+      isTrue,
+    );
   });
 
   testWidgets('22 个公开入口均可通过真实操作打开并关闭', (tester) async {

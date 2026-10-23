@@ -4,6 +4,7 @@ import 'package:tdesign_flutter_icons/tdesign_flutter_icons.dart' show TIcons;
 import '../../theme/t_colors.dart';
 import '../../theme/t_fonts.dart';
 import '../../theme/t_internal_material.dart';
+import '../../theme/t_spacers.dart';
 import '../../theme/t_theme.dart';
 import '../../util/context_extension.dart';
 import '../checkbox/t_check_box.dart';
@@ -11,6 +12,7 @@ import '../empty/t_empty.dart';
 import '../icon/t_icon.dart';
 import '../loading/t_loading.dart';
 import '../text/t_text_resolve.dart';
+import '../text/t_text_style_scope.dart';
 import 't_table_col.dart';
 import 't_table_theme_data.dart';
 import 't_table_types.dart';
@@ -468,15 +470,19 @@ class _TTableState<T> extends State<TTable<T>> {
                 trailingBoundary: index == left.length - 1,
               ),
             Expanded(
-              child: TInternalScrollScope(child: SingleChildScrollView(
-                controller: _horizontalScroll.headerController,
-                scrollDirection: Axis.horizontal,
-                child: Row(
-                  children: center
-                      .map((column) => _buildHeaderCell(context, theme, column))
-                      .toList(),
+              child: TInternalScrollScope(
+                child: SingleChildScrollView(
+                  controller: _horizontalScroll.headerController,
+                  scrollDirection: Axis.horizontal,
+                  child: Row(
+                    children: center
+                        .map(
+                          (column) => _buildHeaderCell(context, theme, column),
+                        )
+                        .toList(),
+                  ),
                 ),
-              )),
+              ),
             ),
             for (var index = 0; index < right.length; index++)
               _buildHeaderCell(
@@ -575,20 +581,20 @@ class _TTableState<T> extends State<TTable<T>> {
             ),
           _buildPane(context, theme, grid, left, rowHeight),
           Expanded(
-            child: TInternalScrollScope(child: SingleChildScrollView(
-              controller: _horizontalScroll.bodyController,
-              scrollDirection: Axis.horizontal,
-              child: _buildPane(context, theme, grid, center, rowHeight),
-            )),
+            child: TInternalScrollScope(
+              child: SingleChildScrollView(
+                controller: _horizontalScroll.bodyController,
+                scrollDirection: Axis.horizontal,
+                child: _buildPane(context, theme, grid, center, rowHeight),
+              ),
+            ),
           ),
           _buildPane(context, theme, grid, right, rowHeight),
         ],
       ),
     );
     var body = widget.height != null || widget.maxHeight != null
-        ? TInternalScrollScope(child: SingleChildScrollView(
-            child: content,
-          ))
+        ? TInternalScrollScope(child: SingleChildScrollView(child: content))
         : content;
     if (widget.onScroll == null) {
       return body;
@@ -741,9 +747,13 @@ class _TTableState<T> extends State<TTable<T>> {
       TTableColumnAlign.right => Alignment.centerRight,
     };
     final content = Padding(
-      padding: theme?.cellPadding ?? const EdgeInsets.symmetric(horizontal: 16),
+      padding:
+          theme?.resolveCellPadding(
+            EdgeInsets.symmetric(horizontal: context.tTheme.spacer1),
+          ) ??
+          EdgeInsets.symmetric(horizontal: context.tTheme.spacer1),
       child: ClipRect(
-        child: DefaultTextStyle.merge(
+        child: TTextStyleScope(
           style: TTextResolve.resolve(
             context: context,
             style: _textStyle(context, header: header),

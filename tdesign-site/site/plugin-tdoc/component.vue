@@ -1,10 +1,10 @@
 <template>
   <td-doc-content ref="tdDocContent" platform="mobile" page-status="hidden">
     <td-doc-header v-if="info.tdDocHeader" platform="mobile" slot="doc-header" ref="tdDocHeader" changelog="false"></td-doc-header>
-    <template v-if="info.isComponent">
-      <td-doc-tabs ref="tdDocTabs" :tab="tab"></td-doc-tabs>
-      <div class="td-doc-main" v-show="tab === 'demo'">
-        <div name="DEMO" v-html="info.demoMd"></div>
+    <template v-if="info.isComponent || info.flutterExample">
+      <td-doc-tabs v-if="info.isComponent" ref="tdDocTabs" :tab="tab"></td-doc-tabs>
+      <div class="td-doc-main" v-show="!info.isComponent || tab === 'demo'">
+        <div name="DEMO" v-html="info.isComponent ? info.demoMd : info.docMd"></div>
         <td-doc-phone headless>
           <iframe
             ref="demoIframe"
@@ -16,10 +16,10 @@
           ></iframe>
           <div>注：web示例仅供参考，预览实际效果请阅读<a href="/flutter/getting-started">快速开始</a></div>
         </td-doc-phone>
-        <td-contributors platform="flutter" framework="flutter" :component-name="name"></td-contributors>
+        <td-contributors v-if="info.isComponent" platform="flutter" framework="flutter" :component-name="name"></td-contributors>
       </div>
-      <div v-show="tab === 'api'" name="API" v-html="info.apiMd"></div>
-      <div v-show="tab === 'design'" name="DESIGN" v-html="info.designMd"></div>
+      <div v-if="info.isComponent" v-show="tab === 'api'" name="API" v-html="info.apiMd"></div>
+      <div v-if="info.isComponent" v-show="tab === 'design'" name="DESIGN" v-html="info.designMd"></div>
     </template>
     <div name="DOC" :class="info.docClass" v-else v-html="info.docMd"></div>
     <div style="margin-top: 48px">
@@ -63,7 +63,7 @@ export default defineComponent({
       return path.slice(path.lastIndexOf('/') + 1);
     },
     liveUrl() {
-      return flutterExampleLiveUrl(this.name, {
+      return flutterExampleLiveUrl(this.info.flutterExample || this.name, {
         dev: import.meta.env.DEV,
         hostname: window.location.hostname,
         devServerPort: import.meta.env.VITE_FLUTTER_WEB_PORT || '19001',

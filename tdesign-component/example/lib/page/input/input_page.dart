@@ -33,7 +33,6 @@ class _TInputViewPageState extends State<TInputViewPage> {
       exampleCodeGroup: 'input',
       desc: '用于单行文本信息输入。',
       compactDemo: true,
-      showTestModule: false,
       children: [
         ExampleModule(
           title: '组件类型',
