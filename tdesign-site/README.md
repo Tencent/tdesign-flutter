@@ -33,7 +33,7 @@ pnpm install --frozen-lockfile
 
 `pnpm test:example-code` 验证全部57份组件文档及对应资产；组件页禁止手写代码块、API参数表和迁移正文。迁移摘要的后续接入见[设计方案](site/docs/migration-0.2.7-to-1.0.md)。
 
-主题与国际化示例维护在 `tdesign-component/example/lib/documentation_examples.dart`，指南中的标记片段从该源码提取；修改代码后由现有Theme功能测试验证。迁移示例继续来自独立消费夹具。
+入门应用维护在 `tdesign-component/example/lib/documentation_quick_start.dart`；主题与国际化示例维护在 `tdesign-component/example/lib/documentation_examples.dart`，指南中的标记片段从该源码提取；修改代码后由文档示例和 Theme 功能测试验证。主题资源 JSON 与资源代理翻译同步生成；导航测试通过 `pnpm test:theme` 执行。迁移示例继续来自独立消费夹具。
 
 包内README和迁移副本统一执行 `node ../scripts/sync-readme.mjs` 生成，或加 `--check` 只读检查。`script/copy-readme.js` 仅保留兼容入口。
 

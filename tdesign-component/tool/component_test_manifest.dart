@@ -40,6 +40,7 @@ enum VisualTestKind {
 
 const sharedExampleTests = [
   'test/widget_test.dart',
+  'test/documentation_examples_test.dart',
   'test/demo_build_info_test.dart',
   'test/example_code_viewer_test.dart',
   'test/api_docs_test.dart',

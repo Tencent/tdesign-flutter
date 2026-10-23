@@ -1,4 +1,10 @@
 {
+  "uploading": "上传中",
+  "uploadSelect": "选择文件",
+  "uploadPending": "待上传",
+  "uploadFailed": "上传失败",
+  "uploadRetry": "重新上传",
+  "uploadSuccess": "上传成功",
   "components": "TDesign Flutter 组件库",
   "setting": "设置",
   "about": "关于我们",

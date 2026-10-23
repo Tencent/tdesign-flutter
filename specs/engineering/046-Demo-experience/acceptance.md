@@ -40,3 +40,14 @@
 - `dart run tool/generate_example_code.dart --check` 通过，未改生成片段。
 - Node 24.15.0：站点测试 33/33；57 个组件文档/360 个生成示例映射和 Vite 构建通过。`node scripts/sync-readme.mjs --check` 为 6 份文档、0 stale；变更 Markdown 的相对文件链接检查无缺失。
 - 只更新文档、注释和历史处置；未执行全组件功能、Golden、设备或全部代码面板人工验收。上述记录不替代最终 head 的远端 CI，CI 尚待核对。
+
+## 2026-10-23 residual guide and navigation verification
+
+Base: `182f8cd956edeee4dfd7ef977176309f051e3c3c`. Binary diff SHA-256 (`git diff --binary --no-ext-diff origin/develop -- scripts tdesign-component tdesign-site`): `46125980f83eff49c2a7bac8fd8b99faa58108d91b4b6236811054e2d1a18a87`.
+
+- macOS Flutter 3.32.0 / 3.47.7: Example `flutter analyze --fatal-infos` passed with no diagnostics on both SDKs. `flutter test --no-pub test/documentation_examples_test.dart test/theme/theme_demo_test.dart --exclude-tags golden --reporter expanded`: 23/23 passed on each SDK. Covers counter, asset theme loading, locale switching, default/business themes, token object reuse and unequal/sparse/empty functional palettes.
+- Flutter 3.32.0: `dart run tool/generate_example_code.dart --check` passed. Regression/visual runner and snippet generator tests: 36/36 passed. Documentation tests registered in sharedExampleTests; Theme tests retain existing functional/visual scheduling.
+- Node 24.15.0: site utility/documentation tests 47/47 passed; npm test:theme and test:example-code passed. Mapping check: 57 pages / 360 examples. Sync check: 8 outputs, zero stale. Vite build passed in 3.64s (existing chunk warning only).
+- Linux amd64 local image `tdesign-flutter-golden-cache:3.32.0`: `flutter test --no-pub --dart-define=TDESIGN_DEMO_TEST_MODULES=false test/theme/theme_demo_test.dart --tags golden --reporter expanded`: 14/14 passed with exact pixel comparison; no baseline updates or tolerance changes. First run omitted the debug-module define and two Theme page sizes differed; visual inspection confirmed the extra internal debug section, then the full official configuration passed. Twelve imported guide/counter PNGs were verified on this candidate; the two existing Theme page PNGs were unchanged.
+- Canonical migration source, package MIGRATION, component lib and root READMEs match develop; current CSS theme conversion guidance retained. No old Spec directories or historical CI/screenshot evidence imported. Independent of the #1155 cleanup branch. Diff whitespace check passed.
+- Browser end-to-end manual interaction, mobile devices, deployment and remote CI were not executed. Navigation is covered by focused unit tests; production site build is not a claim of complete browser acceptance. No push or remote PR mutation.

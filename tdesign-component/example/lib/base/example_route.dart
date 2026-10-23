@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../config.dart';
+import '../documentation_quick_start.dart';
 import '../documentation_theme_demo.dart';
 import '../setting.dart';
 import 'api_widget.dart';
@@ -21,18 +22,23 @@ class TExampleRoute {
         pageModelList[model.name] = model;
       });
     });
+    pageModelList['getting-started'] = ExamplePageModel(
+      text: '快速开始',
+      name: 'getting-started',
+      pageBuilder: (_, __) => const CounterPage(),
+    );
     pageModelList['custom-theme'] = ExamplePageModel(
       text: '自定义主题',
       name: 'custom-theme',
-      pageBuilder: (_, __) => const DocumentationThemeGuidePage(),
+      pageBuilder: (_, __) => const ThemeGuidePage(),
     );
     // 指南运行效果使用独立路由，不加入组件清单或 API 生成。
-    for (final scene in DocumentationThemeScene.values) {
+    for (final scene in ThemeScene.values) {
       final name = 'custom-theme-${scene.name}';
       pageModelList[name] = ExamplePageModel(
         text: '自定义主题',
         name: name,
-        pageBuilder: (_, __) => DocumentationThemeDemo(scene: scene),
+        pageBuilder: (_, __) => ThemeDemo(scene: scene),
       );
     }
     // 添加关于页路由

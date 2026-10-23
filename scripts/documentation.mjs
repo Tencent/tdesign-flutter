@@ -65,15 +65,40 @@ export function generatedDocument(source, body) {
   return `<!-- Generated from ${source}; do not edit this copy. -->\n\n${body}`;
 }
 
+// Resource JSON is derived from the same delegate and ARB files as the running app.
+export function renderResourceMessages(guide, delegate, readLocale) {
+  const keys = [...new Set([...delegate.matchAll(/AppLocalizations\.of\(context\)!\.(\w+)/g)].map(match => match[1]))];
+  return guide.replace(/<!-- documentation-resource:(en|zh):start -->[\s\S]*?<!-- documentation-resource:\1:end -->/g, (_, locale) => {
+    const messages = readLocale(locale);
+    const result = {};
+    for (const key of keys) {
+      if (typeof messages[key] !== 'string') throw new Error(`Missing ${locale} translation: ${key}`);
+      result[key] = messages[key];
+      if (messages[`@${key}`]) result[`@${key}`] = messages[`@${key}`];
+    }
+    return `<!-- documentation-resource:${locale}:start -->\n\`\`\`json\n${JSON.stringify(result, null, 2)}\n\`\`\`\n<!-- documentation-resource:${locale}:end -->`;
+  });
+}
+
 // Compute every output before writing; --check never changes any source or copy.
 export function syncDocuments({ root = repositoryRoot, check = false } = {}) {
   const read = file => readFileSync(resolve(root, file), 'utf8');
   const guide = renderMigrationExamples(read(migrationSource), read(exampleSource));
   const outputs = new Map([[migrationSource, guide]]);
-  const documentationExamples = read('tdesign-component/example/lib/documentation_examples.dart');
-  for (const file of ['custom-theme', 'internationalization']) {
+  const documentationExamples = [
+    read('tdesign-component/example/lib/documentation_examples.dart'),
+    read('tdesign-component/example/lib/documentation_quick_start.dart'),
+    read('tdesign-component/example/lib/base/intl_resource_delegate.dart'),
+  ].join('\n');
+  const themeJson = documentationExamples.match(/const themeJson = '''([\s\S]*?)''';/);
+  if (!themeJson) throw new Error('Missing documentation theme JSON');
+  JSON.parse(themeJson[1]);
+  outputs.set('tdesign-component/example/assets/custom_theme.json', `${themeJson[1].trim()}\n`);
+  for (const file of ['getting-started', 'custom-theme', 'internationalization']) {
     const path = `tdesign-site/site/docs/${file}.md`;
-    outputs.set(path, renderExamples(read(path), documentationExamples, 'documentation'));
+    const rendered = renderExamples(read(path), documentationExamples, 'documentation');
+    outputs.set(path, renderResourceMessages(rendered, documentationExamples, locale =>
+      JSON.parse(read(`tdesign-component/example/lib/l10n/app_${locale}.arb`))));
   }
   for (const source of ['README.md', 'README_zh_CN.md']) {
     outputs.set(`tdesign-component/${source}`, generatedDocument(source, packageLinks(read(source))));

@@ -9,6 +9,24 @@ class AppLocalizationsEn extends AppLocalizations {
   AppLocalizationsEn([String locale = 'en']) : super(locale);
 
   @override
+  String get uploading => 'Uploading';
+
+  @override
+  String get uploadSelect => 'Select files';
+
+  @override
+  String get uploadPending => 'Pending upload';
+
+  @override
+  String get uploadFailed => 'Upload failed';
+
+  @override
+  String get uploadRetry => 'Retry upload';
+
+  @override
+  String get uploadSuccess => 'Upload successful';
+
+  @override
   String get components => 'TD Flutter Components';
 
   @override
