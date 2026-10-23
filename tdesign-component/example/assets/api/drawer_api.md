@@ -14,7 +14,7 @@
 | items | List&lt;TDrawerItem&gt;? | - | 抽屉里的列表项 | 否 |
 | key | Key? | - | 组件标识，用于区分或保留组件状态。 | 否 |
 | onItemClick | TDrawerItemClickCallback? | - | 兼容入口，请使用 `onItemTap`；2.0.0 删除。 | 否 |
-| onItemTap | TDrawerItemTapCallback? | - | 点击抽屉里的列表项触发 与旧参数同时提供时优先使用本参数。 | 否 |
+| onItemTap | TDrawerItemTapCallback? | - | 点击抽屉里的列表项触发。 与旧参数同时提供时优先使用本参数。 | 否 |
 | showDivider | bool | true | 是否显示菜单项分隔线，默认 true。 | 否 |
 | showLastDivider | bool | true | 是否显示最后一行分隔线，默认 true。 | 否 |
 | title | Widget? | - | 抽屉的标题组件 | 否 |

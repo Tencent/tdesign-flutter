@@ -59,7 +59,7 @@ class TDrawer extends StatelessWidget {
   /// 抽屉的标题组件
   final Widget? title;
 
-  /// 点击抽屉里的列表项触发
+  /// 点击抽屉里的列表项触发。
   /// 与旧参数同时提供时优先使用本参数。
   // ignore: deprecated_member_use_from_same_package
   TDrawerItemTapCallback? get onItemTap => _onItemTap ?? onItemClick;
@@ -113,6 +113,7 @@ TDrawerHandle showTDrawer(
   VoidCallback? onOverlayClick,
   double? topInset,
   bool useSafeArea = true,
+
   /// 兼容入口，请改用取反值 maintainState；2.0.0 删除。
   @Deprecated(
     'Use maintainState with the old value inverted instead. Deprecated in 1.0.1; remove in 2.0.0.',

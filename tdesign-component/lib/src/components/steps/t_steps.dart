@@ -78,7 +78,7 @@ enum TStepsStatus {
 class TSteps extends StatelessWidget {
   /// 普通进度步骤条。
   ///
-  /// [onStepTapped] 为空时只读；非空时只报告用户点击的索引；当前进度仍由调用方更新 [value] 控制。
+  /// 当前进度由调用方更新 [value] 控制。
   const TSteps.progress({
     super.key,
     required this.steps,
@@ -90,6 +90,10 @@ class TSteps extends StatelessWidget {
       'Use onStepTapped instead. Deprecated in 1.0.1; remove in 2.0.0.',
     )
     ValueChanged<int>? onChange,
+
+    /// 点击步骤时通知索引，包含当前步骤；值由调用方更新。
+    /// 本参数非空时优先，否则沿用 `onChange`；两者均为空时只读。
+    /// 是否提供回调不改变指示器视觉。
     ValueChanged<int>? onStepTapped,
   }) : _onStepTapped = onStepTapped,
        _onChange = onStepTapped ?? onChange,
@@ -97,9 +101,7 @@ class TSteps extends StatelessWidget {
 
   /// 垂直可选择步骤条。
   ///
-  /// 固定使用点状指示器并显示右侧箭头：已完成节点实心，
-  /// 当前与未完成节点空心。[onStepTapped] 只报告用户选择的索引，
-  /// 调用方需要更新 [value] 完成受控重建。
+  /// 固定使用点状指示器和右侧箭头；已完成节点实心，当前与未完成节点空心。
   const TSteps.selectable({
     super.key,
     required this.steps,
@@ -108,6 +110,9 @@ class TSteps extends StatelessWidget {
       'Use onStepTapped instead. Deprecated in 1.0.1; remove in 2.0.0.',
     )
     ValueChanged<int>? onChange,
+
+    /// 点击步骤时通知索引，包含当前步骤；值由调用方更新。
+    /// 须提供本参数或 `onChange`；本参数非空时优先。
     ValueChanged<int>? onStepTapped,
   }) : assert(onStepTapped != null || onChange != null),
        direction = TStepsDirection.vertical,

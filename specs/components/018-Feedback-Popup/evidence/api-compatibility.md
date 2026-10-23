@@ -86,3 +86,15 @@ Popup、Drawer、Picker 分别覆盖旧参数真假 × 新参数 null/false/true
 ## 范围
 
 本地 macOS Widget/工具测试，不外推 Android/iOS 真机或 Web release。公开布局、主题、资源未变化；内部调试提示更新推荐回调名。不生成或更新 Golden；本地验证结果不代表远端 CI 或合并结论。
+
+## Steps / Drawer 中文注释复核
+
+本轮以 `87182fcac4d5a31bcc539e517ca05a9df6fd6e90` 为基线，仅调整 Steps / Drawer 的 dartdoc 及对应生成 API。四个文件的文档补丁 SHA-256：`0adee157fecb71c225057af2338dc4d8d75ba724824e7880b4dc9e6d8e7e48d4`；补丁和日志位于工作区 `artifacts/pr1148-api-compat/docs-steps-drawer/`。上文组件实现验证及源码指纹属于前一实现候选，不将本轮文档检查写成重新执行组件交互或 Golden。
+
+- progress 明确新回调非空时优先，否则沿用旧 onChange；两者均为空才只读。保留点击当前步骤、值由调用方更新和回调不改变指示器视觉的说明。
+- selectable 参数说明只保留本构造器的点击索引、当前步骤通知、受控更新、至少提供一个回调及优先级；原有点状指示器和节点视觉说明保留。
+- Drawer 补齐点击回调说明的句号。两处生产文件的 Dart 可执行 token 与基线逐项一致，API 签名、默认行为和 Controller 绑定规则未变。
+
+Flutter 3.32.0 / 3.47.7 的 172 项工具测试（含字体覆盖）和 70 项 API 文档渲染测试均通过。随后将已弃用 onChange 的 dartdoc 链接改为代码标记，生成 Markdown 保持一致；在最终源码上再次完成 57 份 API 同步、字体覆盖和严格分析，两套 SDK 均通过且无诊断。低版本首次分析对文档链接报出的 2 条弃用提示保留在 `low-analyze-before-link-fix.log`，不作为最终通过证据。
+
+最终复核确认生成参数表保留全部关键契约，selectable 不再混入其他构造器说明；未发现新的文档或实现问题。本轮未修改测试、字体、视觉、运行逻辑或 Controller。
