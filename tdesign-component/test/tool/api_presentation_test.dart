@@ -10,43 +10,33 @@ import '../../tool/api_doc_contract.dart';
 
 void main() {
   test(
-    'Popup independent state copy documents the inverse legacy migration',
+    'Popup copyWith documents optional state precedence and legacy migration',
     () {
       final source = File('example/assets/api/popup_api.md').readAsStringSync();
       final start = source.indexOf('##### TPopupOptions.copyWith\n');
-      final end = source.indexOf('##### TPopupOptions.copyWithMaintainState\n');
+      final end = source.indexOf('##### TPopupOptions.normalized\n');
       expect(start, greaterThanOrEqualTo(0));
       expect(end, greaterThan(start));
-      final oldMethod = source.substring(start, end);
-      final legacyRow = oldMethod
+      final method = source.substring(start, end);
+      final legacyRow = method
           .split('\n')
           .singleWhere((line) => line.startsWith('| destroyOnClose |'));
-      expect(legacyRow, contains('copyWithMaintainState'));
+      expect(legacyRow, contains('maintainState'));
       expect(legacyRow, contains('取反'));
       expect(legacyRow, contains('2.0.0'));
-      expect(
-        oldMethod
-            .split('\n')
-            .where((line) => line.startsWith('| maintainState |')),
-        isEmpty,
-      );
-      final newMethod = source
-          .substring(end)
-          .split('##### TPopupOptions.normalized')
-          .first;
-      expect(newMethod, contains('| maintainState | bool |'));
-      expect(newMethod, contains('子类覆盖'));
-      final nodes = md.Document(
-        extensionSet: md.ExtensionSet.gitHubFlavored,
-      ).parseLines(newMethod.split('\n'));
-      final table = nodes.whereType<md.Element>().firstWhere(
-        (node) => node.tag == 'table',
-      );
-      final body = table.children!.whereType<md.Element>().firstWhere(
-        (node) => node.tag == 'tbody',
-      );
-      final row = body.children!.whereType<md.Element>().single;
-      expect(row.children!.last.textContent, '是');
+      expect(source, isNot(contains('copyWithMaintainState')));
+      expect(method, contains('1.0.1'));
+      final stateRow = method
+          .split('\n')
+          .singleWhere((line) => line.startsWith('| maintainState |'));
+      expect(stateRow, contains('非空时优先'));
+      expect(stateRow, contains('false'));
+      expect(stateRow, contains('当前有效值'));
+      final rows = parameterRows(method);
+      final parameter = rows.singleWhere((row) => row['参数'] == 'maintainState');
+      expect(parameter['类型'], 'bool?');
+      expect(parameter['必填'], '否');
+      expect(parameter['默认值'], '-');
     },
   );
 

@@ -12,6 +12,14 @@ spline: explain
 
 不足够。构造参数、回调、受控值、主题配置和已移除能力均可能变化，尤其要区分顶部页签与底部导航。请先阅读[0.2.7 → 1.0迁移指南](./migration-0.2.7-to-1.0.md)。
 
+## 从 1.0.0 升级到 1.0.1 后，自定义 TPopupOptions.copyWith 为什么报 invalid_override？
+
+1.0.1 为 `TPopupOptions.copyWith` 新增了可选参数 `bool? maintainState`，同时保留旧参数 `destroyOnClose`。新参数非空时优先，否则沿用旧参数的取反值；两者均为 null 时保留当前配置。
+
+如果业务类覆盖或实现了该方法，需要保留原有参数，在原签名中增加 `bool? maintainState`，并在调用 `super.copyWith` 时传入 `maintainState: maintainState`。自行实现复制逻辑的类也须按上述规则处理新参数，不能只接收而忽略它。
+
+这是继承签名的兼容性变化。仅调用 `copyWith`，或继承 `TPopupOptions` 但未重写该方法的用户，无需修改原有调用。旧参数计划在 2.0.0 删除；迁移到 `maintainState` 时将非空旧值取反。参见 [Popup API](/flutter/components/popup?tab=api)。
+
 ## 为什么组件没有跟随Material主题变化？
 
 TD内置外观使用全局Token、组件Theme及公开实例配置。Material的按钮主题、文字主题或IconTheme不作为TD内置视觉的隐式覆盖入口。配置方法见[自定义主题](./custom-theme.md)，明暗模式也在同一指南中。

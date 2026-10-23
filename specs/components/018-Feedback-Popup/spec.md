@@ -92,14 +92,16 @@ Popup 是承载任意内容的基础浮层。小程序基础 Popup 默认只渲�
 
 `TPopupOverlayConfig.onTap` 替代 `onClick`，不改变遮罩点击和关闭规则。`maintainState` 替代 `destroyOnClose`，两者取反；默认保持 true。该参数仅决定被不透明路由遮挡时是否保留状态，不改变关闭后释放。false 允许状态释放，不保证每次遮挡均释放。
 
-新旧参数同时提供时，新参数优先，仅通知一次；没有新参数时保留旧公开 getter 的继承覆盖。旧入口及类型保留，标注推荐入口和 2.0.0 删除计划。旧 API、默认行为及 Controller 绑定规则不变。
+新旧参数同时提供时，新参数优先，仅通知一次；没有新参数时保留旧公开 getter 的继承覆盖。旧入口及类型保留，标注推荐入口和 2.0.0 删除计划。普通旧 API 调用、默认行为及 Controller 绑定规则不变；copyWith 覆盖或实现的签名适配例外见下文。
 
 验收覆盖旧调用、继承覆盖、新参数优先级、空回调及实际交互；取反参数覆盖默认、真假组合、工厂、copyWith 和 normalized。
 
-### copyWith 继承兼容与独立状态复制
+### copyWith 新旧参数共存与继承适配
 
-旧 `TPopupOptions.copyWith` 的完整签名保持不变，不增加 `maintainState` 参数，以免旧子类覆盖产生 invalid_override。其兼容参数 `destroyOnClose` 非空时取反设置状态保留值，null 时保留当前有效值；该参数计划在 2.0.0 删除。
+`TPopupOptions.copyWith` 同时接受 `bool? maintainState`（默认 null）和兼容参数 `bool? destroyOnClose`。maintainState 非空时优先，包含 false；否则取非空 destroyOnClose 的反值；两者均为 null 或未传时保留当前有效 maintainState（含旧 getter 覆盖）。不改变原对象，其他字段仍按原有复制规则处理。旧参数标明替代入口和 2.0.0 删除计划。
 
-新入口 `copyWithMaintainState(bool maintainState)` 只设置状态保留值，通过虚分派调用 `copyWith(destroyOnClose: !maintainState)`。因此保留旧子类的复制定制，沿用 copyWith 的返回类型与复制规则，不绕过其覆盖；子类应按既有 copyWith 契约处理参数。其他属性的复制仍使用原 copyWith；无需提供新旧参数的混合优先级。
+移除未发布的独立方法 `copyWithMaintainState`，统一使用原 copyWith。普通旧调用、旧 getter 覆盖及未覆盖该方法的子类保持原行为。1.0.0 使用方如覆盖或实现了 copyWith，升级到 1.0.1 时必须增加可选参数 bool? maintainState，并处理或转发；仅增加参数而忽略其值不算完成适配。该签名扩展属于继承源码的破坏性变更，FAQ 不能消除兼容风险，更新日志和版本化 FAQ 必须明确，不能宣称全部旧覆盖无需修改。
 
-验收包含：完整旧签名的子类仍可编译与调用；新入口对旧覆盖只分派一次并传入取反值；显式 true/false、原值不变、其他配置保留、normalized、旧参数 null 及生成文档的迁移说明。旧设计向可覆盖方法增加可选参数不能保留继承兼容，已由独立入口取代。
+此前独立方法方案保留旧覆盖签名，但增加冗余入口及后续迁移成本，已按用户确定的统一命名方案取代。2.0.0 计划删除旧 destroyOnClose 参数，已使用 maintainState 的普通复制调用无需再次迁移。
+
+验收覆盖：当前状态真假 × 新旧 nullable 参数的完整矩阵、显式 false 优先、null 回退、旧 getter 覆盖、其他配置保留与原对象不变、normalized、实际遮挡/恢复/关闭生命周期，以及增加参数后的子类虚分派、参数转发和原有复制定制。生成 API 保留两个参数的类型、可选性与迁移说明，不再生成独立方法。

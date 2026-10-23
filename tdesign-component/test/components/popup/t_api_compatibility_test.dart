@@ -127,12 +127,20 @@ class _LegacyPopup extends TPopupOptions {
 
 const Object _legacyUnset = Object();
 
-class _LegacyCopyWithOptions extends TPopupOptions {
-  _LegacyCopyWithOptions({required this.onCopy, required this.onArgument})
-    : super(child: const Text('legacy copy'), width: 120, destroyOnClose: true);
+class _AdaptedCopyWithOptions extends TPopupOptions {
+  _AdaptedCopyWithOptions({
+    required this.onCopy,
+    required this.onArgument,
+    required this.onMaintainState,
+  }) : super(
+         child: const Text('legacy copy'),
+         width: 120,
+         destroyOnClose: true,
+       );
 
   final VoidCallback onCopy;
   final ValueChanged<bool?> onArgument;
+  final ValueChanged<bool?> onMaintainState;
 
   @override
   TPopupOptions copyWith({
@@ -145,6 +153,7 @@ class _LegacyCopyWithOptions extends TPopupOptions {
     Object? backgroundColor = _legacyUnset,
     Object? overlay = _legacyUnset,
     bool? destroyOnClose,
+    bool? maintainState,
     Duration? animationDuration,
     Object? headerBuilder = _legacyUnset,
     Object? closeBuilder = _legacyUnset,
@@ -155,6 +164,7 @@ class _LegacyCopyWithOptions extends TPopupOptions {
   }) {
     onCopy();
     onArgument(destroyOnClose);
+    onMaintainState(maintainState);
     return super.copyWith(
       child: child,
       placement: placement,
@@ -167,6 +177,7 @@ class _LegacyCopyWithOptions extends TPopupOptions {
           : backgroundColor,
       overlay: identical(overlay, _legacyUnset) ? this.overlay : overlay,
       destroyOnClose: destroyOnClose,
+      maintainState: maintainState,
       animationDuration: animationDuration,
       headerBuilder: identical(headerBuilder, _legacyUnset)
           ? this.headerBuilder
@@ -421,84 +432,115 @@ void main() {
   );
 
   test(
-    'old copyWith override remains valid and receives independent state copies',
+    'adapted copyWith override forwards both names and preserves old calls',
     () {
       var calls = 0;
       final arguments = <bool?>[];
-      final options = _LegacyCopyWithOptions(
+      final newArguments = <bool?>[];
+      final options = _AdaptedCopyWithOptions(
         onCopy: () => calls++,
         onArgument: arguments.add,
+        onMaintainState: newArguments.add,
       );
       final originalCopy = options.copyWith();
       expect(originalCopy.maintainState, isFalse);
       expect(originalCopy.width, 120);
-      expect(options.copyWithMaintainState(true).maintainState, isTrue);
-      expect(options.copyWithMaintainState(false).maintainState, isFalse);
+      expect(options.copyWith(maintainState: true).maintainState, isTrue);
+      expect(options.copyWith(maintainState: false).maintainState, isFalse);
       expect(options.copyWith(destroyOnClose: false).maintainState, isTrue);
-      expect(calls, 4);
-      expect(arguments, [null, false, true, false]);
+      expect(
+        options
+            .copyWith(maintainState: false, destroyOnClose: false)
+            .maintainState,
+        isFalse,
+      );
+      expect(
+        options
+            .copyWith(maintainState: true, destroyOnClose: true)
+            .maintainState,
+        isTrue,
+      );
+      expect(
+        options
+            .copyWith(maintainState: null, destroyOnClose: false)
+            .maintainState,
+        isTrue,
+      );
+      expect(
+        options
+            .copyWith(maintainState: null, destroyOnClose: null)
+            .maintainState,
+        isFalse,
+      );
+      expect(calls, 8);
+      expect(arguments, [null, null, null, false, false, true, false, null]);
+      expect(newArguments, [null, true, false, null, false, true, null, null]);
       expect(options.maintainState, isFalse);
       expect(options.width, 120);
       expect(identical(originalCopy, options), isFalse);
     },
   );
 
-  test('independent state copy retains all other options and the original', () {
-    const child = Text('state copy');
-    const overlay = TPopupOverlayConfig(onTap: _void);
-    final options = TPopupOptions.bottom(
-      child: child,
-      height: 321,
-      inset: const TPopupBottomInset(left: 7, right: 9),
-      radius: 12,
-      backgroundColor: Colors.red,
-      overlay: overlay,
-      animationDuration: const Duration(milliseconds: 123),
-      useSafeArea: true,
-      onOpened: _void,
-      onClosed: _otherVoid,
-      onVisibleChange: (_, __) {},
-      headerBuilder: (_, __) => const Text('header'),
-    );
-    final copy = options.copyWithMaintainState(false);
-    expect(copy.maintainState, isFalse);
-    expect(copy.destroyOnClose, isTrue);
-    expect(copy.child, same(child));
-    expect(copy.placement, options.placement);
-    expect(copy.width, options.width);
-    expect(copy.height, options.height);
-    expect(copy.inset, same(options.inset));
-    expect(copy.radius, options.radius);
-    expect(copy.backgroundColor, options.backgroundColor);
-    expect(copy.overlay, same(overlay));
-    expect(copy.animationDuration, options.animationDuration);
-    expect(copy.headerBuilder, same(options.headerBuilder));
-    expect(copy.closeBuilder, same(options.closeBuilder));
-    expect(copy.onOpened, same(options.onOpened));
-    expect(copy.onClosed, same(options.onClosed));
-    expect(copy.onVisibleChange, same(options.onVisibleChange));
-    expect(copy.useSafeArea, options.useSafeArea);
-    expect(options.maintainState, isTrue);
-    expect(identical(copy, options), isFalse);
-    final center = TPopupOptions.center(
-      child: child,
-      width: 200,
-      height: 160,
-      closeBuilder: (_, __) => const Text('close'),
-    );
-    final centerCopy = center.copyWithMaintainState(false);
-    expect(centerCopy.width, 200);
-    expect(centerCopy.closeBuilder, same(center.closeBuilder));
-    expect(centerCopy.child, same(child));
-    expect(centerCopy.maintainState, isFalse);
-  });
+  test(
+    'copyWith state parameter retains all other options and the original',
+    () {
+      const child = Text('state copy');
+      const overlay = TPopupOverlayConfig(onTap: _void);
+      final options = TPopupOptions.bottom(
+        child: child,
+        height: 321,
+        inset: const TPopupBottomInset(left: 7, right: 9),
+        radius: 12,
+        backgroundColor: Colors.red,
+        overlay: overlay,
+        animationDuration: const Duration(milliseconds: 123),
+        useSafeArea: true,
+        onOpened: _void,
+        onClosed: _otherVoid,
+        onVisibleChange: (_, __) {},
+        headerBuilder: (_, __) => const Text('header'),
+      );
+      final copy = options.copyWith(maintainState: false, radius: 20);
+      expect(copy.maintainState, isFalse);
+      expect(copy.destroyOnClose, isTrue);
+      expect(copy.child, same(child));
+      expect(copy.placement, options.placement);
+      expect(copy.width, options.width);
+      expect(copy.height, options.height);
+      expect(copy.inset, same(options.inset));
+      expect(copy.radius, 20);
+      expect(options.radius, 12);
+      expect(copy.backgroundColor, options.backgroundColor);
+      expect(copy.overlay, same(overlay));
+      expect(copy.animationDuration, options.animationDuration);
+      expect(copy.headerBuilder, same(options.headerBuilder));
+      expect(copy.closeBuilder, same(options.closeBuilder));
+      expect(copy.onOpened, same(options.onOpened));
+      expect(copy.onClosed, same(options.onClosed));
+      expect(copy.onVisibleChange, same(options.onVisibleChange));
+      expect(copy.useSafeArea, options.useSafeArea);
+      expect(options.maintainState, isTrue);
+      expect(identical(copy, options), isFalse);
+      final center = TPopupOptions.center(
+        child: child,
+        width: 200,
+        height: 160,
+        closeBuilder: (_, __) => const Text('close'),
+      );
+      final centerCopy = center.copyWith(maintainState: false);
+      expect(centerCopy.width, 200);
+      expect(centerCopy.closeBuilder, same(center.closeBuilder));
+      expect(centerCopy.child, same(child));
+      expect(centerCopy.maintainState, isFalse);
+    },
+  );
 
   for (final value in [false, true]) {
     test(
-      'independent state copy preserves getter overrides and normalization: $value',
+      'copyWith state parameter preserves getter overrides and normalization: $value',
       () {
         final options = _LegacyPopup(maintainState: !value);
-        final copy = options.copyWithMaintainState(value);
+        final copy = options.copyWith(maintainState: value);
         expect(copy.maintainState, value);
         expect(copy.destroyOnClose, !value);
         expect(copy.copyWith().maintainState, value);
@@ -507,6 +549,39 @@ void main() {
         expect(options.maintainState, !value);
       },
     );
+  }
+
+  for (final initial in [false, true]) {
+    for (final newValue in <bool?>[null, false, true]) {
+      for (final oldValue in <bool?>[null, false, true]) {
+        test(
+          'copyWith state matrix initial=$initial new=$newValue old=$oldValue',
+          () {
+            final original = TPopupOptions(
+              child: const Text('matrix'),
+              maintainState: initial,
+              radius: 8,
+            );
+            final expected =
+                newValue ?? (oldValue == null ? initial : !oldValue);
+            final copy = original.copyWith(
+              maintainState: newValue,
+              destroyOnClose: oldValue,
+              radius: 16,
+            );
+            expect(copy.maintainState, expected);
+            expect(copy.destroyOnClose, !expected);
+            expect(copy.normalized().maintainState, expected);
+            expect(copy.copyWith().maintainState, expected);
+            expect(copy.radius, 16);
+            expect(copy.child, same(original.child));
+            expect(original.maintainState, initial);
+            expect(original.radius, 8);
+            expect(identical(copy, original), isFalse);
+          },
+        );
+      }
+    }
   }
 
   for (final oldValue in [false, true]) {
@@ -560,7 +635,7 @@ void main() {
             !oldValue,
           );
           expect(
-            option.copyWithMaintainState(effective).maintainState,
+            option.copyWith(maintainState: effective).maintainState,
             effective,
           );
           expect(
@@ -572,7 +647,7 @@ void main() {
     }
   }
 
-  for (final entryPoint in ['popup', 'drawer', 'picker']) {
+  for (final entryPoint in ['popup', 'popup-copy', 'drawer', 'picker']) {
     for (final oldValue in [false, true]) {
       for (final newValue in <bool?>[null, false, true]) {
         testWidgets(
@@ -611,6 +686,15 @@ void main() {
                       const TPopupHeader(title: Text('header')),
                   destroyOnClose: oldValue,
                   maintainState: newValue,
+                );
+              case 'popup-copy':
+                drawer = null;
+                popup = TPopup.show(
+                  host,
+                  options: TPopupOptions(
+                    child: content,
+                    maintainState: !(newValue ?? !oldValue),
+                  ).copyWith(maintainState: newValue, destroyOnClose: oldValue),
                 );
               default:
                 drawer = null;

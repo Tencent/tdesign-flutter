@@ -228,6 +228,8 @@
 
 复制配置。
 
+1.0.1 新增 maintainState；覆盖或实现本方法的类须增加对应可选参数并处理或转发。
+
 | 名称 | 类型 | 默认值 | 说明 | 必传 |
 | --- | --- | --- | --- | --- |
 | child | Widget? | - | 非空值替换原配置；不传或 null 保留原值。 | 否 |
@@ -238,7 +240,8 @@
 | radius | Object? | _unset | 不传时保留原值；显式 null 清除本字段，非空值须为 num。 | 否 |
 | backgroundColor | Object? | _unset | 不传时保留原值；显式 null 清除本字段，非空值须为 Color。 | 否 |
 | overlay | Object? | _unset | 不传时保留原值；显式 null 清除本字段，非空值须为 TPopupOverlayConfig。 | 否 |
-| destroyOnClose | bool? | - | 已废弃，此为兼容入口。请使用 `copyWithMaintainState` 并传入非空旧值的取反值；将在 2.0.0 删除。 非空值取反后设置状态保留值；不传或 null 保留当前有效值。 | 否 |
+| destroyOnClose | bool? | - | 已废弃，此为兼容入口。请使用 `maintainState` 并传入非空旧值的取反值；将在 2.0.0 删除。 新参数为 null 时非空值取反生效；两者均为 null 时保留当前有效值。 | 否 |
+| maintainState | bool? | - | 新副本的状态保留值；非空时优先，包含 false。 不传或 null 时沿用 destroyOnClose 的取反值；两者均为 null 时保留当前有效值。 | 否 |
 | animationDuration | Duration? | - | 非空值替换原配置；不传或 null 保留原值。 | 否 |
 | headerBuilder | Object? | _unset | 不传时保留原值；显式 null 清除本字段，非空值须为 TPopupHeaderBuilder。 | 否 |
 | closeBuilder | Object? | _unset | 不传时保留原值；显式 null 清除本字段，非空值须为 TPopupSlotBuilder。 | 否 |
@@ -253,25 +256,6 @@
 | 名称 | 类型 | 默认值 | 说明 | 必传 |
 | --- | --- | --- | --- | --- |
 | 返回值 | TPopupOptions | - | 应用指定参数后的配置副本。 | - |
-
-
-##### TPopupOptions.copyWithMaintainState
-
-位置参数：`maintainState`
-
-
-复制配置并设置状态保留值，沿用 `copyWith` 的子类覆盖和复制规则。
-
-| 名称 | 类型 | 默认值 | 说明 | 必传 |
-| --- | --- | --- | --- | --- |
-| maintainState | bool | - | 被不透明路由覆盖时是否保留内容状态；false 时允许释放，关闭后始终释放。 | 是 |
-
-
-###### 返回值
-
-| 名称 | 类型 | 默认值 | 说明 | 必传 |
-| --- | --- | --- | --- | --- |
-| 返回值 | TPopupOptions | - | 设置状态保留值后的配置副本。 | - |
 
 
 ##### TPopupOptions.normalized
