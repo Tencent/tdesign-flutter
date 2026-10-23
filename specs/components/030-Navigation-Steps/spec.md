@@ -14,9 +14,9 @@ Flutter Steps 的公开 Demo、状态命名及只读/可选择所有权与新版
 
 ## 最终方案与行为契约
 
-- `TSteps.progress` 表达普通受控进度：`value` 由调用方持有，越界值只在渲染时收敛；可选 `onChange` 只报告点击索引，不改变指示器的进度语义。
-- `TSteps.selectable` 表达垂直可选择步骤：固定为点状指示器，`onChange` 必填，并显示右箭头。
-- `TSteps.display` 表达纯展示：不接收 `value`、`status` 或 `onChange`，横向与纵向均显示全实心节点及完成态连线。
+- `TSteps.progress` 表达普通受控进度：`value` 由调用方持有，越界值只在渲染时收敛；可选 `onStepTapped`（兼容 `onChange`）只报告点击索引，不改变指示器的进度语义。
+- `TSteps.selectable` 表达垂直可选择步骤：固定为点状指示器，须提供 `onStepTapped` 或兼容入口 `onChange`，并显示右箭头。
+- `TSteps.display` 表达纯展示：不接收 `value`、`status`、`onStepTapped` 或 `onChange`，横向与纵向均显示全实心节点及完成态连线。
 - `indicator` 只表达进度步骤条的指示器样式：`standard` 或 `dot`。
 - `status` 是当前 `value` 的业务状态：`process` 或 `error`。
 - `icon` 替换默认数字/完成图标；`customTitle`、`customContent` 分别优先于字符串便利字段。
@@ -54,7 +54,7 @@ Flutter Steps 的公开 Demo、状态命名及只读/可选择所有权与新版
 - `TStepsStatus.success` 改为 `process`。
 - `TStepsItemData.successIcon` 改为 `icon`。
 - 移除未命名 `TSteps(...)` 构造和 `TStepsVariant`，分别改用 `TSteps.progress`、`TSteps.selectable`、`TSteps.display` 与 `TStepsIndicator`。
-- 移除 `TSteps.simple`、`readOnly`、`verticalSelect`；交互由各命名构造的 `onChange` 契约表达。
+- 移除 `TSteps.simple`、`readOnly`、`verticalSelect`；交互由各命名构造的 `onStepTapped` 契约表达，`onChange` 保留为兼容入口。
 - 删除只持有上述业务状态的 `TStepsThemeData`。
 
 ## 验收标准
@@ -74,3 +74,11 @@ Flutter Steps 的公开 Demo、状态命名及只读/可选择所有权与新版
 兼容性：这会改变原先未显式配置的自定义文字默认行为，属于用户可感知的默认行为变化（patch 发布归类，不代表默认行为完全兼容）；迁移时显式指定需保留的字号、字重、颜色、行高或在内容内部设置局部文字主题。仅指定部分样式的用户仍会接入其余默认字段。
 
 发布归类：本轮与 Button/NavBar 的默认文字槽调整采用同一 patch 策略。未配置、空样式或部分显式样式仍可能改变字体、颜色、换行、尺寸和省略位置；原生 Text 的字体也可能受新默认值影响，段落参数沿用既有语义。保留旧外观需在实例或内容内部主题中明确所需字段；不以参数签名不变或测试通过承诺零兼容风险。
+
+## 1.0.1 API 兼容迁移
+
+`onStepTapped` 替代 `onChange`，保留点击当前步骤的通知，值仍由外部控制；覆盖 progress、selectable 和水平、垂直布局。selectable 必须提供新旧回调之一。
+
+新旧参数同时提供时，新参数优先，仅通知一次；没有新参数时保留旧公开 getter 的继承覆盖。旧入口及类型保留，标注推荐入口和 2.0.0 删除计划。旧 API、默认行为及 Controller 绑定规则不变。
+
+验收覆盖旧调用、继承覆盖、新参数优先级、空回调及实际交互；取反参数覆盖默认、真假组合、工厂、copyWith 和 normalized。

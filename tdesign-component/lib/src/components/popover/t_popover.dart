@@ -170,10 +170,15 @@ class TPopoverAnchor extends StatefulWidget {
     this.width,
     this.height,
     this.onTap,
-    this.onLongTap,
+    @Deprecated(
+      'Use onLongPress instead. Deprecated in 1.0.1; remove in 2.0.0.',
+    )
+    VoidCallback? onLongTap,
+    VoidCallback? onLongPress,
     this.onOpen,
     this.onClose,
-  });
+  }) : _onLongPress = onLongPress,
+       _onLongTap = onLongPress ?? onLongTap;
 
   /// 气泡内容。
   final Widget content;
@@ -215,7 +220,16 @@ class TPopoverAnchor extends StatefulWidget {
   final VoidCallback? onTap;
 
   /// 长按气泡内容时触发。
-  final VoidCallback? onLongTap;
+  /// 与旧参数同时提供时优先使用本参数。
+  // ignore: deprecated_member_use_from_same_package
+  VoidCallback? get onLongPress => _onLongPress ?? onLongTap;
+
+  final VoidCallback? _onLongPress;
+  final VoidCallback? _onLongTap;
+
+  /// 兼容入口，请使用 [onLongPress]；2.0.0 删除。
+  @Deprecated('Use onLongPress instead. Deprecated in 1.0.1; remove in 2.0.0.')
+  VoidCallback? get onLongTap => _onLongTap;
 
   /// 气泡展开后触发。
   final VoidCallback? onOpen;
@@ -280,7 +294,7 @@ class _TPopoverAnchorState extends State<TPopoverAnchor> {
       width: widget.width,
       height: widget.height,
       onTap: widget.onTap,
-      onLongTap: widget.onLongTap,
+      onLongPress: widget.onLongPress,
       controllerProvider: () => _controller,
       onDismissed: () => _handleDismissed(operationEpoch),
       throwOnMissingOverlay: true,
@@ -398,8 +412,14 @@ class TPopover {
     /// 点击气泡内容时触发。
     VoidCallback? onTap,
 
-    /// 长按气泡内容时触发。
+    /// 兼容入口，请使用 onLongPress；2.0.0 删除。
+    @Deprecated(
+      'Use onLongPress instead. Deprecated in 1.0.1; remove in 2.0.0.',
+    )
     VoidCallback? onLongTap,
+
+    /// 长按气泡内容时触发，与旧参数同时提供时本参数优先。
+    VoidCallback? onLongPress,
   }) => _showPopover(
     context: context,
     content: content,
@@ -411,7 +431,7 @@ class TPopover {
     width: width,
     height: height,
     onTap: onTap,
-    onLongTap: onLongTap,
+    onLongPress: onLongPress ?? onLongTap,
   ).closed;
 
   static _PopoverSession _showPopover({
@@ -425,7 +445,7 @@ class TPopover {
     required double? width,
     required double? height,
     required VoidCallback? onTap,
-    required VoidCallback? onLongTap,
+    required VoidCallback? onLongPress,
     TPopoverController Function()? controllerProvider,
     VoidCallback? onDismissed,
     bool throwOnMissingOverlay = false,
@@ -517,7 +537,7 @@ class TPopover {
             width: width,
             height: height,
             onTap: onTap,
-            onLongTap: onLongTap,
+            onLongPress: onLongPress,
             onTapOutside: closeOnClickOutside ? dismiss : null,
             radius: theme.borderRadius,
           ),

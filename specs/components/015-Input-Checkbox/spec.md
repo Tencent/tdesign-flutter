@@ -162,3 +162,11 @@ Checkbox 根据当前约束下的实际文字排版决定纵向对齐：单行�
 验收标准描述应满足的行为，不表示已执行或通过；执行范围与证据见 [acceptance.md](./acceptance.md)，剩余事项只在 [tasks.md](./tasks.md) 维护。
 
 跨组件配置职责见 [Theme 契约](../../engineering/048-Theme-configuration-contracts/spec.md)，视觉方法见 [Golden 规范](../../engineering/044-Testing-golden-regression/spec.md)。
+
+## 1.0.1 API 兼容迁移
+
+`onSelectionLimitExceeded` 替代 `onMaxSelected`，仅在增加选项受到数量上限阻止时通知；达到上限本身不触发。
+
+新旧参数同时提供时，新参数优先，仅通知一次；没有新参数时保留旧公开 getter 的继承覆盖。旧入口及类型保留，标注推荐入口和 2.0.0 删除计划。旧 API、默认行为及 Controller 绑定规则不变。
+
+验收覆盖旧调用、继承覆盖、新参数优先级、空回调及实际交互；取反参数覆盖默认、真假组合、工厂、copyWith 和 normalized。

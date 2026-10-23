@@ -33,10 +33,15 @@ class TPopoverWidget extends StatefulWidget {
     this.width,
     this.height,
     this.onTap,
-    this.onLongTap,
+    @Deprecated(
+      'Use onLongPress instead. Deprecated in 1.0.1; remove in 2.0.0.',
+    )
+    VoidCallback? onLongTap,
+    VoidCallback? onLongPress,
     this.onTapOutside,
     this.radius,
-  });
+  }) : _onLongPress = onLongPress,
+       _onLongTap = onLongPress ?? onLongTap;
 
   /// 上下文
   final BuildContext context;
@@ -72,7 +77,16 @@ class TPopoverWidget extends StatefulWidget {
   final VoidCallback? onTap;
 
   /// 长按事件
-  final VoidCallback? onLongTap;
+  /// 与旧参数同时提供时优先使用本参数。
+  // ignore: deprecated_member_use_from_same_package
+  VoidCallback? get onLongPress => _onLongPress ?? onLongTap;
+
+  final VoidCallback? _onLongPress;
+  final VoidCallback? _onLongTap;
+
+  /// 兼容入口，请使用 [onLongPress]；2.0.0 删除。
+  @Deprecated('Use onLongPress instead. Deprecated in 1.0.1; remove in 2.0.0.')
+  VoidCallback? get onLongTap => _onLongTap;
 
   /// 点击气泡外部时触发。
   final VoidCallback? onTapOutside;
@@ -829,11 +843,11 @@ class _TPopoverWidgetState extends State<TPopoverWidget> {
     final anchorRect = anchorOffset & anchorBounds.size;
     final mediaQuery = MediaQuery.of(context);
     var popover = _getChild();
-    if (widget.onTap != null || widget.onLongTap != null) {
+    if (widget.onTap != null || widget.onLongPress != null) {
       popover = GestureDetector(
         behavior: HitTestBehavior.opaque,
         onTap: widget.onTap,
-        onLongPress: widget.onLongTap,
+        onLongPress: widget.onLongPress,
         child: popover,
       );
     }

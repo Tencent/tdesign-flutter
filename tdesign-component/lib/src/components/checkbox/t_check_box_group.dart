@@ -56,9 +56,15 @@ class TCheckboxGroup<T> extends StatelessWidget {
     this.contentDirection = TContentDirection.right,
     this.size = TCheckboxSize.medium,
     this.maxSelected,
-    this.onMaxSelected,
+    @Deprecated(
+      'Use onSelectionLimitExceeded instead. Deprecated in 1.0.1; remove in 2.0.0.',
+    )
+    VoidCallback? onMaxSelected,
+    VoidCallback? onSelectionLimitExceeded,
     this.itemBuilder,
-  }) : assert(columns > 0);
+  }) : _onSelectionLimitExceeded = onSelectionLimitExceeded,
+       _onMaxSelected = onSelectionLimitExceeded ?? onMaxSelected,
+       assert(columns > 0);
 
   /// 受控选中项列表。
   final List<T> value;
@@ -92,8 +98,21 @@ class TCheckboxGroup<T> extends StatelessWidget {
   /// null 时不限制；达到上限后阻止新增选择，但仍允许取消。设为 0 时不能新增选择。
   final int? maxSelected;
 
-  /// 超过最多可选数量时触发。
-  final VoidCallback? onMaxSelected;
+  /// 新增选择被数量上限阻止时触发；达到上限本身不触发。
+  /// 与旧参数同时提供时优先使用本参数。
+  // ignore: deprecated_member_use_from_same_package
+  VoidCallback? get onSelectionLimitExceeded =>
+      // ignore: deprecated_member_use_from_same_package
+      _onSelectionLimitExceeded ?? onMaxSelected;
+
+  final VoidCallback? _onSelectionLimitExceeded;
+  final VoidCallback? _onMaxSelected;
+
+  /// 兼容入口，请使用 [onSelectionLimitExceeded]；2.0.0 删除。
+  @Deprecated(
+    'Use onSelectionLimitExceeded instead. Deprecated in 1.0.1; remove in 2.0.0.',
+  )
+  VoidCallback? get onMaxSelected => _onMaxSelected;
 
   /// 自定义数据项视觉；交互仍由组接管。
   final TCheckboxOptionBuilder<T>? itemBuilder;
@@ -172,7 +191,7 @@ class TCheckboxGroup<T> extends StatelessWidget {
       next.remove(option.value);
     } else {
       if (maxSelected != null && next.length >= maxSelected!) {
-        onMaxSelected?.call();
+        onSelectionLimitExceeded?.call();
         return;
       }
       next.add(option.value);

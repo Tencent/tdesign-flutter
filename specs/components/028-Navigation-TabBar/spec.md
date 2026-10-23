@@ -57,7 +57,7 @@
 - `value` 是唯一选中状态；`onChanged == null` 时整栏只读并禁用交互。
 - `indicatorAnimation` 在 none、linear、elastic 间切换时始终与当前 value 对齐；动画中再次切换值从当前位置继续。
 - 每项 `onTap` 是选中变化时的附加动作；重复点击仅在
-  `allowMultipleTaps == true` 时调用。`needInkWell` 只改变水波纹视觉，一次手势
+  `notifyOnReselect == true`（兼容 `allowMultipleTaps`）时调用。`needInkWell` 只改变水波纹视觉，一次手势
   仍只进入一次选中与回调链路。
 - `itemStyle == label` 时选中项显示品牌浅色背景；`normal` 只改变前景色。
 - `style == capsule` 时标签栏具有 16px 外边距、圆角与顶部阴影，不显示顶部边线。
@@ -149,7 +149,7 @@
   局部 Row/Column 假装实现整栏方向。
 - 水波纹路径只由内部 `InkWell` 接收 tap，普通路径只由外层 `GestureDetector`
   接收 tap；新增一次手势只触发一次 item `onTap` 和一次 `onChanged` 的回归。
-- `onTap` 与 `allowMultipleTaps` dartdoc 明确选中变化、重复点击、禁用和通知边界。
+- `onTap` 与 `notifyOnReselect`（兼容 `allowMultipleTaps`）dartdoc 明确选中变化、重复点击、禁用和通知边界。
 - 撤回仅供 TabBar 使用的 `ExamplePage.navBarTitle`；页面壳继续使用既有单标题契约，
   不把页面展示差异扩散为共享 API。
 
@@ -194,3 +194,11 @@
 | scroll | 高自定义项及等高菜单超出视口 | 打开后、真实滚动至末项后，light/dark |
 
 共 8 张新增 Golden，登记到 TabBar Demo 的现有视觉入口；功能与交互断言继续由组件测试承担。首次生成前核对实际渲染，生成只写上述新文件，随后不带更新参数复跑；已有基线保持不变。
+
+## 1.0.1 API 兼容迁移
+
+菜单 `onSelected` 替代 `onChanged`，须提供两者之一，保留选项值和重复选择通知。标签项 `notifyOnReselect` 替代 `allowMultipleTaps`，仅控制重复点击当前项时的 `onTap`，不使整栏 `onChanged` 重复通知；默认 false。
+
+新旧参数同时提供时，新参数优先，仅通知一次；没有新参数时保留旧公开 getter 的继承覆盖。旧入口及类型保留，标注推荐入口和 2.0.0 删除计划。旧 API、默认行为及 Controller 绑定规则不变。
+
+验收覆盖旧调用、继承覆盖、新参数优先级、空回调及实际交互；取反参数覆盖默认、真假组合、工厂、copyWith 和 normalized。

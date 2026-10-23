@@ -41,8 +41,14 @@ class TNoticeBar extends StatefulWidget {
     this.marquee = false,
     this.speed = 50,
     this.interval = const Duration(seconds: 2),
-    this.onPressed,
-  }) : assert(speed > 0, 'speed must be greater than zero'),
+    @Deprecated(
+      'Use onTargetTap instead. Deprecated in 1.0.1; remove in 2.0.0.',
+    )
+    ValueChanged<TNoticeBarTapTarget>? onPressed,
+    ValueChanged<TNoticeBarTapTarget>? onTargetTap,
+  }) : _onTargetTap = onTargetTap,
+       _onPressed = onTargetTap ?? onPressed,
+       assert(speed > 0, 'speed must be greater than zero'),
        assert(maxLines > 0, 'maxLines must be greater than zero');
 
   /// 单条公告内容。
@@ -96,7 +102,18 @@ class TNoticeBar extends StatefulWidget {
   /// 长按、取消、多指、非主按钮及按键组合；不阻止子组件自身的手势。
   /// 内置前缀图标、正文和尾部图标保留原有点击手势，不受上述自定义区域
   /// 过滤规则约束。
-  final ValueChanged<TNoticeBarTapTarget>? onPressed;
+  /// 与旧参数同时提供时优先使用本参数。
+  // ignore: deprecated_member_use_from_same_package
+  ValueChanged<TNoticeBarTapTarget>? get onTargetTap =>
+      // ignore: deprecated_member_use_from_same_package
+      _onTargetTap ?? onPressed;
+
+  final ValueChanged<TNoticeBarTapTarget>? _onTargetTap;
+  final ValueChanged<TNoticeBarTapTarget>? _onPressed;
+
+  /// 兼容入口，请使用 [onTargetTap]；2.0.0 删除。
+  @Deprecated('Use onTargetTap instead. Deprecated in 1.0.1; remove in 2.0.0.')
+  ValueChanged<TNoticeBarTapTarget>? get onPressed => _onPressed;
 
   @override
   State<StatefulWidget> createState() => _TNoticeBarState();
@@ -181,7 +198,7 @@ class _TNoticeBarState extends State<TNoticeBar> {
   @override
   void didUpdateWidget(covariant TNoticeBar oldWidget) {
     super.didUpdateWidget(oldWidget);
-    if (widget.onPressed == null) {
+    if (widget.onTargetTap == null) {
       _tapPointers.clear();
       _multipleTapPointers = false;
     }
@@ -463,17 +480,17 @@ class _TNoticeBarState extends State<TNoticeBar> {
   }
 
   Widget _buildBuiltInTapTarget(TNoticeBarTapTarget target, Widget child) {
-    if (widget.onPressed == null) {
+    if (widget.onTargetTap == null) {
       return child;
     }
     return GestureDetector(
-      onTap: () => widget.onPressed!(target),
+      onTap: () => widget.onTargetTap!(target),
       child: child,
     );
   }
 
   Widget _buildCustomTapTarget(TNoticeBarTapTarget target, Widget child) {
-    if (widget.onPressed == null) {
+    if (widget.onTargetTap == null) {
       return child;
     }
     return _NoticeBarTapObserver(
@@ -481,7 +498,7 @@ class _TNoticeBarState extends State<TNoticeBar> {
           !_multipleTapPointers &&
           _tapPointers.length == 1 &&
           _tapPointers.contains(pointer),
-      onTap: () => widget.onPressed?.call(target),
+      onTap: () => widget.onTargetTap?.call(target),
       child: child,
     );
   }
@@ -586,7 +603,7 @@ class _TNoticeBarState extends State<TNoticeBar> {
         ],
       ),
     );
-    if (widget.onPressed == null) {
+    if (widget.onTargetTap == null) {
       return bar;
     }
     return Listener(

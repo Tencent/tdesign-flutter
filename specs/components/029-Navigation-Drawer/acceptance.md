@@ -27,3 +27,7 @@
 范围：菜单正文 content 默认字体、布局包装、显式与局部样式，以及自定义段落控制；不扩大完整 child/footer/icon 的作用域。
 
 最终候选、双版本功能与视觉结果集中记录在 [Theme 文字槽验收](../../engineering/048-Theme-configuration-contracts/acceptance.md#自定义文字槽统一验收2026-10-22)，本组件不重复保存验证流水。既有设备及设计待办继续保留；本地结果不替代当前候选的远端 CI 或真机验证，截图不存 Spec。
+
+## API 兼容迁移候选
+
+基线 develop `3704434fd2adfb6988110bc760aaaa52a814581c`。本轮候选、双版本结果与未覆盖范围见[统一验收记录](../018-Feedback-Popup/evidence/api-compatibility.md)。双版本验证及本地 Review 通过。

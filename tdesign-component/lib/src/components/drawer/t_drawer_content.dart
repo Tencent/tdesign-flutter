@@ -7,7 +7,13 @@ part of 't_drawer.dart';
 ///
 /// ## 返回值
 /// 无返回值。
-typedef TDrawerItemClickCallback = void Function(int index, TDrawerItem item);
+typedef TDrawerItemTapCallback = void Function(int index, TDrawerItem item);
+
+/// 兼容类型，请使用 [TDrawerItemTapCallback]；2.0.0 删除。
+@Deprecated(
+  'Use TDrawerItemTapCallback instead. Deprecated in 1.0.1; remove in 2.0.0.',
+)
+typedef TDrawerItemClickCallback = TDrawerItemTapCallback;
 
 /// `TDrawer` 的内部内容布局。
 class _TDrawerContent extends StatelessWidget {
@@ -16,7 +22,7 @@ class _TDrawerContent extends StatelessWidget {
     this.items,
     this.child,
     this.title,
-    this.onItemClick,
+    this.onItemTap,
     this.enableFeedback = true,
     this.showDivider = true,
     this.showLastDivider = true,
@@ -35,7 +41,7 @@ class _TDrawerContent extends StatelessWidget {
   final Widget? title;
 
   /// 点击抽屉里的列表项触发
-  final TDrawerItemClickCallback? onItemClick;
+  final TDrawerItemTapCallback? onItemTap;
 
   /// 宽度；优先级高于 ThemeData，默认使用 280。
 
@@ -103,9 +109,9 @@ class _TDrawerContent extends StatelessWidget {
                     final item = items![index];
                     return _DrawerMenuItem(
                       item: item,
-                      onTap: onItemClick == null
+                      onTap: onItemTap == null
                           ? null
-                          : () => onItemClick!(index, item),
+                          : () => onItemTap!(index, item),
                       enableFeedback: enableFeedback,
                       textStyle: _itemTextStyle(context, drawerTheme),
                       backgroundColor:

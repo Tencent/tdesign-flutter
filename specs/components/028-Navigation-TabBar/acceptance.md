@@ -32,3 +32,7 @@
 范围：自定义菜单默认字体、等高自然布局、动态内容、固定高度、滚动与原生段落；本轮补充自定义长文案、混合内容和滚动前后的明暗 Golden。
 
 最终候选、双版本功能与视觉结果集中记录在 [Theme 文字槽验收](../../engineering/048-Theme-configuration-contracts/acceptance.md#自定义文字槽统一验收2026-10-22)，本组件不重复保存验证流水。既有设备及设计待办继续保留；本地结果不替代当前候选的远端 CI 或真机验证，截图不存 Spec。
+
+## API 兼容迁移候选
+
+基线 develop `3704434fd2adfb6988110bc760aaaa52a814581c`。本轮候选、双版本结果与未覆盖范围见[统一验收记录](../018-Feedback-Popup/evidence/api-compatibility.md)。双版本验证及本地 Review 通过。

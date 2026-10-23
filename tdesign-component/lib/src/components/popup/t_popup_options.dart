@@ -33,7 +33,11 @@ class TPopupOptions {
     this.radius,
     this.backgroundColor,
     this.overlay,
-    this.destroyOnClose = false,
+    @Deprecated(
+      'Use maintainState with the old value inverted instead. Deprecated in 1.0.1; remove in 2.0.0.',
+    )
+    bool destroyOnClose = false,
+    bool? maintainState,
     this.animationDuration,
     this.headerBuilder,
     this.closeBuilder,
@@ -41,7 +45,10 @@ class TPopupOptions {
     this.onClosed,
     this.onVisibleChange,
     this.useSafeArea = false,
-  });
+  }) : _maintainState = maintainState,
+       _destroyOnClose = maintainState == null
+           ? destroyOnClose
+           : !maintainState;
 
   /// 底部弹出配置。
   factory TPopupOptions.bottom({
@@ -52,7 +59,11 @@ class TPopupOptions {
     double? radius,
     Color? backgroundColor,
     TPopupOverlayConfig? overlay,
+    @Deprecated(
+      'Use maintainState with the old value inverted instead. Deprecated in 1.0.1; remove in 2.0.0.',
+    )
     bool destroyOnClose = false,
+    bool? maintainState,
     Duration? animationDuration,
     VoidCallback? onOpened,
     VoidCallback? onClosed,
@@ -67,7 +78,7 @@ class TPopupOptions {
     radius: radius,
     backgroundColor: backgroundColor,
     overlay: overlay,
-    destroyOnClose: destroyOnClose,
+    maintainState: maintainState ?? !destroyOnClose,
     animationDuration: animationDuration,
     onOpened: onOpened,
     onClosed: onClosed,
@@ -84,7 +95,11 @@ class TPopupOptions {
     double? radius,
     Color? backgroundColor,
     TPopupOverlayConfig? overlay,
+    @Deprecated(
+      'Use maintainState with the old value inverted instead. Deprecated in 1.0.1; remove in 2.0.0.',
+    )
     bool destroyOnClose = false,
+    bool? maintainState,
     Duration? animationDuration,
     VoidCallback? onOpened,
     VoidCallback? onClosed,
@@ -99,7 +114,7 @@ class TPopupOptions {
     radius: radius,
     backgroundColor: backgroundColor,
     overlay: overlay,
-    destroyOnClose: destroyOnClose,
+    maintainState: maintainState ?? !destroyOnClose,
     animationDuration: animationDuration,
     onOpened: onOpened,
     onClosed: onClosed,
@@ -115,7 +130,11 @@ class TPopupOptions {
     double? radius,
     Color? backgroundColor,
     TPopupOverlayConfig? overlay,
+    @Deprecated(
+      'Use maintainState with the old value inverted instead. Deprecated in 1.0.1; remove in 2.0.0.',
+    )
     bool destroyOnClose = false,
+    bool? maintainState,
     Duration? animationDuration,
     VoidCallback? onOpened,
     VoidCallback? onClosed,
@@ -129,7 +148,7 @@ class TPopupOptions {
     radius: radius,
     backgroundColor: backgroundColor,
     overlay: overlay,
-    destroyOnClose: destroyOnClose,
+    maintainState: maintainState ?? !destroyOnClose,
     animationDuration: animationDuration,
     onOpened: onOpened,
     onClosed: onClosed,
@@ -145,7 +164,11 @@ class TPopupOptions {
     double? radius,
     Color? backgroundColor,
     TPopupOverlayConfig? overlay,
+    @Deprecated(
+      'Use maintainState with the old value inverted instead. Deprecated in 1.0.1; remove in 2.0.0.',
+    )
     bool destroyOnClose = false,
+    bool? maintainState,
     Duration? animationDuration,
     VoidCallback? onOpened,
     VoidCallback? onClosed,
@@ -159,7 +182,7 @@ class TPopupOptions {
     radius: radius,
     backgroundColor: backgroundColor,
     overlay: overlay,
-    destroyOnClose: destroyOnClose,
+    maintainState: maintainState ?? !destroyOnClose,
     animationDuration: animationDuration,
     onOpened: onOpened,
     onClosed: onClosed,
@@ -175,7 +198,11 @@ class TPopupOptions {
     double? radius,
     Color? backgroundColor,
     TPopupOverlayConfig? overlay,
+    @Deprecated(
+      'Use maintainState with the old value inverted instead. Deprecated in 1.0.1; remove in 2.0.0.',
+    )
     bool destroyOnClose = false,
+    bool? maintainState,
     Duration? animationDuration,
     VoidCallback? onOpened,
     VoidCallback? onClosed,
@@ -189,7 +216,7 @@ class TPopupOptions {
     radius: radius,
     backgroundColor: backgroundColor,
     overlay: overlay,
-    destroyOnClose: destroyOnClose,
+    maintainState: maintainState ?? !destroyOnClose,
     animationDuration: animationDuration,
     onOpened: onOpened,
     onClosed: onClosed,
@@ -225,8 +252,21 @@ class TPopupOptions {
   TPopupOverlayConfig get overlayConfig =>
       overlay ?? const TPopupOverlayConfig();
 
-  /// 为 true 时，被其他不透明路由覆盖可释放内容状态；关闭后始终释放，再次打开创建新状态。
-  final bool destroyOnClose;
+  /// 被不透明路由覆盖时是否保留内容状态，默认 true。
+  ///
+  /// false 时允许释放状态；关闭后始终释放，再次打开创建新 State。
+  /// 未传时使用旧参数 `destroyOnClose` 的取反值，同时提供时本参数优先。
+  // ignore: deprecated_member_use_from_same_package
+  bool get maintainState => _maintainState ?? !destroyOnClose;
+
+  final bool? _maintainState;
+  final bool _destroyOnClose;
+
+  /// 兼容入口，请改用取反值 [maintainState]；2.0.0 删除。
+  @Deprecated(
+    'Use maintainState with the old value inverted instead. Deprecated in 1.0.1; remove in 2.0.0.',
+  )
+  bool get destroyOnClose => _destroyOnClose;
 
   /// 打开/关闭动画时长；未指定时使用 240ms。
   final Duration? animationDuration;
@@ -280,7 +320,13 @@ class TPopupOptions {
     Object? overlay = _unset,
 
     /// 非空值替换原配置；不传或 null 保留原值。
+    @Deprecated(
+      'Use maintainState with the old value inverted instead. Deprecated in 1.0.1; remove in 2.0.0.',
+    )
     bool? destroyOnClose,
+
+    /// 非空值替换原配置，并优先于 destroyOnClose；不传或 null 保留原值。
+    bool? maintainState,
 
     /// 非空值替换原配置；不传或 null 保留原值。
     Duration? animationDuration,
@@ -322,7 +368,9 @@ class TPopupOptions {
       overlay: identical(overlay, _unset)
           ? this.overlay
           : overlay as TPopupOverlayConfig?,
-      destroyOnClose: destroyOnClose ?? this.destroyOnClose,
+      maintainState:
+          maintainState ??
+          (destroyOnClose == null ? this.maintainState : !destroyOnClose),
       animationDuration: animationDuration ?? this.animationDuration,
       headerBuilder: identical(headerBuilder, _unset)
           ? this.headerBuilder
@@ -367,7 +415,7 @@ class TPopupOptions {
       radius: radius,
       backgroundColor: backgroundColor,
       overlay: overlay,
-      destroyOnClose: destroyOnClose,
+      maintainState: maintainState,
       animationDuration: animationDuration,
       headerBuilder: isBottom ? headerBuilder : null,
       closeBuilder: isCenter ? closeBuilder : null,

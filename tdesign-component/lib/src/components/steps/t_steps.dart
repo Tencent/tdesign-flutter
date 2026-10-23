@@ -62,7 +62,7 @@ enum TStepsIndicator {
 
   /// 点状进度指示器；横向与纵向均以当前节点实心表达进度。
   ///
-  /// 在 [TSteps.progress] 中是否传入 [TSteps.onChange] 不改变该视觉语义。
+  /// 在 [TSteps.progress] 中是否传入 [TSteps.onStepTapped] 不改变该视觉语义。
   dot,
 }
 
@@ -78,7 +78,7 @@ enum TStepsStatus {
 class TSteps extends StatelessWidget {
   /// 普通进度步骤条。
   ///
-  /// [onChange] 为空时只读；非空时只报告用户点击的索引；当前进度仍由调用方更新 [value] 控制。
+  /// [onStepTapped] 为空时只读；非空时只报告用户点击的索引；当前进度仍由调用方更新 [value] 控制。
   const TSteps.progress({
     super.key,
     required this.steps,
@@ -86,23 +86,35 @@ class TSteps extends StatelessWidget {
     this.direction = TStepsDirection.horizontal,
     this.status = TStepsStatus.process,
     this.indicator = TStepsIndicator.standard,
-    this.onChange,
-  }) : _mode = TStepsMode.progress;
+    @Deprecated(
+      'Use onStepTapped instead. Deprecated in 1.0.1; remove in 2.0.0.',
+    )
+    ValueChanged<int>? onChange,
+    ValueChanged<int>? onStepTapped,
+  }) : _onStepTapped = onStepTapped,
+       _onChange = onStepTapped ?? onChange,
+       _mode = TStepsMode.progress;
 
   /// 垂直可选择步骤条。
   ///
   /// 固定使用点状指示器并显示右侧箭头：已完成节点实心，
-  /// 当前与未完成节点空心。[onChange] 只报告用户选择的索引，
+  /// 当前与未完成节点空心。[onStepTapped] 只报告用户选择的索引，
   /// 调用方需要更新 [value] 完成受控重建。
   const TSteps.selectable({
     super.key,
     required this.steps,
     required this.value,
-    required ValueChanged<int> onChange,
-  }) : direction = TStepsDirection.vertical,
+    @Deprecated(
+      'Use onStepTapped instead. Deprecated in 1.0.1; remove in 2.0.0.',
+    )
+    ValueChanged<int>? onChange,
+    ValueChanged<int>? onStepTapped,
+  }) : assert(onStepTapped != null || onChange != null),
+       direction = TStepsDirection.vertical,
        status = TStepsStatus.process,
        indicator = TStepsIndicator.dot,
-       onChange = onChange,
+       _onStepTapped = onStepTapped,
+       _onChange = onStepTapped ?? onChange,
        _mode = TStepsMode.selectable;
 
   /// 纯展示步骤条。
@@ -115,7 +127,8 @@ class TSteps extends StatelessWidget {
   }) : value = 0,
        status = TStepsStatus.process,
        indicator = TStepsIndicator.dot,
-       onChange = null,
+       _onStepTapped = null,
+       _onChange = null,
        _mode = TStepsMode.display;
 
   /// 步骤条数据
@@ -136,8 +149,17 @@ class TSteps extends StatelessWidget {
   /// 用户选择步骤时触发；调用方通过更新 [value] 实现受控模式。
   ///
   /// [TSteps.progress] 中为空时只读，非空时不改变指示器视觉；
-  /// [TSteps.selectable] 中必填。[TSteps.display] 不接收此参数。
-  final ValueChanged<int>? onChange;
+  /// [TSteps.selectable] 须提供本参数或旧参数。[TSteps.display] 不接收此参数。
+  /// 与旧参数同时提供时优先使用本参数，包含点击当前步骤。
+  // ignore: deprecated_member_use_from_same_package
+  ValueChanged<int>? get onStepTapped => _onStepTapped ?? onChange;
+
+  final ValueChanged<int>? _onStepTapped;
+  final ValueChanged<int>? _onChange;
+
+  /// 兼容入口，请使用 [onStepTapped]；2.0.0 删除。
+  @Deprecated('Use onStepTapped instead. Deprecated in 1.0.1; remove in 2.0.0.')
+  ValueChanged<int>? get onChange => _onChange;
 
   final TStepsMode _mode;
 
@@ -163,7 +185,7 @@ class TSteps extends StatelessWidget {
             status: status,
             indicator: indicator,
             mode: _mode,
-            onChange: onChange,
+            onStepTapped: onStepTapped,
           )
         : TStepsVertical(
             steps: steps,
@@ -171,7 +193,7 @@ class TSteps extends StatelessWidget {
             status: status,
             indicator: indicator,
             mode: _mode,
-            onChange: onChange,
+            onStepTapped: onStepTapped,
           );
   }
 }

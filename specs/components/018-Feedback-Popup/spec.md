@@ -87,3 +87,11 @@ Popup 是承载任意内容的基础浮层。小程序基础 Popup 默认只渲�
 验收标准描述应满足的行为，不表示已执行或通过；执行范围与证据见 [acceptance.md](./acceptance.md)，剩余事项只在 [tasks.md](./tasks.md) 维护。
 
 跨组件配置职责见 [Theme 契约](../../engineering/048-Theme-configuration-contracts/spec.md)，视觉方法见 [Golden 规范](../../engineering/044-Testing-golden-regression/spec.md)。
+
+## 1.0.1 API 兼容迁移
+
+`TPopupOverlayConfig.onTap` 替代 `onClick`，不改变遮罩点击和关闭规则。`maintainState` 替代 `destroyOnClose`，两者取反；默认保持 true。该参数仅决定被不透明路由遮挡时是否保留状态，不改变关闭后释放。false 允许状态释放，不保证每次遮挡均释放。
+
+新旧参数同时提供时，新参数优先，仅通知一次；没有新参数时保留旧公开 getter 的继承覆盖。旧入口及类型保留，标注推荐入口和 2.0.0 删除计划。旧 API、默认行为及 Controller 绑定规则不变。
+
+验收覆盖旧调用、继承覆盖、新参数优先级、空回调及实际交互；取反参数覆盖默认、真假组合、工厂、copyWith 和 normalized。

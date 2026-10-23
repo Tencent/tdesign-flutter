@@ -40,7 +40,7 @@ TPopover 已公开点击、长按、主题背景色、最小/最大尺寸和十�
 
 ### 内容与配置
 
-- 内容统一为 required Widget content；placement 默认 top。onTap/onLongTap 只通知内容手势，不隐式关闭。任意 Widget 按真实尺寸测量，width/height 是显式外框约束；min/max 约束与 padding 不得产生负布局。
+- 内容统一为 required Widget content；placement 默认 top。onTap/onLongPress（兼容 onLongTap）只通知内容手势，不隐式关闭。任意 Widget 按真实尺寸测量，width/height 是显式外框约束；min/max 约束与 padding 不得产生负布局。
 - 配色入口使用 colorPreset / TPopoverColorPreset；颜色预设不进入 Theme。borderRadius、barrierColor 等具体视觉由 TPopoverThemeData 提供，保留 Token 回退；不再公开同义的 radius/overlayColor 实例入口。
 - TPopoverWidget 是包内布局实现，不从公开包入口导出。Tag 共享的形态与配色职责是实例 variant 与 colorPreset，Theme 不保存枚举选择器。
 
@@ -111,3 +111,11 @@ TPopover 已公开点击、长按、主题背景色、最小/最大尺寸和十�
 这是对已发布“组合内容自行定义样式”契约的默认行为调整。未显式指定的字号、颜色、字重、行高和字距会变化，菜单尺寸可能随之变化；迁移时在文字实例或内容内部主题中显式保留需要的字段。
 
 发布归类：本轮与 Button/NavBar 的默认文字槽调整采用同一 patch 策略。未配置、空样式或部分显式样式仍可能改变字体、颜色、换行、尺寸和省略位置；原生 Text 的字体也可能受新默认值影响，段落参数沿用既有语义。保留旧外观需在实例或内容内部主题中明确所需字段；不以参数签名不变或测试通过承诺零兼容风险。
+
+## 1.0.1 API 兼容迁移
+
+`onLongPress` 替代 `onLongTap`，长按气泡内容的时机、关闭行为保持不变。
+
+新旧参数同时提供时，新参数优先，仅通知一次；没有新参数时保留旧公开 getter 的继承覆盖。旧入口及类型保留，标注推荐入口和 2.0.0 删除计划。旧 API、默认行为及 Controller 绑定规则不变。
+
+验收覆盖旧调用、继承覆盖、新参数优先级、空回调及实际交互；取反参数覆盖默认、真假组合、工厂、copyWith 和 normalized。
