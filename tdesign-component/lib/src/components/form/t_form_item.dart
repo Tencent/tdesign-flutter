@@ -64,8 +64,9 @@ class TFormItem extends StatelessWidget {
 
   /// 内容区域的水平方向对齐方式。
   ///
-  /// 未传时默认起始侧对齐；影响
-  /// 字段控件、help 和 error 的外部位置，不影响输入文本自身的对齐方式。
+  /// 未传时依次回退：[TFormThemeData.contentAlignment]（Form 级通用默认值）、
+  /// [TFormItemContentAlignment.start]；影响字段控件、help 和 error 的
+  /// 外部位置，不影响输入文本自身的对齐方式。
   final TFormItemContentAlignment? contentAlignment;
 
   /// 是否展示继承的校验错误。
@@ -85,8 +86,9 @@ class TFormItem extends StatelessWidget {
     final effectiveLeadingGap = theme?.leadingGap ?? token.spacer;
     final effectiveVerticalAlignment =
         verticalAlignment ?? TFormItemVerticalAlignment.start;
-    final effectiveContentAlignment =
-        contentAlignment ?? TFormItemContentAlignment.start;
+    final effectiveContentAlignment = contentAlignment ??
+        theme?.contentAlignment ??
+        TFormItemContentAlignment.start;
     final horizontalCrossAxisAlignment = switch (effectiveVerticalAlignment) {
       TFormItemVerticalAlignment.start => CrossAxisAlignment.start,
       TFormItemVerticalAlignment.center => CrossAxisAlignment.center,
@@ -182,35 +184,35 @@ class TFormItem extends StatelessWidget {
             required: effectiveRequired,
             errorText: effectiveErrorText,
             showErrorInInput: false,
-            child: effectiveContentAlignment == TFormItemContentAlignment.end
-                ? Align(alignment: contentAreaAlignment, child: child)
-                : child,
+            child: effectiveContentAlignment == TFormItemContentAlignment.start
+                ? child
+                : Align(alignment: contentAreaAlignment, child: child),
           ),
         ),
         if (effectiveErrorText != null) ...[
           SizedBox(height: theme?.messageGap ?? 4.0),
-          effectiveContentAlignment == TFormItemContentAlignment.end
-              ? Align(
+          effectiveContentAlignment == TFormItemContentAlignment.start
+              ? TTextStyled(effectiveErrorText, style: errorStyle)
+              : Align(
                   alignment: contentAreaAlignment,
                   child: TTextStyled(
                     effectiveErrorText,
                     textAlign: contentTextAlign,
                     style: errorStyle,
                   ),
-                )
-              : TTextStyled(effectiveErrorText, style: errorStyle),
+                ),
         ] else if (help != null) ...[
           SizedBox(height: theme?.messageGap ?? 4.0),
-          effectiveContentAlignment == TFormItemContentAlignment.end
-              ? Align(
+          effectiveContentAlignment == TFormItemContentAlignment.start
+              ? TTextStyled(help!, style: helpStyle)
+              : Align(
                   alignment: contentAreaAlignment,
                   child: TTextStyled(
                     help!,
                     textAlign: contentTextAlign,
                     style: helpStyle,
                   ),
-                )
-              : TTextStyled(help!, style: helpStyle),
+                ),
         ],
       ],
     );

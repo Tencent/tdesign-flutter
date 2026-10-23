@@ -30,6 +30,9 @@ enum TFormItemVerticalAlignment {
 }
 
 /// 表单项内容区域的水平方向对齐方式。
+///
+/// 与小程序端 Form/FormItem 的 contentAlign(left/right) 对齐，
+/// 暂不提供 center 居中档；如需居中场景请在单独 issue 中讨论设计依据。
 enum TFormItemContentAlignment {
   /// 内容靠起始侧对齐。
   start,
@@ -51,6 +54,7 @@ class TFormThemeData extends ThemeExtension<TFormThemeData> {
     this.labelWidth,
     this.layout,
     this.labelAlign,
+    this.contentAlignment,
     this.requiredMarkPosition,
     this.labelStyle,
     this.requiredMarkStyle,
@@ -77,6 +81,12 @@ class TFormThemeData extends ThemeExtension<TFormThemeData> {
 
   /// 标签对齐方式；默认 TextAlign.start，随文字方向对齐起始侧。
   final TextAlign? labelAlign;
+
+  /// 内容区域的水平方向对齐方式，作为表单项的通用默认值。
+  ///
+  /// 表单项显式传入自身的 contentAlignment 时以表单项为准；
+  /// 未配置时为 TFormItemContentAlignment.start。
+  final TFormItemContentAlignment? contentAlignment;
 
   /// 必填标记位置。
   /// null 时使用 TFormRequiredMarkPosition.left。
@@ -132,6 +142,7 @@ class TFormThemeData extends ThemeExtension<TFormThemeData> {
     double? labelWidth,
     TFormLayout? layout,
     TextAlign? labelAlign,
+    TFormItemContentAlignment? contentAlignment,
     TFormRequiredMarkPosition? requiredMarkPosition,
     TextStyle? labelStyle,
     TextStyle? requiredMarkStyle,
@@ -150,6 +161,7 @@ class TFormThemeData extends ThemeExtension<TFormThemeData> {
       labelWidth: labelWidth ?? this.labelWidth,
       layout: layout ?? this.layout,
       labelAlign: labelAlign ?? this.labelAlign,
+      contentAlignment: contentAlignment ?? this.contentAlignment,
       requiredMarkPosition: requiredMarkPosition ?? this.requiredMarkPosition,
       labelStyle: labelStyle ?? this.labelStyle,
       requiredMarkStyle: requiredMarkStyle ?? this.requiredMarkStyle,
@@ -186,6 +198,8 @@ class TFormThemeData extends ThemeExtension<TFormThemeData> {
       labelWidth: _lerpDoubleWithDefault(labelWidth, other.labelWidth, t, 80),
       layout: t < 0.5 ? layout : other.layout,
       labelAlign: t < 0.5 ? labelAlign : other.labelAlign,
+      contentAlignment:
+          t < 0.5 ? contentAlignment : other.contentAlignment,
       requiredMarkPosition: t < 0.5
           ? requiredMarkPosition
           : other.requiredMarkPosition,
