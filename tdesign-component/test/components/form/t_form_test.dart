@@ -2110,6 +2110,101 @@ void main() {
       expect(tester.getRect(find.byKey(fieldKey)).right, 384);
     });
 
+    testWidgets('center content alignment applies to fields and messages', (
+      tester,
+    ) async {
+      const fieldKey = Key('centered-content-field');
+      await tester.pumpWidget(
+        wrap(
+          const TFormItem(
+            label: 'Label',
+            help: 'Help',
+            contentAlignment: TFormItemContentAlignment.center,
+            child: SizedBox(key: fieldKey, width: 40, height: 24),
+          ),
+        ),
+      );
+
+      // 宽 400，水平内边距 16，标签宽 80，标签与内容间距 spacer2=16，
+      // 内容区为 [112, 384)；居中时字段的水平中心应等于内容区中心 248。
+      final fieldRect = tester.getRect(find.byKey(fieldKey));
+      final helpRect = tester.getRect(find.text('Help'));
+      expect(fieldRect.center.dx, 248);
+      expect(helpRect.center.dx, 248);
+    });
+
+    testWidgets('form theme contentAlignment provides item default', (
+      tester,
+    ) async {
+      const fieldKey = Key('theme-default-field');
+      const overrideKey = Key('theme-override-field');
+      await tester.pumpWidget(
+        wrap(
+          const Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              TFormItem(
+                label: 'Label',
+                child: SizedBox(key: fieldKey, width: 40, height: 24),
+              ),
+              TFormItem(
+                label: 'Label',
+                contentAlignment: TFormItemContentAlignment.start,
+                child: SizedBox(key: overrideKey, width: 40, height: 24),
+              ),
+            ],
+          ),
+          formTheme: TFormThemeData(
+            contentAlignment: TFormItemContentAlignment.end,
+          ),
+        ),
+      );
+
+      // 未显式指定的表单项回退到 Form 级默认值 end；
+      // 显式传入 start 的表单项保持起始侧对齐（内容区左缘 112）。
+      expect(tester.getRect(find.byKey(fieldKey)).right, 384);
+      expect(tester.getRect(find.byKey(overrideKey)).left, 112);
+    });
+
+    testWidgets('center alignment applies to TStepper and TRate', (
+      tester,
+    ) async {
+      const stepperKey = Key('aligned-stepper');
+      const rateKey = Key('aligned-rate');
+      await tester.pumpWidget(
+        wrap(
+          Theme(
+            data: ThemeData().mergeExtension(
+              const TFormThemeData(
+                contentAlignment: TFormItemContentAlignment.center,
+              ),
+            ),
+            child: const Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                TFormItem(
+                  label: '数量',
+                  child: TStepper(key: stepperKey, value: 1),
+                ),
+                TFormItem(
+                  label: '评分',
+                  child: TRate(key: rateKey, value: 3),
+                ),
+              ],
+            ),
+          ),
+        ),
+      );
+
+      // 内容区为 [112, 384)，中心 dx = 248；
+      // TStepper/TRate 自身不铺满宽度（MainAxisSize.min），
+      // 补齐通用对齐后应整体居中于内容区。
+      final stepperRect = tester.getRect(find.byKey(stepperKey));
+      final rateRect = tester.getRect(find.byKey(rateKey));
+      expect(stepperRect.center.dx, 248);
+      expect(rateRect.center.dx, 248);
+    });
+
     testWidgets('physical and directional label alignments differ in RTL', (
       tester,
     ) async {
@@ -2178,6 +2273,7 @@ void main() {
       labelWidth: 80,
       layout: TFormLayout.horizontal,
       labelAlign: TextAlign.left,
+      contentAlignment: TFormItemContentAlignment.start,
       requiredMarkPosition: TFormRequiredMarkPosition.left,
       labelStyle: TextStyle(fontSize: 12),
       requiredMarkStyle: TextStyle(color: Colors.red),
@@ -2195,6 +2291,7 @@ void main() {
       labelWidth: 120,
       layout: TFormLayout.vertical,
       labelAlign: TextAlign.right,
+      contentAlignment: TFormItemContentAlignment.end,
       requiredMarkPosition: TFormRequiredMarkPosition.right,
       labelStyle: TextStyle(fontSize: 16),
       requiredMarkStyle: TextStyle(color: Colors.blue),
@@ -2216,6 +2313,7 @@ void main() {
             labelWidth: 100,
             layout: TFormLayout.vertical,
             labelAlign: TextAlign.center,
+            contentAlignment: TFormItemContentAlignment.center,
             requiredMarkPosition: TFormRequiredMarkPosition.right,
             labelStyle: const TextStyle(fontSize: 14),
             requiredMarkStyle: const TextStyle(color: Colors.green),
@@ -2234,6 +2332,21 @@ void main() {
     expect(base.lerp(null, 0.5), same(base));
     expect(base.lerp(other, 0.25).showColon, isTrue);
     expect(base.lerp(other, 0.75).layout, TFormLayout.vertical);
+    expect(
+      base.lerp(other, 0.25).contentAlignment,
+      TFormItemContentAlignment.start,
+    );
+    expect(
+      base.lerp(other, 0.75).contentAlignment,
+      TFormItemContentAlignment.end,
+    );
+    expect(base.copyWith().contentAlignment, TFormItemContentAlignment.start);
+    expect(
+      base
+          .copyWith(contentAlignment: TFormItemContentAlignment.center)
+          .contentAlignment,
+      TFormItemContentAlignment.center,
+    );
     expect(
       base.lerp(other, 0.25).requiredMarkPosition,
       TFormRequiredMarkPosition.left,
