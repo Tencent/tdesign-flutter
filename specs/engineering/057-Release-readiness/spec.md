@@ -49,3 +49,7 @@
 - 默认、显式配置、关键状态与边界行为符合最终方案；功能、视觉和人工路径按适用范围分别验收。
 
 验收标准描述应满足的行为，不表示已执行或通过；执行范围与证据见 [acceptance.md](./acceptance.md)，剩余事项只在 [tasks.md](./tasks.md) 维护。
+
+## 未使用版本工具清理
+
+VersionUtil 与 kIsFlutterWebAfter320 位于内部 src/util，未由包入口导出，库内无调用。删除该历史实现与重复/空注释，不新增版本探测、不改 SDK 约束、组件 API 或默认行为。依赖 package:tdesign_flutter/src/util/version_util.dart 的外部深层导入将失效，该内部文件不作为受支持入口保留；正式包入口用户无需迁移。冻结证据内的旧文件路径保留原样用于追溯。验收为全库引用/导出检查与 Flutter 双版本严格分析；清理不关闭设备、设计、Token 或发布门槛。
