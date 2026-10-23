@@ -1,21 +1,10 @@
-import 'dart:io';
-
-import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:tdesign_flutter/tdesign_flutter.dart';
 
+import '../../helpers/component_golden_fonts.dart';
+
 void main() {
-  setUpAll(() async {
-    final iconFont = FontLoader('packages/tdesign_flutter_icons/TIcons')
-      ..addFont(rootBundle.load('packages/tdesign_flutter_icons/fonts/t.ttf'));
-    final cjkFont = FontLoader('TDesign Alignment CJK')
-      ..addFont(
-        File(
-          'example/test/fonts/TDesignAlignmentCJK-Regular.otf',
-        ).readAsBytes().then(ByteData.sublistView),
-      );
-    await Future.wait([iconFont.load(), cjkFont.load()]);
-  });
+  setUpAll(loadComponentGoldenFonts);
 
   for (final brightness in Brightness.values) {
     testWidgets('BackTop 8-state matrix ${brightness.name}', (tester) async {
@@ -24,18 +13,7 @@ void main() {
       addTearDown(tester.view.resetPhysicalSize);
       addTearDown(tester.view.resetDevicePixelRatio);
 
-      final token = TThemeData.defaultData();
-      final baseTheme = brightness == Brightness.light
-          ? TThemeBuilder.light(token)
-          : TThemeBuilder.dark(token);
-      final theme = baseTheme.copyWith(
-        textTheme: baseTheme.textTheme.apply(
-          fontFamilyFallback: const ['TDesign Alignment CJK'],
-        ),
-        primaryTextTheme: baseTheme.primaryTextTheme.apply(
-          fontFamilyFallback: const ['TDesign Alignment CJK'],
-        ),
-      );
+      final theme = componentGoldenTheme(brightness);
       await tester.pumpWidget(
         MaterialApp(
           theme: theme,

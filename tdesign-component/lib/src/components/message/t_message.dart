@@ -7,6 +7,7 @@ import 'package:tdesign_flutter_icons/tdesign_flutter_icons.dart';
 import '../../theme/t_colors.dart';
 import '../../theme/t_fonts.dart';
 import '../../theme/t_internal_material.dart';
+import '../../theme/t_overlay_themes.dart';
 import '../../theme/t_radius.dart';
 import '../../theme/t_shadows.dart';
 import '../../theme/t_theme.dart';
@@ -166,7 +167,7 @@ class TMessage extends StatefulWidget {
     final messageKey = GlobalKey<_TMessageState>();
     late OverlayEntry entry;
     final overlay = Overlay.of(context);
-    final captured = InheritedTheme.capture(from: context, to: overlay.context);
+    final captured = TOverlayThemes.capture(from: context, to: overlay.context);
     final slot = offset == null
         ? (_defaultSlots[overlay] ??= _TMessageSlot())
         : null;
@@ -200,6 +201,7 @@ class TMessage extends StatefulWidget {
 
     entry = OverlayEntry(
       builder: (context) => captured.wrap(
+        context,
         TMessage(
           key: messageKey,
           content: content,
@@ -280,7 +282,7 @@ class _TMessageState extends State<TMessage>
     final minimumTop = _safePadding.top;
     final maximumTop = math.max(
       minimumTop,
-      MediaQuery.sizeOf(context).height - _safePadding.bottom - 48,
+      MediaQuery.sizeOf(context).height - _safePadding.bottom - _contentHeight,
     );
     return desiredTop.clamp(minimumTop, maximumTop).toDouble();
   }
@@ -451,14 +453,27 @@ class _TMessageState extends State<TMessage>
     });
   }
 
-  Widget _buildText(BuildContext context) {
+  TextStyle _bodyTextStyle(BuildContext context) {
     final font = context.tTheme.fontBodyMedium;
-    final style = TextStyle(
+    return TextStyle(
       color: context.tTheme.textColorPrimary,
       fontSize: font?.size,
       height: font?.height,
       fontWeight: font?.fontWeight,
     );
+  }
+
+  double get _contentHeight => math.max(
+    48,
+    TTextStyled(
+      widget.content,
+      style: _bodyTextStyle(context),
+      maxLines: 1,
+    ).naturalSize(context).height,
+  );
+
+  Widget _buildText(BuildContext context) {
+    final style = _bodyTextStyle(context);
     if (widget.marquee == null) {
       return Align(
         alignment: Alignment.centerLeft,
@@ -571,7 +586,7 @@ class _TMessageState extends State<TMessage>
         );
     final content = SizedBox(
       width: _effectiveWidth,
-      height: 48,
+      height: _contentHeight,
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 16),
         child: Row(
@@ -584,7 +599,7 @@ class _TMessageState extends State<TMessage>
             if (widget.action != null) ...[
               const SizedBox(width: 8),
               ConstrainedBox(
-                constraints: const BoxConstraints(maxWidth: 96),
+                constraints: const BoxConstraints(maxWidth: 96, maxHeight: 48),
                 child: widget.action,
               ),
             ],

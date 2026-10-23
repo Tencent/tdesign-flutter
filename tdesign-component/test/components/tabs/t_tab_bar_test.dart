@@ -278,11 +278,10 @@ void main() {
       );
 
       final tagContainers = find.byWidgetPredicate((widget) {
-        if (widget is! Container || widget.decoration is! BoxDecoration) {
+        if (widget is! Container || widget.decoration is! ShapeDecoration) {
           return false;
         }
-        return (widget.decoration! as BoxDecoration).borderRadius ==
-            BorderRadius.circular(16);
+        return (widget.decoration! as ShapeDecoration).shape is StadiumBorder;
       });
       expect(tagContainers, findsNWidgets(3));
 
@@ -292,14 +291,14 @@ void main() {
       );
       expect(tabBar.labelPadding, const EdgeInsets.all(4));
       expect(
-        containers.map((item) => (item.decoration! as BoxDecoration).color),
+        containers.map((item) => (item.decoration! as ShapeDecoration).color),
         [selectedColor, backgroundColor, backgroundColor],
       );
       for (final container in containers) {
         final size = tester.getSize(find.byWidget(container));
         expect(size.height, 32);
         expect(size.width, greaterThan(80));
-        expect(container.padding, const EdgeInsets.symmetric(horizontal: 8));
+        expect(container.padding, const EdgeInsets.symmetric(horizontal: 16));
       }
     });
 

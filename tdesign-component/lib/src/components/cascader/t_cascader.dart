@@ -1,3 +1,5 @@
+import 'dart:math' as math;
+
 import 'package:flutter/foundation.dart' show listEquals;
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -169,28 +171,113 @@ class _TCascaderState extends State<TCascader> {
                 borderRadius: borderRadius,
               ),
               clipBehavior: Clip.antiAlias,
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  _buildNavigation(context, selected, theme),
-                  TInternalDivider(
-                    height: 1,
-                    thickness: 1,
-                    color:
-                        theme?.dividerColor ?? context.tTheme.componentStroke,
-                  ),
-                  if (_activeLevel < widget.subtitles.length &&
-                      widget.subtitles[_activeLevel].isNotEmpty)
-                    _buildSubtitle(context),
-                  Expanded(
-                    child: TInternalScrollScope(child: ListView.builder(
-                      padding: EdgeInsets.zero,
-                      itemCount: options.length,
-                      itemBuilder: (context, index) =>
-                          _buildOption(context, options[index], theme),
-                    )),
-                  ),
-                ],
+              child: LayoutBuilder(
+                builder: (context, constraints) {
+                  final styles = _resolveTextStyles(context, theme);
+                  var rowHeight = 56.0;
+                  for (final style in [
+                    styles.normal,
+                    styles.active,
+                    styles.selected,
+                    styles.disabled,
+                  ]) {
+                    rowHeight = math.max(
+                      rowHeight,
+                      TTextStyled(
+                        '国Ag',
+                        style: style,
+                        centerLeading: true,
+                      ).naturalSize(context).height,
+                    );
+                  }
+                  final bodyReserve = math.min(
+                    rowHeight,
+                    constraints.maxHeight / 2,
+                  );
+                  final navReserve = math.min(
+                    rowHeight,
+                    math.max(0, constraints.maxHeight - bodyReserve - 1),
+                  );
+                  final hasSubtitle =
+                      _activeLevel < widget.subtitles.length &&
+                      widget.subtitles[_activeLevel].isNotEmpty;
+                  var subtitleHeight = 0.0;
+                  if (hasSubtitle) {
+                    final font = context.tTheme.fontBodyMedium;
+                    subtitleHeight =
+                        TTextStyled(
+                              widget.subtitles[_activeLevel],
+                              style: TextStyle(
+                                fontSize: font?.size,
+                                height: font?.height,
+                                fontWeight: font?.fontWeight,
+                              ),
+                            )
+                            .naturalSize(
+                              context,
+                              maxWidth: math.max(
+                                0,
+                                constraints.maxWidth -
+                                    context.tTheme.spacer2 * 2,
+                              ),
+                            )
+                            .height +
+                        20 +
+                        context.tTheme.spacer;
+                    subtitleHeight = math.min(
+                      subtitleHeight,
+                      math.max(
+                        0,
+                        constraints.maxHeight - bodyReserve - navReserve - 1,
+                      ),
+                    );
+                  }
+                  final navHeight = math.max(
+                    0.0,
+                    constraints.maxHeight - bodyReserve - subtitleHeight - 1,
+                  );
+                  return Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      ConstrainedBox(
+                        constraints: BoxConstraints(maxHeight: navHeight),
+                        child: TInternalScrollScope(
+                          child: SingleChildScrollView(
+                            child: _buildNavigation(context, selected, theme),
+                          ),
+                        ),
+                      ),
+                      TInternalDivider(
+                        height: 1,
+                        thickness: 1,
+                        color:
+                            theme?.dividerColor ??
+                            context.tTheme.componentStroke,
+                      ),
+                      if (hasSubtitle)
+                        ConstrainedBox(
+                          constraints: BoxConstraints(
+                            maxHeight: subtitleHeight,
+                          ),
+                          child: TInternalScrollScope(
+                            child: SingleChildScrollView(
+                              child: _buildSubtitle(context),
+                            ),
+                          ),
+                        ),
+                      Expanded(
+                        child: TInternalScrollScope(
+                          child: ListView.builder(
+                            padding: EdgeInsets.zero,
+                            itemCount: options.length,
+                            itemBuilder: (context, index) =>
+                                _buildOption(context, options[index], theme),
+                          ),
+                        ),
+                      ),
+                    ],
+                  );
+                },
               ),
             ),
           ),
@@ -250,16 +337,18 @@ class _TCascaderState extends State<TCascader> {
         ),
       );
     }
-    return TInternalScrollScope(child: SingleChildScrollView(
-      scrollDirection: Axis.horizontal,
-      padding: theme?.navigationPadding,
-      child: Row(
-        children: [
-          for (final entry in entries)
-            _buildTabNavigationEntry(context, entry, styles, activeColor),
-        ],
+    return TInternalScrollScope(
+      child: SingleChildScrollView(
+        scrollDirection: Axis.horizontal,
+        padding: theme?.navigationPadding,
+        child: Row(
+          children: [
+            for (final entry in entries)
+              _buildTabNavigationEntry(context, entry, styles, activeColor),
+          ],
+        ),
       ),
-    ));
+    );
   }
 
   Widget _buildStepNavigationEntry(
@@ -274,55 +363,74 @@ class _TCascaderState extends State<TCascader> {
       onTap: entry.onTap,
       enabled: entry.enabled,
       selected: entry.active,
-      child: SizedBox(
-        height: 44,
-        child: Row(
-          children: [
-            SizedBox(
-              width: 8,
-              height: 44,
-              child: Stack(
-                alignment: Alignment.center,
-                children: [
-                  if (index > 0)
-                    Positioned(
-                      top: 0,
-                      bottom: 26,
-                      child: Container(width: 1, color: activeColor),
+      child: ConstrainedBox(
+        constraints: const BoxConstraints(minHeight: 44),
+        child: IntrinsicHeight(
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              SizedBox(
+                width: 8,
+                height: 0,
+                child: Stack(
+                  alignment: Alignment.center,
+                  children: [
+                    if (index > 0)
+                      Align(
+                        alignment: Alignment.topCenter,
+                        child: FractionallySizedBox(
+                          heightFactor: .5,
+                          child: Padding(
+                            padding: const EdgeInsets.only(bottom: 4),
+                            child: Container(width: 1, color: activeColor),
+                          ),
+                        ),
+                      ),
+                    if (index < length - 1)
+                      Align(
+                        alignment: Alignment.bottomCenter,
+                        child: FractionallySizedBox(
+                          heightFactor: .5,
+                          child: Padding(
+                            padding: const EdgeInsets.only(top: 4),
+                            child: Container(width: 1, color: activeColor),
+                          ),
+                        ),
+                      ),
+                    Container(
+                      width: 8,
+                      height: 8,
+                      decoration: BoxDecoration(
+                        color: entry.selected
+                            ? activeColor
+                            : context.tTheme.bgColorContainer,
+                        border: Border.all(color: activeColor),
+                        shape: BoxShape.circle,
+                      ),
                     ),
-                  if (index < length - 1)
-                    Positioned(
-                      top: 26,
-                      bottom: 0,
-                      child: Container(width: 1, color: activeColor),
-                    ),
-                  Container(
-                    width: 8,
-                    height: 8,
-                    decoration: BoxDecoration(
-                      color: entry.selected
-                          ? activeColor
-                          : context.tTheme.bgColorContainer,
-                      border: Border.all(color: activeColor),
-                      shape: BoxShape.circle,
-                    ),
+                  ],
+                ),
+              ),
+              SizedBox(width: context.tTheme.spacer2),
+              Expanded(
+                child: Align(
+                  alignment: Alignment.centerLeft,
+                  child: TTextStyled(
+                    entry.label,
+                    centerLeading: true,
+                    style: entry.active ? styles.active : styles.normal,
                   ),
-                ],
+                ),
               ),
-            ),
-            SizedBox(width: context.tTheme.spacer2),
-            Expanded(
-              child: TTextStyled(
-                entry.label,
-                style: entry.active ? styles.active : styles.normal,
+              Center(
+                child: TIcon(
+                  TIcons.chevron_right,
+                  size: 22,
+                  color: context.tTheme.textColorPlaceholder,
+                ),
               ),
-            ),
-            TIcon(
-              TIcons.chevron_right,
-              size: 22,
-              color: context.tTheme.textColorPlaceholder,
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );
@@ -339,17 +447,22 @@ class _TCascaderState extends State<TCascader> {
       enabled: entry.enabled,
       selected: entry.active,
       child: Container(
-        height: 48,
+        constraints: const BoxConstraints(minHeight: 48),
         padding: EdgeInsets.symmetric(horizontal: context.tTheme.spacer2),
         decoration: BoxDecoration(
           border: entry.active
               ? Border(bottom: BorderSide(width: 2, color: activeColor))
               : null,
         ),
-        alignment: Alignment.center,
-        child: TTextStyled(
-          entry.label,
-          style: entry.active ? styles.active : styles.normal,
+        child: Align(
+          alignment: Alignment.center,
+          heightFactor: 1,
+          widthFactor: 1,
+          child: TTextStyled(
+            entry.label,
+            centerLeading: true,
+            style: entry.active ? styles.active : styles.normal,
+          ),
         ),
       ),
     );
@@ -403,8 +516,8 @@ class _TCascaderState extends State<TCascader> {
       onTap: onTap,
       enabled: _enabled && !option.disabled,
       selected: selected,
-      child: SizedBox(
-        height: 56,
+      child: ConstrainedBox(
+        constraints: const BoxConstraints(minHeight: 56),
         child: Padding(
           padding: EdgeInsets.symmetric(horizontal: context.tTheme.spacer2),
           child: Row(
@@ -412,6 +525,7 @@ class _TCascaderState extends State<TCascader> {
               Expanded(
                 child: TTextStyled(
                   option.label,
+                  centerLeading: true,
                   style: option.disabled
                       ? styles.disabled
                       : selected

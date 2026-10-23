@@ -1,7 +1,91 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:tdesign_flutter/tdesign_flutter.dart';
 
+import '../../helpers/text_slot_regression.dart';
+
 void main() {
+  registerNativeParagraphContractTests(
+    'Drawer custom menu',
+    (child) => SizedBox(
+      height: 400,
+      child: TDrawer(items: [TDrawerItem(content: child)]),
+    ),
+    reset: false,
+  );
+  for (final wrapper in ['direct', 'Row', 'Padding', 'Builder']) {
+    registerTextSlotParityTests('Drawer menu content $wrapper', (child) {
+      final content = switch (wrapper) {
+        'Row' => Row(mainAxisSize: MainAxisSize.min, children: [child]),
+        'Padding' => Padding(padding: const EdgeInsets.all(3), child: child),
+        'Builder' => Builder(builder: (_) => child),
+        _ => child,
+      };
+      return SizedBox(
+        height: 400,
+        child: TDrawer(items: [TDrawerItem(content: content)]),
+      );
+    });
+  }
+
+  testWidgets(
+    'Drawer menu content uses component defaults without forcing a single line',
+    (tester) async {
+      await tester.pumpWidget(
+        MaterialApp(
+          theme: TThemeBuilder.light(TThemeData.defaultData()).mergeExtension(
+            const TDrawerThemeData(
+              itemTextStyle: TextStyle(fontSize: 19, color: Colors.purple),
+            ),
+          ),
+          home: const Scaffold(
+            body: SizedBox(
+              height: 400,
+              child: TDrawer(
+                items: [
+                  TDrawerItem(
+                    content: TText(
+                      'custom\nsecond',
+                      maxLines: 2,
+                      overflow: TextOverflow.fade,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ),
+      );
+      final rich = tester.widget<RichText>(
+        find.descendant(
+          of: find.text('custom\nsecond'),
+          matching: find.byType(RichText),
+        ),
+      );
+      expect(rich.text.style!.fontSize, 19);
+      expect(rich.text.style!.color, Colors.purple);
+      expect(rich.maxLines, 2);
+      expect(rich.overflow, TextOverflow.fade);
+      expect(tester.takeException(), isNull);
+    },
+  );
+
+  registerNativeParagraphContractTests(
+    'Drawer title slot',
+    (child) => SizedBox(
+      height: 400,
+      child: TDrawer(title: child, items: const []),
+    ),
+    reset: true,
+  );
+
+  registerTextSlotParityTests(
+    'Drawer title slot',
+    (child) => SizedBox(
+      height: 400,
+      child: TDrawer(title: child, items: const []),
+    ),
+  );
+
   ThemeData fullTheme({TDrawerThemeData? drawerTheme}) {
     var theme = TThemeBuilder.light(TThemeData.defaultData());
     if (drawerTheme != null) {

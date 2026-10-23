@@ -183,12 +183,12 @@ TCalendar 组件级 ThemeExtension
 | --- | --- | --- | --- | --- |
 | bodyPadding | double? | - | 日历主体内边距；为 null 时使用全局 spacer2 Token。 | 否 |
 | cellDecoration | BoxDecoration? | - | 日期单元格装饰（选中状态） null 时按日期格选择状态与全局 Token 解析默认装饰。 | 否 |
-| cellHeight | double? | - | 日期单元格高度；为 null 时使用 60 逻辑像素。 | 否 |
+| cellHeight | double? | - | 日期单元格高度；为 null 时至少为 60 逻辑像素，内置日期随文字自然行高增长。 | 否 |
 | centreColor | Color? | - | 区间中间格背景与格间衔接条颜色 null 时按区间格的选择状态与当前 Token 解析区间背景。 | 否 |
 | dayStyle | TextStyle? | - | 日期数字样式 null 时继承当前全局 Token 与日期格状态解析的样式。 | 否 |
 | decoration | BoxDecoration? | - | 组件容器装饰 null 时继承当前全局 Token 解析的容器装饰。 | 否 |
 | height | double? | - | 日历整体高度；为 null 时由星期栏、月份标题、六行日期、间距和内边距计算视窗高度，不按全部月份展开。 | 否 |
-| monthTitleHeight | double? | - | 月份标题高度；为 null 时使用 22 逻辑像素。 | 否 |
+| monthTitleHeight | double? | - | 月份标题高度；为 null 时至少为 22 逻辑像素，默认文字随自然行高增长。 | 否 |
 | monthTitleStyle | TextStyle? | - | 月份标题文字样式 null 时继承当前全局 Token 解析的月份标题样式。 | 否 |
 | subtitleStyle | TextStyle? | - | 副标题样式 null 时继承当前全局 Token 与选择状态解析的副标题样式。 | 否 |
 | todayDayStyle | TextStyle? | - | 今天日期数字样式 null 时继承当前全局 Token 解析的今天样式。 | 否 |

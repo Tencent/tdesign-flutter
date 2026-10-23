@@ -2,6 +2,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:provider/provider.dart';
 import 'package:tdesign_flutter/tdesign_flutter.dart';
 import 'package:tdesign_flutter_example/base/example_base.dart';
+import 'package:tdesign_flutter_example/base/example_widget.dart';
 import 'package:tdesign_flutter_example/page/switch/switch_page.dart';
 import 'package:tdesign_flutter_example/provider/theme_mode_provider.dart';
 
@@ -46,7 +47,10 @@ void main() {
     expect(find.text('01 组件类型'), findsOneWidget);
     expect(find.text('02 组件状态'), findsOneWidget);
     expect(find.text('03 组件样式'), findsOneWidget);
-    expect(find.text('04 单元测试'), findsNothing);
+    expect(
+      tester.widget<ExamplePage>(find.byType(ExamplePage)).showTestModule,
+      isTrue,
+    );
     expect(find.text('基础开关'), findsNWidgets(2));
     expect(find.text('带描述开关'), findsOneWidget);
     expect(find.text('自定义颜色开关'), findsNWidgets(2));

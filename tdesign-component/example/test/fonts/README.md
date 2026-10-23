@@ -200,3 +200,13 @@ ActionSheet、Dialog、DropdownMenu 或 NoticeBar 页面文案时，更新 feedb
 生成基线。
 
 2026-10-09 补齐源码字符“批”“逆”。沿用上述 Noto Sans SC 2.004 与 HarfBuzz，既有 cmap 字符的轮廓、横向度量和全局字体度量逐项一致。
+
+## 公开页面与内部调试区块
+
+公开 Demo 的功能与视觉测试分别通过组件包下的 `dart run tool/run_example_regression.dart`、`dart run tool/run_visual_regression.dart` 执行。两者自动传入 `--dart-define=TDESIGN_DEMO_TEST_MODULES=false`，让组件数量、代码入口、布局和截图只包含公开示例；功能调度器随后单独运行 `internal-demo` 标签，验证不传开关时 Debug 默认展示的契约。
+
+单独运行页面 Golden 时也要传入上述编译参数；不能通过修改页面默认值来隐藏调试区块。像素测试与基线生成仍仅使用 Linux + Flutter 3.32.0，保持精确比较。首次新增基线应先检查 Linux 实际图，再安装并不带更新参数重跑。
+
+自定义主题指南内部有独立的 `MaterialApp`，仅适配外层主题无法固定其原生文字字体。截图通过指南的 `themeAdapter` 注入原生文字字体与回退栈，保留原始 Token、主题名称和浅深关联；不要通过替换整个 Token 主题来修正测试字体。
+
+Theme guide Golden tests also register the SDK Roboto font under the monospace alias so explicit numeric Text styles do not resolve to the test runner Ahem font. This is test-only and does not change the application font.

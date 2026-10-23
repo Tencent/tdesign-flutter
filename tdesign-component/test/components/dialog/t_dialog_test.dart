@@ -28,6 +28,118 @@ void main() {
     );
   }
 
+  group('Dialog text slot styles', () {
+    for (final native in [false, true]) {
+      for (final slots in ['both', 'title', 'content', 'scroll']) {
+        testWidgets(
+          '${native ? 'Text' : 'TText'} inherits $slots slot styles',
+          (tester) async {
+            const titleStyle = TextStyle(
+              fontSize: 23,
+              height: 1.4,
+              fontWeight: FontWeight.w700,
+              color: Colors.purple,
+            );
+            const contentStyle = TextStyle(
+              fontSize: 17,
+              height: 1.6,
+              color: Colors.teal,
+            );
+            final body = slots == 'scroll'
+                ? List.filled(40, 'body').join('\n')
+                : 'body';
+            Widget text(String data) => native ? Text(data) : TText(data);
+            await tester.pumpWidget(
+              app(
+                TDialog(
+                  title: slots == 'content' ? null : text('heading'),
+                  content: slots == 'title' ? null : text(body),
+                ),
+                dialogTheme: const TDialogThemeData(
+                  maxHeight: 220,
+                  titleTextStyle: titleStyle,
+                  contentTextStyle: contentStyle,
+                ),
+              ),
+            );
+            await tester.pumpAndSettle();
+            void check(String data, TextStyle expected) {
+              final rich = find.descendant(
+                of: find.text(data),
+                matching: find.byType(RichText),
+              );
+              final actual = tester.widget<RichText>(rich).text.style!;
+              expect(actual.fontSize, expected.fontSize);
+              expect(actual.height, expected.height);
+              expect(actual.color, expected.color);
+              if (expected.fontWeight != null) {
+                expect(actual.fontWeight, expected.fontWeight);
+              }
+              expect(tester.widget<RichText>(rich).textAlign, TextAlign.center);
+            }
+
+            if (slots != 'content') {
+              check('heading', titleStyle);
+            }
+            if (slots != 'title') {
+              check(body, contentStyle);
+            }
+            if (slots == 'scroll') {
+              final scroll = tester.widget<SingleChildScrollView>(
+                find.byType(SingleChildScrollView),
+              );
+              expect(
+                scroll.controller!.position.maxScrollExtent,
+                greaterThan(0),
+              );
+              await tester.drag(
+                find.byType(SingleChildScrollView),
+                const Offset(0, -80),
+              );
+              await tester.pumpAndSettle();
+              expect(scroll.controller!.offset, greaterThan(0));
+            }
+            expect(tester.takeException(), isNull);
+          },
+        );
+      }
+      testWidgets(
+        '${native ? 'Text' : 'TText'} explicit styles override slot defaults',
+        (tester) async {
+          const explicit = TextStyle(
+            fontSize: 27,
+            color: Colors.orange,
+            fontWeight: FontWeight.w300,
+          );
+          await tester.pumpWidget(
+            app(
+              TDialog(
+                title: native
+                    ? const Text('explicit', style: explicit)
+                    : const TText('explicit', style: explicit),
+              ),
+              dialogTheme: const TDialogThemeData(
+                titleTextStyle: TextStyle(fontSize: 19, color: Colors.purple),
+              ),
+            ),
+          );
+          final actual = tester
+              .widget<RichText>(
+                find.descendant(
+                  of: find.text('explicit'),
+                  matching: find.byType(RichText),
+                ),
+              )
+              .text
+              .style!;
+          expect(actual.fontSize, 27);
+          expect(actual.color, Colors.orange);
+          expect(actual.fontWeight, FontWeight.w300);
+        },
+      );
+    }
+  });
+
   group('TDialog 路由与结果', () {
     testWidgets('通过居中模态路由打开并返回 typed result', (tester) async {
       bool? result;

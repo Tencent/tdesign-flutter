@@ -36,7 +36,7 @@
 | builder | TCellGroupBuilder? | - | 自定义单元格外层构建器。 | 否 |
 | cells | List&lt;TCell&gt; | - | 单元格列表。 | 是 |
 | key | Key? | - | 组件标识，用于区分或保留组件状态。 | 否 |
-| scrollable | bool | false | 是否使用可滚动列表。 | 否 |
+| scrollable | bool | false | 是否使用可滚动列表。 父级提供确定高度时，列表撑满剩余空间并可滚动；父级高度为无界时 （如放在 `SingleChildScrollView` 或 `Column` 中）按内容高度展示，不再滚动。 | 否 |
 | title | Widget? | - | 组标题。 | 否 |
 | variant | TCellGroupVariant? | - | 组视觉形态；未设置时为 `TCellGroupVariant.standard`。 | 否 |
 
@@ -104,7 +104,7 @@ Cell 与 CellGroup 的组件级 ThemeExtension。
 | arrowColor | Color? | - | 箭头颜色。 未配置时使用 textColorPlaceholder Token。 | 否 |
 | backgroundColor | Color? | - | 默认背景色。 未配置时使用 bgColorContainer Token。 | 否 |
 | borderColor | Color? | - | 分隔线颜色。 未配置时使用 componentStroke Token。 | 否 |
-| cardBorderRadius | BorderRadius? | - | 卡片组圆角。 仅卡片形态生效，未配置时为 8 逻辑像素圆角。 | 否 |
+| cardBorderRadius | BorderRadius? | - | 卡片组圆角。 仅卡片形态生效，未配置时使用 radiusLarge Token，默认 9 逻辑像素。 | 否 |
 | cardPadding | EdgeInsetsGeometry? | - | 卡片组内边距。 仅卡片形态生效，未配置时为左右 16 逻辑像素。 | 否 |
 | groupBorderColor | Color? | - | 单元格组边框颜色。 未配置时使用 componentStroke Token。 | 否 |
 | groupBordered | bool? | - | 是否显示组外边框。 未配置时为 false。 | 否 |

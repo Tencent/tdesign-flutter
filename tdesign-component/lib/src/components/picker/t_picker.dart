@@ -36,6 +36,10 @@ class TPicker extends StatefulWidget {
   final void Function(int columnIndex, TPickerValue value)? onColumnScrollEnd;
 
   /// 自定义选项构建器。
+  ///
+  /// 内容子树默认使用当前选中、未选中或禁用选项的文字样式，布局包装不影响继承。
+  /// 显式文字样式和内容内部更近的局部文字主题优先。
+  /// 不强制行数或省略；内容须适配滚轮项高度，自定义高度职责保持不变。
   final TPickerItemBuilder? itemBuilder;
 
   @override
@@ -54,11 +58,7 @@ class _TPickerState extends State<TPicker> {
   TPickerThemeData? get _theme =>
       Theme.of(context).extension<TPickerThemeData>();
 
-  double get _height => _theme?.height ?? defaultPickerHeight;
-
   int get _itemCount => _theme?.itemCount ?? defaultPickerItemCount;
-
-  double get _itemHeight => _height / _itemCount;
 
   @override
   void initState() {
@@ -179,6 +179,11 @@ class _TPickerState extends State<TPicker> {
 
   @override
   Widget build(BuildContext context) {
+    final height = resolvePickerHeight(
+      context,
+      customContent: widget.itemBuilder != null,
+    );
+    final itemHeight = height / _itemCount;
     return Semantics(
       container: true,
       explicitChildNodes: true,
@@ -189,11 +194,11 @@ class _TPickerState extends State<TPicker> {
         child: AbsorbPointer(
           absorbing: !_enabled,
           child: MultiWheelLayout(
-            height: _height,
-            itemHeight: _itemHeight,
+            height: height,
+            itemHeight: itemHeight,
             columns: [
               for (var index = 0; index < _columns.length; index++)
-                _buildColumn(context, index),
+                _buildColumn(context, index, itemHeight),
             ],
           ),
         ),
@@ -201,7 +206,11 @@ class _TPickerState extends State<TPicker> {
     );
   }
 
-  Widget _buildColumn(BuildContext context, int columnIndex) {
+  Widget _buildColumn(
+    BuildContext context,
+    int columnIndex,
+    double itemHeight,
+  ) {
     final options = _columns[columnIndex];
     if (options.isEmpty) {
       return const SizedBox.shrink();
@@ -214,7 +223,7 @@ class _TPickerState extends State<TPicker> {
           colIndex: columnIndex,
           options: options,
           controller: _controllers[columnIndex],
-          itemHeight: _itemHeight,
+          itemHeight: itemHeight,
           disabled: !_enabled,
           itemBuilder: widget.itemBuilder,
           onItemSelected: _onItemSelected,

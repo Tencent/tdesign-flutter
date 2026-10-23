@@ -5,6 +5,7 @@ import 'dart:ui' show lerpDouble;
 import 'package:flutter/material.dart';
 import 'package:meta/meta.dart';
 
+import '../../theme/t_theme.dart';
 import 't_avatar_defaults.dart';
 import 't_avatar_types.dart';
 
@@ -56,10 +57,10 @@ class TAvatarThemeData extends ThemeExtension<TAvatarThemeData> {
              groupBorderWidth * 2 <= dimension,
        );
 
-  /// 自定义头像边长；未设置时小、中、大尺寸分别为 40、48、64 逻辑像素。
+  /// 自定义头像边长；未设置时使用全局 size12/size13/size15，默认小、中、大为 40/48/64 逻辑像素。
   final double? dimension;
 
-  /// 默认图标大小；未设置时小、中、大尺寸分别为 20、24、32 逻辑像素。
+  /// 默认图标大小；未设置时小档为 20，中、大档分别读取 size8、size10（默认 24、32）。
   final double? iconSize;
 
   /// 方形头像圆角；未设置时回退全局 `radiusDefault`（默认 6 逻辑像素）。
@@ -98,16 +99,18 @@ class TAvatarThemeData extends ThemeExtension<TAvatarThemeData> {
   _AvatarDoubleLerp? get _groupSpacingLerp => null;
 
   @internal
-  double resolveDimension(TAvatarSize size) =>
-      _dimensionLerp?.resolve(TAvatarDefaults.dimensionFor(size)) ??
+  double resolveDimension(TAvatarSize size, {TThemeData? token}) =>
+      _dimensionLerp?.resolve(
+        TAvatarDefaults.dimensionFor(size, token: token),
+      ) ??
       dimension ??
-      TAvatarDefaults.dimensionFor(size);
+      TAvatarDefaults.dimensionFor(size, token: token);
 
   @internal
-  double resolveIconSize(TAvatarSize size) =>
-      _iconSizeLerp?.resolve(TAvatarDefaults.iconSizeFor(size)) ??
+  double resolveIconSize(TAvatarSize size, {TThemeData? token}) =>
+      _iconSizeLerp?.resolve(TAvatarDefaults.iconSizeFor(size, token: token)) ??
       iconSize ??
-      TAvatarDefaults.iconSizeFor(size);
+      TAvatarDefaults.iconSizeFor(size, token: token);
 
   @internal
   double resolveCircleBorderRadius(double tokenRadius) =>

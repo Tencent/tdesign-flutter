@@ -33,7 +33,6 @@ class TBadgePage extends StatelessWidget {
         desc: '用于告知用户，该区域的状态变化或者待处理任务的数量。',
         exampleCodeGroup: 'badge',
         backgroundColor: pageBackground,
-        showTestModule: false,
         children: [
           ExampleModule(
             title: '组件类型',

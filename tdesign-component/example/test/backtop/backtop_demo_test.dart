@@ -13,7 +13,7 @@ void main() {
 
     final page = tester.widget<ExamplePage>(find.byType(ExamplePage));
     expect(page.compactDemo, isTrue);
-    expect(page.showTestModule, isFalse);
+    expect(page.showTestModule, isTrue);
     expect(
       page.floatingActionButtonAnimator,
       FloatingActionButtonAnimator.noAnimation,

@@ -35,3 +35,11 @@ dart run tool/generate_example_code.dart --check
 提交示例改动时，必须一并提交生成的 `assets/code/*.txt`。`--check` 不写文件，CI 使用它检查源码片段是否过期。
 
 有状态或依赖数据的示例优先使用类级注解。生成器会携带当前文件的 imports 和对应 `State<Widget>`；示例所需的数据与 helper 应放在该 Widget/State 内，不能依赖页面壳的私有声明。Web 组件文档通过 `{{ flutter-example-group <group> }}` 展开该组件全部生成资产，单片段映射只作为调试能力保留。
+
+## 构建 Demo
+
+在 example 目录执行 `sh shell/build_demo.sh apk --release`、
+`sh shell/build_demo.sh ios --release` 或 `sh shell/build_demo.sh web --release`。
+此入口先写入本次构建时间和组件版本，再构建应用；设置页按北京时间展示构建日期。
+GitHub 与 CNB 构建使用同一元数据工具。直接运行 `flutter build` 时，需先执行
+`dart ../tool/write_demo_build_info.dart`，否则会保留资源中已有的构建信息。

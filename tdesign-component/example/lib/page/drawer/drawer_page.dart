@@ -21,7 +21,6 @@ class TDrawerPage extends StatelessWidget {
       exampleCodeGroup: 'drawer',
       navBarKey: navBarkey,
       compactDemo: true,
-      showTestModule: false,
       children: [
         ExampleModule(
           title: '组件类型',

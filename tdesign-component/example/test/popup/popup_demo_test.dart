@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:tdesign_flutter_example/base/example_widget.dart';
 
 import '../demo_page_test_utils.dart';
 import 'popup_demo_test_spec.dart';
@@ -27,7 +28,10 @@ void main() {
     ];
     expect(triggerTops, orderedEquals([...triggerTops]..sort()));
     expect(find.text('嵌套弹窗'), findsNothing);
-    expect(find.text('单元测试'), findsNothing);
+    expect(
+      tester.widget<ExamplePage>(find.byType(ExamplePage)).showTestModule,
+      isTrue,
+    );
 
     await disposeDemoPage(tester);
   }, tags: 'demo');

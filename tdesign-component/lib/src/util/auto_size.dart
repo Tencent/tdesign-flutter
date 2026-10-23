@@ -6,7 +6,6 @@
 
 import 'dart:ui';
 
-import 'package:flutter/widgets.dart';
 
 /// 宽高屏幕自动适配，使用举例：100.as
 extension TIntScale on int {

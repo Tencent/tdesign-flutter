@@ -24,7 +24,6 @@ class _TStepperPageState extends State<TStepperPage> {
     desc: '用于数量的增减。',
     exampleCodeGroup: 'stepper',
     compactDemo: true,
-    showTestModule: false,
     children: [
       ExampleModule(
         title: '组件类型',

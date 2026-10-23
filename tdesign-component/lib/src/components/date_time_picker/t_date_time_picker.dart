@@ -238,7 +238,7 @@ class _TDateTimePickerState extends State<TDateTimePicker> {
       showWeek: widget.showWeek,
       steps: widget.steps,
       renderLabel: widget.renderLabel,
-      height: pickerTheme?.height ?? defaultPickerHeight,
+      height: resolvePickerHeight(context),
       itemCount: pickerTheme?.itemCount ?? defaultPickerItemCount,
       onChanged: _handleWheelChanged,
       onScrollEnd: _handleScrollEnd,

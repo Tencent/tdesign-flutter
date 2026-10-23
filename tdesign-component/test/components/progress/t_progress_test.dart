@@ -2,11 +2,53 @@ import 'package:flutter/rendering.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:tdesign_flutter/tdesign_flutter.dart';
 
+import '../../helpers/text_slot_regression.dart';
+import '../../support/token_consumption_evidence.dart';
+
 /// TProgress Widget 测试
 ///
 /// 覆盖 variant 四档（linear/circular/micro/button）、value 边界、
 /// label 位置、Theme 各字段、copyWith/lerp、边界情况。
 void main() {
+  registerNativeParagraphContractTests(
+    'Progress plump slot',
+    (child) => TProgress.plump(value: 0.8, label: child),
+    reset: true,
+  );
+  registerNativeParagraphContractTests(
+    'Progress circular slot',
+    (child) => TProgress.circular(value: 0.8, label: child),
+    reset: true,
+  );
+  registerNativeParagraphContractTests(
+    'Progress warning slot',
+    (child) => TProgress.linear(
+      value: 0.8,
+      status: TProgressStatus.warning,
+      label: child,
+    ),
+    reset: true,
+  );
+
+  registerTextSlotParityTests(
+    'Progress plump slot',
+    (child) => TProgress.plump(value: 0.8, label: child),
+  );
+  registerTextSlotParityTests(
+    'Progress circular slot',
+    (child) => TProgress.circular(value: 0.8, label: child),
+  );
+  registerTextSlotParityTests(
+    'Progress warning slot',
+    (child) => TProgress.linear(
+      value: 0.8,
+      status: TProgressStatus.warning,
+      label: child,
+    ),
+  );
+
+  progressTokenConsumptionTests();
+
   /// 用 TTheme 包裹以提供基础 Token
   Widget wrapWithTheme(
     Widget child, {
@@ -1185,4 +1227,158 @@ void main() {
       expect(microLongPresses, 1);
     });
   });
+}
+
+void progressTokenConsumptionTests() {
+  for (final brightness in Brightness.values) {
+    for (final custom in [false, true]) {
+      testWidgets(
+        'token consumption progress ${brightness.name} custom=$custom',
+        (tester) async {
+          final token = evidenceTokens(brightness, custom: custom);
+          for (final plump in [false, true]) {
+            await tester.pumpWidget(
+              evidenceHost(
+                SizedBox(
+                  width: 240,
+                  child: plump
+                      ? TProgress.plump(value: 0.5)
+                      : TProgress.linear(value: 0.5),
+                ),
+                brightness: brightness,
+                token: token,
+              ),
+            );
+            await tester.pumpAndSettle();
+            final scenario = '${brightness.name}/custom=$custom/plump=$plump';
+            tokenObservation(
+              plump ? 'progressStrokePlumpWidth' : 'progressLineStrokeWidth',
+              scenario: scenario,
+              actual: tester
+                  .getSize(find.byKey(const ValueKey('progress-track')))
+                  .height,
+              expected: plump ? 20.0 : 6.0,
+            );
+            final track = tester.widget<Container>(
+              find.byKey(const ValueKey('progress-track')),
+            );
+            tokenObservation(
+              'progressTrackBgColor',
+              scenario: scenario,
+              actual: (track.decoration! as BoxDecoration).color,
+              expected: token.bgColorComponent,
+            );
+            final fill = tester.widget<Container>(
+              find.byKey(const ValueKey('progress-value')),
+            );
+            tokenObservation(
+              'progressInnerBgColor',
+              scenario: scenario,
+              actual: (fill.decoration! as BoxDecoration).color,
+              expected: token.brandColor,
+            );
+          }
+          await tester.pumpWidget(
+            evidenceHost(
+              TProgress.circular(value: 0.5),
+              brightness: brightness,
+              token: token,
+            ),
+          );
+          await tester.pumpAndSettle();
+          final scenario = '${brightness.name}/custom=$custom/circular';
+          final paintFinder = find.byWidgetPredicate(
+            (widget) =>
+                widget is CustomPaint &&
+                widget.painter.runtimeType.toString() ==
+                    '_TProgressCircularPainter',
+          );
+          final dynamic painter = tester
+              .widget<CustomPaint>(paintFinder)
+              .painter;
+          tokenObservation(
+            'progressStrokeCircleWidth',
+            scenario: scenario,
+            actual: painter.strokeWidth,
+            expected: 6.0,
+          );
+          tokenObservation(
+            'progressCircleWidth',
+            scenario: scenario,
+            actual: tester.getSize(paintFinder).width,
+            expected: 112.0,
+          );
+          tokenObservation(
+            'progressTrackBgColor',
+            scenario: scenario,
+            actual: painter.backgroundColor,
+            expected: token.bgColorComponent,
+          );
+          tokenObservation(
+            'progressInnerBgColor',
+            scenario: scenario,
+            actual: painter.valueColor.value,
+            expected: token.brandColor,
+          );
+          final inner = find.byKey(const ValueKey('progress-circle-inner'));
+          final decoration =
+              tester
+                      .widget<DecoratedBox>(
+                        find.descendant(
+                          of: inner,
+                          matching: find.byType(DecoratedBox),
+                        ),
+                      )
+                      .decoration
+                  as BoxDecoration;
+          tokenObservation(
+            'progressCircleInnerBgColor',
+            scenario: scenario,
+            actual: decoration.color,
+            expected: brightness == Brightness.dark
+                ? Colors.transparent
+                : token.bgColorContainer,
+          );
+          final labelStyle = tester
+              .widget<DefaultTextStyle>(
+                find.byKey(const ValueKey('progress-label-style')),
+              )
+              .style;
+          tokenObservation(
+            'progressCircleLabelFont',
+            scenario: scenario,
+            actual:
+                '${labelStyle.fontSize}/${labelStyle.height! * labelStyle.fontSize!}/${labelStyle.fontWeight}',
+            expected: custom
+                ? '23.0/31.0/${FontWeight.w500}'
+                : '20.0/28.0/${FontWeight.w600}',
+          );
+          await tester.pumpWidget(
+            evidenceHost(
+              TProgress.circular(value: 0.5),
+              brightness: brightness,
+              token: token,
+              extensions: const [
+                TProgressThemeData(
+                  color: Colors.lime,
+                  backgroundColor: Colors.purple,
+                  circleInnerBgColor: Colors.cyan,
+                  strokeWidth: 9,
+                  circleSize: 140,
+                ),
+              ],
+            ),
+          );
+          await tester.pumpAndSettle();
+          final dynamic themed = tester
+              .widget<CustomPaint>(paintFinder)
+              .painter;
+          expect(themed.strokeWidth, 9);
+          expect(themed.backgroundColor, Colors.purple);
+          expect(themed.valueColor.value, Colors.lime);
+          expect(tester.getSize(paintFinder).width, 140);
+        },
+      );
+    }
+  }
 }

@@ -16,7 +16,6 @@ class TImageViewerPage extends StatelessWidget {
       title: 'ImageViewer 图片预览',
       desc: '用于图片内容的缩略展示与查看。',
       exampleCodeGroup: 'image-viewer',
-      showTestModule: false,
       children: [
         ExampleModule(
           title: '组件类型',

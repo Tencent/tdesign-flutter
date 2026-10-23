@@ -208,6 +208,7 @@ export 'src/theme/t_font_family.dart';
 export 'src/theme/t_fonts.dart';
 export 'src/theme/t_radius.dart';
 export 'src/theme/t_shadows.dart';
+export 'src/theme/t_sizes.dart';
 export 'src/theme/t_spacers.dart';
 export 'src/theme/t_theme.dart';
 export 'src/util/platform_util.dart';

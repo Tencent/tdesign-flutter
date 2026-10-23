@@ -11,6 +11,7 @@ import 't_colors.dart';
 import 't_component_theme_data.dart';
 import 't_default_theme.dart';
 import 't_fonts.dart';
+import 't_size_defaults.dart';
 
 // ============================================================
 // L2: 全局 theme.of 基础设施
@@ -517,6 +518,9 @@ class TThemeData extends ThemeExtension<TThemeData> {
   /// 间隔
   late TMap<String, double> spacerMap;
 
+  /// 全局尺寸刻度，单位为逻辑像素；与间距 Token 独立。
+  late TMap<String, double> sizeMap;
+
   /// 映射关系
   late TMap<String, String> refMap;
 
@@ -533,9 +537,11 @@ class TThemeData extends ThemeExtension<TThemeData> {
     required this.shadowMap,
     TMap<String, BorderSide>? insetShadowMap,
     required this.spacerMap,
+    TMap<String, double>? sizeMap,
     required this.refMap,
     this.extraThemeData,
   }) {
+    this.sizeMap = sizeMap ?? TMap<String, double>();
     this.fontMetricMap = fontMetricMap ?? TMap<String, double>();
     this.insetShadowMap = insetShadowMap ?? TMap<String, BorderSide>();
     light = this;
@@ -585,6 +591,9 @@ class TThemeData extends ThemeExtension<TThemeData> {
 
     /// 间距 Token 的增量映射；传入值覆盖同名 Token，其他值沿用当前配置。
     Map<String, double>? spacerMap,
+
+    /// 尺寸刻度的增量映射；未提供时保留当前值。
+    Map<String, double>? sizeMap,
     TExtraThemeData? extraThemeData,
   }) {
     final copiedRefs = _copyMap<String>(refMap, null);
@@ -614,6 +623,7 @@ class TThemeData extends ThemeExtension<TThemeData> {
         copiedRefs,
       ),
       spacerMap: _copyMap<double>(this.spacerMap, spacerMap, copiedRefs),
+      sizeMap: _copyMap<double>(this.sizeMap, sizeMap, copiedRefs),
       refMap: copiedRefs,
       extraThemeData: extraThemeData ?? this.extraThemeData,
     );
@@ -637,32 +647,42 @@ class TThemeData extends ThemeExtension<TThemeData> {
   }
 
   /// 创建空对象
-  static TThemeData _emptyData(String name, {TExtraThemeData? extraThemeData}) {
-    var refMap = TMap<String, String>(factory: () => defaultData().refMap);
+  static TThemeData _emptyData(
+    String name, {
+    TExtraThemeData? extraThemeData,
+    bool preferDarkDefaults = false,
+  }) {
+    TThemeData defaults() => preferDarkDefaults
+        ? defaultData().dark ?? defaultData()
+        : defaultData();
+    var refMap = TMap<String, String>(factory: () => defaults().refMap);
     return TThemeData(
       name: name,
-      colorMap: TMap(factory: () => defaultData().colorMap, refs: refMap),
-      fontMap: TMap(factory: () => defaultData().fontMap, refs: refMap),
+      colorMap: TMap(factory: () => defaults().colorMap, refs: refMap),
+      fontMap: TMap(factory: () => defaults().fontMap, refs: refMap),
       fontMetricMap: TMap(
-        factory: () => defaultData().fontMetricMap,
+        factory: () => defaults().fontMetricMap,
         refs: refMap,
       ),
-      radiusMap: TMap(factory: () => defaultData().radiusMap, refs: refMap),
+      radiusMap: TMap(factory: () => defaults().radiusMap, refs: refMap),
       fontFamilyMap: TMap(
-        factory: () => defaultData().fontFamilyMap,
+        factory: () => defaults().fontFamilyMap,
         refs: refMap,
       ),
-      shadowMap: TMap(factory: () => defaultData().shadowMap, refs: refMap),
+      shadowMap: TMap(factory: () => defaults().shadowMap, refs: refMap),
       insetShadowMap: TMap(
-        factory: () => defaultData().insetShadowMap,
+        factory: () => defaults().insetShadowMap,
         refs: refMap,
       ),
-      spacerMap: TMap(factory: () => defaultData().spacerMap, refs: refMap),
+      spacerMap: TMap(factory: () => defaults().spacerMap, refs: refMap),
+      sizeMap: TMap(factory: () => defaults().sizeMap, refs: refMap),
       refMap: refMap,
     );
   }
 
   /// 解析主题 JSON；空字符串、格式错误或缺少 name 对应配置时返回 null。
+  /// 浅色与深色块中未配置的 Token 分别回退默认浅色与深色主题；
+  /// 深色块不存在时不自动创建，暗色构建仍回退当前 Token。
   ///
   /// [name] 主题名称，目前只支持一级键
   ///
@@ -700,6 +720,7 @@ class TThemeData extends ThemeExtension<TThemeData> {
             darkName,
             themeConfig,
             extraThemeData,
+            preferDarkDefaults: true,
           );
           darkTheme.light = theme;
           theme.dark = darkTheme;
@@ -740,9 +761,10 @@ class TThemeData extends ThemeExtension<TThemeData> {
     dynamic themeConfig,
 
     /// 可选的额外主题数据；仅在 name 对应的配置存在且非空时解析并安装。
-    TExtraThemeData? extraThemeData,
-  ) {
-    var theme = _emptyData(name);
+    TExtraThemeData? extraThemeData, {
+    bool preferDarkDefaults = false,
+  }) {
+    var theme = _emptyData(name, preferDarkDefaults: preferDarkDefaults);
     Map<String, dynamic>? curThemeMap = themeConfig['$name'];
     if (curThemeMap?.isEmpty ?? true) {
       return theme;
@@ -815,6 +837,16 @@ class TThemeData extends ThemeExtension<TThemeData> {
         color: toColor(value['color']) ?? Colors.transparent,
         width: (value['width'] as num).toDouble(),
       );
+    });
+
+    /// 独立尺寸刻度；非法尺寸使整份配置被 fromJson 拒绝。
+    final sizes = curThemeMap?['size'] as Map<String, dynamic>?;
+    sizes?.forEach((key, value) {
+      final size = (value as num).toDouble();
+      if (!size.isFinite || size < 0) {
+        throw FormatException('Invalid size token: $key');
+      }
+      theme.sizeMap[key] = size;
     });
 
     /// 设置Margin
@@ -895,6 +927,14 @@ class TThemeData extends ThemeExtension<TThemeData> {
         BorderSide.lerp,
       ),
       spacerMap: _lerpMap(spacerMap, other.spacerMap, refs, t, _lerpNumber),
+      sizeMap: _lerpMap(
+        sizeMap,
+        other.sizeMap,
+        refs,
+        t,
+        _lerpNumber,
+        defaults: defaultSizeTokens,
+      ),
       refMap: refs,
       extraThemeData: selected.extraThemeData,
     );
@@ -948,10 +988,11 @@ class TThemeData extends ThemeExtension<TThemeData> {
     TMap<String, V> b,
     TMap<String, String> refs,
     double t,
-    V Function(V, V, double) interpolate,
-  ) {
+    V Function(V, V, double) interpolate, {
+    Map<String, V> defaults = const {},
+  }) {
     final result = TMap<String, V>(refs: refs);
-    for (final key in {..._tokenKeys(a), ..._tokenKeys(b)}) {
+    for (final key in {..._tokenKeys(a), ..._tokenKeys(b), ...defaults.keys}) {
       final reference = a.refs?[key];
       if (reference != null &&
           reference == b.refs?[key] &&
@@ -959,8 +1000,8 @@ class TThemeData extends ThemeExtension<TThemeData> {
           b.get(key) == null) {
         continue;
       }
-      final first = a[key];
-      final second = b[key];
+      final first = a[key] ?? defaults[key];
+      final second = b[key] ?? defaults[key];
       final value = first == null
           ? second
           : second == null
@@ -1019,7 +1060,6 @@ class TMap<K, V> extends DelegatingMap<K, V> {
     if (!visited.add(key)) {
       return null;
     }
-    // An explicitly configured token wins over its default reference. This
     // Explicit Token values override reference and default-map fallbacks.
     final localValue = super[key];
     if (localValue != null) {

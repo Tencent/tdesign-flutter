@@ -11,6 +11,7 @@ import 'package:tdesign_flutter_icons/tdesign_flutter_icons.dart';
 import '../../theme/t_colors.dart';
 import '../../theme/t_fonts.dart';
 import '../../theme/t_internal_material.dart';
+import '../../theme/t_sizes.dart';
 import '../../theme/t_theme.dart';
 import '../text/t_text_styled.dart';
 import 't_dropdown_theme_data.dart';
@@ -624,18 +625,20 @@ class _TDropdownMenuState extends State<TDropdownMenu>
   Widget build(BuildContext context) {
     final theme = _theme;
     final bar = widget.scrollable
-        ? TInternalScrollScope(child: SingleChildScrollView(
-            scrollDirection: Axis.horizontal,
-            child: Row(
-              children: List<Widget>.generate(
-                widget.items.length,
-                (index) => SizedBox(
-                  width: widget.items[index].width ?? 112,
-                  child: _buildTrigger(index),
+        ? TInternalScrollScope(
+            child: SingleChildScrollView(
+              scrollDirection: Axis.horizontal,
+              child: Row(
+                children: List<Widget>.generate(
+                  widget.items.length,
+                  (index) => SizedBox(
+                    width: widget.items[index].width ?? 112,
+                    child: _buildTrigger(index),
+                  ),
                 ),
               ),
             ),
-          ))
+          )
         : LayoutBuilder(
             builder: (context, constraints) {
               if (constraints.hasBoundedWidth) {
@@ -678,7 +681,12 @@ class _TDropdownMenuState extends State<TDropdownMenu>
           trackTransforms: _controller.isOpen,
           child: Container(
             key: _barKey,
-            height: theme.barHeight ?? 48,
+            height: !theme.hasBarHeightOverride
+                ? null
+                : theme.resolveBarHeight(context.tTheme.size13),
+            constraints: !theme.hasBarHeightOverride
+                ? BoxConstraints(minHeight: context.tTheme.size13)
+                : null,
             decoration: BoxDecoration(
               color:
                   theme.barBackgroundColor ?? context.tTheme.bgColorContainer,
@@ -781,7 +789,7 @@ class _TDropdownMenuState extends State<TDropdownMenu>
               curve: Curves.ease,
               child: TInternalIcon(
                 TIcons.caret_down_small,
-                size: theme.iconSize ?? 24,
+                size: theme.resolveIconSize(context.tTheme.size7),
                 color: iconColor,
               ),
             ),

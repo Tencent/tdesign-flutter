@@ -46,7 +46,11 @@ Skills 按职责补充规范：本 skill 管通用协作与 CI 登记；[`tdesig
 
 ## 三、Spec 流程
 
-第一节判定需要 Spec 后，按 [`specs/README.md`](../../../specs/README.md) 创建或更新对应 `specs/<编号>-<短名称>/`（spec / plan / tasks / acceptance）；提交代码须与 Spec 行为契约一致，方案变更先更新 Spec 再改代码，并在 PR 附对应目录链接。
+第一节判定需要 Spec 后，按 [`specs/README.md`](../../../specs/README.md) 创建或更新对应记录（spec / plan / tasks / acceptance）。组件目录使用 `specs/components/<编号>-<组件分类>-<组件名>/`，组件名保留规范大小写，目录不附加事项后缀；同组件只维护一套主文档，多事项按章节合并，保留任务状态与文字验收结论，非组件使用 `specs/engineering/<编号>-<类别>-<事项描述>/` 并按长期职责合并；Theme 的配置职责与 Material 隔离合为一份，Token 运行验证归其验收与证据附件，不单设 Spec；控制器与导入归 ThemeController，Testing 仅维护 Golden，文档规则与用户指南不另设 Documentation Spec。类别、编号与归并规则以该规范为准，同步维护索引和全部路径引用。提交代码须与 Spec 行为契约一致，方案变更先更新 Spec 再改代码，并在 PR 附对应目录链接。
+
+### Spec 正文与证据
+
+保留设计背景、最终方案和影响实现的关键决策/取舍；被取代的方案摘要保留否决原因，不继续作为当前要求。plan 只记录实现组织与验证安排，tasks 集中维护真实剩余工作；验收标准不维护勾选状态，acceptance 只保留绑定候选/环境的结论、必要证据和未覆盖范围。清理重复/过时流水不能补造通过、丢失未完成项或把旧结果外推当前 head。遇到设计与源码冲突且缺裁定依据时明确列待核对，详见 [正文规范](../../../specs/README.md#文档边界与正文收敛)。
 
 ## 四、Flutter 双版本兼容
 
@@ -76,7 +80,7 @@ Skills 按职责补充规范：本 skill 管通用协作与 CI 登记；[`tdesig
 
 1. **API 文档**：`sh ./demo_tool/all_build.sh`（等价 `node tool/generate_api.mjs`，manifest 驱动），从组件 API 生成 `example/assets/api/<component>_api.md`；新增 / 迁移组件时先更新 `tool/components.json`。改动设计 / 组件 API 时该产物会随之变化。
 2. **示例代码片段**：`dart run tool/generate_example_code.dart`，从带 `@ExampleCode` 注解的示例方法生成 `example/assets/code/*.txt`；CI 用 `--check` 校验片段与源码同步。改动示例方法时该产物会随之变化。
-3. **README 副本**：`node scripts/sync-readme.mjs`，把根目录 `README.md` / `README_zh_CN.md` 同步到 `tdesign-component/README*.md` 与 `tdesign-site/site/docs/getting-started.md`。改动根目录 README 时副本会随之同步。
+3. **README 副本**：`node scripts/sync-readme.mjs`，把根目录 `README.md` / `README_zh_CN.md` 同步到 `tdesign-component/README*.md`；站点 `site/docs/migration-0.2.7-to-1.0.md` 是迁移正文源，生成包内 `MIGRATION.md`。站点快速开始独立维护，不再由 README 生成；`--check` 只检查同步状态，不写文件。
 
 自动生成与本地验收不是同一件事：贡献者无需手工维护产物；组件对齐任务需要核对示例时，按 Review skill 校验生成片段，变化只能来自源文件，不能直接修改产物。
 

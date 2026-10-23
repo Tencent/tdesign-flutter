@@ -1,6 +1,7 @@
 import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart' show OverflowBoxFit;
 
 import '../../theme/t_colors.dart';
 import '../../theme/t_fonts.dart';
@@ -10,7 +11,6 @@ import '../../theme/t_theme.dart';
 import '../../util/context_extension.dart';
 import '../badge/t_badge_internal.dart';
 import '../badge/t_badge_layout.dart';
-import '../text/t_text.dart';
 import '../text/t_text_styled.dart';
 import 't_action_sheet_item.dart';
 import 't_action_sheet_theme_data.dart';
@@ -53,9 +53,10 @@ class TActionSheetItemWidget<T> extends StatelessWidget {
             },
       child: LayoutBuilder(
         builder: (context, constraints) {
-          final labelFont = context.tTheme.fontBodySmall;
-          final labelHeight =
-              (labelFont?.size ?? 12) * (labelFont?.height ?? (20 / 12));
+          final labelHeight = actionSheetGridLabel(
+            context,
+            item,
+          ).naturalSize(context).height;
           final contentHeight = item.icon == null
               ? labelHeight
               : iconExtent + context.tTheme.spacer + labelHeight;
@@ -73,22 +74,22 @@ class TActionSheetItemWidget<T> extends StatelessWidget {
               top: topSpacing,
               right: context.tTheme.spacer,
             ),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: [
-                if (item.icon != null) ...[
-                  _buildIcon(context, iconColor, iconSize, iconExtent),
-                  SizedBox(height: context.tTheme.spacer),
+            child: OverflowBox(
+              fit: OverflowBoxFit.deferToChild,
+              minHeight: 0,
+              maxHeight: double.infinity,
+              alignment: Alignment.topCenter,
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  if (item.icon != null) ...[
+                    _buildIcon(context, iconColor, iconSize, iconExtent),
+                    SizedBox(height: context.tTheme.spacer),
+                  ],
+                  actionSheetGridLabel(context, item),
                 ],
-                TTextStyled(
-                  item.label,
-                  font: context.tTheme.fontBodySmall,
-                  textColor: context.tTheme.textColorPrimary,
-                  style: item.textStyle,
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
-                ),
-              ],
+              ),
             ),
           );
         },
@@ -182,10 +183,14 @@ Widget buildCancelButton(
             top: BorderSide(color: context.tTheme.componentStroke, width: 0.5),
           ),
         ),
-        height: actionSheetCancelButtonHeight,
+        constraints: const BoxConstraints(
+          minHeight: actionSheetCancelButtonHeight,
+        ),
         child: Center(
-          child: TText(
+          heightFactor: 1,
+          child: TTextStyled(
             cancelText ?? context.resource.cancel,
+            centerLeading: true,
             font: context.tTheme.fontBodyLarge,
             style: TextStyle(color: context.tTheme.textColorPrimary),
           ),
@@ -194,3 +199,45 @@ Widget buildCancelButton(
     ),
   );
 }
+
+// Measurement and rendering share the final TD style, including explicit item styles.
+TTextStyled actionSheetGridLabel<T>(
+  BuildContext context,
+  TActionSheetItem<T> item,
+) => TTextStyled(
+  item.label,
+  font: context.tTheme.fontBodySmall,
+  textColor: context.tTheme.textColorPrimary,
+  style: item.textStyle,
+  maxLines: 1,
+  overflow: TextOverflow.ellipsis,
+);
+
+double actionSheetGridItemHeight<T>(
+  BuildContext context,
+  Iterable<TActionSheetItem<T>> items,
+) {
+  final theme = Theme.of(context).extension<TActionSheetThemeData>();
+  return items.fold<double>(
+    96,
+    (height, item) => math.max(
+      height,
+      actionSheetGridLabel(context, item).naturalSize(context).height +
+          (item.icon == null
+              ? 0
+              : (theme?.gridIconExtent ?? 40) + context.tTheme.spacer) +
+          context.tTheme.spacer2 +
+          context.tTheme.spacer1,
+    ),
+  );
+}
+
+double actionSheetCancelHeight(BuildContext context, String? text) => math.max(
+  actionSheetCancelButtonHeight,
+  TTextStyled(
+    text ?? context.resource.cancel,
+    centerLeading: true,
+    font: context.tTheme.fontBodyLarge,
+    style: TextStyle(color: context.tTheme.textColorPrimary),
+  ).naturalSize(context, maxWidth: MediaQuery.sizeOf(context).width).height,
+);

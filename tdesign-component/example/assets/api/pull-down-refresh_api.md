@@ -13,9 +13,9 @@
 | child | Widget | - | 必填：滚动内容（对应官方默认 slot）。 必须为**有界且可滚动**的内容（如 `ListView` / `GridView` / `CustomScrollView`）。 `SizedBox` 等只能提供尺寸约束，不能把静态内容变成可滚动内容；若内容自身不可滚动， 下拉 / 触底手势仍无法生效，应将内容放入可滚动容器。 | 是 |
 | controller | TPullDownRefreshController? | - | 外部主动刷新控制器。 通过 `TPullDownRefreshController.refresh` 从页面外部触发刷新。刷新完成时机 由 `onRefresh` 返回的 Future、异常或 `refreshTimeout` 共同决定；超时后 控制器 Future 也会完成，迟到的原始 Future 不会再次改变刷新状态。 刷新资源由组件管理；外部控制器无需也不提供 dispose （详见 `TPullDownRefreshController` 文档）。 | 否 |
 | key | Key? | - | 组件标识，用于区分或保留组件状态。 | 否 |
-| loadingBarHeight | double | 50 | Header 容器高度与触发阈值，默认 50 逻辑像素，必须大于 0。 | 否 |
+| loadingBarHeight | double? | - | Header 容器高度与触发阈值；默认至少 50，随内置文字增长。 显式值固定，必须大于 0。 | 否 |
 | lowerThreshold | double | 50 | 距离底部多少逻辑像素时触发加载，默认 50，必须大于 0。 | 否 |
-| maxBarHeight | double | 80 | 最大下拉高度，默认 80 逻辑像素，不得小于 loadingBarHeight。 | 否 |
+| maxBarHeight | double? | - | 最大下拉高度；默认至少 80，并覆盖默认增长后的 Header。 显式值固定，不得小于 loadingBarHeight；其值也限制默认 Header 的增长。 | 否 |
 | onLoadMore | FutureOr&lt;void&gt; Function()? | - | 触底加载回调（对应官方 `scrolltolower` 事件）。 非空时自动启用，触底达到 `lowerThreshold` 时触发；Footer 本身不增加 TDesign 未定义的可见样式。 返回的 `Future` 完成后自动结束加载态。与 `onRefresh` 一致，本回调若同步 抛错或返回的 `Future` 失败， 加载任务会**正常结束（不悬挂）**，错误经 `FlutterError.reportError` 上报 （不吞掉）。若需在失败时做业务处理，请在回调内部自行 try/catch。 | 否 |
 | onRefresh | FutureOr&lt;void&gt; Function()? | - | 下拉触发刷新回调（对应官方 `refresh` 事件）。 为空时禁用下拉刷新。返回的 Future 完成后自动展示完成态并复位。 若回调同步抛错或返回的 Future 失败，刷新任务会**正常结束（不悬挂）**， 错误通过 `FlutterError.reportError` 上报（不吞掉），但不会作为未捕获异常 中断 easy_refresh 的动画流程。若需在失败时做业务处理，请在回调内部自行 try/catch。 | 否 |
 | onStateChanged | ValueChanged&lt;TPullDownRefreshState&gt;? | - | 刷新状态变化回调（对应官方 `change`/`onChange` 事件）。 值域为 `TPullDownRefreshState`。仅在状态**跳变**时回调（已去重）， 且通过异步调度触发，**不会**在 build 期间同步调用，可在回调中安全 `setState`。其中 `TPullDownRefreshState.timeout` 是一次性超时通知， 随后会收到 `TPullDownRefreshState.inactive`。 | 否 |

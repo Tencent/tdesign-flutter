@@ -9,9 +9,9 @@ import 'package:flutter/material.dart';
 import '../../theme/basic.dart';
 import '../../theme/t_colors.dart';
 import '../../theme/t_fonts.dart';
+import '../../theme/t_sizes.dart';
 import '../../theme/t_theme.dart';
-import '../../util/context_extension.dart';
-import '../text/t_text.dart';
+import '../text/t_text_styled.dart';
 import 't_activity_indicator.dart';
 import 't_circle_indicator.dart';
 import 't_loading_theme_data.dart';
@@ -59,8 +59,7 @@ class TLoading extends StatelessWidget {
 
   /// 获取生效的 Theme（Theme Extension > 默认值）
   ///
-  /// 按文档 §2.1 裁决：样式默认只从 `Theme.of(context)` 读取，
-  /// 子树覆盖使用 `Theme.of(context).mergeExtension(...)`。
+  /// 从当前子树读取组件 ThemeExtension；未配置时使用内置默认值。
   TLoadingThemeData _effectiveTheme(BuildContext context) {
     return Theme.of(context).extension<TLoadingThemeData>() ??
         const TLoadingThemeData();
@@ -130,9 +129,12 @@ class TLoading extends StatelessWidget {
       children: [
         indicator,
         effectiveAxis == Axis.vertical
-            ? const SizedBox(height: 6)
-            : const SizedBox(width: 8),
-        _textWidget(context, theme, effectiveRefreshWidget),
+            ? SizedBox(height: context.tTheme.size3)
+            : SizedBox(width: context.tTheme.size4),
+        if (effectiveAxis == Axis.horizontal)
+          Flexible(child: _textWidget(context, theme, effectiveRefreshWidget))
+        else
+          _textWidget(context, theme, effectiveRefreshWidget),
       ],
     );
   }
@@ -142,8 +144,9 @@ class TLoading extends StatelessWidget {
     TLoadingThemeData theme,
     Widget? refreshWidget,
   ) {
-    Widget result = TText(
+    Widget result = TTextStyled(
       text ?? '',
+      centerLeading: true,
       font: context.tTheme.fontBodyMedium ?? Font(size: 14, lineHeight: 22),
       textAlign: TextAlign.center,
       style: TextStyle(
@@ -154,7 +157,11 @@ class TLoading extends StatelessWidget {
     if (refreshWidget != null) {
       result = Row(
         mainAxisSize: MainAxisSize.min,
-        children: [result, const SizedBox(width: 8), refreshWidget],
+        children: [
+          Flexible(child: result),
+          SizedBox(width: context.tTheme.size4),
+          refreshWidget,
+        ],
       );
     }
     return result;

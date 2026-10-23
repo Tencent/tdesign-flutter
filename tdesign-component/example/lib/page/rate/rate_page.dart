@@ -25,7 +25,6 @@ class TRatePage extends StatelessWidget {
     desc: '用于对某行为/事物进行打分。',
     exampleCodeGroup: 'rate',
     compactDemo: true,
-    showTestModule: false,
     children: [
       ExampleModule(
         title: '组件类型',

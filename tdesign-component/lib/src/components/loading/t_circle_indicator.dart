@@ -10,7 +10,6 @@ import 'dart:ui' as ui;
 import 'package:flutter/material.dart';
 import '../../theme/t_colors.dart';
 import '../../theme/t_theme.dart';
-import '../../util/context_extension.dart';
 
 /// 环形加载指示器。
 class TCircleIndicator extends StatefulWidget {

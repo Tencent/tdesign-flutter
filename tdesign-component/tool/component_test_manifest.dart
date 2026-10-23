@@ -40,8 +40,12 @@ enum VisualTestKind {
 
 const sharedExampleTests = [
   'test/widget_test.dart',
+  'test/demo_build_info_test.dart',
+  'test/example_code_viewer_test.dart',
   'test/api_docs_test.dart',
   'test/web_theme_message_test.dart',
+  'test/tool/generator_theme_test.dart',
+  'test/theme/all_component_web_theme_test.dart',
   'test/web_theme_listener_lifecycle_test.dart',
   'test/demo_page_test_utils_test.dart',
 ];
@@ -104,6 +108,12 @@ const componentTestManifests = <ComponentTestManifest>[
     exampleTests: ['test/cell/cell_page_test.dart'],
     visualTests: [
       VisualTestManifest(
+        name: 'Cell Component',
+        workingDirectory: '.',
+        testFiles: ['test/components/cell/t_cell_golden_test.dart'],
+        kind: VisualTestKind.component,
+      ),
+      VisualTestManifest(
         name: 'Cell Demo',
         workingDirectory: 'example',
         testFiles: [
@@ -141,6 +151,7 @@ const componentTestManifests = <ComponentTestManifest>[
     coverageTargets: ['lib/src/components/button/'],
     componentTests: [
       'test/components/button/t_button_test.dart',
+      'test/components/button/t_button_text_layout_test.dart',
       'test/components/button/t_button_theme_priority_test.dart',
       'test/components/button/t_button_theme_test.dart',
       'test/components/button/t_button_widget_test.dart',
@@ -179,6 +190,7 @@ const componentTestManifests = <ComponentTestManifest>[
     name: 'picker',
     coverageTargets: ['lib/src/components/picker/'],
     componentTests: [
+      'test/components/picker/t_picker_value_types_test.dart',
       'test/components/picker/picker_consumers_theme_test.dart',
       'test/components/picker/t_picker_theme_test.dart',
       'test/components/picker/t_picker_types_test.dart',
@@ -220,6 +232,7 @@ const componentTestManifests = <ComponentTestManifest>[
     name: 'date_time_picker',
     coverageTargets: ['lib/src/components/date_time_picker/'],
     componentTests: [
+      'test/components/date_time_picker/t_date_time_picker_steps_test.dart',
       'test/components/picker/picker_consumers_theme_test.dart',
       'test/components/date_time_picker/t_date_time_picker_test.dart',
       'test/components/date_time_picker/t_date_time_picker_wheel_test.dart',
@@ -247,8 +260,12 @@ const componentTestManifests = <ComponentTestManifest>[
       'test/components/calendar/t_calendar_lunar_test.dart',
       'test/components/calendar/t_calendar_on_change_init_test.dart',
       'test/components/calendar/t_calendar_test.dart',
+      'test/components/calendar/t_calendar_label_height_test.dart',
     ],
-    exampleTests: ['test/calendar/calendar_demo_test.dart'],
+    exampleTests: [
+      'test/calendar/lunar_info_test.dart',
+      'test/calendar/calendar_demo_test.dart',
+    ],
     visualTests: [
       VisualTestManifest(
         name: 'Calendar States',
@@ -337,6 +354,7 @@ const componentTestManifests = <ComponentTestManifest>[
     name: 'divider',
     coverageTargets: ['lib/src/components/divider/'],
     componentTests: ['test/components/divider/t_divider_test.dart'],
+    exampleTests: ['test/divider/divider_page_test.dart'],
     visualTests: [
       VisualTestManifest(
         name: 'Divider Demo',
@@ -374,9 +392,23 @@ const componentTestManifests = <ComponentTestManifest>[
   ComponentTestManifest(
     name: 'dialog',
     coverageTargets: ['lib/src/components/dialog/'],
-    componentTests: ['test/components/dialog/t_dialog_test.dart'],
+    componentTests: [
+      'test/components/dialog/t_dialog_test.dart',
+      'test/components/dialog/t_dialog_action_layout_test.dart',
+    ],
     exampleTests: ['test/dialog/dialog_page_test.dart'],
     visualTests: [
+      VisualTestManifest(
+        name: 'Dialog Popup Consumer',
+        workingDirectory: '.',
+        testFiles: ['test/components/theme/t_popup_consumers_golden_test.dart'],
+        kind: VisualTestKind.component,
+        // Keep the repaired TD text-slot contract in the visual gate.
+        arguments: [
+          '--plain-name',
+          'dialog keeps the shared Popup visual contract',
+        ],
+      ),
       VisualTestManifest(
         name: 'Dialog Demo',
         workingDirectory: 'example',
@@ -403,7 +435,10 @@ const componentTestManifests = <ComponentTestManifest>[
   ComponentTestManifest(
     name: 'drawer',
     coverageTargets: ['lib/src/components/drawer/'],
-    componentTests: ['test/components/drawer/t_drawer_test.dart'],
+    componentTests: [
+      'test/components/drawer/t_drawer_test.dart',
+      'test/components/drawer/t_drawer_token_transition_test.dart',
+    ],
     exampleTests: ['test/drawer/drawer_demo_test.dart'],
     visualTests: [
       VisualTestManifest(
@@ -416,6 +451,7 @@ const componentTestManifests = <ComponentTestManifest>[
         workingDirectory: '.',
         testFiles: ['test/components/theme/t_popup_consumers_golden_test.dart'],
         kind: VisualTestKind.component,
+        // Keep the existing ActionSheet filter; see CI Spec 080.
         arguments: [
           '--plain-name',
           'drawer keeps the shared Popup visual contract',
@@ -427,10 +463,17 @@ const componentTestManifests = <ComponentTestManifest>[
     name: 'fab',
     coverageTargets: ['lib/src/components/fab/'],
     componentTests: [
+      'test/components/fab/t_fab_bounds_test.dart',
       'test/components/fab/t_fab_layout_test.dart',
       'test/components/fab/t_fab_test.dart',
     ],
+    exampleTests: ['test/fab/fab_page_test.dart'],
     visualTests: [
+      VisualTestManifest(
+        name: 'Demo code viewer',
+        workingDirectory: 'example',
+        testFiles: ['test/example_code_viewer_golden_test.dart'],
+      ),
       VisualTestManifest(
         name: 'Fab Demo',
         workingDirectory: 'example',
@@ -460,6 +503,7 @@ const componentTestManifests = <ComponentTestManifest>[
     componentTests: [
       'test/components/indexes/sticky_header/sticky_header_test.dart',
       'test/components/indexes/t_indexes_test.dart',
+      'test/components/indexes/t_indexes_scroll_test.dart',
     ],
     exampleTests: ['test/indexes/indexes_demo_test.dart'],
     visualTests: [
@@ -556,7 +600,10 @@ const componentTestManifests = <ComponentTestManifest>[
       VisualTestManifest(
         name: 'TabBar Demo',
         workingDirectory: 'example',
-        testFiles: ['test/tab_bar/tab_bar_demo_golden_test.dart'],
+        testFiles: [
+          'test/tab_bar/tab_bar_demo_golden_test.dart',
+          'test/tab_bar/tab_bar_custom_menu_golden_test.dart',
+        ],
       ),
     ],
   ),
@@ -565,6 +612,7 @@ const componentTestManifests = <ComponentTestManifest>[
     coverageTargets: ['lib/src/components/navbar/'],
     componentTests: [
       'test/components/navbar/t_nav_bar_test.dart',
+      'test/components/navbar/t_nav_bar_text_layout_test.dart',
       'test/components/navbar/t_navbar_test.dart',
     ],
     exampleTests: ['test/navbar/navbar_page_test.dart'],
@@ -596,6 +644,7 @@ const componentTestManifests = <ComponentTestManifest>[
     componentTests: [
       'test/components/tabs/t_horizontal_tab_bar_test.dart',
       'test/components/tabs/t_tab_bar_test.dart',
+      'test/components/tabs/t_tabs_content_constraints_test.dart',
       'test/components/tabs/t_tab_test.dart',
     ],
     exampleTests: ['test/tabs/tabs_page_test.dart'],
@@ -603,7 +652,10 @@ const componentTestManifests = <ComponentTestManifest>[
       VisualTestManifest(
         name: 'Tabs Component',
         workingDirectory: '.',
-        testFiles: ['test/components/tabs/t_tab_golden_test.dart'],
+        testFiles: [
+          'test/components/tabs/t_tab_golden_test.dart',
+          'test/components/tabs/t_tag_padding_golden_test.dart',
+        ],
         kind: VisualTestKind.component,
       ),
       VisualTestManifest(
@@ -659,6 +711,7 @@ const componentTestManifests = <ComponentTestManifest>[
     name: 'icon',
     coverageTargets: ['lib/src/components/icon/'],
     componentTests: ['test/components/icon/t_icon_test.dart'],
+    exampleTests: ['test/icon/icon_page_test.dart'],
     visualTests: [
       VisualTestManifest(
         name: 'Icon Demo',
@@ -693,7 +746,11 @@ const componentTestManifests = <ComponentTestManifest>[
   ComponentTestManifest(
     name: 'loading',
     coverageTargets: ['lib/src/components/loading/'],
-    componentTests: ['test/components/loading/t_loading_test.dart'],
+    componentTests: [
+      'test/components/loading/t_activity_indicator_test.dart',
+      'test/components/loading/t_circle_indicator_test.dart',
+      'test/components/loading/t_loading_test.dart',
+    ],
     exampleTests: ['test/loading/loading_demo_test.dart'],
     visualTests: [
       VisualTestManifest(
@@ -731,7 +788,11 @@ const componentTestManifests = <ComponentTestManifest>[
   ),
   ComponentTestManifest(
     name: 'popup',
-    coverageTargets: ['lib/src/components/popup/'],
+    coverageTargets: [
+      'lib/src/components/popup/',
+      // The shared toolbar text-style bridge is exercised by Popup tests.
+      'lib/src/util/t_toolbar_pressable.dart',
+    ],
     componentTests: [
       'test/components/popup/t_feedback_theme_data_test.dart',
       'test/components/popup/t_popup_options_contract_test.dart',
@@ -804,6 +865,8 @@ const componentTestManifests = <ComponentTestManifest>[
     componentTests: [
       'test/components/text/t_font_loader_test.dart',
       'test/components/text/t_text_resolve_test.dart',
+      'test/components/text/t_single_line_leading_test.dart',
+      'test/components/text/t_component_centering_test.dart',
       'test/components/text/t_text_style_scope_test.dart',
       'test/components/text/t_text_test.dart',
     ],
@@ -813,12 +876,21 @@ const componentTestManifests = <ComponentTestManifest>[
         workingDirectory: 'example',
         testFiles: ['test/text/text_demo_test.dart'],
       ),
+      VisualTestManifest(
+        name: 'Component centering states',
+        workingDirectory: '.',
+        kind: VisualTestKind.component,
+        testFiles: [
+          'test/components/text/t_component_centering_golden_test.dart',
+        ],
+      ),
     ],
   ),
   ComponentTestManifest(
     name: 'search',
     coverageTargets: ['lib/src/components/search/'],
     componentTests: ['test/components/search/t_search_test.dart'],
+    exampleTests: ['test/search/search_page_test.dart'],
     visualTests: [
       VisualTestManifest(
         name: 'Search Demo',
@@ -920,8 +992,10 @@ const componentTestManifests = <ComponentTestManifest>[
     coverageTargets: ['lib/src/components/switch/'],
     componentTests: [
       'test/components/switch/t_switch_test.dart',
+      'test/components/switch/t_switch_typography_test.dart',
       'test/components/switch/t_cupertino_switch_test.dart',
     ],
+    exampleTests: ['test/switch/switch_page_test.dart'],
     visualTests: [
       VisualTestManifest(
         name: 'Switch Demo',
@@ -953,6 +1027,7 @@ const componentTestManifests = <ComponentTestManifest>[
     name: 'upload',
     coverageTargets: ['lib/src/components/upload/'],
     componentTests: ['test/components/upload/t_upload_test.dart'],
+    exampleTests: ['test/upload/upload_page_test.dart'],
     visualTests: [
       VisualTestManifest(
         name: 'Upload Demo',
@@ -987,6 +1062,7 @@ const componentTestManifests = <ComponentTestManifest>[
       'test/components/input/t_input_test.dart',
       'test/components/input/t_input_theme_test.dart',
     ],
+    exampleTests: ['test/input/input_page_test.dart'],
     visualTests: [
       VisualTestManifest(
         name: 'Input Demo',
@@ -1012,12 +1088,22 @@ const componentTestManifests = <ComponentTestManifest>[
     name: 'theme',
     coverageTargets: [
       'lib/src/theme/t_theme.dart',
+      'lib/src/theme/basic.dart',
       'lib/src/theme/t_radius.dart',
+      'lib/src/theme/t_sizes.dart',
+      'lib/src/theme/t_size_defaults.dart',
+      'lib/src/theme/t_token_double_lerp.dart',
+      'lib/src/theme/t_shadows.dart',
+      'lib/src/theme/t_overlay_themes.dart',
       'lib/src/theme/t_internal_material.dart',
     ],
     componentTests: [
       'test/acceptance/theme_acceptance_test.dart',
       'test/theme/theme_test.dart',
+      'test/theme/font_json_test.dart',
+      'test/theme/overlay_themes_test.dart',
+      'test/theme/component_token_ownership_test.dart',
+      'test/theme/token_default_transition_test.dart',
       'test/theme/t_theme_extensions_test.dart',
       'test/components/theme/t_colors_test.dart',
       'test/components/theme/t_material_theme_priority_test.dart',

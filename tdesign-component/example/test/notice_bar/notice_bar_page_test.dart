@@ -10,7 +10,7 @@ void main() {
     await pumpFullDemoPage(tester, noticeBarDemoPageTestSpec, ThemeMode.light);
 
     final page = tester.widget<ExamplePage>(find.byType(ExamplePage));
-    expect(page.showTestModule, isFalse);
+    expect(page.showTestModule, isTrue);
     expect(page.children.map((module) => module.title), [
       '组件类型',
       '组件状态',
@@ -32,7 +32,10 @@ void main() {
       page.children[2].children.single.desc,
       '可滚动公告栏有水平（horizontal）和垂直（vertical）',
     );
-    expect(find.textContaining('单元测试'), findsNothing);
+    expect(
+      tester.widget<ExamplePage>(find.byType(ExamplePage)).showTestModule,
+      isTrue,
+    );
     expect(tester.takeException(), isNull);
     await disposeDemoPage(tester);
   });

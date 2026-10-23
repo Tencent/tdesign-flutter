@@ -36,18 +36,23 @@ class WheelColumn extends StatefulWidget {
   final ScrollBehavior? scrollBehavior;
   final TPickerItemBuilder? itemBuilder;
   final void Function(
-          int columnIndex, int itemIndex, List<TPickerOption> options)
-      onItemSelected;
+    int columnIndex,
+    int itemIndex,
+    List<TPickerOption> options,
+  )
+  onItemSelected;
   final bool Function(
     ScrollNotification notification,
     int columnIndex,
     List<TPickerOption> options,
-  )? onScrollEnd;
+  )?
+  onScrollEnd;
   final void Function(
     int columnIndex,
     int itemIndex,
     List<TPickerOption> options,
-  )? onAnimationComplete;
+  )?
+  onAnimationComplete;
 
   @override
   State<WheelColumn> createState() => WheelColumnState();
@@ -70,6 +75,14 @@ class WheelColumnState extends State<WheelColumn> {
   @override
   void didUpdateWidget(covariant WheelColumn oldWidget) {
     super.didUpdateWidget(oldWidget);
+    // 行高改变时保留同一项，而不是用旧像素偏移解释新的行高。
+    // correctPixels 不发送用户选择通知；原生滚轮随后按新尺寸布局。
+    if (oldWidget.itemHeight != widget.itemHeight &&
+        identical(oldWidget.controller, widget.controller) &&
+        _controller.hasClients) {
+      final index = (_controller.offset / oldWidget.itemHeight).round();
+      _controller.position.correctPixels(index * widget.itemHeight);
+    }
     applyColumnUpdate(options: widget.options, controller: widget.controller);
   }
 
@@ -141,19 +154,19 @@ class WheelColumnState extends State<WheelColumn> {
     _correcting = true;
     _controller
         .animateToItem(
-      target,
-      duration: const Duration(milliseconds: _correctionDurationMs),
-      curve: Curves.easeOutCubic,
-    )
+          target,
+          duration: const Duration(milliseconds: _correctionDurationMs),
+          curve: Curves.easeOutCubic,
+        )
         .then((_) {
-      if (!mounted) {
-        return;
-      }
-      _correcting = false;
-      if (_lastNotifiedIndex != target) {
-        widget.onAnimationComplete?.call(widget.colIndex, target, _options);
-      }
-    });
+          if (!mounted) {
+            return;
+          }
+          _correcting = false;
+          if (_lastNotifiedIndex != target) {
+            widget.onAnimationComplete?.call(widget.colIndex, target, _options);
+          }
+        });
   }
 
   bool _handleScrollNotification(ScrollNotification notification) {
@@ -199,7 +212,8 @@ class WheelColumnState extends State<WheelColumn> {
       context: context,
       removeTop: true,
       child: ScrollConfiguration(
-        behavior: widget.scrollBehavior ??
+        behavior:
+            widget.scrollBehavior ??
             WheelBehavior(callerBehavior: ScrollConfiguration.of(context)),
         child: NotificationListener<ScrollNotification>(
           onNotification: _handleScrollNotification,

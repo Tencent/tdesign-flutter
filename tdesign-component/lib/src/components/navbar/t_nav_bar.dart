@@ -7,7 +7,7 @@ import '../../theme/t_fonts.dart';
 import '../../theme/t_internal_material.dart';
 import '../../theme/t_spacers.dart';
 import '../../theme/t_theme.dart';
-import '../text/t_text_resolve.dart';
+import '../text/t_text_style_scope.dart';
 import 't_nav_bar_theme_data.dart';
 
 class TNavBar extends StatelessWidget implements PreferredSizeWidget {
@@ -28,10 +28,11 @@ class TNavBar extends StatelessWidget implements PreferredSizeWidget {
 
   /// 标题控件。
   ///
-  /// 文本标题可传入 [Text]，用法与 [AppBar.title] 一致。
-  /// 标题自身的显式文本样式优先于 NavBar 提供的默认标题样式；例如 `TText`
-  /// 默认会解析正文颜色，如需使用 Theme 的标题颜色，请通过 `TText.style`
-  /// 传入相同颜色，或改用未显式设置颜色的 [Text]。
+  /// 文本标题可传入 `Text('标题')` 或 `TText('标题')`。
+  /// 默认使用 NavBar 的标题字体和标题颜色，单行显示，超出时省略。
+  /// 标题自身的显式文本样式优先；仅设置部分字段时，其余字段使用标题默认值。
+  /// 复合标题内部可通过更近的 TTextThemeData 区分主副标题样式。
+  /// 外层通用 TTextThemeData 的同名字段由本槽默认覆盖；需保持旧外观时显式指定。
   final Widget? title;
 
   /// 左侧操作项（对齐 AppBar.leading）
@@ -220,11 +221,8 @@ class TNavBar extends StatelessWidget implements PreferredSizeWidget {
   }
 
   Widget _getTitleWidget(BuildContext context) {
-    return DefaultTextStyle.merge(
-      style: TTextResolve.resolve(
-        context: context,
-        style: _getTitleStyle(context),
-      ),
+    return TTextStyleScope(
+      style: _getTitleStyle(context),
       maxLines: 1,
       overflow: TextOverflow.ellipsis,
       child: title ?? const SizedBox.shrink(),

@@ -24,7 +24,6 @@ class TTextareaPage extends StatelessWidget {
       exampleCodeGroup: 'textarea',
       desc: '用于多行文本信息输入。',
       compactDemo: true,
-      showTestModule: false,
       children: [
         ExampleModule(
           title: '组件类型',

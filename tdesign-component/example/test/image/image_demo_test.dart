@@ -79,6 +79,9 @@ void main() {
     expect(images[7].src, isNull);
     expect(images[8].src, isEmpty);
     expect(images[9].src, isEmpty);
-    expect(find.textContaining('单元测试'), findsNothing);
+    expect(
+      tester.widget<ExamplePage>(find.byType(ExamplePage)).showTestModule,
+      isTrue,
+    );
   }, tags: 'demo');
 }

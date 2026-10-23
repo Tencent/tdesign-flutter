@@ -22,7 +22,6 @@ class TCollapsePageState extends State<TCollapsePage> {
       title: tTitle(),
       exampleCodeGroup: 'collapse',
       desc: '可以折叠/展开的内容区域。',
-      showTestModule: false,
       backgroundColor: Theme.of(context).brightness == Brightness.light
           ? const Color(0xFFF6F6F6)
           : context.tTheme.bgColorPage,

@@ -6,6 +6,7 @@ import '../../theme/t_internal_material.dart';
 import '../../theme/t_radius.dart';
 import '../../theme/t_theme.dart';
 import '../text/t_text_resolve.dart';
+import '../text/t_text_style_scope.dart';
 import 't_avatar_defaults.dart';
 import 't_avatar_theme_data.dart';
 import 't_avatar_types.dart';
@@ -48,8 +49,8 @@ class TAvatar extends StatelessWidget {
         TAvatarSize.medium;
     final resolvedShape = shape ?? TAvatarShape.circle;
     final dimension =
-        theme?.resolveDimension(resolvedSize) ??
-        TAvatarDefaults.dimensionFor(resolvedSize);
+        theme?.resolveDimension(resolvedSize, token: context.tTheme) ??
+        TAvatarDefaults.dimensionFor(resolvedSize, token: context.tTheme);
     final radius = resolvedShape == TAvatarShape.circle
         ? theme?.resolveCircleBorderRadius(context.tTheme.radiusCircle) ??
               context.tTheme.radiusCircle
@@ -59,14 +60,15 @@ class TAvatar extends StatelessWidget {
         theme?.foregroundColor ?? context.tTheme.brandColor;
     final resolvedTextStyle = TAvatarDefaults.textStyleFor(
       resolvedSize,
+      token: context.tTheme,
     ).copyWith(color: resolvedForegroundColor);
     final content =
         child ??
         TInternalIcon(
           TIcons.user,
           size:
-              theme?.resolveIconSize(resolvedSize) ??
-              TAvatarDefaults.iconSizeFor(resolvedSize),
+              theme?.resolveIconSize(resolvedSize, token: context.tTheme) ??
+              TAvatarDefaults.iconSizeFor(resolvedSize, token: context.tTheme),
           color: resolvedForegroundColor,
         );
 
@@ -80,7 +82,7 @@ class TAvatar extends StatelessWidget {
             fit: StackFit.expand,
             children: [
               Center(
-                child: DefaultTextStyle.merge(
+                child: TTextStyleScope(
                   style: TTextResolve.resolve(
                     context: context,
                     style: resolvedTextStyle,
@@ -172,10 +174,11 @@ class TAvatarGroup extends StatelessWidget {
     final dimensions = visible.map((child) {
       final size = child is TAvatar ? child.size ?? groupSize : groupSize;
       final requested =
-          theme?.resolveDimension(size) ?? TAvatarDefaults.dimensionFor(size);
+          theme?.resolveDimension(size, token: context.tTheme) ??
+          TAvatarDefaults.dimensionFor(size, token: context.tTheme);
       return requested.isFinite && requested > 0
           ? requested
-          : TAvatarDefaults.dimensionFor(size);
+          : TAvatarDefaults.dimensionFor(size, token: context.tTheme);
     }).toList();
     final resolvedDimension = dimensions.reduce((a, b) => a > b ? a : b);
     final requestedOverlap =

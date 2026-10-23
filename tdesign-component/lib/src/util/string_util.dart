@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 
-import 'log.dart';
 
 Color? toColor(String colorStr, {double alpha = 1}) {
   if (colorStr.trim().toLowerCase() == 'transparent') {

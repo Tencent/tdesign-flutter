@@ -23,16 +23,42 @@ class Font {
   }
 
   factory Font.fromJson(
-    /// 字体 JSON 配置，包含 size、lineHeight 和可选的 fontWeight（1 至 9，默认 4）。
+    /// 字体 JSON 配置。size 为正、lineHeight 为非负的有限整数或小数，保留精度；
+    /// fontWeight 为 1 至 9 的整数，默认 4。非法配置抛出 FormatException。
     Map<String, dynamic> map,
-  ) => Font(
-    size: map['size'],
-    lineHeight: map['lineHeight'],
-    fontWeight: _getFontWeight(map),
-  );
+  ) {
+    final size = _metric(map['size'], 'size');
+    final lineHeight = _metric(
+      map['lineHeight'],
+      'lineHeight',
+      allowZero: true,
+    );
+    if (!(lineHeight / size).isFinite) {
+      throw const FormatException('Font height ratio must be finite');
+    }
+    return Font._metrics(size, lineHeight, _getFontWeight(map));
+  }
+
+  Font._metrics(this.size, double lineHeight, this.fontWeight)
+    : height = lineHeight / size;
+
+  static double _metric(Object? value, String name, {bool allowZero = false}) {
+    if (value is! num ||
+        !value.isFinite ||
+        value < 0 ||
+        (!allowZero && value == 0)) {
+      throw FormatException(
+        'Invalid Font.$name: expected a finite ${allowZero ? 'nonnegative' : 'positive'} number',
+      );
+    }
+    return value.toDouble();
+  }
 
   static FontWeight _getFontWeight(Map<String, dynamic> map) {
-    int weight = map['fontWeight'] ?? 4;
+    final weight = map['fontWeight'] ?? 4;
+    if (weight is! int || weight < 1 || weight > FontWeight.values.length) {
+      throw const FormatException('Font.fontWeight must be an integer in 1..9');
+    }
     return FontWeight.values[weight - 1];
   }
 }

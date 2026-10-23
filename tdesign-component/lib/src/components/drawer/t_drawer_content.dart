@@ -63,16 +63,27 @@ class _TDrawerContent extends StatelessWidget {
             if (title != null)
               Padding(
                 padding:
-                    drawerTheme?.titlePadding ??
-                    const EdgeInsets.fromLTRB(16, 24, 16, 8),
+                    drawerTheme?.resolveTitlePadding(
+                      EdgeInsets.fromLTRB(
+                        context.tTheme.size6,
+                        context.tTheme.size8,
+                        context.tTheme.size6,
+                        context.tTheme.size4,
+                      ),
+                    ) ??
+                    EdgeInsets.fromLTRB(
+                      context.tTheme.size6,
+                      context.tTheme.size8,
+                      context.tTheme.size6,
+                      context.tTheme.size4,
+                    ),
                 child: Align(
                   alignment: AlignmentDirectional.centerStart,
-                  child: Theme(
-                    data: Theme.of(context).mergeExtension(
-                      TTextThemeData(
-                        textStyle: _titleTextStyle(context, drawerTheme),
-                      ),
-                    ),
+                  // Preserve inherited TD paragraph settings along with the title style.
+                  child: TTextStyleScope(
+                    style: _titleTextStyle(context, drawerTheme),
+                    // Keep native paragraph defaults; only TD theme settings
+                    // were accidentally discarded by the former Theme replacement.
                     child: DefaultTextStyle(
                       style: TTextResolve.resolve(
                         context: context,
@@ -84,43 +95,65 @@ class _TDrawerContent extends StatelessWidget {
                 ),
               ),
             Expanded(
-              child: TInternalScrollScope(child: ListView.builder(
-                padding: EdgeInsets.zero,
-                itemCount: items?.length ?? 0,
-                itemBuilder: (context, index) {
-                  final item = items![index];
-                  return _DrawerMenuItem(
-                    item: item,
-                    onTap: onItemClick == null
-                        ? null
-                        : () => onItemClick!(index, item),
-                    enableFeedback: enableFeedback,
-                    textStyle: _itemTextStyle(context, drawerTheme),
-                    backgroundColor:
-                        drawerTheme?.itemBackgroundColor ??
-                        effectiveBackgroundColor,
-                    pressedColor:
-                        drawerTheme?.itemPressedColor ??
-                        context.tTheme.bgColorSecondaryContainer,
-                    padding:
-                        drawerTheme?.itemPadding ??
-                        const EdgeInsets.fromLTRB(16, 16, 0, 16),
-                    iconColor:
-                        drawerTheme?.itemIconColor ??
-                        context.tTheme.textColorPrimary,
-                    iconSize: drawerTheme?.itemIconSize ?? 24,
-                    iconGap: drawerTheme?.itemIconGap ?? 8,
-                    dividerColor:
-                        drawerTheme?.dividerColor ??
-                        context.tTheme.componentStroke,
-                    dividerIndent: drawerTheme?.dividerIndent ?? 16,
-                    dividerThickness: drawerTheme?.dividerThickness ?? 0.5,
-                    showDivider:
-                        showDivider &&
-                        (index < (items?.length ?? 0) - 1 || showLastDivider),
-                  );
-                },
-              )),
+              child: TInternalScrollScope(
+                child: ListView.builder(
+                  padding: EdgeInsets.zero,
+                  itemCount: items?.length ?? 0,
+                  itemBuilder: (context, index) {
+                    final item = items![index];
+                    return _DrawerMenuItem(
+                      item: item,
+                      onTap: onItemClick == null
+                          ? null
+                          : () => onItemClick!(index, item),
+                      enableFeedback: enableFeedback,
+                      textStyle: _itemTextStyle(context, drawerTheme),
+                      backgroundColor:
+                          drawerTheme?.itemBackgroundColor ??
+                          effectiveBackgroundColor,
+                      pressedColor:
+                          drawerTheme?.itemPressedColor ??
+                          context.tTheme.bgColorSecondaryContainer,
+                      padding:
+                          drawerTheme?.resolveItemPadding(
+                            EdgeInsets.fromLTRB(
+                              context.tTheme.size6,
+                              context.tTheme.size6,
+                              0,
+                              context.tTheme.size6,
+                            ),
+                          ) ??
+                          EdgeInsets.fromLTRB(
+                            context.tTheme.size6,
+                            context.tTheme.size6,
+                            0,
+                            context.tTheme.size6,
+                          ),
+                      iconColor:
+                          drawerTheme?.itemIconColor ??
+                          context.tTheme.textColorPrimary,
+                      iconSize:
+                          drawerTheme?.resolveItemIconSize(
+                            context.tTheme.size8,
+                          ) ??
+                          context.tTheme.size8,
+                      iconGap:
+                          drawerTheme?.resolveItemIconGap(
+                            context.tTheme.size4,
+                          ) ??
+                          context.tTheme.size4,
+                      dividerColor:
+                          drawerTheme?.dividerColor ??
+                          context.tTheme.componentStroke,
+                      dividerIndent: drawerTheme?.dividerIndent ?? 16,
+                      dividerThickness: drawerTheme?.dividerThickness ?? 0.5,
+                      showDivider:
+                          showDivider &&
+                          (index < (items?.length ?? 0) - 1 || showLastDivider),
+                    );
+                  },
+                ),
+              ),
             ),
             if (footer != null)
               Container(
@@ -234,16 +267,20 @@ class _DrawerMenuItemState extends State<_DrawerMenuItem> {
             SizedBox(width: widget.iconGap),
           ],
           Expanded(
-            child:
-                widget.item.content ??
-                (widget.item.title == null
-                    ? const SizedBox.shrink()
-                    : TTextStyled(
-                        widget.item.title!,
-                        style: widget.textStyle,
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
-                      )),
+            child: widget.item.content != null
+                ? TTextStyleScope(
+                    // A layout wrapper does not change menu text defaults.
+                    style: widget.textStyle,
+                    child: widget.item.content!,
+                  )
+                : (widget.item.title == null
+                      ? const SizedBox.shrink()
+                      : TTextStyled(
+                          widget.item.title!,
+                          style: widget.textStyle,
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                        )),
           ),
         ],
       ),
@@ -295,5 +332,8 @@ class TDrawerItem {
   final Widget? icon;
 
   /// 自定义菜单项正文，优先于 [title]；仍与 [icon]、菜单项间距和分隔线组合。
+  ///
+  /// 整个子树的 Text/TText 使用菜单正文默认字体和颜色；布局包装不切断传递。
+  /// 显式文字样式和内容内部更近的 TD 文字主题优先；自定义内容自行控制换行。
   final Widget? content;
 }

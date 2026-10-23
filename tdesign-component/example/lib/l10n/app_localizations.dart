@@ -125,7 +125,7 @@ abstract class AppLocalizations {
   /// No description provided for @publishDate.
   ///
   /// In en, this message translates to:
-  /// **'PublishDate'**
+  /// **'Build date'**
   String get publishDate;
 
   /// No description provided for @defaultTheme.

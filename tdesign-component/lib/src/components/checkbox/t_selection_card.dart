@@ -67,6 +67,7 @@ class TSelectionCard extends StatelessWidget {
         borderRadius: BorderRadius.circular(borderRadius),
       ),
       child: Stack(
+        alignment: AlignmentDirectional.centerStart,
         children: [
           Align(alignment: AlignmentDirectional.centerStart, child: child),
           if (selected)
@@ -114,8 +115,13 @@ class TSelectionCardGroupLayout extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             for (var index = 0; index < children.length; index++) ...[
-              SizedBox(
-                height: _selectionCardHeight(context, itemHasSubtitles[index]),
+              ConstrainedBox(
+                constraints: BoxConstraints(
+                  minHeight: _selectionCardHeight(
+                    context,
+                    itemHasSubtitles[index],
+                  ),
+                ),
                 child: children[index],
               ),
               if (index < children.length - 1)
@@ -150,12 +156,14 @@ class TSelectionCardGroupLayout extends StatelessWidget {
               for (final child in children)
                 SizedBox(
                   width: itemWidth,
-                  height: itemHeight,
-                  child: _SelectionCardMarkStyle(
-                    size: markSize,
-                    iconSize: markSize / 2,
-                    iconOffset: Offset(markSize / 16, markSize / 16),
-                    child: child,
+                  child: ConstrainedBox(
+                    constraints: BoxConstraints(minHeight: itemHeight),
+                    child: _SelectionCardMarkStyle(
+                      size: markSize,
+                      iconSize: markSize / 2,
+                      iconOffset: Offset(markSize / 16, markSize / 16),
+                      child: child,
+                    ),
                   ),
                 ),
             ],

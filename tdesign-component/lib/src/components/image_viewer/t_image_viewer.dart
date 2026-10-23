@@ -1,3 +1,5 @@
+import 'dart:math' as math;
+
 import 'package:flutter/material.dart';
 import 'package:tdesign_flutter_icons/tdesign_flutter_icons.dart' show TIcons;
 
@@ -256,8 +258,40 @@ class _TImageViewerViewState extends State<_TImageViewerView>
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context).extension<TImageViewerThemeData>();
-    final appBarHeight = context.tTheme.spacer5;
     const actionSize = 40.0;
+    final titleWidth = math.max(
+      0.0,
+      MediaQuery.sizeOf(context).width -
+          context.tTheme.spacer * 2 -
+          actionSize * 2,
+    );
+    var titleHeight = 0.0;
+    final label = widget.labels?[_index];
+    if (label != null && label.isNotEmpty) {
+      titleHeight += TTextStyled(
+        label,
+        style:
+            theme?.labelStyle ?? TextStyle(color: context.tTheme.textColorAnti),
+        textAlign: TextAlign.center,
+        overflow: TextOverflow.ellipsis,
+      ).naturalSize(context, maxWidth: titleWidth).height;
+    }
+    if (widget.showIndex) {
+      titleHeight += TTextStyled(
+        '${_index + 1}/${widget.images.length}',
+        centerLeading: true,
+        style:
+            theme?.indexStyle ??
+            TextStyle(
+              color: context.tTheme.textColorAnti,
+              fontSize: context.tTheme.fontBodyMedium?.size ?? 14,
+            ),
+      ).naturalSize(context, maxWidth: titleWidth).height;
+    }
+    final appBarHeight = math.min(
+      math.max(context.tTheme.spacer5, titleHeight),
+      MediaQuery.sizeOf(context).height - MediaQuery.paddingOf(context).top,
+    );
     final backgroundColor =
         theme?.backgroundColor ??
         Color.alphaBlend(
@@ -392,31 +426,33 @@ class _TImageViewerViewState extends State<_TImageViewerView>
 
   Widget _buildTitle(BuildContext context, TImageViewerThemeData? theme) {
     final label = widget.labels?[_index];
-    return FittedBox(
-      fit: BoxFit.scaleDown,
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          if (label != null && label.isNotEmpty)
-            TTextStyled(
-              label,
-              textAlign: TextAlign.center,
-              overflow: TextOverflow.ellipsis,
-              style:
-                  theme?.labelStyle ??
-                  TextStyle(color: context.tTheme.textColorAnti),
-            ),
-          if (widget.showIndex)
-            TTextStyled(
-              '${_index + 1}/${widget.images.length}',
-              style:
-                  theme?.indexStyle ??
-                  TextStyle(
-                    color: context.tTheme.textColorAnti,
-                    fontSize: context.tTheme.fontBodyMedium?.size ?? 14,
-                  ),
-            ),
-        ],
+    return TInternalScrollScope(
+      child: SingleChildScrollView(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            if (label != null && label.isNotEmpty)
+              TTextStyled(
+                label,
+                textAlign: TextAlign.center,
+                overflow: TextOverflow.ellipsis,
+                style:
+                    theme?.labelStyle ??
+                    TextStyle(color: context.tTheme.textColorAnti),
+              ),
+            if (widget.showIndex)
+              TTextStyled(
+                '${_index + 1}/${widget.images.length}',
+                centerLeading: true,
+                style:
+                    theme?.indexStyle ??
+                    TextStyle(
+                      color: context.tTheme.textColorAnti,
+                      fontSize: context.tTheme.fontBodyMedium?.size ?? 14,
+                    ),
+              ),
+          ],
+        ),
       ),
     );
   }

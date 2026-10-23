@@ -5,8 +5,10 @@ import '../../theme/t_font_family.dart';
 import '../../theme/t_fonts.dart';
 import '../../theme/t_internal_material.dart';
 import '../../theme/t_radius.dart';
+import '../../theme/t_sizes.dart';
 import '../../theme/t_theme.dart';
 import '../text/t_text_resolve.dart';
+import 't_button_theme_data.dart';
 import 't_button_types.dart';
 
 /// 按钮样式解析器
@@ -82,6 +84,8 @@ class TButtonResolve {
       hasChild: hasChild,
       effectiveShape: shape,
       tapTargetSize: tapTargetSize,
+      theme: tTheme,
+      buttonTheme: Theme.of(context).extension<TButtonThemeData>(),
     );
 
     // 5.5 textStyle 在各主题层合并完成后解析，保留其 stateful 字体字段，
@@ -387,7 +391,7 @@ class TButtonResolve {
       case TButtonColorPreset.light:
         fg = tTheme.brandColor;
       case TButtonColorPreset.defaultTheme:
-        fg = tTheme.fontWhite1;
+        fg = tTheme.textColorAnti;
     }
 
     return ButtonStyle(
@@ -437,6 +441,8 @@ class TButtonResolve {
     required bool hasChild,
     required TButtonShape effectiveShape,
     required MaterialTapTargetSize tapTargetSize,
+    required TThemeData theme,
+    TButtonThemeData? buttonTheme,
   }) {
     final isSquareOrCircle =
         effectiveShape == TButtonShape.square ||
@@ -444,7 +450,7 @@ class TButtonResolve {
     // square/circle 纯 icon 按钮：等宽高 + 等边 padding
     final onlyIcon = hasIcon && !hasChild;
 
-    final metrics = sizeMetrics(size, null);
+    final metrics = sizeMetrics(size, theme, buttonTheme: buttonTheme);
     final paddingValue = onlyIcon
         ? metrics.iconOnlyPadding
         : metrics.horizontalPadding;
@@ -471,53 +477,58 @@ class TButtonResolve {
   }
 
   /// 返回普通与渐变按钮共用的 TDesign 尺寸规格。
-  static TButtonSizeMetrics sizeMetrics(TButtonSize size, TThemeData? theme) {
+  static TButtonSizeMetrics sizeMetrics(
+    TButtonSize size,
+    TThemeData? theme, {
+    TButtonThemeData? buttonTheme,
+  }) {
+    final token = theme ?? TThemeData.defaultData();
     final font = switch (size) {
-      TButtonSize.large || TButtonSize.medium => theme?.fontMarkLarge,
-      TButtonSize.small || TButtonSize.extraSmall => theme?.fontMarkMedium,
+      TButtonSize.large || TButtonSize.medium => token.fontMarkLarge,
+      TButtonSize.small || TButtonSize.extraSmall => token.fontMarkMedium,
     };
-    return switch (size) {
-      TButtonSize.large => TButtonSizeMetrics(
-        height: 48,
-        horizontalPadding: 20,
-        verticalPadding: 12,
-        iconOnlyPadding: 12,
-        iconSize: 24,
-        fontSize: font?.size ?? 16,
-        fontHeight: font?.height ?? 1.5,
-        fontWeight: font?.fontWeight ?? FontWeight.w600,
-      ),
-      TButtonSize.medium => TButtonSizeMetrics(
-        height: 40,
-        horizontalPadding: 16,
-        verticalPadding: 8,
-        iconOnlyPadding: 10,
-        iconSize: 20,
-        fontSize: font?.size ?? 16,
-        fontHeight: font?.height ?? 1.5,
-        fontWeight: font?.fontWeight ?? FontWeight.w600,
-      ),
-      TButtonSize.small => TButtonSizeMetrics(
-        height: 32,
-        horizontalPadding: 12,
-        verticalPadding: 5,
-        iconOnlyPadding: 7,
-        iconSize: 18,
-        fontSize: font?.size ?? 14,
-        fontHeight: font?.height ?? 22 / 14,
-        fontWeight: font?.fontWeight ?? FontWeight.w600,
-      ),
-      TButtonSize.extraSmall => TButtonSizeMetrics(
-        height: 28,
-        horizontalPadding: 8,
-        verticalPadding: 3,
-        iconOnlyPadding: 5,
-        iconSize: 18,
-        fontSize: font?.size ?? 14,
-        fontHeight: font?.height ?? 22 / 14,
-        fontWeight: font?.fontWeight ?? FontWeight.w600,
-      ),
+    final height = switch (size) {
+      TButtonSize.large => token.size13,
+      TButtonSize.medium => token.size12,
+      TButtonSize.small => token.size10,
+      TButtonSize.extraSmall => token.size9,
     };
+    final horizontalPadding = switch (size) {
+      TButtonSize.large => token.size7,
+      TButtonSize.medium => token.size6,
+      TButtonSize.small => token.size5,
+      TButtonSize.extraSmall => token.size4,
+    };
+    final iconSize = switch (size) {
+      TButtonSize.large => token.size8,
+      TButtonSize.medium => token.size7,
+      TButtonSize.small || TButtonSize.extraSmall => 18.0,
+    };
+    final effectiveIconSize =
+        (buttonTheme?.resolveIconSize(size, iconSize) ?? iconSize).clamp(
+          0.0,
+          double.infinity,
+        );
+    final fontSize =
+        font?.size ??
+        (size == TButtonSize.large || size == TButtonSize.medium ? 16.0 : 14.0);
+    final fontHeight = font?.height ?? (fontSize == 16 ? 1.5 : 22 / 14);
+    return TButtonSizeMetrics(
+      height: height,
+      horizontalPadding: horizontalPadding,
+      verticalPadding: ((height - fontSize * fontHeight) / 2).clamp(
+        0,
+        double.infinity,
+      ),
+      iconOnlyPadding: ((height - effectiveIconSize) / 2).clamp(
+        0,
+        double.infinity,
+      ),
+      iconSize: effectiveIconSize,
+      fontSize: fontSize,
+      fontHeight: fontHeight,
+      fontWeight: font?.fontWeight ?? FontWeight.w600,
+    );
   }
 
   static Color _disabledBackgroundColor(
