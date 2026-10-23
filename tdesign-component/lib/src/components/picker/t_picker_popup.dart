@@ -56,7 +56,7 @@ final class TPickerPopup {
     /// 蒙层行为；null 时沿用 Popup 默认值。
     TPopupOverlayConfig? overlay,
 
-    /// 兼容入口，请改用取反值 maintainState；2.0.0 删除。
+    /// 已废弃，此为兼容入口。请使用取反值 maintainState；将在 2.0.0 删除。
     @Deprecated(
       'Use maintainState with the old value inverted instead. Deprecated in 1.0.1; remove in 2.0.0.',
     )

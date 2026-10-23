@@ -43,7 +43,7 @@
 | key | Key? | - | 组件标识，用于区分或保留组件状态。 | 否 |
 | maxSelected | int? | - | 最多可选数量。 null 时不限制；达到上限后阻止新增选择，但仍允许取消。设为 0 时不能新增选择。 | 否 |
 | onChanged | ValueChanged&lt;List&lt;T&gt;&gt;? | - | 选中项列表变更回调；为 null 时整组禁用。 回调提供完整选中列表，按 options 的顺序排列；父组件需回传新的 value。 | 否 |
-| onMaxSelected | VoidCallback? | - | 兼容入口，请使用 `onSelectionLimitExceeded`；2.0.0 删除。 | 否 |
+| onMaxSelected | VoidCallback? | - | 已废弃，此为兼容入口。请使用 `onSelectionLimitExceeded`；将在 2.0.0 删除。 | 否 |
 | onSelectionLimitExceeded | VoidCallback? | - | 新增选择被数量上限阻止时触发；达到上限本身不触发。 与旧参数同时提供时优先使用本参数。 | 否 |
 | options | List&lt;TCheckboxOption&lt;T&gt;&gt; | - | 复选框数据项。 | 是 |
 | showDivider | bool | true | 普通模式是否显示项间分割线，默认显示；卡片模式不显示。 | 否 |

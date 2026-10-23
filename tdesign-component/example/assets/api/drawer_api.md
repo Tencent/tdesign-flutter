@@ -13,7 +13,7 @@
 | footer | Widget? | - | 抽屉的底部 | 否 |
 | items | List&lt;TDrawerItem&gt;? | - | 抽屉里的列表项 | 否 |
 | key | Key? | - | 组件标识，用于区分或保留组件状态。 | 否 |
-| onItemClick | TDrawerItemClickCallback? | - | 兼容入口，请使用 `onItemTap`；2.0.0 删除。 | 否 |
+| onItemClick | TDrawerItemClickCallback? | - | 已废弃，此为兼容入口。请使用 `onItemTap`；将在 2.0.0 删除。 | 否 |
 | onItemTap | TDrawerItemTapCallback? | - | 点击抽屉里的列表项触发。 与旧参数同时提供时优先使用本参数。 | 否 |
 | showDivider | bool | true | 是否显示菜单项分隔线，默认 true。 | 否 |
 | showLastDivider | bool | true | 是否显示最后一行分隔线，默认 true。 | 否 |
@@ -76,7 +76,7 @@
 | onOverlayClick | VoidCallback? | - | 在蒙层被点击时触发，不受是否自动关闭影响。 | 否 |
 | topInset | double? | - | 设置抽屉相对屏幕顶部的可选偏移，默认 0，必须大于或等于 0。 | 否 |
 | useSafeArea | bool | true | 控制浮层是否避让系统安全区域，默认 true。 | 否 |
-| destroyOnClose | bool | false | 兼容入口，请改用取反值 maintainState；2.0.0 删除。 | 否 |
+| destroyOnClose | bool | false | 已废弃，此为兼容入口。请使用取反值 maintainState；将在 2.0.0 删除。 | 否 |
 | maintainState | bool? | - | 被不透明路由覆盖时是否保留内容状态，默认 true。 未传时使用 destroyOnClose 的取反值，同时提供时本参数优先；关闭后始终释放。 | 否 |
 | onClose | VoidCallback? | - | 在抽屉浮层关闭后触发。 | 否 |
 
@@ -105,7 +105,7 @@
 
 | 名称 | 类型 | 默认值 | 说明 | 必传 |
 | --- | --- | --- | --- | --- |
-| TDrawerItemClickCallback | TDrawerItemTapCallback | - | 兼容类型，请使用 `TDrawerItemTapCallback`；2.0.0 删除。 | - |
+| TDrawerItemClickCallback | TDrawerItemTapCallback | - | 已废弃，此为兼容入口。请使用 `TDrawerItemTapCallback`；将在 2.0.0 删除。 | - |
 
 
 ### TDrawerItemTapCallback

@@ -29,7 +29,7 @@ class TStepsHorizontal extends StatelessWidget {
   final ValueChanged<int>? _onStepTapped;
   final ValueChanged<int>? _onChange;
 
-  /// 兼容入口，请使用 [onStepTapped]；2.0.0 删除。
+  /// 已废弃，此为兼容入口。请使用 [onStepTapped]；将在 2.0.0 删除。
   @Deprecated('Use onStepTapped instead. Deprecated in 1.0.1; remove in 2.0.0.')
   ValueChanged<int>? get onChange => _onChange;
 

@@ -111,7 +111,7 @@ class TNoticeBar extends StatefulWidget {
   final ValueChanged<TNoticeBarTapTarget>? _onTargetTap;
   final ValueChanged<TNoticeBarTapTarget>? _onPressed;
 
-  /// 兼容入口，请使用 [onTargetTap]；2.0.0 删除。
+  /// 已废弃，此为兼容入口。请使用 [onTargetTap]；将在 2.0.0 删除。
   @Deprecated('Use onTargetTap instead. Deprecated in 1.0.1; remove in 2.0.0.')
   ValueChanged<TNoticeBarTapTarget>? get onPressed => _onPressed;
 

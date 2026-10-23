@@ -262,7 +262,7 @@ class TPopupOptions {
   final bool? _maintainState;
   final bool _destroyOnClose;
 
-  /// 兼容入口，请改用取反值 [maintainState]；2.0.0 删除。
+  /// 已废弃，此为兼容入口。请使用取反值 [maintainState]；将在 2.0.0 删除。
   @Deprecated(
     'Use maintainState with the old value inverted instead. Deprecated in 1.0.1; remove in 2.0.0.',
   )
@@ -319,7 +319,7 @@ class TPopupOptions {
     /// 不传时保留原值；显式 null 清除本字段，非空值须为 TPopupOverlayConfig。
     Object? overlay = _unset,
 
-    /// 兼容参数，非空时请改用 [copyWithMaintainState] 并传入取反值；2.0.0 删除。
+    /// 已废弃，此为兼容入口。请使用 [copyWithMaintainState] 并传入非空旧值的取反值；将在 2.0.0 删除。
     /// 非空值取反后设置状态保留值；不传或 null 保留当前有效值。
     @Deprecated(
       'Use copyWithMaintainState with the old non-null value inverted instead. Deprecated in 1.0.1; remove in 2.0.0.',

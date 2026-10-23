@@ -84,7 +84,7 @@ class TPopoverWidget extends StatefulWidget {
   final VoidCallback? _onLongPress;
   final VoidCallback? _onLongTap;
 
-  /// 兼容入口，请使用 [onLongPress]；2.0.0 删除。
+  /// 已废弃，此为兼容入口。请使用 [onLongPress]；将在 2.0.0 删除。
   @Deprecated('Use onLongPress instead. Deprecated in 1.0.1; remove in 2.0.0.')
   VoidCallback? get onLongTap => _onLongTap;
 

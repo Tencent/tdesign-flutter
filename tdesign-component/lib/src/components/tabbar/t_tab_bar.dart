@@ -223,7 +223,7 @@ class TTabBarItemConfig {
   final bool? _notifyOnReselect;
   final bool _allowMultipleTaps;
 
-  /// 兼容入口，请使用 [notifyOnReselect]；2.0.0 删除。
+  /// 已废弃，此为兼容入口。请使用 [notifyOnReselect]；将在 2.0.0 删除。
   @Deprecated(
     'Use notifyOnReselect instead. Deprecated in 1.0.1; remove in 2.0.0.',
   )
@@ -1133,7 +1133,7 @@ class TTabBarPopUpBtnConfig {
   TTabBarPopUpBtnConfig({
     required this.items,
 
-    /// 兼容入口，请使用 [onSelected]；2.0.0 删除。
+    /// 已废弃，此为兼容入口。请使用 [onSelected]；将在 2.0.0 删除。
     @Deprecated('Use onSelected instead. Deprecated in 1.0.1; remove in 2.0.0.')
     ValueChanged<String>? onChanged,
     ValueChanged<String>? onSelected,
@@ -1169,7 +1169,7 @@ class TTabBarPopUpBtnConfig {
   final ValueChanged<String>? _onSelected;
   final ValueChanged<String> _onChanged;
 
-  /// 兼容入口，请使用 [onSelected]；2.0.0 删除。
+  /// 已废弃，此为兼容入口。请使用 [onSelected]；将在 2.0.0 删除。
   @Deprecated('Use onSelected instead. Deprecated in 1.0.1; remove in 2.0.0.')
   ValueChanged<String> get onChanged => _onChanged;
 

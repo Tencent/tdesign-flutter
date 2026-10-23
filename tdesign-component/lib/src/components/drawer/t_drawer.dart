@@ -67,7 +67,7 @@ class TDrawer extends StatelessWidget {
   final TDrawerItemTapCallback? _onItemTap;
   final TDrawerItemTapCallback? _onItemClick;
 
-  /// 兼容入口，请使用 [onItemTap]；2.0.0 删除。
+  /// 已废弃，此为兼容入口。请使用 [onItemTap]；将在 2.0.0 删除。
   @Deprecated('Use onItemTap instead. Deprecated in 1.0.1; remove in 2.0.0.')
   TDrawerItemClickCallback? get onItemClick => _onItemClick;
 
@@ -114,7 +114,7 @@ TDrawerHandle showTDrawer(
   double? topInset,
   bool useSafeArea = true,
 
-  /// 兼容入口，请改用取反值 maintainState；2.0.0 删除。
+  /// 已废弃，此为兼容入口。请使用取反值 maintainState；将在 2.0.0 删除。
   @Deprecated(
     'Use maintainState with the old value inverted instead. Deprecated in 1.0.1; remove in 2.0.0.',
   )

@@ -5,7 +5,7 @@
 缺少 CJK fallback 而把中文渲染成缺字符号。字符清单见
 `component_demo_glyphs.txt`；上游为 Noto Sans SC 2.004，子集工具为
 HarfBuzz 11.4.5，子集 SHA-256 为
-`1cf396734d8d8bd6f81bebc03f9abc16680da03b9bad485564d14e65c0e34235`。
+`531e46e706724aa002e9faf9c12c8fcec3191383b25bfc893d5bc5f6489b88df`。
 它不会打包进 Example 或组件产物。
 
 共享 Demo Golden 工具统一加载 Roboto、Material Icons、Cupertino Icons、
@@ -200,6 +200,8 @@ ActionSheet、Dialog、DropdownMenu 或 NoticeBar 页面文案时，更新 feedb
 生成基线。
 
 2026-10-09 补齐源码字符“批”“逆”。沿用上述 Noto Sans SC 2.004 与 HarfBuzz，既有 cmap 字符的轮廓、横向度量和全局字体度量逐项一致。
+
+2026-10-23 为中文 API 废弃说明补齐“废”。沿用同一 Noto Sans SC 2.004 与 HarfBuzz 11.4.5，并以 fonttools 4.59.1 保留原字体名称及时间记录；既有 1181 个 cmap 字符的轮廓、hint 程序、横纵度量和全局字体度量逐项一致，仅新增 U+5E9F。不更新既有 Golden 基线。
 
 ## 公开页面与内部调试区块
 

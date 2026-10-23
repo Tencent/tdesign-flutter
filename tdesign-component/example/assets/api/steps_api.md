@@ -31,7 +31,7 @@
 | direction | TStepsDirection | TStepsDirection.horizontal | 步骤条方向 | 否 |
 | status | TStepsStatus | TStepsStatus.process | 进度步骤条当前 `value` 对应步骤的状态。 | 否 |
 | indicator | TStepsIndicator | TStepsIndicator.standard | 进度步骤条的指示器样式。 | 否 |
-| onChange | ValueChanged&lt;int&gt;? | - | 兼容入口，请使用 `onStepTapped`；2.0.0 删除。 | 否 |
+| onChange | ValueChanged&lt;int&gt;? | - | 已废弃，此为兼容入口。请使用 `onStepTapped`；将在 2.0.0 删除。 | 否 |
 | onStepTapped | ValueChanged&lt;int&gt;? | - | 点击步骤时通知索引，包含当前步骤；值由调用方更新。 本参数非空时优先，否则沿用 `onChange`；两者均为空时只读。 是否提供回调不改变指示器视觉。 | 否 |
 
 
@@ -46,7 +46,7 @@
 | key | Key? | - | 组件标识，用于区分或保留组件状态。 | 否 |
 | steps | List&lt;TStepsItemData&gt; | - | 步骤条数据 | 是 |
 | value | int | - | 进度或可选择步骤条当前激活的索引；越界值会收敛到有效范围。 | 是 |
-| onChange | ValueChanged&lt;int&gt;? | - | 兼容入口，请使用 `onStepTapped`；2.0.0 删除。 | 否 |
+| onChange | ValueChanged&lt;int&gt;? | - | 已废弃，此为兼容入口。请使用 `onStepTapped`；将在 2.0.0 删除。 | 否 |
 | onStepTapped | ValueChanged&lt;int&gt;? | - | 点击步骤时通知索引，包含当前步骤；值由调用方更新。 须提供本参数或 `onChange`；本参数非空时优先。 | 否 |
 
 
@@ -56,7 +56,7 @@
 | --- | --- | --- | --- | --- |
 | direction | TStepsDirection | - | 步骤条方向 | - |
 | indicator | TStepsIndicator | - | 进度步骤条的指示器样式。 | - |
-| onChange | ValueChanged&lt;int&gt;? | - | 兼容入口，请使用 `onStepTapped`；2.0.0 删除。 | - |
+| onChange | ValueChanged&lt;int&gt;? | - | 已废弃，此为兼容入口。请使用 `onStepTapped`；将在 2.0.0 删除。 | - |
 | onStepTapped | ValueChanged&lt;int&gt;? | - | 用户选择步骤时触发；调用方通过更新 `value` 实现受控模式。 `TSteps.progress` 中为空时只读，非空时不改变指示器视觉； `TSteps.selectable` 须提供本参数或旧参数。`TSteps.display` 不接收此参数。 与旧参数同时提供时优先使用本参数，包含点击当前步骤。 | - |
 | status | TStepsStatus | - | 进度步骤条当前 `value` 对应步骤的状态。 | - |
 | steps | List&lt;TStepsItemData&gt; | - | 步骤条数据 | - |

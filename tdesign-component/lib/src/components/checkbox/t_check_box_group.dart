@@ -108,7 +108,7 @@ class TCheckboxGroup<T> extends StatelessWidget {
   final VoidCallback? _onSelectionLimitExceeded;
   final VoidCallback? _onMaxSelected;
 
-  /// 兼容入口，请使用 [onSelectionLimitExceeded]；2.0.0 删除。
+  /// 已废弃，此为兼容入口。请使用 [onSelectionLimitExceeded]；将在 2.0.0 删除。
   @Deprecated(
     'Use onSelectionLimitExceeded instead. Deprecated in 1.0.1; remove in 2.0.0.',
   )

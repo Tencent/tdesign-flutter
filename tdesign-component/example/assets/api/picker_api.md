@@ -47,7 +47,7 @@ Picker 专用弹层入口。
 | radius | double? | - | 顶部圆角；null 时使用 Popup 主题或 TDesign 默认值。 | 否 |
 | backgroundColor | Color? | - | 面板背景色；null 时使用 Popup 主题或容器色。 | 否 |
 | overlay | TPopupOverlayConfig? | - | 蒙层行为；null 时沿用 Popup 默认值。 | 否 |
-| destroyOnClose | bool | false | 兼容入口，请改用取反值 maintainState；2.0.0 删除。 | 否 |
+| destroyOnClose | bool | false | 已废弃，此为兼容入口。请使用取反值 maintainState；将在 2.0.0 删除。 | 否 |
 | maintainState | bool? | - | 被不透明路由覆盖时是否保留内容状态，默认 true。 未传时使用 destroyOnClose 的取反值，同时提供时本参数优先；关闭后始终释放。 | 否 |
 | animationDuration | Duration? | - | 打开和关闭动画时长。 | 否 |
 | onOpened | VoidCallback? | - | 打开动画完成回调。 | 否 |

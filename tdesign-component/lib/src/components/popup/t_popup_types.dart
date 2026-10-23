@@ -69,7 +69,7 @@ class TPopupOverlayConfig {
   final VoidCallback? _onTap;
   final VoidCallback? _onClick;
 
-  /// 兼容入口，请使用 [onTap]；2.0.0 删除。
+  /// 已废弃，此为兼容入口。请使用 [onTap]；将在 2.0.0 删除。
   @Deprecated('Use onTap instead. Deprecated in 1.0.1; remove in 2.0.0.')
   VoidCallback? get onClick => _onClick;
 

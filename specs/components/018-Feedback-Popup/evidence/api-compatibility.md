@@ -98,3 +98,13 @@ Popup、Drawer、Picker 分别覆盖旧参数真假 × 新参数 null/false/true
 Flutter 3.32.0 / 3.47.7 的 172 项工具测试（含字体覆盖）和 70 项 API 文档渲染测试均通过。随后将已弃用 onChange 的 dartdoc 链接改为代码标记，生成 Markdown 保持一致；在最终源码上再次完成 57 份 API 同步、字体覆盖和严格分析，两套 SDK 均通过且无诊断。低版本首次分析对文档链接报出的 2 条弃用提示保留在 `low-analyze-before-link-fix.log`，不作为最终通过证据。
 
 最终复核确认生成参数表保留全部关键契约，selectable 不再混入其他构造器说明；未发现新的文档或实现问题。本轮未修改测试、字体、视觉、运行逻辑或 Controller。
+
+## 旧入口废弃说明统一
+
+以 `ce957a12c3e7832edca87b917b2b3de8bea4b835` 为基线，18 处旧 API 源注释统一为“已废弃，此为兼容入口。请使用对应替代 API；将在 2.0.0 删除。”取反迁移及 copyWith 的非空旧值、null 保留语义继续说明；8 份生成 API 同步。13 个生产 Dart 文件的可执行 token 与基线逐项一致，未改签名、默认行为或 Controller 绑定。
+
+现有共享测试字体缺少“废”，本轮仅补齐该字及清单，沿用已有 Noto Sans SC 2.004 来源、HarfBuzz 11.4.5 和 fonttools 4.59.1。原有 1181 个 cmap 字符的轮廓及 hint 程序、横纵度量、全局度量均一致；10220 行不含新增字的既有源码文本在 HarfBuzz 下的字形程序、位置和 advance 均一致。不更新 Golden 基线，字体不进入产品产物；Linux Golden 仍以本次提交的远端 CI 结果为准。
+
+两套独立 SDK（Flutter 3.32.0 / 3.47.7）各通过 172 项工具测试（含字体覆盖）、70 项 API 文档渲染、57 份 API 同步检查和严格分析。文档及字体补丁 SHA-256：`01f963f0ad5fdeeec5afb7c4e8f892e909b8337b21ab857b1b66049a718f333b`。补丁、字体对比与原始日志位于工作区 `artifacts/pr1148-api-compat/docs-deprecation-wording/`。原有实现功能回归按前述实现候选追溯，不写成本轮重跑结果。
+
+复核确认废弃状态、替代入口与 2.0.0 删除计划明确，特殊迁移说明保留，运行实现未改；本地文档 Review 通过，未合并。
