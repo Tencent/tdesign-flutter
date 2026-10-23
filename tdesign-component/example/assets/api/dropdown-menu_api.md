@@ -10,7 +10,7 @@
 | --- | --- | --- | --- | --- |
 | animationDuration | Duration? | - | 展开、关闭及切换动画时长。 未指定时为 200ms。系统禁用动画时始终使用零时长。 | 否 |
 | closeOnOverlayTap | bool | true | 点击外部区域是否关闭面板，默认 true；不依赖遮罩是否绘制。 | 否 |
-| controller | TDropdownMenuController? | - | 外部筛选栏控制器；为空时由组件创建和释放内部控制器。 外部控制器由调用方释放，应只绑定一个筛选栏。 | 否 |
+| controller | TDropdownMenuController? | - | 外部筛选栏控制器；为空时由组件创建和释放内部控制器。 外部控制器由调用方释放。建议独立筛选栏分别使用 Controller； 绑定规则见 `TDropdownMenuController`。 | 否 |
 | items | List&lt;TDropdownMenuItem&gt; | - | 按顺序展示的筛选触发项和对应面板。 | 是 |
 | key | Key? | - | 组件标识，用于区分或保留组件状态。 | 否 |
 | onClosed | TDropdownMenuClosedCallback? | - | 面板关闭流程完成后回调，携带筛选项下标和关闭原因。 | 否 |
@@ -174,6 +174,10 @@
 ### TDropdownMenuController
 
 类型安全的下拉筛选栏控制器。
+
+重复绑定保留既有的后绑定覆盖行为，命令作用于最后绑定的筛选栏，
+不提供同时控制多个筛选栏的能力。当前绑定筛选栏卸载后，不会自动恢复此前的绑定。
+多个筛选栏共享 Controller 时，不保证各自状态完整隔离。
 
 #### 构造方法
 

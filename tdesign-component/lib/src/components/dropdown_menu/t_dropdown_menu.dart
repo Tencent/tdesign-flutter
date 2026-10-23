@@ -197,11 +197,16 @@ class TDropdownMenuItem {
 }
 
 /// 类型安全的下拉筛选栏控制器。
+///
+/// 重复绑定保留既有的后绑定覆盖行为，命令作用于最后绑定的筛选栏，
+/// 不提供同时控制多个筛选栏的能力。当前绑定筛选栏卸载后，不会自动恢复此前的绑定。
+/// 多个筛选栏共享 Controller 时，不保证各自状态完整隔离。
 class TDropdownMenuController extends ChangeNotifier {
   Future<void> Function(int index)? _openCallback;
   Future<void> Function(TDropdownMenuCloseReason reason)? _closeCallback;
   Future<void> Function(int index)? _toggleCallback;
   int? _openIndex;
+  Object? _owner;
 
   /// 当前打开项的下标；没有打开的面板时为 null。
   int? get openIndex => _openIndex;
@@ -240,16 +245,22 @@ class TDropdownMenuController extends ChangeNotifier {
   }
 
   void _attach({
+    required Object owner,
     required Future<void> Function(int index) open,
     required Future<void> Function(TDropdownMenuCloseReason reason) close,
     required Future<void> Function(int index) toggle,
   }) {
+    _owner = owner;
     _openCallback = open;
     _closeCallback = close;
     _toggleCallback = toggle;
   }
 
-  void _detach() {
+  void _detach(Object owner) {
+    if (!identical(_owner, owner)) {
+      return;
+    }
+    _owner = null;
     _openCallback = null;
     _closeCallback = null;
     _toggleCallback = null;
@@ -284,7 +295,8 @@ class TDropdownMenu extends StatefulWidget {
   final List<TDropdownMenuItem> items;
 
   /// 外部筛选栏控制器；为空时由组件创建和释放内部控制器。
-  /// 外部控制器由调用方释放，应只绑定一个筛选栏。
+  /// 外部控制器由调用方释放。建议独立筛选栏分别使用 Controller；
+  /// 绑定规则见 [TDropdownMenuController]。
   final TDropdownMenuController? controller;
 
   /// 面板展开方向，默认 auto，根据上下可用空间决定。
@@ -513,7 +525,7 @@ class _TDropdownMenuState extends State<TDropdownMenu>
           _activeMenus.remove(navigator);
         }
       }
-      _controller._detach();
+      _controller._detach(this);
       if (_ownsController) {
         _controller.dispose();
       }
@@ -589,7 +601,7 @@ class _TDropdownMenuState extends State<TDropdownMenu>
     _overlayEntry = null;
     _overlayState = null;
     _capturedThemes = null;
-    _controller._detach();
+    _controller._detach(this);
     if (_ownsController) {
       _controller.dispose();
     }
@@ -605,7 +617,12 @@ class _TDropdownMenuState extends State<TDropdownMenu>
   void _bindController(TDropdownMenuController? external) {
     _ownsController = external == null;
     _controller = external ?? TDropdownMenuController();
-    _controller._attach(open: _open, close: _close, toggle: _toggle);
+    _controller._attach(
+      owner: this,
+      open: _open,
+      close: _close,
+      toggle: _toggle,
+    );
   }
 
   void _syncFocusNodes() {
