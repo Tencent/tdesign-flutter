@@ -168,3 +168,8 @@ DropdownMenu 已具备锚点、普通滚动跟随和自动方向能力，但边�
 验收标准描述应满足的行为，不表示已执行或通过；执行范围与证据见 [acceptance.md](./acceptance.md)，剩余事项只在 [tasks.md](./tasks.md) 维护。
 
 跨组件配置职责见 [Theme 契约](../../engineering/048-Theme-configuration-contracts/spec.md)，视觉方法见 [Golden 规范](../../engineering/044-Testing-golden-regression/spec.md)。
+
+
+## 1.0.1 controller-binding
+
+保持 Controller 现有后绑定覆盖行为及未绑定命令无副作用，不新增重复绑定异常；内部记录最后绑定的 owner，旧组件卸载或替换不解绑新 owner。

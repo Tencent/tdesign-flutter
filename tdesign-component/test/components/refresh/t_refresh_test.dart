@@ -49,6 +49,52 @@ void main() {
     );
   }
 
+  for (final replace in [false, true]) {
+    testWidgets('stale refresh owner does not unbind latest owner: $replace', (
+      tester,
+    ) async {
+      final controller = TPullDownRefreshController();
+      final replacement = TPullDownRefreshController();
+      var calls = 0;
+      Widget host(bool updated) => wrap(
+        Column(
+          children: [
+            if (!updated || replace)
+              Expanded(
+                child: TPullDownRefresh(
+                  key: const ValueKey('old'),
+                  controller: updated ? replacement : controller,
+                  onRefresh: () async {},
+                  child: ListView(children: const [Text('old')]),
+                ),
+              ),
+            Expanded(
+              child: TPullDownRefresh(
+                key: const ValueKey('latest'),
+                controller: controller,
+                onRefresh: () async {
+                  calls++;
+                },
+                child: ListView(children: const [Text('latest')]),
+              ),
+            ),
+          ],
+        ),
+      );
+      await tester.pumpWidget(host(false));
+      expect(tester.takeException(), isNull);
+      await tester.pumpWidget(host(true));
+      final refresh = controller.refresh();
+      await tester.pumpAndSettle();
+      await refresh;
+      await tester.pump(const Duration(seconds: 1));
+      expect(calls, 1);
+      await tester.pumpWidget(const SizedBox());
+      await controller.refresh();
+      expect(calls, 1);
+    });
+  }
+
   group('TPullDownRefresh 最小化组件', () {
     test('可见行为默认值符合组件契约', () {
       const widget = TPullDownRefresh(child: SizedBox());

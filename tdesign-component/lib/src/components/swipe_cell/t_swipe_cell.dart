@@ -132,6 +132,7 @@ class _TSwipeCellState extends State<TSwipeCell>
   final _endPanelKey = GlobalKey();
 
   late final AnimationController _offsetController;
+  TSwipeCellController? _boundController;
   ScrollPosition? _scrollPosition;
   ModalRoute<dynamic>? _route;
   TextDirection? _textDirection;
@@ -160,6 +161,7 @@ class _TSwipeCellState extends State<TSwipeCell>
     super.initState();
     _offsetController = AnimationController.unbounded(vsync: this);
     widget.controller?._attach(this);
+    _boundController = widget.controller;
     WidgetsBinding.instance.addPostFrameCallback((_) async {
       if (!mounted) {
         return;
@@ -189,9 +191,10 @@ class _TSwipeCellState extends State<TSwipeCell>
   @override
   void didUpdateWidget(covariant TSwipeCell oldWidget) {
     super.didUpdateWidget(oldWidget);
-    if (oldWidget.controller != widget.controller) {
-      oldWidget.controller?._detach(this);
+    if (!identical(_boundController, widget.controller)) {
       widget.controller?._attach(this);
+      _boundController?._detach(this);
+      _boundController = widget.controller;
     }
     if (oldWidget.closeOnScroll != widget.closeOnScroll) {
       _bindScrollable();
@@ -202,7 +205,7 @@ class _TSwipeCellState extends State<TSwipeCell>
   @override
   void dispose() {
     _unbindRoute();
-    widget.controller?._detach(this);
+    _boundController?._detach(this);
     _unbindScrollable();
     _unregisterTapOutsideListener();
     _offsetController.dispose();

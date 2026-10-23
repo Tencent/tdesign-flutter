@@ -72,3 +72,8 @@
 验收标准描述应满足的行为，不表示已执行或通过；执行范围与证据见 [acceptance.md](./acceptance.md)，剩余事项只在 [tasks.md](./tasks.md) 维护。
 
 跨组件配置职责见 [Theme 契约](../../engineering/048-Theme-configuration-contracts/spec.md)，视觉方法见 [Golden 规范](../../engineering/044-Testing-golden-regression/spec.md)。
+
+
+## 1.0.1 controller-binding
+
+保留已有 StateError 和单目标规则；以实际绑定而非上一份 Widget 配置判断替换。重复无效 Controller 提交仍拒绝，失败后原 Controller 可继续控制。

@@ -47,6 +47,7 @@ class TForm extends StatefulWidget {
 
 /// [TForm] 的公开状态。
 class TFormState extends State<TForm> {
+  TFormController? _boundController;
   final _formKey = GlobalKey<FormState>();
   final Map<String, Object?> _values = {};
   final Map<String, Object> _fieldOwners = {};
@@ -237,20 +238,22 @@ class TFormState extends State<TForm> {
   void initState() {
     super.initState();
     widget.controller?._attach(this);
+    _boundController = widget.controller;
   }
 
   @override
   void didUpdateWidget(covariant TForm oldWidget) {
     super.didUpdateWidget(oldWidget);
-    if (oldWidget.controller != widget.controller) {
-      oldWidget.controller?._detach(this);
+    if (!identical(_boundController, widget.controller)) {
       widget.controller?._attach(this);
+      _boundController?._detach(this);
+      _boundController = widget.controller;
     }
   }
 
   @override
   void dispose() {
-    widget.controller?._detach(this);
+    _boundController?._detach(this);
     super.dispose();
   }
 

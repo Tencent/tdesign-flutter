@@ -38,6 +38,48 @@ void main() {
     );
   }
 
+  for (final replace in [false, true]) {
+    testWidgets('stale dropdown owner does not unbind latest owner: $replace', (
+      tester,
+    ) async {
+      final controller = TDropdownMenuController();
+      final replacement = TDropdownMenuController();
+      Widget host(bool updated) => wrap(
+        Column(
+          children: [
+            if (!updated || replace)
+              TDropdownMenu(
+                key: const ValueKey('old'),
+                controller: updated ? replacement : controller,
+                items: [item('old')],
+              ),
+            TDropdownMenu(
+              key: const ValueKey('latest'),
+              controller: controller,
+              items: [item('latest')],
+            ),
+          ],
+        ),
+      );
+      await tester.pumpWidget(host(false));
+      expect(tester.takeException(), isNull);
+      await tester.pumpWidget(host(true));
+      final opening = controller.open(0);
+      await tester.pumpAndSettle();
+      await opening;
+      expect(find.text('latest panel'), findsOneWidget);
+      expect(find.text('old panel'), findsNothing);
+      final closing = controller.close();
+      await tester.pumpAndSettle();
+      await closing;
+      await tester.pumpWidget(const SizedBox());
+      await controller.open(0);
+      expect(controller.isOpen, isFalse);
+      controller.dispose();
+      replacement.dispose();
+    });
+  }
+
   group('public models', () {
     test('item and trigger state expose immutable configuration', () {
       final menuItem = item('排序');
