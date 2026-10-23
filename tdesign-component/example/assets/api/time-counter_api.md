@@ -138,5 +138,5 @@ Controller 由调用方创建并负责释放。绑定多个 `TTimeCounter` 时�
 | blockBackgroundColor | Color? | - | 圆形、方形数字块的背景色；未设置时回退 `errorColor`。 | 否 |
 | blockTextColor | Color? | - | 圆形、方形数字块的文字颜色；未设置时回退 `textColorAnti`。 | 否 |
 | defaultTextColor | Color? | - | 纯文本计时数字颜色；未设置时回退 `textColorPrimary`。 | 否 |
-| roundBorderRadius | double? | - | 圆形数字块的圆角，单位为逻辑像素；未设置时回退 `radiusCircle`。 默认数字块宽高相等，故固定大半径显示为正圆。自定义较小半径时显示 对应的圆角方块，不再被固定 `BoxShape.circle` 忽略。 | 否 |
+| roundBorderRadius | double? | - | 圆形数字块的圆角，单位为逻辑像素；未设置时回退 `radiusCircle`。 默认数字块宽高相等，故固定大半径显示为正圆。自定义较小半径时显示 对应的圆角方块。 | 否 |
 | squareBorderRadius | double? | - | 方形数字块的圆角，单位为逻辑像素；未设置时回退 `radiusSmall`。 | 否 |

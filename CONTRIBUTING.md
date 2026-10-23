@@ -117,23 +117,14 @@ PR 描述「更新日志」小节是**面向实际使用方的用户**的本次�
 
 ## 示例代码片段
 
-示例 App 的代码查看和 Web Markdown 都读取 `tdesign-component/example/assets/code/` 中的源码片段。将示例方法标记为 `@ExampleCode`，其中 `group` 必须与页面的 `exampleCodeGroup` 完全一致：
-
-```dart
-@ExampleCode(group: 'button')
-Widget _buildPrimaryButton(BuildContext context) {
-  return const TButton(child: TText('按钮'));
-}
-```
-
-在 `tdesign-component` 目录执行以下命令生成片段，并将变更后的 `.txt` 文件与示例源码一起提交：
+示例 App 的代码查看和 Web Markdown 共用从独立示例 Widget 生成的源码资产。`@ExampleCode`、页面清单、共享依赖和校验方式见 [demo_tool/README.md](tdesign-component/demo_tool/README.md#生成逻辑)。修改标注源码后，在 `tdesign-component` 目录运行：
 
 ```bash
 dart run tool/generate_example_code.dart
 dart run tool/generate_example_code.dart --check
 ```
 
-第二条命令不会写文件，用于本地和 CI 校验片段是否与源码同步。
+产物只能从源码生成，不手工编辑。`--check` 不写文件。
 
 ## 组件测试与 CI 回归门禁
 
