@@ -70,3 +70,17 @@ python3 -m http.server 19002 --bind 127.0.0.1 --directory /tmp/css2token-browser
 
 打开 `http://127.0.0.1:19002/browser.html`。
 HTML 中的 JavaScript 仅加载样本与编译产物、切换页面展示模式；转换逻辑来自 Dart。
+
+## 完整生成器导出到应用
+
+`splitGeneratorCss(css)` 读取生成器下载的完整 CSS，返回可传给 `cssToFlutterTokens` 的浅/深声明集。共享根声明先合并，模式专属声明覆盖共享值；不支持的选择器或嵌套规则抛出 `FormatException`。
+
+业务接入使用仓库内 Example 的离线工具，补齐复合字体后输出公共命名主题 JSON：
+
+```sh
+cd tdesign-component/example
+flutter pub get
+dart run tool/convert_theme.dart theme.css theme.json --name ocean
+```
+
+命令从仓库根目录执行。组件包须包含 #1173 的字体小数解析修复；将生成的 `theme.json` 作为业务资产，使用 `TThemeData.fromJson('ocean', json, darkName: 'oceanDark')` 加载。运行时无需 `css2token`。参见[接入文档](../../tdesign-site/site/docs/custom-theme.md)。

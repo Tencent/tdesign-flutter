@@ -1,3 +1,4 @@
+import 'package:flutter/rendering.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:tdesign_flutter/tdesign_flutter.dart';
 
@@ -133,6 +134,118 @@ void registerTextSlotParityTests(
           }
         });
       }
+    }
+  }
+}
+
+/// Preserve each existing native paragraph boundary while supplying TD fonts.
+void registerNativeParagraphContractTests(
+  String name,
+  Widget Function(Widget child) build, {
+  ThemeData Function(ThemeData theme)? theme,
+  required bool reset,
+}) {
+  for (final mode in ['inherited', 'explicit', 'local']) {
+    for (final scale in [1.0, 2.0]) {
+      testWidgets('$name native paragraph $mode scale=$scale', (tester) async {
+        const outerHeight = TextHeightBehavior(applyHeightToFirstAscent: false);
+        const innerHeight = TextHeightBehavior(applyHeightToLastDescent: false);
+        final text = Text(
+          'Line one\nLine two',
+          key: const Key('native-paragraph'),
+          maxLines: mode == 'explicit' ? 2 : null,
+          softWrap: mode == 'explicit' ? true : null,
+          overflow: mode == 'explicit' ? TextOverflow.fade : null,
+          textAlign: mode == 'explicit' ? TextAlign.left : null,
+          textWidthBasis: mode == 'explicit' ? TextWidthBasis.parent : null,
+          textHeightBehavior: mode == 'explicit' ? innerHeight : null,
+        );
+        final child = mode == 'local'
+            ? DefaultTextStyle(
+                style: const TextStyle(fontSize: 17),
+                maxLines: 3,
+                softWrap: true,
+                overflow: TextOverflow.visible,
+                textAlign: TextAlign.center,
+                textWidthBasis: TextWidthBasis.parent,
+                textHeightBehavior: innerHeight,
+                child: text,
+              )
+            : text;
+        final base = TThemeBuilder.light(TThemeData.defaultData());
+        await tester.pumpWidget(
+          MaterialApp(
+            theme: theme?.call(base) ?? base,
+            home: Scaffold(
+              body: MediaQuery(
+                data: MediaQueryData(textScaler: TextScaler.linear(scale)),
+                child: DefaultTextStyle(
+                  style: const TextStyle(fontSize: 30),
+                  maxLines: 1,
+                  softWrap: false,
+                  overflow: TextOverflow.ellipsis,
+                  textAlign: TextAlign.right,
+                  textWidthBasis: TextWidthBasis.longestLine,
+                  textHeightBehavior: outerHeight,
+                  child: Center(child: build(child)),
+                ),
+              ),
+            ),
+          ),
+        );
+        await tester.pumpAndSettle();
+        final paragraph = tester.renderObject<RenderParagraph>(
+          find.byKey(const Key('native-paragraph')),
+        );
+        final expectedReset = reset && mode == 'inherited';
+        expect(
+          paragraph.maxLines,
+          mode == 'explicit'
+              ? 2
+              : mode == 'local'
+              ? 3
+              : reset
+              ? null
+              : 1,
+        );
+        expect(paragraph.softWrap, mode != 'inherited' || reset);
+        expect(
+          paragraph.overflow,
+          mode == 'explicit'
+              ? TextOverflow.fade
+              : mode == 'local'
+              ? TextOverflow.visible
+              : reset
+              ? TextOverflow.clip
+              : TextOverflow.ellipsis,
+        );
+        expect(
+          paragraph.textAlign,
+          mode == 'explicit'
+              ? TextAlign.left
+              : mode == 'local'
+              ? TextAlign.center
+              : reset
+              ? TextAlign.start
+              : TextAlign.right,
+        );
+        expect(
+          paragraph.textWidthBasis,
+          mode != 'inherited' || reset
+              ? TextWidthBasis.parent
+              : TextWidthBasis.longestLine,
+        );
+        expect(
+          paragraph.textHeightBehavior,
+          mode != 'inherited'
+              ? innerHeight
+              : expectedReset
+              ? null
+              : outerHeight,
+        );
+        expect(paragraph.textScaler.scale(1), scale);
+        expect(tester.takeException(), isNull);
+      });
     }
   }
 }

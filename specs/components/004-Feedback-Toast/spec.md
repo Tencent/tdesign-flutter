@@ -56,15 +56,19 @@ TDesign Flutter 的 TToast 组件在与 TDesign Mobile 对齐时存在两处默�
 曾使用公开 infiniteDuration 哨兵并为加载默认无限展示；最终采用所有入口同一时长规则，以零或负时长显式表达持续显示，减少特殊常量与入口差异。
 
 - `Colors.black.withValues(alpha:)` 需 Flutter 3.27+；项目基线 3.32.0 满足，latest 满足。
-- placement 采用垂直百分比偏移（25% / 50% / 75%），与小程序 / mobile-vue 一致。旧实现为固定 `Center` 居中（并未叠加 SafeArea），新实现改为百分比定位，同样天然避让安全区（刘海屏 / 挖孔屏 / 底部手势条），无需叠加 SafeArea。
-- **breaking change**：移除 `bool? preventTap` 参数，更新日志使用 `breaking` commit type（`- breaking(toast): 移除 preventTap 参数，改用 overlay`）提醒用户迁移。
-
-独立验证目录，主工作区已有修改未触碰。Linux 一次性容器通过 --no-hardlinks 修复缓存 Git 克隆故障；切换 Flutter SDK 后清理构建缓存，避免 shader 版本污染。远端最终提交 CI 等待推送后核对，不沿用旧 head 的通过结论。
+- 早期方案按剩余空间百分比定位，并曾将 middle 定为 50%；最终按 Overlay 全高中的实际内容中心定位，top/middle/bottom 为 25%/45%/75%。百分比定位不保证自动避让安全区。
+- 最终遮罩参数为 `TOverlayConfig.preventScrollThrough`，替代 `preventTap`，同时控制背景点击和滚动；并非改成仅提供 `overlay` 就完成迁移。
 
 ## 兼容性与迁移
 
 - 旧 infiniteDuration 迁移为 duration: Duration.zero；加载默认从长期展示改为 2000ms，需要长期加载时显式传零时长。
 - preventTap 迁移为 preventScrollThrough；默认 middle 从 50% 调整为 45%。这些属于可感知行为变化，不能以整理文档重新声明为兼容。
+
+## 自定义文案默认值
+
+showText / showLoading 的 customWidget 文案槽整个子树接入与各自内置文案相同的默认字体和反色文字，使用相同主题/实例配置解析。Row、Padding、Builder 不切断传递；显式字段及内容内部更近的 TTextThemeData 优先，全局隔离保持。自定义内容仍自行布局，不强加内置文案的一行/三行限制；不更改其他 Toast 类型或图标。
+
+属于默认行为变更：未配置或仅部分配置的自定义文字可能改变字体、颜色、字距、换行和尺寸。自带背景仍需调用方保证对比度；不新增配置。
 
 ## 验收标准
 
@@ -76,3 +80,5 @@ TDesign Flutter 的 TToast 组件在与 TDesign Mobile 对齐时存在两处默�
 验收标准描述应满足的行为，不表示已执行或通过；执行范围与证据见 [acceptance.md](./acceptance.md)，剩余事项只在 [tasks.md](./tasks.md) 维护。
 
 跨组件配置职责见 [Theme 契约](../../engineering/048-Theme-configuration-contracts/spec.md)，视觉方法见 [Golden 规范](../../engineering/044-Testing-golden-regression/spec.md)。
+
+发布归类：本轮与 Button/NavBar 的默认文字槽调整采用同一 patch 策略。未配置、空样式或部分显式样式仍可能改变字体、颜色、换行、尺寸和省略位置；原生 Text 的字体也可能受新默认值影响，段落参数沿用既有语义。保留旧外观需在实例或内容内部主题中明确所需字段；不以参数签名不变或测试通过承诺零兼容风险。

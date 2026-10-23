@@ -7,8 +7,8 @@ import '../../theme/t_sizes.dart';
 import '../../theme/t_theme.dart';
 import '../popup/t_popup.dart';
 import '../text/t_text_resolve.dart';
+import '../text/t_text_style_scope.dart';
 import '../text/t_text_styled.dart';
-import '../text/t_text_theme_data.dart';
 import 't_drawer_theme_data.dart';
 
 part 't_drawer_content.dart';

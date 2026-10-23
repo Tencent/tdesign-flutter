@@ -36,6 +36,10 @@ class TPicker extends StatefulWidget {
   final void Function(int columnIndex, TPickerValue value)? onColumnScrollEnd;
 
   /// 自定义选项构建器。
+  ///
+  /// 内容子树默认使用当前选中、未选中或禁用选项的文字样式，布局包装不影响继承。
+  /// 显式文字样式和内容内部更近的局部文字主题优先。
+  /// 不强制行数或省略；内容须适配滚轮项高度，自定义高度职责保持不变。
   final TPickerItemBuilder? itemBuilder;
 
   @override
