@@ -70,3 +70,5 @@
 - 本轮没有重跑 Example、API/示例生成器或调度器自测；没有修改生产代码、生成产物、依赖声明及测试清单。原候选与远端 CI 结论分别记录，不伪装成本轮本地验证。
 
 本次无绘制、布局、主题或资源改动，不更新 Golden；设备行为未验证。历史视觉/设备待办保留，不由本次功能回归核销。
+
+Form 关闭断言后的绑定兼容性另有独立的[双版本 Web release 验证](../008-Input-Form/acceptance.md#form-web-release-validation)，不计入本节 288 项 Widget 回归；仅覆盖 Web release，不代表 Android/iOS 真机 release 已验证。
