@@ -102,12 +102,10 @@ class TFormItem extends StatelessWidget {
     };
     final contentAreaAlignment = switch (effectiveContentAlignment) {
       TFormItemContentAlignment.start => AlignmentDirectional.centerStart,
-      TFormItemContentAlignment.center => AlignmentDirectional.center,
       TFormItemContentAlignment.end => AlignmentDirectional.centerEnd,
     };
     final contentTextAlign = switch (effectiveContentAlignment) {
       TFormItemContentAlignment.start => TextAlign.start,
-      TFormItemContentAlignment.center => TextAlign.center,
       TFormItemContentAlignment.end => TextAlign.end,
     };
     final labelText = '${label ?? ''}${theme?.showColon == true ? ':' : ''}';
