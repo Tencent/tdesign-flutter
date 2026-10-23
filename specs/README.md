@@ -4,7 +4,7 @@ specs/ 用于记录复杂需求、重构、公共 API 变更和跨目录修复�
 
 ## 组件 A–Z
 
-[组件索引](./components/README.md)：52 个组件目录，按组件规范英文名 A–Z 展示；同组件的不同事项合入一套主文档，共享契约交叉引用。Dialog 的 083 文字槽恢复事项已归入 [Dialog 主契约](./components/010-Feedback-Dialog/spec.md#record-083-text-slot-restoration)，沿用原事项编号。
+[组件索引](./components/README.md)：53 个组件目录，按组件规范英文名 A–Z 展示；同组件的不同事项合入一套主文档，共享契约交叉引用。Dialog 的 083 文字槽恢复事项已归入 [Dialog 主契约](./components/010-Feedback-Dialog/spec.md#record-083-text-slot-restoration)，沿用原事项编号。
 
 ## 非组件 Spec
 
