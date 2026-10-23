@@ -41,6 +41,9 @@ class TBackTop extends StatefulWidget {
   /// Without an attached scroll position this runs immediately on tap.
   /// An interrupted animation can still notify; use [onCompleted] for success.
   ///
+  /// 当前保留历史通知时机且不标记废弃；计划在 2.0 统一为点击时触发，
+  /// 成功回顶通知使用 [onCompleted]，该时机调整属于 breaking change。
+  ///
   /// `null` 不表示禁用；只要提供 [controller]，组件仍可点击并执行回顶。
   final VoidCallback? onPressed;
 
@@ -54,6 +57,9 @@ class TBackTop extends StatefulWidget {
   /// top completes once. This callback alone does not enable the button.
   /// Success is recorded before the historical [onPressed] notification, which
   /// runs first; lifecycle and binding identity are checked again afterwards.
+  ///
+  /// 与 [onPressed] 当前的历史通知时机不同，不能等价替换。计划在 2.0
+  /// 将 [onPressed] 统一为点击时触发，成功回顶通知继续使用本回调。
   final VoidCallback? onCompleted;
 
   /// 是否显示设计内置文案。

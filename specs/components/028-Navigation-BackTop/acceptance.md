@@ -38,3 +38,7 @@
 - API 通过 AST 对比旧公开构造参数、属性、方法签名和默认值；仅 BackTop 允许新增可选 onCompleted。新测试均在原 manifest 登记的文件内，GitHub test-build.yml 调用公共组件和 Example runner，三份调度器自测确认清单一致。
 - 最终 Review 通过，无阻塞问题。onCompleted 是唯一新增可选 API，用于表达旧 onPressed 无法保证的成功结果。旧 onPressed 不废弃，启用规则、无 Controller 即时通知与动画 Future 结束后通知不变。仅按完成时原 Controller/原位置/到顶/挂载状态判断；同帧、跨帧重绑及临时更换后恢复允许完成，完成时解绑/位置替换/中断/卸载拒绝。成功在旧回调副作用前记录，发送前重查身份；两项正式新增回归覆盖旧回调成功后解绑或替换位置。没有逐帧观察、历史计数、观察器或专用 Controller。
 - 原始日志、LCOV、锁文件与独立补丁保存在工作区外层 `artifacts/pr1148-independent/04-backtop-completed/`，与本记录的指纹绑定；摘要随分支保留在验证数据中。未执行设备、正式 Linux Golden 或远端 CI；改动不涉及绘制/布局/Theme/字体，未更新图片基线。历史视觉/设备任务继续按原 tasks 保留，不据本次功能验收核销。未推送、创建 PR 或发布。
+
+## 2.0 回调迁移说明的文档检查（2026-10-23）
+
+基于远端候选 `373c92f7919fb7f1c227873e7103a4ac8e4a78d1` 补充 onPressed/onCompleted 的 API 注释、生成文档和迁移计划。去除 dartdoc 后生产文件与该候选一致；没有改变回调时机、完成条件、默认值或绑定规则。Flutter 3.47.7 和 3.32.0 的生成器检查通过，生成的 BackTop API 逐字节一致；低版本使用原隔离目录，仅用于本次 BackTop 文档验证。日志为工作区外层 publication/pr1193-api-plan-*.log。只修改文档，未重复运行功能测试或 Golden；之前的测试记录仍绑定原候选，不能外推为新提交完整 CI 已通过。
