@@ -10,7 +10,7 @@ permissions:
   id-token: write
 
 jobs:
-  publish:
+  release:
     if: github.event.pull_request.merged && startsWith(github.head_ref, 'release/')
     runs-on: ubuntu-latest
     steps:
@@ -20,3 +20,22 @@ jobs:
         with:
           token: ${{ secrets.TDESIGN_BOT_TOKEN }}
           manifest-path: tdesign-component/pubspec.yaml
+
+  dry-run-publish:
+    if: github.event.pull_request.merged && startsWith(github.head_ref, 'release/')
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: flutter-actions/setup-flutter@v4
+        with:
+          channel: stable
+          version: 3.32.0
+
+      - name: install
+        working-directory: ./tdesign-component
+        run: flutter pub get
+
+      - name: dry run publish
+        working-directory: ./tdesign-component
+        run: flutter pub publish --dry-run

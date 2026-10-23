@@ -38,10 +38,6 @@ jobs:
         working-directory: ./tdesign-component
         run: flutter pub get
 
-      - name: Validate package
-        working-directory: ./tdesign-component
-        run: flutter pub publish --dry-run
-
       - name: publish
         working-directory: ./tdesign-component
         run: flutter pub publish --force
