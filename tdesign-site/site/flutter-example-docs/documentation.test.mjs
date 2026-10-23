@@ -5,7 +5,7 @@ import path from 'node:path';
 import test from 'node:test';
 import { fileURLToPath } from 'node:url';
 import siteConfig from '../site.config.mjs';
-import { migrationSource, guideLinks, packageLinks, renderMigrationExamples, syncDocuments } from '../../../scripts/documentation.mjs';
+import { migrationSource, guideLinks, packageLinks, renderMigrationExamples, renderResourceMessages, syncDocuments } from '../../../scripts/documentation.mjs';
 import { adaptGuideLinks, adaptRepositoryDocument } from './repository-document.mjs';
 
 const root = fileURLToPath(new URL('../../../', import.meta.url));
@@ -35,14 +35,18 @@ test('check mode detects stale copies and missing sources without writing files'
   const read = file => readFileSync(path.join(temp, file), 'utf8');
   try {
     write(migrationSource, `---\ntitle: migration\n---\n\n${marker}\n[主题](./custom-theme.md)`);
-    write('tdesign-component/example/lib/documentation_examples.dart', example.replaceAll('migration:', 'documentation:'));
-    for (const file of ['custom-theme', 'internationalization']) write(`tdesign-site/site/docs/${file}.md`, marker.replaceAll('migration-example:', 'documentation-example:'));
+    write('tdesign-component/example/lib/documentation_examples.dart', `${example.replaceAll('migration:', 'documentation:')}\nconst themeJson = '''{"green":{"color":{"brandColor":"#16875D"}}}''';`);
+    write('tdesign-component/example/assets/custom_theme.json', 'stale');
+    write('tdesign-component/example/lib/base/intl_resource_delegate.dart', '');
+    write('tdesign-component/example/lib/documentation_quick_start.dart', '');
+    for (const file of ['getting-started', 'custom-theme', 'internationalization']) write(`tdesign-site/site/docs/${file}.md`, marker.replaceAll('migration-example:', 'documentation-example:'));
     write('README.md', '# project');
     write('README_zh_CN.md', '# 项目');
     write('tdesign-component/tool/fixtures/token_migration/lib/migration_027_to_100_examples.dart', example);
     assert.throws(() => syncDocuments({ root: temp, check: true }), /Stale/);
     assert.match(read(migrationSource), /old/);
     syncDocuments({ root: temp });
+    assert.equal(JSON.parse(read('tdesign-component/example/assets/custom_theme.json')).green.color.brandColor, '#16875D');
     const portable = read('tdesign-component/MIGRATION.md');
     assert.match(portable, /Generated from/);
     assert.doesNotMatch(portable, /title: migration/);
@@ -111,6 +115,28 @@ test('custom theme guide uses the shared component preview with standalone scene
   for (const scene of ['json', 'local', 'mode']) {
     assert.ok(guide.includes(`[单独打开运行示例](/flutter/example/#custom-theme-${scene})`));
   }
-  assert.match(runtime, /documentationThemeApp\(/);
-  assert.match(runtime, /documentationLocalTheme\(/);
+  assert.match(runtime, /buildThemeApp\(/);
+  assert.match(runtime, /wrapLocalTheme\(/);
+});
+
+
+test('resource documentation includes translated values and placeholder declarations', () => {
+  const delegate = 'AppLocalizations.of(context)!.confirm; AppLocalizations.of(context)!.pickerColumn(index)';
+  const guide = '<!-- documentation-resource:en:start -->old<!-- documentation-resource:en:end -->';
+  const rendered = renderResourceMessages(guide, delegate, () => ({
+    confirm: 'Confirm', pickerColumn: 'Column {index}',
+    '@pickerColumn': { placeholders: { index: { type: 'int' } } }, unused: 'irrelevant',
+  }));
+  assert.match(rendered, /"confirm": "Confirm"/);
+  assert.match(rendered, /"@pickerColumn"/);
+  assert.doesNotMatch(rendered, /"unused"|>old</);
+  assert.throws(() => renderResourceMessages(guide, delegate, () => ({confirm: 'Confirm'})), /Missing en translation: pickerColumn/);
+});
+
+test('quick start shares the Flutter preview and retains its legacy theme anchor', () => {
+  const guide = readFileSync(path.join(root, 'tdesign-site/site/docs/getting-started.md'), 'utf8');
+  assert.match(guide, /^flutterExample: getting-started$/m);
+  assert.doesNotMatch(guide, /<iframe|^## 自定义主题$/m);
+  assert.match(guide, /<span id="自定义主题" aria-hidden="true"><\/span>/);
+  assert.match(guide, /\[自定义主题\]\(\.\/custom-theme\.md\)/);
 });

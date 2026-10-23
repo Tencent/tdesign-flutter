@@ -1,21 +1,16 @@
 <template>
-  <td-doc-content ref="tdDocContent" platform="mobile" page-status="hidden">
+  <td-doc-content
+    ref="tdDocContent"
+    platform="mobile"
+    :class="{ 'flutter-preview-layout': info.isComponent || info.flutterExample }"
+    page-status="hidden"
+  >
     <td-doc-header v-if="info.tdDocHeader" platform="mobile" slot="doc-header" ref="tdDocHeader" changelog="false"></td-doc-header>
     <template v-if="info.isComponent || info.flutterExample">
       <td-doc-tabs v-if="info.isComponent" ref="tdDocTabs" :tab="tab"></td-doc-tabs>
       <div class="td-doc-main" v-show="!info.isComponent || tab === 'demo'">
         <div name="DEMO" v-html="info.isComponent ? info.demoMd : info.docMd"></div>
-        <td-doc-phone headless>
-          <iframe
-            ref="demoIframe"
-            :src="liveUrl"
-            frameborder="0"
-            width="100%"
-            height="100%"
-            style="box-sizing: border-box; border-radius: 0 0 6px 6px; overflow: hidden;"
-          ></iframe>
-          <div>注：web示例仅供参考，预览实际效果请阅读<a href="/flutter/getting-started">快速开始</a></div>
-        </td-doc-phone>
+        <FlutterPreview :src="liveUrl" :title="info.title" />
         <td-contributors v-if="info.isComponent" platform="flutter" framework="flutter" :component-name="name"></td-contributors>
       </div>
       <div v-if="info.isComponent" v-show="tab === 'api'" name="API" v-html="info.apiMd"></div>
@@ -37,14 +32,14 @@ import 'prismjs/components/prism-json.js';
 import 'prismjs/components/prism-dart.js';
 import 'prismjs/components/prism-yaml.js';
 
-import QrCode from '@components/qrcode.vue';
+import FlutterPreview from './flutter-preview.vue';
 import { flutterExampleLiveUrl } from '../flutter-example-docs/live-url.mjs';
 
 export default defineComponent({
   inject: ['info', 'demos'],
 
   components: {
-    QrCode,
+    FlutterPreview,
   },
 
   computed: {
@@ -69,17 +64,11 @@ export default defineComponent({
         devServerPort: import.meta.env.VITE_FLUTTER_WEB_PORT || '19001',
       });
     },
-    qrcode() {
-      const { path } = this.$route;
-      const name = path.slice(path.lastIndexOf('/') + 1);
-      // new URL(): https://cn.vitejs.dev/guide/assets.html#new-url-url-import-meta-url
-      return new URL(`../public/assets/qrcode/td_apk_qr_0_1_7.png`, import.meta.url).href;
-    },
   },
 
   mounted() {
     const { info } = this;
-    const { tdDocContent, tdDocHeader, tdDocTabs, demoIframe } = this.$refs;
+    const { tdDocContent, tdDocHeader, tdDocTabs } = this.$refs;
 
     if (info.isComponent) {
       tdDocTabs.onchange = ({ detail: currentTab }) => (this.tab = currentTab);
@@ -92,42 +81,30 @@ export default defineComponent({
     this.$emit('loaded', () => {
       tdDocContent.pageStatus = 'show';
     });
-
-    // iframe 加载后通知站点主题控制器重发完整主题消息。
-    if (demoIframe) {
-      this.setupDemoReadyListener(demoIframe);
-    }
-  },
-
-  beforeUnmount() {
-    const iframe = this.$refs.demoIframe as HTMLIFrameElement | undefined;
-    const iframeLoadHandler = (this as any).iframeLoadHandler;
-    if (iframe && iframeLoadHandler) {
-      iframe.removeEventListener('load', iframeLoadHandler);
-      (this as any).iframeLoadHandler = null;
-    }
-  },
-
-  data() {
-    return {
-      iframeLoadHandler: null as (() => void) | null,
-    };
-  },
-
-  methods: {
-    setupDemoReadyListener(iframe: HTMLIFrameElement) {
-      const handleIframeLoad = () => {
-        window.dispatchEvent(new CustomEvent('flutter-demo-ready', { detail: { iframe } }));
-      };
-      iframe.addEventListener('load', handleIframeLoad);
-      (this as any).iframeLoadHandler = handleIframeLoad;
-      if (iframe.contentWindow) handleIframeLoad();
-    },
   },
 });
 </script>
 
 <style lang="less">
+// Guides use the same phone sidebar spacing as component pages.
+td-doc-content :is(a, details)[id^="migration-"] {
+  scroll-margin-top: 80px;
+}
+
+td-doc-content.flutter-preview-layout {
+  --content-padding-right: 400px;
+
+  :is(h2, h3, span)[id] {
+    scroll-margin-top: 80px;
+  }
+}
+
+@media screen and (max-width: 959px) {
+  td-doc-content.flutter-preview-layout {
+    --content-padding-right: 0px;
+  }
+}
+
 div[name='API'] {
   h6 {
     font-size: 1em;
@@ -186,14 +163,4 @@ div[name='API'] {
   }
 }
 
-.qrcode {
-  width: 100%;
-
-  &__wrapper {
-    width: 128px;
-    height: 128px;
-    padding: 4px;
-    box-sizing: border-box;
-  }
-}
 </style>

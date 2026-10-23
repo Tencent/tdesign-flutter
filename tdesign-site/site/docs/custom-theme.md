@@ -9,9 +9,18 @@ flutterExample: custom-theme
 
 全局颜色、字体和间距等 Token 通过 `TThemeData` 配置；`TThemeBuilder` 把 Token 转为 Flutter `ThemeData`。组件局部外观使用对应 `T*ThemeData`，单个组件可用的实例配置以组件 API 为准。
 
+| 想修改什么 | 配置入口 | 注意事项 |
+| --- | --- | --- |
+| 整个应用的颜色、字体、间距等 | `TThemeData` + `TThemeBuilder` | 为浅色和深色准备对应 Token |
+| 一类组件支持的默认样式 | `TButtonThemeData`、`TTagThemeData` 等 | 只配置该组件公开支持的字段 |
+| 某个页面或区域 | 子树 `Theme` + `mergeExtension` | 从当前主题合并，保留其他扩展 |
+| 某个实例的尺寸、状态或内容 | 该组件的构造参数 | 具体能力以当前依赖版本的 API 为准 |
+
 使用 `context.tTheme` 读取当前子树主题。`TThemeData.defaultData()` 返回默认配置，不能代替当前上下文的主题。TD 内置视觉不隐式继承 Material 组件主题；自定义内容仍可使用 Flutter 的主题机制。
 
-本文代码由[可运行示例源码](https://github.com/Tencent/tdesign-flutter/blob/develop/tdesign-component/example/lib/documentation_examples.dart)同步生成；右侧 Flutter 示例按章节展示对应效果，并直接复用这些函数。预览使用本文的品牌色配置；初始外观跟随外层预览，点击示例中的模式按钮后整页同步切换。示例文件引入：
+右侧预览展示 JSON 配色、局部标签样式和明暗切换。点击“默认主题 / 业务主题”可比较配色，点击模式按钮可切换整页外观。资源文件加载按下方步骤接入。[查看预览源码](https://github.com/Tencent/tdesign-flutter/blob/develop/tdesign-component/example/lib/documentation_theme_demo.dart)。
+
+示例使用以下导入：
 
 ```dart
 import 'package:tdesign_flutter/tdesign_flutter.dart';
@@ -19,30 +28,101 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 
 ## JSON 配置
 
-以下示例分别配置浅色和深色品牌色：
+以下绿色业务主题同时配置品牌状态色、背景、文字和边框；未列出的 Token 保留对应模式的默认值。将配置传入下方的主题构建函数，即可应用到页面和组件：
 
 <!-- documentation-example:theme-json:start -->
 ```dart
-TThemeData documentationThemeTokens() {
-  const json = '''
+const themeJson = '''
 {
-  "ocean": {"color": {"brandColor": "#0052D9"}},
-  "oceanDark": {"color": {"brandColor": "#699EF5"}}
+  "green": {"color": {
+    "brandColor": "#16875D", "brandColorLight": "#E5F5ED",
+    "brandColorFocus": "#C5E8D6", "brandColorActive": "#106B49",
+    "brandColorDisabled": "#A6D6BF", "bgColorPage": "#EFF7F2",
+    "bgColorContainer": "#FFFFFF", "textColorPrimary": "#183C2C",
+    "textColorSecondary": "#526E60", "componentBorder": "#A8CDBA",
+    "componentStroke": "#D4E8DD"
+  }},
+  "greenDark": {"color": {
+    "brandColor": "#56C08D", "brandColorLight": "#183D2D",
+    "brandColorFocus": "#24543D", "brandColorActive": "#78D4A6",
+    "brandColorDisabled": "#315B45", "bgColorPage": "#101F18",
+    "bgColorContainer": "#192E23", "textColorPrimary": "#E2F3E9",
+    "textColorSecondary": "#A5C6B3", "componentBorder": "#537A64",
+    "componentStroke": "#304C3D", "textColorAnti": "#102B1B"
+  }}
 }
 ''';
-  return TThemeData.fromJson('ocean', json, darkName: 'oceanDark') ??
-      TThemeData.defaultData();
-}
+
+TThemeData createTheme() =>
+    TThemeData.fromJson('green', themeJson, darkName: 'greenDark')!;
 ```
 <!-- documentation-example:theme-json:end -->
 
-运行效果：浅色品牌色 #0052D9、深色品牌色 #699EF5 应用于按钮和标签。右侧同时列出两套配置的品牌色、页面背景、容器背景和主要文字色，并标注 JSON 覆盖或默认继承；下方切换明暗模式时整页同步更新，并标识当前生效的一列。
+运行效果：切换“默认主题 / 业务主题”，观察同一个业务卡片中的按钮、标签、输入框、背景、文字和边框一起变化；明暗模式与主题选择相互独立，整页同步。下方色值表展示当前主题的浅深色配置。
 
 [单独打开运行示例](/flutter/example/#custom-theme-json)
 
-JSON 中未覆盖的 Token 按所属模式继承默认浅色或深色配置，背景和文字也会随模式切换。JSON 使用命名主题对象；`ocean`、`oceanDark` 必须与调用中的名称一致。`fromJson` 返回可空结果，加载失败时可回退默认主题。完整字段见[主题 API](/flutter/components/theme?tab=api)，默认 Token 定义见[默认主题源码](https://github.com/Tencent/tdesign-flutter/blob/develop/tdesign-component/lib/src/theme/t_default_theme.dart)。
+JSON 中未覆盖的 Token 按所属模式继承默认浅色或深色配置，背景和文字也会随模式切换。JSON 使用命名主题对象；`green`、`greenDark` 必须与调用中的名称一致。`fromJson` 返回可空结果，加载失败时可回退默认主题。完整字段见 [主题 API](/flutter/components/theme?tab=api)，默认 Token 定义见[默认主题源码](https://github.com/Tencent/tdesign-flutter/blob/develop/tdesign-component/lib/src/theme/t_default_theme.dart)。
 
 配置来自资源文件时，先在应用 `pubspec.yaml` 的 `flutter.assets` 注册文件，再通过 `rootBundle.loadString` 读取；这需要导入 `package:flutter/services.dart`。读取完成后再构建或更新应用主题，不在 Widget 的每次 build 中重复加载。
+
+## 从业务资源加载主题
+
+将上面的 JSON 保存为 `assets/custom_theme.json`（不包含 Dart 的变量声明和三引号）。`green` / `greenDark` 是这份配置的浅色和深色主题名称，加载时使用相同名称。
+
+在应用 `pubspec.yaml` 登记资源，然后执行 `flutter pub get`：
+
+```yaml
+flutter:
+  assets:
+    - assets/custom_theme.json
+```
+
+在 `lib/main.dart` 导入以下两个入口，并加入资源加载与启动函数：
+
+```dart
+import 'package:flutter/services.dart';
+import 'package:tdesign_flutter/tdesign_flutter.dart';
+```
+
+<!-- documentation-example:theme-asset:start -->
+```dart
+Future<TThemeData> loadTheme() async {
+  final json = await rootBundle.loadString('assets/custom_theme.json');
+  final tokens = TThemeData.fromJson('green', json, darkName: 'greenDark');
+  if (tokens == null) {
+    throw const FormatException('主题 JSON 缺少 green 配置或格式错误');
+  }
+  return tokens;
+}
+
+Future<void> runThemeApp() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  final tokens = await loadTheme();
+  runApp(
+    MaterialApp(
+      theme: TThemeBuilder.light(tokens),
+      darkTheme: TThemeBuilder.dark(tokens),
+      themeMode: ThemeMode.system,
+      home: Scaffold(
+        appBar: const TNavBar(title: Text('资源主题')),
+        body: Center(
+          child: TButton(
+            colorPreset: TButtonColorPreset.primary,
+            onPressed: () {},
+            child: const Text('主题按钮'),
+          ),
+        ),
+      ),
+    ),
+  );
+}
+```
+<!-- documentation-example:theme-asset:end -->
+
+最后使用 `Future<void> main() => runThemeApp();` 作为应用入口。资源只在启动时加载一次，不放进 Widget 的 `build`。文件不存在、JSON 格式错误或缺少 `green` 配置时，加载函数会抛出异常。缺少 `greenDark` 不会使 `fromJson` 返回 `null`；使用自定义深色主题时，请同时提供该配置。
+
+`rootBundle.loadString` 的文件路径须与资源注册路径一致；`fromJson` 的 `green`、`greenDark` 对应 JSON 内的主题键名，与文件名无关。加载成功后，同一对象分别传给 `TThemeBuilder.light` 与 `dark`，由 `themeMode` 决定当前外观。
 
 ## 组件局部样式
 
@@ -50,7 +130,7 @@ JSON 中未覆盖的 Token 按所属模式继承默认浅色或深色配置，�
 
 <!-- documentation-example:theme-local:start -->
 ```dart
-Widget documentationLocalTheme(BuildContext context, Widget child) {
+Widget wrapLocalTheme(BuildContext context, Widget child) {
   return Theme(
     data: Theme.of(
       context,
@@ -97,8 +177,8 @@ Button、NavBar 的文字槽现在同时向原生 `Text` 和 `TText` 提供组�
 
 <!-- documentation-example:theme-mode:start -->
 ```dart
-Widget documentationThemeApp(ThemeMode mode, Widget home) {
-  final tokens = documentationThemeTokens();
+Widget buildThemeApp(ThemeMode mode, Widget home, {TThemeData? tokens}) {
+  tokens ??= createTheme();
   return MaterialApp(
     theme: TThemeBuilder.light(tokens),
     darkTheme: TThemeBuilder.dark(tokens),
@@ -113,17 +193,17 @@ Widget documentationThemeApp(ThemeMode mode, Widget home) {
 
 [单独打开运行示例](/flutter/example/#custom-theme-mode)
 
-`tokens` 同时包含浅色配置 `ocean` 与深色配置 `oceanDark`。`TThemeBuilder.light(tokens)` 使用浅色配置，`TThemeBuilder.dark(tokens)` 使用深色配置；两者传入同一个对象，并不表示使用同一套配色。
+`tokens` 同时包含浅色配置 `green` 与深色配置 `greenDark`。`TThemeBuilder.light(tokens)` 使用浅色配置，`TThemeBuilder.dark(tokens)` 使用深色配置；两者传入同一个对象，并不表示使用同一套配色。
 
 - `ThemeMode.light`：固定浅色。
 - `ThemeMode.dark`：固定深色。
 - `ThemeMode.system`：跟随系统外观。
 
-业务保存用户的外观选择，在切换时重建 `MaterialApp` 并传入新的 `mode`；不需要重新注册资源代理。自定义深色配色必须提供相应的深色主题配置，不能只把浅色颜色整体变暗。
+业务保存用户的外观选择，在切换时重建 `MaterialApp` 并传入新的 `mode`。自定义深色配色必须提供相应的深色主题配置，不能只把浅色颜色整体变暗。
 
 ## 主题工具与色板预览
 
-[Theme 主题](/flutter/components/theme)展示功能色、文字与图标颜色、中性色板，并提供主题 API 查询。页面中的色板会根据当前上下文重新读取主题。
+[Theme 主题](/flutter/components/theme) 展示功能色、文字与图标颜色、中性色板，并提供主题 API 查询。页面中的色板会根据当前上下文重新读取主题。
 
 从主题工具下载完整的 `theme.css` 后，可以在仓库中离线转换为组件包支持的 JSON。无需手动拆分明暗规则，也无需删除字体配置或将小数字号取整：
 

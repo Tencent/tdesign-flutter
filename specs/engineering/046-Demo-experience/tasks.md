@@ -14,6 +14,10 @@
 
 已完成的开发步骤和旧 PR 创建过程已清理。原记录的远端 CI/Review 或设备连接状态不作为当前事实；相关事项需以实际证据核对，不能随文档整理关闭。
 
+## Guide/navigation follow-up acceptance
+
+- [ ] Browser end-to-end manual check on the final release candidate: quick start, theme and locale previews, folded anchors, back/forward navigation and repeated same-URL history entries. Current unit, dual-SDK functional, site build and Linux Golden results do not replace this check.
+
 ## 站点历史转换清理
 
-- [ ] 核对本分支最终 head 的远端 CI；本地通过不替代远端检查。
+- [x] #1185 最终 head `41efca99` 的远端检查为 28 项成功、1 项条件跳过，已于 2026-10-23 合并；不替代 #1156 新 head 的检查。
