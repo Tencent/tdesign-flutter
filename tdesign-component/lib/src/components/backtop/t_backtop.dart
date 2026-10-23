@@ -1,5 +1,6 @@
 import 'dart:math' as math;
 
+import 'package:flutter/foundation.dart' show precisionErrorTolerance;
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart' show OverflowBoxFit;
 import 'package:tdesign_flutter_icons/tdesign_flutter_icons.dart' show TIcons;
@@ -19,6 +20,7 @@ class TBackTop extends StatefulWidget {
     Key? key,
     this.controller,
     this.onPressed,
+    this.onCompleted,
     this.showText = false,
     this.visibilityOffset = 200,
     this.tooltip,
@@ -34,10 +36,25 @@ class TBackTop extends StatefulWidget {
   /// 控制器由调用方创建和释放，组件只管理自己的滚动监听。
   final ScrollController? controller;
 
-  /// 回顶动画完成后的通知。
+  /// Historical notification after the animation future settles.
+  ///
+  /// Without an attached scroll position this runs immediately on tap.
+  /// An interrupted animation can still notify; use [onCompleted] for success.
   ///
   /// `null` 不表示禁用；只要提供 [controller]，组件仍可点击并执行回顶。
   final VoidCallback? onPressed;
+
+  /// Called after this component successfully returns to the top.
+  ///
+  /// At completion the original scroll position must still be attached to the
+  /// original controller, which must remain the current [controller], and must
+  /// have reached its minimum scroll extent. Temporary detach/reattach before
+  /// completion is allowed. Does not run after disposal, position replacement,
+  /// or an interruption away from the top. An accepted return already at the
+  /// top completes once. This callback alone does not enable the button.
+  /// Success is recorded before the historical [onPressed] notification, which
+  /// runs first; lifecycle and binding identity are checked again afterwards.
+  final VoidCallback? onCompleted;
 
   /// 是否显示设计内置文案。
   ///
@@ -160,11 +177,20 @@ class _TBackTopState extends State<TBackTop> {
     }
 
     final controller = widget.controller;
+    ScrollPosition? position;
+
+    bool isCurrentBinding() =>
+        mounted &&
+        identical(controller, widget.controller) &&
+        position != null &&
+        controller!.positions.contains(position);
+
     if (controller != null && controller.hasClients) {
+      position = controller.position;
       _isAnimating = true;
       try {
         await controller.animateTo(
-          controller.position.minScrollExtent,
+          position.minScrollExtent,
           duration: const Duration(milliseconds: 500),
           curve: Curves.easeIn,
         );
@@ -173,8 +199,17 @@ class _TBackTopState extends State<TBackTop> {
       }
     }
 
+    // The legacy callback may change scroll pixels. Record this operation's
+    // result first, while keeping the historical notification order/timing.
+    final completed =
+        isCurrentBinding() &&
+        (position!.pixels - position.minScrollExtent).abs() <=
+            precisionErrorTolerance;
     if (mounted) {
       widget.onPressed?.call();
+      if (completed && isCurrentBinding()) {
+        widget.onCompleted?.call();
+      }
     }
   }
 

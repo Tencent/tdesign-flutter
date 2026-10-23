@@ -84,3 +84,12 @@
 验收标准描述应满足的行为，不表示已执行或通过；执行范围与证据见 [acceptance.md](./acceptance.md)，剩余事项只在 [tasks.md](./tasks.md) 维护。
 
 跨组件配置职责见 [Theme 契约](../../engineering/048-Theme-configuration-contracts/spec.md)，视觉方法见 [Golden 规范](../../engineering/044-Testing-golden-regression/spec.md)。
+
+
+## 1.0.1 backtop-completed
+
+新增可选 onCompleted，仅在本组件发起的操作结束时，原 ScrollPosition 仍绑定原 Controller、该 Controller 仍是当前 Controller、原位置到达最小滚动边界且组件仍挂载时触发。onPressed 保持原有时机、不标记废弃；无可用滚动位置时立即通知，有位置时等待动画 Future 结束，动画中断仍可能通知。仅提供 onCompleted 不启用按钮，动画期间重复点击继续忽略。
+
+同帧和跨帧解绑重绑原位置、临时切换 BackTop Controller 后恢复均允许完成；完成时仍解绑、位置替换、当前 Controller 不同、未到顶或卸载不通知。成功在旧 onPressed 副作用前记录，随后在发送 onCompleted 前再次检查挂载和绑定身份。旧回调修改偏移不会改写已记录的成功；旧回调跳到顶部也不将失败变成功。
+
+不要求全程从未解绑。先前考虑的全程观察方案已被完成时状态定义取代：普通已创建 ScrollController 无法透明追加每次 attach/detach 事件接入，且用户不需要此历史约束。因此没有逐帧观察、绑定历史计数、新观察器或专用 Controller；所有权、绑定数量限制与异常规则保持原样。
