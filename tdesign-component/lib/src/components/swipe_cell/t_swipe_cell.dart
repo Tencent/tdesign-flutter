@@ -26,7 +26,8 @@ typedef TSwipeCellChanged = void Function(TSwipeCellSide side, bool isOpen);
 
 /// [TSwipeCell] 的命令式控制器。
 ///
-/// 一个控制器同一时间只能绑定一个 [TSwipeCell]。通常无需使用控制器，用户拖动、
+/// 一个控制器同一时间只能绑定一个 [TSwipeCell]，重复绑定其他实例会抛出
+/// [FlutterError]。通常无需使用控制器，用户拖动、
 /// 点击操作项、点击单元格外部或滚动列表时，组件会自行管理展开状态。
 class TSwipeCellController {
   _TSwipeCellControllerBinding? _binding;
@@ -107,6 +108,7 @@ class TSwipeCell extends StatefulWidget {
   final TSwipeCellChanged? onOpenChanged;
 
   /// 命令式控制器。
+  /// 建议独立单元格分别使用 Controller；绑定规则见 [TSwipeCellController]。
   final TSwipeCellController? controller;
 
   /// 首次布局后默认展开的面板；为空时保持关闭。

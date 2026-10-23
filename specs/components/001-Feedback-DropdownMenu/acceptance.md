@@ -72,3 +72,18 @@
 本次无绘制、布局、主题或资源改动，不更新 Golden；设备行为未验证。历史视觉/设备待办保留，不由本次功能回归核销。
 
 Form 关闭断言后的绑定兼容性另有独立的[双版本 Web release 验证](../008-Input-Form/acceptance.md#form-web-release-validation)，不计入本节 288 项 Widget 回归；仅覆盖 Web release，不代表 Android/iOS 真机 release 已验证。
+
+<a id="controller-api-doc-validation"></a>
+
+### 五组件中文 API 注释与生成文档
+
+本轮以 `b5842f05` 为起点，补充 Form、SwipeCell、Swiper、PullDownRefresh、DropdownMenu 的 controller 字段及 Controller 类注释，同步五份生成 API。字段说明推荐独立组件分别使用 Controller；类说明准确描述各自原有的拒绝或后绑定覆盖规则，不增加绑定限制或未来迁移计划。
+
+- Form 明确同一 Controller 同时绑定多个表单时，断言开启会报错，断言关闭时保留后绑定覆盖；未把同一表单重建描述为重复绑定错误。
+- SwipeCell / Swiper 分别保留 FlutterError / StateError；Refresh / DropdownMenu 说明后绑定覆盖、单目标命令及卸载不恢复旧绑定。DropdownMenu 不承诺共享状态完整隔离。
+- Dart 分析器比较六个修改源码的非注释 token，与起点完全一致。实现、公开 API 签名、默认值、所有权及既有绑定规则不变；本轮不重跑组件或 Web release 实验，不将历史运行结果改记为新 head 的运行结果。
+- 本地站点 Form API 页已实际预览，推荐用法和类说明正常显示；原始截图与过程保存在工作区外层 `artifacts/pr1191-api-docs-local/`。
+
+- Flutter 3.32.0 / 3.47.7 在独立目录分别生成并检查 57 份 API，两版本全部产物逐字一致；相对起点仅五份目标 API 文档变化。
+- 每 SDK：字体覆盖及相关工具测试 14 项通过，组件包严格 analyze 零诊断；未修改字体清单或资源。命令包括 `node tool/generate_api.mjs`、`node tool/generate_api.mjs --check`、`flutter test --no-pub test/tool/run_visual_regression_test.dart --reporter expanded`、`flutter analyze --no-pub --fatal-infos`，均使用对应 SDK。
+- 六份源码及五份生成 API 的路径/NUL/字节 SHA-256 为 `799e3947381c0fd1747aaafd582dda9d3d78bf6eff716040b39d87b6b193ce2f`。环境、依赖锁文件、命令、token 对比与日志摘要见[验证数据](evidence/1.0.1-controller-api-docs.json)；原始日志保存在工作区外层 `artifacts/pr1148-independent/publication/pr1191-controller-api-docs/`。

@@ -47,6 +47,7 @@ class TPullDownRefresh extends StatefulWidget {
   final double lowerThreshold;
 
   /// 外部主动刷新控制器。
+  /// 建议独立刷新组件分别使用 Controller；绑定规则见 [TPullDownRefreshController]。
   ///
   /// 通过 [TPullDownRefreshController.refresh] 从页面外部触发刷新。刷新完成时机
   /// 由 [onRefresh] 返回的 Future、异常或 [refreshTimeout] 共同决定；超时后

@@ -54,3 +54,5 @@
 - **仅验证 Web release，不外推 Android/iOS 真机 release。** 移动端构建通过不能代替真机运行；本页上方历史移动设备记录不属于本次验证。此项是独立的本地 release 实验，不计入 288 项 Widget 回归数量，也不表示已有对应 CI 执行入口。
 
 本次只补充验证记录，生产实现、公开 API、默认行为、绑定规则、正式测试及生成 API 均未修改；复用上述相同源码的已有测试结果。
+
+中文 API 注释及生成文档已补充推荐用法与原有绑定规则；本轮文档、字体覆盖及静态分析结果见[整组验收](../001-Feedback-DropdownMenu/acceptance.md#controller-api-doc-validation)，不改变实现或既有绑定限制。

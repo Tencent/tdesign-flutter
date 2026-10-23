@@ -20,6 +20,7 @@ class TForm extends StatefulWidget {
   final Widget child;
 
   /// 表单控制器。
+  /// 建议独立表单分别使用 Controller；绑定规则见 [TFormController]。
   final TFormController? controller;
 
   /// 自动校验时机。
@@ -279,6 +280,10 @@ class TFormState extends State<TForm> {
 }
 
 /// 命令式触发表单提交、校验和重置。
+///
+/// 同一 Controller 同时绑定多个表单时，断言开启会报错；断言关闭时保留后绑定覆盖，
+/// 命令作用于最后绑定的表单，不提供同时控制多个表单的能力。
+/// 当前绑定表单卸载后，不会自动恢复此前的绑定。
 class TFormController {
   TFormState? _state;
 

@@ -11,7 +11,7 @@
 | 名称 | 类型 | 默认值 | 说明 | 必传 |
 | --- | --- | --- | --- | --- |
 | child | Widget | - | 必填：滚动内容（对应官方默认 slot）。 必须为**有界且可滚动**的内容（如 `ListView` / `GridView` / `CustomScrollView`）。 `SizedBox` 等只能提供尺寸约束，不能把静态内容变成可滚动内容；若内容自身不可滚动， 下拉 / 触底手势仍无法生效，应将内容放入可滚动容器。 | 是 |
-| controller | TPullDownRefreshController? | - | 外部主动刷新控制器。 通过 `TPullDownRefreshController.refresh` 从页面外部触发刷新。刷新完成时机 由 `onRefresh` 返回的 Future、异常或 `refreshTimeout` 共同决定；超时后 控制器 Future 也会完成，迟到的原始 Future 不会再次改变刷新状态。 刷新资源由组件管理；外部控制器无需也不提供 dispose （详见 `TPullDownRefreshController` 文档）。 | 否 |
+| controller | TPullDownRefreshController? | - | 外部主动刷新控制器。 建议独立刷新组件分别使用 Controller；绑定规则见 `TPullDownRefreshController`。 通过 `TPullDownRefreshController.refresh` 从页面外部触发刷新。刷新完成时机 由 `onRefresh` 返回的 Future、异常或 `refreshTimeout` 共同决定；超时后 控制器 Future 也会完成，迟到的原始 Future 不会再次改变刷新状态。 刷新资源由组件管理；外部控制器无需也不提供 dispose （详见 `TPullDownRefreshController` 文档）。 | 否 |
 | key | Key? | - | 组件标识，用于区分或保留组件状态。 | 否 |
 | loadingBarHeight | double? | - | Header 容器高度与触发阈值；默认至少 50，随内置文字增长。 显式值固定，必须大于 0。 | 否 |
 | lowerThreshold | double | 50 | 距离底部多少逻辑像素时触发加载，默认 50，必须大于 0。 | 否 |
@@ -31,6 +31,9 @@
 使用 Flutter 惯用的控制器模式，从页面外部通过 `refresh` 主动触发一次刷新。
 返回的 Future 会在本次刷新成功、回调失败或超时复位后完成；它不返回业务结果。
 回调异常仍由 `TPullDownRefresh` 通过 `FlutterError.reportError` 上报。
+
+重复绑定保留既有的后绑定覆盖行为，`refresh` 只作用于最后绑定的组件，
+不提供同时刷新多个组件的能力。当前绑定组件卸载后，不会自动恢复此前的绑定。
 
 #### 生命周期（所有权）
 
