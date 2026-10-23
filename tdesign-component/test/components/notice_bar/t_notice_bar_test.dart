@@ -1,3 +1,4 @@
+import 'package:flutter/gestures.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:tdesign_flutter/tdesign_flutter.dart';
 
@@ -6,6 +7,275 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 /// 覆盖 status 四档、marquee 滚动、prefix/operation/suffix、onPressed 回调、
 /// Theme 注入、边界情况。
 void main() {
+  testWidgets(
+    'built-in long hold preserves legacy tap; custom region filters it',
+    (tester) async {
+      final targets = <TNoticeBarTapTarget>[];
+      await tester.pumpWidget(
+        MaterialApp(
+          home: Scaffold(
+            body: TNoticeBar(
+              content: 'built-in content',
+              operation: const SizedBox(
+                width: 100,
+                height: 40,
+                child: Text('custom operation'),
+              ),
+              onPressed: targets.add,
+            ),
+          ),
+        ),
+      );
+      final builtIn = await tester.startGesture(
+        tester.getCenter(find.text('built-in content')),
+      );
+      await tester.pump(const Duration(seconds: 1));
+      await builtIn.up();
+      expect(targets, [TNoticeBarTapTarget.content]);
+      targets.clear();
+      final custom = await tester.startGesture(
+        tester.getCenter(find.text('custom operation')),
+      );
+      await tester.pump(const Duration(seconds: 1));
+      await custom.up();
+      expect(targets, isEmpty);
+      await tester.pumpWidget(const SizedBox());
+    },
+  );
+
+  testWidgets(
+    'cross-region two fingers preserve built-in tap while custom is suppressed',
+    (tester) async {
+      final targets = <TNoticeBarTapTarget>[];
+      await tester.pumpWidget(
+        MaterialApp(
+          home: Scaffold(
+            body: TNoticeBar(
+              content: 'built-in content',
+              operation: const SizedBox(
+                width: 100,
+                height: 40,
+                child: Text('custom operation'),
+              ),
+              onPressed: targets.add,
+            ),
+          ),
+        ),
+      );
+      final builtIn = await tester.startGesture(
+        tester.getCenter(find.text('built-in content')),
+        pointer: 1,
+      );
+      final custom = await tester.startGesture(
+        tester.getCenter(find.text('custom operation')),
+        pointer: 2,
+      );
+      await builtIn.up();
+      await custom.up();
+      expect(targets, [TNoticeBarTapTarget.content]);
+      await tester.pumpWidget(const SizedBox());
+    },
+  );
+
+  for (final prefixFirst in [false, true]) {
+    for (final cancelFirst in [false, true]) {
+      testWidgets(
+        'cross-region multi-touch prefixFirst=$prefixFirst cancelFirst=$cancelFirst',
+        (tester) async {
+          final targets = <TNoticeBarTapTarget>[];
+          var childCalls = 0;
+          Widget area(String label) => GestureDetector(
+            onTap: () => childCalls++,
+            child: SizedBox(width: 80, height: 40, child: Text(label)),
+          );
+          await tester.pumpWidget(
+            MaterialApp(
+              home: Scaffold(
+                body: TNoticeBar(
+                  content: 'notice',
+                  prefix: area('prefix area'),
+                  operation: area('operation area'),
+                  onPressed: targets.add,
+                ),
+              ),
+            ),
+          );
+          final prefix = await tester.startGesture(
+            tester.getCenter(find.text('prefix area')),
+            pointer: 1,
+          );
+          final operation = await tester.startGesture(
+            tester.getCenter(find.text('operation area')),
+            pointer: 2,
+          );
+          final first = prefixFirst ? prefix : operation;
+          final last = prefixFirst ? operation : prefix;
+          if (cancelFirst) {
+            await first.cancel();
+          } else {
+            await first.up();
+          }
+          expect(targets, isEmpty);
+          await last.up();
+          expect(targets, isEmpty);
+          expect(
+            childCalls,
+            cancelFirst ? 1 : 2,
+            reason: 'Child gestures remain independent.',
+          );
+          await tester.tap(find.text('operation area'));
+          expect(targets, [TNoticeBarTapTarget.operation]);
+          expect(childCalls, cancelFirst ? 2 : 3);
+        },
+      );
+    }
+  }
+
+  for (final finalButtons in [kPrimaryButton, kSecondaryButton]) {
+    testWidgets('mouse button chord invalidates candidate: $finalButtons', (
+      tester,
+    ) async {
+      final targets = <TNoticeBarTapTarget>[];
+      var childCalls = 0;
+      await tester.pumpWidget(
+        MaterialApp(
+          home: Scaffold(
+            body: TNoticeBar(
+              content: 'notice',
+              operation: GestureDetector(
+                onTap: () => childCalls++,
+                child: const SizedBox(
+                  width: 80,
+                  height: 40,
+                  child: Text('chord target'),
+                ),
+              ),
+              onPressed: targets.add,
+            ),
+          ),
+        ),
+      );
+      final position = tester.getCenter(find.text('chord target'));
+      final gesture = await tester.startGesture(
+        position,
+        pointer: 1,
+        kind: PointerDeviceKind.mouse,
+      );
+      for (final buttons in [kPrimaryButton | kSecondaryButton, finalButtons]) {
+        await gesture.updateWithCustomEvent(
+          PointerMoveEvent(
+            pointer: 1,
+            kind: PointerDeviceKind.mouse,
+            position: position,
+            buttons: buttons,
+          ),
+        );
+      }
+      await gesture.up();
+      expect(targets, isEmpty);
+      expect(childCalls, 0);
+      final next = await tester.startGesture(
+        position,
+        pointer: 2,
+        kind: PointerDeviceKind.mouse,
+      );
+      await next.up();
+      expect(targets, [TNoticeBarTapTarget.operation]);
+      expect(childCalls, 1);
+    });
+  }
+
+  for (final mode in [
+    'cancel',
+    'longPress',
+    'multiPointer',
+    'secondaryButton',
+    'smallMove',
+  ]) {
+    testWidgets('custom target tap classification: $mode', (tester) async {
+      final targets = <TNoticeBarTapTarget>[];
+      await tester.pumpWidget(
+        MaterialApp(
+          home: Scaffold(
+            body: TNoticeBar(
+              content: 'notice',
+              operation: const SizedBox(
+                width: 80,
+                height: 40,
+                child: Text('target'),
+              ),
+              onPressed: targets.add,
+            ),
+          ),
+        ),
+      );
+      final position = tester.getCenter(find.text('target'));
+      final gesture = await tester.createGesture(
+        pointer: 1,
+        buttons: mode == 'secondaryButton' ? kSecondaryButton : kPrimaryButton,
+      );
+      await gesture.down(position);
+      switch (mode) {
+        case 'cancel':
+          await gesture.cancel();
+          break;
+        case 'longPress':
+          await tester.pump(const Duration(milliseconds: 600));
+          await gesture.up();
+          break;
+        case 'multiPointer':
+          final second = await tester.startGesture(position, pointer: 2);
+          await second.up();
+          await gesture.up();
+          break;
+        case 'smallMove':
+          await gesture.moveBy(const Offset(2, 2));
+          await gesture.up();
+          break;
+        default:
+          await gesture.up();
+      }
+      await tester.pump();
+      expect(
+        targets,
+        mode == 'smallMove' ? [TNoticeBarTapTarget.operation] : isEmpty,
+      );
+    });
+  }
+
+  testWidgets('NoticeBar custom target does not report a drag as a tap', (
+    tester,
+  ) async {
+    final targets = <TNoticeBarTapTarget>[];
+    var buttonCalls = 0;
+    await tester.pumpWidget(
+      MaterialApp(
+        home: Scaffold(
+          body: TNoticeBar(
+            content: 'notice',
+            operation: TButton(
+              onPressed: () => buttonCalls++,
+              child: const Text('operation'),
+            ),
+            onPressed: targets.add,
+          ),
+        ),
+      ),
+    );
+    final gesture = await tester.startGesture(
+      tester.getCenter(find.text('operation')),
+    );
+    await gesture.moveBy(const Offset(0, 100));
+    await gesture.up();
+    await tester.pump();
+    expect(buttonCalls, 0);
+    expect(
+      targets,
+      isEmpty,
+      reason: 'A cancelled button gesture must not become a NoticeBar tap.',
+    );
+  });
+
   /// 用 TTheme 包裹以提供基础 Token
   Widget wrapWithTheme(
     Widget child, {

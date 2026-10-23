@@ -1,0 +1,119 @@
+{
+  "base": "071efaba0111d868efe0b6a7ce55f6f784069a62",
+  "branch": "rss1102/fix/noticebar-gesture-1.0.1",
+  "code_test_api_files": [
+    "tdesign-component/example/assets/api/notice-bar_api.md",
+    "tdesign-component/lib/src/components/notice_bar/t_notice_bar.dart",
+    "tdesign-component/test/components/notice_bar/t_notice_bar_test.dart"
+  ],
+  "code_test_api_path_nul_bytes_sha256": "1426b106f117230d592e25e7b92877c9ee12a0f7372421d59a98d3cd6a646687",
+  "code_test_api_binary_diff_sha256": "95111566e1de80402832f8b537ba2442249b03acc0c20d2982e2635f11485277",
+  "low_high_inputs_identical": true,
+  "verification": {
+    "low": {
+      "sdk": "Flutter 3.32.0 • channel stable • https://github.com/flutter/flutter.git\nFramework • revision be698c48a6 (1 year, 5 months ago) • 2025-05-19 12:59:14 -0700\nEngine • revision 1881800949 (1 year, 5 months ago) • 2025-05-19 10:54:07 -0700\nTools • Dart 3.8.0 • DevTools 2.45.1",
+      "scope": {
+        "components": [
+          "notice_bar"
+        ],
+        "component_tests": [
+          "test/components/notice_bar/t_notice_bar_test.dart"
+        ],
+        "example_tests": [
+          "test/notice_bar/notice_bar_page_test.dart"
+        ]
+      },
+      "component_tests_passed": 64,
+      "example_tests_passed": 4,
+      "runner_tests_passed": 30,
+      "analyze": "zero diagnostics",
+      "api_documents_checked": 57,
+      "snippets_check": "passed",
+      "coverage": {
+        "notice_bar": {
+          "hit": 337,
+          "found": 348,
+          "percent": 96.84
+        }
+      },
+      "dependency_lock_sha256": {
+        "tdesign-component/pubspec.lock": "7deb49a80a8288c84280257591090c14c5fa1db08f8aabad6233b51a8a6e4d92",
+        "tdesign-component/example/pubspec.lock": "696bf039762651eb175109f70e6cd4993e8cd40388b9ddc330005d1482a4e1c6"
+      },
+      "log_sha256": {
+        "analyze.log": "b0695a3d8dcab0a89991831d6a4d40b0785da2c4e9cc0d0070a0d7f73e696a83",
+        "api-check.log": "b11618d5eb010b831011d01a89eda7491c11a68799e767954b497642cd06e631",
+        "api-generate.log": "06d21eb8b3f9175b7006940182ea50fdf71246513c4ed50fe195e2e8c376d886",
+        "components.log": "f5e8256813b4b17ab5d8abddb68bafd5e1acf40349d3e0d315719af474b7b939",
+        "coverage-notice_bar.log": "73883a8b1a2bc0a2368406916db57ec1b3c9567928ff5158e25423b84587b647",
+        "examples.log": "165fd5a2674a621d2d16135684f243d04d188ab1d473e8f8bd949e7d38e8f6f4",
+        "pub-get-component.log": "0463a12f4fdbd1c3d4a2683c816c25e95c22d77ca8b3a6d54af873e3af3fda56",
+        "pub-get-example.log": "77894d05f73401bca14c0dc3be669cfd43d7ae8059b597f57efbacb6fb21e711",
+        "runners.log": "447a9e60e126a32b017e9dde2205c0269ff3a88e73de752c95162302e994a872",
+        "sdk.log": "a1b002ef5662a6de7a8910e0c0fee594d1ebc7e335014dda114fe1658ea12a12",
+        "snippets.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    "high": {
+      "sdk": "Flutter 3.47.7 • channel stable • https://github.com/flutter/flutter.git\nFramework • revision abaf9c5237 (2 weeks ago) • 2026-10-08 09:51:21 -0700\nEngine • hash d8a2d6c768c334d53e16277f837970ffa1e2de81 (revision deb287481e) (15 days ago) • 2026-10-07 17:09:12.000Z\nTools • Dart 3.13.5 • DevTools 2.60.0",
+      "scope": {
+        "components": [
+          "notice_bar"
+        ],
+        "component_tests": [
+          "test/components/notice_bar/t_notice_bar_test.dart"
+        ],
+        "example_tests": [
+          "test/notice_bar/notice_bar_page_test.dart"
+        ]
+      },
+      "component_tests_passed": 64,
+      "example_tests_passed": 4,
+      "runner_tests_passed": 30,
+      "analyze": "zero diagnostics",
+      "api_documents_checked": 57,
+      "snippets_check": "passed",
+      "coverage": {
+        "notice_bar": {
+          "hit": 337,
+          "found": 348,
+          "percent": 96.84
+        }
+      },
+      "dependency_lock_sha256": {
+        "tdesign-component/pubspec.lock": "f4fcd8d10e1ba7d89670e87509f87a6c0d359ceffd83dff9bf8ac58cc8ad59c2",
+        "tdesign-component/example/pubspec.lock": "2910a5cf161a20433ac683dbeaa348a85edaba7e6697cc9aba351519a16615a3"
+      },
+      "log_sha256": {
+        "analyze.log": "891895b8d94028e696e10649807965fa1dd0f04cfe2b21757491bdd5913deeea",
+        "api-check.log": "14d6c17ca4e6d159e32cd0250624c8e1654439d1472aaf365d518476c8284b5a",
+        "api-generate.log": "1d2c029fdd6618b84139f39ad5f81596d97c1be9b06473222f0af33abfdec052",
+        "components.log": "507bc22752e3c25d13305dd8bf1a166f73ec3b553adb9a139e3256f2207fc763",
+        "coverage-notice_bar.log": "73883a8b1a2bc0a2368406916db57ec1b3c9567928ff5158e25423b84587b647",
+        "examples.log": "50cb41285ecf654b82d9dbaafb9215e641a664c836932d8aac56c300b5d1985e",
+        "pub-get-component.log": "5e3ba87de4b282d4f1dd3d66dfcb10442f72bf2c07015bf36f60e4bad8d21bb9",
+        "pub-get-example.log": "fac5535739136823d4bc8acf20263a212d189bcf2b14b634c4e65d1663b50572",
+        "runners.log": "25a4e2a0665b0a61a2ece9c77dee0da22f2fd311cd3553e036a90dccf440f303",
+        "sdk.log": "7da1fa9f0d23102495171cfa222c8d31b4a60776c3c003858d35b8f3befe281d",
+        "snippets.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    }
+  },
+  "api_contract_review": [
+    {
+      "file": "tdesign-component/lib/src/components/notice_bar/t_notice_bar.dart",
+      "legacy_public_signatures_and_defaults": "unchanged",
+      "allowed_addition": null
+    }
+  ],
+  "review": {
+    "result": "passed",
+    "blocking_findings": [],
+    "scope": "旧 API、默认值与手势实现不变，无 PR 5 别名或废弃迁移。dartdoc 与生成 API 明确新增过滤仅作用于自定义 prefix/operation；内置前缀图标、正文和尾部图标保留原手势。两项正式回归分别验证内置正文长按仍通知而自定义操作区过滤，以及正文/操作区跨区双指时仅正文通知。原有跨自定义区双指、鼠标按键组合、拖动、取消及子组件独立动作回归继续通过。",
+    "closed_findings": [
+      "P2: NoticeBar public documentation overstates custom-region filtering scope"
+    ],
+    "production_change": "Dartdoc only relative to cc8d6603a98b447f0feb7573fe293f031d97841a; executable source tokens unchanged."
+  },
+  "visual": "Nonvisual logic/callback/lifecycle changes. No Golden update or device validation. No remote CI."
+}

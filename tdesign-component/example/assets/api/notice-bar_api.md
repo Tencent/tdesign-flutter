@@ -15,7 +15,7 @@
 | key | Key? | - | 组件标识，用于区分或保留组件状态。 | 否 |
 | marquee | bool | false | 是否启用横向跑马灯展示。 | 否 |
 | maxLines | int | 1 | 文本行数（仅静态有效），必须大于 0。 | 否 |
-| onPressed | ValueChanged&lt;TNoticeBarTapTarget&gt;? | - | 点击事件 | 否 |
+| onPressed | ValueChanged&lt;TNoticeBarTapTarget&gt;? | - | 公告栏区域点击通知。 自定义 `prefix` 和 `operation` 区域仅通知单指主按钮短按，过滤拖动、 长按、取消、多指、非主按钮及按键组合；不阻止子组件自身的手势。 内置前缀图标、正文和尾部图标保留原有点击手势，不受上述自定义区域 过滤规则约束。 | 否 |
 | operation | Widget? | - | 内容右侧、`suffixIcon` 左侧的自定义操作区。 可以和 `suffixIcon` 同时显示。 | 否 |
 | prefix | Widget? | - | 自定义前缀区域。 为 null 时根据 `status` 显示默认图标；传入 `SizedBox.shrink` 可隐藏 前缀区域。组件统一在非空前缀与正文之间保留 `TSpacers.spacer` 间距 （默认 8 逻辑像素）；自定义 `Icon` 中未显式指定的颜色或尺寸会继承公告栏 状态色和标准图标尺寸。 | 否 |
 | speed | double | 50 | 横向跑马灯每秒滚动的逻辑像素，仅在 `direction` 为 `Axis.horizontal` 且 marquee 为 true 时生效；必须大于 0。 | 否 |
