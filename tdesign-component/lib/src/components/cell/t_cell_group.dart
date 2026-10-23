@@ -61,73 +61,76 @@ class TCellGroup extends StatelessWidget {
           index,
         ),
     ];
-    return LayoutBuilder(
-      builder: (context, constraints) {
-        // scrollable 需要确定的高度才能撑满剩余空间并滚动。父级给的是无界高度时
-        // （常见于放在 SingleChildScrollView 或 Column 中），改为按内容高度，
-        // 否则 Expanded 与无界视口会同时触发布局异常。
-        final canExpand = scrollable && constraints.hasBoundedHeight;
-        final list = scrollable
-            ? TInternalScrollScope(
-                child: ListView(
-                  shrinkWrap: !canExpand,
-                  physics: canExpand
-                      ? null
-                      : const NeverScrollableScrollPhysics(),
-                  children: children,
-                ),
-              )
-            : Column(mainAxisSize: MainAxisSize.min, children: children);
-        final content = Container(
-          padding: resolvedVariant == TCellGroupVariant.card
-              ? theme?.cardPadding ?? const EdgeInsets.symmetric(horizontal: 16)
-              : null,
-          decoration: BoxDecoration(
-            border: theme?.groupBordered ?? false
-                ? Border.all(
-                    color:
-                        theme?.groupBorderColor ??
-                        context.tTheme.componentStroke,
-                  )
-                : null,
-            borderRadius: resolvedVariant == TCellGroupVariant.card
-                ? theme?.resolveCardBorderRadius(
-                        BorderRadius.circular(context.tTheme.radiusLarge),
-                      ) ??
-                      BorderRadius.circular(context.tTheme.radiusLarge)
-                : null,
-          ),
-          clipBehavior: resolvedVariant == TCellGroupVariant.card
-              ? Clip.antiAlias
-              : Clip.none,
-          child: list,
-        );
-        return Column(
-          mainAxisSize: canExpand ? MainAxisSize.max : MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            if (title != null)
-              Padding(
-                padding: theme?.titlePadding ?? const EdgeInsets.all(16),
-                child: TTextStyleScope(
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
-                  softWrap: false,
-                  style: TextStyle(
-                    color: context.tTheme.textColorPrimary,
-                    fontSize: context.tTheme.fontBodyMedium?.size ?? 14,
-                    height: context.tTheme.fontBodyMedium?.height,
-                    fontWeight:
-                        context.tTheme.fontBodyMedium?.fontWeight ??
-                        FontWeight.w400,
-                  ).merge(theme?.groupTitleStyle),
-                  child: title!,
-                ),
+    Widget buildGroup({required bool canExpand}) {
+      final list = scrollable
+          ? TInternalScrollScope(
+              child: ListView(
+                shrinkWrap: !canExpand,
+                physics: canExpand
+                    ? null
+                    : const NeverScrollableScrollPhysics(),
+                children: children,
               ),
-            if (canExpand) Expanded(child: content) else content,
-          ],
-        );
-      },
+            )
+          : Column(mainAxisSize: MainAxisSize.min, children: children);
+      final content = Container(
+        padding: resolvedVariant == TCellGroupVariant.card
+            ? theme?.cardPadding ?? const EdgeInsets.symmetric(horizontal: 16)
+            : null,
+        decoration: BoxDecoration(
+          border: theme?.groupBordered ?? false
+              ? Border.all(
+                  color:
+                      theme?.groupBorderColor ?? context.tTheme.componentStroke,
+                )
+              : null,
+          borderRadius: resolvedVariant == TCellGroupVariant.card
+              ? theme?.resolveCardBorderRadius(
+                      BorderRadius.circular(context.tTheme.radiusLarge),
+                    ) ??
+                    BorderRadius.circular(context.tTheme.radiusLarge)
+              : null,
+        ),
+        clipBehavior: resolvedVariant == TCellGroupVariant.card
+            ? Clip.antiAlias
+            : Clip.none,
+        child: list,
+      );
+      return Column(
+        mainAxisSize: canExpand ? MainAxisSize.max : MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          if (title != null)
+            Padding(
+              padding: theme?.titlePadding ?? const EdgeInsets.all(16),
+              child: TTextStyleScope(
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+                softWrap: false,
+                style: TextStyle(
+                  color: context.tTheme.textColorPrimary,
+                  fontSize: context.tTheme.fontBodyMedium?.size ?? 14,
+                  height: context.tTheme.fontBodyMedium?.height,
+                  fontWeight:
+                      context.tTheme.fontBodyMedium?.fontWeight ??
+                      FontWeight.w400,
+                ).merge(theme?.groupTitleStyle),
+                child: title!,
+              ),
+            ),
+          if (canExpand) Expanded(child: content) else content,
+        ],
+      );
+    }
+
+    if (!scrollable) {
+      return buildGroup(canExpand: false);
+    }
+    // Only scrollable groups depend on the parent's available height.
+    // Keep intrinsic sizing available for non-scrollable groups.
+    return LayoutBuilder(
+      builder: (context, constraints) =>
+          buildGroup(canExpand: constraints.hasBoundedHeight),
     );
   }
 
