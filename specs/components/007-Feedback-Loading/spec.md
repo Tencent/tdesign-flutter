@@ -144,3 +144,15 @@
 验收标准描述应满足的行为，不表示已执行或通过；执行范围与证据见 [acceptance.md](./acceptance.md)，剩余事项只在 [tasks.md](./tasks.md) 维护。
 
 跨组件配置职责见 [Theme 契约](../../engineering/048-Theme-configuration-contracts/spec.md)，视觉方法见 [Golden 规范](../../engineering/044-Testing-golden-regression/spec.md)。
+
+
+## 1.0.1 overlay-lifecycle
+
+所属 Overlay 卸载（含首次绘制前）释放全局会话，后续可重新 show；普通页面替换或不透明 Entry 遮挡时，所属 Overlay 仍存活则不释放。保持全局唯一、重复 show 忽略及原参数默认值。
+
+
+### Loading 自动释放补全
+
+使用独立、零尺寸、无交互且 maintainState=true 的生命周期 Entry 跟踪 Overlay owner；内容 Entry 保持原有 maintainState=false，不改变遮挡时内容销毁和恢复重建规则。卸载通知中只调度微任务，待祖先 unmount 结束后复核 owner，再清空全局会话并移除、释放两个 Entry。首次绘制前卸载仍由 post-frame 检查兜底。旧会话的延迟检查必须按会话身份隔离，不得释放新的会话。
+
+验收不依赖后续 show/dismiss：监听 Flutter 的对象创建和销毁事件，记录本次 show 创建的 OverlayEntry；普通卸载、遮挡后卸载、首次绘制前/后均须全部 dispose 且每个只发生一次。保留没有 Overlay、重复 show 忽略、普通页面离开但 Overlay 存活时继续展示，以及重复 dismiss 无副作用的原有契约。

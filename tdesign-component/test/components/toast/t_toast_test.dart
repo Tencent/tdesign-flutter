@@ -26,6 +26,207 @@ void expectToastCenter(WidgetTester tester, Finder content, double fraction) {
 }
 
 void main() {
+  for (final painted in [false, true]) {
+    testWidgets('obscured Toast releases owner and long timer painted=$painted', (
+      tester,
+    ) async {
+      late BuildContext anchor;
+      await tester.pumpWidget(
+        MaterialApp(
+          home: Builder(
+            builder: (context) {
+              anchor = context;
+              return const SizedBox();
+            },
+          ),
+        ),
+      );
+      TToast.showText(
+        'obscured toast',
+        context: anchor,
+        duration: const Duration(hours: 1),
+      );
+      if (painted) {
+        await tester.pump();
+      }
+      final cover = OverlayEntry(
+        opaque: true,
+        builder: (_) => const ColoredBox(color: Colors.white),
+      );
+      Overlay.of(anchor).insert(cover);
+      await tester.pump();
+      expect(find.text('obscured toast'), findsNothing);
+      // The initial post-frame check has run while the owner was alive.
+      await tester.pumpWidget(const SizedBox());
+      cover.remove();
+      cover.dispose();
+      // Do not dismissAll or advance the timeout: the framework must find no pending timer.
+      expect(tester.takeException(), isNull);
+    });
+  }
+
+  testWidgets(
+    'obscured Toast keeps original content State and duration rules',
+    (tester) async {
+      late BuildContext anchor;
+      var mounts = 0;
+      var disposals = 0;
+      await tester.pumpWidget(
+        MaterialApp(
+          home: Builder(
+            builder: (context) {
+              anchor = context;
+              return const SizedBox();
+            },
+          ),
+        ),
+      );
+      TToast.showText(
+        null,
+        context: anchor,
+        duration: Duration.zero,
+        customWidget: _ToastContentLifecycleProbe(
+          onMount: () => mounts++,
+          onDispose: () => disposals++,
+        ),
+      );
+      await tester.pump();
+      expect(mounts, 1);
+      final cover = OverlayEntry(
+        opaque: true,
+        builder: (_) => const ColoredBox(color: Colors.white),
+      );
+      Overlay.of(anchor).insert(cover);
+      await tester.pump();
+      expect(
+        disposals,
+        1,
+        reason: 'The content Entry must not gain maintainState.',
+      );
+      await tester.pump(const Duration(seconds: 10));
+      cover.remove();
+      cover.dispose();
+      await tester.pump();
+      expect(mounts, 2);
+      expect(find.text('content lifecycle'), findsOneWidget);
+      TToast.dismissAll();
+      await tester.pump();
+      expect(disposals, 2);
+      expect(tester.takeException(), isNull);
+    },
+  );
+
+  testWidgets('obscured Toast still expires while its Overlay stays alive', (
+    tester,
+  ) async {
+    late BuildContext anchor;
+    await tester.pumpWidget(
+      MaterialApp(
+        home: Builder(
+          builder: (context) {
+            anchor = context;
+            return const SizedBox();
+          },
+        ),
+      ),
+    );
+    TToast.showText(
+      'expires behind cover',
+      context: anchor,
+      duration: const Duration(milliseconds: 100),
+    );
+    await tester.pump();
+    final cover = OverlayEntry(
+      opaque: true,
+      builder: (_) => const ColoredBox(color: Colors.white),
+    );
+    Overlay.of(anchor).insert(cover);
+    await tester.pump();
+    await tester.pump(const Duration(milliseconds: 100));
+    await tester.pump(const Duration(milliseconds: 200));
+    cover.remove();
+    cover.dispose();
+    await tester.pump();
+    expect(find.text('expires behind cover'), findsNothing);
+    expect(tester.takeException(), isNull);
+  });
+
+  testWidgets('obscured old Toast cannot remove a same-ID replacement', (
+    tester,
+  ) async {
+    late BuildContext anchor;
+    await tester.pumpWidget(
+      MaterialApp(
+        home: Builder(
+          builder: (context) {
+            anchor = context;
+            return const SizedBox();
+          },
+        ),
+      ),
+    );
+    TToast.showText(
+      'old obscured',
+      context: anchor,
+      toastId: 'shared',
+      duration: const Duration(milliseconds: 100),
+    );
+    await tester.pump();
+    final cover = OverlayEntry(
+      opaque: true,
+      builder: (_) => const ColoredBox(color: Colors.white),
+    );
+    Overlay.of(anchor).insert(cover);
+    await tester.pump();
+    TToast.showText(
+      'new visible',
+      context: anchor,
+      toastId: 'shared',
+      duration: Duration.zero,
+    );
+    await tester.pump(const Duration(seconds: 1));
+    expect(find.text('new visible'), findsOneWidget);
+    cover.remove();
+    cover.dispose();
+    TToast.dismissToast('shared');
+    await tester.pump();
+    expect(find.text('new visible'), findsNothing);
+    expect(tester.takeException(), isNull);
+  });
+
+  for (final painted in [false, true]) {
+    testWidgets('Toast owner unmount cleanup, painted=$painted', (
+      tester,
+    ) async {
+      late BuildContext anchor;
+      await tester.pumpWidget(
+        MaterialApp(
+          home: Builder(
+            builder: (context) {
+              anchor = context;
+              return const SizedBox();
+            },
+          ),
+        ),
+      );
+      TToast.showText(
+        'old toast',
+        context: anchor,
+        toastId: 'owner',
+        duration: const Duration(milliseconds: 50),
+      );
+      if (painted) {
+        await tester.pump();
+      }
+      await tester.pumpWidget(const SizedBox());
+      await tester.pump(const Duration(seconds: 1));
+      expect(tester.takeException(), isNull);
+      TToast.dismissToast('owner');
+      TToast.dismissAll();
+      expect(tester.takeException(), isNull);
+    });
+  }
+
   for (final loading in [false, true]) {
     for (final local in [false, true]) {
       for (final scale in [1.0, 2.0]) {
@@ -1800,4 +2001,34 @@ void main() {
     expect(identical(base.lerp(null, 0.5), base), isTrue);
     expect(TToastThemeData.lerpDouble(null, null, 0.5), isNull);
   });
+}
+
+class _ToastContentLifecycleProbe extends StatefulWidget {
+  const _ToastContentLifecycleProbe({
+    required this.onMount,
+    required this.onDispose,
+  });
+  final VoidCallback onMount;
+  final VoidCallback onDispose;
+  @override
+  State<_ToastContentLifecycleProbe> createState() =>
+      _ToastContentLifecycleProbeState();
+}
+
+class _ToastContentLifecycleProbeState
+    extends State<_ToastContentLifecycleProbe> {
+  @override
+  void initState() {
+    super.initState();
+    widget.onMount();
+  }
+
+  @override
+  void dispose() {
+    widget.onDispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) => const Text('content lifecycle');
 }

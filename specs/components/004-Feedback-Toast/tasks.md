@@ -19,3 +19,9 @@
 ## 文字槽交付
 
 组件范围和已验证边界见 acceptance.md；共享收口事项统一维护在 [Theme tasks](../../engineering/048-Theme-configuration-contracts/tasks.md#文字槽-review-收口)，不在各组件重复记录分支、推送与 CI 流程。上述既有设备、设计和 Review 待办不因此关闭。
+
+
+## 1.0.1 overlay-lifecycle
+
+- [x] 完成本独立分支双版本功能回归、覆盖率、静态分析和生成产物验证。
+- [x] 按最终候选复核 API、默认行为、绑定边界及测试门禁，记录验收。

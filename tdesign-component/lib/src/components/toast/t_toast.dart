@@ -71,19 +71,32 @@ class TOverlayConfig {
 /// Toast实例管理类
 class _ToastInstance {
   final OverlayEntry overlayEntry;
+  final OverlayEntry lifecycleEntry;
   final Timer? timer;
   Timer? disposeTimer;
   bool showing = true;
   bool removed = false;
 
-  _ToastInstance({required this.overlayEntry, this.timer});
+  _ToastInstance({
+    required this.overlayEntry,
+    required this.lifecycleEntry,
+    this.timer,
+  });
+
+  VoidCallback? entryListener;
 
   void _removeEntry() {
     if (removed) {
       return;
     }
+    final listener = entryListener;
+    if (listener != null) {
+      lifecycleEntry.removeListener(listener);
+    }
     overlayEntry.remove();
     overlayEntry.dispose();
+    lifecycleEntry.remove();
+    lifecycleEntry.dispose();
     removed = true;
   }
 
@@ -599,7 +612,13 @@ class TToast {
       );
     }
 
-    overlayState.insert(overlayEntry);
+    // An inert entry observes the owner even when an opaque Entry hides content.
+    // Keep the content Entry's existing State, layout and interaction behavior.
+    final lifecycleEntry = OverlayEntry(
+      maintainState: true,
+      builder: (_) => const SizedBox.shrink(),
+    );
+    overlayState.insertAll([lifecycleEntry, overlayEntry]);
 
     Timer? timer;
 
@@ -614,10 +633,29 @@ class TToast {
       });
     }
 
-    _toastInstances[toastId] = _ToastInstance(
+    final instance = _ToastInstance(
       overlayEntry: overlayEntry,
+      lifecycleEntry: lifecycleEntry,
       timer: timer,
     );
+    _toastInstances[toastId] = instance;
+    void releaseUnmounted() {
+      // Entry 卸载通知发生时祖先 Overlay 可能尚未完成 unmount；
+      // 等本轮卸载完成后再判断 owner，并避开 ChangeNotifier 通知栈。
+      scheduleMicrotask(() {
+        if (overlayState.mounted || instance.removed) {
+          return;
+        }
+        if (identical(_toastInstances[toastId], instance)) {
+          _toastInstances.remove(toastId);
+        }
+        instance.cancel();
+      });
+    }
+
+    instance.entryListener = releaseUnmounted;
+    lifecycleEntry.addListener(releaseUnmounted);
+    WidgetsBinding.instance.addPostFrameCallback((_) => releaseUnmounted());
   }
 }
 

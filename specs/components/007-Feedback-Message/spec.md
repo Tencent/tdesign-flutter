@@ -137,3 +137,8 @@ TDesign Flutter 的 `TMessage` 组件（`tdesign-component/lib/src/components/me
 验收标准描述应满足的行为，不表示已执行或通过；执行范围与证据见 [acceptance.md](./acceptance.md)，剩余事项只在 [tasks.md](./tasks.md) 维护。
 
 跨组件配置职责见 [Theme 契约](../../engineering/048-Theme-configuration-contracts/spec.md)，视觉方法见 [Golden 规范](../../engineering/044-Testing-golden-regression/spec.md)。
+
+
+## 1.0.1 overlay-lifecycle
+
+所属 Overlay 在首次绘制前卸载也必须清理句柄及默认 slot，onDismissed 恰好通知一次；重复 dismiss 无副作用。保持展示时长、默认位置、并发与回调阶段。
