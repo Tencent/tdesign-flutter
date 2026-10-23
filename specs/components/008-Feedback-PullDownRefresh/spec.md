@@ -211,3 +211,5 @@ class TPullDownRefreshTexts {
 ## 1.0.1 controller-binding
 
 保持 Controller.bind/unbind 公开签名及现有后绑定覆盖行为，不新增重复绑定异常；组件内部只在自己仍为最后绑定者时解绑，旧组件卸载或替换不清空新使用者的命令。
+
+后绑定覆盖仅用于保留历史兼容，不代表推荐多个刷新组件共享同一个 Controller。业务中建议为独立刷新组件分别提供 Controller；本次不新增共享限制，也不承诺同时控制多个组件。
