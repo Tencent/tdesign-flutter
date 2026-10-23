@@ -111,7 +111,7 @@ TForm                 表单生命周期、字段注册和统一操作
 - 默认视觉使用小程序 FormItem 的容器结构：容器背景、16px 水平/垂直内边距和底部分隔线；放置输入组件时，输入组件的默认外层内边距由 FormItem 内部作用域压缩，避免出现双重留白。
 - `TFormThemeData.borderColor` 可覆盖 FormItem 底部分隔线颜色，用于小程序自定义主题或无边界 Demo。
 - `TFormThemeData.leadingGap` 可覆盖前置内容与标签区域的间距，默认读取 8dp 间距 token。
-- `TFormThemeData.contentAlignment` 提供字段内容区域的全局默认水平对齐，`TFormItem.contentAlignment` 可逐项覆盖；仅提供 RTL 安全的 `start`、`end`，并同时对齐 child、help 和 error，不改变输入文本自身的 `textAlign`。
+- `TFormThemeData.contentAlignment` 提供字段内容区域的全局默认水平对齐，`TFormItem.contentAlignment` 可逐项覆盖；提供 RTL 安全的 `start`、`center`、`end`，并同时对齐 child、help 和 error，不改变输入文本自身的 `textAlign`。`center` 档通过内容区 `Align` 包裹实现，使 `TStepper`、`TRate` 等自身不铺满宽度（`MainAxisSize.min`）的字段控件同样参与对齐。
 - label 默认使用 `fontBodyLarge + textColorPrimary`；help 使用 `fontBodySmall + textColorPlaceholder`；error 使用 `fontBodySmall + errorNormalColor`。组件主题中的局部 TextStyle 只覆盖显式字段，不得清空其余 token 字体属性。
 - `TFormItemVerticalAlignment` 只提供 `start`、`center` 两种水平布局下的语义化纵向对齐；实例配置优先于 `TFormThemeData.verticalAlignment`，默认 `start` 保持多行字段与消息场景的现有行为，不暴露 Flutter `CrossAxisAlignment`。
 - `extra` 保持纯 Widget 插槽，不附加固定 Padding、Transform 或尺寸；它与 label、字段内容共同遵循上述纵向对齐。Input Demo 的普通图标行使用 `center`，带 tips 的操作按钮保持 `start`，对应小程序默认与 `.extra` 局部覆盖。

@@ -210,7 +210,7 @@
 | 名称 | 类型 | 默认值 | 说明 | 必传 |
 | --- | --- | --- | --- | --- |
 | child | Widget | - | 字段内容。 | 是 |
-| contentAlignment | TFormItemContentAlignment? | - | 内容区域的水平方向对齐方式。 未传时默认起始侧对齐；影响 字段控件、help 和 error 的外部位置，不影响输入文本自身的对齐方式。 | 否 |
+| contentAlignment | TFormItemContentAlignment? | - | 内容区域的水平方向对齐方式。 未传时依次回退：`TFormThemeData.contentAlignment`（Form 级通用默认值）、 `TFormItemContentAlignment.start`；影响字段控件、help 和 error 的 外部位置，不影响输入文本自身的对齐方式。 | 否 |
 | errorText | String? | - | 错误文案。 未传时自动使用最近 `TFormField` 的校验错误。 | 否 |
 | extra | Widget? | - | 表单项尾部的额外内容。 该插槽不会被附加内边距、位移或固定尺寸。 | 否 |
 | help | String? | - | 辅助说明文案。 | 否 |
@@ -263,6 +263,7 @@
 | 名称 | 类型 | 默认值 | 说明 | 必传 |
 | --- | --- | --- | --- | --- |
 | start | TFormItemContentAlignment | - | 内容靠起始侧对齐。 | - |
+| center | TFormItemContentAlignment | - | 内容水平居中对齐。 | - |
 | end | TFormItemContentAlignment | - | 内容靠结束侧对齐。 | - |
 
 
@@ -310,6 +311,7 @@ TForm 组件级 ThemeExtension。
 | --- | --- | --- | --- | --- |
 | backgroundColor | Color? | - | 表单及表单项背景色。 null 时使用 bgColorContainer Token。 | 否 |
 | borderColor | Color? | - | 表单项底部分隔线颜色。 null 时使用 componentStroke Token。 | 否 |
+| contentAlignment | TFormItemContentAlignment? | - | 内容区域的水平方向对齐方式，作为表单项的通用默认值。 表单项显式传入自身的 contentAlignment 时以表单项为准； 未配置时为 TFormItemContentAlignment.start。 | 否 |
 | errorStyle | TextStyle? | - | 错误文案样式。 | 否 |
 | helpStyle | TextStyle? | - | 辅助说明样式。 | 否 |
 | itemPadding | EdgeInsetsGeometry? | - | 表单项内边距。 未配置时左右为 16 逻辑像素；水平布局上下为 14，垂直布局上下为 16。 | 否 |

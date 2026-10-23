@@ -2154,7 +2154,7 @@ void main() {
               ),
             ],
           ),
-          formTheme: TFormThemeData(
+          formTheme: const TFormThemeData(
             contentAlignment: TFormItemContentAlignment.end,
           ),
         ),
@@ -2203,6 +2203,124 @@ void main() {
       final rateRect = tester.getRect(find.byKey(rateKey));
       expect(stepperRect.center.dx, 248);
       expect(rateRect.center.dx, 248);
+    });
+
+    testWidgets('center alignment mirrors correctly in RTL', (tester) async {
+      const fieldKey = Key('rtl-centered-field');
+      await tester.pumpWidget(
+        wrap(
+          const Directionality(
+            textDirection: TextDirection.rtl,
+            child: TFormItem(
+              label: '标签',
+              help: '帮助',
+              contentAlignment: TFormItemContentAlignment.center,
+              child: SizedBox(key: fieldKey, width: 40, height: 24),
+            ),
+          ),
+        ),
+      );
+
+      // RTL 下标签在右侧，内容区为 [16, 288)，中心 dx = 152。
+      final fieldRect = tester.getRect(find.byKey(fieldKey));
+      final helpRect = tester.getRect(find.text('帮助'));
+      expect(fieldRect.center.dx, 152);
+      expect(helpRect.center.dx, 152);
+    });
+
+    testWidgets('center alignment applies to error text', (tester) async {
+      const fieldKey = Key('error-centered-field');
+      await tester.pumpWidget(
+        wrap(
+          const TFormItem(
+            label: 'Label',
+            errorText: '错误提示',
+            contentAlignment: TFormItemContentAlignment.center,
+            child: SizedBox(key: fieldKey, width: 40, height: 24),
+          ),
+        ),
+      );
+
+      final fieldRect = tester.getRect(find.byKey(fieldKey));
+      final errorRect = tester.getRect(find.text('错误提示'));
+      expect(fieldRect.center.dx, 248);
+      expect(errorRect.center.dx, 248);
+    });
+
+    testWidgets('center alignment works in vertical layout', (tester) async {
+      const fieldKey = Key('vertical-centered-field');
+      await tester.pumpWidget(
+        wrap(
+          const TFormItem(
+            label: '标签',
+            contentAlignment: TFormItemContentAlignment.center,
+            child: SizedBox(key: fieldKey, width: 40, height: 24),
+          ),
+          formTheme: const TFormThemeData(layout: TFormLayout.vertical),
+        ),
+      );
+
+      // 竖向布局内容区为 [16, 384)，中心 dx = 200。
+      expect(tester.getRect(find.byKey(fieldKey)).center.dx, 200);
+    });
+
+    testWidgets('default start alignment renders without Align wrapper', (
+      tester,
+    ) async {
+      // 兼容验证：未传 contentAlignment 且 Form 未配置时，
+      // 行为与旧版本一致（字段贴内容区起始侧，几何位置不变）。
+      const fieldKey = Key('legacy-start-field');
+      await tester.pumpWidget(
+        wrap(
+          const TFormItem(
+            label: '标签',
+            child: SizedBox(key: fieldKey, width: 40, height: 24),
+          ),
+        ),
+      );
+
+      expect(tester.getRect(find.byKey(fieldKey)).left, 112);
+    });
+
+    testWidgets('theme lerp switches contentAlignment at midpoint', (
+      tester,
+    ) async {
+      // 验证 Form 级 contentAlignment 切换时的布局语义：
+      // start 沿用上游既有行为（无 Align 包裹，Column.stretch 下子组件铺满内容区），
+      // center 生效后由 Align 约束子组件按自身尺寸水平居中。
+      await tester.pumpWidget(
+        wrap(
+          const TFormItem(
+            label: '标签',
+            child: SizedBox(key: Key('lerp-field'), width: 40, height: 24),
+          ),
+          formTheme: const TFormThemeData(
+            contentAlignment: TFormItemContentAlignment.start,
+          ),
+        ),
+      );
+      // start：无 Align 约束，子组件被拉伸铺满内容区 [112, 384]。
+      final startRect = tester.getRect(find.byKey(const Key('lerp-field')));
+      expect(startRect.left, 112);
+      expect(startRect.right, 384);
+
+      // 更换 Form 级默认为 center：wrap 直接替换 ThemeData 扩展，首帧生效。
+      await tester.pumpWidget(
+        wrap(
+          const TFormItem(
+            label: '标签',
+            child: SizedBox(key: Key('lerp-field'), width: 40, height: 24),
+          ),
+          formTheme: const TFormThemeData(
+            contentAlignment: TFormItemContentAlignment.center,
+          ),
+        ),
+      );
+      await tester.pumpAndSettle();
+      // center：Align 约束子组件自身尺寸并水平居中（中心 = (112+384)/2 = 248）。
+      final centerRect = tester.getRect(find.byKey(const Key('lerp-field')));
+      expect(centerRect.width, 40);
+      expect(centerRect.center.dx, 248);
     });
 
     testWidgets('physical and directional label alignments differ in RTL', (
