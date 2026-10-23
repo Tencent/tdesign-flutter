@@ -1,0 +1,62 @@
+name: auto-publish
+
+on:
+  push:
+    tags:
+      - "*"
+
+jobs:
+  publish-pub:
+    permissions:
+      contents: read
+      id-token: write
+    environment:
+      name: pub.dev
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+
+      - name: Validate release version
+        working-directory: ./tdesign-component
+        env:
+          RELEASE_TAG: ${{ github.ref_name }}
+        run: |
+          VERSION=$(sed -nE 's/^version:[[:space:]]*([^[:space:]#]+).*$/\1/p' pubspec.yaml)
+          if [ -z "$VERSION" ] || [ "$RELEASE_TAG" != "$VERSION" ]; then
+            echo "::error::Tag $RELEASE_TAG does not match pubspec.yaml version $VERSION"
+            exit 1
+          fi
+
+      - uses: flutter-actions/setup-flutter@v4
+        with:
+          channel: stable
+          version: 3.32.0
+
+      - uses: flutter-actions/setup-pubdev-credentials@v1
+
+      - name: install
+        working-directory: ./tdesign-component
+        run: flutter pub get
+
+      - name: publish
+        working-directory: ./tdesign-component
+        run: flutter pub publish --force
+
+  publish-official-website:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          ref: main
+          fetch-depth: 0
+          token: ${{ secrets.TDESIGN_BOT_TOKEN }}
+          submodules: recursive
+
+      - name: update official website
+        run: |
+          git config --local user.email "github-actions[bot]@users.noreply.github.com"
+          git config --local user.name "github-actions[bot]"
+          git status
+          git fetch origin
+          git merge origin/develop
+          git push origin main
