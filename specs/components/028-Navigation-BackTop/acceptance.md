@@ -50,3 +50,7 @@
 ### 回调文档统一中文
 
 基于候选 `6ccb9900a67d43e2c33826ae003aa8efc9c578d6`，将 onPressed/onCompleted 的说明统一为中文，保留全部触发条件、完成时绑定检查、调用顺序及 2.0 迁移计划。去除 dartdoc 后生产代码逐字一致。Flutter 3.32.0 / 3.47.7 文档生成及一致性检查通过，BackTop API 产物相同；字体覆盖相关测试 run_visual_regression_test.dart 两版各 14 项通过。没有修改字体清单、字体资源、测试规则或运行行为；新提交完整 CI 由远端执行，本记录不代替其结果。日志见工作区外层 publication/pr1193-cn-doc-*.log。
+
+### 回调注释精简检查
+
+基于候选 `fe1c15e284bba8f0ac3b500d9df90535a6351542` 按已确认版本精简两个回调的中文说明，仅保留关键使用契约与 2.0 计划。执行代码及 spec.md 的边界说明原文均未改变。Flutter 3.32.0 / 3.47.7 的 API 生成和一致性检查通过，BackTop 生成内容相同；字体覆盖相关测试两版各 14 项通过。原始日志见工作区外层 publication/pr1193-concise-doc-*.log。未重复运行功能测试或 Golden，新提交完整 CI 由远端执行。
