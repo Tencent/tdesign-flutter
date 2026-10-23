@@ -1,0 +1,256 @@
+{
+  "validation_date": "2026-10-23",
+  "platform": "macOS arm64; headless Chrome; Flutter Web release",
+  "candidate": "4b602f62966933dbc774a92a625349c6d6d6ea6e",
+  "baseline_form_source": "02282342fdeb0b47ca81dc95bff1cd4156dc38b9",
+  "isolation": "Identical candidate package sources and host per SDK; replace only t_form.dart with baseline or candidate source; dependency lock unchanged within each SDK.",
+  "build_command": "flutter build web --release --no-pub --no-web-resources-cdn --pwa-strategy=none",
+  "execution": "Run each compiled release in an isolated headless Chrome session; wait for explicit completion through Chrome DevTools Protocol.",
+  "release_verified": true,
+  "assertions_enabled": false,
+  "release_builds_executed": 4,
+  "checks_per_build": 215,
+  "binding_snapshots_per_build": 28,
+  "framework_errors": [],
+  "before_after_and_cross_sdk_results_identical": true,
+  "binding_snapshots": [
+    {
+      "step": "duplicate.initial",
+      "owner": "B",
+      "validate": true,
+      "submit": true
+    },
+    {
+      "step": "duplicate.remove_stale",
+      "owner": "B",
+      "validate": true,
+      "submit": true
+    },
+    {
+      "step": "duplicate.remove_latest",
+      "owner": null,
+      "validate": false,
+      "submit": false
+    },
+    {
+      "step": "latest_removed.no_restore",
+      "owner": null,
+      "validate": false,
+      "submit": false
+    },
+    {
+      "step": "latest_removed.same_controller_rebuild",
+      "owner": null,
+      "validate": false,
+      "submit": false
+    },
+    {
+      "step": "latest_removed.explicit_rebind",
+      "owner": "A",
+      "validate": true,
+      "submit": true
+    },
+    {
+      "step": "latest_removed.cleanup",
+      "owner": null,
+      "validate": false,
+      "submit": false
+    },
+    {
+      "step": "valid.initial",
+      "owner": "A",
+      "validate": true,
+      "submit": true
+    },
+    {
+      "step": "valid.identical",
+      "owner": "A",
+      "validate": true,
+      "submit": true
+    },
+    {
+      "step": "valid.old_released",
+      "owner": null,
+      "validate": false,
+      "submit": false
+    },
+    {
+      "step": "valid.new_attached",
+      "owner": "A",
+      "validate": true,
+      "submit": true
+    },
+    {
+      "step": "valid.to_null",
+      "owner": null,
+      "validate": false,
+      "submit": false
+    },
+    {
+      "step": "valid.from_null",
+      "owner": "A",
+      "validate": true,
+      "submit": true
+    },
+    {
+      "step": "valid.cleanup",
+      "owner": null,
+      "validate": false,
+      "submit": false
+    },
+    {
+      "step": "occupied.old_released",
+      "owner": null,
+      "validate": false,
+      "submit": false
+    },
+    {
+      "step": "occupied.last_wins",
+      "owner": "B",
+      "validate": true,
+      "submit": true
+    },
+    {
+      "step": "occupied.repeat",
+      "owner": "B",
+      "validate": true,
+      "submit": true
+    },
+    {
+      "step": "occupied.remove_stale",
+      "owner": "B",
+      "validate": true,
+      "submit": true
+    },
+    {
+      "step": "occupied.cleanup",
+      "owner": null,
+      "validate": false,
+      "submit": false
+    },
+    {
+      "step": "stale_replace.latest_preserved",
+      "owner": "B",
+      "validate": true,
+      "submit": true
+    },
+    {
+      "step": "stale_replace.new_attached",
+      "owner": "A",
+      "validate": true,
+      "submit": true
+    },
+    {
+      "step": "stale_replace.latest_unmounted",
+      "owner": null,
+      "validate": false,
+      "submit": false
+    },
+    {
+      "step": "stale_replace.other_preserved",
+      "owner": "A",
+      "validate": true,
+      "submit": true
+    },
+    {
+      "step": "stale_replace.cleanup",
+      "owner": null,
+      "validate": false,
+      "submit": false
+    },
+    {
+      "step": "swap.first",
+      "owner": "B",
+      "validate": true,
+      "submit": true
+    },
+    {
+      "step": "swap.second",
+      "owner": "A",
+      "validate": true,
+      "submit": true
+    },
+    {
+      "step": "swap.first_cleanup",
+      "owner": null,
+      "validate": false,
+      "submit": false
+    },
+    {
+      "step": "swap.second_cleanup",
+      "owner": null,
+      "validate": false,
+      "submit": false
+    }
+  ],
+  "versions": {
+    "3.32.0": {
+      "identical": true,
+      "checks_per_implementation": 215,
+      "binding_snapshots_per_implementation": 28,
+      "release": true,
+      "assertionsEnabled": false,
+      "metadata": {
+        "sdk": "3.32.0",
+        "candidate": "4b602f62966933dbc774a92a625349c6d6d6ea6e",
+        "baseline": "02282342fdeb0b47ca81dc95bff1cd4156dc38b9",
+        "isolation": "same package source, host and dependencies; replace only t_form.dart with pre-PR or current implementation",
+        "source_sha256": {
+          "before": "b6985f3e443c16432919c329b2941bc8a74b56b4f836c007698f25bc65c1f3f4",
+          "after": "132ffe96ef477fcd8dbea52730a933611d932221c32abead4d684c9abd33f9a0"
+        },
+        "host_sha256": "2e908faf4c8ba70b548ada4576157306252cf72dc87a5773539cd71f04b5d4a6",
+        "lock_sha256": "57584cf7e7a71b5309739fad58a1efaac44d0cb5e0d2334521b66063cf04f737"
+      },
+      "log_sha256": {
+        "before-build.log": "3d1edc3a88b0dbc910fe32abd781b39eb7ac8822ad960987b52a539c0a468fa8",
+        "pub-get.log": "e360387e127274bb31ee13fa6f62f643046d89881f1c2c0c7b7004156d81bfbe",
+        "before-chrome.log": "b2c0045a55994bbd86094affbeeeadd558353a4ed34f02f673841ccf3237fa72",
+        "after-chrome.log": "29754c9016a1020e4f88875766da7d10b3e2811c0b12c9ec50cc75bba6e98e6b",
+        "sdk.log": "a1b002ef5662a6de7a8910e0c0fee594d1ebc7e335014dda114fe1658ea12a12",
+        "after-build.log": "3d1edc3a88b0dbc910fe32abd781b39eb7ac8822ad960987b52a539c0a468fa8"
+      },
+      "result_sha256": {
+        "before": "f2ca6a8b671ace102350a7d21fc242a7c58eab478bff399d09dfcfea41b75454",
+        "after": "f2ca6a8b671ace102350a7d21fc242a7c58eab478bff399d09dfcfea41b75454"
+      }
+    },
+    "3.47.7": {
+      "identical": true,
+      "checks_per_implementation": 215,
+      "binding_snapshots_per_implementation": 28,
+      "release": true,
+      "assertionsEnabled": false,
+      "metadata": {
+        "sdk": "3.47.7",
+        "candidate": "4b602f62966933dbc774a92a625349c6d6d6ea6e",
+        "baseline": "02282342fdeb0b47ca81dc95bff1cd4156dc38b9",
+        "isolation": "same package source, host and dependencies; replace only t_form.dart with pre-PR or current implementation",
+        "source_sha256": {
+          "before": "b6985f3e443c16432919c329b2941bc8a74b56b4f836c007698f25bc65c1f3f4",
+          "after": "132ffe96ef477fcd8dbea52730a933611d932221c32abead4d684c9abd33f9a0"
+        },
+        "host_sha256": "2e908faf4c8ba70b548ada4576157306252cf72dc87a5773539cd71f04b5d4a6",
+        "lock_sha256": "6b7f42aa6cca21da95fbb786296fd92aea264a159dc653740662239f322e3232"
+      },
+      "log_sha256": {
+        "before-build.log": "e6f373c4f776971b10d8399a886d3548a23286d09f4747b2232f8adf4adebb24",
+        "pub-get.log": "9d9a47e390d0871588dc05933b13c4644bbdcbf7a5a7e2a1e4d983300aa9df70",
+        "before-chrome.log": "b8037a059528dbefde2883d14cc565f6fca24ac8ec47f19c4e98a939c020836a",
+        "after-chrome.log": "d2001115b9470cba82b39875b40d67790d548c8764660b48a918b8f20e736502",
+        "sdk.log": "7da1fa9f0d23102495171cfa222c8d31b4a60776c3c003858d35b8f3befe281d",
+        "after-build.log": "89490d56b9aaa66720dab0e155daffc3ce7adbabff118a778c707bf8c66c26c1"
+      },
+      "result_sha256": {
+        "before": "f2ca6a8b671ace102350a7d21fc242a7c58eab478bff399d09dfcfea41b75454",
+        "after": "f2ca6a8b671ace102350a7d21fc242a7c58eab478bff399d09dfcfea41b75454"
+      }
+    }
+  },
+  "local_artifact_directory": "artifacts/pr1191-form-release/",
+  "host_source_sha256": "2e908faf4c8ba70b548ada4576157306252cf72dc87a5773539cd71f04b5d4a6",
+  "runner_sha256": "b1cfac67901cc8727501621d694fb204278aea55072a610a39756a54c48ef81d",
+  "browser_collector_sha256": "53f1f5eb88c55047d424990c33936f1d1ab317b64d2ca6557f460eb21366b3cd",
+  "scope_limit": "Only actual Web release execution is validated. Android/iOS physical-device release runtime is not validated; build-only CI is not runtime proof.",
+  "ci_registration": "This is a separate local release compatibility experiment, not a flutter_test suite or a new CI job."
+}

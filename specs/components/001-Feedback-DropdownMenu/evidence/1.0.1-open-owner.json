@@ -1,0 +1,244 @@
+{
+  "validation_parent": "d14e72200bff76a38bc3b3590d4a999bd6098097",
+  "platform": "macOS arm64",
+  "files": [
+    "tdesign-component/lib/src/components/dropdown_menu/t_dropdown_menu.dart",
+    "tdesign-component/lib/src/components/form/t_form.dart",
+    "tdesign-component/lib/src/components/refresh/t_pull_down_refresh.dart",
+    "tdesign-component/lib/src/components/swipe_cell/t_swipe_cell.dart",
+    "tdesign-component/lib/src/components/swiper/t_swiper.dart",
+    "tdesign-component/test/components/dropdown_menu/t_dropdown_menu_test.dart",
+    "tdesign-component/test/components/form/t_form_test.dart",
+    "tdesign-component/test/components/refresh/t_refresh_test.dart",
+    "tdesign-component/test/components/swipe_cell/t_swipe_cell_test.dart",
+    "tdesign-component/test/components/swiper/t_swiper_test.dart"
+  ],
+  "path_nul_bytes_sha256": "51e110dfdc32cca869a852bc1a0c7ba55269580b28a0725af270ba95d9d44c14",
+  "binary_diff_from_parent_sha256": "129a3f859886bc191bed8b00f19a0528273196ad1548638f2085a036a9d10fe9",
+  "low_high_inputs_identical": true,
+  "production_and_generated_api_changes": "none since validation parent",
+  "component_tests_per_sdk": 288,
+  "scope": "8 manifest component test files; full component package strict analyze; five component production coverage gates",
+  "not_rerun": "Example, generator, scheduler and Golden checks; no changes to their inputs or registrations in this update",
+  "historical_shared_state_issue": "https://github.com/Tencent/tdesign-flutter/issues/1195",
+  "verification": {
+    "low": {
+      "sdk": "Flutter 3.32.0 • channel stable • https://github.com/flutter/flutter.git\nFramework • revision be698c48a6 (1 year, 5 months ago) • 2025-05-19 12:59:14 -0700\nEngine • revision 1881800949 (1 year, 5 months ago) • 2025-05-19 10:54:07 -0700\nTools • Dart 3.8.0 • DevTools 2.45.1",
+      "commands": [
+        {
+          "name": "sdk",
+          "command": [
+            "/Users/rs/fvm/versions/3.32.0/bin/flutter",
+            "--version"
+          ],
+          "exit_code": 0,
+          "log_sha256": "a1b002ef5662a6de7a8910e0c0fee594d1ebc7e335014dda114fe1658ea12a12"
+        },
+        {
+          "name": "components",
+          "command": [
+            "/Users/rs/fvm/versions/3.32.0/bin/flutter",
+            "test",
+            "--no-pub",
+            "--coverage",
+            "--reporter",
+            "expanded",
+            "test/components/dropdown_menu/t_dropdown_item_test.dart",
+            "test/components/dropdown_menu/t_dropdown_menu_test.dart",
+            "test/components/form/t_form_test.dart",
+            "test/components/refresh/t_refresh_test.dart",
+            "test/components/swipe_cell/t_swipe_cell_auto_extent_test.dart",
+            "test/components/swipe_cell/t_swipe_cell_inherited_test.dart",
+            "test/components/swipe_cell/t_swipe_cell_test.dart",
+            "test/components/swiper/t_swiper_test.dart"
+          ],
+          "exit_code": 0,
+          "log_sha256": "b133c411963b6a27950f5eac13d4d5bb3af5e31564120631809526f9e04e6b7b"
+        },
+        {
+          "name": "analyze",
+          "command": [
+            "/Users/rs/fvm/versions/3.32.0/bin/flutter",
+            "analyze",
+            "--no-pub",
+            "--fatal-infos"
+          ],
+          "exit_code": 0,
+          "log_sha256": "4183ed291a513f808c73f605ba8c638f1c5179be30cf5aa7ae644b655ac911ec"
+        },
+        {
+          "name": "coverage-dropdown_menu",
+          "command": [
+            "/Users/rs/fvm/versions/3.32.0/bin/dart",
+            "run",
+            "tool/check_component_coverage.dart",
+            "dropdown_menu"
+          ],
+          "exit_code": 0,
+          "log_sha256": "4cd9b92434f12e52526e69c47221deb8b2de9dfe1424878d449c039bbd2eda33"
+        },
+        {
+          "name": "coverage-form",
+          "command": [
+            "/Users/rs/fvm/versions/3.32.0/bin/dart",
+            "run",
+            "tool/check_component_coverage.dart",
+            "form"
+          ],
+          "exit_code": 0,
+          "log_sha256": "1aab15da88f2dac121c6899180aaaf7baa1e36d16fc70c098bea31b6f6cda46e"
+        },
+        {
+          "name": "coverage-refresh",
+          "command": [
+            "/Users/rs/fvm/versions/3.32.0/bin/dart",
+            "run",
+            "tool/check_component_coverage.dart",
+            "refresh"
+          ],
+          "exit_code": 0,
+          "log_sha256": "8fc67904f4deb8a4dd185e6421b5b1cbe14914a399313a285f6bb709e6343eb9"
+        },
+        {
+          "name": "coverage-swipe_cell",
+          "command": [
+            "/Users/rs/fvm/versions/3.32.0/bin/dart",
+            "run",
+            "tool/check_component_coverage.dart",
+            "swipe_cell"
+          ],
+          "exit_code": 0,
+          "log_sha256": "21aecef0a49f6d6cf1048d79951fe2dcaace76a08b4220622a51b85b0ee3cc0f"
+        },
+        {
+          "name": "coverage-swiper",
+          "command": [
+            "/Users/rs/fvm/versions/3.32.0/bin/dart",
+            "run",
+            "tool/check_component_coverage.dart",
+            "swiper"
+          ],
+          "exit_code": 0,
+          "log_sha256": "3af2c7b3ceb9a0bfc455b965e84ce02eca689f58b7378d44e2b38b4335d848b4"
+        }
+      ],
+      "dependency_lock_sha256": "7deb49a80a8288c84280257591090c14c5fa1db08f8aabad6233b51a8a6e4d92",
+      "coverage": {
+        "dropdown_menu": "dropdown_menu matched files:\n  - lib/src/components/dropdown_menu/t_dropdown_item.dart\n  - lib/src/components/dropdown_menu/t_dropdown_menu.dart\n  - lib/src/components/dropdown_menu/t_dropdown_theme_data.dart\ndropdown_menu production LH/LF = 1014/1022 = 99.22%",
+        "form": "form matched files:\n  - lib/src/components/form/t_field_scope.dart\n  - lib/src/components/form/t_form.dart\n  - lib/src/components/form/t_form_theme_data.dart\n  - lib/src/components/form/t_form_item.dart\n  - lib/src/components/form/t_form_item_scope.dart\nform production LH/LF = 384/389 = 98.71%",
+        "refresh": "refresh matched files:\n  - lib/src/components/refresh/t_pull_down_refresh.dart\n  - lib/src/components/refresh/t_pull_down_refresh_controller.dart\n  - lib/src/components/refresh/t_pull_down_refresh_texts.dart\nrefresh production LH/LF = 215/224 = 95.98%",
+        "swipe_cell": "swipe_cell matched files:\n  - lib/src/components/swipe_cell/t_swipe_cell.dart\n  - lib/src/components/swipe_cell/t_swipe_cell_inherited.dart\n  - lib/src/components/swipe_cell/t_swipe_cell_panel.dart\n  - lib/src/components/swipe_cell/t_swipe_cell_action.dart\n  - lib/src/components/swipe_cell/t_swipe_cell_theme_data.dart\nswipe_cell production LH/LF = 304/315 = 96.51%",
+        "swiper": "swiper matched files:\n  - lib/src/components/swiper/t_swiper.dart\n  - lib/src/components/swiper/t_swiper_types.dart\n  - lib/src/components/swiper/t_swiper_theme_data.dart\nswiper production LH/LF = 534/550 = 97.09%"
+      }
+    },
+    "high": {
+      "sdk": "Flutter 3.47.7 • channel stable • https://github.com/flutter/flutter.git\nFramework • revision abaf9c5237 (2 weeks ago) • 2026-10-08 09:51:21 -0700\nEngine • hash d8a2d6c768c334d53e16277f837970ffa1e2de81 (revision deb287481e) (15 days ago) • 2026-10-07 17:09:12.000Z\nTools • Dart 3.13.5 • DevTools 2.60.0",
+      "commands": [
+        {
+          "name": "sdk",
+          "command": [
+            "/Users/rs/fvm/versions/3.47.7/bin/flutter",
+            "--version"
+          ],
+          "exit_code": 0,
+          "log_sha256": "7da1fa9f0d23102495171cfa222c8d31b4a60776c3c003858d35b8f3befe281d"
+        },
+        {
+          "name": "components",
+          "command": [
+            "/Users/rs/fvm/versions/3.47.7/bin/flutter",
+            "test",
+            "--no-pub",
+            "--coverage",
+            "--reporter",
+            "expanded",
+            "test/components/dropdown_menu/t_dropdown_item_test.dart",
+            "test/components/dropdown_menu/t_dropdown_menu_test.dart",
+            "test/components/form/t_form_test.dart",
+            "test/components/refresh/t_refresh_test.dart",
+            "test/components/swipe_cell/t_swipe_cell_auto_extent_test.dart",
+            "test/components/swipe_cell/t_swipe_cell_inherited_test.dart",
+            "test/components/swipe_cell/t_swipe_cell_test.dart",
+            "test/components/swiper/t_swiper_test.dart"
+          ],
+          "exit_code": 0,
+          "log_sha256": "333bd85d300f89f5dd06fe7f988b481237dd2a70ea4a94baf6b0da7e2902debe"
+        },
+        {
+          "name": "analyze",
+          "command": [
+            "/Users/rs/fvm/versions/3.47.7/bin/flutter",
+            "analyze",
+            "--no-pub",
+            "--fatal-infos"
+          ],
+          "exit_code": 0,
+          "log_sha256": "783ee4a61806664fb703781d7c3d94cb61bfae5107e30ba1723c2c12b1f97d85"
+        },
+        {
+          "name": "coverage-dropdown_menu",
+          "command": [
+            "/Users/rs/fvm/versions/3.47.7/bin/dart",
+            "run",
+            "tool/check_component_coverage.dart",
+            "dropdown_menu"
+          ],
+          "exit_code": 0,
+          "log_sha256": "4cd9b92434f12e52526e69c47221deb8b2de9dfe1424878d449c039bbd2eda33"
+        },
+        {
+          "name": "coverage-form",
+          "command": [
+            "/Users/rs/fvm/versions/3.47.7/bin/dart",
+            "run",
+            "tool/check_component_coverage.dart",
+            "form"
+          ],
+          "exit_code": 0,
+          "log_sha256": "1aab15da88f2dac121c6899180aaaf7baa1e36d16fc70c098bea31b6f6cda46e"
+        },
+        {
+          "name": "coverage-refresh",
+          "command": [
+            "/Users/rs/fvm/versions/3.47.7/bin/dart",
+            "run",
+            "tool/check_component_coverage.dart",
+            "refresh"
+          ],
+          "exit_code": 0,
+          "log_sha256": "8fc67904f4deb8a4dd185e6421b5b1cbe14914a399313a285f6bb709e6343eb9"
+        },
+        {
+          "name": "coverage-swipe_cell",
+          "command": [
+            "/Users/rs/fvm/versions/3.47.7/bin/dart",
+            "run",
+            "tool/check_component_coverage.dart",
+            "swipe_cell"
+          ],
+          "exit_code": 0,
+          "log_sha256": "21aecef0a49f6d6cf1048d79951fe2dcaace76a08b4220622a51b85b0ee3cc0f"
+        },
+        {
+          "name": "coverage-swiper",
+          "command": [
+            "/Users/rs/fvm/versions/3.47.7/bin/dart",
+            "run",
+            "tool/check_component_coverage.dart",
+            "swiper"
+          ],
+          "exit_code": 0,
+          "log_sha256": "3af2c7b3ceb9a0bfc455b965e84ce02eca689f58b7378d44e2b38b4335d848b4"
+        }
+      ],
+      "dependency_lock_sha256": "f4fcd8d10e1ba7d89670e87509f87a6c0d359ceffd83dff9bf8ac58cc8ad59c2",
+      "coverage": {
+        "dropdown_menu": "dropdown_menu matched files:\n  - lib/src/components/dropdown_menu/t_dropdown_item.dart\n  - lib/src/components/dropdown_menu/t_dropdown_menu.dart\n  - lib/src/components/dropdown_menu/t_dropdown_theme_data.dart\ndropdown_menu production LH/LF = 1014/1022 = 99.22%",
+        "form": "form matched files:\n  - lib/src/components/form/t_field_scope.dart\n  - lib/src/components/form/t_form.dart\n  - lib/src/components/form/t_form_theme_data.dart\n  - lib/src/components/form/t_form_item.dart\n  - lib/src/components/form/t_form_item_scope.dart\nform production LH/LF = 384/389 = 98.71%",
+        "refresh": "refresh matched files:\n  - lib/src/components/refresh/t_pull_down_refresh.dart\n  - lib/src/components/refresh/t_pull_down_refresh_controller.dart\n  - lib/src/components/refresh/t_pull_down_refresh_texts.dart\nrefresh production LH/LF = 215/224 = 95.98%",
+        "swipe_cell": "swipe_cell matched files:\n  - lib/src/components/swipe_cell/t_swipe_cell.dart\n  - lib/src/components/swipe_cell/t_swipe_cell_inherited.dart\n  - lib/src/components/swipe_cell/t_swipe_cell_panel.dart\n  - lib/src/components/swipe_cell/t_swipe_cell_action.dart\n  - lib/src/components/swipe_cell/t_swipe_cell_theme_data.dart\nswipe_cell production LH/LF = 304/315 = 96.51%",
+        "swiper": "swiper matched files:\n  - lib/src/components/swiper/t_swiper.dart\n  - lib/src/components/swiper/t_swiper_types.dart\n  - lib/src/components/swiper/t_swiper_theme_data.dart\nswiper production LH/LF = 534/550 = 97.09%"
+      }
+    }
+  }
+}

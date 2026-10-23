@@ -47,6 +47,7 @@ class TPullDownRefresh extends StatefulWidget {
   final double lowerThreshold;
 
   /// 外部主动刷新控制器。
+  /// 建议独立刷新组件分别使用 Controller；绑定规则见 [TPullDownRefreshController]。
   ///
   /// 通过 [TPullDownRefreshController.refresh] 从页面外部触发刷新。刷新完成时机
   /// 由 [onRefresh] 返回的 Future、异常或 [refreshTimeout] 共同决定；超时后
@@ -127,6 +128,23 @@ class _TPullDownRefreshState extends State<TPullDownRefresh> {
   Completer<void>? _activeRefresh;
   Completer<void>? _pendingExternalRefresh;
 
+  static final _controllerOwners = Expando<Object>();
+
+  void _bindController() {
+    final controller = widget.controller;
+    if (controller != null) {
+      controller.bind(_requestRefresh);
+      _controllerOwners[controller] = this;
+    }
+  }
+
+  void _unbindController(TPullDownRefreshController? controller) {
+    if (controller != null && identical(_controllerOwners[controller], this)) {
+      controller.unbind();
+      _controllerOwners[controller] = null;
+    }
+  }
+
   bool get _refreshEnabled => widget.onRefresh != null;
 
   bool get _loadMoreEnabled => widget.onLoadMore != null;
@@ -137,15 +155,15 @@ class _TPullDownRefreshState extends State<TPullDownRefresh> {
     assert(widget.refreshTimeout == null || !widget.refreshTimeout!.isNegative);
     super.initState();
     _easyController = EasyRefreshController(controlFinishRefresh: true);
-    widget.controller?.bind(_requestRefresh);
+    _bindController();
   }
 
   @override
   void didUpdateWidget(TPullDownRefresh oldWidget) {
     super.didUpdateWidget(oldWidget);
     if (oldWidget.controller != widget.controller) {
-      oldWidget.controller?.unbind();
-      widget.controller?.bind(_requestRefresh);
+      _unbindController(oldWidget.controller);
+      _bindController();
     }
   }
 
@@ -153,7 +171,7 @@ class _TPullDownRefreshState extends State<TPullDownRefresh> {
   void dispose() {
     _timeoutTimer?.cancel();
     _completeRefreshWaiters();
-    widget.controller?.unbind();
+    _unbindController(widget.controller);
     _easyController?.dispose();
     super.dispose();
   }

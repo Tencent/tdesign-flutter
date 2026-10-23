@@ -25,3 +25,12 @@
 未绑定唯一候选的结果不作为当前通过证明；旧命令与流水由Git历史追溯。
 
 当前待办见 [tasks.md](./tasks.md)；实际执行入口见[贡献规范](../../../CONTRIBUTING.md#组件测试与-ci-回归门禁)。清理不关闭未完成项。
+
+## 1.0.1 controller-binding 验收
+
+- 重复绑定仍抛 FlutterError；替换失败后原 Controller 可继续控制，卸载按实际绑定对象清理。
+- 本组公开 API 签名及默认值未变，不包含 API 别名或废弃迁移。
+- 原独立候选 `58cb2736`：Flutter 3.32.0 / 3.47.7 的本组件生产覆盖率均为 304/315 = 96.51%；原始结果见[验证数据](../001-Feedback-DropdownMenu/evidence/1.0.1-independent.json)。
+- 整组验证环境、命令、指纹及本次补充回归结果统一记录在 [DropdownMenu 验收记录](../001-Feedback-DropdownMenu/acceptance.md#controller-binding-validation)，不以原候选结果替代新候选验证。
+
+中文 API 注释及生成文档已补充推荐用法与原有绑定规则；本轮文档、字体覆盖及静态分析结果见[整组验收](../001-Feedback-DropdownMenu/acceptance.md#controller-api-doc-validation)，不改变实现或既有绑定限制。

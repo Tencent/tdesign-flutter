@@ -1,0 +1,119 @@
+{
+  "base": "071efaba0111d868efe0b6a7ce55f6f784069a62",
+  "branch": "rss1102/feat/backtop-completed-1.0.1",
+  "code_test_api_files": [
+    "tdesign-component/example/assets/api/back-top_api.md",
+    "tdesign-component/lib/src/components/backtop/t_backtop.dart",
+    "tdesign-component/test/components/backtop/t_backtop_test.dart"
+  ],
+  "code_test_api_path_nul_bytes_sha256": "07f22f96192a3f014bf924cf7e971ec4bed9c43ac906e76b980949a9916220dd",
+  "code_test_api_binary_diff_sha256": "f2ae5e9659ca290448790be2b62423ebcf462a0fa2f4f9c2e29e1199cc7dfba3",
+  "low_high_inputs_identical": true,
+  "verification": {
+    "low": {
+      "sdk": "Flutter 3.32.0 • channel stable • https://github.com/flutter/flutter.git\nFramework • revision be698c48a6 (1 year, 5 months ago) • 2025-05-19 12:59:14 -0700\nEngine • revision 1881800949 (1 year, 5 months ago) • 2025-05-19 10:54:07 -0700\nTools • Dart 3.8.0 • DevTools 2.45.1",
+      "scope": {
+        "components": [
+          "backtop"
+        ],
+        "component_tests": [
+          "test/components/backtop/t_backtop_test.dart",
+          "test/components/backtop/t_backtop_theme_test.dart",
+          "test/components/backtop/t_backtop_widget_test.dart"
+        ],
+        "example_tests": [
+          "test/backtop/backtop_demo_test.dart"
+        ]
+      },
+      "component_tests_passed": 68,
+      "example_tests_passed": 3,
+      "runner_tests_passed": 30,
+      "analyze": "zero diagnostics",
+      "api_documents_checked": 57,
+      "snippets_check": "passed",
+      "coverage": {
+        "backtop": {
+          "hit": 263,
+          "found": 267,
+          "percent": 98.5
+        }
+      },
+      "dependency_lock_sha256": {
+        "tdesign-component/pubspec.lock": "7deb49a80a8288c84280257591090c14c5fa1db08f8aabad6233b51a8a6e4d92",
+        "tdesign-component/example/pubspec.lock": "696bf039762651eb175109f70e6cd4993e8cd40388b9ddc330005d1482a4e1c6"
+      },
+      "log_sha256": {
+        "analyze.log": "b01ec4d86ce662e79ed759c9ab24cd4866ecc7d94325e08488211e4d3fba5b01",
+        "api-check.log": "7978006dd67d354ec6c840b14283c4a057f2b38453df349ff9176e9da1a9a6d6",
+        "api-generate.log": "1eeb3d8c2ab9119677fbaf6dca792624ccd260d11696cf18dba6c071e9e53b39",
+        "components.log": "e2595a9cf69aa46ffbd0ec1c21250f3ce6ea2eb00f913d0c4c4bddeec9584986",
+        "coverage-backtop.log": "8ec8f7e3b8c5890c7eb7a22f5b9fad8b7e3f8b45b32e1483b67c3a3a7b69acd8",
+        "examples.log": "207dfe3374a2670a142a35f53524eede8bc6a7608b63d011677b31f2fa824945",
+        "pub-get-component.log": "0463a12f4fdbd1c3d4a2683c816c25e95c22d77ca8b3a6d54af873e3af3fda56",
+        "pub-get-example.log": "77894d05f73401bca14c0dc3be669cfd43d7ae8059b597f57efbacb6fb21e711",
+        "runners.log": "1252a56133197e4697bd7b6bd4414729ecad2750aa78942dae12b2e93c2beb24",
+        "sdk.log": "a1b002ef5662a6de7a8910e0c0fee594d1ebc7e335014dda114fe1658ea12a12",
+        "snippets.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    "high": {
+      "sdk": "Flutter 3.47.7 • channel stable • https://github.com/flutter/flutter.git\nFramework • revision abaf9c5237 (2 weeks ago) • 2026-10-08 09:51:21 -0700\nEngine • hash d8a2d6c768c334d53e16277f837970ffa1e2de81 (revision deb287481e) (15 days ago) • 2026-10-07 17:09:12.000Z\nTools • Dart 3.13.5 • DevTools 2.60.0",
+      "scope": {
+        "components": [
+          "backtop"
+        ],
+        "component_tests": [
+          "test/components/backtop/t_backtop_test.dart",
+          "test/components/backtop/t_backtop_theme_test.dart",
+          "test/components/backtop/t_backtop_widget_test.dart"
+        ],
+        "example_tests": [
+          "test/backtop/backtop_demo_test.dart"
+        ]
+      },
+      "component_tests_passed": 68,
+      "example_tests_passed": 3,
+      "runner_tests_passed": 30,
+      "analyze": "zero diagnostics",
+      "api_documents_checked": 57,
+      "snippets_check": "passed",
+      "coverage": {
+        "backtop": {
+          "hit": 263,
+          "found": 267,
+          "percent": 98.5
+        }
+      },
+      "dependency_lock_sha256": {
+        "tdesign-component/pubspec.lock": "f4fcd8d10e1ba7d89670e87509f87a6c0d359ceffd83dff9bf8ac58cc8ad59c2",
+        "tdesign-component/example/pubspec.lock": "2910a5cf161a20433ac683dbeaa348a85edaba7e6697cc9aba351519a16615a3"
+      },
+      "log_sha256": {
+        "analyze.log": "12300d72f63a892eda96c2bf6a0d8308f4466f3056b45da0f06169a8c0245805",
+        "api-check.log": "618b268fad8e09b4d4de2d900c3be1724e56e3769e269d1dab6ed1d323f8437b",
+        "api-generate.log": "a1073b7bd3ece5ce9f8e0790f0b77c5b9884862bfc494aa6615b5019bff33a5b",
+        "components.log": "e62a3d5a630f231f6dd03626f42506547f8be6a1dfa9c860ed89b708b2e4d687",
+        "coverage-backtop.log": "8ec8f7e3b8c5890c7eb7a22f5b9fad8b7e3f8b45b32e1483b67c3a3a7b69acd8",
+        "examples.log": "f7a76515cf97ff7e10bb1ac787592024178bfeababd72dbeef31ff9404d503e5",
+        "pub-get-component.log": "5e3ba87de4b282d4f1dd3d66dfcb10442f72bf2c07015bf36f60e4bad8d21bb9",
+        "pub-get-example.log": "fac5535739136823d4bc8acf20263a212d189bcf2b14b634c4e65d1663b50572",
+        "runners.log": "65e149a956da64b41fc61fc0256cd1f8b2d975288b6076d08e4cf66d4a9a625c",
+        "sdk.log": "7da1fa9f0d23102495171cfa222c8d31b4a60776c3c003858d35b8f3befe281d",
+        "snippets.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    }
+  },
+  "api_contract_review": [
+    {
+      "file": "tdesign-component/lib/src/components/backtop/t_backtop.dart",
+      "legacy_public_signatures_and_defaults": "unchanged",
+      "allowed_addition": "TBackTop.onCompleted optional callback only"
+    }
+  ],
+  "review": {
+    "result": "passed",
+    "blocking_findings": [],
+    "scope": "onCompleted 是唯一新增可选 API，用于表达旧 onPressed 无法保证的成功结果。旧 onPressed 不废弃，启用规则、无 Controller 即时通知与动画 Future 结束后通知不变。仅按完成时原 Controller/原位置/到顶/挂载状态判断；同帧、跨帧重绑及临时更换后恢复允许完成，完成时解绑/位置替换/中断/卸载拒绝。成功在旧回调副作用前记录，发送前重查身份；两项正式新增回归覆盖旧回调成功后解绑或替换位置。没有逐帧观察、历史计数、观察器或专用 Controller。"
+  },
+  "visual": "Nonvisual logic/callback/lifecycle changes. No Golden update or device validation. No remote CI."
+}

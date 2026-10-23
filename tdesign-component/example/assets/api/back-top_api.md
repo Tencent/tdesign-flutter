@@ -11,7 +11,8 @@
 | colorPreset | TBackTopColorPreset | TBackTopColorPreset.light | 局部配色预设，默认 `TBackTopColorPreset.light`；不切换全局明暗主题。 | 否 |
 | controller | ScrollController? | - | 页面滚动控制器。 未传时组件始终可见，点击只触发 `onPressed`；传入后组件监听滚动偏移并 在点击时以 500 毫秒、Curves.easeIn 动画回到该滚动位置的最小边界。 控制器由调用方创建和释放，组件只管理自己的滚动监听。 | 否 |
 | key | Key? | - | 组件标识，用于区分或保留组件状态。 | 否 |
-| onPressed | VoidCallback? | - | 回顶动画完成后的通知。 `null` 不表示禁用；只要提供 `controller`，组件仍可点击并执行回顶。 | 否 |
+| onCompleted | VoidCallback? | - | 配合 `controller` 使用，在本组件成功回顶后通知。 完成时，组件仍挂载，原滚动位置已到最小边界且仍绑定原控制器， 该控制器仍为当前 `controller`。 在 `onPressed` 之后通知，成功结果按 `onPressed` 执行前的状态判断。 | 否 |
+| onPressed | VoidCallback? | - | 点击后的通知。 未绑定滚动位置时立即触发；已绑定时，在回顶动画的 Future 结束后 触发，动画中断也可能通知。 计划在 2.0 统一为点击时触发，成功回顶通知使用 `onCompleted`。 `null` 不表示禁用；提供 `controller` 时仍可点击回顶。 | 否 |
 | shape | TBackTopShape | TBackTopShape.circle | 结构形态，默认 `TBackTopShape.circle`。 | 否 |
 | showText | bool | false | 是否显示设计内置文案。 圆形显示“顶部”，半圆形显示“返回/顶部”，文案来自当前资源代理。 | 否 |
 | tooltip | String? | - | 读屏和 Tooltip 提示；未传时使用当前资源代理的“返回顶部”。 | 否 |
