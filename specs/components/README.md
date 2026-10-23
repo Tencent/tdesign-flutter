@@ -2,7 +2,7 @@
 
 [返回总规范](../README.md) · [工程 Spec](../engineering/README.md)
 
-本目录收录 52 个组件目录。组件名保留规范大小写，目录采用 `<编号>-<组件分类>-<组件名>`；索引按组件英文名 A–Z 排序。
+本目录收录 53 个组件目录。组件名保留规范大小写，目录采用 `<编号>-<组件分类>-<组件名>`；索引按组件英文名 A–Z 排序。
 
 同组件只维护一套契约、方案、任务与验收主文档；共享契约通过交叉引用复用，不复制正文。编号不是契约优先级，也不代表验收状态。
 
@@ -15,6 +15,7 @@
 | [Button](009-Basic-Button/spec.md) | 基础 / Basic | [009 · Button 尺寸、形状与原生交互契约对齐](009-Basic-Button/spec.md#record-009-contract-alignment)<br>[037 · Button 禁用态与浅色描边对齐](009-Basic-Button/spec.md#record-037-disabled-theme-alignment)<br>[082 · 文案默认值](009-Basic-Button/spec.md#source-082) |
 | [Calendar](023-Input-Calendar/spec.md) | 输入 / Input | [023 · Calendar 平铺面板与 Figma Demo 对齐](023-Input-Calendar/spec.md) |
 | [Cascader](024-Input-Cascader/spec.md) | 输入 / Input | [024 · Cascader 公开 Demo 对齐](024-Input-Cascader/spec.md) |
+| [Cell](084-DataDisplay-Cell/spec.md) | 数据展示 / DataDisplay | [084 · CellGroup 高度约束与滚动边界](084-DataDisplay-Cell/spec.md) |
 | [Checkbox](015-Input-Checkbox/spec.md) | 输入 / Input | [015 · Checkbox Demo 与卡片角标对齐](015-Input-Checkbox/spec.md#record-015-demo-card-alignment)<br>[016 · Checkbox 样式尺寸 token 化](015-Input-Checkbox/spec.md#record-016-theme-token-sizes)<br>[041 · Checkbox 设计细节对齐](015-Input-Checkbox/spec.md#record-041-design-details) |
 | [Collapse](030-DataDisplay-Collapse/spec.md) | 数据展示 / DataDisplay | [030 · Collapse 设计对齐](030-DataDisplay-Collapse/spec.md) |
 | [DateTimePicker](025-Input-DateTimePicker/spec.md) | 输入 / Input | [025 · DateTimePicker 平铺滚轮与 Figma Demo 对齐](025-Input-DateTimePicker/spec.md#record-025-demo-alignment)<br>[056 · DateTimePicker 展示更新与滚动状态](025-Input-DateTimePicker/spec.md#record-056-label-updates) |
