@@ -80,6 +80,72 @@ void main() {
     });
   }
 
+  for (final replace in [false, true]) {
+    testWidgets(
+      'open latest dropdown survives stale owner ${replace ? 'replacement' : 'unmount'}',
+      (tester) async {
+        final controller = TDropdownMenuController();
+        final replacement = TDropdownMenuController();
+        final oldItems = [item('old')];
+        final latestItems = [item('latest')];
+        var opened = 0;
+        var closed = 0;
+        Widget host(bool updated) => wrap(
+          Column(
+            children: [
+              if (!updated || replace)
+                TDropdownMenu(
+                  key: const ValueKey('old'),
+                  controller: updated ? replacement : controller,
+                  items: oldItems,
+                ),
+              TDropdownMenu(
+                key: const ValueKey('latest'),
+                controller: controller,
+                items: latestItems,
+                onOpened: (_) => opened++,
+                onClosed: (_, __) => closed++,
+              ),
+            ],
+          ),
+        );
+        await tester.pumpWidget(host(false));
+        final opening = controller.open(0);
+        await tester.pumpAndSettle();
+        await opening;
+        expect(controller.openIndex, 0);
+        expect(find.text('latest panel'), findsOneWidget);
+        expect(opened, 1);
+        await tester.pumpWidget(host(true));
+        await tester.pumpAndSettle();
+        expect(controller.openIndex, 0);
+        expect(find.text('latest panel'), findsOneWidget);
+        expect(find.text('old panel'), findsNothing);
+        expect(replacement.isOpen, isFalse);
+        expect(opened, 1);
+        expect(closed, 0);
+        final closing = controller.close();
+        await tester.pumpAndSettle();
+        await closing;
+        expect(controller.isOpen, isFalse);
+        expect(find.text('latest panel'), findsNothing);
+        expect(closed, 1);
+        final reopening = controller.open(0);
+        await tester.pumpAndSettle();
+        await reopening;
+        expect(controller.openIndex, 0);
+        expect(find.text('latest panel'), findsOneWidget);
+        expect(opened, 2);
+        await tester.pumpWidget(const SizedBox());
+        await controller.open(0);
+        expect(controller.isOpen, isFalse);
+        expect(tester.takeException(), isNull);
+        controller.dispose();
+        replacement.dispose();
+      },
+    );
+  }
+
   group('public models', () {
     test('item and trigger state expose immutable configuration', () {
       final menuItem = item('排序');

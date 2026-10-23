@@ -33,14 +33,40 @@
 
 当前待办见 [tasks.md](./tasks.md)；实际执行入口见[贡献规范](../../../CONTRIBUTING.md#组件测试与-ci-回归门禁)。清理不关闭未完成项。
 
-## 1.0.1 controller-binding 独立候选（2026-10-23）
+<a id="controller-binding-validation"></a>
 
-- 基线 develop `071efaba0111d868efe0b6a7ce55f6f784069a62`；分支 `rss1102/fix/controller-binding-1.0.1`，直接基于基线，不依赖其他修复分支。只包含本组源码、已登记回归、生成 API 与 Spec；不纳入后续 API 兼容别名/废弃迁移。
-- macOS arm64；Flutter 3.32.0 / 3.47.7（官方 stable ref `abaf9c523780a608bd46686fd5e53740a07077f8` 与已安装高版本一致）。两 SDK 使用独立依赖解析、构建目录，分别离线解析组件包与 Example 的依赖。锁文件指纹保存在[验证数据](evidence/1.0.1-independent.json)。
-- 变更的生产源码、测试及生成 API 按排序路径/NUL/文件字节 SHA-256：`cbbf663ebc674673faa77aafc8868e5066aecdadee381535284a5940a04454dd`；其相对基线的二进制 diff SHA-256：`ea96731c464a99f712e3c8935fc6af1fcdf7b04eae8b4f1277e1b31df1ac4b11`。双版本相关输入逐文件一致。验收文案和证据文件不纳入自引用指纹。
-- 每 SDK：本组 manifest 中 8 个组件文件共 286 项通过；6 个 Example 文件共 37 项通过；三份调度器自测 30 项通过。严格 analyze 零诊断；API 生成并检查 57 份；示例片段 --check 通过。未沿用旧总补丁计数。
-- 本组件生产覆盖率：3.32.0 1014/1022 = 99.22%；3.47.7 1014/1022 = 99.22%，均通过 95% 门禁。范围来自 manifest coverageTargets，数据按本组功能测试合并运行后分别过滤，不混入 Demo 或其他组件。
-- 入口：在 tdesign-component 中分别用各 SDK 执行 `flutter test --no-pub --coverage --reporter expanded <manifest.componentTests>`、`dart run tool/check_component_coverage.dart dropdown_menu`、`flutter analyze --no-pub --fatal-infos`；调度器自测为 check_component_coverage_test / run_component_regression_test / run_visual_regression_test 三个 test/tool 文件。Example 使用 `flutter test --no-pub --exclude-tags golden --dart-define=TDESIGN_DEMO_TEST_MODULES=false <manifest.exampleTests>`。清单的实际文件集及日志摘要见验证数据。
-- API 通过 AST 对比旧公开构造参数、属性、方法签名和默认值；仅 BackTop 允许新增可选 onCompleted。新测试均在原 manifest 登记的文件内，GitHub test-build.yml 调用公共组件和 Example runner，三份调度器自测确认清单一致。
-- 最终 Review 通过，无阻塞问题。核对 Form/SwipeCell 先校验新绑定再释放旧绑定，替换失败及重复无效替换后保留实际绑定，卸载按实际对象清理。Swiper 保留 StateError 和单目标限制，Refresh/Dropdown 保留后绑定覆盖规则，旧 owner 不清理新 owner。未新增绑定限制或改变异常类型；既有 bind/unbind 签名保留。
-- 原始日志、LCOV、锁文件与独立补丁保存在工作区外层 `artifacts/pr1148-independent/02-controller-binding/`，与本记录的指纹绑定；摘要随分支保留在验证数据中。未执行设备、正式 Linux Golden 或远端 CI；改动不涉及绘制/布局/Theme/字体，未更新图片基线。历史视觉/设备任务继续按原 tasks 保留，不据本次功能验收核销。未推送、创建 PR 或发布。
+## 1.0.1 controller-binding 整组验收
+
+本组包含 DropdownMenu、Form、PullDownRefresh、SwipeCell 和 Swiper 的绑定修复。公开 API 签名及默认值未变，不包含 API 别名或废弃迁移；生成 API 没有差异。各组件的绑定规则、异常类型及所有权保持兼容。
+
+### 原独立候选
+
+- 基线 develop `071efaba0111d868efe0b6a7ce55f6f784069a62`；候选 `58cb2736`，分支 `rss1102/fix/controller-binding-1.0.1`。
+- macOS arm64；Flutter 3.32.0 / 3.47.7 stable，分别解析依赖并使用独立构建目录。每 SDK：8 个组件文件共 286 项、6 个 Example 文件共 37 项、调度器自测 30 项通过；严格 analyze 零诊断；API 检查 57 份及示例片段检查通过。
+- 原候选的源码/测试指纹、依赖锁文件和日志摘要见[验证数据](evidence/1.0.1-independent.json)。原始日志、LCOV 和独立补丁位于工作区外层 `artifacts/pr1148-independent/02-controller-binding/`。以上是历史验证，不外推为当前提交的 CI 结果。
+
+| 组件 | 两 SDK 原候选生产覆盖率 |
+| --- | --- |
+| DropdownMenu | 1014/1022 = 99.22% |
+| Form | 384/389 = 98.71% |
+| PullDownRefresh | 215/224 = 95.98% |
+| SwipeCell | 304/315 = 96.51% |
+| Swiper | 534/550 = 97.09% |
+
+### 本次补充回归
+
+以 PR #1191 `d14e7220` 为验证起点；仅新增 DropdownMenu 两项正式回归并整理 Spec/验收记录，生产实现和生成 API 未变。
+
+- 后绑定菜单已打开时，旧组件卸载后，面板仍显示、openIndex 仍为 0，且关闭、重新打开命令正常。
+- 后绑定菜单已打开时，旧组件更换 Controller 后同样保持上述行为；替换 Controller 保持关闭，不多发打开/关闭回调。
+- 两项测试均在现有 manifest 已登记的 `test/components/dropdown_menu/t_dropdown_menu_test.dart` 内；本次不新增测试入口。
+- 共享 Controller 时旧菜单更新 items 仍可能清空当前打开状态，单独跟踪 [Issue #1195](https://github.com/Tencent/tdesign-flutter/issues/1195)。本组仅保护旧组件卸载/换绑时的命令入口，不宣称完整的共享状态隔离。
+
+### 本次验证结果
+
+- Flutter 3.32.0 / 3.47.7 均在独立目录验证：8 个正式组件测试文件共 288 项通过（原 286 项 + 新增 2 项）；组件包严格 analyze 零诊断；五个组件生产覆盖率与上表一致，最低 95.98%，均通过 95% 门禁。
+- 验证输入按排序路径/NUL/文件字节 SHA-256：`51e110dfdc32cca869a852bc1a0c7ba55269580b28a0725af270ba95d9d44c14`；相对验证起点的代码/测试二进制 diff SHA-256：`129a3f859886bc191bed8b00f19a0528273196ad1548638f2085a036a9d10fe9`。两 SDK 相关源码与测试逐文件一致，详细命令、环境、依赖锁文件及日志摘要见[本次验证数据](evidence/1.0.1-open-owner.json)。
+- 测试命令为组件包中 `flutter test --no-pub --coverage --reporter expanded <8 个 manifest 文件>`，随后执行 `flutter analyze --no-pub --fatal-infos` 和五个组件的 `dart run tool/check_component_coverage.dart <组件>`。完整参数见验证数据；原始日志位于工作区外层 `artifacts/pr1148-independent/publication/pr1191-open-owner/`。
+- 本轮没有重跑 Example、API/示例生成器或调度器自测；没有修改生产代码、生成产物、依赖声明及测试清单。原候选与远端 CI 结论分别记录，不伪装成本轮本地验证。
+
+本次无绘制、布局、主题或资源改动，不更新 Golden；设备行为未验证。历史视觉/设备待办保留，不由本次功能回归核销。

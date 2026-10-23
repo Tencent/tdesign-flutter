@@ -173,3 +173,7 @@ DropdownMenu 已具备锚点、普通滚动跟随和自动方向能力，但边�
 ## 1.0.1 controller-binding
 
 保持 Controller 现有后绑定覆盖行为及未绑定命令无副作用，不新增重复绑定异常；内部记录最后绑定的 owner，旧组件卸载或替换不解绑新 owner。
+
+后绑定菜单已经打开时，旧组件卸载或更换 Controller 不关闭该面板、不清空其打开下标，后绑定菜单的关闭和重新打开命令仍有效。
+
+共享 Controller 的完整状态隔离不在本次修复范围，旧菜单更新 items 的历史串扰由 [Issue #1195](https://github.com/Tencent/tdesign-flutter/issues/1195) 单独跟踪。
