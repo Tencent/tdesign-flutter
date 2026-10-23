@@ -77,3 +77,5 @@
 ## 1.0.1 controller-binding
 
 保留已有 StateError 和单目标规则；以实际绑定而非上一份 Widget 配置判断替换。重复无效 Controller 提交仍拒绝，失败后原 Controller 可继续控制。
+
+Controller 不提供同时控制多个组件的能力，建议独立组件分别使用 Controller。为保持历史兼容，本版本保留本组件既有的重复绑定处理规则。

@@ -178,4 +178,4 @@ DropdownMenu 已具备锚点、普通滚动跟随和自动方向能力，但边�
 
 共享 Controller 的完整状态隔离不在本次修复范围，旧菜单更新 items 的历史串扰由 [Issue #1195](https://github.com/Tencent/tdesign-flutter/issues/1195) 单独跟踪。
 
-后绑定覆盖仅用于保留历史兼容，不代表推荐多个菜单共享同一个 Controller。业务中建议为独立菜单分别提供 Controller；本次不新增共享限制，也不承诺多个菜单的完整状态隔离。
+Controller 不提供同时控制多个组件的能力，建议独立组件分别使用 Controller。为保持历史兼容，本版本保留本组件既有的重复绑定处理规则。本次不新增绑定限制，也不承诺多个菜单的完整状态隔离。
