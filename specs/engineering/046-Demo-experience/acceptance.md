@@ -26,6 +26,15 @@
 
 当前待办见 [tasks.md](./tasks.md)；实际执行入口见[贡献规范](../../../CONTRIBUTING.md#组件测试与-ci-回归门禁)。清理不关闭未完成项。
 
+## 2026-10-23 站点历史转换清理
+
+基线 `8bbbcd21b02dd3e2c83a21d373c8718f0ce0693a`；本分支 `tdesign-site` 源码补丁 SHA-256 `f236c9df201637b3cfb6df424c435b5167d612b4b20fe80a727a7524fa095439`（`git diff 8bbbcd21b02dd3e2c83a21d373c8718f0ce0693a -- tdesign-site` 的 UTF-8 字节）。此标识不包含验收记录本身。
+
+- Node 24.15.0：`node --test site/utils/flutterThemeBridge.test.mjs site/flutter-example-docs/*.test.mjs`，33/33 通过。
+- `node site/flutter-example-docs/check-docs.mjs`：57 个组件文档、360 个生成示例映射通过。
+- 在 `tdesign-site/site` 执行 `../node_modules/.bin/vite build`：通过，4.06s；存在既有大 chunk 提示。
+- 扫描站点 Markdown：无 Flutter 指令之外的旧占位符；无 `.wxml`/`.wxss` 资产。仓库文档适配、Flutter 示例/API 指令及 BASE_URL 图片改写保留。
+- 未执行 Flutter 组件、Golden、设备或线上部署；最终远端 head CI 待核对。
 ## 全组件历史审查处置
 
 [审查表及最新处置](./evidence/component-audit.md)保留原基线范围，并按 2026-10-23 的 develop 和合并状态修正 Upload/Toast 说明；不将历史检查点视为当前全量验收。
@@ -51,3 +60,17 @@ Base: `182f8cd956edeee4dfd7ef977176309f051e3c3c`. Binary diff SHA-256 (`git diff
 - Linux amd64 local image `tdesign-flutter-golden-cache:3.32.0`: `flutter test --no-pub --dart-define=TDESIGN_DEMO_TEST_MODULES=false test/theme/theme_demo_test.dart --tags golden --reporter expanded`: 14/14 passed with exact pixel comparison; no baseline updates or tolerance changes. First run omitted the debug-module define and two Theme page sizes differed; visual inspection confirmed the extra internal debug section, then the full official configuration passed. Twelve imported guide/counter PNG images were verified on this candidate; the two existing Theme page PNG images were unchanged.
 - Canonical migration source, package MIGRATION, component lib and root READMEs match develop; current CSS theme conversion guidance retained. No old Spec directories or historical CI/screenshot evidence imported. Independent of the #1155 cleanup branch. Diff whitespace check passed.
 - Browser end-to-end manual interaction, mobile devices, deployment and remote CI were not executed. Navigation is covered by focused unit tests; production site build is not a claim of complete browser acceptance. No push or remote PR mutation.
+
+## 2026-10-23 latest develop verification
+
+Base: `182f8cd956edeee4dfd7ef977176309f051e3c3c`. Binary diff SHA-256 (`git diff --binary --no-ext-diff origin/develop -- tdesign-site`): `f236c9df201637b3cfb6df424c435b5167d612b4b20fe80a727a7524fa095439`.
+
+- Node 24.15.0 / macOS: theme bridge and documentation tests 33/33 passed; 57 component pages / 360 generated example mappings passed; Vite production build passed in 3.32s (existing chunk size warning only).
+- `git diff --check origin/develop` passed. Flutter directives, repository document adapters and BASE_URL image rewriting retained. No component source changes; Flutter/Golden/device tests are outside this cleanup scope.
+- Current FAQ, audit dispositions and unused-version cleanup come from develop. No push, remote PR mutation, deployment or current remote CI verification.
+
+## 2026-10-23 #1185 合并后冲突处理
+
+同步 develop `7d6e4514`（包含 #1185、#1192）。冲突仅涉及本目录四份规范文档：同时保留站点历史转换清理与入门/导航章节，原验收结果保留原基线，浏览器人工待办不关闭。#1156 相对最新 develop 的源码补丁与上一候选 `ff20e42f` 相对 `831fb0aa` 的补丁完全相同。
+
+本轮站点测试 47/47、57 页/360 示例映射与 8 份文档同步检查通过，生产构建通过。组件源码变化来自 develop 已合并的 #1192，不属于本 PR；不重复生成 Golden。上一候选的 CI 成功只作为历史记录，合并同步后的远端 CI 按新 head 单独核对。
