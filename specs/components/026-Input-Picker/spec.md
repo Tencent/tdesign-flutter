@@ -112,4 +112,4 @@ TPickerThemeData 的 height 必须为有限正数、itemCount 必须大于零（
 
 ## destroyOnClose 关闭生命周期
 
-透传 Popup 的关闭销毁策略，默认 false；true 关闭后释放，false 保留至所属 Navigator 卸载。Picker 同一句柄 open 可复用 State；Drawer 现有句柄只提供 close，不新增重开入口。API 和 Controller 规则不变，默认 false 的资源释放时机改变及长期保留风险见 [Popup Spec](../018-Feedback-Popup/spec.md#destroyonclose-关闭销毁修复独立本地候选)。
+透传 Popup 的关闭销毁策略，默认 false；true 关闭后释放，false 保留至所属 Navigator 卸载。Picker 同一句柄 open 可复用 State；Drawer 现有句柄只提供 close，不新增重开入口。API 和 Controller 规则不变，默认 false 的资源释放时机改变及长期保留风险见 [Popup Spec](../018-Feedback-Popup/spec.md#destroyonclose-关闭销毁修复独立交付)。

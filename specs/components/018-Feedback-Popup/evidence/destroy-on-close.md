@@ -48,3 +48,8 @@
 默认 false 从关闭释放变为保留，旧 true 的遮挡释放映射也改为仅控制关闭销毁，属于有意的生命周期行为变化；不能声称所有旧行为兼容。丢弃句柄可能保留到 Navigator 卸载，根 Navigator 可长期存在；业务定时器/订阅不保证暂停。本候选按用户确定的 1.0.1 修复范围单独处理，不与命名迁移混合。公开 API、参数默认值及 Controller 绑定规则未改变。
 
 本地 macOS Widget、工具及示例验证，不外推 Android/iOS 真机或 Web release。可见绘制和布局无意改变；按仓库平台规则未执行或修改 Linux Golden 基线。远端 CI 与 Review 以独立 PR 最终 head 的实际结果为准，不沿用其他提交的通过状态，暂不合并。
+
+
+## Spec 风险链接修正复核
+
+本轮仅将 Picker 与 Drawer 的 Popup 风险链接更新到“destroyOnClose 关闭销毁修复（独立交付）”的现有锚点，两个链接均与目标标题匹配。生产实现、公开注释、生成 API、回归测试未变，源码指纹仍2488ca62bad4cc0b2736dfdbb45d82e9dcbbc79f4477757790bcdce9f45ed7ad；复用上表同指纹双 SDK 功能验收。本轮两 SDK 另运行57份API --check、工具清单/字体覆盖14项均通过，日志见 artifacts/popup-destroy-close/implements-fix-docs。新head远端CI另行核对，不把旧CI状态当作当前通过，不合并。
