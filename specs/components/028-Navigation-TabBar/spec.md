@@ -194,3 +194,9 @@
 | scroll | 高自定义项及等高菜单超出视口 | 打开后、真实滚动至末项后，light/dark |
 
 共 8 张新增 Golden，登记到 TabBar Demo 的现有视觉入口；功能与交互断言继续由组件测试承担。首次生成前核对实际渲染，生成只写上述新文件，随后不带更新参数复跑；已有基线保持不变。
+
+## 菜单选择回调内路由操作修复
+
+普通及自定义菜单先同步通知旧 onChanged，再只清理原菜单路由。回调中已关闭、移除或替换原菜单时不再次返回；回调打开新页时，定向移除被覆盖的原菜单，不关闭新页。回调前保存 Route/Navigator，回调后不读取 context。普通关闭继续 pop 并保留动画；被覆盖菜单 removeRoute，Observer 收到 didRemove，不播放原菜单返回动画。异常传播不变，不增加 finally 关闭。
+
+不新增或弃用 API，不包含 onSelected/notifyOnReselect 等命名迁移；默认值、回调时机和 Controller 绑定规则保持。正式 48 项矩阵覆盖两种菜单、根/嵌套 Navigator 与 12 类操作，包括先关闭再导航、清栈及直接替换，登记到既有 TabBar 组件 CI。

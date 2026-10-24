@@ -57,7 +57,7 @@
 | 名称 | 类型 | 默认值 | 说明 | 必传 |
 | --- | --- | --- | --- | --- |
 | items | List&lt;TTabBarMenuItem&gt; | - | 选项list | 是 |
-| onChanged | ValueChanged&lt;String&gt; | - | 统一在 onChanged 中处理各item点击事件 | 是 |
+| onChanged | ValueChanged&lt;String&gt; | - | 选择菜单项时同步触发，包含重复选择；不改变主标签值。 自动关闭菜单前通知。 | 是 |
 | popUpDialogConfig | TTabBarPopUpShapeConfig? | - | 弹窗UI配置 | 否 |
 
 
