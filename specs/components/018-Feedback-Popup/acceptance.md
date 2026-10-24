@@ -29,3 +29,9 @@
 未绑定唯一候选的结果不作为当前通过证明；旧命令与流水由Git历史追溯。
 
 当前待办见 [tasks.md](./tasks.md)；实际执行入口见[贡献规范](../../../CONTRIBUTING.md#组件测试与-ci-回归门禁)。清理不关闭未完成项。
+
+## destroyOnClose 独立修复候选
+
+基线 develop `3704434fd2adfb6988110bc760aaaa52a814581c`，分支 `rss1102/fix/popup-destroy-on-close`。本地候选已完成双版本验证与复审；存在路由上下文阻塞回归，两版失败，Review 不通过。通过检查点和失败候选分别绑定指纹，详见[本轮验收](./evidence/destroy-on-close.md)。API、参数默认 false 与 Controller 规则保持，关闭后释放时机按要求修正，不能声明生命周期全兼容。
+
+默认 false 会保留内容，丢弃句柄后可能占用资源至 Navigator 卸载；根 Navigator 可能长期存活。隐藏期间的路由 inherited 上下文兼容目前未闭环，最终 Review 不通过；业务定时器/订阅不保证自动暂停。真实 State 复用限同一句柄、同一 Navigator；不同 Navigator 重建。本轮不新增公开宿主或 dispose。

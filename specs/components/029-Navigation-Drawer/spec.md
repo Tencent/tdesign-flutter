@@ -87,3 +87,7 @@
 跨组件配置职责见 [Theme 契约](../../engineering/048-Theme-configuration-contracts/spec.md)，视觉方法见 [Golden 规范](../../engineering/044-Testing-golden-regression/spec.md)。
 
 发布归类：本轮与 Button/NavBar 的默认文字槽调整采用同一 patch 策略。未配置、空样式或部分显式样式仍可能改变字体、颜色、换行、尺寸和省略位置；原生 Text 的字体也可能受新默认值影响，段落参数沿用既有语义。保留旧外观需在实例或内容内部主题中明确所需字段；不以参数签名不变或测试通过承诺零兼容风险。
+
+## destroyOnClose 关闭生命周期
+
+透传 Popup 的关闭销毁策略，默认 false；true 关闭后释放，false 保留至所属 Navigator 卸载。Picker 同一句柄 open 可复用 State；Drawer 现有句柄只提供 close，不新增重开入口。API 和 Controller 规则不变，默认 false 的资源释放时机改变及长期保留风险见 [Popup Spec](../018-Feedback-Popup/spec.md#destroyonclose-关闭销毁修复独立本地候选)。

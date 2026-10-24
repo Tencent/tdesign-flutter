@@ -10,7 +10,7 @@ part of 't_popup.dart';
 ///   options: TPopupOptions.bottom(child: panel),
 /// );
 /// handle.close();
-/// handle.open(); // 可省略 context，复用已缓存的 Navigator
+/// handle.open(); // 可省略 context；destroyOnClose 为 false 时复用内容 State
 /// ```
 class TPopupHandle {
   TPopupHandle._({
@@ -34,6 +34,7 @@ class TPopupHandle {
 
   _PopupNavigatorRoute<dynamic>? _route;
   NavigatorState? _lastNavigator;
+  _PopupRetention? _retention;
   bool _isClosed = false;
   int _openEpoch = 0;
   Completer<Object?>? _resultCompleter;
@@ -49,6 +50,9 @@ class TPopupHandle {
       _route != null && !_isClosed && (_route?.isActive ?? false);
 
   /// 打开或重新打开浮层。
+  ///
+  /// destroyOnClose 为 false 时，同一 Navigator 内复用保留的内容 State；
+  /// 切换 Navigator 时创建新 State。每次 TPopup.show 创建独立会话。
   ///
   /// | 状态 | 行为 |
   /// | --- | --- |
@@ -87,10 +91,30 @@ class TPopupHandle {
         ? TOverlayThemes.capture(from: captureFrom, to: navigator.context)
         : null;
 
+    if (_retention != null && !identical(_retention!.navigator, navigator)) {
+      _retention!.release();
+      _retention = null;
+    }
+    if (!options.destroyOnClose && _retention == null) {
+      late final _PopupRetention retention;
+      retention = _PopupRetention(navigator, () {
+        if (identical(_retention, retention)) {
+          _retention = null;
+        }
+      });
+      _retention = retention;
+    }
     _isClosed = false;
     _lastNavigator = navigator;
 
     _PopupNavigatorRoute<dynamic>? route;
+    var tracked = true;
+    void untrack() {
+      if (tracked) {
+        tracked = false;
+        _PopupTracker.remove(navigator, this);
+      }
+    }
 
     void closeWithTrigger(TPopupTrigger trigger) {
       final currentRoute = route;
@@ -101,6 +125,14 @@ class TPopupHandle {
     }
 
     route = _PopupNavigatorRoute<dynamic>(
+      retention: _retention,
+      onDisposed: () {
+        untrack();
+        final disposedRoute = route;
+        if (disposedRoute != null) {
+          _detachRoute(disposedRoute);
+        }
+      },
       options: normalized.copyWith(
         onClosed: () {
           if (_openEpoch == openEpoch) {
@@ -111,6 +143,7 @@ class TPopupHandle {
       onCloseWithTrigger: closeWithTrigger,
       capturedThemes: capturedThemes,
     );
+    _retention?.activate(route);
     _route = route;
 
     _PopupTracker.push(navigator, this);
@@ -123,7 +156,7 @@ class TPopupHandle {
           }
         })
         .whenComplete(() {
-          _PopupTracker.remove(navigator, this);
+          untrack();
           final completedRoute = route;
           if (completedRoute != null) {
             _detachRoute(completedRoute);

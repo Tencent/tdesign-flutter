@@ -6,6 +6,8 @@ class _PopupNavigatorRoute<T> extends PopupRoute<T> {
     required this.options,
     required this.onCloseWithTrigger,
     required this.capturedThemes,
+    this.retention,
+    this.onDisposed,
   }) : _layout = PopupLayout(
          placement: options.placement,
          inset: options.inset,
@@ -15,6 +17,9 @@ class _PopupNavigatorRoute<T> extends PopupRoute<T> {
        super(traversalEdgeBehavior: TraversalEdgeBehavior.closedLoop);
 
   final TPopupOptions options;
+  final _PopupRetention? retention;
+  final VoidCallback? onDisposed;
+  bool _popping = false;
   final void Function(TPopupTrigger trigger) onCloseWithTrigger;
   final TOverlayThemes? capturedThemes;
 
@@ -65,7 +70,7 @@ class _PopupNavigatorRoute<T> extends PopupRoute<T> {
   bool get opaque => false;
 
   @override
-  bool get maintainState => !options.destroyOnClose;
+  bool get maintainState => true;
 
   @override
   Widget buildModalBarrier() {
@@ -164,7 +169,8 @@ class _PopupNavigatorRoute<T> extends PopupRoute<T> {
         children: [if (options.overlayConfig.showOverlay) barrier, positioned],
       ),
     );
-    return capturedThemes?.wrap(context, content) ?? content;
+    final themed = capturedThemes?.wrap(context, content) ?? content;
+    return retention?.visible(this, themed) ?? themed;
   }
 
   Widget _buildBarrier(BuildContext context, double t) {
@@ -224,6 +230,26 @@ class _PopupNavigatorRoute<T> extends PopupRoute<T> {
   }
 
   @override
+  void install() {
+    super.install();
+    animation?.addStatusListener(_parkWhenDismissed);
+  }
+
+  void _parkWhenDismissed(AnimationStatus status) {
+    if (status == AnimationStatus.dismissed) {
+      retention?.park(this);
+    }
+  }
+
+  @override
+  void didComplete(T? result) {
+    if (!_popping) {
+      retention?.park(this);
+    }
+    super.didComplete(result);
+  }
+
+  @override
   TickerFuture didPush() {
     options.onVisibleChange?.call(true, TPopupTrigger.api);
     final future = super.didPush();
@@ -233,12 +259,14 @@ class _PopupNavigatorRoute<T> extends PopupRoute<T> {
 
   @override
   bool didPop(T? result) {
+    _popping = true;
     fireCloseStart(TPopupTrigger.systemBack);
     return super.didPop(result);
   }
 
   @override
   void dispose() {
+    animation?.removeStatusListener(_parkWhenDismissed);
     if (!_closedFired) {
       _closedFired = true;
       options.onClosed?.call();
@@ -246,6 +274,7 @@ class _PopupNavigatorRoute<T> extends PopupRoute<T> {
     if (_animationListenerAttached) {
       animation?.removeStatusListener(_onAnimationStatus);
     }
+    onDisposed?.call();
     super.dispose();
   }
 }

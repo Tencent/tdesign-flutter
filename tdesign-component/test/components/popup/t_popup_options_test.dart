@@ -1,7 +1,440 @@
+import 'dart:async';
+
 import 'package:flutter_test/flutter_test.dart';
 import 'package:tdesign_flutter/tdesign_flutter.dart';
 
 void main() {
+  for (final destroy in [false, true]) {
+    testWidgets('close state and navigator cleanup destroy=$destroy', (
+      tester,
+    ) async {
+      late BuildContext context;
+      var created = 0;
+      var disposed = 0;
+      var closed = 0;
+      await tester.pumpWidget(
+        MaterialApp(
+          home: Builder(
+            builder: (value) {
+              context = value;
+              return const Scaffold();
+            },
+          ),
+        ),
+      );
+      final handle = TPopup.show(
+        context,
+        options: TPopupOptions.center(
+          child: _CloseRetentionProbe(
+            onInit: () => created++,
+            onDispose: () => disposed++,
+          ),
+          destroyOnClose: destroy,
+          animationDuration: const Duration(milliseconds: 40),
+          onClosed: () => closed++,
+        ),
+      );
+      await tester.pumpAndSettle();
+      await tester.enterText(find.byType(TextField), 'saved');
+      final result = handle.result;
+      handle.close('result');
+      await tester.pumpAndSettle();
+      expect(await result, 'result');
+      expect(handle.isShowing, isFalse);
+      expect(find.byType(TextField), findsNothing);
+      expect(disposed, destroy ? 1 : 0);
+      expect(closed, 1);
+      handle.open();
+      await tester.pumpAndSettle();
+      expect(created, destroy ? 2 : 1);
+      expect(find.text('saved'), destroy ? findsNothing : findsOneWidget);
+      handle.close();
+      await tester.pumpAndSettle();
+      expect(closed, 2);
+      await tester.pumpWidget(const SizedBox.shrink());
+      await tester.pump();
+      expect(disposed, created);
+      expect(tester.takeException(), isNull);
+    });
+  }
+
+  for (final mode in [
+    'zero',
+    'system',
+    'covered',
+    'reopen',
+    'active-unmount',
+    'unpainted',
+  ]) {
+    testWidgets('retained popup boundary $mode', (tester) async {
+      late BuildContext context;
+      var created = 0;
+      var disposed = 0;
+      await tester.pumpWidget(
+        MaterialApp(
+          home: Builder(
+            builder: (value) {
+              context = value;
+              return const Scaffold();
+            },
+          ),
+        ),
+      );
+      final navigator = Navigator.of(context);
+      final handle = TPopup.show(
+        context,
+        options: TPopupOptions.center(
+          child: _CloseRetentionProbe(
+            onInit: () => created++,
+            onDispose: () => disposed++,
+          ),
+          animationDuration: mode == 'zero'
+              ? Duration.zero
+              : const Duration(milliseconds: 40),
+        ),
+      );
+      if (mode == 'unpainted') {
+        handle.close();
+        await tester.pumpWidget(const SizedBox.shrink());
+        await tester.pump();
+        expect(created, disposed);
+        expect(tester.takeException(), isNull);
+        return;
+      }
+      await tester.pumpAndSettle();
+      await tester.enterText(find.byType(TextField), 'boundary');
+      if (mode == 'active-unmount') {
+        await tester.pumpWidget(const SizedBox.shrink());
+        await tester.pump();
+        expect(disposed, created);
+        expect(tester.takeException(), isNull);
+        return;
+      }
+      if (mode == 'system') {
+        navigator.pop();
+      } else if (mode == 'covered') {
+        unawaited(
+          navigator.push(
+            MaterialPageRoute<void>(
+              builder: (_) => const Scaffold(body: Text('cover')),
+            ),
+          ),
+        );
+        await tester.pumpAndSettle();
+        handle.close();
+      } else {
+        handle.close();
+      }
+      if (mode == 'reopen') {
+        await tester.pump(const Duration(milliseconds: 10));
+        handle.open();
+      }
+      await tester.pumpAndSettle();
+      expect(disposed, 0);
+      if (mode == 'covered') {
+        expect(find.text('cover'), findsOneWidget);
+        navigator.pop();
+        await tester.pumpAndSettle();
+      }
+      if (mode != 'reopen') {
+        handle.open();
+      }
+      await tester.pumpAndSettle();
+      expect(find.text('boundary'), findsOneWidget);
+      expect(created, 1);
+      handle.close();
+      handle.close();
+      await tester.pumpAndSettle();
+      final hidden = tester.element(
+        find.byType(_CloseRetentionProbe, skipOffstage: false),
+      );
+      // TickerMode.valuesOf is unavailable on Flutter 3.32.
+      // ignore: deprecated_member_use
+      expect(TickerMode.of(hidden), isFalse);
+      expect(
+        tester
+            .widget<EditableText>(
+              find.byType(EditableText, skipOffstage: false),
+            )
+            .focusNode
+            .hasFocus,
+        isFalse,
+      );
+      await tester.pumpWidget(const SizedBox.shrink());
+      await tester.pump();
+      expect(disposed, created);
+      expect(tester.takeException(), isNull);
+    });
+  }
+
+  testWidgets(
+    'retained handle changes Navigator without keeping the old subtree',
+    (tester) async {
+      late BuildContext first;
+      late BuildContext second;
+      var created = 0;
+      var disposed = 0;
+      Widget nested(ValueChanged<BuildContext> save) => Navigator(
+        onGenerateRoute: (_) => MaterialPageRoute<void>(
+          builder: (value) {
+            save(value);
+            return const Scaffold();
+          },
+        ),
+      );
+      await tester.pumpWidget(
+        MaterialApp(
+          home: Row(
+            children: [
+              Expanded(child: nested((value) => first = value)),
+              Expanded(child: nested((value) => second = value)),
+            ],
+          ),
+        ),
+      );
+      await tester.pumpAndSettle();
+      final handle = TPopup.show(
+        first,
+        options: TPopupOptions.center(
+          animationDuration: Duration.zero,
+          child: _CloseRetentionProbe(
+            onInit: () => created++,
+            onDispose: () => disposed++,
+          ),
+        ),
+      );
+      await tester.pumpAndSettle();
+      handle.close();
+      await tester.pumpAndSettle();
+      expect(disposed, 0);
+      handle.open(second);
+      await tester.pumpAndSettle();
+      expect(created, 2);
+      expect(disposed, 1);
+      await tester.pumpWidget(const SizedBox.shrink());
+      await tester.pump();
+      expect(disposed, 2);
+    },
+  );
+
+  testWidgets(
+    'separate show calls retain separate states and release together',
+    (tester) async {
+      late BuildContext context;
+      var created = 0;
+      var disposed = 0;
+      await tester.pumpWidget(
+        MaterialApp(
+          home: Builder(
+            builder: (value) {
+              context = value;
+              return const Scaffold();
+            },
+          ),
+        ),
+      );
+      for (var i = 0; i < 2; i++) {
+        final handle = TPopup.show(
+          context,
+          options: TPopupOptions.center(
+            animationDuration: Duration.zero,
+            child: _CloseRetentionProbe(
+              onInit: () => created++,
+              onDispose: () => disposed++,
+            ),
+          ),
+        );
+        await tester.pumpAndSettle();
+        handle.close();
+        await tester.pumpAndSettle();
+      }
+      expect(created, 2);
+      expect(disposed, 0);
+      await tester.pumpWidget(const SizedBox.shrink());
+      await tester.pump();
+      expect(disposed, 2);
+    },
+  );
+
+  for (final destroy in [false, true]) {
+    testWidgets(
+      'zero animation onOpened may close reentrantly destroy=$destroy',
+      (tester) async {
+        late BuildContext context;
+        TPopupHandle? handle;
+        var closed = 0;
+        await tester.pumpWidget(
+          MaterialApp(
+            home: Builder(
+              builder: (value) {
+                context = value;
+                return const Scaffold();
+              },
+            ),
+          ),
+        );
+        handle = TPopup.show(
+          context,
+          options: TPopupOptions.center(
+            destroyOnClose: destroy,
+            animationDuration: Duration.zero,
+            onOpened: () => handle!.close(),
+            onClosed: () => closed++,
+            child: const Text('reentrant'),
+          ),
+        );
+        await tester.pumpAndSettle();
+        expect(handle.isShowing, isFalse);
+        expect(closed, 1);
+        expect(tester.takeException(), isNull);
+      },
+    );
+  }
+
+  for (final entry in ['drawer', 'picker']) {
+    for (final destroy in [false, true]) {
+      testWidgets('$entry applies close destruction destroy=$destroy', (
+        tester,
+      ) async {
+        late BuildContext context;
+        var disposed = 0;
+        await tester.pumpWidget(
+          MaterialApp(
+            home: Builder(
+              builder: (value) {
+                context = value;
+                return const Scaffold();
+              },
+            ),
+          ),
+        );
+        final content = _CloseRetentionProbe(
+          onInit: () {},
+          onDispose: () => disposed++,
+        );
+        final VoidCallback close;
+        if (entry == 'drawer') {
+          final handle = showTDrawer(
+            context,
+            drawer: TDrawer(child: content),
+            destroyOnClose: destroy,
+          );
+          close = handle.close;
+        } else {
+          final handle = TPickerPopup.show(
+            context,
+            child: content,
+            headerBuilder: (_, __) => const TPopupHeader(title: Text('header')),
+            destroyOnClose: destroy,
+          );
+          close = handle.close;
+        }
+        await tester.pumpAndSettle();
+        close();
+        await tester.pumpAndSettle();
+        expect(disposed, destroy ? 1 : 0);
+        await tester.pumpWidget(const SizedBox.shrink());
+        await tester.pump();
+        expect(disposed, 1);
+      });
+    }
+  }
+
+  testWidgets('retained popup keeps implicit primary scroll position', (
+    tester,
+  ) async {
+    late BuildContext context;
+    await tester.pumpWidget(
+      MaterialApp(
+        home: Builder(
+          builder: (value) {
+            context = value;
+            return const Scaffold();
+          },
+        ),
+      ),
+    );
+    final handle = TPopup.show(
+      context,
+      options: TPopupOptions.center(
+        width: 260,
+        height: 200,
+        animationDuration: Duration.zero,
+        child: ListView.builder(
+          itemExtent: 40,
+          itemCount: 50,
+          itemBuilder: (_, i) => Text('row $i'),
+        ),
+      ),
+    );
+    await tester.pumpAndSettle();
+    await tester.drag(find.byType(ListView), const Offset(0, -320));
+    await tester.pumpAndSettle();
+    final before = tester
+        .state<ScrollableState>(find.byType(Scrollable))
+        .position
+        .pixels;
+    expect(before, greaterThan(0));
+    handle.close();
+    await tester.pumpAndSettle();
+    handle.open();
+    await tester.pumpAndSettle();
+    expect(
+      tester.state<ScrollableState>(find.byType(Scrollable)).position.pixels,
+      before,
+    );
+    await tester.pumpWidget(const SizedBox.shrink());
+  });
+
+  testWidgets(
+    'retained content has a route context while hidden and after reopen',
+    (tester) async {
+      late BuildContext context;
+      var created = 0;
+      var disposed = 0;
+      await tester.pumpWidget(
+        MaterialApp(
+          home: Builder(
+            builder: (value) {
+              context = value;
+              return const Scaffold();
+            },
+          ),
+        ),
+      );
+      final handle = TPopup.show(
+        context,
+        options: TPopupOptions.center(
+          animationDuration: Duration.zero,
+          child: _RouteRetentionProbe(
+            onInit: () => created++,
+            onDispose: () => disposed++,
+          ),
+        ),
+      );
+      await tester.pumpAndSettle();
+      final visible = tester.element(find.byType(_RouteRetentionProbe));
+      final navigator = Navigator.of(visible);
+      handle.close();
+      await tester.pumpAndSettle();
+      final hidden = tester.element(
+        find.byType(_RouteRetentionProbe, skipOffstage: false),
+      );
+      expect(ModalRoute.of(hidden), isNotNull);
+      handle.open();
+      await tester.pumpAndSettle();
+      expect(created, 1);
+      expect(
+        Navigator.of(tester.element(find.byType(_RouteRetentionProbe))),
+        same(navigator),
+      );
+      expect(tester.takeException(), isNull);
+      await tester.pumpWidget(const SizedBox.shrink());
+      await tester.pump();
+      expect(disposed, 1);
+    },
+  );
+
   group('TPopupOptions', () {
     test('默认 placement 为 bottom，内容 builder 默认均为空', () {
       final options = const TPopupOptions(child: SizedBox()).normalized();
@@ -368,4 +801,55 @@ void main() {
       expect(options.overlayConfig.preventTap, isTrue);
     });
   });
+}
+
+class _CloseRetentionProbe extends StatefulWidget {
+  const _CloseRetentionProbe({required this.onInit, required this.onDispose});
+  final VoidCallback onInit;
+  final VoidCallback onDispose;
+  @override
+  State<_CloseRetentionProbe> createState() => _CloseRetentionProbeState();
+}
+
+class _CloseRetentionProbeState extends State<_CloseRetentionProbe> {
+  @override
+  void initState() {
+    super.initState();
+    widget.onInit();
+  }
+
+  @override
+  void dispose() {
+    widget.onDispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) => const Material(child: TextField());
+}
+
+class _RouteRetentionProbe extends StatefulWidget {
+  const _RouteRetentionProbe({required this.onInit, required this.onDispose});
+  final VoidCallback onInit;
+  final VoidCallback onDispose;
+  @override
+  State<_RouteRetentionProbe> createState() => _RouteRetentionProbeState();
+}
+
+class _RouteRetentionProbeState extends State<_RouteRetentionProbe> {
+  @override
+  void initState() {
+    super.initState();
+    widget.onInit();
+  }
+
+  @override
+  void dispose() {
+    widget.onDispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) =>
+      Text('route: ${ModalRoute.of(context)!.isCurrent}');
 }
