@@ -12,6 +12,8 @@ import 'dart:async';
 import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart'
+    show RenderConstrainedBox, SemanticsConfiguration;
 
 import '../../theme/t_colors.dart';
 import '../../theme/t_fonts.dart';
@@ -26,6 +28,7 @@ part '_popup_center_close.dart';
 part '_popup_header.dart';
 part '_popup_layout.dart';
 part '_popup_route.dart';
+part '_popup_retention.dart';
 part '_popup_shell.dart';
 part '_popup_tracker.dart';
 part 't_popup_handle.dart';

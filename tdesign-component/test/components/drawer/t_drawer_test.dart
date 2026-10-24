@@ -1004,7 +1004,7 @@ void main() {
       await tester.tap(find.text('打开'));
       await tester.pumpAndSettle();
       expect(find.text('无遮罩'), findsOneWidget);
-      expect(maintainState, isFalse);
+      expect(maintainState, isTrue);
     });
 
     testWidgets('拒绝负数顶部偏移', (tester) async {

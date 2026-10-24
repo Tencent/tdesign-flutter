@@ -29,3 +29,9 @@
 未绑定唯一候选的结果不作为当前通过证明；旧命令与流水由Git历史追溯。
 
 当前待办见 [tasks.md](./tasks.md)；实际执行入口见[贡献规范](../../../CONTRIBUTING.md#组件测试与-ci-回归门禁)。清理不关闭未完成项。
+
+## destroyOnClose 独立修复候选
+
+基线 develop `3704434fd2adfb6988110bc760aaaa52a814581c`，分支 `rss1102/fix/popup-destroy-on-close`；本轮源码指纹 `2488ca62bad4cc0b2736dfdbb45d82e9dcbbc79f4477757790bcdce9f45ed7ad`。完成内部承载重构，并修复 LocalHistoryEntry 消费返回后移除及声明式页面替换导致 State 丢失；路由上下文、语义及正常 pop 动画边界均有正式回归。两版全部登记组件各 3969 项、示例/API/代码面板各 98 项、工具与字体覆盖各 171 项通过；严格分析、57 份 API 和片段校验通过，相关生产覆盖率均超过 95%。本次修复范围最终复审无阻塞项，零动画 onClosed 历史问题不纳入；详见[本轮验收](./evidence/destroy-on-close.md)。
+
+公开签名、默认 false 和 Controller 规则保持；关闭后资源保留时机按需求修正，不能声明生命周期全兼容。丢弃句柄可能保留到 Navigator 卸载；根 Navigator 可长期存在，业务定时器/订阅不保证暂停。不新增公开宿主或 dispose。本地验收不替代远端 CI；独立 PR 的交付及检查状态以最终 head 为准，暂不合并。未验证真机/Web release，未修改 Golden 基线。

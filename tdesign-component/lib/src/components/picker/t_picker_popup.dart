@@ -56,8 +56,8 @@ final class TPickerPopup {
     /// 蒙层行为；null 时沿用 Popup 默认值。
     TPopupOverlayConfig? overlay,
 
-    /// 默认 false；为 true 时路由被其他不透明路由覆盖可释放内容 State。
-    /// 关闭路由后内容始终释放，再次打开会创建新 State。
+    /// 关闭后是否销毁内容 State，默认 false。
+    /// false 时同一句柄再次打开复用 State，所属 Navigator 卸载时释放；true 时关闭后释放。
     bool destroyOnClose = false,
 
     /// 打开和关闭动画时长。
