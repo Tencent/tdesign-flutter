@@ -107,7 +107,7 @@ final class TPopup {
       color: overlay.color ?? themeColor,
       preventTap: overlay.preventTap,
       closeOnClick: overlay.closeOnClick,
-      onClick: overlay.onClick,
+      onTap: overlay.onTap,
     );
   }
 }

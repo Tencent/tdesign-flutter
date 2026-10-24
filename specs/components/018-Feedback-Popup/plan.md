@@ -26,3 +26,7 @@ bottom 只提供 headerBuilder，center 只提供 closeBuilder；按钮业务回
 4. 结果绑定候选、环境和必要证据，更新 acceptance.md；真实剩余工作只在 tasks.md 维护。
 
 本次文档整理不执行上述实现或候选验收，不据旧命令流水推定当前检查通过。
+
+## 2.0 蒙层配置设计调整
+
+先固定 final/命名迁移及 FAQ，再迁移包内调用、生成文档并验证外部消费者。双 SDK 检查 Popup 功能、默认行为、遮罩分派和静态诊断，作为独立 breaking 草稿，不依赖其他未合并 PR。

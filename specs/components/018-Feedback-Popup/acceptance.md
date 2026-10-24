@@ -29,3 +29,7 @@
 未绑定唯一候选的结果不作为当前通过证明；旧命令与流水由Git历史追溯。
 
 当前待办见 [tasks.md](./tasks.md)；实际执行入口见[贡献规范](../../../CONTRIBUTING.md#组件测试与-ci-回归门禁)。清理不关闭未完成项。
+
+## 2.0 蒙层配置 breaking 候选
+
+基线 develop 3704434f，独立候选结果见 [配置设计验收](./evidence/overlay-final.md)。此前 onTap 兼容别名或 destroyOnClose 分支结果不作为当前候选证据。

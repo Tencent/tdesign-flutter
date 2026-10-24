@@ -37,8 +37,8 @@ Popup 是承载任意内容的基础浮层。小程序基础 Popup 默认只渲�
 ### 面板与蒙层
 
 - child、placement、width/height/inset、生命周期和单次 animationDuration 归 TPopupOptions。TPopupThemeData 承载面板背景、圆角、默认尺寸及 barrierColor；不保存同义动画时长或 barrierOpacity。
-- TPopupOverlayConfig 只包括 showOverlay、color、preventTap、closeOnClick、onClick。color 自带 alpha，不再叠乘独立 opacity。默认显示遮罩并拦截背景；未指定色时回退组件 Theme，再到 black54。
-- 可见性与拦截独立。只有可见且拦截的蒙层响应 onClick 和 closeOnClick；穿透时由背景接收事件，不把不可见层当作可点击遮罩。
+- TPopupOverlayConfig 只包括 showOverlay、color、preventTap、closeOnClick、onTap。color 自带 alpha，不再叠乘独立 opacity。默认显示遮罩并拦截背景；未指定色时回退组件 Theme，再到 black54。
+- 可见性与拦截独立。只有可见且拦截的蒙层响应 onTap 和 closeOnClick；穿透时由背景接收事件，不把不可见层当作可点击遮罩。
 - useSafeArea 默认 false，显式 true 按方向避让。top/bottom/center 默认大圆角；left/right 未设置圆角时为全高矩形，显式设置时只作用于内容侧边缘。
 - 单次 animationDuration 优先，未设置为 240ms；不从已删除的 Theme transitionDuration 取值。减少动画等系统环境继续响应。
 
@@ -87,3 +87,11 @@ Popup 是承载任意内容的基础浮层。小程序基础 Popup 默认只渲�
 验收标准描述应满足的行为，不表示已执行或通过；执行范围与证据见 [acceptance.md](./acceptance.md)，剩余事项只在 [tasks.md](./tasks.md) 维护。
 
 跨组件配置职责见 [Theme 契约](../../engineering/048-Theme-configuration-contracts/spec.md)，视觉方法见 [Golden 规范](../../engineering/044-Testing-golden-regression/spec.md)。
+
+## 2.0 蒙层配置接口收敛（breaking）
+
+TPopupOverlayConfig 改为 final，库外不能 extends 或 implements；onClick 参数和成员统一改为 onTap，不提供本版本的旧名别名。保留直接构造、const、五项原有配置的默认值、蒙层通知时机与关闭条件，不涉及 TPopupOptions/copyWith、destroyOnClose 生命周期、Controller 或其他 Popup 类型的继承规则。
+
+原因：配置对象负责不可变配置值，业务使用构造与组合；避免未来新增配置成员都要求外部 implements 补齐。final 不保证任意新增必填参数、改默认值或改变行为都兼容，也不等于限制 Popup 的 child/builder/回调扩展。旧动态 getter 每次读取的行为与配置快照不一定等价，需要在业务变更时重新构造并按既有句柄/打开流程应用，不承诺活动 Popup 自动响应外部配置变化。
+
+旧 onClick 调用、继承、implements 以及相关 mock 都需要迁移；FAQ 必须明确 1.x 到 2.0 的版本边界、接口改变原因和组合替代，不用新增一个 getter 的转发作为 final 的适配方案。消费者测试验证旧 implements/extends 被诊断、普通 const 构造与业务工厂可用，并覆盖真实遮罩点击和关闭先后。此 PR 独立于命名迁移及 destroyOnClose 修复，保持草稿供 2.0 评审，不作为 1.0.1 patch 合并。

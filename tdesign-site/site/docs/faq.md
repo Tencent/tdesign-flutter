@@ -12,6 +12,31 @@ spline: explain
 
 不足够。构造参数、回调、受控值、主题配置和已移除能力均可能变化，尤其要区分顶部页签与底部导航。请先阅读[0.2.7 → 1.0迁移指南](./migration-0.2.7-to-1.0.md)。
 
+
+## 从 1.x 升级到 2.0，为什么不能再 extends 或 implements TPopupOverlayConfig？
+
+这是 2.0 的 breaking 调整：`TPopupOverlayConfig` 改为 `final`，只允许直接构造和组合；原 `onClick` 参数及成员改用 `onTap`。1.x 仍按原版本规则使用，这不是 1.0.1 的新增限制。
+
+Dart 的 `implements` 要求业务实现所有实例成员，不继承默认实现。配置类每新增成员，旧实现就可能报缺失成员。将配置对象与业务扩展分开，可以避免此类被动适配；但不能保证改变默认值、增加必填参数或修改行为也兼容。
+
+普通调用将 `TPopupOverlayConfig(onClick: callback)` 改为 `TPopupOverlayConfig(onTap: callback)`；其他配置值和回调时机保持。已有 `extends`、`implements` 及相关 mock 需改为创建真实配置对象：
+
+```dart
+TPopupOverlayConfig createOverlay({
+  required bool showMask,
+  VoidCallback? onMaskTap,
+}) {
+  return TPopupOverlayConfig(
+    showOverlay: showMask,
+    onTap: onMaskTap,
+  );
+}
+```
+
+配置字段使用 `final` 不等于自动响应业务状态。旧 getter 若在每次读取时动态计算，不能直接当作等价快照；应在业务状态变化时重新创建配置，并按原有打开/更新流程应用。不要只新增 `onTap` getter 或用 `noSuchMethod` 绕过 `final`。
+
+Popup 的自定义内容、builder、主题、回调和 Controller 能力不因此删除；本次仅限制蒙层配置类的外部继承/实现，不涉及 `TPopupOptions.copyWith` 或 `destroyOnClose`。
+
 ## 为什么组件没有跟随Material主题变化？
 
 TD内置外观使用全局Token、组件Theme及公开实例配置。Material的按钮主题、文字主题或IconTheme不作为TD内置视觉的隐式覆盖入口。配置方法见[自定义主题](./custom-theme.md)，明暗模式也在同一指南中。

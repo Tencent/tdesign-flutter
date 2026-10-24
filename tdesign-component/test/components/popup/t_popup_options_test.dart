@@ -2,6 +2,52 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:tdesign_flutter/tdesign_flutter.dart';
 
 void main() {
+  for (final closeOnClick in [false, true]) {
+    testWidgets('onTap retains notification-before-close close=$closeOnClick', (
+      tester,
+    ) async {
+      late BuildContext context;
+      TPopupHandle? handle;
+      final events = <String>[];
+      await tester.pumpWidget(
+        MaterialApp(
+          home: Builder(
+            builder: (value) {
+              context = value;
+              return const Scaffold();
+            },
+          ),
+        ),
+      );
+      handle = TPopup.show(
+        context,
+        options: TPopupOptions.bottom(
+          child: const SizedBox(height: 100),
+          overlay: TPopupOverlayConfig(
+            closeOnClick: closeOnClick,
+            onTap: () {
+              expect(handle!.isShowing, isTrue);
+              events.add('tap');
+            },
+          ),
+          onVisibleChange: (visible, _) {
+            if (!visible) {
+              events.add('close');
+            }
+          },
+        ),
+      );
+      await tester.pumpAndSettle();
+      await tester.tapAt(const Offset(10, 10));
+      await tester.pumpAndSettle();
+      expect(events, closeOnClick ? ['tap', 'close'] : ['tap']);
+      expect(handle.isShowing, !closeOnClick);
+      handle.close();
+      await tester.pumpAndSettle();
+      expect(tester.takeException(), isNull);
+    });
+  }
+
   group('TPopupOptions', () {
     test('默认 placement 为 bottom，内容 builder 默认均为空', () {
       final options = const TPopupOptions(child: SizedBox()).normalized();
@@ -357,7 +403,7 @@ void main() {
       expect(config.color, isNull);
       expect(config.preventTap, isTrue);
       expect(config.closeOnClick, isNull);
-      expect(config.onClick, isNull);
+      expect(config.onTap, isNull);
       expect(config.effectiveCloseOnClick, isTrue);
     });
 
