@@ -1,12 +1,12 @@
-# 1.0.1 API 兼容迁移验收（本地撤出状态参数候选）
+# 1.0.1 API 兼容迁移验收（撤出状态参数迁移）
 
-基线 develop `3704434fd2adfb6988110bc760aaaa52a814581c`；远端 #1196 保持 `07b65c4c`，本轮不推送、不更新远端正文、不创建 PR。
+基线 develop `3704434fd2adfb6988110bc760aaaa52a814581c`；在原 #1196 提交 `07b65c4c` 上撤出状态参数迁移（实现提交 `12e18203`），同步更新 PR 范围；远端 CI 以最终 head 为准，暂不合并。
 
 ## 最终范围
 
 保留 NoticeBar.onTargetTap、CheckboxGroup.onSelectionLimitExceeded、Drawer.onItemTap/类型别名、Popover.onLongPress、PopupOverlay.onTap、Steps.onStepTapped、TabBar.onSelected/notifyOnReselect。非空新参数优先，未指定时通过旧 getter 分派，普通旧调用、const/函数类型、默认行为及 Controller 绑定规则保持。
 
-已撤出 Popup/Drawer/Picker 的 maintainState 参数、destroyOnClose 弃用、copyWith 扩展和独立复制入口、继承适配 FAQ 及对应 2.0 迁移计划。TPopupOptions 与 copyWith 恢复 develop 原签名，旧覆盖不再因新增参数适配。本分支不改变 destroyOnClose 的既有生命周期；关闭保留修复在独立本地分支 `rss1102/fix/popup-destroy-on-close` 验证，不能把其结果外推本分支。
+已撤出 Popup/Drawer/Picker 的 maintainState 参数、destroyOnClose 弃用、copyWith 扩展和独立复制入口、继承适配 FAQ 及对应 2.0 迁移计划。TPopupOptions 与 copyWith 恢复 develop 原签名，旧覆盖不再因新增参数适配。本分支不改变 destroyOnClose 的既有生命周期；关闭保留修复在独立分支 `rss1102/fix/popup-destroy-on-close` 交付，不能把其结果外推本分支。
 
 ## 验证
 
@@ -18,4 +18,4 @@ Flutter 3.32.0 / 3.47.7 均通过：八组件 878 项功能回归（兼容用例
 
 ## 最终本地 Review
 
-TPopupOptions/PickerPopup 源码恢复 develop 原版，copyWith 原签名、旧 getter 和默认 false 保留。Popup 路由仅保留蒙层 onTap 兼容迁移。生成 API 没有新增状态参数或独立复制入口，FAQ 恢复基线。其他组件旧入口分派、非空优先、受控/禁用/重复选择契约与 Controller 规则一致。未发现新阻塞问题。此结论仅对应本地撤出候选，远端 #1196 仍未修改。
+TPopupOptions/PickerPopup 源码恢复 develop 原版，copyWith 原签名、旧 getter 和默认 false 保留。Popup 路由仅保留蒙层 onTap 兼容迁移。生成 API 没有新增状态参数或独立复制入口，FAQ 恢复基线。其他组件旧入口分派、非空优先、受控/禁用/重复选择契约与 Controller 规则一致。未发现新阻塞问题。此结论对应上述源码指纹；交付只更新验收说明，不改变已验证实现。远端 CI 与 Review 须核对最终 head，暂不合并。

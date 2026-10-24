@@ -32,4 +32,4 @@
 
 ## API 兼容迁移候选
 
-本地撤出 Popup/Drawer/Picker 状态参数、copyWith 扩展、继承适配 FAQ 与旧参数弃用计划。保留其他兼容命名；本分支旧 TPopupOptions 签名、默认行为与 Controller 绑定规则不变。当前候选与验证范围见[统一验收](./evidence/api-compatibility.md)，不沿用已撤出用例的旧数量；不推送或更新远端 #1196。
+撤出 Popup/Drawer/Picker 状态参数、copyWith 扩展、继承适配 FAQ 与旧参数弃用计划。保留其他兼容命名；本分支旧 TPopupOptions 签名、默认行为与 Controller 绑定规则不变。当前候选与验证范围见[统一验收](./evidence/api-compatibility.md)，不沿用已撤出用例的旧数量；更新 #1196 后核对最终 head 的 CI 与 Review，暂不合并。
