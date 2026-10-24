@@ -29,8 +29,12 @@ bottom 只提供 headerBuilder，center 只提供 closeBuilder；按钮业务回
 
 ## destroyOnClose 修复组织
 
-基于 develop 独立交付，原字段/函数签名不变，默认 false。每个保留句柄有 Navigator Overlay 内部停放槽；GlobalKey 在同帧转移整个内容子树，路由仍正常移除。重挂载的渲染根在脱离父节点后清理语义缓存；隐藏时关闭语义、焦点和 ticker。路由 disposal 幂等撤销内部登记，Navigator 卸载释放停放槽；未绘制即卸载由一次 post-frame 检查补足。关闭动画 listener 与原业务回调 listener 分离，保持既有回调时机。
+基于 develop 独立交付，原字段/函数签名不变，默认 false。每个保留句柄拥有一个私有承载 ModalRoute，由内部安装到所属 Navigator 的 Overlay，提供隐藏期间的原生路由上下文，但不进入导航历史；不创建嵌套 Navigator。可见路由正常 push/pop/remove，GlobalKey 同帧转移内容面板；动画、布局及捕获主题包装留在保留边界外，停放前读取已布局面板的实际尺寸，隐藏时用同尺寸约束保留内容，重开时重新构建外层包装；避免主题包装变化销毁内容或隐藏尺寸变化截断滚动位置；可见内容的 Navigator 仍为原所属实例。
 
-验证覆盖销毁/保留、输入状态、零动画、系统返回、遮挡后非栈顶关闭、动画中重开、回调重入、重复关闭、隐藏焦点/ticker、嵌套浮层、独立会话、跨 Navigator 及未绘制卸载。完整登记组件回归验证消费方；双 SDK 独立目录，Popup/Drawer/Picker 生产覆盖率不降低门槛。
+私有承载路由始终 offstage、不请求焦点、没有拦截蒙层。隐藏内容 ExcludeFocus、ExcludeSemantics、TickerMode(false)；原生路由发出的 NavigationNotification 在内部截断，避免隐藏 PopScope 改变外部返回状态。保留独立 PrimaryScrollController/PageStorage，重开不丢失输入与滚动。内容面板在同一 RenderConstrainedBox 渲染根内切换停放尺寸约束，避免新增渲染祖先改变语义几何关系；该根声明独立语义边界，脱离父节点后清理自身语义缓存，不改 Flutter 私有实现或全局无障碍状态。
 
-复审补充：原路由的 PrimaryScrollController/PageStorage 会随 pop 释放；保留内容使用自有内部滚动控制器与存储桶，实际滚动 320 后关闭重开仍维持位置，避免仅 State 对象保留但局部滚动状态丢失。
+承载槽 State.dispose 随 Navigator 卸载触发幂等释放；未绘制即卸载由一次 post-frame 检查补足。清除句柄关联后，microtask 移除 Overlay 条目、完成私有路由结果并释放动画等资源，避免 Overlay 自身卸载期间重入 setState。跨 Navigator 重开释放旧承载并创建新 State。关闭动画 listener 与既有业务 listener 分离，保持业务回调时机。
+
+验证覆盖销毁/保留、输入与滚动、零动画、系统返回、遮挡后非栈顶关闭、动画中重开、回调重入、隐藏焦点/ticker、嵌套浮层、独立会话、跨 Navigator、未绘制卸载。新增路由上下文及反复关闭重开回归，实际开启语义树并覆盖运行时启用无障碍；断言隐藏内容不可见、底层可点击、返回栈与 NavigatorObserver 不含承载路由、隐藏 PopScope 通知不外泄。双 SDK 独立目录完成登记组件、示例、工具/字体、文档生成与覆盖率检查。
+
+已否决：普通 Overlay 停放丢失 ModalRoute；嵌套 Navigator 停放触发无障碍断言并引入新的 Navigator 祖先。用户已授权扩大内部重构，不通过要求调用方增加空判断或新增公开宿主规避问题。

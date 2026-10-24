@@ -12,7 +12,8 @@ import 'dart:async';
 import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart' show RenderProxyBox;
+import 'package:flutter/rendering.dart'
+    show RenderConstrainedBox, SemanticsConfiguration;
 
 import '../../theme/t_colors.dart';
 import '../../theme/t_fonts.dart';

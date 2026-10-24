@@ -420,7 +420,9 @@ void main() {
       final hidden = tester.element(
         find.byType(_RouteRetentionProbe, skipOffstage: false),
       );
-      expect(ModalRoute.of(hidden), isNotNull);
+      final hiddenRoute = ModalRoute.of(hidden)!;
+      var parkingReleased = false;
+      unawaited(hiddenRoute.popped.then((_) => parkingReleased = true));
       handle.open();
       await tester.pumpAndSettle();
       expect(created, 1);
@@ -432,8 +434,304 @@ void main() {
       await tester.pumpWidget(const SizedBox.shrink());
       await tester.pump();
       expect(disposed, 1);
+      expect(parkingReleased, isTrue);
     },
   );
+
+  for (final semanticsInitiallyEnabled in [false, true]) {
+    testWidgets(
+      'retained route preserves navigation and semantics enabled=$semanticsInitiallyEnabled',
+      (tester) async {
+        final observer = _RetentionRouteObserver();
+        final navigatorKey = GlobalKey<NavigatorState>();
+        final canPop = ValueNotifier<bool>(false);
+        addTearDown(canPop.dispose);
+        final notifications = <bool>[];
+        var taps = 0;
+        late BuildContext context;
+        var created = 0;
+        var disposed = 0;
+        final semantics = semanticsInitiallyEnabled
+            ? tester.ensureSemantics()
+            : null;
+        await tester.pumpWidget(
+          NotificationListener<NavigationNotification>(
+            onNotification: (notification) {
+              notifications.add(notification.canHandlePop);
+              return false;
+            },
+            child: MaterialApp(
+              navigatorKey: navigatorKey,
+              navigatorObservers: [observer],
+              home: Builder(
+                builder: (value) {
+                  context = value;
+                  return Scaffold(
+                    body: TextButton(
+                      onPressed: () => taps++,
+                      child: const Text('underlying action'),
+                    ),
+                  );
+                },
+              ),
+            ),
+          ),
+        );
+        final owner = navigatorKey.currentState!;
+        final handle = TPopup.show(
+          context,
+          options: TPopupOptions.center(
+            animationDuration: const Duration(milliseconds: 40),
+            child: ValueListenableBuilder<bool>(
+              valueListenable: canPop,
+              builder: (context, value, child) => PopScope(
+                canPop: value,
+                child: Semantics(
+                  label: 'retained route content',
+                  child: _RouteRetentionProbe(
+                    onInit: () => created++,
+                    onDispose: () => disposed++,
+                  ),
+                ),
+              ),
+            ),
+          ),
+        );
+        await tester.pumpAndSettle();
+        final extraSemantics = semanticsInitiallyEnabled
+            ? null
+            : tester.ensureSemantics();
+        for (var cycle = 0; cycle < 3; cycle++) {
+          final visible = tester.element(find.byType(_RouteRetentionProbe));
+          expect(Navigator.of(visible), same(owner));
+          final visibleRoute = ModalRoute.of(visible)!;
+          expect(visibleRoute.isCurrent, isTrue);
+          expect(visibleRoute.isActive, isTrue);
+          expect(
+            find.bySemanticsLabel(RegExp('retained route content')),
+            findsOneWidget,
+          );
+          expect(owner.canPop(), isTrue);
+          // A registered PopScope still vetoes native maybePop while visible.
+          canPop.value = false;
+          await tester.pumpAndSettle();
+          expect(await owner.maybePop(), isTrue);
+          await tester.pumpAndSettle();
+          expect(handle.isShowing, isTrue);
+          handle.close();
+          await tester.pumpAndSettle();
+          expect(owner.canPop(), isFalse);
+          final hidden = tester.element(
+            find.byType(_RouteRetentionProbe, skipOffstage: false),
+          );
+          final hiddenRoute = ModalRoute.of(hidden)!;
+          expect(hiddenRoute.isCurrent, isFalse);
+          expect(hiddenRoute.isActive, isFalse);
+          expect(hiddenRoute.offstage, isTrue);
+          expect(Navigator.of(hidden), same(owner));
+          expect(
+            find.bySemanticsLabel(RegExp('retained route content')),
+            findsNothing,
+          );
+          await tester.tap(find.text('underlying action'));
+          await tester.pump();
+          expect(taps, cycle + 1);
+          notifications.clear();
+          canPop.value = true;
+          await tester.pumpAndSettle();
+          canPop.value = false;
+          await tester.pumpAndSettle();
+          expect(notifications, isEmpty);
+          expect(await owner.maybePop(), isFalse);
+          expect(observer.pushes, cycle + 2);
+          expect(observer.pops, cycle + 1);
+          if (cycle < 2) {
+            handle.open();
+            await tester.pumpAndSettle();
+          }
+        }
+        expect(created, 1);
+        expect(disposed, 0);
+        await tester.pumpWidget(const SizedBox.shrink());
+        await tester.pump();
+        expect(disposed, 1);
+        expect(tester.takeException(), isNull);
+        extraSemantics?.dispose();
+        semantics?.dispose();
+      },
+    );
+  }
+
+  testWidgets('retained panel survives local theme changes on reopen', (
+    tester,
+  ) async {
+    late BuildContext outer;
+    late BuildContext inner;
+    var created = 0;
+    var disposed = 0;
+    await tester.pumpWidget(
+      MaterialApp(
+        home: Builder(
+          builder: (context) {
+            outer = context;
+            return Theme(
+              data: ThemeData.dark(),
+              child: Builder(
+                builder: (context) {
+                  inner = context;
+                  return const Scaffold();
+                },
+              ),
+            );
+          },
+        ),
+      ),
+    );
+    final handle = TPopup.show(
+      outer,
+      options: TPopupOptions.center(
+        animationDuration: Duration.zero,
+        child: _CloseRetentionProbe(
+          onInit: () => created++,
+          onDispose: () => disposed++,
+        ),
+      ),
+    );
+    await tester.pumpAndSettle();
+    await tester.enterText(find.byType(TextField), 'theme state');
+    for (final context in [inner, outer, inner]) {
+      handle.close();
+      await tester.pumpAndSettle();
+      handle.open(context);
+      await tester.pumpAndSettle();
+      expect(created, 1);
+      expect(disposed, 0);
+      expect(find.text('theme state'), findsOneWidget);
+      expect(
+        Theme.of(tester.element(find.byType(TextField))).brightness,
+        Theme.of(context).brightness,
+      );
+    }
+    await tester.pumpWidget(const SizedBox.shrink());
+    await tester.pump();
+    expect(disposed, 1);
+    expect(tester.takeException(), isNull);
+  });
+
+  testWidgets(
+    'retained content keeps its own nested Navigator and route stack',
+    (tester) async {
+      final semantics = tester.ensureSemantics();
+      late BuildContext context;
+      final nestedKey = GlobalKey<NavigatorState>();
+      var created = 0;
+      var disposed = 0;
+      Widget probe() => _CloseRetentionProbe(
+        onInit: () => created++,
+        onDispose: () => disposed++,
+      );
+      await tester.pumpWidget(
+        MaterialApp(
+          home: Builder(
+            builder: (value) {
+              context = value;
+              return const Scaffold();
+            },
+          ),
+        ),
+      );
+      final handle = TPopup.show(
+        context,
+        options: TPopupOptions.center(
+          animationDuration: const Duration(milliseconds: 40),
+          child: HeroControllerScope.none(
+            child: Navigator(
+              key: nestedKey,
+              onGenerateRoute: (_) =>
+                  MaterialPageRoute<void>(builder: (_) => probe()),
+            ),
+          ),
+        ),
+      );
+      await tester.pumpAndSettle();
+      final nested = nestedKey.currentState!;
+      unawaited(nested.push(MaterialPageRoute<void>(builder: (_) => probe())));
+      await tester.pumpAndSettle();
+      await tester.enterText(find.byType(TextField), 'nested state');
+      handle.close();
+      await tester.pumpAndSettle();
+      handle.open();
+      await tester.pumpAndSettle();
+      expect(nestedKey.currentState, same(nested));
+      expect(nested.canPop(), isTrue);
+      expect(find.text('nested state'), findsOneWidget);
+      expect(created, 2);
+      expect(disposed, 0);
+      expect(await nested.maybePop(), isTrue);
+      await tester.pumpAndSettle();
+      expect(disposed, 1);
+      expect(handle.isShowing, isTrue);
+      await tester.pumpWidget(const SizedBox.shrink());
+      await tester.pump();
+      expect(disposed, 2);
+      expect(tester.takeException(), isNull);
+      semantics.dispose();
+    },
+  );
+
+  testWidgets('retained edge panel keeps viewport and end scroll position', (
+    tester,
+  ) async {
+    late BuildContext context;
+    await tester.pumpWidget(
+      MaterialApp(
+        home: Builder(
+          builder: (value) {
+            context = value;
+            return const Scaffold();
+          },
+        ),
+      ),
+    );
+    final handle = TPopup.show(
+      context,
+      options: TPopupOptions.bottom(
+        height: 200,
+        animationDuration: Duration.zero,
+        child: ListView.builder(
+          itemCount: 50,
+          itemExtent: 40,
+          itemBuilder: (_, i) => Text('row $i'),
+        ),
+      ),
+    );
+    await tester.pumpAndSettle();
+    final initial = tester
+        .state<ScrollableState>(find.byType(Scrollable))
+        .position;
+    initial.jumpTo(initial.maxScrollExtent);
+    await tester.pumpAndSettle();
+    final offset = initial.pixels;
+    final viewport = initial.viewportDimension;
+    expect(offset, greaterThan(0));
+    handle.close();
+    await tester.pumpAndSettle();
+    final hidden = tester
+        .state<ScrollableState>(find.byType(Scrollable, skipOffstage: false))
+        .position;
+    expect(hidden.viewportDimension, viewport);
+    expect(hidden.pixels, offset);
+    handle.open();
+    await tester.pumpAndSettle();
+    final reopened = tester
+        .state<ScrollableState>(find.byType(Scrollable))
+        .position;
+    expect(reopened.viewportDimension, viewport);
+    expect(reopened.pixels, offset);
+    await tester.pumpWidget(const SizedBox.shrink());
+    await tester.pump();
+    expect(tester.takeException(), isNull);
+  });
 
   group('TPopupOptions', () {
     test('默认 placement 为 bottom，内容 builder 默认均为空', () {
@@ -852,4 +1150,18 @@ class _RouteRetentionProbeState extends State<_RouteRetentionProbe> {
   @override
   Widget build(BuildContext context) =>
       Text('route: ${ModalRoute.of(context)!.isCurrent}');
+}
+
+class _RetentionRouteObserver extends NavigatorObserver {
+  int pushes = 0;
+  int pops = 0;
+  @override
+  void didPush(Route<dynamic> route, Route<dynamic>? previousRoute) {
+    pushes++;
+  }
+
+  @override
+  void didPop(Route<dynamic> route, Route<dynamic>? previousRoute) {
+    pops++;
+  }
 }

@@ -135,17 +135,18 @@ class _PopupNavigatorRoute<T> extends PopupRoute<T> {
       onCloseWithTrigger: onCloseWithTrigger,
     );
 
+    final retainedPanel = retention?.visible(this, panel) ?? panel;
     Widget popupContent;
     if (options.placement == TPopupPlacement.center) {
       popupContent = Transform.scale(
         scale: t,
         alignment: Alignment.center,
-        child: panel,
+        child: retainedPanel,
       );
     } else {
       popupContent = FractionalTranslation(
         translation: _layout.slideOffset(t),
-        child: panel,
+        child: retainedPanel,
       );
     }
 
@@ -169,8 +170,7 @@ class _PopupNavigatorRoute<T> extends PopupRoute<T> {
         children: [if (options.overlayConfig.showOverlay) barrier, positioned],
       ),
     );
-    final themed = capturedThemes?.wrap(context, content) ?? content;
-    return retention?.visible(this, themed) ?? themed;
+    return capturedThemes?.wrap(context, content) ?? content;
   }
 
   Widget _buildBarrier(BuildContext context, double t) {

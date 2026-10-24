@@ -32,6 +32,6 @@
 
 ## destroyOnClose 独立修复候选
 
-基线 develop `3704434fd2adfb6988110bc760aaaa52a814581c`，分支 `rss1102/fix/popup-destroy-on-close`。本地候选已完成双版本验证与复审；存在路由上下文阻塞回归，两版失败，Review 不通过。通过检查点和失败候选分别绑定指纹，详见[本轮验收](./evidence/destroy-on-close.md)。API、参数默认 false 与 Controller 规则保持，关闭后释放时机按要求修正，不能声明生命周期全兼容。
+基线 develop `3704434fd2adfb6988110bc760aaaa52a814581c`，分支 `rss1102/fix/popup-destroy-on-close`；本轮源码指纹 `71b577d44c0840b69a31d33432b4759dde88fec0e5a30b1985fc077e40d9b43f`。完成内部承载重构，路由上下文及语义边界遗漏已闭环。两版全部登记组件各 3965 项、示例/API/代码面板各 98 项、工具与字体覆盖各 171 项通过；严格分析、57 份 API 和片段校验通过，相关生产覆盖率均超过 95%。最终复审无阻塞项，详见[本轮验收](./evidence/destroy-on-close.md)。
 
-默认 false 会保留内容，丢弃句柄后可能占用资源至 Navigator 卸载；根 Navigator 可能长期存活。隐藏期间的路由 inherited 上下文兼容目前未闭环，最终 Review 不通过；业务定时器/订阅不保证自动暂停。真实 State 复用限同一句柄、同一 Navigator；不同 Navigator 重建。本轮不新增公开宿主或 dispose。
+公开签名、默认 false 和 Controller 规则保持；关闭后资源保留时机按需求修正，不能声明生命周期全兼容。丢弃句柄可能保留到 Navigator 卸载；根 Navigator 可长期存在，业务定时器/订阅不保证暂停。不新增公开宿主或 dispose。只完成本地验收，未推送、创建 PR、合并或验证真机/Web release；未修改 Golden 基线。

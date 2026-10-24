@@ -1,11 +1,11 @@
 part of 't_popup.dart';
 
-// A mounted parking slot belongs to the Navigator overlay, not to a popped
-// route. A GlobalKey moves the live subtree within the same frame.
+// The owner-managed parking route stays outside Navigator history. A GlobalKey
+// moves the live subtree between visible and offstage modal scopes in one frame.
 class _PopupRetention {
   _PopupRetention(this.navigator, this.onReleased) {
-    _entry = OverlayEntry(maintainState: true, builder: _build);
-    navigator.overlay!.insert(_entry);
+    _parkingRoute = _PopupParkingRoute(this);
+    _parkingRoute.mount();
     WidgetsBinding.instance.addPostFrameCallback((_) {
       if (!navigator.mounted) {
         release();
@@ -16,20 +16,23 @@ class _PopupRetention {
   final NavigatorState navigator;
   final VoidCallback onReleased;
   final GlobalKey _key = GlobalKey();
-  late final OverlayEntry _entry;
+  late final _PopupParkingRoute _parkingRoute;
   _PopupNavigatorRoute<dynamic>? _active;
   Widget? _content;
+  TOverlayThemes? _themes;
+  Size? _parkedSize;
   bool _released = false;
 
   void activate(_PopupNavigatorRoute<dynamic> route) {
     _active = route;
-    _entry.markNeedsBuild();
+    _parkingRoute.refresh();
   }
 
   Widget visible(_PopupNavigatorRoute<dynamic> route, Widget content) {
     if (_released || !identical(_active, route)) {
       return const SizedBox.shrink();
     }
+    _themes = route.capturedThemes;
     _content = Semantics(
       container: true,
       explicitChildNodes: true,
@@ -45,8 +48,12 @@ class _PopupRetention {
     if (_released || !identical(_active, route)) {
       return;
     }
+    final renderObject = _key.currentContext?.findRenderObject();
+    if (renderObject is _PopupRetainedRenderBox && renderObject.hasSize) {
+      _parkedSize = renderObject.size;
+    }
     _active = null;
-    _entry.markNeedsBuild();
+    _parkingRoute.refresh();
   }
 
   Widget _build(BuildContext context) => _PopupRetentionSlot(
@@ -57,16 +64,20 @@ class _PopupRetention {
             child: TickerMode(
               enabled: false,
               child: ExcludeFocus(
-                child: ExcludeSemantics(
-                  child: _PopupRetainedTree(
-                    key: _key,
-                    child: _PopupRetainedScope(child: _content!),
-                  ),
-                ),
+                child: ExcludeSemantics(child: _parkedContent(context)),
               ),
             ),
           ),
   );
+
+  Widget _parkedContent(BuildContext context) {
+    final content = _PopupRetainedTree(
+      key: _key,
+      parkedSize: _parkedSize,
+      child: _PopupRetainedScope(child: _content!),
+    );
+    return _themes?.wrap(context, content) ?? content;
+  }
 
   void release() {
     if (_released) {
@@ -75,12 +86,11 @@ class _PopupRetention {
     _released = true;
     _active = null;
     _content = null;
+    _themes = null;
+    _parkedSize = null;
     onReleased();
     // Slot disposal can happen while the Overlay itself is unmounting.
-    scheduleMicrotask(() {
-      _entry.remove();
-      _entry.dispose();
-    });
+    scheduleMicrotask(_parkingRoute.unmount);
   }
 }
 
@@ -107,14 +117,36 @@ class _PopupRetentionSlotState extends State<_PopupRetentionSlot> {
 // Reparenting a live tree changes its semantic ancestry. Clear the detached
 // render root's cached semantic tree before it is attached to the parking slot.
 class _PopupRetainedTree extends SingleChildRenderObjectWidget {
-  const _PopupRetainedTree({super.key, required super.child});
+  const _PopupRetainedTree({super.key, this.parkedSize, required super.child});
+  final Size? parkedSize;
+
+  BoxConstraints get _constraints => parkedSize == null
+      ? const BoxConstraints()
+      : BoxConstraints.tight(parkedSize!);
 
   @override
-  RenderProxyBox createRenderObject(BuildContext context) =>
-      _PopupRetainedRenderBox();
+  RenderConstrainedBox createRenderObject(BuildContext context) =>
+      _PopupRetainedRenderBox(additionalConstraints: _constraints);
+
+  @override
+  void updateRenderObject(
+    BuildContext context,
+    _PopupRetainedRenderBox renderObject,
+  ) {
+    renderObject.additionalConstraints = _constraints;
+  }
 }
 
-class _PopupRetainedRenderBox extends RenderProxyBox {
+class _PopupRetainedRenderBox extends RenderConstrainedBox {
+  _PopupRetainedRenderBox({required super.additionalConstraints});
+
+  @override
+  void describeSemanticsConfiguration(SemanticsConfiguration config) {
+    super.describeSemanticsConfiguration(config);
+    config.isSemanticBoundary = true;
+    config.explicitChildNodes = true;
+  }
+
   @override
   void detach() {
     super.detach();
@@ -149,4 +181,70 @@ class _PopupRetainedScopeState extends State<_PopupRetainedScope> {
     _scroll.dispose();
     super.dispose();
   }
+}
+
+// A private owner-managed route supplies ModalRoute dependencies while parked.
+// It never enters Navigator history and therefore cannot intercept system back.
+class _PopupParkingRoute extends PopupRoute<void> {
+  _PopupParkingRoute(this.retention) : super(requestFocus: false);
+  final _PopupRetention retention;
+
+  @override
+  NavigatorState get navigator => retention.navigator;
+  @override
+  bool get isCurrent => false;
+  @override
+  bool get isFirst => false;
+  @override
+  bool get offstage => true;
+  @override
+  bool get hasActiveRouteBelow => false;
+  @override
+  Duration get transitionDuration => Duration.zero;
+  @override
+  bool get barrierDismissible => false;
+  @override
+  Color? get barrierColor => null;
+  @override
+  String? get barrierLabel => null;
+  @override
+  bool get maintainState => true;
+
+  @override
+  Widget buildModalBarrier() => const SizedBox.shrink();
+
+  void mount() {
+    install();
+    navigator.overlay!.insertAll(overlayEntries);
+  }
+
+  void refresh() {
+    changedInternalState();
+  }
+
+  void unmount() {
+    for (final entry in overlayEntries) {
+      entry.remove();
+    }
+    didComplete(null);
+    dispose();
+  }
+
+  @override
+  Widget buildPage(
+    BuildContext context,
+    Animation<double> animation,
+    Animation<double> secondaryAnimation,
+  ) => const SizedBox.shrink();
+
+  @override
+  Widget buildTransitions(
+    BuildContext context,
+    Animation<double> animation,
+    Animation<double> secondaryAnimation,
+    Widget child,
+  ) => NotificationListener<NavigationNotification>(
+    onNotification: (_) => true,
+    child: Stack(children: [child, retention._build(context)]),
+  );
 }
