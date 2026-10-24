@@ -56,15 +56,9 @@ final class TPickerPopup {
     /// 蒙层行为；null 时沿用 Popup 默认值。
     TPopupOverlayConfig? overlay,
 
-    /// 已废弃，此为兼容入口。请使用取反值 maintainState；将在 2.0.0 删除。
-    @Deprecated(
-      'Use maintainState with the old value inverted instead. Deprecated in 1.0.1; remove in 2.0.0.',
-    )
+    /// 默认 false；为 true 时路由被其他不透明路由覆盖可释放内容 State。
+    /// 关闭路由后内容始终释放，再次打开会创建新 State。
     bool destroyOnClose = false,
-
-    /// 被不透明路由覆盖时是否保留内容状态，默认 true。
-    /// 未传时使用 destroyOnClose 的取反值，同时提供时本参数优先；关闭后始终释放。
-    bool? maintainState,
 
     /// 打开和关闭动画时长。
     Duration? animationDuration,
@@ -103,7 +97,7 @@ final class TPickerPopup {
         radius: radius,
         backgroundColor: backgroundColor,
         overlay: overlay,
-        maintainState: maintainState ?? !destroyOnClose,
+        destroyOnClose: destroyOnClose,
         animationDuration: animationDuration,
         onOpened: onOpened,
         onClosed: onClosed,

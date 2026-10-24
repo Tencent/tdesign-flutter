@@ -9,37 +9,6 @@ import 'package:markdown/markdown.dart' as md;
 import '../../tool/api_doc_contract.dart';
 
 void main() {
-  test(
-    'Popup copyWith documents optional state precedence and legacy migration',
-    () {
-      final source = File('example/assets/api/popup_api.md').readAsStringSync();
-      final start = source.indexOf('##### TPopupOptions.copyWith\n');
-      final end = source.indexOf('##### TPopupOptions.normalized\n');
-      expect(start, greaterThanOrEqualTo(0));
-      expect(end, greaterThan(start));
-      final method = source.substring(start, end);
-      final legacyRow = method
-          .split('\n')
-          .singleWhere((line) => line.startsWith('| destroyOnClose |'));
-      expect(legacyRow, contains('maintainState'));
-      expect(legacyRow, contains('取反'));
-      expect(legacyRow, contains('2.0.0'));
-      expect(source, isNot(contains('copyWithMaintainState')));
-      expect(method, contains('1.0.1'));
-      final stateRow = method
-          .split('\n')
-          .singleWhere((line) => line.startsWith('| maintainState |'));
-      expect(stateRow, contains('非空时优先'));
-      expect(stateRow, contains('false'));
-      expect(stateRow, contains('当前有效值'));
-      final rows = parameterRows(method);
-      final parameter = rows.singleWhere((row) => row['参数'] == 'maintainState');
-      expect(parameter['类型'], 'bool?');
-      expect(parameter['必填'], '否');
-      expect(parameter['默认值'], '-');
-    },
-  );
-
   final themes = <String, ClassDeclaration>{};
   for (final file in Directory(
     'lib/src/components',

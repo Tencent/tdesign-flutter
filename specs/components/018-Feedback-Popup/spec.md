@@ -90,22 +90,6 @@ Popup 是承载任意内容的基础浮层。小程序基础 Popup 默认只渲�
 
 ## 1.0.1 API 兼容迁移
 
-`TPopupOverlayConfig.onTap` 替代 `onClick`，不改变遮罩点击和关闭规则。
+仅新增 `TPopupOverlayConfig.onTap` 兼容旧 `onClick`；新参数非空时优先，否则通过旧 getter 分派，不改变蒙层点击与关闭规则。旧入口标注弃用及 2.0.0 删除计划。
 
-1.0.0 的 `destroyOnClose` 实际已用于控制被不透明路由遮挡时的状态保留：路由返回 `maintainState = !options.destroyOnClose`，并非控制关闭后是否销毁。旧参数默认 false，遮挡时保留状态；true 时允许释放，不保证每次遮挡均释放。无论取值如何，关闭后均释放，再次打开创建新 State。依据见 [v1.0.0 路由实现](https://github.com/Tencent/tdesign-flutter/blob/v1.0.0/tdesign-component/lib/src/components/popup/_popup_route.dart#L68)及[当时的参数说明](https://github.com/Tencent/tdesign-flutter/blob/v1.0.0/tdesign-component/lib/src/components/popup/t_popup_options.dart#L228)。
-
-本次提供 `maintainState` 以纠正命名，并保留旧参数的取反映射和原生命周期行为；不是新增“关闭后保留”能力。新参数声明为 `bool? maintainState`，省略默认值时隐式为 null，表示未指定新值。构造/展示入口此时回退到 `!destroyOnClose`，因此两者均未传时实际仍为 true；不能将新参数直接默认设为 true，否则会覆盖旧参数显式 true 的调用。copyWith 的 null 回退规则见下文。继承签名适配是独立的源码兼容风险，与生命周期是否改变分别说明。
-
-新旧参数同时提供时，新参数优先，仅通知一次；没有新参数时保留旧公开 getter 的继承覆盖。旧入口及类型保留，标注推荐入口和 2.0.0 删除计划。普通旧 API 调用、默认行为及 Controller 绑定规则不变；copyWith 覆盖或实现的签名适配例外见下文。
-
-验收覆盖旧调用、继承覆盖、新参数优先级、空回调及实际交互；取反参数覆盖默认、真假组合、工厂、copyWith 和 normalized。
-
-### copyWith 新旧参数共存与继承适配
-
-`TPopupOptions.copyWith` 同时接受 `bool? maintainState`（默认 null）和兼容参数 `bool? destroyOnClose`。maintainState 非空时优先，包含 false；否则取非空 destroyOnClose 的反值；两者均为 null 或未传时保留当前有效 maintainState（含旧 getter 覆盖）。不改变原对象，其他字段仍按原有复制规则处理。旧参数标明替代入口和 2.0.0 删除计划。
-
-移除未发布的独立方法 `copyWithMaintainState`，统一使用原 copyWith。普通旧调用、旧 getter 覆盖及未覆盖该方法的子类保持原行为。1.0.0 使用方如覆盖或实现了 copyWith，升级到 1.0.1 时必须增加可选参数 bool? maintainState，并处理或转发；仅增加参数而忽略其值不算完成适配。该签名扩展属于继承源码的破坏性变更，FAQ 不能消除兼容风险，更新日志和版本化 FAQ 必须明确，不能宣称全部旧覆盖无需修改。
-
-此前独立方法方案保留旧覆盖签名，但增加冗余入口及后续迁移成本，已按用户确定的统一命名方案取代。2.0.0 计划删除旧 destroyOnClose 参数，已使用 maintainState 的普通复制调用无需再次迁移。 自定义子类届时须移除向 super.copyWith 转发的旧参数；如继续提供自身的旧兼容入口，应自行取反映射到 maintainState。依赖旧 destroyOnClose getter 覆盖的类须改为显式配置或覆盖 maintainState。API 清理不应改变默认有效值、遮挡保留及关闭释放的生命周期契约。
-
-验收覆盖：当前状态真假 × 新旧 nullable 参数的完整矩阵、显式 false 优先、null 回退、旧 getter 覆盖、其他配置保留与原对象不变、normalized、实际遮挡/恢复/关闭生命周期，以及增加参数后的子类虚分派、参数转发和原有复制定制。生成 API 保留两个参数的类型、可选性与迁移说明，不再生成独立方法。
+maintainState 参数及相关 copyWith 扩展、继承适配 FAQ 和旧 destroyOnClose 弃用计划已撤出本地候选。保留原 TPopupOptions API、copyWith 签名与生命周期行为；destroyOnClose 的关闭保留修复在独立分支处理，不包含于本候选。

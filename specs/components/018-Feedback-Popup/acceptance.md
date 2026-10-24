@@ -32,6 +32,4 @@
 
 ## API 兼容迁移候选
 
-基线 develop `3704434fd2adfb6988110bc760aaaa52a814581c`。本轮候选、双版本结果与未覆盖范围见[统一验收记录](./evidence/api-compatibility.md)。双版本验证及本地 Review 通过。
-
-本轮 copyWith 已统一新旧参数并移除独立入口；普通旧调用保持，覆盖或实现 copyWith 的业务类须增加可选参数并处理或转发。该继承签名变化属于明确的破坏性风险，已在 1.0.0 → 1.0.1 FAQ 和 PR 说明中明确。2.0.0 删除旧参数时，普通新调用无需再次迁移；子类须清理旧参数转发及旧 getter 依赖。双版本验证及本地 Review 通过，本轮授权推送 #1196 并检查新 head CI，暂不合并。具体验证范围及证据同上。
+本地撤出 Popup/Drawer/Picker 状态参数、copyWith 扩展、继承适配 FAQ 与旧参数弃用计划。保留其他兼容命名；本分支旧 TPopupOptions 签名、默认行为与 Controller 绑定规则不变。当前候选与验证范围见[统一验收](./evidence/api-compatibility.md)，不沿用已撤出用例的旧数量；不推送或更新远端 #1196。

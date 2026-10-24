@@ -76,8 +76,7 @@
 | onOverlayClick | VoidCallback? | - | 在蒙层被点击时触发，不受是否自动关闭影响。 | 否 |
 | topInset | double? | - | 设置抽屉相对屏幕顶部的可选偏移，默认 0，必须大于或等于 0。 | 否 |
 | useSafeArea | bool | true | 控制浮层是否避让系统安全区域，默认 true。 | 否 |
-| destroyOnClose | bool | false | 已废弃，此为兼容入口。请使用取反值 maintainState；将在 2.0.0 删除。 | 否 |
-| maintainState | bool? | - | 被不透明路由覆盖时是否保留内容状态，默认 true。 未传时使用 destroyOnClose 的取反值，同时提供时本参数优先；关闭后始终释放。 | 否 |
+| destroyOnClose | bool | false | 默认 false；为 true 时路由 maintainState 为 false， 被其他不透明路由覆盖时可释放内容 State。关闭路由后内容始终会释放。 | 否 |
 | onClose | VoidCallback? | - | 在抽屉浮层关闭后触发。 | 否 |
 
 
