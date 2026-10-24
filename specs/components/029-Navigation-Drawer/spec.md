@@ -41,7 +41,7 @@
 - `TDrawer` 是可用于 `Scaffold.drawer` / `Scaffold.endDrawer` 的声明式 Widget，只持有内容与组件视觉/交互参数。
 - `showTDrawer(...)` 的 `placement` 非空默认 `right`；Demo 的基础与图标示例显式使用小程序公开示例的 `left`，左右方向都有回归。
 - `showTDrawer(...)` 的 `showOverlay`、`closeOnOverlayClick` 非空默认 `true`；`onOverlayClick` 每次有效蒙层点击触发一次，是否关闭只由 `closeOnOverlayClick` 决定。
-- `showTDrawer(...)` 的 `destroyOnClose` 非空默认 `false` 并透传 Popup；`onClose` 在一次展示周期真正结束后触发；`topInset` 替代旧 `drawerTop`。
+- `showTDrawer(...)` 的 `placement` 非空默认 `right`；Demo 的基础与图标示例显式使用小程序公开示例的 `left`，左右方向都有回归。
 - `TDrawer.enableFeedback`、`TDrawer.showDivider`、`TDrawer.showLastDivider` 为组件实例状态，非空默认 `true`，Theme 不保存同义开关。
 - `showDivider` 控制菜单项分隔线，不在列表四周额外绘制整圈边框；末项是否显示分隔线由 `showLastDivider` 决定。
 - 标题 Widget 默认按文字方向起始侧对齐；面板实例或 Theme 背景色同时作为菜单项未显式配置背景时的默认值。
@@ -87,3 +87,11 @@
 跨组件配置职责见 [Theme 契约](../../engineering/048-Theme-configuration-contracts/spec.md)，视觉方法见 [Golden 规范](../../engineering/044-Testing-golden-regression/spec.md)。
 
 发布归类：本轮与 Button/NavBar 的默认文字槽调整采用同一 patch 策略。未配置、空样式或部分显式样式仍可能改变字体、颜色、换行、尺寸和省略位置；原生 Text 的字体也可能受新默认值影响，段落参数沿用既有语义。保留旧外观需在实例或内容内部主题中明确所需字段；不以参数签名不变或测试通过承诺零兼容风险。
+
+## 1.0.1 API 兼容迁移
+
+`onItemTap` / `TDrawerItemTapCallback` 替代 `onItemClick` / `TDrawerItemClickCallback`，保留索引、选项和调用时机。本轮不调整 showTDrawer 的状态或关闭生命周期。
+
+新旧参数同时提供时，新参数优先，仅通知一次；没有新参数时保留旧公开 getter 的继承覆盖。旧入口及类型保留，标注推荐入口和 2.0.0 删除计划。旧 API、默认行为及 Controller 绑定规则不变。
+
+验收覆盖旧调用、继承覆盖、新参数优先级、空回调及实际交互。

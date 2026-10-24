@@ -31,9 +31,12 @@ class TDrawer extends StatelessWidget {
     this.enableFeedback = true,
     this.showLastDivider = true,
     this.title,
-    this.onItemClick,
+    @Deprecated('Use onItemTap instead. Deprecated in 1.0.1; remove in 2.0.0.')
+    TDrawerItemClickCallback? onItemClick,
+    TDrawerItemTapCallback? onItemTap,
     this.child,
-  });
+  }) : _onItemTap = onItemTap,
+       _onItemClick = onItemTap ?? onItemClick;
 
   /// 是否显示菜单项分隔线，默认 true。
   final bool showDivider;
@@ -56,8 +59,17 @@ class TDrawer extends StatelessWidget {
   /// 抽屉的标题组件
   final Widget? title;
 
-  /// 点击抽屉里的列表项触发
-  final TDrawerItemClickCallback? onItemClick;
+  /// 点击抽屉里的列表项触发。
+  /// 与旧参数同时提供时优先使用本参数。
+  // ignore: deprecated_member_use_from_same_package
+  TDrawerItemTapCallback? get onItemTap => _onItemTap ?? onItemClick;
+
+  final TDrawerItemTapCallback? _onItemTap;
+  final TDrawerItemTapCallback? _onItemClick;
+
+  /// 已废弃，此为兼容入口。请使用 [onItemTap]；将在 2.0.0 删除。
+  @Deprecated('Use onItemTap instead. Deprecated in 1.0.1; remove in 2.0.0.')
+  TDrawerItemClickCallback? get onItemClick => _onItemClick;
 
   @override
   Widget build(BuildContext context) {
@@ -69,7 +81,7 @@ class TDrawer extends StatelessWidget {
       showLastDivider: showLastDivider,
       child: child,
       title: title,
-      onItemClick: onItemClick,
+      onItemTap: onItemTap,
     );
   }
 }
@@ -101,6 +113,7 @@ TDrawerHandle showTDrawer(
   VoidCallback? onOverlayClick,
   double? topInset,
   bool useSafeArea = true,
+
   bool destroyOnClose = false,
   VoidCallback? onClose,
 }) {
@@ -124,7 +137,7 @@ TDrawerHandle showTDrawer(
         showOverlay: showOverlay,
         closeOnClick: closeOnOverlayClick,
         color: showOverlay ? null : Colors.transparent,
-        onClick: onOverlayClick,
+        onTap: onOverlayClick,
       ),
       destroyOnClose: destroyOnClose,
       useSafeArea: useSafeArea,

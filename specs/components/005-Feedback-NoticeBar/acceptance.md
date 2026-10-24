@@ -38,3 +38,7 @@
 - 原始日志、LCOV、锁文件与独立补丁保存在工作区外层 `artifacts/pr1148-independent/03-noticebar-gesture/`，与本记录的指纹绑定；摘要随分支保留在验证数据中。未执行设备、正式 Linux Golden 或远端 CI；改动不涉及绘制/布局/Theme/字体，未更新图片基线。历史视觉/设备任务继续按原 tasks 保留，不据本次功能验收核销。未推送、创建 PR 或发布。
 
 本轮已闭环公开文档过度承诺过滤范围的 P2：仅修改 dartdoc 并重新生成 API，未收紧内置区域手势。两项原临时验证已进入原 manifest 登记的正式组件测试文件；双版本各 64 项组件、4 项 Example、30 项调度器自测及严格 analyze/生成器检查通过，生产覆盖率均为 337/348 = 96.84%。旧候选的 62 项验收仅保存在外层 history/pr3-before-doc-contract，不外推当前结果。
+
+## API 兼容迁移候选
+
+基线 develop `3704434fd2adfb6988110bc760aaaa52a814581c`。本轮候选、双版本结果与未覆盖范围见[统一验收记录](../018-Feedback-Popup/evidence/api-compatibility.md)。双版本验证及本地 Review 通过。

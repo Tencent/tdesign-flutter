@@ -168,8 +168,13 @@ class TTabBarItemConfig {
     this.badge,
     this.popUpButtonConfig,
     this.onLongPress,
-    this.allowMultipleTaps = false,
-  });
+    @Deprecated(
+      'Use notifyOnReselect instead. Deprecated in 1.0.1; remove in 2.0.0.',
+    )
+    bool allowMultipleTaps = false,
+    bool? notifyOnReselect,
+  }) : _notifyOnReselect = notifyOnReselect,
+       _allowMultipleTaps = notifyOnReselect ?? allowMultipleTaps;
 
   /// 选中时图标。未指定尺寸的 Icon 默认使用 TabBar 的 20px 图标尺寸；
   /// Icon 自身显式指定的尺寸优先。
@@ -190,7 +195,7 @@ class TTabBarItemConfig {
   /// 标签项被选中时的附加点击回调。
   ///
   /// 点击未选中项时，在 [TTabBar.onChanged] 之前调用；重复点击当前选中项时，
-  /// 仅当 [allowMultipleTaps] 为 true 才调用。整栏禁用时不会调用。
+  /// 仅当 [notifyOnReselect] 为 true 才调用。整栏禁用时不会调用。
   final GestureTapCallback? onTap;
 
   /// 展示在标签内容右上角的徽标；为空时不显示。
@@ -211,7 +216,18 @@ class TTabBarItemConfig {
   /// 是否允许重复点击当前选中项时再次调用 [onTap]，默认为 false。
   ///
   /// 该字段不影响点击未选中项，也不会让 [TTabBar.onChanged] 重复通知当前值。
-  final bool allowMultipleTaps;
+  /// 与旧参数同时提供时优先使用本参数。
+  // ignore: deprecated_member_use_from_same_package
+  bool get notifyOnReselect => _notifyOnReselect ?? allowMultipleTaps;
+
+  final bool? _notifyOnReselect;
+  final bool _allowMultipleTaps;
+
+  /// 已废弃，此为兼容入口。请使用 [notifyOnReselect]；将在 2.0.0 删除。
+  @Deprecated(
+    'Use notifyOnReselect instead. Deprecated in 1.0.1; remove in 2.0.0.',
+  )
+  bool get allowMultipleTaps => _allowMultipleTaps;
 
   /// 长按事件
   final GestureLongPressCallback? onLongPress;
@@ -580,7 +596,7 @@ class _TTabBarState extends State<TTabBar> with SingleTickerProviderStateMixin {
       return;
     }
     if (_selectedIndex == index) {
-      if (widget.navigationTabs[index].allowMultipleTaps) {
+      if (widget.navigationTabs[index].notifyOnReselect) {
         widget.navigationTabs[index].onTap?.call();
       }
       return;
@@ -1102,7 +1118,7 @@ class _TTabBarItemWithBadge extends StatelessWidget {
               config: popUpButtonConfig.popUpDialogConfig,
               items: popUpButtonConfig.items,
               onClickMenu: (value) {
-                popUpButtonConfig.onChanged(value);
+                popUpButtonConfig.onSelected(value);
               },
             ),
           ),
@@ -1116,9 +1132,18 @@ class _TTabBarItemWithBadge extends StatelessWidget {
 class TTabBarPopUpBtnConfig {
   TTabBarPopUpBtnConfig({
     required this.items,
-    required this.onChanged,
+
+    /// 已废弃，此为兼容入口。请使用 [onSelected]；将在 2.0.0 删除。
+    @Deprecated('Use onSelected instead. Deprecated in 1.0.1; remove in 2.0.0.')
+    ValueChanged<String>? onChanged,
+    ValueChanged<String>? onSelected,
     this.popUpDialogConfig,
-  }) : assert(() {
+  }) : _onSelected = onSelected,
+       _onChanged =
+           onSelected ??
+           onChanged ??
+           (throw ArgumentError('onSelected is required.')),
+       assert(() {
          if (popUpDialogConfig != null) {
            if ((popUpDialogConfig.arrowHeight != null &&
                    popUpDialogConfig.arrowHeight! <= 0.0) ||
@@ -1136,8 +1161,17 @@ class TTabBarPopUpBtnConfig {
   /// 选项list
   final List<TTabBarMenuItem> items;
 
-  /// 统一在 onChanged 中处理各item点击事件
-  final ValueChanged<String> onChanged;
+  /// 选择菜单项时触发，包含重复选择；不改变主标签值。
+  /// 须提供本参数或旧参数 `onChanged`，同时提供时本参数优先。
+  // ignore: deprecated_member_use_from_same_package
+  ValueChanged<String> get onSelected => _onSelected ?? onChanged;
+
+  final ValueChanged<String>? _onSelected;
+  final ValueChanged<String> _onChanged;
+
+  /// 已废弃，此为兼容入口。请使用 [onSelected]；将在 2.0.0 删除。
+  @Deprecated('Use onSelected instead. Deprecated in 1.0.1; remove in 2.0.0.')
+  ValueChanged<String> get onChanged => _onChanged;
 
   /// 弹窗UI配置
   final TTabBarPopUpShapeConfig? popUpDialogConfig;

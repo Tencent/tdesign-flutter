@@ -801,6 +801,7 @@ const componentTestManifests = <ComponentTestManifest>[
       'test/components/popup/t_popup_coverage_test.dart',
       'test/components/popup/t_popup_layout_test.dart',
       'test/components/popup/t_popup_options_test.dart',
+      'test/components/popup/t_api_compatibility_test.dart',
       'test/components/popup/t_popup_route_test.dart',
       'test/components/popup/t_popup_test.dart',
     ],

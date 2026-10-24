@@ -35,3 +35,7 @@
 未绑定唯一候选的结果不作为当前通过证明；旧命令与流水由Git历史追溯。
 
 当前待办见 [tasks.md](./tasks.md)；实际执行入口见[贡献规范](../../../CONTRIBUTING.md#组件测试与-ci-回归门禁)。清理不关闭未完成项。
+
+## API 兼容迁移候选
+
+基线 develop `3704434fd2adfb6988110bc760aaaa52a814581c`。本轮候选、双版本结果与未覆盖范围见[统一验收记录](../018-Feedback-Popup/evidence/api-compatibility.md)。双版本验证及本地 Review 通过。
