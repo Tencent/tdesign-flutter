@@ -588,7 +588,10 @@ const componentTestManifests = <ComponentTestManifest>[
   ComponentTestManifest(
     name: 'tab_bar',
     coverageTargets: ['lib/src/components/tabbar/'],
-    componentTests: ['test/components/tabbar/t_tab_bar_test.dart'],
+    componentTests: [
+      'test/components/tabbar/t_tab_bar_test.dart',
+      'test/components/tabbar/t_tab_bar_menu_callback_test.dart',
+    ],
     exampleTests: ['test/tab_bar/tab_bar_demo_test.dart'],
     visualTests: [
       VisualTestManifest(
