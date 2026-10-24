@@ -95,3 +95,7 @@ Popup 是承载任意内容的基础浮层。小程序基础 Popup 默认只渲�
 隐藏内容维持原面板尺寸，避免停放扩大视口截断滚动位置；不绘制、不命中、不参与语义或焦点，禁用 Flutter ticker；业务定时器/订阅不保证暂停。result、onVisibleChange、onClosed 仍对应每次展示。关闭动画中 reopen、系统返回、非栈顶移除与重复关闭不得重复挂载或通知。隐藏期间由不进入返回栈的私有承载 ModalRoute 提供路由上下文；可见期间仍为本次实际路由，Navigator 祖先身份不变。承载路由不拦截底层点击，不向外传播隐藏 PopScope 的返回通知；不新增嵌套 Navigator。
 
 风险：默认 false 以及显式 false 均从关闭释放变为保留，属于生命周期行为变化；丢弃句柄后仍可能占用至 Navigator 卸载，根 Navigator 可能长时间存活。本候选按确定的 1.0.1 修复范围单独交付，不宣称透明兼容旧资源释放时机，不与 API 命名迁移合并。
+
+局部历史消费返回（didPop 返回 false）不等于路由成功弹出；后续直接移除或非栈顶移除仍须保留 false 会话 State，同句柄重开复用。成功 pop 保持原动画与回调时序，内容在关闭动画结束后停放。此前局部历史消费时的 close-start 通知位置不在本次调整范围；零动画 onClosed 同步重开另行处理。
+
+声明式 Navigator.pages 替换关联页面导致 Popup 移除时，同一 Navigator 的 false 会话也保留 State；内部停放刷新不得因构建阶段跳过而丢失 State。

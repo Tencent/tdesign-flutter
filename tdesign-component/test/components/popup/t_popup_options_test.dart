@@ -733,6 +733,240 @@ void main() {
     expect(tester.takeException(), isNull);
   });
 
+  for (final mode in ['remove', 'non-top-remove', 'pop']) {
+    testWidgets('local history consumption then $mode retains session', (
+      tester,
+    ) async {
+      final semantics = tester.ensureSemantics();
+      try {
+        late BuildContext context;
+        var created = 0;
+        var disposed = 0;
+        var closed = 0;
+        var resultCompleted = false;
+        final events = <String>[];
+        await tester.pumpWidget(
+          MaterialApp(
+            home: Builder(
+              builder: (value) {
+                context = value;
+                return const Scaffold();
+              },
+            ),
+          ),
+        );
+        final navigator = Navigator.of(context);
+        final handle = TPopup.show(
+          context,
+          options: TPopupOptions.center(
+            animationDuration: const Duration(milliseconds: 120),
+            onVisibleChange: (visible, trigger) =>
+                events.add('visible:$visible'),
+            onOpened: () => events.add('opened'),
+            onClosed: () {
+              closed++;
+              events.add('closed');
+            },
+            child: _CloseRetentionProbe(
+              onInit: () => created++,
+              onDispose: () => disposed++,
+            ),
+          ),
+        );
+        final result = handle.result;
+        unawaited(result.then((_) => resultCompleted = true));
+        await tester.pumpAndSettle();
+        await tester.enterText(find.byType(TextField), 'local history state');
+        final originalState = tester.state<_CloseRetentionProbeState>(
+          find.byType(_CloseRetentionProbe),
+        );
+        final route = ModalRoute.of(
+          tester.element(find.byType(_CloseRetentionProbe)),
+        )!;
+        route.addLocalHistoryEntry(
+          LocalHistoryEntry(onRemove: () => events.add('history:1')),
+        );
+        route.addLocalHistoryEntry(
+          LocalHistoryEntry(onRemove: () => events.add('history:2')),
+        );
+        for (var i = 0; i < 2; i++) {
+          navigator.pop();
+          await tester.pumpAndSettle();
+          expect(route.isActive, isTrue);
+          expect(handle.isShowing, isTrue);
+          expect(disposed, 0);
+          expect(closed, 0);
+          expect(resultCompleted, isFalse);
+        }
+        // Preserve the existing close-start notification timing for consumed pops.
+        expect(events, [
+          'visible:true',
+          'opened',
+          'visible:false',
+          'history:2',
+          'history:1',
+        ]);
+        if (mode == 'non-top-remove') {
+          unawaited(
+            navigator.push(
+              MaterialPageRoute<void>(
+                builder: (_) => const Scaffold(body: Text('history cover')),
+              ),
+            ),
+          );
+          await tester.pumpAndSettle();
+          handle.close('finished');
+        } else if (mode == 'remove') {
+          navigator.removeRoute(route, 'finished');
+        } else {
+          navigator.pop('finished');
+          await tester.pump();
+          await tester.pump(const Duration(milliseconds: 30));
+          expect(find.byType(_CloseRetentionProbe), findsOneWidget);
+          final duringAnimation = tester.element(
+            find.byType(_CloseRetentionProbe),
+          );
+          expect(ModalRoute.of(duringAnimation), same(route));
+          expect(ModalRoute.of(duringAnimation)!.offstage, isFalse);
+          expect(disposed, 0);
+          expect(closed, 0);
+          expect(resultCompleted, isTrue);
+        }
+        await tester.pumpAndSettle();
+        expect(await result, 'finished');
+        expect(resultCompleted, isTrue);
+        expect(handle.isShowing, isFalse);
+        expect(closed, 1);
+        expect(disposed, 0);
+        expect(events.where((event) => event == 'visible:false'), hasLength(1));
+        if (mode == 'non-top-remove') {
+          expect(find.text('history cover'), findsOneWidget);
+          navigator.pop();
+          await tester.pumpAndSettle();
+        }
+        handle.open();
+        await tester.pumpAndSettle();
+        expect(created, 1);
+        expect(
+          tester.state<_CloseRetentionProbeState>(
+            find.byType(_CloseRetentionProbe),
+          ),
+          same(originalState),
+        );
+        expect(find.text('local history state'), findsOneWidget);
+        expect(closed, 1);
+        await tester.pumpWidget(const SizedBox.shrink());
+        await tester.pump();
+        expect(disposed, 1);
+        expect(closed, 2);
+        expect(tester.takeException(), isNull);
+      } finally {
+        semantics.dispose();
+      }
+    });
+  }
+
+  testWidgets(
+    'local history consumption then declarative replacement retains session',
+    (tester) async {
+      final page = ValueNotifier<int>(0);
+      final navigatorKey = GlobalKey<NavigatorState>();
+      late BuildContext context;
+      var created = 0;
+      var disposed = 0;
+      var closed = 0;
+      var resultCompleted = false;
+      final semantics = tester.ensureSemantics();
+      try {
+        await tester.pumpWidget(
+          MaterialApp(
+            home: ValueListenableBuilder<int>(
+              valueListenable: page,
+              builder: (_, value, __) => Navigator(
+                key: navigatorKey,
+                pages: [
+                  const MaterialPage<void>(
+                    key: ValueKey('root'),
+                    child: Scaffold(),
+                  ),
+                  MaterialPage<void>(
+                    key: ValueKey(value),
+                    child: Builder(
+                      builder: (value) {
+                        context = value;
+                        return const Scaffold();
+                      },
+                    ),
+                  ),
+                ],
+                onDidRemovePage: (_) {},
+              ),
+            ),
+          ),
+        );
+        await tester.pumpAndSettle();
+        final handle = TPopup.show(
+          context,
+          options: TPopupOptions.center(
+            animationDuration: const Duration(milliseconds: 120),
+            onClosed: () => closed++,
+            child: _CloseRetentionProbe(
+              onInit: () => created++,
+              onDispose: () => disposed++,
+            ),
+          ),
+        );
+        unawaited(handle.result.then((_) => resultCompleted = true));
+        await tester.pumpAndSettle();
+        await tester.enterText(
+          find.byType(TextField),
+          'declarative history state',
+        );
+        final original = tester.state<_CloseRetentionProbeState>(
+          find.byType(_CloseRetentionProbe),
+        );
+        final route = ModalRoute.of(
+          tester.element(find.byType(_CloseRetentionProbe)),
+        )!;
+        route.addLocalHistoryEntry(LocalHistoryEntry());
+        navigatorKey.currentState!.pop();
+        await tester.pumpAndSettle();
+        expect(route.isActive, isTrue);
+        expect(closed, 0);
+        expect(resultCompleted, isFalse);
+        page.value = 1;
+        await tester.pumpAndSettle();
+        expect(handle.isShowing, isFalse);
+        expect(closed, 1);
+        expect(resultCompleted, isTrue);
+        expect(disposed, 0);
+        handle.open(context);
+        await tester.pumpAndSettle();
+        expect(created, 1);
+        expect(closed, 1);
+        expect(
+          tester.state<_CloseRetentionProbeState>(
+            find.byType(_CloseRetentionProbe),
+          ),
+          same(original),
+        );
+        expect(find.text('declarative history state'), findsOneWidget);
+        expect(
+          Navigator.of(tester.element(find.byType(_CloseRetentionProbe))),
+          same(navigatorKey.currentState),
+        );
+        await tester.pumpWidget(const SizedBox.shrink());
+        await tester.pump();
+        expect(disposed, 1);
+        expect(closed, 2);
+        expect(tester.takeException(), isNull);
+      } finally {
+        semantics.dispose();
+        page.dispose();
+      }
+    },
+  );
+
   group('TPopupOptions', () {
     test('默认 placement 为 bottom，内容 builder 默认均为空', () {
       final options = const TPopupOptions(child: SizedBox()).normalized();

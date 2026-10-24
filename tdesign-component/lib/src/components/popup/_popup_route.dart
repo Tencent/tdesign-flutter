@@ -259,9 +259,14 @@ class _PopupNavigatorRoute<T> extends PopupRoute<T> {
 
   @override
   bool didPop(T? result) {
+    final wasPopping = _popping;
     _popping = true;
     fireCloseStart(TPopupTrigger.systemBack);
-    return super.didPop(result);
+    final popped = super.didPop(result);
+    if (!popped) {
+      _popping = wasPopping;
+    }
+    return popped;
   }
 
   @override

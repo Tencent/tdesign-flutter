@@ -38,3 +38,12 @@ bottom 只提供 headerBuilder，center 只提供 closeBuilder；按钮业务回
 验证覆盖销毁/保留、输入与滚动、零动画、系统返回、遮挡后非栈顶关闭、动画中重开、回调重入、隐藏焦点/ticker、嵌套浮层、独立会话、跨 Navigator、未绘制卸载。新增路由上下文及反复关闭重开回归，实际开启语义树并覆盖运行时启用无障碍；断言隐藏内容不可见、底层可点击、返回栈与 NavigatorObserver 不含承载路由、隐藏 PopScope 通知不外泄。双 SDK 独立目录完成登记组件、示例、工具/字体、文档生成与覆盖率检查。
 
 已否决：普通 Overlay 停放丢失 ModalRoute；嵌套 Navigator 停放触发无障碍断言并引入新的 Navigator 祖先。用户已授权扩大内部重构，不通过要求调用方增加空判断或新增公开宿主规避问题。
+
+
+## LocalHistoryEntry 消费返回后的停放修复
+
+`didPop` 仍在调用 super 前设置弹出中标记，使成功 pop 的 didComplete 不提前停放；若 super 返回 false（只消费局部历史），恢复进入方法前的标记。保持原 fireCloseStart 的调用位置、回调时机及默认 false，不改公开 API 或 Controller 绑定。
+
+正式回归覆盖消费两条局部历史后：直接 removeRoute、遮挡后非栈顶 handle.close，以及正常 pop。前两者验证关闭后 State/输入保留、同句柄重开复用和 Navigator 卸载仅释放一次；正常 pop 验证动画进行中内容仍在原可见路由，result 先完成、onClosed 待动画结束，不提前停放。零动画 onClosed 同步重开的历史问题不纳入修复。
+
+复审补充：Navigator.pages 在构建阶段替换关联页面时，原生 ModalRoute.changedInternalState 不执行 setState，不能保证保留内容同帧转移。私有承载路由用自有 ValueNotifier 驱动内部内容 builder，确保构建阶段也在移除内容前刷新；不延迟到 post-frame（会错过 State 保留），不引入公开 API 或 NavigatorObserver。该信号随私有路由释放。正式回归另覆盖局部历史消费后的声明式页面替换、同 Navigator 重开和卸载清理。

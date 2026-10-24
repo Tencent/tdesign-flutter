@@ -188,6 +188,7 @@ class _PopupRetainedScopeState extends State<_PopupRetainedScope> {
 class _PopupParkingRoute extends PopupRoute<void> {
   _PopupParkingRoute(this.retention) : super(requestFocus: false);
   final _PopupRetention retention;
+  final ValueNotifier<int> _revision = ValueNotifier<int>(0);
 
   @override
   NavigatorState get navigator => retention.navigator;
@@ -219,7 +220,7 @@ class _PopupParkingRoute extends PopupRoute<void> {
   }
 
   void refresh() {
-    changedInternalState();
+    _revision.value++;
   }
 
   void unmount() {
@@ -228,6 +229,7 @@ class _PopupParkingRoute extends PopupRoute<void> {
     }
     didComplete(null);
     dispose();
+    _revision.dispose();
   }
 
   @override
@@ -245,6 +247,14 @@ class _PopupParkingRoute extends PopupRoute<void> {
     Widget child,
   ) => NotificationListener<NavigationNotification>(
     onNotification: (_) => true,
-    child: Stack(children: [child, retention._build(context)]),
+    child: Stack(
+      children: [
+        child,
+        ValueListenableBuilder<int>(
+          valueListenable: _revision,
+          builder: (context, _, __) => retention._build(context),
+        ),
+      ],
+    ),
   );
 }
