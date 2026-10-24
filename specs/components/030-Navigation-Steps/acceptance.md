@@ -30,4 +30,4 @@ Demo步骤标题是静态数据，不随索引切换“已完成/当前/未完�
 
 ## API 兼容迁移候选
 
-基线 develop `3704434fd2adfb6988110bc760aaaa52a814581c`。本轮候选、双版本结果与未覆盖范围见[统一验收记录](../018-Feedback-Popup/evidence/api-compatibility.md)。双版本验证及本地 Review 通过。
+基线 develop `3704434fd2adfb6988110bc760aaaa52a814581c`。本轮候选、双版本结果与未覆盖范围见[统一验收记录](../028-Navigation-TabBar/evidence/api-naming.md)。双版本验证及本地 Review 通过。

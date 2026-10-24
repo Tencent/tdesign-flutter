@@ -13,8 +13,6 @@ import 'package:tdesign_flutter/src/components/steps/t_steps_mode.dart';
 import 'package:tdesign_flutter/src/components/steps/t_steps_vertical.dart';
 import 'package:tdesign_flutter/tdesign_flutter.dart';
 
-import '../../fixtures/api_compatibility/consumer_overlay.dart';
-
 void _target(TNoticeBarTapTarget _) {}
 void _void() {}
 void _index(int _) {}
@@ -65,12 +63,6 @@ class _LegacyPopoverWidget extends TPopoverWidget {
     : super(content: const Text('content'));
   @override
   VoidCallback? get onLongTap => _void;
-}
-
-class _LegacyOverlay extends TPopupOverlayConfig {
-  const _LegacyOverlay({super.onTap});
-  @override
-  VoidCallback? get onClick => _void;
 }
 
 class _LegacySteps extends TSteps {
@@ -151,10 +143,6 @@ void main() {
         const _LegacyAnchor(onLongPress: _otherVoid).onLongPress,
         same(_otherVoid),
       );
-    },
-    'PopupOverlay': () {
-      expect(const _LegacyOverlay().onTap, same(_void));
-      expect(const _LegacyOverlay(onTap: _otherVoid).onTap, same(_otherVoid));
     },
     'Steps progress': () {
       expect(const _LegacySteps().onStepTapped, same(_index));
@@ -250,7 +238,6 @@ void main() {
       onMaxSelected: _void,
     );
     const drawer = TDrawer(onItemClick: _item);
-    const overlay = TPopupOverlayConfig(onClick: _void);
     const tab = TTabBarItemConfig(allowMultipleTaps: true);
     const steps = TSteps.selectable(steps: [], value: 0, onChange: _index);
     const horizontal = TStepsHorizontal(
@@ -272,7 +259,6 @@ void main() {
     expect(notice.onPressed, same(notice.onTargetTap));
     expect(checkbox.onMaxSelected, same(checkbox.onSelectionLimitExceeded));
     expect(drawer.onItemClick, same(drawer.onItemTap));
-    expect(overlay.onClick, same(overlay.onTap));
     expect(tab.allowMultipleTaps, tab.notifyOnReselect);
     expect(steps.onChange, same(steps.onStepTapped));
     expect(horizontal.onChange, same(horizontal.onStepTapped));
@@ -635,88 +621,6 @@ void main() {
     expect(selections, ['choice', 'choice']);
   });
 
-  testWidgets('overlay alias keeps close behavior and single notification', (
-    tester,
-  ) async {
-    var oldCalls = 0;
-    var newCalls = 0;
-    late BuildContext host;
-    await tester.pumpWidget(
-      MaterialApp(
-        home: Scaffold(
-          body: Builder(
-            builder: (context) {
-              host = context;
-              return const SizedBox.expand();
-            },
-          ),
-        ),
-      ),
-    );
-    final handle = TPopup.show(
-      host,
-      options: TPopupOptions.bottom(
-        height: 100,
-        child: const Text('compat panel'),
-        overlay: TPopupOverlayConfig(
-          onClick: () => oldCalls++,
-          onTap: () => newCalls++,
-        ),
-      ),
-    );
-    await tester.pumpAndSettle();
-    await tester.tapAt(const Offset(10, 10));
-    await tester.pumpAndSettle();
-    expect(oldCalls, 0);
-    expect(newCalls, 1);
-    expect(handle.isShowing, isFalse);
-  });
-
-  for (final color in [null, Colors.black]) {
-    for (final closeOnClick in [false, true]) {
-      testWidgets(
-        'adapted implements overlay dispatches once color=$color close=$closeOnClick',
-        (tester) async {
-          late BuildContext context;
-          var calls = 0;
-          await tester.pumpWidget(
-            MaterialApp(
-              home: Builder(
-                builder: (value) {
-                  context = value;
-                  return const Scaffold();
-                },
-              ),
-            ),
-          );
-          final overlay = ConsumerOverlay(
-            color: color,
-            closeOnClick: closeOnClick,
-            onClick: () => calls++,
-          );
-          final handle = TPopup.show(
-            context,
-            options: TPopupOptions.bottom(
-              height: 100,
-              child: const Text('consumer panel'),
-              overlay: overlay,
-            ),
-          );
-          await tester.pumpAndSettle();
-          await tester.tapAt(const Offset(10, 10));
-          await tester.pumpAndSettle();
-          expect(calls, 1);
-          expect(handle.isShowing, !closeOnClick);
-          handle.close();
-          await tester.pumpAndSettle();
-          expect(calls, 1);
-          expect(handle.isShowing, isFalse);
-          expect(tester.takeException(), isNull);
-        },
-      );
-    }
-  }
-
   test(
     'all deprecated public accessors name their replacement and removal version',
     () {
@@ -731,7 +635,6 @@ void main() {
         },
         'popover/t_popover.dart': {'onLongTap': 'onLongPress'},
         'popover/t_popover_widget.dart': {'onLongTap': 'onLongPress'},
-        'popup/t_popup_types.dart': {'onClick': 'onTap'},
         'tabbar/t_tab_bar.dart': {
           'allowMultipleTaps': 'notifyOnReselect',
           'onChanged': 'onSelected',

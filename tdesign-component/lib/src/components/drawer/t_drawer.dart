@@ -137,7 +137,7 @@ TDrawerHandle showTDrawer(
         showOverlay: showOverlay,
         closeOnClick: closeOnOverlayClick,
         color: showOverlay ? null : Colors.transparent,
-        onTap: onOverlayClick,
+        onClick: onOverlayClick,
       ),
       destroyOnClose: destroyOnClose,
       useSafeArea: useSafeArea,

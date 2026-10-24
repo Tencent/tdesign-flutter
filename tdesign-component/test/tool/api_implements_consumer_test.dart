@@ -23,13 +23,13 @@ void main() {
       p.join(configDirectory.path, 'package_config.json'),
     ).writeAsStringSync(jsonEncode(config));
     File(p.join(consumer.path, 'pubspec.yaml')).writeAsStringSync(
-      'name: business_overlay_consumer\n'
+      'name: business_tab_consumer\n'
       'environment:\n  sdk: ">=3.8.0 <4.0.0"\n',
     );
-    source = File(p.join(consumer.path, 'overlay.dart'));
+    source = File(p.join(consumer.path, 'tab_config.dart'));
     source.writeAsStringSync(
       File(
-        'test/fixtures/api_compatibility/consumer_overlay.dart',
+        'test/fixtures/api_compatibility/consumer_tab_config.dart',
       ).readAsStringSync(),
     );
   });
@@ -43,10 +43,10 @@ void main() {
   ], workingDirectory: consumer.path);
 
   test(
-    'external implements consumer must adapt the new onTap getter',
+    'external implements consumer must adapt the new notifyOnReselect getter',
     () async {
       const forwardingGetter =
-          '  @override\n  VoidCallback? get onTap => onClick;\n';
+          '  @override\n  bool get notifyOnReselect => allowMultipleTaps;\n';
       final adapted = source.readAsStringSync();
       expect(adapted, contains(forwardingGetter));
       source.writeAsStringSync(adapted.replaceFirst(forwardingGetter, ''));
@@ -61,7 +61,7 @@ void main() {
         diagnostics.single,
         contains('NON_ABSTRACT_CLASS_INHERITS_ABSTRACT_MEMBER'),
       );
-      expect(diagnostics.single, contains('onTap'));
+      expect(diagnostics.single, contains('notifyOnReselect'));
     },
   );
 

@@ -29,9 +29,3 @@
 未绑定唯一候选的结果不作为当前通过证明；旧命令与流水由Git历史追溯。
 
 当前待办见 [tasks.md](./tasks.md)；实际执行入口见[贡献规范](../../../CONTRIBUTING.md#组件测试与-ci-回归门禁)。清理不关闭未完成项。
-
-## API 兼容迁移候选
-
-撤出 Popup/Drawer/Picker 状态参数、copyWith 扩展、继承适配 FAQ 与旧参数弃用计划。保留其他兼容命名；本分支旧 TPopupOptions 签名、默认行为与 Controller 绑定规则不变。当前候选与验证范围见[统一验收](./evidence/api-compatibility.md)，不沿用已撤出用例的旧数量；更新 #1196 后核对最终 head 的 CI 与 Review，暂不合并。
-
-本轮补充 implements 的源码兼容例外与适配 FAQ，不改变生产实现；双 SDK 各882项组件（兼容用例33项）、173项工具、129项示例/API通过，严格分析及文档同步检查通过。消费者测试明确验证旧实现缺失诊断与适配成功，详见统一验收。新源码/测试/FAQ指纹 `8541b9eb9cb633d896e4d47a75a0c9fd381eb86510a9d90687255ecafef43f7a`。

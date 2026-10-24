@@ -588,7 +588,10 @@ const componentTestManifests = <ComponentTestManifest>[
   ComponentTestManifest(
     name: 'tab_bar',
     coverageTargets: ['lib/src/components/tabbar/'],
-    componentTests: ['test/components/tabbar/t_tab_bar_test.dart'],
+    componentTests: [
+      'test/components/tabbar/t_tab_bar_test.dart',
+      'test/components/tabbar/t_api_compatibility_test.dart',
+    ],
     exampleTests: ['test/tab_bar/tab_bar_demo_test.dart'],
     visualTests: [
       VisualTestManifest(
@@ -801,7 +804,6 @@ const componentTestManifests = <ComponentTestManifest>[
       'test/components/popup/t_popup_coverage_test.dart',
       'test/components/popup/t_popup_layout_test.dart',
       'test/components/popup/t_popup_options_test.dart',
-      'test/components/popup/t_api_compatibility_test.dart',
       'test/components/popup/t_popup_route_test.dart',
       'test/components/popup/t_popup_test.dart',
     ],
