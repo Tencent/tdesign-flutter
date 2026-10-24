@@ -1,6 +1,6 @@
 # destroyOnClose 独立候选验收
 
-基线 develop `3704434fd2adfb6988110bc760aaaa52a814581c`；分支 `rss1102/fix/popup-destroy-on-close`。最终组件源码/测试/生成 API 二进制 diff 的 SHA-256：`2488ca62bad4cc0b2736dfdbb45d82e9dcbbc79f4477757790bcdce9f45ed7ad`；高低版本 12 个相关文件逐字节一致。仅本地实现与验证，不推送、不创建 PR、不合并。#1196 的迁移撤出仍为独立本地提交 `12e18203`。
+基线 develop `3704434fd2adfb6988110bc760aaaa52a814581c`；分支 `rss1102/fix/popup-destroy-on-close`。最终组件源码/测试/生成 API 二进制 diff 的 SHA-256：`2488ca62bad4cc0b2736dfdbb45d82e9dcbbc79f4477757790bcdce9f45ed7ad`；高低版本 12 个相关文件逐字节一致。独立 PR 交付；#1196 另行撤出状态参数及 copyWith 迁移（实现提交 `12e18203`）。本表绑定本地已验证源码，远端 CI 以各 PR 最终 head 为准，暂不合并。
 
 ## 最终实现与复审
 
@@ -47,4 +47,4 @@
 
 默认 false 从关闭释放变为保留，旧 true 的遮挡释放映射也改为仅控制关闭销毁，属于有意的生命周期行为变化；不能声称所有旧行为兼容。丢弃句柄可能保留到 Navigator 卸载，根 Navigator 可长期存在；业务定时器/订阅不保证暂停。本候选按用户确定的 1.0.1 修复范围单独处理，不与命名迁移混合。公开 API、参数默认值及 Controller 绑定规则未改变。
 
-本地 macOS Widget、工具及示例验证，不外推 Android/iOS 真机或 Web release。可见绘制和布局无意改变；按仓库平台规则未执行或修改 Linux Golden 基线。无远端新候选 CI，没有推送、创建 PR 或合并。
+本地 macOS Widget、工具及示例验证，不外推 Android/iOS 真机或 Web release。可见绘制和布局无意改变；按仓库平台规则未执行或修改 Linux Golden 基线。远端 CI 与 Review 以独立 PR 最终 head 的实际结果为准，不沿用其他提交的通过状态，暂不合并。

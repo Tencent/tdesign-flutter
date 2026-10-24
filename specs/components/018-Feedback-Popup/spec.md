@@ -88,7 +88,7 @@ Popup 是承载任意内容的基础浮层。小程序基础 Popup 默认只渲�
 
 跨组件配置职责见 [Theme 契约](../../engineering/048-Theme-configuration-contracts/spec.md)，视觉方法见 [Golden 规范](../../engineering/044-Testing-golden-regression/spec.md)。
 
-## destroyOnClose 关闭销毁修复（独立本地候选）
+## destroyOnClose 关闭销毁修复（独立交付）
 
 保留现有 API、默认 false、Controller 绑定规则，不增加公开宿主、dispose 或状态保留参数。true 在关闭动画结束后卸载内容；false 关闭后保持内容 State，同一句柄 open 复用，重复 show 创建独立会话。路由正常 pop/remove，不把关闭路由保留在导航栈。打开期间被不透明路由遮挡时保留状态，不再把 destroyOnClose 取反用于遮挡策略；原 true 的遮挡释放行为也会改变。内部保留容器绑定实际 Navigator；卸载时清理隐藏内容，包括首次绘制前卸载。切换 Navigator 重新创建内容，不跨 Navigator 搬迁会话。
 
