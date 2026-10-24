@@ -13,6 +13,8 @@ import 'package:tdesign_flutter/src/components/steps/t_steps_mode.dart';
 import 'package:tdesign_flutter/src/components/steps/t_steps_vertical.dart';
 import 'package:tdesign_flutter/tdesign_flutter.dart';
 
+import '../../fixtures/api_compatibility/consumer_overlay.dart';
+
 void _target(TNoticeBarTapTarget _) {}
 void _void() {}
 void _index(int _) {}
@@ -669,6 +671,51 @@ void main() {
     expect(newCalls, 1);
     expect(handle.isShowing, isFalse);
   });
+
+  for (final color in [null, Colors.black]) {
+    for (final closeOnClick in [false, true]) {
+      testWidgets(
+        'adapted implements overlay dispatches once color=$color close=$closeOnClick',
+        (tester) async {
+          late BuildContext context;
+          var calls = 0;
+          await tester.pumpWidget(
+            MaterialApp(
+              home: Builder(
+                builder: (value) {
+                  context = value;
+                  return const Scaffold();
+                },
+              ),
+            ),
+          );
+          final overlay = ConsumerOverlay(
+            color: color,
+            closeOnClick: closeOnClick,
+            onClick: () => calls++,
+          );
+          final handle = TPopup.show(
+            context,
+            options: TPopupOptions.bottom(
+              height: 100,
+              child: const Text('consumer panel'),
+              overlay: overlay,
+            ),
+          );
+          await tester.pumpAndSettle();
+          await tester.tapAt(const Offset(10, 10));
+          await tester.pumpAndSettle();
+          expect(calls, 1);
+          expect(handle.isShowing, !closeOnClick);
+          handle.close();
+          await tester.pumpAndSettle();
+          expect(calls, 1);
+          expect(handle.isShowing, isFalse);
+          expect(tester.takeException(), isNull);
+        },
+      );
+    }
+  }
 
   test(
     'all deprecated public accessors name their replacement and removal version',

@@ -93,3 +93,10 @@ Popup 是承载任意内容的基础浮层。小程序基础 Popup 默认只渲�
 仅新增 `TPopupOverlayConfig.onTap` 兼容旧 `onClick`；新参数非空时优先，否则通过旧 getter 分派，不改变蒙层点击与关闭规则。旧入口标注弃用及 2.0.0 删除计划。
 
 maintainState 参数及相关 copyWith 扩展、继承适配 FAQ 和旧 destroyOnClose 弃用计划已撤出本地候选。保留原 TPopupOptions API、copyWith 签名与生命周期行为；destroyOnClose 的关闭保留修复在独立分支处理，不包含于本候选。
+
+
+### 1.0.0 → 1.0.1 的 implements 适配边界
+
+本轮新增推荐实例 getter 后，普通旧调用及 extends 继承已有实现的用法保持兼容；implements 不继承默认实现，业务类必须补齐新接口成员。代表场景是 implements TPopupOverlayConfig 需要增加 onTap，并按业务意图转发旧 onClick。其他本次新增 getter 的公开类同样存在此源码兼容例外。它不同于已撤出的 copyWith 签名风险，不能声明所有旧 implements 用法无需修改。适配示例见[版本化 FAQ](../../../tdesign-site/site/docs/faq.md)。
+
+正式消费者回归应验证：未适配的旧实现产生缺少 onTap 的指定编译诊断；增加转发后的外部消费者分析通过，并在真实 Popup 蒙层点击中保持通知次数和关闭规则。不得使用 noSuchMethod 或忽略缺失实现诊断绕过契约。
