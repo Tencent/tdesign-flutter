@@ -29,4 +29,4 @@ bottom 只提供 headerBuilder，center 只提供 closeBuilder；按钮业务回
 
 ## 1.0.1 蒙层配置调整
 
-先固定 final/命名迁移及 FAQ，再迁移包内调用、生成文档并验证外部消费者。双 SDK 检查 Popup 功能、默认行为、遮罩分派和静态诊断，作为独立源码 breaking 草稿，不依赖其他未合并 PR。
+先固定 final/回调兼容及 FAQ，再迁移包内调用、生成文档并验证外部消费者。双 SDK 检查 Popup 功能、默认行为、遮罩分派和静态诊断，作为独立源码 breaking 草稿，不依赖其他未合并 PR。

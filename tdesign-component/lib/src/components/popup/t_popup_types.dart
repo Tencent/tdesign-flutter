@@ -61,8 +61,12 @@ final class TPopupOverlayConfig {
   /// 点击蒙层是否关闭；仅显示蒙层且拦截交互时生效，未指定时为 true。
   final bool? closeOnClick;
 
-  /// 蒙层点击回调；仅显示蒙层且拦截交互时触发，是否关闭由 [closeOnClick] 决定。
+  /// 蒙层点击回调；非空时优先于 `onClick`，仅显示蒙层且拦截交互时触发，是否关闭由 [closeOnClick] 决定。
   final VoidCallback? onTap;
+
+  /// 已废弃，此为兼容入口。请使用 [onTap]；返回实际生效的回调。
+  @Deprecated('已废弃，此为兼容入口。请使用 onTap。')
+  VoidCallback? get onClick => onTap;
 
   /// 创建蒙层配置。
   const TPopupOverlayConfig({
@@ -70,8 +74,9 @@ final class TPopupOverlayConfig {
     this.color,
     this.preventTap = true,
     this.closeOnClick,
-    this.onTap,
-  });
+    VoidCallback? onTap,
+    @Deprecated('已废弃，此为兼容入口。请使用 onTap。') VoidCallback? onClick,
+  }) : onTap = onTap ?? onClick;
 
   /// 实际是否支持蒙层点击关闭；无可见蒙层或允许穿透时为 false，否则取 [closeOnClick]（未指定为 true）。
   bool get effectiveCloseOnClick =>

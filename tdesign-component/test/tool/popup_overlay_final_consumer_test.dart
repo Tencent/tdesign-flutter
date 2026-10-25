@@ -52,25 +52,18 @@ void main() {
     });
   }
 
-  test('1.0.1 rejects the removed onClick constructor parameter', () async {
-    final result = await analyze(
-      'final config = TPopupOverlayConfig(onClick: () {});',
-    );
-    expect(result.exitCode, isNot(0));
-    expect(
-      '${result.stdout}${result.stderr}',
-      contains('UNDEFINED_NAMED_PARAMETER'),
-    );
-  });
-
-  test('1.0.1 rejects the removed onClick member', () async {
-    final result = await analyze(
-      'final config = TPopupOverlayConfig();\n'
-      'final callback = config.onClick;',
-    );
-    expect(result.exitCode, isNot(0));
-    expect('${result.stdout}${result.stderr}', contains('UNDEFINED_GETTER'));
-  });
+  for (final usage in [
+    'final config = TPopupOverlayConfig(onClick: () {});',
+    'const config = TPopupOverlayConfig();\nfinal callback = config.onClick;',
+  ]) {
+    test('legacy onClick is accepted with deprecation: $usage', () async {
+      final result = await analyze(usage);
+      final diagnostics = '${result.stdout}${result.stderr}';
+      expect(diagnostics, contains('DEPRECATED_MEMBER_USE'));
+      expect(diagnostics, isNot(contains('ERROR|')));
+      expect(diagnostics, isNot(contains('UNDEFINED_')));
+    });
+  }
 
   test(
     '1.0.1 const construction and composition compile without diagnostics',

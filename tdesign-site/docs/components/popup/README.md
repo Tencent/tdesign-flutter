@@ -15,12 +15,14 @@ isComponent: true
 
 ### 从 1.0.0 升级到 1.0.1 后，蒙层配置需要如何适配？
 
-1.0.1 调整了 `TPopupOverlayConfig` 的继承规则和回调名称，存在源码不兼容变化：
+1.0.1 调整了 `TPopupOverlayConfig` 的继承规则，并新增推荐回调名称 `onTap`：
 
 - 配置类改为 `final`，库外不能再 `extends` 或 `implements`；已有业务子类和相关 mock 需改为直接构造或通过工厂组合。
-- `onClick` 构造参数及成员改为 `onTap`，不保留旧名；旧参数调用和成员访问需要替换，否则无法编译。
+- `onClick` 构造参数及成员保留并标记废弃，旧调用仍可编译使用；推荐改用 `onTap`。两者同时传入时，非空的 `onTap` 优先，只触发一次；旧 `onClick` 成员返回实际生效的回调。
 
-例如，将 `TPopupOverlayConfig(onClick: callback)` 改为 `TPopupOverlayConfig(onTap: callback)`。需要封装业务配置时可使用工厂函数：
+旧入口会产生废弃提示；将提示视为错误的静态检查仍需适配。
+
+例如，可将 `TPopupOverlayConfig(onClick: callback)` 改为 `TPopupOverlayConfig(onTap: callback)`。需要封装业务配置时可使用工厂函数：
 
 ```dart
 TPopupOverlayConfig createOverlay({

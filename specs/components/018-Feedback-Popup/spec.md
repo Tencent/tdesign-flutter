@@ -90,11 +90,11 @@ Popup 是承载任意内容的基础浮层。小程序基础 Popup 默认只渲�
 
 ## 1.0.0 → 1.0.1 蒙层配置调整（源码 breaking）
 
-TPopupOverlayConfig 改为 final，库外不能 extends 或 implements；onClick 参数和成员统一改为 onTap，不提供本版本的旧名别名。保留直接构造、const、五项原有配置的默认值、蒙层通知时机与关闭条件，不涉及 TPopupOptions/copyWith、destroyOnClose 生命周期、Controller 或其他 Popup 类型的继承规则。
+TPopupOverlayConfig 改为 final，库外不能 extends 或 implements；推荐使用 onTap，保留 onClick 构造参数及成员并标记废弃。非空 onTap 优先，null 时回退到 onClick；内部只保存并触发一个有效回调，旧成员返回同一个有效回调。保留直接构造、const、五项原有配置的默认值、蒙层通知时机与关闭条件，不涉及 TPopupOptions/copyWith、destroyOnClose 生命周期、Controller 或其他 Popup 类型的继承规则。
 
 原因：配置对象负责不可变配置值，业务使用构造与组合；避免未来新增配置成员都要求外部 implements 补齐。final 不保证任意新增必填参数、改默认值或改变行为都兼容，也不等于限制 Popup 的 child/builder/回调扩展。旧动态 getter 每次读取的行为与配置快照不一定等价，handle.open() 沿用创建句柄时的 options，不会应用新配置；更换配置须重新构造 TPopupOptions，通过 TPopup.show() 创建新会话，不承诺活动 Popup 自动响应外部配置变化。
 
-旧 onClick 调用、继承、implements 以及相关 mock 都需要迁移；Popup 组件文档的 FAQ 说明接口现状、源码迁移影响、组合替代和新配置的实际应用方式，明确 1.0.0 到 1.0.1 的适配范围，不表述其他版本方向；不用新增一个 getter 的转发作为 final 的适配方案。消费者测试验证旧 implements/extends 被诊断、普通 const 构造与业务工厂可用，并覆盖真实遮罩点击和关闭先后。此 PR 独立于命名迁移及 destroyOnClose 修复，按本次 1.0.1 发布范围审查，但 final 和旧名移除仍属于源码 breaking，不能视为完全兼容的 patch；保持草稿，暂不合并。
+旧 onClick 普通调用和成员访问保持可用并提示废弃；旧继承、implements 以及相关 mock 仍需迁移；Popup 组件文档的 FAQ 说明接口现状、源码迁移影响、组合替代和新配置的实际应用方式，明确 1.0.0 到 1.0.1 的适配范围，不表述其他版本方向；不用新增一个 getter 的转发作为 final 的适配方案。消费者测试验证旧 implements/extends 被诊断、普通 const 构造与业务工厂可用，并覆盖真实遮罩点击和关闭先后。此 PR 独立于命名迁移及 destroyOnClose 修复，按本次 1.0.1 发布范围审查，但 final 限制仍属于源码 breaking，不能视为完全兼容的 patch；保持草稿，暂不合并。
 
 
 show() 创建独立会话并立即显示，不需要随后调用 open()；open() 沿用原句柄创建时的配置，已显示时不重复打开。更换配置通过 show() 创建新会话，不会自动关闭旧会话。该重开行为在 1.0.0 已存在，API 注释与 FAQ 必须区分既有行为和本次源码迁移。本次不新增 update()、dispose()、宿主 API 或 maintainState，也不修改默认值、回调时机或 Controller 绑定规则。

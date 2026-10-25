@@ -352,7 +352,8 @@
 | --- | --- | --- | --- | --- |
 | closeOnClick | bool? | - | 点击蒙层是否关闭；仅显示蒙层且拦截交互时生效，未指定时为 true。 | 否 |
 | color | Color? | - | 蒙层颜色（含透明度）；未指定时取 `TPopupThemeData.barrierColor`，再回退到 black54。 | 否 |
-| onTap | VoidCallback? | - | 蒙层点击回调；仅显示蒙层且拦截交互时触发，是否关闭由 `closeOnClick` 决定。 | 否 |
+| onClick | VoidCallback? | - | 已废弃，此为兼容入口。请使用 `onTap`；返回实际生效的回调。 | 否 |
+| onTap | VoidCallback? | - | 蒙层点击回调；非空时优先于 `onClick`，仅显示蒙层且拦截交互时触发，是否关闭由 `closeOnClick` 决定。 | 否 |
 | preventTap | bool | true | 是否拦截背景交互。 | 否 |
 | showOverlay | bool | true | 是否显示可见蒙层。 | 否 |
 

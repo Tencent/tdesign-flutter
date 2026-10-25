@@ -32,4 +32,4 @@
 
 ## 1.0.1 蒙层配置源码 breaking 候选
 
-初始基线 develop 3704434f，当前基线 develop 264fc582；独立候选结果及 FAQ 修正的双版本复验见 [配置设计验收](./evidence/overlay-final.md)。此前 onTap 兼容别名或 destroyOnClose 分支结果不作为当前候选证据。
+初始基线 develop 3704434f，当前基线 develop 264fc582；独立候选结果、FAQ 修正及 onClick 废弃兼容的双版本复验见 [配置设计验收](./evidence/overlay-final.md)。此前 onTap 兼容别名或 destroyOnClose 分支结果不作为当前候选证据。
