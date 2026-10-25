@@ -438,6 +438,7 @@ const componentTestManifests = <ComponentTestManifest>[
     componentTests: [
       'test/components/drawer/t_drawer_test.dart',
       'test/components/drawer/t_drawer_token_transition_test.dart',
+      'test/theme/theme_implements_compatibility_test.dart',
     ],
     exampleTests: ['test/drawer/drawer_demo_test.dart'],
     visualTests: [
@@ -591,6 +592,7 @@ const componentTestManifests = <ComponentTestManifest>[
     componentTests: [
       'test/components/tabbar/t_tab_bar_test.dart',
       'test/components/tabbar/t_tab_bar_menu_callback_test.dart',
+      'test/theme/theme_implements_compatibility_test.dart',
     ],
     exampleTests: ['test/tab_bar/tab_bar_demo_test.dart'],
     visualTests: [
