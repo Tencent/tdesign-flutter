@@ -15,7 +15,7 @@ isComponent: true
 
 ### 从 1.0.0 升级到 1.0.1 后，蒙层配置需要如何适配？
 
-1.0.1 调整了 `TPopupOverlayConfig` 的继承规则，并新增推荐回调名称 `onTap`：
+1.0.1 将 `TPopupOverlayConfig` 改为 `final`，源码不兼容影响库外继承、实现及相关 mock；普通旧 `onClick` 调用仍可编译，并提示废弃。
 
 - 配置类改为 `final`，库外不能再 `extends` 或 `implements`；已有业务子类和相关 mock 需改为直接构造或通过工厂组合。
 - `onClick` 构造参数及成员保留并标记废弃，旧调用仍可编译使用；推荐改用 `onTap`。两者同时传入时，非空的 `onTap` 优先，只触发一次；旧 `onClick` 成员返回实际生效的回调。

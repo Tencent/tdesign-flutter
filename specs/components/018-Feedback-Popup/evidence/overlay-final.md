@@ -34,3 +34,8 @@ Popup 组件 API 页签的 FAQ 集中说明升级风险、onTap 替换和工厂�
 ## 测试字体维护
 
 新增废弃注释中的“废”触发既有源码字体扫描。补齐 component_demo_glyphs.txt，并使用原 Noto Sans SC 2.004（源 SHA-256 faa6c9df652116dde789d351359f3d7e5d2285a2b2a1f04a2d7244df706d5ea9）与 HarfBuzz 11.4.5 更新共享测试字体。逐个核对原有 1181 个映射字形的轮廓和字宽均未变化；新字体哈希见字体 README。不修改 Golden 基线，最终像素回归以远端 Linux CI 为准。
+
+
+## 文案一致性复核
+
+FAQ 与 PR 开头明确区分 final 的源码不兼容和 onClick 的废弃兼容；更新日志保持二级列表，仅列 API 变更，折叠提醒保留最小升级适配摘录。API 源注释与生成文档已在 1403dbaa 同步，本轮不修改实现或生成 API。站点文档检查 35 项及 57 份组件/360 份示例映射检查通过；日志为 artifacts/pr1199-faq-preview/alias-doc-followup-site.log。双版本功能、静态分析与覆盖率沿用上一节同一实现的验证，不重复声明为本轮重跑。
