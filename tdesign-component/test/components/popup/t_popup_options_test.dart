@@ -561,6 +561,200 @@ void main() {
     });
   }
 
+  for (final entry in ['popup', 'picker']) {
+    testWidgets(
+      '$entry same handle reuses GlobalKey and one controller binding',
+      (tester) async {
+        late BuildContext context;
+        final contentKey = GlobalKey<FormState>();
+        final scroll = ScrollController();
+        await tester.pumpWidget(
+          MaterialApp(
+            home: Builder(
+              builder: (value) {
+                context = value;
+                return const Scaffold();
+              },
+            ),
+          ),
+        );
+        final handle = _showReuseSession(
+          context,
+          entry,
+          child: _reuseSessionContent(contentKey, scroll),
+        );
+        await tester.pumpAndSettle();
+        final state = contentKey.currentState;
+        scroll.jumpTo(80);
+        await tester.pump();
+        handle.close();
+        await tester.pumpAndSettle();
+        expect(contentKey.currentState, same(state));
+        expect(scroll.positions, hasLength(1));
+        expect(scroll.offset, 80);
+        handle.open();
+        await tester.pumpAndSettle();
+        expect(contentKey.currentState, same(state));
+        expect(scroll.positions, hasLength(1));
+        expect(scroll.offset, 80);
+        await tester.pumpWidget(const SizedBox.shrink());
+        await tester.pump();
+        expect(contentKey.currentState, isNull);
+        expect(scroll.hasClients, isFalse);
+        // Business-owned controllers remain usable after popup cleanup.
+        scroll.addListener(_legacyTap);
+        scroll.removeListener(_legacyTap);
+        scroll.dispose();
+        expect(tester.takeException(), isNull);
+      },
+    );
+
+    for (final destroy in [false, true]) {
+      testWidgets('$entry replacement GlobalKey boundary destroy=$destroy', (
+        tester,
+      ) async {
+        late BuildContext context;
+        final contentKey = GlobalKey<FormState>();
+        await tester.pumpWidget(
+          MaterialApp(
+            home: Builder(
+              builder: (value) {
+                context = value;
+                return const Scaffold();
+              },
+            ),
+          ),
+        );
+        TPopupHandle show() => _showReuseSession(
+          context,
+          entry,
+          destroyOnClose: destroy,
+          child: Form(key: contentKey, child: const Text('key reuse')),
+        );
+        final first = show();
+        await tester.pumpAndSettle();
+        final original = contentKey.currentState;
+        first.close();
+        await tester.pumpAndSettle();
+        expect(contentKey.currentState, destroy ? isNull : same(original));
+        show();
+        await tester.pumpAndSettle();
+        final error = tester.takeException();
+        if (destroy) {
+          expect(error, isNull);
+          expect(contentKey.currentState, isNotNull);
+          expect(contentKey.currentState, isNot(same(original)));
+        } else {
+          // Retained content is still mounted: this reuse violates GlobalKey uniqueness.
+          expect(error, isA<FlutterError>());
+          expect(error.toString(), contains('Duplicate GlobalKey'));
+        }
+        await tester.pumpWidget(const SizedBox.shrink());
+        await tester.pump();
+        expect(contentKey.currentState, isNull);
+        expect(tester.takeException(), isNull);
+      });
+
+      testWidgets(
+        '$entry replacement shared ScrollController boundary destroy=$destroy',
+        (tester) async {
+          late BuildContext context;
+          final scroll = ScrollController();
+          await tester.pumpWidget(
+            MaterialApp(
+              home: Builder(
+                builder: (value) {
+                  context = value;
+                  return const Scaffold();
+                },
+              ),
+            ),
+          );
+          TPopupHandle show() => _showReuseSession(
+            context,
+            entry,
+            destroyOnClose: destroy,
+            child: _reuseSessionContent(GlobalKey<FormState>(), scroll),
+          );
+          final first = show();
+          await tester.pumpAndSettle();
+          first.close();
+          await tester.pumpAndSettle();
+          expect(scroll.positions, hasLength(destroy ? 0 : 1));
+          final second = show();
+          await tester.pumpAndSettle();
+          expect(scroll.positions, hasLength(destroy ? 1 : 2));
+          if (destroy) {
+            expect(scroll.position, isA<ScrollPosition>());
+          } else {
+            expect(() => scroll.position, throwsAssertionError);
+          }
+          second.close();
+          await tester.pumpAndSettle();
+          await tester.pumpWidget(const SizedBox.shrink());
+          await tester.pump();
+          expect(scroll.hasClients, isFalse);
+          scroll.addListener(_legacyTap);
+          scroll.removeListener(_legacyTap);
+          scroll.dispose();
+          expect(tester.takeException(), isNull);
+        },
+      );
+    }
+
+    testWidgets('$entry replacement uses independent keys and controllers', (
+      tester,
+    ) async {
+      late BuildContext context;
+      final firstKey = GlobalKey<FormState>();
+      final secondKey = GlobalKey<FormState>();
+      final firstScroll = ScrollController();
+      final secondScroll = ScrollController();
+      await tester.pumpWidget(
+        MaterialApp(
+          home: Builder(
+            builder: (value) {
+              context = value;
+              return const Scaffold();
+            },
+          ),
+        ),
+      );
+      final first = _showReuseSession(
+        context,
+        entry,
+        child: _reuseSessionContent(firstKey, firstScroll),
+      );
+      await tester.pumpAndSettle();
+      final firstState = firstKey.currentState;
+      first.close();
+      await tester.pumpAndSettle();
+      final second = _showReuseSession(
+        context,
+        entry,
+        child: _reuseSessionContent(secondKey, secondScroll),
+      );
+      await tester.pumpAndSettle();
+      expect(firstKey.currentState, same(firstState));
+      expect(secondKey.currentState, isNotNull);
+      expect(secondKey.currentState, isNot(same(firstState)));
+      expect(firstScroll.positions, hasLength(1));
+      expect(secondScroll.positions, hasLength(1));
+      expect(firstScroll.position, isNot(same(secondScroll.position)));
+      second.close();
+      await tester.pumpAndSettle();
+      await tester.pumpWidget(const SizedBox.shrink());
+      await tester.pump();
+      expect(firstKey.currentState, isNull);
+      expect(secondKey.currentState, isNull);
+      expect(firstScroll.hasClients, isFalse);
+      expect(secondScroll.hasClients, isFalse);
+      firstScroll.dispose();
+      secondScroll.dispose();
+      expect(tester.takeException(), isNull);
+    });
+  }
+
   for (final entry in ['drawer', 'picker']) {
     for (final destroy in [false, true]) {
       testWidgets('$entry applies close destruction destroy=$destroy', (
@@ -1694,6 +1888,42 @@ void main() {
     });
   });
 }
+
+TPopupHandle _showReuseSession(
+  BuildContext context,
+  String entry, {
+  required Widget child,
+  bool destroyOnClose = false,
+}) => entry == 'picker'
+    ? TPickerPopup.show(
+        context,
+        child: child,
+        headerBuilder: (_, __) => const TPopupHeader(title: Text('header')),
+        destroyOnClose: destroyOnClose,
+      )
+    : TPopup.show(
+        context,
+        options: TPopupOptions.center(
+          width: 240,
+          height: 200,
+          destroyOnClose: destroyOnClose,
+          child: child,
+        ),
+      );
+
+Widget _reuseSessionContent(
+  GlobalKey<FormState> contentKey,
+  ScrollController scroll,
+) => Form(
+  key: contentKey,
+  child: ListView(
+    controller: scroll,
+    children: List.generate(
+      20,
+      (index) => SizedBox(height: 32, child: Text('row $index')),
+    ),
+  ),
+);
 
 class _CloseRetentionProbe extends StatefulWidget {
   const _CloseRetentionProbe({required this.onInit, required this.onDispose});

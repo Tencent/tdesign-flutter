@@ -1,6 +1,6 @@
 # destroyOnClose 独立候选验收
 
-当前结论以末节“Drawer 历史生命周期保持后的当前验收”为准；此前候选的 Drawer 关闭后保留方案已撤回，历史统计不作为当前验证。
+当前结论以末节“替换会话资源复用边界的当前验收”为准；此前候选的 Drawer 关闭后保留方案已撤回，历史统计不作为当前验证。
 
 基线 develop `3704434fd2adfb6988110bc760aaaa52a814581c`；分支 `rss1102/fix/popup-destroy-on-close`。最终组件源码/测试/生成 API 二进制 diff 的 SHA-256：`2488ca62bad4cc0b2736dfdbb45d82e9dcbbc79f4477757790bcdce9f45ed7ad`；高低版本 12 个相关文件逐字节一致。独立 PR 交付；#1196 另行撤出状态参数及 copyWith 迁移（实现提交 `12e18203`）。本表绑定本地已验证源码，远端 CI 以各 PR 最终 head 为准，暂不合并。
 
@@ -109,3 +109,28 @@
 站点 Node 35 项及文档入口检查通过。双 SDK 从 componentTestManifests 选择全部登记组件（`--coverage --exclude-tags demo`）及 Popup/Drawer/Picker 示例，工具执行 `flutter test test/tool`，严格分析使用 `--fatal-infos`；生成器执行 API 与示例片段 `--check`。正式文件已由现有 CI 入口调度，无需新增清单项。原字体、字形清单与 Golden 基线均未改变。
 
 日志、验证脚本、LCOV、源码指纹补丁及历史对照保存在仓库外 `artifacts/popup-destroy-close/drawer-legacy-lifecycle/`，不提交录制素材或运行日志。当前范围无绘制修改，本地未执行 Linux Golden，不外推 Android/iOS 真机及 Web release；远端 CI 按推送后的最终 head 独立核对。零动画 onClosed 中同步重开的历史问题仍不混入，不合并 PR。
+
+## 替换会话资源复用边界的当前验收
+
+2026-10-26，基于已推送的 `474cc6747d35a5efeee007bcec453676e0f496cd` 补齐文档与测试。生产源码、API 签名、参数默认值、生成 API 文件、回调与 Drawer 关闭/遮挡规则均未改变。验证输入为 develop `fabe5f6b` 到当前候选的 `tdesign-component`、Popup FAQ 及 CI/工具路径二进制 diff，SHA-256：`7b342cd135aaf64e725c5b4d14ed90e8d6f91c270b13f9b686573dfd7a464382`。
+
+默认 false 关闭后仍挂载，因此不能把“Controller 绑定规则不变”理解成“关闭后已解绑”。推荐同句柄 open 复用原 State；新会话采用独立 GlobalKey/Controller。若需转交同一资源，须创建旧会话时设置 true，并等旧内容卸载后再 show；false 的 onClosed 不等于内容卸载。是否支持多绑定仍以各 Controller 原有规则为准，不新增全局禁止共享规则。FAQ、Spec 和 PR 升级提醒均按此边界收敛，不改变实现来规避框架诊断。
+
+在已登记的 `test/components/popup/t_popup_options_test.dart` 新增 12 项正式回归，两入口 Popup/Picker 各 6 项：同句柄重开保持 GlobalKey State、滚动值及单个绑定；false/true 替换同一 GlobalKey（false 验证 Duplicate GlobalKey，true 卸载后新建 State）；false/true 转交同一 ScrollController（false 验证两个位置及单 position 断言，true 卸载后只有一个位置）；false 用独立 Key/Controller 安全替换。所有场景验证 Navigator 卸载清理；业务 Controller 仍由业务释放。只约束 State、滚动值与绑定数量，不承诺 Flutter 内部 ScrollPosition 对象身份。预期诊断在测试中精确捕获，清理后不残留额外异常；两 SDK 不跳过正式用例。
+
+| 当前检查 | Flutter 3.32.0 | Flutter 3.47.7 |
+| --- | --- | --- |
+| Popup/Drawer/Picker 全部登记组件 | 473 通过 | 473 通过 |
+| 受影响示例/API/代码面板 | 98 通过 | 98 通过 |
+| 全部工具、字体及消费者 | 177 通过 | 177 通过 |
+| 严格完整 analyze | 零诊断 | 零诊断 |
+| 57 份 API / 示例片段 --check | 通过 / 通过 | 通过 / 通过 |
+| Popup 覆盖率 | 678/694 = 97.69% | 676/694 = 97.41% |
+| Drawer 覆盖率 | 277/289 = 95.85% | 277/289 = 95.85% |
+| Picker 覆盖率 | 402/412 = 97.57% | 402/412 = 97.57% |
+
+当前本地组件范围为三个组件清单，覆盖率也仅来自该范围，不能与此前全量组件的分子直接比较。较早的 4050 项全量结果仍只对应其原候选；新 head 的全量 CI 单独核对。站点 Node 35 项及 57 份文档/360 份示例映射检查通过；生成 API 与原源码同步，未手工改写生成文件。新增测试由现有清单与双版本 CI 调度。
+
+本轮复审确认此前 FAQ 的替换指引和资源复用测试遗漏已闭环；默认 false 延后销毁、共享资源复用边界及旧 true 遮挡行为仍是明确的生命周期 breaking，不声称旧调用行为完全兼容。Drawer 不承担该保留风险。未改变绘制、字体或 Golden 基线，不在 macOS 重跑 Linux Golden；未验证 Android/iOS 真机或 Web release 交互。
+
+本地脚本、日志、LCOV、输入补丁保存在仓库外 `artifacts/popup-destroy-close/session-reuse-boundaries/`。推送后按最终 head 核对 CI/Review，不以旧 head 绿色替代，不合并 PR。

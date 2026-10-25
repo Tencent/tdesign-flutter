@@ -98,6 +98,10 @@ Drawer 单独保持 1.0.0 行为：`destroyOnClose: false`（默认）在不透�
 
 风险：默认 false 以及显式 false 均从关闭释放变为保留，属于生命周期行为变化；丢弃句柄后仍可能占用至 Navigator 卸载，根 Navigator 可能长时间存活。本候选按确定的 1.0.1 修复范围单独交付，不宣称透明兼容旧资源释放时机，不与 API 命名迁移合并。
 
+替换会话的兼容边界：默认 false 关闭后内容仍挂载，GlobalKey 及内容使用的业务 Controller 不能视为已释放/解绑。同句柄 open 复用原 State 和绑定；独立 show 推荐使用独立 GlobalKey 与 Controller，共享能力仍以各 Controller 原有规则为准。若需在替换会话时转交同一资源，应在创建旧会话时设置 true，并等旧内容卸载后再 show；不能事后通过关闭 false 会话获得销毁效果。false 的 onClosed 不等于内容 dispose，不应据此释放仍被内容使用的 Controller。Controller 所有权和重复绑定规则未改，解绑时机随 State 保留延后。这是 Popup/Picker 的生命周期 breaking，Drawer 不适用。
+
+正式回归覆盖 Popup/Picker 两入口：同句柄重开保留 GlobalKey State/滚动位置且不重复绑定、false 替换复用 GlobalKey 的框架诊断、共享 ScrollController 的多位置与 position 断言、true 卸载后的安全转交、false 使用独立资源的安全替换及 Navigator 卸载清理。测试将不支持的复用作为兼容边界，不通过改实现或收紧公开 API 消除诊断。
+
 局部历史消费返回（didPop 返回 false）不等于路由成功弹出；后续直接移除或非栈顶移除仍须保留 false 会话 State，同句柄重开复用。成功 pop 保持原动画与回调时序，内容在关闭动画结束后停放。此前局部历史消费时的 close-start 通知位置不在本次调整范围；零动画 onClosed 同步重开另行处理。
 
 声明式 Navigator.pages 替换关联页面导致 Popup 移除时，同一 Navigator 的 false 会话也保留 State；内部停放刷新不得因构建阶段跳过而丢失 State。

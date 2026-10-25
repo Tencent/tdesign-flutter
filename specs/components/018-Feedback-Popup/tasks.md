@@ -49,3 +49,10 @@
 - [x] 正式关闭/遮挡/丢弃句柄回归，验证 Popup/Picker 保留规则与内部入口不可见。
 - [x] 当前候选双 SDK 完整验证、文档生成、字体、覆盖率及最终复审。
 - [ ] 更新 PR 并核对最终 head 的 CI/Review；不合并。
+
+## 替换会话的资源复用边界
+
+- [x] 补齐 Popup FAQ、Spec 与升级提醒：GlobalKey 唯一性、Controller 解绑延后及三类推荐用法，不改实现或 Drawer 规则。
+- [x] 在现有 CI 登记文件补齐 Popup/Picker 两入口的 12 项正式边界回归。
+- [x] 双 SDK 验证并更新本地验收和补丁，复审 FAQ 与正式测试一致。
+- [ ] 更新 PR 并按最终 head 核对 CI/Review，不合并。
