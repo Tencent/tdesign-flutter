@@ -92,6 +92,6 @@ Popup 是承载任意内容的基础浮层。小程序基础 Popup 默认只渲�
 
 TPopupOverlayConfig 改为 final，库外不能 extends 或 implements；onClick 参数和成员统一改为 onTap，不提供本版本的旧名别名。保留直接构造、const、五项原有配置的默认值、蒙层通知时机与关闭条件，不涉及 TPopupOptions/copyWith、destroyOnClose 生命周期、Controller 或其他 Popup 类型的继承规则。
 
-原因：配置对象负责不可变配置值，业务使用构造与组合；避免未来新增配置成员都要求外部 implements 补齐。final 不保证任意新增必填参数、改默认值或改变行为都兼容，也不等于限制 Popup 的 child/builder/回调扩展。旧动态 getter 每次读取的行为与配置快照不一定等价，需要在业务变更时重新构造并按既有句柄/打开流程应用，不承诺活动 Popup 自动响应外部配置变化。
+原因：配置对象负责不可变配置值，业务使用构造与组合；避免未来新增配置成员都要求外部 implements 补齐。final 不保证任意新增必填参数、改默认值或改变行为都兼容，也不等于限制 Popup 的 child/builder/回调扩展。旧动态 getter 每次读取的行为与配置快照不一定等价，handle.open() 沿用创建句柄时的 options，不会应用新配置；更换配置须重新构造 TPopupOptions，通过 TPopup.show() 创建新会话，不承诺活动 Popup 自动响应外部配置变化。
 
-旧 onClick 调用、继承、implements 以及相关 mock 都需要迁移；FAQ 必须明确 1.x 到 2.0 的版本边界、接口改变原因和组合替代，不用新增一个 getter 的转发作为 final 的适配方案。消费者测试验证旧 implements/extends 被诊断、普通 const 构造与业务工厂可用，并覆盖真实遮罩点击和关闭先后。此 PR 独立于命名迁移及 destroyOnClose 修复，保持草稿供 2.0 评审，不作为 1.0.1 patch 合并。
+旧 onClick 调用、继承、implements 以及相关 mock 都需要迁移；FAQ 说明接口现状、源码迁移影响、组合替代和新配置的实际应用方式，不表述未来版本方向；不用新增一个 getter 的转发作为 final 的适配方案。消费者测试验证旧 implements/extends 被诊断、普通 const 构造与业务工厂可用，并覆盖真实遮罩点击和关闭先后。此 PR 独立于命名迁移及 destroyOnClose 修复，保持草稿供 2.0 评审，不作为 1.0.1 patch 合并。

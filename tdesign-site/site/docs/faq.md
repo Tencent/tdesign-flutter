@@ -13,9 +13,9 @@ spline: explain
 不足够。构造参数、回调、受控值、主题配置和已移除能力均可能变化，尤其要区分顶部页签与底部导航。请先阅读[0.2.7 → 1.0迁移指南](./migration-0.2.7-to-1.0.md)。
 
 
-## 从 1.x 升级到 2.0，为什么不能再 extends 或 implements TPopupOverlayConfig？
+## 为什么不能继承或实现 TPopupOverlayConfig，如何迁移？
 
-这是 2.0 的 breaking 调整：`TPopupOverlayConfig` 改为 `final`，只允许直接构造和组合；原 `onClick` 参数及成员改用 `onTap`。1.x 仍按原版本规则使用，这不是 1.0.1 的新增限制。
+`TPopupOverlayConfig` 是 `final` 配置类，库外不能继承或实现，请直接构造或通过工厂组合。旧 `onClick` 参数及成员改用 `onTap`；已有调用、业务子类和相关 mock 需要适配。
 
 Dart 的 `implements` 要求业务实现所有实例成员，不继承默认实现。配置类每新增成员，旧实现就可能报缺失成员。将配置对象与业务扩展分开，可以避免此类被动适配；但不能保证改变默认值、增加必填参数或修改行为也兼容。
 
@@ -33,7 +33,7 @@ TPopupOverlayConfig createOverlay({
 }
 ```
 
-配置字段使用 `final` 不等于自动响应业务状态。旧 getter 若在每次读取时动态计算，不能直接当作等价快照；应在业务状态变化时重新创建配置，并按原有打开/更新流程应用。不要只新增 `onTap` getter 或用 `noSuchMethod` 绕过 `final`。
+配置字段使用 `final` 不等于自动响应业务状态，旧动态 getter 与配置快照不一定等价。`handle.open()` 沿用创建句柄时的 `options`，不会应用新配置；更换配置需重新构造 `TPopupOptions`，通过 `TPopup.show()` 创建新会话。不要只新增 `onTap` getter 或用 `noSuchMethod` 绕过 `final`。
 
 Popup 的自定义内容、builder、主题、回调和 Controller 能力不因此删除；本次仅限制蒙层配置类的外部继承/实现，不涉及 `TPopupOptions.copyWith` 或 `destroyOnClose`。
 
