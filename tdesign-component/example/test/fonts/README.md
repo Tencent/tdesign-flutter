@@ -5,7 +5,7 @@
 缺少 CJK fallback 而把中文渲染成缺字符号。字符清单见
 `component_demo_glyphs.txt`；上游为 Noto Sans SC 2.004，子集工具为
 HarfBuzz 11.4.5，子集 SHA-256 为
-`1cf396734d8d8bd6f81bebc03f9abc16680da03b9bad485564d14e65c0e34235`。
+`980d66bc50a52c95fc5f32ab29faf3aa8f06081093aad3348d8cf5dc12b645a0`。
 它不会打包进 Example 或组件产物。
 
 共享 Demo Golden 工具统一加载 Roboto、Material Icons、Cupertino Icons、

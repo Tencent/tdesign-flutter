@@ -34,3 +34,17 @@ test('rejects copied API tables, migration prose and raw Dart panels', () => {
 test('requires the generated API for the same component', () => {
   assert.match(validateComponentPage(generatedPage.replace('flutter-api text', 'flutter-api input'), 'text', 'text'), /generated example group and API/);
 });
+
+
+test('accepts component FAQ after generated entries, including adaptation snippets', () => {
+  const faq = '\n## FAQ\n\n### 如何更换配置？\n\n请新建会话。\n\n```dart\nhandle.open();\n```\n';
+  assert.equal(validateComponentPage(generatedPage + faq, 'text', 'text'), null);
+});
+
+test('FAQ does not allow copied API tables, generated mappings or extra sections', () => {
+  const faq = '\n## FAQ\n\n### 如何配置？\n\n使用公开参数。\n';
+  for (const extra of ['\n| 参数 | 默认值 |\n|---|---|', '\n{{ flutter-api input }}', '\n<td-code-block panel="Dart">示例</td-code-block>', '\n## 基础用法\n\n旧示例']) {
+    assert.match(validateComponentPage(generatedPage + faq + extra, 'text', 'text'), /forbidden/);
+  }
+  assert.match(validateComponentPage(generatedPage + '\n## FAQ\n\n无问题标题', 'text', 'text'), /forbidden/);
+});

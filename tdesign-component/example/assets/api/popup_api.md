@@ -9,7 +9,9 @@
 位置参数：`context`
 
 
-每次调用打开独立浮层，可叠加展示；参数与方向不匹配时抛出 `FlutterError`。
+创建独立会话并立即显示，返回 `TPopupHandle`，无需再调用 `TPopupHandle.open`。
+
+重开原会话使用返回句柄的 `TPopupHandle.open`；更换配置需重新调用本方法。多次调用可叠加展示，不会自动关闭旧会话；参数与方向不匹配时抛出 `FlutterError`。
 
 | 名称 | 类型 | 默认值 | 说明 | 必传 |
 | --- | --- | --- | --- | --- |
@@ -311,7 +313,9 @@
 位置参数：`context`
 
 
-打开或重新打开浮层。
+使用创建句柄时的 `options` 打开或重新打开浮层。
+
+不更新配置或创建独立会话；更换配置请调用 `TPopup.show`。
 
 <!-- api-table: details -->
 | 名称 | 类型 | 默认值 | 说明 | 必传 |
@@ -348,7 +352,8 @@
 | --- | --- | --- | --- | --- |
 | closeOnClick | bool? | - | 点击蒙层是否关闭；仅显示蒙层且拦截交互时生效，未指定时为 true。 | 否 |
 | color | Color? | - | 蒙层颜色（含透明度）；未指定时取 `TPopupThemeData.barrierColor`，再回退到 black54。 | 否 |
-| onClick | VoidCallback? | - | 蒙层点击回调；仅显示蒙层且拦截交互时触发，是否关闭由 `closeOnClick` 决定。 | 否 |
+| onClick | VoidCallback? | - | 已废弃，此为兼容入口。请使用 `onTap`；返回实际生效的回调。 | 否 |
+| onTap | VoidCallback? | - | 蒙层点击回调；非空时优先于 `onClick`，仅显示蒙层且拦截交互时触发，是否关闭由 `closeOnClick` 决定。 | 否 |
 | preventTap | bool | true | 是否拦截背景交互。 | 否 |
 | showOverlay | bool | true | 是否显示可见蒙层。 | 否 |
 

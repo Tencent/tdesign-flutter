@@ -2,6 +2,96 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:tdesign_flutter/tdesign_flutter.dart';
 
 void main() {
+  for (final mode in ['old', 'new', 'both', 'null-new']) {
+    for (final closeOnClick in [false, true]) {
+      testWidgets(
+        'callback alias $mode notifies once before close=$closeOnClick',
+        (tester) async {
+          late BuildContext context;
+          TPopupHandle? handle;
+          final events = <String>[];
+          void notify(String name) {
+            expect(handle!.isShowing, isTrue);
+            events.add(name);
+          }
+
+          await tester.pumpWidget(
+            MaterialApp(
+              theme: ThemeData(
+                extensions: const [TPopupThemeData(barrierColor: Colors.red)],
+              ),
+              home: Builder(
+                builder: (value) {
+                  context = value;
+                  return const Scaffold();
+                },
+              ),
+            ),
+          );
+          final oldCallback = mode == 'new' ? null : () => notify('old');
+          final newCallback = mode == 'new' || mode == 'both'
+              ? () => notify('new')
+              : null;
+          final overlay = mode == 'old'
+              ? TPopupOverlayConfig(
+                  closeOnClick: closeOnClick,
+                  // ignore: deprecated_member_use_from_same_package
+                  onClick: oldCallback,
+                )
+              : TPopupOverlayConfig(
+                  closeOnClick: closeOnClick,
+                  onTap: newCallback,
+                  // ignore: deprecated_member_use_from_same_package
+                  onClick: oldCallback,
+                );
+          handle = TPopup.show(
+            context,
+            options: TPopupOptions.bottom(
+              child: const SizedBox(height: 100),
+              overlay: overlay,
+              onVisibleChange: (visible, _) {
+                if (!visible) {
+                  events.add('close');
+                }
+              },
+            ),
+          );
+          expect(handle.options.overlayConfig.color, Colors.red);
+          expect(
+            handle.options.overlayConfig.onTap,
+            same(newCallback ?? oldCallback),
+          );
+          expect(
+            // ignore: deprecated_member_use_from_same_package
+            handle.options.overlayConfig.onClick,
+            same(newCallback ?? oldCallback),
+          );
+          await tester.pumpAndSettle();
+          await tester.tapAt(const Offset(10, 10));
+          await tester.pumpAndSettle();
+          final expected = mode == 'new' || mode == 'both' ? 'new' : 'old';
+          expect(events, closeOnClick ? [expected, 'close'] : [expected]);
+          expect(handle.isShowing, !closeOnClick);
+          handle.close();
+          await tester.pumpAndSettle();
+          expect(tester.takeException(), isNull);
+        },
+      );
+    }
+  }
+
+  test('callback alias retains const construction and null defaults', () {
+    const current = TPopupOverlayConfig();
+    // ignore: deprecated_member_use_from_same_package
+    const legacy = TPopupOverlayConfig(onClick: _legacyTap, onTap: null);
+    expect(current.onTap, isNull);
+    // ignore: deprecated_member_use_from_same_package
+    expect(current.onClick, isNull);
+    expect(legacy.onTap, same(_legacyTap));
+    // ignore: deprecated_member_use_from_same_package
+    expect(legacy.onClick, same(_legacyTap));
+  });
+
   group('TPopupOptions', () {
     test('默认 placement 为 bottom，内容 builder 默认均为空', () {
       final options = const TPopupOptions(child: SizedBox()).normalized();
@@ -357,7 +447,7 @@ void main() {
       expect(config.color, isNull);
       expect(config.preventTap, isTrue);
       expect(config.closeOnClick, isNull);
-      expect(config.onClick, isNull);
+      expect(config.onTap, isNull);
       expect(config.effectiveCloseOnClick, isTrue);
     });
 
@@ -369,3 +459,5 @@ void main() {
     });
   });
 }
+
+void _legacyTap() {}
