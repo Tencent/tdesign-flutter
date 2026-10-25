@@ -11,12 +11,6 @@ import '../../theme/t_token_double_lerp.dart';
 ///
 /// {@category ComponentTheme}
 class TTabBarThemeData extends ThemeExtension<TTabBarThemeData> {
-  TokenValueLerp<double>? get _barHeightTransition => null;
-
-  @internal
-  double resolveBarHeight(double fallback) =>
-      _barHeightTransition?.resolve(fallback) ?? barHeight ?? fallback;
-
   /// 默认高度
   final double? barHeight;
 
@@ -72,7 +66,9 @@ class TTabBarThemeData extends ThemeExtension<TTabBarThemeData> {
         dividerThickness: dividerThickness ?? this.dividerThickness,
         dividerColor: dividerColor ?? this.dividerColor,
       ),
-      barHeightTransition: barHeight == null ? _barHeightTransition : null,
+      barHeightTransition: barHeight == null
+          ? _tabBarTransition(this)?._barHeightTransition
+          : null,
     );
   }
 
@@ -126,9 +122,9 @@ class TTabBarThemeData extends ThemeExtension<TTabBarThemeData> {
       ),
       barHeightTransition: TokenValueLerp.between(
         barHeight,
-        _barHeightTransition,
+        _tabBarTransition(this)?._barHeightTransition,
         other.barHeight,
-        other._barHeightTransition,
+        _tabBarTransition(other)?._barHeightTransition,
         t,
         (a, b, t) => lerpDouble(a, b, t)!,
       ),
@@ -173,6 +169,22 @@ class _InterpolatedTTabBarThemeData extends TTabBarThemeData {
          dividerColor: data.dividerColor,
        );
 
-  @override
   final TokenValueLerp<double>? _barHeightTransition;
+}
+
+// Only library-owned interpolation objects carry deferred token state.
+// External implements satisfy the historic public interface, not private getters.
+_InterpolatedTTabBarThemeData? _tabBarTransition(TTabBarThemeData theme) =>
+    theme is _InterpolatedTTabBarThemeData ? theme : null;
+
+double _resolveTabBarHeight(TTabBarThemeData theme, double fallback) =>
+    _tabBarTransition(theme)?._barHeightTransition?.resolve(fallback) ??
+    theme.barHeight ??
+    fallback;
+
+/// Internal resolution bridge; excluded from the package's public exports.
+@internal
+extension TTabBarThemeDataResolution on TTabBarThemeData {
+  double resolveBarHeight(double fallback) =>
+      _resolveTabBarHeight(this, fallback);
 }
