@@ -40,6 +40,14 @@ void main() {
     ], workingDirectory: consumer.path);
   }
 
+  test('Drawer lifecycle bridge is not a public package API', () async {
+    final result = await analyze(
+      'void use(BuildContext context) { showDrawerPopupInternal(context, options: TPopupOptions.center(child: const SizedBox())); }',
+    );
+    expect(result.exitCode, isNot(0));
+    expect('${result.stdout}${result.stderr}', contains('UNDEFINED_FUNCTION'));
+  });
+
   for (final relation in ['extends', 'implements']) {
     test('1.0.1 external $relation is explicitly rejected', () async {
       final result = await analyze(

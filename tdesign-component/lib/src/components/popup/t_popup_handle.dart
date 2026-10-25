@@ -10,7 +10,7 @@ part of 't_popup.dart';
 ///   options: TPopupOptions.bottom(child: panel),
 /// );
 /// handle.close();
-/// handle.open(); // 可省略 context，复用已缓存的 Navigator
+/// handle.open(); // 可省略 context；destroyOnClose 为 false 时复用内容 State
 /// ```
 class TPopupHandle {
   TPopupHandle._({
@@ -18,7 +18,8 @@ class TPopupHandle {
     required this.themeContext,
     this.navigatorContext,
     this.useRootNavigator = false,
-  });
+    bool reusable = true,
+  }) : _reusable = reusable;
 
   /// [TPopup.show] 合并显式配置与 [TPopupThemeData] 后的配置；重新 [open] 不重新解析已合并的主题值，并按 [TPopupOptions.placement] 裁剪无效字段。
   final TPopupOptions options;
@@ -32,8 +33,11 @@ class TPopupHandle {
   /// 与 [TPopup.show] 的 [useRootNavigator] 相同。
   final bool useRootNavigator;
 
+  // Drawer has no reopen entry and keeps its legacy one-shot lifecycle.
+  final bool _reusable;
   _PopupNavigatorRoute<dynamic>? _route;
   NavigatorState? _lastNavigator;
+  _PopupRetention? _retention;
   bool _isClosed = false;
   int _openEpoch = 0;
   Completer<Object?>? _resultCompleter;
@@ -51,6 +55,9 @@ class TPopupHandle {
   /// 使用创建句柄时的 [options] 打开或重新打开浮层。
   ///
   /// 不更新配置或创建独立会话；更换配置请调用 [TPopup.show]。
+  ///
+  /// destroyOnClose 为 false 时，同一 Navigator 内复用保留的内容 State；
+  /// 切换 Navigator 时创建新 State。每次 TPopup.show 创建独立会话。
   ///
   /// | 状态 | 行为 |
   /// | --- | --- |
@@ -89,10 +96,30 @@ class TPopupHandle {
         ? TOverlayThemes.capture(from: captureFrom, to: navigator.context)
         : null;
 
+    if (_retention != null && !identical(_retention!.navigator, navigator)) {
+      _retention!.release();
+      _retention = null;
+    }
+    if (_reusable && !options.destroyOnClose && _retention == null) {
+      late final _PopupRetention retention;
+      retention = _PopupRetention(navigator, () {
+        if (identical(_retention, retention)) {
+          _retention = null;
+        }
+      });
+      _retention = retention;
+    }
     _isClosed = false;
     _lastNavigator = navigator;
 
     _PopupNavigatorRoute<dynamic>? route;
+    var tracked = true;
+    void untrack() {
+      if (tracked) {
+        tracked = false;
+        _PopupTracker.remove(navigator, this);
+      }
+    }
 
     void closeWithTrigger(TPopupTrigger trigger) {
       final currentRoute = route;
@@ -103,6 +130,15 @@ class TPopupHandle {
     }
 
     route = _PopupNavigatorRoute<dynamic>(
+      retention: _retention,
+      maintainWhenCovered: _reusable || !options.destroyOnClose,
+      onDisposed: () {
+        untrack();
+        final disposedRoute = route;
+        if (disposedRoute != null) {
+          _detachRoute(disposedRoute);
+        }
+      },
       options: normalized.copyWith(
         onClosed: () {
           if (_openEpoch == openEpoch) {
@@ -113,6 +149,7 @@ class TPopupHandle {
       onCloseWithTrigger: closeWithTrigger,
       capturedThemes: capturedThemes,
     );
+    _retention?.activate(route);
     _route = route;
 
     _PopupTracker.push(navigator, this);
@@ -125,7 +162,7 @@ class TPopupHandle {
           }
         })
         .whenComplete(() {
-          _PopupTracker.remove(navigator, this);
+          untrack();
           final completedRoute = route;
           if (completedRoute != null) {
             _detachRoute(completedRoute);
