@@ -56,3 +56,11 @@
 - [x] 在现有 CI 登记文件补齐 Popup/Picker 两入口的 12 项正式边界回归。
 - [x] 双 SDK 验证并更新本地验收和补丁，复审 FAQ 与正式测试一致。
 - [ ] 更新 PR 并按最终 head 核对 CI/Review，不合并。
+
+
+## FAQ 精简与跨组件指引
+
+- [x] Popup 保留批准的精简文本，详细边界留在 Spec。
+- [x] Picker/DateTimePicker 简短提示与精准锚点；ActionSheet 单独说明未暴露 destroyOnClose。
+- [x] 双 SDK 文档、三个链接和四页实际渲染验证，更新本地验收。
+- [ ] 更新 PR 并核对最终 head 的 CI/Review；不修改生产实现或 Drawer 规则，不合并。

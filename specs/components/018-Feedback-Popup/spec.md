@@ -92,7 +92,7 @@ Popup 是承载任意内容的基础浮层。小程序基础 Popup 默认只渲�
 
 Popup/Picker 保留现有 API、默认 false、Controller 绑定规则，不增加公开宿主、dispose 或状态保留参数。true 在关闭动画结束后卸载内容；false 关闭后保持内容 State，同一句柄 open 复用，重复 show 创建独立会话。路由正常 pop/remove，不把关闭路由保留在导航栈。打开期间被不透明路由遮挡时保留状态，不再把 destroyOnClose 取反用于遮挡策略；原 true 的遮挡释放行为也会改变。内部保留容器绑定实际 Navigator；卸载时清理隐藏内容，包括首次绘制前卸载。切换 Navigator 重新创建内容，不跨 Navigator 搬迁会话。
 
-Drawer 单独保持 1.0.0 行为：`destroyOnClose: false`（默认）在不透明路由遮挡时保留 State，true 时允许释放；无论取值如何，关闭完成后均释放。句柄无重开入口，不创建保留容器，不缓存不可再使用的会话。内部入口采用包内桥接且不从主库导出，公开签名不变；不把 Drawer 的旧参数解释为关闭后缓存。下述关闭保留、隐藏路由及迁移风险仅适用于 Popup/Picker。
+Drawer 单独保持 1.0.0 行为：`destroyOnClose: false`（默认）在不透明路由遮挡时保留 State，true 时允许释放；无论取值如何，关闭完成后均释放。句柄无重开入口，不创建保留容器，不缓存不可再使用的会话。内部入口采用包内桥接且不从主库导出，公开签名不变；不把 Drawer 的旧参数解释为关闭后缓存。下述关闭保留、隐藏路由及迁移风险适用于 Popup/Picker，以及沿用 Popup 默认配置的 ActionSheet 命令式入口。
 
 隐藏内容维持原面板尺寸，避免停放扩大视口截断滚动位置；不绘制、不命中、不参与语义或焦点，禁用 Flutter ticker；业务定时器/订阅不保证暂停。result、onVisibleChange、onClosed 仍对应每次展示。关闭动画中 reopen、系统返回、非栈顶移除与重复关闭不得重复挂载或通知。隐藏期间由不进入返回栈的私有承载 ModalRoute 提供路由上下文；可见期间仍为本次实际路由，Navigator 祖先身份不变。承载路由不拦截底层点击，不向外传播隐藏 PopScope 的返回通知；不新增嵌套 Navigator。
 
@@ -118,3 +118,10 @@ TPopupOverlayConfig 改为 final，库外不能 extends 或 implements；推荐�
 show() 创建独立会话并立即显示，不需要随后调用 open()；open() 沿用原句柄创建时的配置，已显示时不重复打开。更换配置通过 show() 创建新会话，不会自动关闭旧会话。该重开行为在 1.0.0 已存在，API 注释与 FAQ 必须区分既有行为和本次源码迁移。本次不新增 update()、dispose()、宿主 API 或 maintainState，也不修改默认值、回调时机或 Controller 绑定规则。
 
 组件 FAQ 在生成 API 入口后维护；文档校验允许该问答区，但仍拒绝复制 API 表、重复生成入口和额外演示章节。全局 FAQ 不重复 Popup 详情。
+
+
+## FAQ 展示与 ActionSheet 间接影响
+
+Popup FAQ 保留变化、推荐用法与关键资源风险；重复 close 不销毁、onClosed 与 dispose 的区别、Controller 所有权/多绑定规则、根 Navigator 长期保留以及旧 true 的遮挡变化仍由本 Spec 详细说明，不因 FAQ 精简而撤销。Picker 与 DateTimePicker 只给出 TPickerPopup 的简短提示，链接到 Popup 的“替换会话”具体标题，使用文档局部稳定锚点 popup-session-reuse，必须带 tab=api；空锚点仅以 relative/top:-128px 提前定位，不占额外布局高度，避免固定栏遮挡目标标题，不修改全站滚动行为；独立面板不受弹层保留规则影响。Drawer 不复制该升级 FAQ，维持既有 API 注释及关闭/遮挡规则。
+
+ActionSheet 的 showList/showGrid 通过 _show、showGridSections 直接调用 TPopup.show；两处 TPopupOptions.bottom 均不传 destroyOnClose，因而沿用 false 保留策略。返回值为 TPopupHandle，可同句柄 open 重开，所属 Navigator 卸载时清理。此间接生命周期影响此前范围说明遗漏，本轮补齐记录，不改变实现。三个入口都没有 destroyOnClose 参数，不能让用户直接设置 true；ActionSheet FAQ 须独立注明参数限制，再链接通用资源风险。不可把“仅 Popup/Picker 受影响”作为完整结论，也不新增参数或更改默认值来规避该限制。

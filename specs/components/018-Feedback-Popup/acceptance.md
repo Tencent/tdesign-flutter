@@ -56,3 +56,9 @@ Drawer 单独保持 1.0.0 的关闭释放/遮挡规则，默认 false，未新�
 基于 474cc674 仅补齐 FAQ、Spec 和 12 项正式测试，生产源码与生成 API 均未改变。默认 false 关闭后 GlobalKey/Controller 仍可能被保留内容使用；同句柄 open、独立资源替换和 true 卸载后转交均有实际入口回归，非法复用边界在双 SDK 中精确验证。两版各 473 项受影响组件、98 项示例/API、177 项工具/字体通过，严格分析零诊断、API/片段同步及三组件覆盖率门禁通过。输入指纹、范围差异与资源风险见[当前验收](./evidence/destroy-on-close.md#替换会话资源复用边界的当前验收)。
 
 本轮本地 Review 无阻塞项；不扩大实现，不把 Controller 所有权规则不变写成关闭后必定解绑，保持 Drawer 原规则。远端结果绑定推送后的 head，暂不合并。
+
+## 当前文档补充：FAQ 精简与跨组件指引
+
+基于 1c7a3d45，仅修改四组件 FAQ 与 Spec；生产实现、API、默认值、正式测试、字体、Drawer 规则及站点导航代码未变。Popup 保留批准的精简文本，Picker/DateTimePicker 采用简短提示和精准链接，ActionSheet 单独注明三个入口未暴露 destroyOnClose，详细边界与间接影响留在 Spec。
+
+两 SDK 各 57 份 API 同步、70 项 API 文档渲染及 14 项字体/清单检查通过；站点 Node 35 项和映射检查通过。本地浏览器四页实看及三个跨页链接验证通过，目标标题未被固定栏遮挡。输入指纹、渲染范围和行为证据复用边界见[本轮文档验收](./evidence/destroy-on-close.md#faq-精简与跨组件指引的当前验收)。本地文档 Review 无阻塞，生命周期 breaking 与 ActionSheet 参数限制仍明确保留；远端 CI 按新 head 核对，不合并。

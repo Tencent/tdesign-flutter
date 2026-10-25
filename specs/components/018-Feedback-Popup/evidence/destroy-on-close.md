@@ -1,6 +1,6 @@
 # destroyOnClose 独立候选验收
 
-当前结论以末节“替换会话资源复用边界的当前验收”为准；此前候选的 Drawer 关闭后保留方案已撤回，历史统计不作为当前验证。
+当前文档结论以末节“FAQ 精简与跨组件指引的当前验收”为准；行为验收仍绑定前述源码候选；此前候选的 Drawer 关闭后保留方案已撤回，历史统计不作为当前验证。
 
 基线 develop `3704434fd2adfb6988110bc760aaaa52a814581c`；分支 `rss1102/fix/popup-destroy-on-close`。最终组件源码/测试/生成 API 二进制 diff 的 SHA-256：`2488ca62bad4cc0b2736dfdbb45d82e9dcbbc79f4477757790bcdce9f45ed7ad`；高低版本 12 个相关文件逐字节一致。独立 PR 交付；#1196 另行撤出状态参数及 copyWith 迁移（实现提交 `12e18203`）。本表绑定本地已验证源码，远端 CI 以各 PR 最终 head 为准，暂不合并。
 
@@ -134,3 +134,23 @@
 本轮复审确认此前 FAQ 的替换指引和资源复用测试遗漏已闭环；默认 false 延后销毁、共享资源复用边界及旧 true 遮挡行为仍是明确的生命周期 breaking，不声称旧调用行为完全兼容。Drawer 不承担该保留风险。未改变绘制、字体或 Golden 基线，不在 macOS 重跑 Linux Golden；未验证 Android/iOS 真机或 Web release 交互。
 
 本地脚本、日志、LCOV、输入补丁保存在仓库外 `artifacts/popup-destroy-close/session-reuse-boundaries/`。推送后按最终 head 核对 CI/Review，不以旧 head 绿色替代，不合并 PR。
+
+## FAQ 精简与跨组件指引的当前验收
+
+2026-10-26，基于 `1c7a3d45b2ce665e4213ffa2e94ea96c5cd83389` 仅调整站点 FAQ 和 Spec。生产 Dart、公开 API、参数默认值、生成 API、正式测试、字体、Drawer 关闭/遮挡规则及站点导航代码均未改。输入为该基线到四组件 FAQ、Popup/ActionSheet Spec 的二进制 diff，SHA-256：`b5f4fce9ee99cbe8117867f8ad0af620b6fec751bb97c482318e28440b51d618`；验收正文与任务状态不纳入输入指纹，防止记录自引用。
+
+Popup 使用批准的精简文本，Controller 多绑定、重复 close、业务资源释放、长期保留及旧 true 遮挡行为的详细边界留在 Spec。Picker/DateTimePicker 提示仅针对 TPickerPopup，不外推独立面板。三个跨组件链接统一为 `/flutter/components/popup?tab=api#popup-session-reuse`；文档局部空锚点提前 128px 定位，避开固定标题栏，不改全站滚动逻辑。
+
+ActionSheet 三个命令式入口沿用 Popup false 配置，但没有 destroyOnClose 参数；FAQ 独立说明不能直接设置 true。此前“仅 Popup/Picker”的范围不完整，本轮补齐其间接影响及 PR 升级风险；不新增能力、不改变实际保留策略。ActionSheet 早期 Spec 的入口收敛叙述明确作为历史，当前三个入口以源码和新增生命周期章节为准。
+
+| 本轮检查 | Flutter 3.32.0 | Flutter 3.47.7 |
+| --- | --- | --- |
+| API --check | 57 份通过 | 57 份通过 |
+| API 文档渲染测试 | 70 通过 | 70 通过 |
+| 字体覆盖/回归清单 | 14 通过 | 14 通过 |
+
+站点 Node 35 项及 57 份文档/360 份示例映射检查通过。站点 FAQ 不依赖 Flutter SDK；两版生成 API 无差异，复用同一次 Node 与真实浏览器渲染验证，不把 Flutter 的 API 文档测试冒充站点 FAQ 的显示证据。
+
+本地 Vite 预览通过真实浏览器检查 Popup、Picker、DateTimePicker、ActionSheet 四页的标题/段落/列表；从后三页实际点击 Popup FAQ，URL 均带 tab=api 及稳定锚点，Popup 目标标题顶部为 168px，未被固定栏遮挡。跨行链接按实际文字片段点击，未以自动化误点的空白位置判断链接无效。截图与跳转 JSON 保存在仓库外 `artifacts/popup-destroy-close/compact-component-faq/`，不向仓库提交截图或录制素材。
+
+本轮没有生产/测试源码变化，不重复运行无关组件回归或 Golden，不外推 Android/iOS 真机、Web release 交互。原 473/98/177 双 SDK 行为证据仍绑定 1c7a3d45 的相同实现；本节只确认新的文档候选。PR 模板与参数名明确的组件日志保留，新增 ActionSheet 条目只描述用户可感知的继承行为，不增加文档类 Changelog 条目。推送后单独核对新 head CI/Review，暂不合并。
