@@ -47,7 +47,7 @@ Picker 专用弹层入口。
 | radius | double? | - | 顶部圆角；null 时使用 Popup 主题或 TDesign 默认值。 | 否 |
 | backgroundColor | Color? | - | 面板背景色；null 时使用 Popup 主题或容器色。 | 否 |
 | overlay | TPopupOverlayConfig? | - | 蒙层行为；null 时沿用 Popup 默认值。 | 否 |
-| destroyOnClose | bool | false | 关闭后是否销毁内容 State，默认 false。 false 时同一句柄再次打开复用 State，所属 Navigator 卸载时释放；true 时关闭后释放。 | 否 |
+| destroyOnClose | bool | false | 关闭后是否销毁内容 State，默认 false。 false 时同一句柄在同一 Navigator 内再次打开复用 State，所属 Navigator 卸载时释放；true 时关闭后释放。 | 否 |
 | animationDuration | Duration? | - | 打开和关闭动画时长。 | 否 |
 | onOpened | VoidCallback? | - | 打开动画完成回调。 | 否 |
 | onClosed | VoidCallback? | - | 关闭动画完成回调。 | 否 |

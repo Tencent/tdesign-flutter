@@ -291,6 +291,276 @@ void main() {
     );
   }
 
+  for (final destroy in <bool?>[null, false, true]) {
+    for (final mode in ['handle', 'system', 'overlay', 'covered', 'remove']) {
+      testWidgets('drawer legacy close $mode destroy=$destroy', (tester) async {
+        late BuildContext context;
+        late ModalRoute<dynamic> drawerRoute;
+        var created = 0;
+        var disposed = 0;
+        var closed = 0;
+        final observer = _RetentionRouteObserver();
+        await tester.pumpWidget(
+          MaterialApp(
+            navigatorObservers: [observer],
+            home: Builder(
+              builder: (value) {
+                context = value;
+                return const Scaffold();
+              },
+            ),
+          ),
+        );
+        final drawer = TDrawer(
+          child: Builder(
+            builder: (value) {
+              drawerRoute = ModalRoute.of(value)!;
+              return _CloseRetentionProbe(
+                onInit: () => created++,
+                onDispose: () => disposed++,
+              );
+            },
+          ),
+        );
+        final handle = destroy == null
+            ? showTDrawer(context, drawer: drawer, onClose: () => closed++)
+            : showTDrawer(
+                context,
+                drawer: drawer,
+                destroyOnClose: destroy,
+                onClose: () => closed++,
+              );
+        await tester.pumpAndSettle();
+        expect(drawerRoute.maintainState, destroy != true);
+        final navigator = Navigator.of(context);
+        if (mode == 'covered') {
+          unawaited(
+            navigator.push(
+              MaterialPageRoute<void>(
+                builder: (_) => const Scaffold(body: Text('cover')),
+              ),
+            ),
+          );
+          await tester.pumpAndSettle();
+          expect(disposed, destroy == true ? 1 : 0);
+        }
+        switch (mode) {
+          case 'system':
+            navigator.pop();
+          case 'overlay':
+            await tester.tapAt(const Offset(10, 300));
+          case 'remove':
+            navigator.removeRoute(drawerRoute);
+          default:
+            handle.close();
+        }
+        await tester.pumpAndSettle();
+        expect(handle.isShowing, isFalse);
+        expect(disposed, created);
+        expect(created, 1);
+        expect(closed, 1);
+        expect(
+          find.byType(_CloseRetentionProbe, skipOffstage: false),
+          findsNothing,
+        );
+        // The home Navigator is still alive; no hidden Drawer session remains.
+        expect(navigator.mounted, isTrue);
+        expect(observer.pushes, mode == 'covered' ? 3 : 2);
+        handle.close();
+        await tester.pumpAndSettle();
+        expect(closed, 1);
+        await tester.pumpWidget(const SizedBox.shrink());
+        expect(disposed, 1);
+        expect(tester.takeException(), isNull);
+      });
+    }
+
+    testWidgets('drawer legacy opaque cover and return destroy=$destroy', (
+      tester,
+    ) async {
+      late BuildContext context;
+      var created = 0;
+      var disposed = 0;
+      await tester.pumpWidget(
+        MaterialApp(
+          home: Builder(
+            builder: (value) {
+              context = value;
+              return const Scaffold();
+            },
+          ),
+        ),
+      );
+      final drawer = TDrawer(
+        child: _CloseRetentionProbe(
+          onInit: () => created++,
+          onDispose: () => disposed++,
+        ),
+      );
+      final handle = destroy == null
+          ? showTDrawer(context, drawer: drawer)
+          : showTDrawer(context, drawer: drawer, destroyOnClose: destroy);
+      await tester.pumpAndSettle();
+      await tester.enterText(find.byType(TextField), 'saved drawer');
+      final navigator = Navigator.of(context);
+      unawaited(
+        navigator.push(
+          MaterialPageRoute<void>(builder: (_) => const Scaffold()),
+        ),
+      );
+      await tester.pumpAndSettle();
+      expect(disposed, destroy == true ? 1 : 0);
+      navigator.pop();
+      await tester.pumpAndSettle();
+      expect(created, destroy == true ? 2 : 1);
+      expect(
+        find.text('saved drawer'),
+        destroy == true ? findsNothing : findsOneWidget,
+      );
+      handle.close();
+      await tester.pump();
+      // Normal close keeps content until the exit transition finishes.
+      expect(disposed, destroy == true ? 1 : 0);
+      await tester.pumpAndSettle();
+      expect(disposed, created);
+      expect(tester.takeException(), isNull);
+    });
+
+    testWidgets(
+      'discarded drawer handles do not retain sessions destroy=$destroy',
+      (tester) async {
+        late BuildContext context;
+        var disposed = 0;
+        await tester.pumpWidget(
+          MaterialApp(
+            home: Builder(
+              builder: (value) {
+                context = value;
+                return const Scaffold();
+              },
+            ),
+          ),
+        );
+        for (var index = 0; index < 5; index++) {
+          final drawer = TDrawer(
+            child: _CloseRetentionProbe(
+              onInit: () {},
+              onDispose: () => disposed++,
+            ),
+          );
+          if (destroy == null) {
+            showTDrawer(context, drawer: drawer);
+          } else {
+            showTDrawer(context, drawer: drawer, destroyOnClose: destroy);
+          }
+          await tester.pumpAndSettle();
+          Navigator.of(context).pop();
+          await tester.pumpAndSettle();
+          expect(disposed, index + 1);
+          expect(
+            find.byType(_CloseRetentionProbe, skipOffstage: false),
+            findsNothing,
+          );
+        }
+        expect(tester.takeException(), isNull);
+      },
+    );
+  }
+
+  testWidgets(
+    'popup true keeps active state under opaque cover then destroys on close',
+    (tester) async {
+      late BuildContext context;
+      var created = 0;
+      var disposed = 0;
+      await tester.pumpWidget(
+        MaterialApp(
+          home: Builder(
+            builder: (value) {
+              context = value;
+              return const Scaffold();
+            },
+          ),
+        ),
+      );
+      final handle = TPopup.show(
+        context,
+        options: TPopupOptions.center(
+          destroyOnClose: true,
+          child: _CloseRetentionProbe(
+            onInit: () => created++,
+            onDispose: () => disposed++,
+          ),
+        ),
+      );
+      await tester.pumpAndSettle();
+      await tester.enterText(find.byType(TextField), 'saved popup');
+      final navigator = Navigator.of(context);
+      unawaited(
+        navigator.push(
+          MaterialPageRoute<void>(builder: (_) => const Scaffold()),
+        ),
+      );
+      await tester.pumpAndSettle();
+      expect(disposed, 0);
+      navigator.pop();
+      await tester.pumpAndSettle();
+      expect(created, 1);
+      expect(find.text('saved popup'), findsOneWidget);
+      handle.close();
+      await tester.pumpAndSettle();
+      expect(disposed, 1);
+      expect(tester.takeException(), isNull);
+    },
+  );
+
+  for (final destroy in [false, true]) {
+    testWidgets('picker handle reopens with expected state destroy=$destroy', (
+      tester,
+    ) async {
+      late BuildContext context;
+      var created = 0;
+      var disposed = 0;
+      await tester.pumpWidget(
+        MaterialApp(
+          home: Builder(
+            builder: (value) {
+              context = value;
+              return const Scaffold();
+            },
+          ),
+        ),
+      );
+      final handle = TPickerPopup.show(
+        context,
+        child: _CloseRetentionProbe(
+          onInit: () => created++,
+          onDispose: () => disposed++,
+        ),
+        headerBuilder: (_, __) => const TPopupHeader(title: Text('header')),
+        destroyOnClose: destroy,
+      );
+      await tester.pumpAndSettle();
+      await tester.enterText(find.byType(TextField), 'saved picker');
+      handle.close();
+      await tester.pumpAndSettle();
+      expect(disposed, destroy ? 1 : 0);
+      handle.open();
+      await tester.pumpAndSettle();
+      expect(created, destroy ? 2 : 1);
+      expect(
+        find.text('saved picker'),
+        destroy ? findsNothing : findsOneWidget,
+      );
+      handle.close();
+      await tester.pumpAndSettle();
+      await tester.pumpWidget(const SizedBox.shrink());
+      await tester.pump();
+      expect(disposed, created);
+      expect(tester.takeException(), isNull);
+    });
+  }
+
   for (final entry in ['drawer', 'picker']) {
     for (final destroy in [false, true]) {
       testWidgets('$entry applies close destruction destroy=$destroy', (
@@ -332,7 +602,7 @@ void main() {
         await tester.pumpAndSettle();
         close();
         await tester.pumpAndSettle();
-        expect(disposed, destroy ? 1 : 0);
+        expect(disposed, entry == 'drawer' || destroy ? 1 : 0);
         await tester.pumpWidget(const SizedBox.shrink());
         await tester.pump();
         expect(disposed, 1);

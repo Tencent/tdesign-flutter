@@ -90,7 +90,9 @@ Popup 是承载任意内容的基础浮层。小程序基础 Popup 默认只渲�
 
 ## destroyOnClose 关闭销毁修复（独立交付）
 
-保留现有 API、默认 false、Controller 绑定规则，不增加公开宿主、dispose 或状态保留参数。true 在关闭动画结束后卸载内容；false 关闭后保持内容 State，同一句柄 open 复用，重复 show 创建独立会话。路由正常 pop/remove，不把关闭路由保留在导航栈。打开期间被不透明路由遮挡时保留状态，不再把 destroyOnClose 取反用于遮挡策略；原 true 的遮挡释放行为也会改变。内部保留容器绑定实际 Navigator；卸载时清理隐藏内容，包括首次绘制前卸载。切换 Navigator 重新创建内容，不跨 Navigator 搬迁会话。
+Popup/Picker 保留现有 API、默认 false、Controller 绑定规则，不增加公开宿主、dispose 或状态保留参数。true 在关闭动画结束后卸载内容；false 关闭后保持内容 State，同一句柄 open 复用，重复 show 创建独立会话。路由正常 pop/remove，不把关闭路由保留在导航栈。打开期间被不透明路由遮挡时保留状态，不再把 destroyOnClose 取反用于遮挡策略；原 true 的遮挡释放行为也会改变。内部保留容器绑定实际 Navigator；卸载时清理隐藏内容，包括首次绘制前卸载。切换 Navigator 重新创建内容，不跨 Navigator 搬迁会话。
+
+Drawer 单独保持 1.0.0 行为：`destroyOnClose: false`（默认）在不透明路由遮挡时保留 State，true 时允许释放；无论取值如何，关闭完成后均释放。句柄无重开入口，不创建保留容器，不缓存不可再使用的会话。内部入口采用包内桥接且不从主库导出，公开签名不变；不把 Drawer 的旧参数解释为关闭后缓存。下述关闭保留、隐藏路由及迁移风险仅适用于 Popup/Picker。
 
 隐藏内容维持原面板尺寸，避免停放扩大视口截断滚动位置；不绘制、不命中、不参与语义或焦点，禁用 Flutter ticker；业务定时器/订阅不保证暂停。result、onVisibleChange、onClosed 仍对应每次展示。关闭动画中 reopen、系统返回、非栈顶移除与重复关闭不得重复挂载或通知。隐藏期间由不进入返回栈的私有承载 ModalRoute 提供路由上下文；可见期间仍为本次实际路由，Navigator 祖先身份不变。承载路由不拦截底层点击，不向外传播隐藏 PopScope 的返回通知；不新增嵌套 Navigator。
 

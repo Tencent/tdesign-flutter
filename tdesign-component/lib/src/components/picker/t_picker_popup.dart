@@ -57,7 +57,7 @@ final class TPickerPopup {
     TPopupOverlayConfig? overlay,
 
     /// 关闭后是否销毁内容 State，默认 false。
-    /// false 时同一句柄再次打开复用 State，所属 Navigator 卸载时释放；true 时关闭后释放。
+    /// false 时同一句柄在同一 Navigator 内再次打开复用 State，所属 Navigator 卸载时释放；true 时关闭后释放。
     bool destroyOnClose = false,
 
     /// 打开和关闭动画时长。

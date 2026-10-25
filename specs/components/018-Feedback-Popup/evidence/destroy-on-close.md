@@ -1,5 +1,7 @@
 # destroyOnClose 独立候选验收
 
+当前结论以末节“Drawer 历史生命周期保持后的当前验收”为准；此前候选的 Drawer 关闭后保留方案已撤回，历史统计不作为当前验证。
+
 基线 develop `3704434fd2adfb6988110bc760aaaa52a814581c`；分支 `rss1102/fix/popup-destroy-on-close`。最终组件源码/测试/生成 API 二进制 diff 的 SHA-256：`2488ca62bad4cc0b2736dfdbb45d82e9dcbbc79f4477757790bcdce9f45ed7ad`；高低版本 12 个相关文件逐字节一致。独立 PR 交付；#1196 另行撤出状态参数及 copyWith 迁移（实现提交 `12e18203`）。本表绑定本地已验证源码，远端 CI 以各 PR 最终 head 为准，暂不合并。
 
 ## 最终实现与复审
@@ -73,3 +75,37 @@
 站点主题/文档 35 项通过，57 份组件文档与 360 份示例映射检查通过。两 SDK 使用独立目录，生产源码、测试、工具及生成 API 已核对一致；源码输入指纹 `f13a0bb104b2035bd32070f4c45f1e60d156f6ce7ced36ce98b181e22e917530`。日志、输入哈希、清单驱动的执行脚本和 LCOV 位于本地 artifacts/popup-destroy-close/sync-develop-fabe5f6b，补丁为同目录 candidate.patch。
 
 复审确认本 PR 相对最新 develop 仍仅叠加 destroyOnClose 生命周期修复及文档，不撤销 #1199 的 final/回调兼容契约，不改变 Controller 绑定规则，不混入零动画 onClosed 历史问题。默认 false 的关闭状态保留、旧 true 的遮挡行为及资源释放成本仍按前述风险说明，不能宣称生命周期透明兼容。本地 macOS 检查不外推真机/Web release；未在本地运行或修改 Linux Golden，远端检查以合并提交 head 为准。暂不合并 PR。
+
+## Drawer 历史生命周期保持后的当前验收
+
+2026-10-26，基线 develop `fabe5f6bbd68d35ce304deee1b840c77df46465e`，上一 PR head `8b971830`。验证输入为基线到当前候选的 `tdesign-component .github .cnb scripts packages` 二进制 diff，SHA-256：`6d7e25cfc9e99ffcab5004552615533e7c47f6c843d4581a86f499edee6c1f2a`。本节替代此前候选的 Drawer 保留策略及相关风险结论。
+
+### 当前契约与兼容边界
+
+- Drawer 保持 v1.0.0：默认/显式 false 被不透明路由遮挡时保留 State，true 时允许释放；两种取值都在关闭完成后释放。无重开能力，不创建隐藏保留会话。
+- Popup/Picker 保持本 PR 现有保留规则：false 同句柄/同 Navigator 重开复用，true 关闭释放，Navigator 卸载自动清理。其关闭释放时机与旧 true 的遮挡规则仍是有意的生命周期 breaking，不能声称完全兼容旧资源行为；丢弃句柄、业务订阅与长期存活 Navigator 的成本仍存在。
+- 不新增公开 API，不改变参数默认值、回调时机、Controller 绑定或 #1199 的 onTap/onClick/final 契约。私有一次性策略只在 Drawer 内部桥接接入；桥接不从主库导出，消费者诊断回归验证无法调用。
+
+### 正式回归与历史对照
+
+已登记的 `t_popup_options_test.dart` 新增 24 项 Widget 回归：21 项 Drawer 覆盖省略参数/false/true 下的句柄关闭、系统返回、蒙层点击、遮挡后非栈顶关闭、直接移除、遮挡返回及关闭动画释放、五次连续丢弃句柄；另 1 项验证 Popup true 遮挡保留，2 项经真实 Picker 入口验证同句柄重开输入复用/重建及 Navigator 清理。同步恢复 Drawer 原 maintainState 断言，调整共享入口释放断言。既有 LocalHistoryEntry、声明式页面替换、语义、主题、滚动与正常 pop 回归全部保留。
+
+同样的 21 项 Drawer 测试在 v1.0.0 标签原始源码上以 Flutter 3.32.0 / 3.47.7 均全部通过；该对照沿用当前 SDK 的依赖解析，用于确认历史组件行为，不代表复现旧发布环境或真机结果。
+
+### 双版本当前结果（macOS）
+
+| 检查 | Flutter 3.32.0 | Flutter 3.47.7 |
+| --- | --- | --- |
+| 全部登记组件（排除 demo 标签） | 4050 通过 | 4050 通过 |
+| 受影响示例、API、代码面板 | 98 通过 | 98 通过 |
+| 工具/字体/消费者 | 177 通过 | 177 通过 |
+| 严格完整 analyze | 零诊断 | 零诊断 |
+| API 生成同步 | 57 份通过 | 57 份通过 |
+| 示例片段同步 | 通过 | 通过 |
+| Popup 生产覆盖率 | 678/694 = 97.69% | 676/694 = 97.41% |
+| Drawer 生产覆盖率 | 283/289 = 97.92% | 283/289 = 97.92% |
+| Picker 生产覆盖率 | 406/412 = 98.54% | 406/412 = 98.54% |
+
+站点 Node 35 项及文档入口检查通过。双 SDK 从 componentTestManifests 选择全部登记组件（`--coverage --exclude-tags demo`）及 Popup/Drawer/Picker 示例，工具执行 `flutter test test/tool`，严格分析使用 `--fatal-infos`；生成器执行 API 与示例片段 `--check`。正式文件已由现有 CI 入口调度，无需新增清单项。原字体、字形清单与 Golden 基线均未改变。
+
+日志、验证脚本、LCOV、源码指纹补丁及历史对照保存在仓库外 `artifacts/popup-destroy-close/drawer-legacy-lifecycle/`，不提交录制素材或运行日志。当前范围无绘制修改，本地未执行 Linux Golden，不外推 Android/iOS 真机及 Web release；远端 CI 按推送后的最终 head 独立核对。零动画 onClosed 中同步重开的历史问题仍不混入，不合并 PR。

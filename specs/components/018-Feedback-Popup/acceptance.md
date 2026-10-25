@@ -41,6 +41,12 @@
 初始基线 develop 3704434f，当前基线 develop 264fc582；独立候选结果、FAQ 修正及 onClick 废弃兼容的双版本复验见 [配置设计验收](./evidence/overlay-final.md)。此前 onTap 兼容别名或 destroyOnClose 分支结果不作为当前候选证据。
 
 
-## 同步最新 develop 的当前候选
+## 同步最新 develop 的阶段候选（历史）
 
 已同步 develop fabe5f6b（含 #1199）。冲突解决后两 SDK 各 4026 项登记组件、98 项受影响示例、176 项工具检查通过，严格分析零诊断，57 份 API/示例片段检查与相关覆盖率门禁通过。当前输入指纹及执行范围见[同步后的验收](./evidence/destroy-on-close.md#同步-develop-fabe5f6b-后的当前验收)；上文原基线结果仅作历史追溯，不代替此次候选。
+
+## 当前候选：Drawer 保持历史关闭与遮挡规则
+
+Drawer 单独保持 1.0.0 的关闭释放/遮挡规则，默认 false，未新增公开 API；Popup/Picker 保持现有同句柄保留策略。新增 24 项 Widget 与 1 项包入口消费者回归，原有边界测试保留；相同 21 项 Drawer 用例在 v1.0.0 原始源码上通过双版本对照。两 SDK 当前完整组件各 4050、示例/API 各 98、工具字体各 177 项通过，严格分析、API/片段生成、相关覆盖率通过；输入指纹、范围与局限见[当前验收](./evidence/destroy-on-close.md#drawer-历史生命周期保持后的当前验收)。
+
+本地复审无阻塞项：Drawer 不再保留不可重开的内容，API、默认值、回调和 Controller 规则保持；Popup/Picker 的生命周期 breaking 风险仍须保留。历史章节的 Drawer 保留成本不再描述当前实现。推送后 CI/Review 另按最终 head 核对，暂不合并。

@@ -29,7 +29,7 @@ bottom 只提供 headerBuilder，center 只提供 closeBuilder；按钮业务回
 
 ## destroyOnClose 修复组织
 
-基于 develop 独立交付，原字段/函数签名不变，默认 false。每个保留句柄拥有一个私有承载 ModalRoute，由内部安装到所属 Navigator 的 Overlay，提供隐藏期间的原生路由上下文，但不进入导航历史；不创建嵌套 Navigator。可见路由正常 push/pop/remove，GlobalKey 同帧转移内容面板；动画、布局及捕获主题包装留在保留边界外，停放前读取已布局面板的实际尺寸，隐藏时用同尺寸约束保留内容，重开时重新构建外层包装；避免主题包装变化销毁内容或隐藏尺寸变化截断滚动位置；可见内容的 Navigator 仍为原所属实例。
+基于 develop 独立交付，原字段/函数签名不变，默认 false。仅 Popup/Picker 的保留句柄拥有一个私有承载 ModalRoute，由内部安装到所属 Navigator 的 Overlay，提供隐藏期间的原生路由上下文，但不进入导航历史；不创建嵌套 Navigator。可见路由正常 push/pop/remove，GlobalKey 同帧转移内容面板；动画、布局及捕获主题包装留在保留边界外，停放前读取已布局面板的实际尺寸，隐藏时用同尺寸约束保留内容，重开时重新构建外层包装；避免主题包装变化销毁内容或隐藏尺寸变化截断滚动位置；可见内容的 Navigator 仍为原所属实例。
 
 私有承载路由始终 offstage、不请求焦点、没有拦截蒙层。隐藏内容 ExcludeFocus、ExcludeSemantics、TickerMode(false)；原生路由发出的 NavigationNotification 在内部截断，避免隐藏 PopScope 改变外部返回状态。保留独立 PrimaryScrollController/PageStorage，重开不丢失输入与滚动。内容面板在同一 RenderConstrainedBox 渲染根内切换停放尺寸约束，避免新增渲染祖先改变语义几何关系；该根声明独立语义边界，脱离父节点后清理自身语义缓存，不改 Flutter 私有实现或全局无障碍状态。
 
@@ -51,3 +51,9 @@ bottom 只提供 headerBuilder，center 只提供 closeBuilder；按钮业务回
 ## 1.0.1 蒙层配置调整
 
 #1199 已合入 develop，配置收敛作为本轮基线。保留 final、onTap/onClick 兼容及 FAQ；合并后双 SDK 同时验证配置回调和生命周期，不重复交付原配置迁移。
+
+## Drawer 一次性生命周期隔离
+
+将公共 show 的原实现提取为私有入口；Drawer 通过不从主库导出的 @internal 函数传入私有不可复用标记。句柄仅在可复用且 false 时创建保留容器；可见路由的遮挡保留由内部字段决定，Drawer 使用 !destroyOnClose，Popup/Picker 始终保留。其余 close、onClosed、pop/remove、Controller 与主题解析代码复用，不增加公开参数、方法或专用路由。
+
+在已登记的 t_popup_options_test.dart 补默认/显式 false/true 的关闭与遮挡矩阵、重复丢弃句柄、真实 Picker 入口重开与 Navigator 清理、Popup true 的遮挡状态；消费者测试验证桥接不进入主库 API。双版本完整登记组件、工具/字体、示例与覆盖率及生成文档验收，风险说明只限定 Popup/Picker。

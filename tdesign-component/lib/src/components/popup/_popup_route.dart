@@ -7,6 +7,7 @@ class _PopupNavigatorRoute<T> extends PopupRoute<T> {
     required this.onCloseWithTrigger,
     required this.capturedThemes,
     this.retention,
+    this.maintainWhenCovered = true,
     this.onDisposed,
   }) : _layout = PopupLayout(
          placement: options.placement,
@@ -18,6 +19,7 @@ class _PopupNavigatorRoute<T> extends PopupRoute<T> {
 
   final TPopupOptions options;
   final _PopupRetention? retention;
+  final bool maintainWhenCovered;
   final VoidCallback? onDisposed;
   bool _popping = false;
   final void Function(TPopupTrigger trigger) onCloseWithTrigger;
@@ -70,7 +72,7 @@ class _PopupNavigatorRoute<T> extends PopupRoute<T> {
   bool get opaque => false;
 
   @override
-  bool get maintainState => true;
+  bool get maintainState => maintainWhenCovered;
 
   @override
   Widget buildModalBarrier() {

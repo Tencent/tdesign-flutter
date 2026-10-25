@@ -18,7 +18,8 @@ class TPopupHandle {
     required this.themeContext,
     this.navigatorContext,
     this.useRootNavigator = false,
-  });
+    bool reusable = true,
+  }) : _reusable = reusable;
 
   /// [TPopup.show] 合并显式配置与 [TPopupThemeData] 后的配置；重新 [open] 不重新解析已合并的主题值，并按 [TPopupOptions.placement] 裁剪无效字段。
   final TPopupOptions options;
@@ -32,6 +33,8 @@ class TPopupHandle {
   /// 与 [TPopup.show] 的 [useRootNavigator] 相同。
   final bool useRootNavigator;
 
+  // Drawer has no reopen entry and keeps its legacy one-shot lifecycle.
+  final bool _reusable;
   _PopupNavigatorRoute<dynamic>? _route;
   NavigatorState? _lastNavigator;
   _PopupRetention? _retention;
@@ -97,7 +100,7 @@ class TPopupHandle {
       _retention!.release();
       _retention = null;
     }
-    if (!options.destroyOnClose && _retention == null) {
+    if (_reusable && !options.destroyOnClose && _retention == null) {
       late final _PopupRetention retention;
       retention = _PopupRetention(navigator, () {
         if (identical(_retention, retention)) {
@@ -128,6 +131,7 @@ class TPopupHandle {
 
     route = _PopupNavigatorRoute<dynamic>(
       retention: _retention,
+      maintainWhenCovered: _reusable || !options.destroyOnClose,
       onDisposed: () {
         untrack();
         final disposedRoute = route;

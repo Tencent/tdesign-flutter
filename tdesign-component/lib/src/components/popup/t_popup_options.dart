@@ -226,7 +226,7 @@ class TPopupOptions {
       overlay ?? const TPopupOverlayConfig();
 
   /// 关闭后是否销毁内容 State，默认 false。
-  /// true 时关闭后释放；false 时同一句柄再次打开复用 State，所属 Navigator 卸载时释放。
+  /// true 时关闭后释放；false 时同一句柄在同一 Navigator 内再次打开复用 State，所属 Navigator 卸载时释放。
   /// 关闭后保留的内容可能长期占用资源，即使业务未保存返回句柄。
   final bool destroyOnClose;
 
