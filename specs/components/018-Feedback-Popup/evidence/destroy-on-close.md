@@ -20,7 +20,7 @@
 
 零动画 onClosed 同步重开导致 Navigator !_debugLocked 的问题，已在此前精确 develop 基线双版本确认，明确排除本轮修复；本轮未调整该回调的同步调用时机，也不把它写成已解决。旧 review-3ee11d3d 报告和失败日志保留，LocalHistoryEntry P2 由本轮最终源码与正式回归闭环。
 
-## 最终双版本门禁
+## 同步前历史双版本门禁
 
 | 项目 | Flutter 3.32.0 / Dart 3.8.0 | Flutter 3.47.7 / Dart 3.13.5 |
 | --- | --- | --- |
@@ -53,3 +53,23 @@
 ## Spec 风险链接修正复核
 
 本轮仅将 Picker 与 Drawer 的 Popup 风险链接更新到“destroyOnClose 关闭销毁修复（独立交付）”的现有锚点，两个链接均与目标标题匹配。生产实现、公开注释、生成 API、回归测试未变，源码指纹仍2488ca62bad4cc0b2736dfdbb45d82e9dcbbc79f4477757790bcdce9f45ed7ad；复用上表同指纹双 SDK 功能验收。本轮两 SDK 另运行57份API --check、工具清单/字体覆盖14项均通过，日志见 artifacts/popup-destroy-close/implements-fix-docs。新head远端CI另行核对，不把旧CI状态当作当前通过，不合并。
+
+
+## 同步 develop fabe5f6b 后的当前验收
+
+基线更新至 `fabe5f6bbd68d35ce304deee1b840c77df46465e`（已合入 #1199），本次合并父提交为 `1ed6de286feca64e54bc8ebcebe0128b9288ba8d`。解决 Popup 的 spec/plan/tasks/acceptance 及 t_popup_options_test.dart 共五处文本冲突，保留生命周期和配置回调两边的全部章节与正式回归。两边新增测试块逐字核对保留；私有保留承载及 LocalHistoryEntry、声明式页面替换修复未回退。配置类型、onTap/onClick 解析直接沿用 develop，不在本 PR 重新实现。
+
+| 当前检查 | Flutter 3.32.0 | Flutter 3.47.7 |
+| --- | --- | --- |
+| 全部登记组件回归 | 4026 通过 | 4026 通过 |
+| 受影响示例、API 与代码面板 | 98 通过 | 98 通过 |
+| 工具与字体检查 | 176 通过 | 176 通过 |
+| 完整严格 analyze | 零诊断 | 零诊断 |
+| API --check / 示例片段 --check | 57 份 / 通过 | 57 份 / 通过 |
+| Popup 覆盖率 | 672/688 = 97.67% | 670/688 = 97.38% |
+| Drawer 覆盖率 | 283/289 = 97.92% | 283/289 = 97.92% |
+| Picker 覆盖率 | 406/412 = 98.54% | 406/412 = 98.54% |
+
+站点主题/文档 35 项通过，57 份组件文档与 360 份示例映射检查通过。两 SDK 使用独立目录，生产源码、测试、工具及生成 API 已核对一致；源码输入指纹 `f13a0bb104b2035bd32070f4c45f1e60d156f6ce7ced36ce98b181e22e917530`。日志、输入哈希、清单驱动的执行脚本和 LCOV 位于本地 artifacts/popup-destroy-close/sync-develop-fabe5f6b，补丁为同目录 candidate.patch。
+
+复审确认本 PR 相对最新 develop 仍仅叠加 destroyOnClose 生命周期修复及文档，不撤销 #1199 的 final/回调兼容契约，不改变 Controller 绑定规则，不混入零动画 onClosed 历史问题。默认 false 的关闭状态保留、旧 true 的遮挡行为及资源释放成本仍按前述风险说明，不能宣称生命周期透明兼容。本地 macOS 检查不外推真机/Web release；未在本地运行或修改 Linux Golden，远端检查以合并提交 head 为准。暂不合并 PR。

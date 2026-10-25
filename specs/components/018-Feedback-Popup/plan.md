@@ -47,3 +47,7 @@ bottom 只提供 headerBuilder，center 只提供 closeBuilder；按钮业务回
 正式回归覆盖消费两条局部历史后：直接 removeRoute、遮挡后非栈顶 handle.close，以及正常 pop。前两者验证关闭后 State/输入保留、同句柄重开复用和 Navigator 卸载仅释放一次；正常 pop 验证动画进行中内容仍在原可见路由，result 先完成、onClosed 待动画结束，不提前停放。零动画 onClosed 同步重开的历史问题不纳入修复。
 
 复审补充：Navigator.pages 在构建阶段替换关联页面时，原生 ModalRoute.changedInternalState 不执行 setState，不能保证保留内容同帧转移。私有承载路由用自有 ValueNotifier 驱动内部内容 builder，确保构建阶段也在移除内容前刷新；不延迟到 post-frame（会错过 State 保留），不引入公开 API 或 NavigatorObserver。该信号随私有路由释放。正式回归另覆盖局部历史消费后的声明式页面替换、同 Navigator 重开和卸载清理。
+
+## 1.0.1 蒙层配置调整
+
+#1199 已合入 develop，配置收敛作为本轮基线。保留 final、onTap/onClick 兼容及 FAQ；合并后双 SDK 同时验证配置回调和生命周期，不重复交付原配置迁移。

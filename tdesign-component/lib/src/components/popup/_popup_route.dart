@@ -197,7 +197,7 @@ class _PopupNavigatorRoute<T> extends PopupRoute<T> {
 
   void _handleOverlayTap() {
     final overlay = options.overlayConfig;
-    overlay.onClick?.call();
+    overlay.onTap?.call();
     if (overlay.effectiveCloseOnClick) {
       onCloseWithTrigger(TPopupTrigger.overlay);
     }

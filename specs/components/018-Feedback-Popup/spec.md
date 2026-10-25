@@ -37,8 +37,8 @@ Popup 是承载任意内容的基础浮层。小程序基础 Popup 默认只渲�
 ### 面板与蒙层
 
 - child、placement、width/height/inset、生命周期和单次 animationDuration 归 TPopupOptions。TPopupThemeData 承载面板背景、圆角、默认尺寸及 barrierColor；不保存同义动画时长或 barrierOpacity。
-- TPopupOverlayConfig 只包括 showOverlay、color、preventTap、closeOnClick、onClick。color 自带 alpha，不再叠乘独立 opacity。默认显示遮罩并拦截背景；未指定色时回退组件 Theme，再到 black54。
-- 可见性与拦截独立。只有可见且拦截的蒙层响应 onClick 和 closeOnClick；穿透时由背景接收事件，不把不可见层当作可点击遮罩。
+- TPopupOverlayConfig 只包括 showOverlay、color、preventTap、closeOnClick、onTap。color 自带 alpha，不再叠乘独立 opacity。默认显示遮罩并拦截背景；未指定色时回退组件 Theme，再到 black54。
+- 可见性与拦截独立。只有可见且拦截的蒙层响应 onTap 和 closeOnClick；穿透时由背景接收事件，不把不可见层当作可点击遮罩。
 - useSafeArea 默认 false，显式 true 按方向避让。top/bottom/center 默认大圆角；left/right 未设置圆角时为全高矩形，显式设置时只作用于内容侧边缘。
 - 单次 animationDuration 优先，未设置为 240ms；不从已删除的 Theme transitionDuration 取值。减少动画等系统环境继续响应。
 
@@ -99,3 +99,16 @@ Popup 是承载任意内容的基础浮层。小程序基础 Popup 默认只渲�
 局部历史消费返回（didPop 返回 false）不等于路由成功弹出；后续直接移除或非栈顶移除仍须保留 false 会话 State，同句柄重开复用。成功 pop 保持原动画与回调时序，内容在关闭动画结束后停放。此前局部历史消费时的 close-start 通知位置不在本次调整范围；零动画 onClosed 同步重开另行处理。
 
 声明式 Navigator.pages 替换关联页面导致 Popup 移除时，同一 Navigator 的 false 会话也保留 State；内部停放刷新不得因构建阶段跳过而丢失 State。
+
+## 1.0.0 → 1.0.1 蒙层配置调整（源码 breaking）
+
+TPopupOverlayConfig 改为 final，库外不能 extends 或 implements；推荐使用 onTap，保留 onClick 构造参数及成员并标记废弃。非空 onTap 优先，null 时回退到 onClick；内部只保存并触发一个有效回调，旧成员返回同一个有效回调。保留直接构造、const、五项原有配置的默认值、蒙层通知时机与关闭条件，不涉及 TPopupOptions/copyWith、destroyOnClose 生命周期、Controller 或其他 Popup 类型的继承规则。
+
+原因：配置对象负责不可变配置值，业务使用构造与组合；避免未来新增配置成员都要求外部 implements 补齐。final 不保证任意新增必填参数、改默认值或改变行为都兼容，也不等于限制 Popup 的 child/builder/回调扩展。旧动态 getter 每次读取的行为与配置快照不一定等价，handle.open() 沿用创建句柄时的 options，不会应用新配置；更换配置须重新构造 TPopupOptions，通过 TPopup.show() 创建新会话，不承诺活动 Popup 自动响应外部配置变化。
+
+旧 onClick 普通调用和成员访问保持可用并提示废弃；旧继承、implements 以及相关 mock 仍需迁移；Popup 组件文档的 FAQ 说明接口现状、源码迁移影响、组合替代和新配置的实际应用方式，明确 1.0.0 到 1.0.1 的适配范围，不表述其他版本方向；不用新增一个 getter 的转发作为 final 的适配方案。消费者测试验证旧 implements/extends 被诊断、普通 const 构造与业务工厂可用，并覆盖真实遮罩点击和关闭先后。该配置契约已随 #1199 合入 develop；final 限制仍属于源码 breaking。本 PR 沿用该契约，只叠加上节 destroyOnClose 生命周期修复，不再次调整配置 API。
+
+
+show() 创建独立会话并立即显示，不需要随后调用 open()；open() 沿用原句柄创建时的配置，已显示时不重复打开。更换配置通过 show() 创建新会话，不会自动关闭旧会话。该重开行为在 1.0.0 已存在，API 注释与 FAQ 必须区分既有行为和本次源码迁移。本次不新增 update()、dispose()、宿主 API 或 maintainState，也不修改默认值、回调时机或 Controller 绑定规则。
+
+组件 FAQ 在生成 API 入口后维护；文档校验允许该问答区，但仍拒绝复制 API 表、重复生成入口和额外演示章节。全局 FAQ 不重复 Popup 详情。

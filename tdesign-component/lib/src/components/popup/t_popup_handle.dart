@@ -49,7 +49,9 @@ class TPopupHandle {
   bool get isShowing =>
       _route != null && !_isClosed && (_route?.isActive ?? false);
 
-  /// 打开或重新打开浮层。
+  /// 使用创建句柄时的 [options] 打开或重新打开浮层。
+  ///
+  /// 不更新配置或创建独立会话；更换配置请调用 [TPopup.show]。
   ///
   /// destroyOnClose 为 false 时，同一 Navigator 内复用保留的内容 State；
   /// 切换 Navigator 时创建新 State。每次 TPopup.show 创建独立会话。
