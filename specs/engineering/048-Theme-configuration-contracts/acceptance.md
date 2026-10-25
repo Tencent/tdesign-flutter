@@ -108,7 +108,7 @@ PR 拆分、重放、分支切换与重复推送记录已移除。影响最终�
 
 ### 候选与结论
 
-本节独立于上文历史验收。基于 develop `058ac453bc4bf5974ee9e69fef1150de8e156c0b`，本地分支 `rss1102/fix/theme-resolver-implements-compat`；仅修改两个 ThemeData 的内部解析、相关测试与本 Spec，不修改现有 FAQ 工作区，不推送、不创建 PR。
+本节独立于上文历史验收。基于 develop `058ac453bc4bf5974ee9e69fef1150de8e156c0b`，本地分支 `rss1102/fix/theme-resolver-implements-compat`；仅修改两个 ThemeData 的内部解析、相关测试与本 Spec，不修改现有 FAQ 工作区；本节记录推送前的本地验收。
 
 五个 `@internal` 解析方法移至不经公开 barrel 导出的命名 extension，计算由同文件私有函数完成；类内不再声明这些解析成员或私有过渡 getter。`copyWith` / `lerp` 只从库内插值对象安全读取过渡状态，旧 `implements` 作为普通公开字段来源参与插值。构造、字段、方法参数、默认值和优先级未改；组件、Controller、回调及生命周期实现均未改。
 
@@ -142,4 +142,4 @@ PR 拆分、重放、分支切换与重复推送记录已移除。影响最终�
 
 相对 1.0.0 的这两个 ThemeData 公共接口是兼容性修复，既有 implements 无需新增内部成员。直接调用 develop 新增 `@internal` 类方法的代码不在此兼容承诺内；本修复也不消除其他 PR 的独立 API / implements 风险。外部实现自行覆盖的 `lerp` / `copyWith` 仍由业务负责，本次不代理或重写业务规则。
 
-验证范围是 macOS 本地编译、Widget/工具/文档与布局断言；未执行 Android/iOS 真机、Web release 或 Linux Golden，不外推这些结果。绘制算法与基线未改，不在 macOS 生成或更新 Golden；未推送，故没有本分支远端 CI 结果。
+验证范围是 macOS 本地编译、Widget/工具/文档与布局断言；未执行 Android/iOS 真机、Web release 或 Linux Golden，不外推这些结果。绘制算法与基线未改，不在 macOS 生成或更新 Golden；本节不包含远端 CI 结果，提交 PR 后须按最新 head 另行核对。
