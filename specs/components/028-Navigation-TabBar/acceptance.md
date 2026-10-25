@@ -45,3 +45,8 @@
 ## 同步 develop 058ac453 后的命名迁移候选
 
 合入 #1198/#1199/#1197 后，保留 TabBar 菜单修复与六组件兼容 API，Popup/Picker 实现和生成 API 与当前 develop 一致。两 SDK 各 1175 项相关组件/工具、129 项示例/API、严格分析、57 份 API/片段同步和八组件覆盖率门禁通过。站点 Node 35 项及映射检查通过；未执行全包/真机/Web release 或 macOS Golden。输入指纹、冲突取舍及精确范围见[当前验收](./evidence/api-naming.md#同步-develop-058ac453-后的验收)。新 head CI/Review 另核对，保留 implements 及弃用风险，不合并。
+
+
+## 分组件升级 FAQ 收口
+
+FAQ 仅保留 1.0.0 → 1.0.1 的不兼容风险及最小适配方法；普通废弃迁移、参数优先级和既有行为留在 API 文档。旧 ThemeData implements 无内部解析补成员要求，其他公开 getter、同名成员、手势/视觉及 Popup 生命周期风险保留。站点 35 项、57 份文档/360 份示例映射及 README 同步检查通过，七页已实看。更新日志未增改，生产实现与生成 API 哈希不变；范围、#1200 独立交付边界及未重跑项目见[收口验收](./evidence/api-naming.md#分组件升级-faq-收口验收)。远端结果以新 head 为准，不合并。

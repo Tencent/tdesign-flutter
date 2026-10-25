@@ -12,20 +12,6 @@ spline: explain
 
 不足够。构造参数、回调、受控值、主题配置和已移除能力均可能变化，尤其要区分顶部页签与底部导航。请先阅读[0.2.7 → 1.0迁移指南](./migration-0.2.7-to-1.0.md)。
 
-## 从 1.0.0 升级到 1.0.1 后，implements 配置类为什么报错？
-
-1.0.1 的命名兼容迁移为部分公开类增加了推荐 getter。`implements` 只采用接口，不继承默认实现，因此业务类需要补齐新增成员。例如，旧 `implements TTabBarItemConfig` 实现需增加 `notifyOnReselect`，沿用旧点击通知时可转发：
-
-```dart
-// 在原业务类中保留已有成员，并补充以下 getter。
-@override
-bool get notifyOnReselect => allowMultipleTaps;
-```
-
-该 getter 返回既有的重复点击通知设置，不会触发回调。其他本次新增 getter 的类也有相同适配要求；请按所实现的接口补齐新成员。不要用 `noSuchMethod` 绕过缺失实现。
-
-这是旧 `implements` 用法的源码兼容例外；普通构造调用及 `extends` 继承默认实现的用法不受此缺失成员问题影响。新编写的 `implements` 类完整实现当前接口即可。`TPopupOptions.copyWith` 保留原签名，无需增加 `maintainState`；`destroyOnClose` 也未在本次命名迁移中弃用。
-
 ## 为什么组件没有跟随Material主题变化？
 
 TD内置外观使用全局Token、组件Theme及公开实例配置。Material的按钮主题、文字主题或IconTheme不作为TD内置视觉的隐式覆盖入口。配置方法见[自定义主题](./custom-theme.md)，明暗模式也在同一指南中。

@@ -1,6 +1,6 @@
 # 六组件命名迁移独立验收
 
-当前结论以末节“同步 develop 058ac453 后的验收”为准；初始拆分记录仅对应原候选。
+当前行为结论以“同步 develop 058ac453 后的验收”为准；最新本地文档补充见末节，初始拆分记录仅对应原候选。
 
 ## 初始拆分边界（历史）
 
@@ -47,3 +47,14 @@ API 由源码重新生成；共享测试字体与字形清单直接沿用 develo
 初次联网依赖解析等待后，改用已有缓存离线解析完成验证；未修改依赖约束。脚本、日志、低版本快照、LCOV 和补丁保存在仓库外 artifacts/pr1196-sync-develop-058ac453/。未改绘制或字体，不在 macOS 更新或运行 Linux Golden；未验证真机或 Web release 交互，不把本轮 1175/129 视为全包回归。
 
 本地 Review 无阻塞项：旧 getter 继承分派、新参数非空优先和默认回调行为保留；已有 implements 需补齐 getter、弃用诊断及 2.0.0 旧入口删除风险不变。相对当前 develop 不新增 Popup/Picker/Drawer 生命周期变更；已合入的生命周期风险不因此消失。历史 749 项等结果不代替本节，新 head CI/Review 推送后单独核对，不合并 PR。
+
+
+## 分组件升级 FAQ 收口验收
+
+基于 ffc98c11，仅整理站点文档与 Spec。NoticeBar、Checkbox、Drawer、Popover、Steps、TabBar 的 1.0.0 → 1.0.1 提醒移入各自组件；全局 FAQ 删除原重复汇总。升级 FAQ 只保留新增公开 getter 的 implements 适配、同名成员冲突及实际的手势/视觉/生命周期风险。普通改名、废弃与删除计划、参数优先级和未改变的既有行为由 API 文档说明，不再混入升级 FAQ。Popup 保留 final 和会话保留/资源冲突两问，稳定锚点 popup-session-reuse 不变，相关组件链接仍有效。
+
+Drawer 的 TDrawer.onItemTap，以及 TabBar 的 TTabBarItemConfig.notifyOnReselect / TTabBarPopUpBtnConfig.onSelected 适配仍须保留；两页不要求旧 ThemeData implements 补内部解析方法。#1200 独立交付内部解析兼容补修，发布前须确认已合入，不将其结果外推当前命名分支。
+
+复查全部 getter 的公开签名和回退分派，FAQ 给出的转发关系与实现一致；业务同名成员冲突明确采用重命名或按新契约适配。原参数优先级、继承覆盖、默认行为和 Controller 规则保留；普通旧调用的废弃提示仍由 API/PR 说明披露。更新日志段落不变，不重复交付 #1197/#1198/#1199/#1200，也不增加 FAQ 整理条目。
+
+本轮站点 Node 35 项通过，57 份组件文档 / 360 份示例映射、README 同步检查通过，七个组件 FAQ 均经浏览器逐页实看并保存截图。原始日志、文档审查和截图在工作区 artifacts/pr1196-faq-breaking-only，不入库。生产源码、测试、工具、生成 API 和 CHANGELOG 哈希不变；双 SDK 1175/129 等结果仍绑定上节实现输入，未声称本轮重跑组件、真机、Web release 或 Golden。推送后远端 CI 只认最新 head，不合并。
