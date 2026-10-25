@@ -41,7 +41,7 @@ void main() {
   }
 
   for (final relation in ['extends', 'implements']) {
-    test('2.0 external $relation is explicitly rejected', () async {
+    test('1.0.1 external $relation is explicitly rejected', () async {
       final result = await analyze(
         'abstract class BusinessOverlay $relation TPopupOverlayConfig {}',
       );
@@ -52,7 +52,7 @@ void main() {
     });
   }
 
-  test('2.0 rejects the removed onClick constructor parameter', () async {
+  test('1.0.1 rejects the removed onClick constructor parameter', () async {
     final result = await analyze(
       'final config = TPopupOverlayConfig(onClick: () {});',
     );
@@ -63,8 +63,17 @@ void main() {
     );
   });
 
+  test('1.0.1 rejects the removed onClick member', () async {
+    final result = await analyze(
+      'final config = TPopupOverlayConfig();\n'
+      'final callback = config.onClick;',
+    );
+    expect(result.exitCode, isNot(0));
+    expect('${result.stdout}${result.stderr}', contains('UNDEFINED_GETTER'));
+  });
+
   test(
-    '2.0 const construction and composition compile without diagnostics',
+    '1.0.1 const construction and composition compile without diagnostics',
     () async {
       final result = await analyze('''
 const defaults = TPopupOverlayConfig();

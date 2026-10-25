@@ -1,36 +1,30 @@
-# Popup 蒙层配置 2.0 breaking 草稿验收
+# Popup 蒙层配置与使用说明验收
 
-基线 develop `3704434fd2adfb6988110bc760aaaa52a814581c`，分支 rss1102/refactor/popup-overlay-config-2.0。只收敛 TPopupOverlayConfig，保持草稿供 2.0 评审，不作为 1.0.1 patch 合并。
+## 候选与范围
 
-## 修改与风险
+基线 develop `264fc58206309039bc63216a88153be30d1ef407`，本轮修订父提交 `af7603e3ca3fc5d2f43965d713495e7bd937dbd9`。本次按 1.0.0 → 1.0.1 整理源码迁移和文档，最终提交以 #1199 的 head 为准；此前版本方向与阶段性文案由 Git 历史追溯，不作为当前发布契约。
 
-TPopupOverlayConfig 改为 final，库外 extends/implements 不再合法；onClick 参数/成员改为 onTap，旧名在本 2.0 设计中移除。普通构造和 const 保留，既有遮罩默认值、关闭条件、通知先后不变。Drawer 内部调用同步迁移，不改其公开 onOverlayClick。TPopupOptions/copyWith、destroyOnClose、Controller 及其他类型的继承规则不变。
+TPopupOverlayConfig 为 final，onClick 参数及成员改用 onTap，不保留旧名。旧构造调用、成员访问、库外 extends/implements 与相关 mock 需要适配，属于明确的源码 breaking；发布版本目标不改变这一兼容性结论。直接构造、const、配置默认值、蒙层通知时机和关闭条件保持。Drawer 仅迁移内部调用，公开 onOverlayClick 不变。动态 getter 与配置快照可能不等价，不能以新增 getter 或 noSuchMethod 绕过 final。
 
-这是明确的源码 breaking：旧构造调用、成员访问、业务子类、implements 及相关 mock 需要迁移。FAQ 说明设计动机、源码迁移影响和组合工厂示例，不表述未来版本方向；不能用新增 getter 或 noSuchMethod 适配 final。动态 getter 与配置快照可能不等价，handle.open() 沿用创建句柄时的 options；更换配置须重新构造 TPopupOptions，通过 TPopup.show() 创建新会话，不承诺活动 Popup 自动响应外部状态。
+## 使用契约与文档
 
-final 限制配置类的扩展方式，不删除 Popup 内容、builder、主题、事件或 Controller 能力，也不能保证将来任意必填参数或默认行为调整都兼容。真实动态配置用例仍需 2.0 人工设计评审，测试通过不等于已证明所有现有业务都能等价迁移。
+Popup 组件 API 页签的 FAQ 集中说明升级风险、onTap 替换和工厂组合；全局 FAQ 移除重复详情。API 注释与生成文档明确 show() 创建并立即显示新会话，无需随后 open()；open() 沿用原句柄配置重开，已展示时不重复打开。对照 v1.0.0 的 t_popup_handle.dart 确认固定 options 是既有行为。更换配置通过 show() 创建新会话，不自动关闭旧会话。
 
-## 初始候选验证
+不新增 update()、dispose()、宿主 API 或 maintainState，不修改 TPopupOptions/copyWith、Controller 绑定规则和 Popup 生命周期。destroyOnClose 修复、关闭后 State 保留及最终释放说明继续由 #1197 独立交付，不以本 PR 的说明替代其验收。
 
-Flutter 3.32.0 / 3.47.7 各 211 项通过：Popup 正式组件、2 项真实遮罩通知先于关闭测试、4 项包外消费者分析及字体/回归登记工具检查。消费者明确验证 final 对 extends/implements 的诊断、旧 onClick 命名参数被拒绝，以及 const 构造和组合用法零诊断。
+组件页校验仅允许生成入口后追加 FAQ；继续禁止复制 API 表、额外演示章节、原始演示面板和重复生成入口。贡献规范同步记录组件 FAQ 的维护来源。
 
-两版严格 analyze 零诊断；57 份 API --check 通过。Popup 生产覆盖率高版 526/545（96.51%）、低版 531/545（97.43%）。FAQ 站点主题/文档 16 项通过。新增工具文件由现有 test/tool 入口发现，不需重复登记。
+## 当前验证
 
-日志、LCOV 和输入哈希位于工作区 artifacts/api-split-delivery/03-popup-final。未运行全包组件、真机、Web release 或 Golden；不外推 #1197 的生命周期验证。当前 destroyOnClose 仍沿用 develop，只有独立 #1197 改其关闭保留行为。
+- Flutter 3.32.0 / 3.47.7 各 313 项通过：Popup、Drawer、5 项包外消费者及字体/回归登记检查。消费者覆盖库外继承/实现、旧 onClick 参数及成员访问被拒绝，以及 const 构造和工厂组合可用。
+- 两版完整 flutter analyze --no-pub --fatal-infos 零诊断，各 57 份生成 API --check 通过。
+- 站点主题/文档 35 项通过；57 份组件文档映射 360 份生成示例检查通过。新增 FAQ 正反例验证不放开其他页面约束。
+- Popup FAQ 已在本地站点 API 页签预览，截图只保留本地 artifacts/pr1199-faq-preview，不进入仓库。
 
-## 本地 Review
+初次完整分析因 Example 未解析依赖失败；低版隔离快照还缺本地 css2token 包。补齐同候选依赖后重跑完整分析通过，没有修改依赖声明或提交平台生成文件。本轮没有重新测量覆盖率，也未运行全包、Golden、真机或 Web release；历史覆盖率结果仅由 Git 历史追溯，不作为当前新增测量。
 
-实现、生成 API、FAQ、Spec 与测试一致；未混入其他组件改名或 TabBar 路由修复。保留明确源码风险及动态 getter 的迁移限制，发布与是否收紧扩展方式仍待 2.0 评审。暂不合并。
+当前日志位于本地 artifacts/pr1199-faq-preview/final-{high,low}-{tests,analyze,api}.log、final-site-tests.log；候选输入哈希见 final-inputs.json。低版使用独立快照和独立 SDK 配置，源文件与当前候选核对。
 
+## Review
 
-## FAQ 修正复验
-
-当前基线 develop `264fc58206309039bc63216a88153be30d1ef407`；以 `d21e40cded137a18b2df16cfc66c681a8975740f` 为文档修正前候选。此次只改 FAQ、Spec 和验收记录，组件源码、测试与生成 API 均与该候选一致。
-
-FAQ 明确 handle.open() 不应用新配置，更换配置须通过 TPopup.show() 创建新会话；去除 FAQ 的未来版本方向表述。PR 仍保持 2.0 breaking 草稿，不作为 1.0.1 patch，也不改变现有实现。
-
-该源码此前在 Flutter 3.32.0 / 3.47.7 各通过 287 项 Popup、Drawer 与消费者回归（review-d21e40cd-low/high.log）。本次两版各重跑 29 项消费者、字体覆盖及回归登记工具检查，并各通过 57 份 API --check；站点主题/文档 33 项通过，57 份组件文档映射 360 份生成示例。低版隔离快照最初缺少 CI 参考文件，补齐同一候选的 .github/.cnb 后重跑通过，不属于组件失败。
-
-本次日志为 faq-api-high.log、faq-tools-high.log、review-d21e40cd-low/faq-api-low.log、review-d21e40cd-low/faq-tools-low.log 及 faq-site.log，均位于上述本地 artifacts 目录。未重跑历史覆盖率、全包、Golden、真机或 Web release；初始候选覆盖率不作为本次新增测量。
-
-复审：FAQ、Spec 与句柄固定 options、open() 重用配置的实现一致；没有新增生命周期、回调或 Controller 变更。final 与旧 onClick 移除的源码 breaking 风险仍在，文档修正不消除该风险。远端 CI 与人工评审状态另见 PR，不以本地通过代替。
+本轮对组件生产源码仅补充 show/open 注释，未改变执行逻辑；旧 onClick 成员风险有新增正式消费者测试。FAQ、API、Spec 和测试对源码风险、配置复用及关闭行为的表述一致。未混入生命周期修复，也未增加配置更新能力。保留草稿，人工兼容性评审及最终 head CI 状态另见 PR，暂不合并。

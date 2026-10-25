@@ -37,7 +37,9 @@ final class TPopup {
   // 私有构造器：工具类仅暴露静态方法，无外部调用，标记为覆盖率例外（不可达死代码）。
   const TPopup._(); // coverage:ignore-line
 
-  /// 每次调用打开独立浮层，可叠加展示；参数与方向不匹配时抛出 [FlutterError]。
+  /// 创建独立会话并立即显示，返回 [TPopupHandle]，无需再调用 [TPopupHandle.open]。
+  ///
+  /// 重开原会话使用返回句柄的 [TPopupHandle.open]；更换配置需重新调用本方法。多次调用可叠加展示，不会自动关闭旧会话；参数与方向不匹配时抛出 [FlutterError]。
   ///
   /// [context] 用于查找 [Navigator] 并获取局部主题。
   ///

@@ -186,11 +186,12 @@ CI 显示名按验证（`CI / …`）、生成维护（`Generated / …`）和�
 | 内容 | 唯一来源 | 使用与生成方式 |
 |---|---|---|
 | 项目介绍和最短示例 | 根README.md、README_zh_CN.md | 中英文分别维护，包内副本生成 |
-| 安装、主题（含明暗模式）、国际化、FAQ、迁移 | tdesign-site/site/docs/ | 站点直接读取，迁移另生成包内MIGRATION.md |
+| 安装、主题（含明暗模式）、国际化、全局FAQ、迁移 | tdesign-site/site/docs/ | 站点直接读取，迁移另生成包内MIGRATION.md |
 | 贡献规范 | 本文件 | 站点直接读取并适配页面元信息与相对链接 |
 | 站点开发方式 | [tdesign-site/README.md](tdesign-site/README.md) | 其他说明链接到此处 |
 | API | lib中的公开dartdoc注释 | 生成example/assets/api，站点和示例App共用 |
 | 示例 | example/lib中的标注源码 | 生成example/assets/code，站点和示例App共用 |
+| 组件FAQ | tdesign-site/docs/components/<组件>/README.md | 放在生成API入口后，仅补充使用问答，不复制API表或演示区块 |
 | 设计决策与验收 | specs/ | 按组件或长期职责集中维护，过时方案清理；现行用户用法写入用户指南 |
 | 发布流程与记录 | PUBLISH.md及既有CHANGELOG生成入口 | 发布步骤与历史记录分开维护 |
 

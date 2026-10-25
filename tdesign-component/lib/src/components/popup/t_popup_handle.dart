@@ -48,7 +48,9 @@ class TPopupHandle {
   bool get isShowing =>
       _route != null && !_isClosed && (_route?.isActive ?? false);
 
-  /// 打开或重新打开浮层。
+  /// 使用创建句柄时的 [options] 打开或重新打开浮层。
+  ///
+  /// 不更新配置或创建独立会话；更换配置请调用 [TPopup.show]。
   ///
   /// | 状态 | 行为 |
   /// | --- | --- |
