@@ -1,6 +1,6 @@
 # 六组件命名迁移独立验收
 
-当前行为结论以“同步 develop 058ac453 后的验收”为准；最新本地文档补充见末节，初始拆分记录仅对应原候选。
+当前结论以末节“同步 develop 9203d362 后的验收”为准；先前阶段只对应其原候选与范围。
 
 ## 初始拆分边界（历史）
 
@@ -58,3 +58,20 @@ Drawer 的 TDrawer.onItemTap，以及 TabBar 的 TTabBarItemConfig.notifyOnResel
 复查全部 getter 的公开签名和回退分派，FAQ 给出的转发关系与实现一致；业务同名成员冲突明确采用重命名或按新契约适配。原参数优先级、继承覆盖、默认行为和 Controller 规则保留；普通旧调用的废弃提示仍由 API/PR 说明披露。更新日志段落不变，不重复交付 #1197/#1198/#1199/#1200，也不增加 FAQ 整理条目。
 
 本轮站点 Node 35 项通过，57 份组件文档 / 360 份示例映射、README 同步检查通过，七个组件 FAQ 均经浏览器逐页实看并保存截图。原始日志、文档审查和截图在工作区 artifacts/pr1196-faq-breaking-only，不入库。生产源码、测试、工具、生成 API 和 CHANGELOG 哈希不变；双 SDK 1175/129 等结果仍绑定上节实现输入，未声称本轮重跑组件、真机、Web release 或 Golden。推送后远端 CI 只认最新 head，不合并。
+
+## 同步 develop 9203d362 后的验收
+
+基于 #1196 的 2d6a78a7，合入最新 develop `9203d362e86778a18faf194bc13c6f57500fce01`（#1200），无冲突。保留六组件七组公开命名迁移与 FAQ；自动合并的组件清单同时保留命名兼容、48 项菜单矩阵和 ThemeData implements 回归。Popup/Picker 及两个 ThemeData 实现与最新 develop 一致。
+
+#1200 修复内部解析成员，不移除本 PR 的公开 getter，因此两类消费者结果不同且均为正确预期：旧 ThemeData implements 无需补内部成员，旧 TTabBarItemConfig implements 缺 notifyOnReselect 仍报缺失成员，补充转发后通过。breaking 日志保留，限定“本次命名迁移涉及的类”，不重复记录 #1200 的修复，也不重新加入 FAQ 的废弃迁移说明。
+
+| 合并后验证 | Flutter 3.32.0 | Flutter 3.47.7 |
+| --- | --- | --- |
+| 八组件、完整工具与共享 Token 回归 | 1206 通过 | 1206 通过 |
+| 相关示例/API/代码查看 | 129 通过 | 129 通过 |
+| 严格 analyze | 零诊断 | 零诊断 |
+| API / 示例片段 --check | 57 份 / 通过 | 57 份 / 通过 |
+
+八组件生产覆盖率均超过95%：Drawer 296/302（98.01%）、TabBar 682/690（98.84%）；其余范围见本地 coverage 日志。站点 Node 35 项与57份文档/360份示例映射通过。两 SDK 的2330份源码、测试与生成资源逐字节一致，输入清单SHA-256 `9b3e4643011b6e31584ecbdacdac81715ecd798f8c9e4cd837c0098805a4474e`；相对新develop的组件输入补丁SHA-256 `4f803b14b56d55811ea5df605c1b916c09d8fc969c761e520064478f46b598aa`。记录之后只调整Spec和PR说明，不改变已验证源码。
+
+原始日志、SDK隔离快照、输入清单及补丁在工作区 artifacts/pr1196-sync-develop-9203d362，不入库。未测试真机/Web release交互，不在macOS运行或更新Linux Golden。旧1175/129或其他head的CI不代替本节；推送后核对最新head，暂不合并。
