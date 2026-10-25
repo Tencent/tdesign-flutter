@@ -1,6 +1,6 @@
 # destroyOnClose 独立候选验收
 
-当前文档结论以末节“FAQ 精简与跨组件指引的当前验收”为准；行为验收仍绑定前述源码候选；此前候选的 Drawer 关闭后保留方案已撤回，历史统计不作为当前验证。
+当前文档结论以末节“Popup 前两问 FAQ 精简的当前验收”为准；行为验收仍绑定前述源码候选；此前候选的 Drawer 关闭后保留方案已撤回，历史统计不作为当前验证。
 
 基线 develop `3704434fd2adfb6988110bc760aaaa52a814581c`；分支 `rss1102/fix/popup-destroy-on-close`。最终组件源码/测试/生成 API 二进制 diff 的 SHA-256：`2488ca62bad4cc0b2736dfdbb45d82e9dcbbc79f4477757790bcdce9f45ed7ad`；高低版本 12 个相关文件逐字节一致。独立 PR 交付；#1196 另行撤出状态参数及 copyWith 迁移（实现提交 `12e18203`）。本表绑定本地已验证源码，远端 CI 以各 PR 最终 head 为准，暂不合并。
 
@@ -154,3 +154,20 @@ ActionSheet 三个命令式入口沿用 Popup false 配置，但没有 destroyOn
 本地 Vite 预览通过真实浏览器检查 Popup、Picker、DateTimePicker、ActionSheet 四页的标题/段落/列表；从后三页实际点击 Popup FAQ，URL 均带 tab=api 及稳定锚点，Popup 目标标题顶部为 168px，未被固定栏遮挡。跨行链接按实际文字片段点击，未以自动化误点的空白位置判断链接无效。截图与跳转 JSON 保存在仓库外 `artifacts/popup-destroy-close/compact-component-faq/`，不向仓库提交截图或录制素材。
 
 本轮没有生产/测试源码变化，不重复运行无关组件回归或 Golden，不外推 Android/iOS 真机、Web release 交互。原 473/98/177 双 SDK 行为证据仍绑定 1c7a3d45 的相同实现；本节只确认新的文档候选。PR 模板与参数名明确的组件日志保留，新增 ActionSheet 条目只描述用户可感知的继承行为，不增加文档类 Changelog 条目。推送后单独核对新 head CI/Review，暂不合并。
+
+
+## Popup 前两问 FAQ 精简的当前验收
+
+2026-10-26，基于 `7d12c630ff8ed9ba81800f091f42fd471f40d81f` 精简 Popup 蒙层配置适配与重新打开配置两问，完整工厂示例与动态 getter 等边界移入 Spec。保留 1.0.0 → 1.0.1、final 源码不兼容及静态检查风险、非空 onTap 优先/null 回退 onClick、open 沿用配置与 show 创建新会话的正确用法。第三问、稳定锚点、Picker/DateTimePicker/ActionSheet 提示及所有生成 API 均未改。
+
+本轮 README 与 Spec 输入 diff 的 SHA-256：`610be738d17ffd36d2c66793079875d4746cad4e49b92a96d14cbb8b30aba2a6`；验收及任务状态不计入指纹。生产实现、API、默认值、回调、Controller 绑定和 Drawer 关闭/遮挡规则与基线逐字节一致；更新日志不增加文档项。
+
+| 本轮检查 | Flutter 3.32.0 | Flutter 3.47.7 |
+| --- | --- | --- |
+| API --check | 57 份通过 | 57 份通过 |
+| API 文档渲染 | 70 通过 | 70 通过 |
+| 字体覆盖/回归清单 | 14 通过 | 14 通过 |
+
+站点 Node 35 项及 57 份文档/360 份示例映射检查通过。真实浏览器本地预览确认两问标题、列表、兼容提醒与段落完整显示，正文不再展开工厂代码。第三问稳定锚点及其他组件指引保持上一轮已验证输入；本轮不把 API 测试等同于站点 FAQ 渲染。截图、DOM 核对、日志和输入补丁保存在仓库外 `artifacts/popup-destroy-close/popup-two-faq/`，不提交素材。
+
+本轮文档 Review 无阻塞项：精简没有删除功能或风险契约，详细说明与实际实现一致。未重跑未变组件实现或 Golden；前述 473/98/177 行为证据仍绑定原候选，不外推真机/Web release。推送后按新 head 独立检查 CI/Review，生命周期 breaking 风险与 ActionSheet 参数限制不因精简降低，暂不合并。

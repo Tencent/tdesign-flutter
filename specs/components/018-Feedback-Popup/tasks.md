@@ -64,3 +64,10 @@
 - [x] Picker/DateTimePicker 简短提示与精准锚点；ActionSheet 单独说明未暴露 destroyOnClose。
 - [x] 双 SDK 文档、三个链接和四页实际渲染验证，更新本地验收。
 - [ ] 更新 PR 并核对最终 head 的 CI/Review；不修改生产实现或 Drawer 规则，不合并。
+
+
+## Popup 前两问 FAQ 精简
+
+- [x] 按批准版本精简蒙层配置适配及重新打开配置两问；工厂示例、动态 getter/成员兼容及资源边界留在 Spec。
+- [x] 双版本文档检查与真实渲染核对，更新本地验收。
+- [ ] 更新 PR，按最终 head 核对 CI/Review，不合并。

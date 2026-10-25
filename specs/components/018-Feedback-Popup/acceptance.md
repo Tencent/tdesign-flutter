@@ -62,3 +62,10 @@ Drawer 单独保持 1.0.0 的关闭释放/遮挡规则，默认 false，未新�
 基于 1c7a3d45，仅修改四组件 FAQ 与 Spec；生产实现、API、默认值、正式测试、字体、Drawer 规则及站点导航代码未变。Popup 保留批准的精简文本，Picker/DateTimePicker 采用简短提示和精准链接，ActionSheet 单独注明三个入口未暴露 destroyOnClose，详细边界与间接影响留在 Spec。
 
 两 SDK 各 57 份 API 同步、70 项 API 文档渲染及 14 项字体/清单检查通过；站点 Node 35 项和映射检查通过。本地浏览器四页实看及三个跨页链接验证通过，目标标题未被固定栏遮挡。输入指纹、渲染范围和行为证据复用边界见[本轮文档验收](./evidence/destroy-on-close.md#faq-精简与跨组件指引的当前验收)。本地文档 Review 无阻塞，生命周期 breaking 与 ActionSheet 参数限制仍明确保留；远端 CI 按新 head 核对，不合并。
+
+
+## 当前文档补充：Popup 前两问 FAQ
+
+基于 7d12c630 仅精简 Popup 前两问及整理 Spec，保留版本、final 源码风险、onTap/onClick 优先级及 open/show 正确用法，第三问与跨组件链接不变。两 SDK 各 57 份 API、70 项 API 渲染、14 项字体/清单检查通过，站点 Node 35 项及映射检查通过，真实浏览器已核对本地显示。生产实现、API、默认值、回调、Controller 和 Drawer 规则均未变。
+
+输入指纹及范围见[本轮验收](./evidence/destroy-on-close.md#popup-前两问-faq-精简的当前验收)。本轮文档 Review 无阻塞，不重复运行未变组件或 Golden，不把历史功能结果或旧 CI 当作新 head 验收；远端 CI/Review 单独核对，暂不合并。

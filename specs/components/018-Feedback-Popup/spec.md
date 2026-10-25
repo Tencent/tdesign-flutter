@@ -125,3 +125,26 @@ show() 创建独立会话并立即显示，不需要随后调用 open()；open()
 Popup FAQ 保留变化、推荐用法与关键资源风险；重复 close 不销毁、onClosed 与 dispose 的区别、Controller 所有权/多绑定规则、根 Navigator 长期保留以及旧 true 的遮挡变化仍由本 Spec 详细说明，不因 FAQ 精简而撤销。Picker 与 DateTimePicker 只给出 TPickerPopup 的简短提示，链接到 Popup 的“替换会话”具体标题，使用文档局部稳定锚点 popup-session-reuse，必须带 tab=api；空锚点仅以 relative/top:-128px 提前定位，不占额外布局高度，避免固定栏遮挡目标标题，不修改全站滚动行为；独立面板不受弹层保留规则影响。Drawer 不复制该升级 FAQ，维持既有 API 注释及关闭/遮挡规则。
 
 ActionSheet 的 showList/showGrid 通过 _show、showGridSections 直接调用 TPopup.show；两处 TPopupOptions.bottom 均不传 destroyOnClose，因而沿用 false 保留策略。返回值为 TPopupHandle，可同句柄 open 重开，所属 Navigator 卸载时清理。此间接生命周期影响此前范围说明遗漏，本轮补齐记录，不改变实现。三个入口都没有 destroyOnClose 参数，不能让用户直接设置 true；ActionSheet FAQ 须独立注明参数限制，再链接通用资源风险。不可把“仅 Popup/Picker 受影响”作为完整结论，也不新增参数或更改默认值来规避该限制。
+
+
+## 蒙层配置与原会话重开的 FAQ 详细边界
+
+FAQ 前两问仅保留 1.0.0 到 1.0.1 的适配风险、回调优先级及实际用法；不改变配置 final、onTap/onClick 或 open/show 的既有契约。库外 extends/implements 及相关 mock 应改为构造与组合；不能仅增加 onTap getter 或通过 noSuchMethod 绕过 final。旧 onClick 构造参数与成员保留并提示废弃；非空 onTap 优先，null 回退 onClick，每次点击仅通知一次，旧 onClick 成员返回实际生效的回调。将废弃提示提升为错误的检查仍需适配。
+
+工厂组合示例从 FAQ 移至此处，避免在用户页面重复展开设计说明：
+
+```dart
+TPopupOverlayConfig createOverlay({
+  required bool showMask,
+  VoidCallback? onMaskTap,
+}) {
+  return TPopupOverlayConfig(
+    showOverlay: showMask,
+    onTap: onMaskTap,
+  );
+}
+```
+
+将 TPopupOverlayConfig(onClick: callback) 改为 TPopupOverlayConfig(onTap: callback) 即可迁移普通调用；旧动态 getter 与不可变配置快照并不等价，需按业务状态重新创建配置，工厂不保证旧动态读取行为透明兼容。其他蒙层默认值、通知时机及关闭条件不因本轮文案精简改变。
+
+handle.open() 沿用创建句柄时的 options，不重新应用新配置，是 1.0.0 已有行为；更换配置需构造 TPopupOptions 并通过 TPopup.show() 创建独立会话。新会话不自动关闭旧会话，替换前关闭旧会话后仍须按 destroyOnClose 的资源复用边界处理；配置复用与内容 State 保留是不同维度。详细生命周期、GlobalKey 和 Controller 限制继续沿用上文，不因为 FAQ 删句而撤销。
