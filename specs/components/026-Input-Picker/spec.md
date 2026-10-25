@@ -109,3 +109,7 @@ TPickerThemeData 的 height 必须为有限正数、itemCount 必须大于零（
 兼容性：这会改变原先未显式配置的自定义文字默认行为，属于用户可感知的默认行为变化（patch 发布归类，不代表默认行为完全兼容）；迁移时显式指定需保留的字号、字重、颜色、行高或在内容内部设置局部文字主题。仅指定部分样式的用户仍会接入其余默认字段。
 
 发布归类：本轮与 Button/NavBar 的默认文字槽调整采用同一 patch 策略。未配置、空样式或部分显式样式仍可能改变字体、颜色、换行、尺寸和省略位置；原生 Text 的字体也可能受新默认值影响，段落参数沿用既有语义。保留旧外观需在实例或内容内部主题中明确所需字段；不以参数签名不变或测试通过承诺零兼容风险。
+
+## destroyOnClose 关闭生命周期
+
+沿用 Popup 的关闭销毁策略，默认 false；true 关闭后释放，false 同一句柄在同一 Navigator 内 open 复用真实 State，所属 Navigator 卸载时自动清理。切换 Navigator 或重新 show 创建新 State。API 和 Controller 规则不变；默认 false 的释放时机改变、旧 true 的遮挡规则改变及长期保留风险见 [Popup Spec](../018-Feedback-Popup/spec.md#destroyonclose-关闭销毁修复独立交付)。Drawer 保持其 1.0.0 一次性关闭释放规则，不适用上述保留策略。

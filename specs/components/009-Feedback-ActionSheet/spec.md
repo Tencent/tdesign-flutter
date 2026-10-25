@@ -1,5 +1,8 @@
 # ActionSheet 设计说明
 
+前文“仅 showList/showGrid”及“不保留分组”为早期设计记录；当前源码还包含 showGridSections。本轮只核对末节的当前生命周期契约，不删除已有入口或分组能力。
+
+
 ## 背景与目标
 
 以下保留设计形成时的问题与依据；已修复的问题不表示当前代码仍有同一缺陷。
@@ -120,3 +123,8 @@ ActionSheet 当前 Demo 以自定义业务场景取代了官方小程序的公�
 验收标准描述应满足的行为，不表示已执行或通过；执行范围与证据见 [acceptance.md](./acceptance.md)，剩余事项只在 [tasks.md](./tasks.md) 维护。
 
 跨组件配置职责见 [Theme 契约](../../engineering/048-Theme-configuration-contracts/spec.md)，视觉方法见 [Golden 规范](../../engineering/044-Testing-golden-regression/spec.md)。
+
+
+## Popup 关闭保留的间接影响
+
+showList、showGrid 和 showGridSections 使用 Popup 默认 false 配置，随 Popup 关闭保留修复，内容 State 在关闭后保留，同句柄 open 可重开，所属 Navigator 卸载时释放；直接使用独立面板不涉及该会话缓存。三个入口未提供 destroyOnClose，不能直接配置 true。参数限制与通用资源风险在本站 ActionSheet FAQ 说明，并精准链接 Popup FAQ；完整生命周期风险见 [Popup Spec](../018-Feedback-Popup/spec.md#faq-展示与-actionsheet-间接影响)。本轮只补文档，不修改入口、默认值、回调或绑定规则。

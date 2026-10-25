@@ -1161,7 +1161,8 @@ class TTabBarPopUpBtnConfig {
   /// 选项list
   final List<TTabBarMenuItem> items;
 
-  /// 选择菜单项时触发，包含重复选择；不改变主标签值。
+  /// 选择菜单项时同步触发，包含重复选择；不改变主标签值。
+  /// 自动关闭菜单前通知。
   /// 须提供本参数或旧参数 `onChanged`，同时提供时本参数优先。
   // ignore: deprecated_member_use_from_same_package
   ValueChanged<String> get onSelected => _onSelected ?? onChanged;
@@ -1337,6 +1338,25 @@ class _TabBarPopupDialogState extends State<_TabBarPopupDialog> {
   RelativeRect? position;
   Size? size;
 
+  void _selectItem(String value) {
+    final route = ModalRoute.of(context);
+    final navigator = route?.navigator;
+    widget.onClickMenu(value);
+    // The callback can navigate, close this menu, or remove its owner.
+    // Close only this route without reading context after the callback.
+    if (route == null ||
+        navigator == null ||
+        !navigator.mounted ||
+        !route.isActive) {
+      return;
+    }
+    if (route.isCurrent) {
+      navigator.pop();
+    } else {
+      navigator.removeRoute(route);
+    }
+  }
+
   @override
   void initState() {
     super.initState();
@@ -1404,8 +1424,7 @@ class _TabBarPopupDialogState extends State<_TabBarPopupDialog> {
           (e) => GestureDetector(
             behavior: HitTestBehavior.opaque,
             onTap: () {
-              widget.onClickMenu(e.value);
-              Navigator.of(context).pop();
+              _selectItem(e.value);
             },
             child: SizedBox(height: popUpItemHeight, child: e),
           ),
@@ -1544,8 +1563,7 @@ class _TabBarPopupDialogState extends State<_TabBarPopupDialog> {
                             (item) => GestureDetector(
                               behavior: HitTestBehavior.opaque,
                               onTap: () {
-                                widget.onClickMenu(item.value);
-                                Navigator.of(context).pop();
+                                _selectItem(item.value);
                               },
                               child: item,
                             ),

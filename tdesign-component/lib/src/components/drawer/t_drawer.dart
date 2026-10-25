@@ -96,8 +96,8 @@ class TDrawer extends StatelessWidget {
 /// [onOverlayClick] 在蒙层被点击时触发，不受是否自动关闭影响。
 /// [topInset] 设置抽屉相对屏幕顶部的可选偏移，默认 0，必须大于或等于 0。
 /// [useSafeArea] 控制浮层是否避让系统安全区域，默认 true。
-/// [destroyOnClose] 默认 false；为 true 时路由 maintainState 为 false，
-/// 被其他不透明路由覆盖时可释放内容 State。关闭路由后内容始终会释放。
+/// [destroyOnClose] 沿用 1.0.0 的遮挡规则，默认 false：false 时保留被不透明路由遮挡的内容 State，true 时允许释放。
+/// 两种取值均在关闭完成后销毁内容；不提供关闭后重开复用。
 /// [onClose] 在抽屉浮层关闭后触发。
 ///
 /// 返回的 [TDrawerHandle] 可用于查询显示状态或主动关闭抽屉。
@@ -113,7 +113,6 @@ TDrawerHandle showTDrawer(
   VoidCallback? onOverlayClick,
   double? topInset,
   bool useSafeArea = true,
-
   bool destroyOnClose = false,
   VoidCallback? onClose,
 }) {
@@ -127,7 +126,7 @@ TDrawerHandle showTDrawer(
   final popupInset = placement == TDrawerPlacement.right
       ? TPopupRightInset(top: topInset ?? 0)
       : TPopupLeftInset(top: topInset ?? 0);
-  final handle = TPopup.show(
+  final handle = showDrawerPopupInternal(
     context,
     options: TPopupOptions(
       placement: popupPlacement,
@@ -137,7 +136,7 @@ TDrawerHandle showTDrawer(
         showOverlay: showOverlay,
         closeOnClick: closeOnOverlayClick,
         color: showOverlay ? null : Colors.transparent,
-        onClick: onOverlayClick,
+        onTap: onOverlayClick,
       ),
       destroyOnClose: destroyOnClose,
       useSafeArea: useSafeArea,

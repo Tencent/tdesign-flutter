@@ -591,6 +591,7 @@ const componentTestManifests = <ComponentTestManifest>[
     componentTests: [
       'test/components/tabbar/t_tab_bar_test.dart',
       'test/components/tabbar/t_api_compatibility_test.dart',
+      'test/components/tabbar/t_tab_bar_menu_callback_test.dart',
     ],
     exampleTests: ['test/tab_bar/tab_bar_demo_test.dart'],
     visualTests: [

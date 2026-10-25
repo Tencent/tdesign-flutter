@@ -36,3 +36,12 @@
 ## API 兼容迁移候选
 
 基线 develop `3704434fd2adfb6988110bc760aaaa52a814581c`。本轮候选、双版本结果与未覆盖范围见[统一验收记录](../028-Navigation-TabBar/evidence/api-naming.md)。双版本验证及本地 Review 通过。
+
+## 菜单回调路由修复独立交付
+
+基线 develop 3704434f，独立保留旧 API，候选验证结果见 [菜单回调验收](./evidence/menu-callback.md)。此前命名迁移分支的 96/286 项不作为本分支验收。
+
+
+## 同步 develop 058ac453 后的命名迁移候选
+
+合入 #1198/#1199/#1197 后，保留 TabBar 菜单修复与六组件兼容 API，Popup/Picker 实现和生成 API 与当前 develop 一致。两 SDK 各 1175 项相关组件/工具、129 项示例/API、严格分析、57 份 API/片段同步和八组件覆盖率门禁通过。站点 Node 35 项及映射检查通过；未执行全包/真机/Web release 或 macOS Golden。输入指纹、冲突取舍及精确范围见[当前验收](./evidence/api-naming.md#同步-develop-058ac453-后的验收)。新 head CI/Review 另核对，保留 implements 及弃用风险，不合并。

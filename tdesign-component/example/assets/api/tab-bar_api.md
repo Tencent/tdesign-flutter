@@ -59,7 +59,7 @@
 | --- | --- | --- | --- | --- |
 | items | List&lt;TTabBarMenuItem&gt; | - | 选项list | 是 |
 | onChanged | ValueChanged&lt;String&gt;? | - | 已废弃，此为兼容入口。请使用 `onSelected`；将在 2.0.0 删除。 | 否 |
-| onSelected | ValueChanged&lt;String&gt;? | - | 选择菜单项时触发，包含重复选择；不改变主标签值。 须提供本参数或旧参数 `onChanged`，同时提供时本参数优先。 | 否 |
+| onSelected | ValueChanged&lt;String&gt;? | - | 选择菜单项时同步触发，包含重复选择；不改变主标签值。 自动关闭菜单前通知。 须提供本参数或旧参数 `onChanged`，同时提供时本参数优先。 | 否 |
 | popUpDialogConfig | TTabBarPopUpShapeConfig? | - | 弹窗UI配置 | 否 |
 
 
