@@ -60,6 +60,6 @@ t_footer_test.dart: 733d433124333f904cad34dd208b8872788beaa066f21605aae296081a62
 
 | develop 304bf7d6 | 原 PR 52c32c2b | 最终修复 |
 | --- | --- | --- |
-| ![develop](evidence/footer-develop.png) | ![原 PR](evidence/footer-pr1113-original.png) | ![最终修复](evidence/footer-final.png) |
+| ![develop](evidence/footer-develop.jpg) | ![原 PR](evidence/footer-pr1113-original.jpg) | ![最终修复](evidence/footer-final.jpg) |
 
 推送前在独立交付目录复验双版本组件、Demo、严格分析和 Linux 明暗 Golden；本地结果不等同于推送后最终提交的远端 CI。
