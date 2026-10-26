@@ -86,3 +86,14 @@ macOS Flutter 3.32.0 / 3.47.7：Example 严格分析均无诊断，文档示例�
 
 
 [主题指南深色预览刷新后的浏览器截图](./evidence/guide-preview-reload-dark.png)。截图为本地浏览器证据，不代表移动设备验收。
+
+
+### 2026-10-26 PR #1204 在线预览及独立应用复验
+
+运行源码 `e5bf6372351b15ce2e73e259bd05a42743fe3eaa`；[在线预览](https://preview-pr-1204-40282739968-1-tdesign-flutter.surge.sh/flutter/custom-theme) 的部署任务 40282739968 明确下载构建任务 40282176943 的产物，该构建 head 与上述提交一致。
+
+- 在线快速开始按钮实测 0 → 2。主题指南在浅深色下分别只刷新 iframe；宿主 loader 不变、iframe loader 变化，实际地址均保留 `#custom-theme`，对应恢复 green / `#16875D` 与 greenDark / `#56C08D`。
+- Flutter 3.32.0 从同一源码重新构建独立入口，直接调用 `runLocaleApp` 与 `runThemeApp`。国际化完成“确认 → Confirm → 确认”；资源主题成功加载项目 JSON 并渲染主题按钮，未手写平行应用。国际化指南本身没有内嵌预览，不将本地独立应用写成线上页面交互。
+- [结构化运行记录](./evidence/pr1204-browser-observations.json)；[计数](./evidence/guides-counter.png)、[浅色刷新](./evidence/guides-theme-light-reloaded.png)、[深色刷新](./evidence/guides-theme-dark-reloaded.png)、[中文](./evidence/guides-locale-chinese.png)、[英文](./evidence/guides-locale-english.png)、[资源主题](./evidence/guides-resource-theme.png)均为未经编辑的实际浏览器截图。
+
+该源码提交的远端构建及相关检查已通过。本次只新增截图和验收证据，未改变运行源码、生成片段或 Golden 基线；复用上文同一源码的双版本与 Golden 检查。本轮为桌面浏览器验证，未执行移动设备或其他浏览器验收；截图提交的新 head CI 需另行核对。
