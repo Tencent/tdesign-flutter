@@ -182,11 +182,7 @@ void main() {
         await tester.pumpWidget(host(oldDisabled: true));
         await tester.pumpAndSettle();
 
-        expect(
-          controller.isOpen,
-          isTrue,
-          reason: '旧菜单配置更新不应清空当前 owner 的打开状态',
-        );
+        expect(controller.isOpen, isTrue, reason: '旧菜单配置更新不应清空当前 owner 的打开状态');
         expect(controller.openIndex, 0, reason: 'openIndex 保持不变');
         expect(
           find.text('latest panel'),
@@ -213,14 +209,220 @@ void main() {
         );
         await tester.pumpWidget(latestDisabledHost);
         await tester.pumpAndSettle();
-        expect(
-          controller.isOpen,
-          isFalse,
-          reason: '当前 owner 自身打开项禁用时仍自动关闭',
-        );
+        expect(controller.isOpen, isFalse, reason: '当前 owner 自身打开项禁用时仍自动关闭');
         await tester.pumpWidget(const SizedBox());
       },
     );
+  });
+
+  group('shared controller callback isolation (#1195)', () {
+    testWidgets('stale trigger must not emit a close for latest owner', (
+      tester,
+    ) async {
+      final c = TDropdownMenuController();
+      final oldClosed = <int>[];
+      final latestClosed = <int>[];
+      VoidCallback? oldToggle;
+      await tester.pumpWidget(
+        MaterialApp(
+          home: Scaffold(
+            body: Column(
+              children: [
+                TDropdownMenu(
+                  controller: c,
+                  items: [
+                    TDropdownMenuItem.custom(
+                      triggerBuilder: (_, state) {
+                        oldToggle = state.toggle;
+                        return const Text('old');
+                      },
+                      panelBuilder: (_, __) =>
+                          const SizedBox(height: 80, child: Text('old panel')),
+                    ),
+                  ],
+                  onClosed: (index, _) => oldClosed.add(index),
+                ),
+                TDropdownMenu(
+                  controller: c,
+                  items: [item('latest')],
+                  onClosed: (index, _) => latestClosed.add(index),
+                ),
+              ],
+            ),
+          ),
+        ),
+      );
+      final opening = c.open(0);
+      await tester.pumpAndSettle();
+      await opening;
+      oldToggle!();
+      await tester.pumpAndSettle();
+      expect(c.openIndex, 0);
+      expect(find.text('latest panel'), findsOneWidget);
+      expect(latestClosed, isEmpty);
+      expect(
+        oldClosed,
+        isEmpty,
+        reason: 'old never opened; tapping old must not close a shared index',
+      );
+      await tester.pumpWidget(const SizedBox());
+      c.dispose();
+    });
+
+    testWidgets('opening continuation must not emit after owner handover', (
+      tester,
+    ) async {
+      final c = TDropdownMenuController();
+      final oldOpened = <int>[];
+      Widget host(bool addLatest) => MaterialApp(
+        home: Scaffold(
+          body: Column(
+            children: [
+              TDropdownMenu(
+                key: const ValueKey('old'),
+                controller: c,
+                animationDuration: const Duration(milliseconds: 400),
+                items: [item('old')],
+                onOpened: oldOpened.add,
+              ),
+              if (addLatest)
+                TDropdownMenu(
+                  key: const ValueKey('latest'),
+                  controller: c,
+                  items: [item('latest')],
+                ),
+            ],
+          ),
+        ),
+      );
+      await tester.pumpWidget(host(false));
+      final opening = c.open(0);
+      await tester.pump();
+      await tester.pump(const Duration(milliseconds: 50));
+      await tester.pumpWidget(host(true));
+      await tester.pumpAndSettle();
+      await opening;
+      expect(
+        oldOpened,
+        isEmpty,
+        reason: 'old opening continuation lost controller ownership',
+      );
+      await tester.pumpWidget(const SizedBox());
+      c.dispose();
+    });
+
+    testWidgets(
+      'closing continuation cleans old overlay without notifying latest owner',
+      (tester) async {
+        final controller = TDropdownMenuController();
+        addTearDown(controller.dispose);
+        final oldClosed = <int>[];
+        Widget host(bool addLatest) => wrap(
+          Column(
+            children: [
+              TDropdownMenu(
+                key: const ValueKey('old'),
+                controller: controller,
+                animationDuration: const Duration(milliseconds: 400),
+                items: [item('old')],
+                onClosed: (index, _) => oldClosed.add(index),
+              ),
+              if (addLatest)
+                TDropdownMenu(
+                  key: const ValueKey('latest'),
+                  controller: controller,
+                  items: [item('latest')],
+                ),
+            ],
+          ),
+        );
+        await tester.pumpWidget(host(false));
+        final opening = controller.open(0);
+        await tester.pumpAndSettle();
+        await opening;
+        final closing = controller.close();
+        await tester.pump();
+        await tester.pump(const Duration(milliseconds: 50));
+        await tester.pumpWidget(host(true));
+        await tester.pumpAndSettle();
+        await closing;
+        expect(oldClosed, isEmpty);
+        expect(find.text('old panel'), findsNothing);
+        expect(
+          controller.openIndex,
+          0,
+          reason: 'old close must not clear shared state after handover',
+        );
+        final latestClosing = controller.close();
+        await tester.pumpAndSettle();
+        await latestClosing;
+        final latestOpening = controller.open(0);
+        await tester.pumpAndSettle();
+        await latestOpening;
+        expect(find.text('latest panel'), findsOneWidget);
+        await tester.pumpWidget(const SizedBox());
+      },
+    );
+
+    for (final delete in [false, true]) {
+      testWidgets(
+        'stale ${delete ? 'delete' : 'disable'} preserves latest lifecycle',
+        (tester) async {
+          final c = TDropdownMenuController();
+          final oldClosed = <int>[];
+          var opened = 0;
+          var closed = 0;
+          Widget host(bool changed) => MaterialApp(
+            home: Scaffold(
+              body: Column(
+                children: [
+                  TDropdownMenu(
+                    key: const ValueKey('old'),
+                    controller: c,
+                    items: changed && delete
+                        ? []
+                        : [item('old', enabled: !changed)],
+                    onClosed: (index, _) => oldClosed.add(index),
+                  ),
+                  TDropdownMenu(
+                    key: const ValueKey('latest'),
+                    controller: c,
+                    items: [item('latest')],
+                    onOpened: (_) => opened++,
+                    onClosed: (_, __) => closed++,
+                  ),
+                ],
+              ),
+            ),
+          );
+          await tester.pumpWidget(host(false));
+          final opening = c.open(0);
+          await tester.pumpAndSettle();
+          await opening;
+          await tester.pumpWidget(host(true));
+          await tester.pumpAndSettle();
+          expect(c.openIndex, 0);
+          expect(find.text('latest panel'), findsOneWidget);
+          expect(oldClosed, isEmpty);
+          expect(opened, 1);
+          expect(closed, 0);
+          final closing = c.close();
+          await tester.pumpAndSettle();
+          await closing;
+          expect(c.isOpen, isFalse);
+          expect(find.text('latest panel'), findsNothing);
+          expect(closed, 1);
+          final reopening = c.open(0);
+          await tester.pumpAndSettle();
+          await reopening;
+          expect(c.openIndex, 0);
+          expect(find.text('latest panel'), findsOneWidget);
+          expect(opened, 2);
+          await tester.pumpWidget(const SizedBox());
+          c.dispose();
+        },
+      );
+    }
   });
 
   group('public models', () {
