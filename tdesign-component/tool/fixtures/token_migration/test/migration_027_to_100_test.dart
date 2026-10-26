@@ -250,4 +250,43 @@ void main() {
     await tester.pump(const Duration(seconds: 1));
     expect(find.text('处理中'), findsNothing);
   });
+
+  testWidgets('M11 top tabs share the inherited controller', (tester) async {
+    await tester.pumpWidget(host(migratedTopTabs()));
+    await tester.tap(find.text('详情'));
+    await tester.pumpAndSettle();
+    final context = tester.element(find.byType(TTabsBar));
+    expect(DefaultTabController.of(context).index, 1);
+    expect(find.text('详情内容').hitTestable(), findsOneWidget);
+  });
+
+  testWidgets('M12 bottom tabs accept the parent controlled index', (
+    tester,
+  ) async {
+    var value = 0;
+    await tester.pumpWidget(
+      host(
+        StatefulBuilder(
+          builder: (context, setState) =>
+              migratedBottomTabs(value, (next) => setState(() => value = next)),
+        ),
+      ),
+    );
+    await tester.tap(find.text('我的'));
+    await tester.pumpAndSettle();
+    expect(value, 1);
+    expect(tester.widget<TTabBar>(find.byType(TTabBar)).value, 1);
+  });
+
+  testWidgets('M13 swiper advances and disposes its internal timer', (
+    tester,
+  ) async {
+    await tester.pumpWidget(host(migratedSwiper()));
+    await tester.pump(const Duration(seconds: 3));
+    await tester.pump(const Duration(seconds: 1));
+    expect(find.text('第二页').hitTestable(), findsWidgets);
+    await tester.pumpWidget(const SizedBox());
+    await tester.pump(const Duration(seconds: 4));
+    expect(tester.takeException(), isNull);
+  });
 }

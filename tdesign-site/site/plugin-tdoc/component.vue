@@ -86,6 +86,69 @@ export default defineComponent({
 </script>
 
 <style lang="less">
+.migration-guide [id] {
+  scroll-margin-top: 120px;
+}
+
+// Empty compatibility anchors reserve header space even when a router scrolls
+// directly to the element without reading CSS scroll-margin.
+.migration-guide a[id] {
+  display: block;
+  height: 0;
+  padding-top: 120px;
+  margin-top: -120px;
+  scroll-margin-top: 0;
+}
+
+// Shared site styles only cover tables directly below the document root.
+.migration-guide :is(details, .migration-component-group) {
+  margin: 12px 0;
+  padding: 0 16px;
+  border: 1px solid var(--component-stroke);
+  border-radius: 6px;
+  overflow-x: auto;
+
+  summary, h3 {
+    padding: 16px 0;
+    font-weight: 600;
+    margin: 0;
+    font-size: 16px;
+  }
+
+  table {
+    width: 100%;
+    min-width: 600px;
+    table-layout: fixed;
+    border-collapse: collapse;
+    margin: 16px 0;
+    background: var(--bg-color-table);
+    box-shadow: var(--table-box-shadow);
+  }
+
+  thead { background: var(--bg-color-tag); }
+
+  th, td {
+    padding: 16px;
+    line-height: 22px;
+    text-align: left;
+    vertical-align: top;
+    overflow-wrap: anywhere;
+    border-bottom: 1px solid var(--component-stroke);
+  }
+
+  th:nth-child(1), td:nth-child(1) { width: 32%; }
+  th:nth-child(2), td:nth-child(2) { width: 30%; }
+  th:nth-child(3), td:nth-child(3) { width: 38%; }
+
+  tbody tr:hover { background: var(--bg-color-table-hover); }
+}
+
+// Component mappings need more room for the action than for their API name.
+.migration-guide .migration-component-group {
+  th:nth-child(1), td:nth-child(1) { width: 22%; }
+  th:nth-child(3), td:nth-child(3) { width: 48%; }
+}
+
 // Guides use the same phone sidebar spacing as component pages.
 td-doc-content.flutter-preview-layout {
   --content-padding-right: 400px;
