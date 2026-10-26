@@ -1,0 +1,220 @@
+{
+  "source": "e5bf6372351b15ce2e73e259bd05a42743fe3eaa",
+  "preview": "https://preview-pr-1204-40282739968-1-tdesign-flutter.surge.sh",
+  "counter": 2,
+  "reloads": [
+    {
+      "mode": "light",
+      "before": {
+        "childFrames": [
+          {
+            "frame": {
+              "adFrameStatus": {
+                "adFrameType": "none"
+              },
+              "crossOriginIsolatedContextType": "NotIsolated",
+              "domainAndRegistry": "surge.sh",
+              "gatedAPIFeatures": [],
+              "id": "10005DBD3231B5A5A835C3B7A26663C8",
+              "loaderId": "1F7FA5E87D01D6FA11E1209A70D7D16B",
+              "mimeType": "text/html",
+              "name": "",
+              "parentId": "2C54B7D481D304CB5A5B0F2461C96538",
+              "secureContextType": "Secure",
+              "securityOrigin": "https://preview-pr-1204-40282739968-1-tdesign-flutter.surge.sh",
+              "securityOriginDetails": {
+                "isLocalhost": false
+              },
+              "url": "https://preview-pr-1204-40282739968-1-tdesign-flutter.surge.sh/flutter/example/",
+              "urlFragment": "#custom-theme"
+            }
+          }
+        ],
+        "frame": {
+          "adFrameStatus": {
+            "adFrameType": "none"
+          },
+          "crossOriginIsolatedContextType": "NotIsolated",
+          "domainAndRegistry": "surge.sh",
+          "gatedAPIFeatures": [],
+          "id": "2C54B7D481D304CB5A5B0F2461C96538",
+          "loaderId": "F0AA10B2CCE489F2B9BE9A05E2F468C0",
+          "mimeType": "text/html",
+          "secureContextType": "Secure",
+          "securityOrigin": "https://preview-pr-1204-40282739968-1-tdesign-flutter.surge.sh",
+          "securityOriginDetails": {
+            "isLocalhost": false
+          },
+          "url": "https://preview-pr-1204-40282739968-1-tdesign-flutter.surge.sh/flutter/custom-theme"
+        }
+      },
+      "after": {
+        "childFrames": [
+          {
+            "frame": {
+              "adFrameStatus": {
+                "adFrameType": "none"
+              },
+              "crossOriginIsolatedContextType": "NotIsolated",
+              "domainAndRegistry": "surge.sh",
+              "gatedAPIFeatures": [],
+              "id": "10005DBD3231B5A5A835C3B7A26663C8",
+              "loaderId": "5D14838CF6186532F9726D56D39EF9B1",
+              "mimeType": "text/html",
+              "name": "",
+              "parentId": "2C54B7D481D304CB5A5B0F2461C96538",
+              "secureContextType": "Secure",
+              "securityOrigin": "https://preview-pr-1204-40282739968-1-tdesign-flutter.surge.sh",
+              "securityOriginDetails": {
+                "isLocalhost": false
+              },
+              "url": "https://preview-pr-1204-40282739968-1-tdesign-flutter.surge.sh/flutter/example/",
+              "urlFragment": "#custom-theme"
+            }
+          }
+        ],
+        "frame": {
+          "adFrameStatus": {
+            "adFrameType": "none"
+          },
+          "crossOriginIsolatedContextType": "NotIsolated",
+          "domainAndRegistry": "surge.sh",
+          "gatedAPIFeatures": [],
+          "id": "2C54B7D481D304CB5A5B0F2461C96538",
+          "loaderId": "F0AA10B2CCE489F2B9BE9A05E2F468C0",
+          "mimeType": "text/html",
+          "secureContextType": "Secure",
+          "securityOrigin": "https://preview-pr-1204-40282739968-1-tdesign-flutter.surge.sh",
+          "securityOriginDetails": {
+            "isLocalhost": false
+          },
+          "url": "https://preview-pr-1204-40282739968-1-tdesign-flutter.surge.sh/flutter/custom-theme"
+        }
+      }
+    },
+    {
+      "mode": "dark",
+      "before": {
+        "childFrames": [
+          {
+            "frame": {
+              "adFrameStatus": {
+                "adFrameType": "none"
+              },
+              "crossOriginIsolatedContextType": "NotIsolated",
+              "domainAndRegistry": "surge.sh",
+              "gatedAPIFeatures": [],
+              "id": "10005DBD3231B5A5A835C3B7A26663C8",
+              "loaderId": "5D14838CF6186532F9726D56D39EF9B1",
+              "mimeType": "text/html",
+              "name": "",
+              "parentId": "2C54B7D481D304CB5A5B0F2461C96538",
+              "secureContextType": "Secure",
+              "securityOrigin": "https://preview-pr-1204-40282739968-1-tdesign-flutter.surge.sh",
+              "securityOriginDetails": {
+                "isLocalhost": false
+              },
+              "url": "https://preview-pr-1204-40282739968-1-tdesign-flutter.surge.sh/flutter/example/",
+              "urlFragment": "#custom-theme"
+            }
+          }
+        ],
+        "frame": {
+          "adFrameStatus": {
+            "adFrameType": "none"
+          },
+          "crossOriginIsolatedContextType": "NotIsolated",
+          "domainAndRegistry": "surge.sh",
+          "gatedAPIFeatures": [],
+          "id": "2C54B7D481D304CB5A5B0F2461C96538",
+          "loaderId": "F0AA10B2CCE489F2B9BE9A05E2F468C0",
+          "mimeType": "text/html",
+          "secureContextType": "Secure",
+          "securityOrigin": "https://preview-pr-1204-40282739968-1-tdesign-flutter.surge.sh",
+          "securityOriginDetails": {
+            "isLocalhost": false
+          },
+          "url": "https://preview-pr-1204-40282739968-1-tdesign-flutter.surge.sh/flutter/custom-theme"
+        }
+      },
+      "after": {
+        "childFrames": [
+          {
+            "frame": {
+              "adFrameStatus": {
+                "adFrameType": "none"
+              },
+              "crossOriginIsolatedContextType": "NotIsolated",
+              "domainAndRegistry": "surge.sh",
+              "gatedAPIFeatures": [],
+              "id": "10005DBD3231B5A5A835C3B7A26663C8",
+              "loaderId": "DA246BE095CE6D10FD674679F62ACC2D",
+              "mimeType": "text/html",
+              "name": "",
+              "parentId": "2C54B7D481D304CB5A5B0F2461C96538",
+              "secureContextType": "Secure",
+              "securityOrigin": "https://preview-pr-1204-40282739968-1-tdesign-flutter.surge.sh",
+              "securityOriginDetails": {
+                "isLocalhost": false
+              },
+              "url": "https://preview-pr-1204-40282739968-1-tdesign-flutter.surge.sh/flutter/example/",
+              "urlFragment": "#custom-theme"
+            }
+          }
+        ],
+        "frame": {
+          "adFrameStatus": {
+            "adFrameType": "none"
+          },
+          "crossOriginIsolatedContextType": "NotIsolated",
+          "domainAndRegistry": "surge.sh",
+          "gatedAPIFeatures": [],
+          "id": "2C54B7D481D304CB5A5B0F2461C96538",
+          "loaderId": "F0AA10B2CCE489F2B9BE9A05E2F468C0",
+          "mimeType": "text/html",
+          "secureContextType": "Secure",
+          "securityOrigin": "https://preview-pr-1204-40282739968-1-tdesign-flutter.surge.sh",
+          "securityOriginDetails": {
+            "isLocalhost": false
+          },
+          "url": "https://preview-pr-1204-40282739968-1-tdesign-flutter.surge.sh/flutter/custom-theme"
+        }
+      },
+      "state": [
+        "+\t\t\t\t\t\t\t523 container ID: flt-semantic-node-6, Description: 当前外观：深色 主题配置：greenDark brandColor：#56C08D 周末出行计划 背景、文字、边框和组件跟随同一套主题。 品牌色标签 当前主题的浅色与深色配置 不透明色为 #RRGGBB；含透明度的颜色为 #AARRGGBB，前两位表示透明度。"
+      ]
+    }
+  ],
+  "locale": {
+    "entry": "/private/tmp/pr1156_locale_entry.dart",
+    "flutter": "3.32.0",
+    "observed": [
+      "确认",
+      "Confirm",
+      "确认"
+    ],
+    "scope": "fresh local standalone web build"
+  },
+  "asset": {
+    "entry": "/private/tmp/pr1156_asset_entry.dart",
+    "flutter": "3.32.0",
+    "scope": "fresh local standalone web build",
+    "observed": [
+      "资源主题",
+      "主题按钮"
+    ]
+  },
+  "date": "2026-10-26",
+  "environment": "macOS / Codex in-app Chromium browser",
+  "build_run": 40282176943,
+  "deploy_run": 40282739968,
+  "screenshots": {
+    "guides-counter.png": "582c91b39b2b0892c033c28f7431ce72dcb5568c952f733415276daff4ceaee7",
+    "guides-theme-light-reloaded.png": "15f2f53b92ade710ebce8e885903a358172bee84d8d26f237e72448a8b32143c",
+    "guides-theme-dark-reloaded.png": "89027c7b94c205024050e38d77a02a175b2ee8e8edb909224b6356120140f523",
+    "guides-locale-chinese.png": "23b840d3eb980018f248905c79d596c891ae9b894b17242cebb2a20a9e09f181",
+    "guides-locale-english.png": "cc708451ec7b3a364395707091421fd74723882bf0febe7597d362ec861e1d92",
+    "guides-resource-theme.png": "77ef7898f14c8b52a1c3a08d785d97a1823deeed0d9cab416a0c9ec48c6d3de2"
+  },
+  "scope": "Browser runtime; no mobile-device claim. This follow-up changes evidence only."
+}
