@@ -11,6 +11,19 @@ ThemeMode _previewMode(BuildContext context, ThemeMode? selection) =>
         ? ThemeMode.dark
         : ThemeMode.light);
 
+// The host owns the Web route. A second Navigator would report '/' to the
+// browser and make a reload leave the guide. Keep only the themed app shell.
+Widget _documentationThemePreview(
+  ThemeMode mode,
+  Widget home, {
+  required TThemeData tokens,
+}) => MaterialApp(
+  theme: TThemeBuilder.light(tokens),
+  darkTheme: TThemeBuilder.dark(tokens),
+  themeMode: mode,
+  builder: (_, _) => home,
+);
+
 /// 自定义主题指南的独立运行入口，复用生成文档所用的配置函数。
 class DocumentationThemeDemo extends StatefulWidget {
   const DocumentationThemeDemo({required this.scene, super.key});
@@ -22,12 +35,20 @@ class DocumentationThemeDemo extends StatefulWidget {
 }
 
 class _DocumentationThemeDemoState extends State<DocumentationThemeDemo> {
+  late final TThemeData _businessTokens;
   ThemeMode? _selection;
+  bool _businessTheme = true;
+
+  @override
+  void initState() {
+    super.initState();
+    _businessTokens = documentationThemeTokens();
+  }
 
   @override
   Widget build(BuildContext context) {
     final mode = _previewMode(context, _selection);
-    return documentationThemeApp(
+    return _documentationThemePreview(
       mode,
       Builder(
         builder: (context) => Scaffold(
@@ -37,12 +58,16 @@ class _DocumentationThemeDemoState extends State<DocumentationThemeDemo> {
               child: DocumentationThemeContent(
                 scene: widget.scene,
                 mode: mode,
+                businessTheme: _businessTheme,
+                onThemeChanged: (value) =>
+                    setState(() => _businessTheme = value),
                 onModeChanged: (mode) => setState(() => _selection = mode),
               ),
             ),
           ),
         ),
       ),
+      tokens: _businessTheme ? _businessTokens : TThemeData.defaultData(),
     );
   }
 }
@@ -53,12 +78,16 @@ class DocumentationThemeContent extends StatelessWidget {
     required this.scene,
     required this.mode,
     required this.onModeChanged,
+    required this.businessTheme,
+    required this.onThemeChanged,
     super.key,
   });
 
   final DocumentationThemeScene scene;
   final ThemeMode mode;
   final ValueChanged<ThemeMode> onModeChanged;
+  final bool businessTheme;
+  final ValueChanged<bool> onThemeChanged;
 
   String _modeLabel(ThemeMode mode) => switch (mode) {
     ThemeMode.light => '浅色',
@@ -97,6 +126,24 @@ class DocumentationThemeContent extends StatelessWidget {
               const SizedBox(height: 16),
               const TText('局部设置只影响“局部圆角”标签所在的 Theme 子树。'),
             ] else ...[
+              if (scene == DocumentationThemeScene.json) ...[
+                Wrap(
+                  spacing: 8,
+                  runSpacing: 8,
+                  children: [
+                    for (final value in [false, true])
+                      TButton(
+                        size: TButtonSize.small,
+                        colorPreset: businessTheme == value
+                            ? TButtonColorPreset.primary
+                            : TButtonColorPreset.defaultTheme,
+                        onPressed: () => onThemeChanged(value),
+                        child: Text(value ? '业务主题' : '默认主题'),
+                      ),
+                  ],
+                ),
+                const SizedBox(height: 16),
+              ],
               if (scene == DocumentationThemeScene.mode) ...[
                 Wrap(
                   spacing: 8,
@@ -125,13 +172,7 @@ class DocumentationThemeContent extends StatelessWidget {
               const SizedBox(height: 12),
               TText('brandColor：#$brand'),
               const SizedBox(height: 16),
-              TButton(
-                colorPreset: TButtonColorPreset.primary,
-                onPressed: () {},
-                child: const Text('品牌色按钮'),
-              ),
-              const SizedBox(height: 12),
-              const TTag('品牌色标签', colorPreset: TTagColorPreset.primary),
+              const _BusinessThemeCard(),
               if (scene == DocumentationThemeScene.json) ...[
                 const SizedBox(height: 24),
                 const _ThemeTokenComparison(),
@@ -159,12 +200,20 @@ class DocumentationThemeGuidePage extends StatefulWidget {
 
 class _DocumentationThemeGuidePageState
     extends State<DocumentationThemeGuidePage> {
+  late final TThemeData _businessTokens;
   ThemeMode? _selection;
+  bool _businessTheme = true;
+
+  @override
+  void initState() {
+    super.initState();
+    _businessTokens = documentationThemeTokens();
+  }
 
   @override
   Widget build(BuildContext context) {
     final mode = _previewMode(context, _selection);
-    return documentationThemeApp(
+    return _documentationThemePreview(
       mode,
       Builder(
         builder: (context) {
@@ -172,6 +221,7 @@ class _DocumentationThemeGuidePageState
             title: '自定义主题',
             desc: '配置全局主题、组件局部样式和明暗模式。',
             exampleCodeGroup: 'theme',
+            showTestModule: false,
             backgroundColor: context.tTheme.bgColorPage,
             children: [
               for (final scene in DocumentationThemeScene.values)
@@ -188,6 +238,9 @@ class _DocumentationThemeGuidePageState
                       builder: (_) => DocumentationThemeContent(
                         scene: scene,
                         mode: mode,
+                        businessTheme: _businessTheme,
+                        onThemeChanged: (value) =>
+                            setState(() => _businessTheme = value),
                         onModeChanged: (mode) =>
                             setState(() => _selection = mode),
                       ),
@@ -202,6 +255,7 @@ class _DocumentationThemeGuidePageState
               : Theme(data: adapter(Theme.of(context)), child: page);
         },
       ),
+      tokens: _businessTheme ? _businessTokens : TThemeData.defaultData(),
     );
   }
 }
@@ -221,10 +275,10 @@ class _ThemeTokenComparison extends StatelessWidget {
     final dark = light.dark ?? light;
     final isDark = Theme.of(context).brightness == Brightness.dark;
     final rows = <(String, Color Function(TThemeData), String)>[
-      ('brandColor', (theme) => theme.brandColor, 'JSON 覆盖'),
-      ('bgColorPage', (theme) => theme.bgColorPage, '默认继承'),
-      ('bgColorContainer', (theme) => theme.bgColorContainer, '默认继承'),
-      ('textColorPrimary', (theme) => theme.textColorPrimary, '默认继承'),
+      ('brandColor', (theme) => theme.brandColor, '主题配置'),
+      ('bgColorPage', (theme) => theme.bgColorPage, '主题配置'),
+      ('bgColorContainer', (theme) => theme.bgColorContainer, '主题配置'),
+      ('textColorPrimary', (theme) => theme.textColorPrimary, '主题配置'),
     ];
     Widget label(String text, {bool active = false}) => Padding(
       padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 4),
@@ -267,7 +321,7 @@ class _ThemeTokenComparison extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       mainAxisSize: MainAxisSize.min,
       children: [
-        const TText('浅色与深色配置对照'),
+        const TText('当前主题的浅色与深色配置'),
         const SizedBox(height: 8),
         Table(
           key: const ValueKey('theme-token-comparison'),
@@ -307,6 +361,56 @@ class _ThemeTokenComparison extends StatelessWidget {
         const SizedBox(height: 8),
         const TText('不透明色为 #RRGGBB；含透明度的颜色为 #AARRGGBB，前两位表示透明度。'),
       ],
+    );
+  }
+}
+
+/// 页面布局留在预览源码中，组件通过当前上下文读取同一套 Token。
+class _BusinessThemeCard extends StatefulWidget {
+  const _BusinessThemeCard();
+
+  @override
+  State<_BusinessThemeCard> createState() => _BusinessThemeCardState();
+}
+
+class _BusinessThemeCardState extends State<_BusinessThemeCard> {
+  bool _saved = false;
+
+  @override
+  Widget build(BuildContext context) {
+    final tokens = context.tTheme;
+    return Container(
+      key: const ValueKey('business-theme-card'),
+      padding: const EdgeInsets.all(16),
+      decoration: BoxDecoration(
+        color: tokens.bgColorPage,
+        border: Border.all(color: tokens.componentBorder),
+        borderRadius: BorderRadius.circular(12),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          const TText('周末出行计划'),
+          const SizedBox(height: 8),
+          Text(
+            '背景、文字、边框和组件跟随同一套主题。',
+            style: TextStyle(color: tokens.textColorSecondary, fontSize: 12),
+          ),
+          const SizedBox(height: 12),
+          const Align(
+            alignment: Alignment.centerLeft,
+            child: TTag('品牌色标签', colorPreset: TTagColorPreset.primary),
+          ),
+          const SizedBox(height: 12),
+          const TInput(initialValue: '周末出行', hintText: '输入计划名称'),
+          const SizedBox(height: 16),
+          TButton(
+            colorPreset: TButtonColorPreset.primary,
+            onPressed: () => setState(() => _saved = !_saved),
+            child: Text(_saved ? '已保存' : '品牌色按钮'),
+          ),
+        ],
+      ),
     );
   }
 }
