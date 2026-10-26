@@ -267,13 +267,21 @@ class TDropdownMenuController extends ChangeNotifier {
     _openIndex = null;
   }
 
-  void _setOpenIndex(int? value) {
+  void _setOpenIndex(Object owner, int? value) {
+    // 只允许当前 owner 改写共享打开状态；旧 owner 的配置更新、
+    // 交互或未完成异步操作不得清空新 owner 的打开状态（#1195）。
+    if (!identical(_owner, owner)) {
+      return;
+    }
     if (_openIndex == value) {
       return;
     }
     _openIndex = value;
     notifyListeners();
   }
+
+  /// 判断 [owner] 是否为当前命令入口的绑定者。
+  bool _isAttachedTo(Object owner) => identical(_owner, owner);
 }
 
 class TDropdownMenu extends StatefulWidget {
@@ -543,7 +551,10 @@ class _TDropdownMenuState extends State<TDropdownMenu>
     }
     _animationController.duration = _duration;
     _panelSwitchController.duration = _duration;
-    final openIndex = _controller.openIndex;
+    // 共享 Controller 时，共享 openIndex 属于当前 owner；
+    // 旧 owner 的配置更新不触发面板联动或自动关闭（#1195）。
+    final isCurrentOwner = _controller._isAttachedTo(this);
+    final openIndex = isCurrentOwner ? _controller.openIndex : null;
     final activeItemChanged =
         openIndex != null &&
         openIndex < widget.items.length &&
@@ -559,7 +570,9 @@ class _TDropdownMenuState extends State<TDropdownMenu>
         (openIndex >= widget.items.length ||
             !widget.items[openIndex].enabled)) {
       WidgetsBinding.instance.addPostFrameCallback((_) {
-        if (!mounted || _controller.openIndex != openIndex) {
+        if (!mounted ||
+            !_controller._isAttachedTo(this) ||
+            _controller.openIndex != openIndex) {
           return;
         }
         if (openIndex >= widget.items.length ||
@@ -570,7 +583,9 @@ class _TDropdownMenuState extends State<TDropdownMenu>
     } else if (openIndex != null &&
         widget.useRootOverlay != oldWidget.useRootOverlay) {
       WidgetsBinding.instance.addPostFrameCallback((_) {
-        if (mounted && _controller.openIndex == openIndex) {
+        if (mounted &&
+            _controller._isAttachedTo(this) &&
+            _controller.openIndex == openIndex) {
           _insertOverlay();
         }
       });
@@ -817,6 +832,9 @@ class _TDropdownMenuState extends State<TDropdownMenu>
   }
 
   Future<void> _toggle(int index) async {
+    if (!_controller._isAttachedTo(this)) {
+      return;
+    }
     if (_controller.openIndex == index) {
       await _close(TDropdownMenuCloseReason.trigger);
       return;
@@ -875,8 +893,14 @@ class _TDropdownMenuState extends State<TDropdownMenu>
     }
   }
 
+  // State 的 epoch 只识别本实例内的新操作；共享 Controller 换绑时
+  // 还需同时校验 Controller 身份与 owner，避免旧异步操作误发回调或请求焦点。
+  bool _hasControllerBinding(TDropdownMenuController controller) =>
+      identical(_controller, controller) && controller._isAttachedTo(this);
+
   Future<void> _open(int index) async {
     if (!mounted ||
+        !_controller._isAttachedTo(this) ||
         index < 0 ||
         index >= widget.items.length ||
         !widget.items[index].enabled) {
@@ -890,12 +914,17 @@ class _TDropdownMenuState extends State<TDropdownMenu>
       return;
     }
 
+    final controller = _controller;
+    final requestEpoch = _operationEpoch;
     final navigator =
         _navigator ?? Navigator.maybeOf(context, rootNavigator: true);
     final activeMenu = navigator == null ? null : _activeMenus[navigator];
     if (activeMenu != null && !identical(activeMenu, this)) {
       await activeMenu._close(TDropdownMenuCloseReason.switchItem);
-      if (!mounted || activeMenu._controller.isOpen) {
+      if (!mounted ||
+          !_hasControllerBinding(controller) ||
+          requestEpoch != _operationEpoch ||
+          activeMenu._controller.isOpen) {
         return;
       }
     }
@@ -909,13 +938,14 @@ class _TDropdownMenuState extends State<TDropdownMenu>
     _panelActivationEpoch++;
     _clearPanelSwitch();
     _pendingSwitchClosures.clear();
-    _controller._setOpenIndex(index);
+    _controller._setOpenIndex(this, index);
     setState(() {});
     _insertOverlay();
     _animationController.duration = _duration;
     await _waitForAutoPlacement();
     if (!mounted ||
         epoch != _operationEpoch ||
+        !_hasControllerBinding(controller) ||
         _controller.openIndex != index) {
       return;
     }
@@ -926,6 +956,7 @@ class _TDropdownMenuState extends State<TDropdownMenu>
     }
     if (!mounted ||
         epoch != _operationEpoch ||
+        !_hasControllerBinding(controller) ||
         _controller.openIndex != index) {
       return;
     }
@@ -934,6 +965,10 @@ class _TDropdownMenuState extends State<TDropdownMenu>
   }
 
   Future<void> _switchItem(int index) async {
+    final controller = _controller;
+    if (!_hasControllerBinding(controller)) {
+      return;
+    }
     final previousIndex = _controller.openIndex;
     if (previousIndex == null || previousIndex == index) {
       return;
@@ -947,13 +982,14 @@ class _TDropdownMenuState extends State<TDropdownMenu>
     _panelActivationEpoch++;
     _pendingSwitchClosures.add(previousIndex);
     _resetAutoPlacement(opensAbove: _autoOpensAbove, replacePanelKey: true);
-    _controller._setOpenIndex(index);
+    _controller._setOpenIndex(this, index);
     setState(() {});
     _overlayEntry?.markNeedsBuild();
 
     await _waitForAutoPlacement();
     if (!mounted ||
         epoch != _operationEpoch ||
+        !_hasControllerBinding(controller) ||
         _controller.openIndex != index) {
       return;
     }
@@ -968,7 +1004,10 @@ class _TDropdownMenuState extends State<TDropdownMenu>
     } on TickerCanceled {
       return;
     }
-    if (epoch != _operationEpoch || _controller.openIndex != index) {
+    if (!mounted ||
+        epoch != _operationEpoch ||
+        !_hasControllerBinding(controller) ||
+        _controller.openIndex != index) {
       return;
     }
     _outgoingIndex = null;
@@ -980,6 +1019,7 @@ class _TDropdownMenuState extends State<TDropdownMenu>
   }
 
   Future<void> _close(TDropdownMenuCloseReason reason) async {
+    final controller = _controller;
     final index = _controller.openIndex;
     if (index == null) {
       return;
@@ -997,13 +1037,19 @@ class _TDropdownMenuState extends State<TDropdownMenu>
     }
     _removeOverlay();
     _resetAutoPlacement(opensAbove: false);
-    _controller._setOpenIndex(null);
-    _flushPendingSwitchClosures();
+    // 失去绑定的旧面板仍清理本地 Overlay，但不通知新 owner 的状态、
+    // 不派发业务回调，也不将焦点拉回旧触发项。
+    if (!_hasControllerBinding(controller)) {
+      _pendingSwitchClosures.clear();
+    } else {
+      controller._setOpenIndex(this, null);
+      _flushPendingSwitchClosures();
+    }
     final navigator = _navigator;
     if (navigator != null && identical(_activeMenus[navigator], this)) {
       _activeMenus.remove(navigator);
     }
-    if (mounted) {
+    if (mounted && _hasControllerBinding(controller)) {
       setState(() {});
       if (index < _triggerFocusNodes.length) {
         _triggerFocusNodes[index].requestFocus();
