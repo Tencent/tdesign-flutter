@@ -57,3 +57,14 @@ Base: `182f8cd956edeee4dfd7ef977176309f051e3c3c`. Binary diff SHA-256 (`git diff
 - Node 24.15.0 / macOS: theme bridge and documentation tests 33/33 passed; 57 component pages / 360 generated example mappings passed; Vite production build passed in 3.32s (existing chunk size warning only).
 - `git diff --check origin/develop` passed. Flutter directives, repository document adapters and BASE_URL image rewriting retained. No component source changes; Flutter/Golden/device tests are outside this cleanup scope.
 - Current FAQ, audit dispositions and unused-version cleanup come from develop. No push, remote PR mutation, deployment or current remote CI verification.
+
+
+## 主题功能色板
+
+来源 PR #1156 `a9a44f1985af4f7b4ca3b46b53f26d5c7d90085e`；独立基线 develop `673ddf8cc69d41632f68832a9079385623af7df1`。仅包含本章节职责；验证结果仅适用于以下本地候选，不继承原 PR CI 或其他拆分分支结果。
+
+2026-10-26 本地验证：相对上述基线的源码二进制补丁 SHA-256（scripts / tdesign-component / tdesign-site，不含本记录）为 `0be40213b40d94ea65c94e4e304c9d5ae38e3a9576281c3b475ff006bf7d16f0`。
+
+macOS Flutter 3.32.0 / 3.47.7：Example 严格分析均无诊断，Theme 非 Golden 功能测试各 17/17，包含新增的不等长、稀疏/别名、空色板 3 项；3.32.0 工具与调度器自测 41/41。示例片段从实际源码重新生成，--check 通过。Linux amd64 / Flutter 3.32.0：现有 Theme 测试文件 Golden 8/8 精确比对通过，使用 TDESIGN_DEMO_TEST_MODULES=false；未修改任何基线或容差。页面默认颜色与指南视觉均保持既有基线。
+
+设备上的色板与代码面板仍未人工验证，见 tasks.md；未推送、未执行本分支远端 CI。

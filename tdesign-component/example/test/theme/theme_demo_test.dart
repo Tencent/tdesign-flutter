@@ -124,6 +124,101 @@ void main() {
   }, tags: 'demo');
 
   testWidgets(
+    'functional palettes allow unequal groups and refresh with theme',
+    (tester) async {
+      Widget host(TThemeData tokens) => MaterialApp(
+        theme: ThemeData(extensions: [tokens]),
+        home: const Scaffold(
+          body: SingleChildScrollView(child: ThemeFunctionColorExample()),
+        ),
+      );
+      for (final dark in [false, true]) {
+        final defaults = TThemeData.defaultData();
+        final tokens = (dark ? defaults.dark! : defaults).copyWith(
+          name: 'unequal-palette',
+          colorMap: {
+            'brandBusiness': dark ? Colors.greenAccent : Colors.green,
+            'brandAdditional': Colors.purple,
+          },
+        );
+        await tester.pumpWidget(host(tokens));
+        await tester.pumpAndSettle();
+        for (final prefix in ['brand', 'error', 'warning', 'success']) {
+          for (var index = 1; index <= 10; index++) {
+            expect(find.text('${prefix}Color$index'), findsOneWidget);
+          }
+        }
+        for (final key in ['brandBusiness', 'brandAdditional', 'errorColor']) {
+          final label = find.text(key);
+          expect(label, findsOneWidget);
+          final row = tester.widget<Container>(
+            find.ancestor(of: label, matching: find.byType(Container)).first,
+          );
+          expect(row.color, tokens.colorMap[key]);
+        }
+        expect(find.text('功能色数量不一样'), findsNothing);
+        expect(tester.takeException(), isNull);
+      }
+    },
+  );
+
+  testWidgets(
+    'sparse functional palettes render actual keys and resolve aliases',
+    (tester) async {
+      final tokens = TThemeData.defaultData().copyWith(name: 'sparse-palette');
+      tokens.refMap = TMap<String, String>()..['brandAlias'] = 'brandColor12';
+      tokens.colorMap = TMap<String, Color>(refs: tokens.refMap)
+        ..addAll({
+          'brandColor2': Colors.red,
+          'brandColor12': Colors.purple,
+          'successBusiness': Colors.green,
+        });
+      await tester.pumpWidget(
+        MaterialApp(
+          theme: ThemeData(extensions: [tokens]),
+          home: const Scaffold(
+            body: SingleChildScrollView(child: ThemeFunctionColorExample()),
+          ),
+        ),
+      );
+      await tester.pumpAndSettle();
+      expect(
+        tester.widgetList<TText>(find.byType(TText)).map((text) => text.data),
+        ['brandColor2', 'brandColor12', 'brandAlias', 'successBusiness'],
+      );
+      final alias = tester.widget<Container>(
+        find
+            .ancestor(
+              of: find.text('brandAlias'),
+              matching: find.byType(Container),
+            )
+            .first,
+      );
+      expect(alias.color, Colors.purple);
+      expect(tester.takeException(), isNull);
+    },
+  );
+
+  testWidgets('empty functional palettes do not invent numbered colors', (
+    tester,
+  ) async {
+    final tokens = TThemeData.defaultData().copyWith(name: 'empty-palette');
+    tokens.refMap = TMap<String, String>();
+    tokens.colorMap = TMap<String, Color>();
+    await tester.pumpWidget(
+      MaterialApp(
+        theme: ThemeData(extensions: [tokens]),
+        home: const Scaffold(
+          body: SingleChildScrollView(child: ThemeFunctionColorExample()),
+        ),
+      ),
+    );
+    await tester.pumpAndSettle();
+    expect(find.byType(TText), findsNothing);
+    expect(tester.takeException(), isNull);
+  });
+
+  testWidgets(
     'Theme public Demo has the same three source groups in light and dark',
     (tester) async {
       for (final mode in [ThemeMode.light, ThemeMode.dark]) {

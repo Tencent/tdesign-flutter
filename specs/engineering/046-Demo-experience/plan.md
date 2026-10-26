@@ -27,3 +27,8 @@
 ## 站点历史转换清理
 
 基于 develop `8bbbcd21` 在独立分支执行上述限定清理，验证后在 acceptance.md 记录候选、环境与未覆盖范围。
+
+
+## 主题功能色板
+
+双版本严格分析、Theme 功能测试、生成片段 --check；功能通过后在 Linux Flutter 3.32.0 比对既有 Theme 页面 Golden，不更新基线或容差。
