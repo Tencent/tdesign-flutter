@@ -4,7 +4,7 @@ import { fileURLToPath } from 'node:url';
 
 export const repositoryRoot = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 export const migrationSource = 'tdesign-site/site/docs/migration-0.2.7-to-1.0.md';
-const exampleSource = 'scripts/migration_consumer/lib/guide_examples.dart';
+const exampleSource = 'tdesign-component/example/lib/migration_examples.dart';
 const github = 'https://github.com/Tencent/tdesign-flutter/blob/develop/';
 const site = 'https://tdesign.tencent.com/flutter/';
 

@@ -25,6 +25,10 @@ Future<void> main() async {
         await entity.copy(target.path);
       }
     }
+    // Validate the exact source used to generate the migration guide.
+    await File(
+      '${component.path}/example/lib/migration_examples.dart',
+    ).copy('${consumer.path}/lib/migration_examples.dart');
     for (final arguments in [
       ['pub', 'get'],
       ['analyze', '--no-pub', '--fatal-infos'],

@@ -85,7 +85,7 @@ TDesign 组件不再从 Material `ThemeData.textTheme`、`ThemeData.inputDecorat
 
 ## 独立消费验证与发布边界
 
-在仓库根目录执行 `dart run scripts/run_migration_consumer.dart`。脚本将 [消费夹具](../../../scripts/migration_consumer/test/public_api_usage_test.dart) 复制到仓库外临时目录，以独立的 pubspec、package_config 和 path 依赖执行 `flutter pub get`、严格分析及测试。夹具只从 `package:tdesign_flutter/tdesign_flutter.dart` 导入本库，禁止 implementation imports；不依赖内部测试 helper 或 Example。
+在仓库根目录执行 `dart run scripts/run_migration_consumer.dart`。脚本将 [消费夹具](../../../scripts/migration_consumer/test/public_api_usage_test.dart) 复制到仓库外临时目录，以独立的 pubspec、package_config 和 path 依赖执行 `flutter pub get`、严格分析及测试。夹具只从 `package:tdesign_flutter/tdesign_flutter.dart` 导入本库，禁止 implementation imports；不依赖内部测试 helper 或 Example 的应用配置；文档示例直接复制 Example 内只使用公开入口的源码。
 
 | 迁移类别 | 编译验证 | 关键行为验证 |
 | --- | --- | --- |
@@ -98,4 +98,4 @@ TDesign 组件不再从 Material `ThemeData.textTheme`、`ThemeData.inputDecorat
 
 这项检查证明所列替代写法在独立调用方中成立，不承诺旧调用零修改兼容，也不代替第三方业务逻辑测试。真实业务仓库未提供属于应用升级覆盖的边界，不是库接口迁移未完成的证据。组件变量的默认回退／最终绘制审查及 Figma 视觉验收仍独立记录，不能用本项通过关闭剩余 677 项 Token 审查。
 
-消费验证按职责分层：公开签名与参数组合放在 `lib/public_api_examples.dart`，由静态分析检查；文档片段的交互组合放在 `test/guide_examples_test.dart`；独立的 Theme 链与命令式弹层等场景放在 `test/public_api_usage_test.dart`。Text、Avatar、Tag 的组件样式及 SwipeCell 参数互斥断言复用现有组件测试，不重复维护构造数量、简单 getter 或只检查挂载无异常的用例。具体目录和命令见[迁移消费验证说明](../../../scripts/migration_consumer/README.md)。
+消费验证按职责分层：公开签名与参数组合放在 `lib/public_api_examples.dart`，由静态分析检查；文档片段的交互组合放在 `test/migration_examples_test.dart`；独立的 Theme 链与命令式弹层等场景放在 `test/public_api_usage_test.dart`。Text、Avatar、Tag 的组件样式及 SwipeCell 参数互斥断言复用现有组件测试，不重复维护构造数量、简单 getter 或只检查挂载无异常的用例。具体目录和命令见[迁移消费验证说明](../../../scripts/migration_consumer/README.md)。

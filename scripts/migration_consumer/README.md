@@ -8,13 +8,13 @@
 bash scripts/run-tooling-checks.sh migration
 ```
 
-脚本将项目复制到临时目录，通过组件公开入口执行依赖解析、严格静态分析和测试。GitHub/CNB 使用同一入口，在最低支持版和当前稳定版 Flutter 下验证。
+脚本将验证项目和 Example 中的迁移示例复制到临时目录，通过组件公开入口执行依赖解析、严格静态分析和测试。GitHub/CNB 使用同一入口，在最低支持版和当前稳定版 Flutter 下验证。
 
 ## 内容与验证边界
 
 | 文件 | 用途 | 如何验证 |
 | --- | --- | --- |
-| `lib/guide_examples.dart` | 迁移指南代码片段的唯一来源 | 静态分析；`guide_examples_test.dart` 验证片段的交互组合 |
+| [Example 迁移示例](../../tdesign-component/example/lib/migration_examples.dart) | 迁移指南代码片段的唯一来源；运行时复制到临时消费者，不在此维护副本 | 静态分析；`migration_examples_test.dart` 验证片段的交互组合 |
 | `lib/public_api_examples.dart` | 公开构造参数、Theme 和类型替代示例 | 静态分析，不为列表长度或简单属性读取重复运行测试 |
 | `test/public_api_usage_test.dart` | Theme 返回类型链、TabBar 与 Theme 组合、Popover/Popup 公开调用 | 少量必要的运行时验证 |
 

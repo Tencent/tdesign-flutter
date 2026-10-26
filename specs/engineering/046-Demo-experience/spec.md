@@ -79,6 +79,6 @@ Debug 默认展示内部验证区块，Profile/Release 隐藏。显式页面开�
 
 本次独立文档不依赖 #1202 的主题或导航修复。组件索引使用普通 section 与原生锚点，避免跳转目标处于关闭的折叠区域；旧类型附录保留原生 details/summary，由读者点击展开，不承诺自动展开或恢复折叠历史状态。
 
-迁移文档及 Token 的消费验证属于仓库开发基础设施：项目位于 `scripts/migration_consumer/`，运行入口为 `scripts/run_migration_consumer.dart`，组件目录只保留组件自身的开发内容。运行器从自身路径定位仓库并在临时目录验证对组件公开入口的消费，不依赖调用者当前目录。文档生成与 GitHub/CNB 共用工具检查入口同步引用该仓库级路径。
+迁移文档及 Token 的消费验证属于仓库开发基础设施：项目位于 `scripts/migration_consumer/`，运行入口为 `scripts/run_migration_consumer.dart`，用户迁移示例唯一维护在 `tdesign-component/example/lib/migration_examples.dart`，站点负责指南正文和片段展示。运行器从自身路径定位仓库并在临时目录验证对组件公开入口的消费，不依赖调用者当前目录。文档生成读取 Example 源码，验证运行器将同一源码复制到临时消费者；GitHub/CNB 复用仓库级工具入口，不在验证项目内维护示例副本。
 
-迁移消费验证不保留没有独立行为意义的测试：公开构造与参数类型由静态分析验证；运行时测试聚焦实际指南函数的交互组合及少量公开 API 消费契约。Text、Avatar、Tag 样式等通用组件行为复用组件回归，不为静态可检查的构造列表或已有挂载覆盖增加重复用例。目录去除 fixtures 中间层，按 guide_examples 与 public_api_examples 区分用途，包名统一为 tdesign_migration_consumer。
+迁移消费验证不保留没有独立行为意义的测试：公开构造与参数类型由静态分析验证；运行时测试聚焦实际指南函数的交互组合及少量公开 API 消费契约。Text、Avatar、Tag 样式等通用组件行为复用组件回归，不为静态可检查的构造列表或已有挂载覆盖增加重复用例。目录去除 fixtures 中间层，按 Example 中的 migration_examples 与验证项目内的 public_api_examples 区分用途，包名统一为 tdesign_migration_consumer。
