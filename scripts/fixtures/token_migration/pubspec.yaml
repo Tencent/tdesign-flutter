@@ -6,7 +6,7 @@ dependencies:
   flutter:
     sdk: flutter
   tdesign_flutter:
-    path: '../../../'
+    path: '../../../tdesign-component'
 dev_dependencies:
   flutter_test:
     sdk: flutter

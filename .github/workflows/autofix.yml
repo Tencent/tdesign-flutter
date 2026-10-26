@@ -7,6 +7,7 @@ on:
       - 'README*.md'
       - 'tdesign-site/site/docs/**'
       - 'scripts/documentation.mjs'
+      - 'scripts/fixtures/token_migration/**'
       - 'scripts/sync-readme.mjs'
       - '.github/workflows/autofix.yml'
 

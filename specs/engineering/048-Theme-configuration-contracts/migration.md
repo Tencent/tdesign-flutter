@@ -85,7 +85,7 @@ TDesign 组件不再从 Material `ThemeData.textTheme`、`ThemeData.inputDecorat
 
 ## 独立消费验证与发布边界
 
-执行 `cd tdesign-component && dart run tool/run_migration_consumer.dart`。脚本将 [消费夹具](../../../tdesign-component/tool/fixtures/token_migration/test/migration_test.dart) 复制到仓库外临时目录，以独立的 pubspec、package_config 和 path 依赖执行 `flutter pub get`、严格分析及测试。夹具只从 `package:tdesign_flutter/tdesign_flutter.dart` 导入本库，禁止 implementation imports；不依赖内部测试 helper 或 Example。
+在仓库根目录执行 `dart run scripts/run_migration_consumer.dart`。脚本将 [消费夹具](../../../scripts/fixtures/token_migration/test/migration_test.dart) 复制到仓库外临时目录，以独立的 pubspec、package_config 和 path 依赖执行 `flutter pub get`、严格分析及测试。夹具只从 `package:tdesign_flutter/tdesign_flutter.dart` 导入本库，禁止 implementation imports；不依赖内部测试 helper 或 Example。
 
 | 迁移类别 | 编译验证 | 关键行为验证 |
 | --- | --- | --- |

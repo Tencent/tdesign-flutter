@@ -3,8 +3,9 @@ import 'dart:io';
 /// Runs migration examples with an independent package configuration outside
 /// the checkout, so tests cannot accidentally rely on library-private imports.
 Future<void> main() async {
-  final component = File.fromUri(Platform.script).parent.parent;
-  final fixture = Directory('${component.path}/tool/fixtures/token_migration');
+  final root = File.fromUri(Platform.script).parent.parent;
+  final component = Directory('${root.path}/tdesign-component');
+  final fixture = Directory('${root.path}/scripts/fixtures/token_migration');
   final consumer = await Directory.systemTemp.createTemp('tdesign-migration-');
   try {
     await for (final entity in fixture.list(recursive: true)) {
@@ -17,7 +18,9 @@ Future<void> main() async {
       if (relative == 'pubspec.yaml') {
         final source = await entity.readAsString();
         final path = component.absolute.path.replaceAll("'", "''");
-        await target.writeAsString(source.replaceFirst('../../../', path));
+        await target.writeAsString(
+          source.replaceFirst('../../../tdesign-component', path),
+        );
       } else {
         await entity.copy(target.path);
       }
