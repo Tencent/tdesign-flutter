@@ -85,7 +85,7 @@ class _TBackTopState extends State<TBackTop>
   bool _isAnimating = false;
   bool _isVisible = false;
 
-  /// 是否仍在渲染树中；淡出结束前保持 true，避免突兀消失。
+  /// 是否仍在渲染树中；淡出结束前保持 true，避免突然消失。
   bool _isInTree = false;
 
   late final AnimationController _opacityController = AnimationController(
