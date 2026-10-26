@@ -192,3 +192,9 @@ macOS Flutter 3.32.0 / 3.47.7：Example 严格分析均无诊断，Theme 与 doc
 本机浏览器：Theme 页面及功能色生成代码面板可展示。纯站点生产预览未包含 Flutter 构建资产，不作为 Flutter iframe 功能验收。
 
 本轮未重跑完整 Flutter 演示、真机或两个官网全量回归；原截图和 Flutter 测试仍绑定原候选。最终远端 CI 单独核对。
+
+### PR #1202：合并 develop 304bf7d6 后冲突复核
+
+运行候选 170d95c6（合并 develop 304bf7d6）。冲突仅涉及 Spec 046 四份文档和 package.json 的 theme-generator 版本，分别保留导航与色板记录、选择 1.3.0。site-components 继续使用 0.18.1。站点目录与合并前 c6015bfc 完全一致，tdesign-component 目录与 develop 304bf7d6 完全一致，未覆盖两边实现。
+
+Node 24.15.0 / pnpm 11.20.0 冻结安装、站点测试 51/51、57 页/360 示例映射和生产构建通过；macOS Flutter 3.32.0 Example 严格分析无诊断，Theme 与 documentation_examples 非 Golden 测试 24/24 通过。git diff --check 通过。未重跑浏览器、双版本完整矩阵或 Golden；本轮结果仅覆盖上述检查，最终远端 CI 另行核对。
