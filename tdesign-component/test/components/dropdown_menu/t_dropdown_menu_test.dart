@@ -146,6 +146,83 @@ void main() {
     );
   }
 
+  group('shared controller state isolation (#1195)', () {
+    testWidgets(
+      'stale menu items update must not clear latest owner open state',
+      (tester) async {
+        final controller = TDropdownMenuController();
+        addTearDown(controller.dispose);
+
+        Widget host({required bool oldDisabled}) => wrap(
+          Column(
+            children: [
+              TDropdownMenu(
+                key: const ValueKey('old'),
+                controller: controller,
+                items: [item('old', enabled: !oldDisabled)],
+              ),
+              TDropdownMenu(
+                key: const ValueKey('latest'),
+                controller: controller,
+                items: [item('latest')],
+              ),
+            ],
+          ),
+        );
+
+        await tester.pumpWidget(host(oldDisabled: false));
+        final opening = controller.open(0);
+        await tester.pumpAndSettle();
+        await opening;
+        expect(controller.isOpen, isTrue, reason: '后绑定的 latest 打开面板');
+        expect(controller.openIndex, 0);
+        expect(find.text('latest panel'), findsOneWidget);
+
+        // 仅更新 old 菜单的 items（第 0 项禁用），不触碰 latest。
+        await tester.pumpWidget(host(oldDisabled: true));
+        await tester.pumpAndSettle();
+
+        expect(
+          controller.isOpen,
+          isTrue,
+          reason: '旧菜单配置更新不应清空当前 owner 的打开状态',
+        );
+        expect(controller.openIndex, 0, reason: 'openIndex 保持不变');
+        expect(
+          find.text('latest panel'),
+          findsOneWidget,
+          reason: 'latest 面板仍显示',
+        );
+
+        // 当前 owner 的自动关闭行为保持不变：latest 自身打开项禁用时仍应关闭。
+        final latestDisabledHost = wrap(
+          Column(
+            children: [
+              TDropdownMenu(
+                key: const ValueKey('old'),
+                controller: controller,
+                items: [item('old', enabled: false)],
+              ),
+              TDropdownMenu(
+                key: const ValueKey('latest'),
+                controller: controller,
+                items: [item('latest', enabled: false)],
+              ),
+            ],
+          ),
+        );
+        await tester.pumpWidget(latestDisabledHost);
+        await tester.pumpAndSettle();
+        expect(
+          controller.isOpen,
+          isFalse,
+          reason: '当前 owner 自身打开项禁用时仍自动关闭',
+        );
+        await tester.pumpWidget(const SizedBox());
+      },
+    );
+  });
+
   group('public models', () {
     test('item and trigger state expose immutable configuration', () {
       final menuItem = item('排序');

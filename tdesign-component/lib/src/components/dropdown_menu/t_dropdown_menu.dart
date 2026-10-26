@@ -267,13 +267,21 @@ class TDropdownMenuController extends ChangeNotifier {
     _openIndex = null;
   }
 
-  void _setOpenIndex(int? value) {
+  void _setOpenIndex(Object owner, int? value) {
+    // 只允许当前 owner 改写共享打开状态；旧 owner 的配置更新、
+    // 交互或未完成异步操作不得清空新 owner 的打开状态（#1195）。
+    if (!identical(_owner, owner)) {
+      return;
+    }
     if (_openIndex == value) {
       return;
     }
     _openIndex = value;
     notifyListeners();
   }
+
+  /// 判断 [owner] 是否为当前命令入口的绑定者。
+  bool _isAttachedTo(Object owner) => identical(_owner, owner);
 }
 
 class TDropdownMenu extends StatefulWidget {
@@ -543,7 +551,10 @@ class _TDropdownMenuState extends State<TDropdownMenu>
     }
     _animationController.duration = _duration;
     _panelSwitchController.duration = _duration;
-    final openIndex = _controller.openIndex;
+    // 共享 Controller 时，共享 openIndex 属于当前 owner；
+    // 旧 owner 的配置更新不触发面板联动或自动关闭（#1195）。
+    final isCurrentOwner = _controller._isAttachedTo(this);
+    final openIndex = isCurrentOwner ? _controller.openIndex : null;
     final activeItemChanged =
         openIndex != null &&
         openIndex < widget.items.length &&
@@ -909,7 +920,7 @@ class _TDropdownMenuState extends State<TDropdownMenu>
     _panelActivationEpoch++;
     _clearPanelSwitch();
     _pendingSwitchClosures.clear();
-    _controller._setOpenIndex(index);
+    _controller._setOpenIndex(this, index);
     setState(() {});
     _insertOverlay();
     _animationController.duration = _duration;
@@ -947,7 +958,7 @@ class _TDropdownMenuState extends State<TDropdownMenu>
     _panelActivationEpoch++;
     _pendingSwitchClosures.add(previousIndex);
     _resetAutoPlacement(opensAbove: _autoOpensAbove, replacePanelKey: true);
-    _controller._setOpenIndex(index);
+    _controller._setOpenIndex(this, index);
     setState(() {});
     _overlayEntry?.markNeedsBuild();
 
@@ -997,7 +1008,7 @@ class _TDropdownMenuState extends State<TDropdownMenu>
     }
     _removeOverlay();
     _resetAutoPlacement(opensAbove: false);
-    _controller._setOpenIndex(null);
+    _controller._setOpenIndex(this, null);
     _flushPendingSwitchClosures();
     final navigator = _navigator;
     if (navigator != null && identical(_activeMenus[navigator], this)) {
