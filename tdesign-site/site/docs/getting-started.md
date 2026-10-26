@@ -2,6 +2,7 @@
 title: 快速开始
 description: 安装 TDesign Flutter 并在已有页面中使用组件。
 spline: explain
+flutterExample: getting-started
 ---
 
 ## 快速体验
@@ -30,7 +31,7 @@ dependencies:
   tdesign_flutter: ^1.0.0
 ```
 
-`^1.0.0` 允许兼容的1.x更新。应用应提交依赖锁文件，升级后回归关键业务页面。
+`^1.0.0` 允许兼容的 1.x 更新。应用应提交依赖锁文件，升级后回归关键业务页面。
 
 安装依赖：
 
@@ -46,15 +47,44 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 
 TD 入口导出 Flutter Material 组件，可通过同一个入口使用 `MaterialApp`、`Scaffold`、`Text` 和 TDesign 组件。
 
-### 最小使用
+### 运行第一个应用
 
-将按钮放入已有页面的 Widget 树中：
+将 `lib/main.dart` 替换为以下内容，执行 `flutter run`。点击按钮，计数会随之增加，无需提前配置主题。
 
+<!-- documentation-example:quick-start:start -->
 ```dart
-const TButton(child: Text('按钮'))
-```
+import 'package:tdesign_flutter/tdesign_flutter.dart';
 
-无需额外初始化或主题配置。不传 `onPressed` 时，按钮处于禁用状态。
+void main() => runApp(const MaterialApp(home: CounterPage()));
+
+class CounterPage extends StatefulWidget {
+  const CounterPage({super.key});
+
+  @override
+  State<CounterPage> createState() => _CounterPageState();
+}
+
+class _CounterPageState extends State<CounterPage> {
+  int _count = 0;
+
+  @override
+  Widget build(BuildContext context) => Scaffold(
+    appBar: const TNavBar(title: Text('TDesign Flutter')),
+    body: Center(
+      child: TButton(
+        colorPreset: TButtonColorPreset.primary,
+        onPressed: () => setState(() => _count += 1),
+        child: Text('点击次数：$_count'),
+      ),
+    ),
+  );
+}
+```
+<!-- documentation-example:quick-start:end -->
+
+如果应用已有 `MaterialApp` 和页面，只复制按钮及其业务状态即可。`onPressed: null` 会禁用按钮；需要操作的按钮必须传入回调。
+
+<span id="自定义主题" aria-hidden="true"></span>
 
 ## 下一步
 
@@ -63,7 +93,3 @@ const TButton(child: Text('按钮'))
 - [国际化](./internationalization.md)
 - [组件概览](./overview.md)
 - [常见问题](./faq.md)
-
-## 自定义主题
-
-主题JSON、主题生成器和局部覆盖统一见[自定义主题](./custom-theme.md)。本节保留旧快速开始的章节入口。

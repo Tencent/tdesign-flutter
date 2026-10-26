@@ -57,3 +57,14 @@ Base: `182f8cd956edeee4dfd7ef977176309f051e3c3c`. Binary diff SHA-256 (`git diff
 - Node 24.15.0 / macOS: theme bridge and documentation tests 33/33 passed; 57 component pages / 360 generated example mappings passed; Vite production build passed in 3.32s (existing chunk size warning only).
 - `git diff --check origin/develop` passed. Flutter directives, repository document adapters and BASE_URL image rewriting retained. No component source changes; Flutter/Golden/device tests are outside this cleanup scope.
 - Current FAQ, audit dispositions and unused-version cleanup come from develop. No push, remote PR mutation, deployment or current remote CI verification.
+
+
+## 可运行接入指南
+
+来源 PR #1156 `a9a44f1985af4f7b4ca3b46b53f26d5c7d90085e`；独立基线 develop `673ddf8cc69d41632f68832a9079385623af7df1`。仅包含本章节职责；验证结果仅适用于以下本地候选，不继承原 PR CI 或其他拆分分支结果。
+
+2026-10-26 本地验证：相对上述基线的源码二进制补丁 SHA-256（scripts / tdesign-component / tdesign-site，不含本记录）为 `bbd439ebc56f2b9be5c50892cb6f55dba3be1383270cc665a5ac77efbbbf5867`。
+
+macOS Flutter 3.32.0 / 3.47.7：Example 严格分析均无诊断，文档示例与 Theme 非 Golden 功能测试各 20/20；3.32.0 回归清单、覆盖率 runner、视觉 runner 和示例生成器自测 41/41，生成片段 --check 通过。Node 24.22.1：站点测试 39/39，57 页/360 示例映射、8 份同步输出检查及生产构建通过。Linux amd64 / Flutter 3.32.0：主题与指南 Golden 14/14 精确比对通过，使用 TDESIGN_DEMO_TEST_MODULES=false；未运行更新基线命令，未修改容差。截图内容沿用来源候选中的预期视觉。
+
+仍缺完整指南浏览器交互（含预览 reload 主题同步）及移动设备验收，见 tasks.md；未推送、未执行本分支远端 CI。
