@@ -10,7 +10,7 @@ import test from 'node:test';
 function fixture(t, cachedVersion) {
   const root = mkdtempSync(join(tmpdir(), 'tooling-node-'));
   t.after(() => rmSync(root, {recursive: true, force: true}));
-  const source = join(dirname(fileURLToPath(import.meta.url)), 'with-tooling-node.sh');
+  const source = join(dirname(fileURLToPath(import.meta.url)), '../../scripts/with-tooling-node.sh');
   const version = readFileSync(source, 'utf8').match(/^version=(\S+)/m)[1];
   const entry = join(root, 'with-tooling-node.sh');
   copyFileSync(source, entry);

@@ -7,7 +7,7 @@ on:
       - 'README*.md'
       - 'tdesign-site/site/docs/**'
       - 'scripts/documentation.mjs'
-      - 'scripts/migration_consumer/**'
+      - 'test/migration_consumer/**'
       - 'scripts/sync-readme.mjs'
       - '.github/workflows/autofix.yml'
 

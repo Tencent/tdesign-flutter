@@ -5,7 +5,7 @@ import 'dart:io';
 Future<void> main() async {
   final root = File.fromUri(Platform.script).parent.parent;
   final component = Directory('${root.path}/tdesign-component');
-  final sourceProject = Directory('${root.path}/scripts/migration_consumer');
+  final sourceProject = Directory('${root.path}/test/migration_consumer');
   final consumer = await Directory.systemTemp.createTemp('tdesign-migration-');
   try {
     await for (final entity in sourceProject.list(recursive: true)) {

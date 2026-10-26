@@ -14,7 +14,7 @@ function fixture(t) {
     mkdirSync(join(root, dir), {recursive: true});
   }
   const entry = join(root, 'scripts/run-tooling-checks.sh');
-  copyFileSync(join(dirname(fileURLToPath(import.meta.url)), 'run-tooling-checks.sh'), entry);
+  copyFileSync(join(dirname(fileURLToPath(import.meta.url)), '../../scripts/run-tooling-checks.sh'), entry);
   writeFileSync(join(root, 'tdesign-component/tool/sample_test.mjs'), '');
   const trace = join(root, 'trace.jsonl');
   for (const executable of ['dart', 'flutter', 'node']) {
@@ -46,7 +46,9 @@ test('full entry uses one ordered sequence and discovers the tool test directory
   ]);
   assert.ok(result.calls.slice(0, 3).every((c) => c.cwd.endsWith('/packages/css2token')));
   assert.ok(result.calls.slice(3).every((c) => c.cwd.endsWith('/tdesign-component')));
+  assert.ok(result.calls[3].args[1].endsWith('/scripts/run_migration_consumer.dart'));
   assert.deepEqual(result.calls[4].args, ['test', '--no-pub', 'test/tool']);
+  assert.ok(result.calls[5].args[1].endsWith('/test/scripts/*.test.mjs'));
   assert.ok(result.calls.some((c) => c.args[0] === 'tool/generate_api.mjs' && c.args.includes('--check')));
   assert.ok(result.calls.some((c) => c.args.some((a) => a.endsWith('/scripts/sync-readme.mjs')) && c.args.includes('--check')));
 });
@@ -76,7 +78,7 @@ test('whole entry and multi-command steps stop on the original failure', options
 });
 
 test('GitHub and CNB execute the complete shared tooling sequence', () => {
-  const scripts = dirname(fileURLToPath(import.meta.url));
+  const scripts = join(dirname(fileURLToPath(import.meta.url)), '../../scripts');
   const entry = readFileSync(join(scripts, 'run-tooling-checks.sh'), 'utf8');
   const steps = entry.match(/^steps=\(([^)]+)\)/m)[1].trim().split(/\s+/);
   const github = readFileSync(join(scripts, '../.github/workflows/test-build.yml'), 'utf8');

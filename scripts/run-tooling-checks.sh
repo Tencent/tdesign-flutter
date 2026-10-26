@@ -21,7 +21,7 @@ run_step() {
     migration) dart run "$TOOLING_REPOSITORY_ROOT/scripts/run_migration_consumer.dart" ;;
     # Discover the directory so new tooling tests need no workflow registration.
     tool-tests) flutter test --no-pub test/tool ;;
-    runner-tests) node --test "$TOOLING_REPOSITORY_ROOT/scripts/"*tooling*.test.mjs ;;
+    runner-tests) node --test "$TOOLING_REPOSITORY_ROOT/test/scripts/"*.test.mjs ;;
     api-generator-tests) node --test tool/*_test.mjs ;;
     api-docs) node tool/generate_api.mjs --check ;;
     snippets) dart run tool/generate_example_code.dart --check ;;
