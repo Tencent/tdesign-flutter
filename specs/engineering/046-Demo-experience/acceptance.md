@@ -113,7 +113,7 @@ macOS Flutter 3.32.0 / 3.47.7：Example 严格分析均无诊断，Theme 非 Gol
 
 通过站点既有同源主题消息通道加载[测试配置](./evidence/functional-palette-browser-theme.json)，未修改预览源码。浅色、深色均显示新增业务色、稀疏键 brandColor12 和别名 brandAlias；四类功能色实际数量为 20/16/16/16，没有旧的数量不等提示，别名与目标同色。站点代码面板正常展示真实生成片段，包含导入、实际键名与 entries.length。空配置沿用聚焦 Widget 测试结果，本轮没有声称完成其浏览器检查。检查后重新加载预览，撤销临时主题配置。
 
-[浅色运行截图](./evidence/functional-palette-browser-light.png) · [深色运行截图](./evidence/functional-palette-browser-dark.png)。截图仅为验收证据，未更新任何 Golden 基线或修改运行源码；此前源码候选的 CI 已完成，新增证据提交的 CI 按最终 head 单独核对。
+运行观察以结构化记录为准，未更新任何 Golden 基线或修改运行源码；此前源码候选的 CI 已完成，新增证据提交的 CI 按最终 head 单独核对。
 
 
 ### 2026-10-26 条目收集精简复核
@@ -129,7 +129,7 @@ macOS Flutter 3.32.0 / 3.47.7：Example 严格分析均无诊断，Theme 非 Gol
 
 2026-10-26 本地验证：相对上述基线的源码二进制补丁 SHA-256（scripts / tdesign-component / tdesign-site，不含本记录）为 `bbd439ebc56f2b9be5c50892cb6f55dba3be1383270cc665a5ac77efbbbf5867`。
 
-macOS Flutter 3.32.0 / 3.47.7：Example 严格分析均无诊断，文档示例与 Theme 非 Golden 功能测试各 20/20；3.32.0 回归清单、覆盖率 runner、视觉 runner 和示例生成器自测 41/41，生成片段 --check 通过。Node 24.22.1：站点测试 39/39，57 页/360 示例映射、8 份同步输出检查及生产构建通过。Linux amd64 / Flutter 3.32.0：主题与指南 Golden 14/14 精确比对通过，使用 TDESIGN_DEMO_TEST_MODULES=false；未运行更新基线命令，未修改容差。截图内容沿用来源候选中的预期视觉。
+macOS Flutter 3.32.0 / 3.47.7：Example 严格分析均无诊断，文档示例与 Theme 非 Golden 功能测试各 20/20；3.32.0 回归清单、覆盖率 runner、视觉 runner 和示例生成器自测 41/41，生成片段 --check 通过。Node 24.22.1：站点测试 39/39，57 页/360 示例映射、8 份同步输出检查及生产构建通过。Linux amd64 / Flutter 3.32.0：主题与指南 Golden 14/14 精确比对通过，使用 TDESIGN_DEMO_TEST_MODULES=false；未运行更新基线命令，未修改容差。视觉结论仅对应上述来源候选。
 
 上述检查点尚未执行指南浏览器交互；后续验证及修复见下文。移动设备验收与本分支远端 CI 当时均未执行。
 
@@ -139,17 +139,17 @@ macOS Flutter 3.32.0 / 3.47.7：Example 严格分析均无诊断，文档示例�
 基线仍为 `673ddf8cc69d41632f68832a9079385623af7df1`；本轮最终源码补丁 SHA-256（scripts / tdesign-component / tdesign-site，不含 Spec）为 `faa8ca5a5c3be612c56fc20d5cde99d1a04ccf8d6fc8fb32c81da319a960e4e9`。本地发布构建使用 Flutter 3.47.7，禁用 Web 资源 CDN，挂载于 http://127.0.0.1:19117/flutter/；最终 main.dart.js SHA-256 为 `e2c55e167f28ceb16691d177658212816aaced22b4aa24949b05b96741bf2b90`。测试使用本机内置浏览器和当前分支生产站点，不连接已发布的 Flutter Demo。
 
 - 发现并修复主题指南的实际刷新缺陷：内层带 home 的 MaterialApp 创建 Navigator，挂载时将 iframe 地址覆盖为首页，刷新后落到组件清单。局部应用改为 builder 渲染内容，保留主题、本地化和字体环境，路由由 Example 宿主唯一管理；完整可复制应用的 documentationThemeApp 用法不变。新增宿主导航所有权回归，覆盖完整指南及 JSON / local / mode 三个独立场景。
-- 快速开始：实际点击计数增加；站点切换浅深色时计数保持。主题工具选择非默认腾讯云配色，浅色 `#006eff`、深色 `#2684ff`。在两种模式下只刷新 iframe，宿主 loader ID 均不变、iframe loader ID 变化，重新启动的计数为 0，当前外观及非默认配色恢复。刷新前后截图存于本地 artifacts/pr1156-split-local-20261026/guides-fixed-counter-*.png。
+- 快速开始：实际点击计数增加；站点切换浅深色时计数保持。主题工具选择非默认腾讯云配色，浅色 `#006eff`、深色 `#2684ff`。在两种模式下只刷新 iframe，宿主 loader ID 均不变、iframe loader ID 变化，重新启动的计数为 0，当前外观及非默认配色恢复。
 - 主题指南：默认/业务主题可切换；业务主题浅色为 green / `#16875D`、深色为 greenDark / `#56C08D`。输入“浏览器验证”及保存操作在站点明暗切换时保持。修复后的浅深色 iframe 刷新均保留 `#custom-theme` 路由，恢复对应主题，不再进入组件清单。临时输入、保存及选择跨刷新重新初始化，不承诺持久化。独立 JSON / local / mode 场景刷新后均保留原 hash；浅色、深色及跟随系统的实际文案与配色正确。
 - 共享预览：从指南离开再进入可以挂载；Button 组件页沿用同一预览组件，非默认配色下刷新仍保留 `#button` 路由和当前外观。
 - 国际化：仓库外临时入口直接调用本分支 runLocaleApp，浏览器实际完成“确认 → Confirm → 确认”。资源主题入口直接调用 runThemeApp，实际加载 assets/custom_theme.json 并渲染业务主题按钮；没有为截图手写平行实现。
 - 390px 桌面浏览器视口仿真：正文右侧预留归零，document scrollWidth 374px，不超过 390px 视口。检查后清除视口仿真，并恢复本地站点默认配色；不将该结果记为移动设备验收。
 - 修复后 Flutter 3.32.0 / 3.47.7 严格分析均无诊断；功能测试各 21/21；工具自测 41/41、示例片段 --check、站点测试 39/39、57 页/360 示例映射、8 份同步输出和生产构建通过。Linux Flutter 3.32.0 Golden 14/14 精确比对再次通过，未更新基线或容差。
 
-结构化观察及必要截图保存于本地 artifacts/pr1156-split-local-20261026/。浏览器的外部页面装饰连接出现 Failed to fetch 日志；未验证其线上服务，不据此声称全站外部服务已通过。本轮只补充本机浏览器证据，未执行其他浏览器、真机、发布部署或远端 CI；这些范围见 tasks.md。
+结构化观察保留原候选与运行范围，页面截图不作为长期附件。浏览器的外部页面装饰连接出现 Failed to fetch 日志；未验证其线上服务，不据此声称全站外部服务已通过。本轮只补充本机浏览器证据，未执行其他浏览器、真机、发布部署或远端 CI；这些范围见 tasks.md。
 
 
-[主题指南深色预览刷新后的浏览器截图](./evidence/guide-preview-reload-dark.png)。截图为本地浏览器证据，不代表移动设备验收。
+主题指南刷新结论见本节文字及下节结构化记录，不归档页面截图。
 
 
 ### 2026-10-26 PR #1204 在线预览及独立应用复验
@@ -158,9 +158,9 @@ macOS Flutter 3.32.0 / 3.47.7：Example 严格分析均无诊断，文档示例�
 
 - 在线快速开始按钮实测 0 → 2。主题指南在浅深色下分别只刷新 iframe；宿主 loader 不变、iframe loader 变化，实际地址均保留 `#custom-theme`，对应恢复 green / `#16875D` 与 greenDark / `#56C08D`。
 - Flutter 3.32.0 从同一源码重新构建独立入口，直接调用 `runLocaleApp` 与 `runThemeApp`。国际化完成“确认 → Confirm → 确认”；资源主题成功加载项目 JSON 并渲染主题按钮，未手写平行应用。国际化指南本身没有内嵌预览，不将本地独立应用写成线上页面交互。
-- [结构化运行记录](./evidence/pr1204-browser-observations.json)；[计数](./evidence/guides-counter.png)、[浅色刷新](./evidence/guides-theme-light-reloaded.png)、[深色刷新](./evidence/guides-theme-dark-reloaded.png)、[中文](./evidence/guides-locale-chinese.png)、[英文](./evidence/guides-locale-english.png)、[资源主题](./evidence/guides-resource-theme.png)均为未经编辑的实际浏览器截图。
+- [结构化运行记录](./evidence/pr1204-browser-observations.json)保留计数、浅深色刷新、语言切换及资源主题的实际观察；不归档页面截图。
 
-该源码提交的远端构建及相关检查已通过。本次只新增截图和验收证据，未改变运行源码、生成片段或 Golden 基线；复用上文同一源码的双版本与 Golden 检查。本轮为桌面浏览器验证，未执行移动设备或其他浏览器验收；截图提交的新 head CI 需另行核对。
+该源码提交的远端构建及相关检查已通过。原候选的证据补充未改变运行源码、生成片段或 Golden 基线；复用上文同一源码的双版本与 Golden 检查。本轮为桌面浏览器验证，未执行移动设备或其他浏览器验收；证据提交的新 head CI 需另行核对。
 
 ### PR #1202：site-components 回退至 main 版本
 
@@ -204,3 +204,48 @@ Node 24.15.0 / pnpm 11.20.0 冻结安装、站点测试 51/51、57 页/360 示�
 基线 develop `920babc94ff62b822c4c093a35cba016bfc243d9`；站点源码补丁 SHA-256 `257a952a48f81113547eced6614cd8ae1ef4bcc8c9c6be49904450ab312fb42e`。本 PR 只保留主题初始化、默认 CSS 提取、锚点展开与路由历史恢复；迁移正文、消费示例和专属文档布局移至独立文档 PR，不在本分支重复维护。
 
 现有本地 Node 工具直接执行正式测试文件与构建入口：54/54 测试、57 页/360 示例映射、8 份文档同步、生产构建及差异检查通过。包管理器自动安装因 registry 请求失败及无交互终端未启动，未将其记作项目测试失败。未重新执行 Flutter、Golden、设备或完整浏览器矩阵；本次范围仅为站点源码，远端 CI 按最终提交核对。
+
+
+## 2026-10-26 独立迁移指南整理
+
+本次文档基于 develop `920babc94ff62b822c4c093a35cba016bfc243d9`，不依赖 #1202，不修改站点依赖、主题初始化、Vue Router 或历史状态机。组件对照采用六组直接可见的三列表格，旧类型附录保留原生折叠；保留 57 个组件、388 项映射、12 段示例及原有显式锚点。
+
+历史浏览器记录：[逐项链接清单](./evidence/pr1202-migration-compact-browser.json)、[原候选指纹](./evidence/pr1202-migration-compact-summary.json)、[正式官网 HTTP 记录](./evidence/pr1202-migration-official-http.json)。这些记录绑定拆分前候选及当时布局，不表示本次独立分支已通过，也不将 HTTP 200 作为浏览器渲染证明。当前分支验收单独记录。
+
+本地独立验证：按 develop 原始锁文件冻结安装，实际使用 theme-generator 1.2.7 / site-components 0.18.1；站点测试 42/42、57 页/360 示例映射、8 份文档同步和生产构建通过。独立迁移消费者在 Flutter 3.32.0 / 3.47.7 严格分析均无诊断，测试各 24/24。
+
+生产构建浏览器逐项检查 469 处页内链接，以及 60 个不同的跨页/API 目标；链接落点和对应正文均可用。六组表格行数为 1/6/8/16/15/11，附录为 388 行，目录为 14 项；附录手动展开后表内链接返回直接可见的组件行。刷新直接进入组件锚点时，通过文档空锚点布局留出与当前站点组件一致的 120px 空间，不修改 Vue Router；页面截图仅存本地临时目录，不加入 Spec。
+
+这些结果只覆盖本地桌面生产预览及列明的测试，不承诺现有站点的折叠历史恢复、手机适配或正式部署。前进后退和通用异步导航问题仍由 #1202 单独跟进。本次未运行完整组件/Golden/设备矩阵，远端 CI 按最终提交核对。
+
+与同一 develop 基线的独立 #1208 清理提交经 git merge-tree 检查可干净组合；组合树的站点、组件及文档源码与本候选相同。两个 PR 可分别合入，不需要先合并 #1202。
+
+## 2026-10-26 迁移验证项目移至仓库级目录
+
+将原 `tdesign-component/tool/fixtures/token_migration/` 与运行器移至 `scripts/fixtures/token_migration/`、`scripts/run_migration_consumer.dart`；同步临时消费者的组件依赖路径、文档生成器、测试夹具、工具共用入口和 CI 路径过滤。历史附件中的旧路径仍按其原候选解释，不改写历史指纹。
+
+当前本地：站点与工具入口测试合计 46/46、生产构建和 8 份文档同步检查通过；迁移正文与包内副本逐字节不变。Flutter 3.32.0 经 GitHub/CNB 共用 shell 入口、3.47.7 经仓库根目录直接运行入口，严格分析均无诊断，测试各 24/24。消费示例和测试内容未因搬迁改变，组件公开入口及 Golden 未改动。远端检查按本次推送后的最终提交重新核对。
+
+## 2026-10-27 目录命名与测试职责收敛
+
+去除 fixtures 中间层，项目与包名统一为 scripts/migration_consumer / tdesign_migration_consumer。文档唯一示例源命名为 lib/guide_examples.dart，公开参数替代示例命名为 lib/public_api_examples.dart；测试按 guide_examples_test 与 public_api_usage_test 区分。根目录运行入口及 GitHub/CNB 的共用命令不变，更新引用、组件依赖相对路径与 CI 过滤。
+
+运行时用例由 24 项收敛到 16 项：4 项以构造或属性读取为主的检查转为静态编译示例；Text/Avatar/Tag 的 3 项重复样式用例交由已有组件回归，Calendar/DatePicker 仅挂载无异常的用例由静态示例及既有组件/Demo 覆盖。保留 12 项直接调用指南函数的交互组合，以及 4 项 Theme 链、TabBar、Popover、Popup 的独立消费契约；SwipeCell 参数互斥仍由现有组件测试覆盖。
+
+Flutter 3.32.0 / 3.47.7：严格分析均无诊断，运行时测试各 16/16；3.32.0 经 CI 共用入口、3.47.7 经根目录直接入口验证。本地站点及工具入口 46/46 测试、57 页/360 示例映射、8 份文档同步与生产构建通过，迁移正文和包内副本逐字节不变。临时负向对照为未被调用的公开参数示例加入不存在的参数，静态分析按 undefined_named_parameter 拒绝，说明删除构造数量测试后签名检查仍生效；负向样本不进入仓库。未改组件实现或 Golden。
+
+
+### 迁移示例归属 Example（2026-10-27）
+
+迁移示例唯一源移至 `tdesign-component/example/lib/migration_examples.dart`（SHA-256 `e91197549ff82570e5ffc7b0188d7617a89f8bdfeba089b42699aeab78eafc37`），内容与移动前一致。文档生成直接读取该文件；仓库级验证运行器复制同一文件到临时消费者，不保留第二份源码。同步测试名称、说明和文档 CI 路径过滤。
+
+本地 Flutter 3.32.0 / 3.47.7 独立消费者严格分析及各 16 项测试通过；3.32.0 使用共用工具入口，并额外确认 Example 自身配置下该文件分析无诊断。Node 46 项测试、57 页/360 示例映射、8 份文档同步和站点生产构建通过，迁移正文及包内副本逐字节不变。此次为目录与引用整理，未重复执行浏览器链接或完整组件/Golden/设备矩阵。
+
+
+### 仓库级测试目录归并（2026-10-27）
+
+在 `2d5eca2f42f498a354a9da393cbe27687a07b1d2` 上将脚本测试移至 `test/scripts/`、独立消费者移至 `test/migration_consumer/`；测试输入、断言及 Example 源码不变，脚本仍在 `scripts/`。同步路径定位、CI 过滤和当前文档引用，脚本测试额外确认新测试目录与迁移运行入口确实被调度。
+
+本地通过共用入口执行 7 项脚本测试及 Flutter 3.32.0 / 3.47.7 严格分析、各 16 项消费者测试；另通过 42 项站点测试、8 份文档同步、57 页/360 示例映射与文档相对链接检查。联网依赖解析等待未完成，双版本重跑使用临时适配仅为 pub get 添加 --offline，其余入口和测试不变。指南与包内副本逐字节不变；未重复浏览器、构建或完整组件/Golden/设备矩阵。
+
+运行器聚合补充：在 `3abf5810e107e87ddb320ca26a492e1d765dd06e` 上将专用运行器移入 `test/migration_consumer/run.dart`，从自身目录定位仓库，仅复制 pubspec、分析配置、lib/test 与 Example 示例。运行器 SHA-256：`fb3739b8e43b534284de2ae5d9480a5a04edfd9dccda7c43fad51077cac81a76`。共用入口的 7 项脚本测试及 8 份文档同步通过；Flutter 3.32.0 经共用入口、3.47.7 从仓库外目录直接运行，使用缓存依赖的严格分析与各 16 项测试通过。指南源码及测试用例不变；本补充未重跑站点构建或浏览器。
