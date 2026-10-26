@@ -84,3 +84,13 @@ Node 24.22.1：导航、主题桥及站点文档测试 47/47；57 页/360 示例
 - [结构化运行记录](./evidence/pr1205-browser-observations.json)；[分组深链接](./evidence/navigation-group-anchor.png)、[内部深链接](./evidence/navigation-inside-anchor.png)、[后退恢复](./evidence/navigation-history-back-A.png)、[前进恢复](./evidence/navigation-history-forward-B.png)均为未经编辑的在线站点运行截图。
 
 该源码提交的远端构建及相关检查已通过。本次只新增截图与验收证据，站点实现不变，复用已有 47/47 测试及构建结果；无需重跑 Flutter 或 Golden。本轮为桌面浏览器验证，未执行移动设备或其他浏览器验收；截图提交的新 head CI 需另行核对。
+
+### 2026-10-26 PR #1202 整合复验
+
+包含 #1205 全部提交和 theme-generator 1.3.0。基线 673ddf8cc69d41632f68832a9079385623af7df1，站点二进制补丁 SHA-256 e7884d66243819bb703865b8dacd01b5769fe5bbb90988d098f7a94b26cbd710（计算入口同 Spec 044）。#1205 导航实现与测试未改动。
+
+仅升级主题生成器的对照版本中，内部 #migration-component-icon 章节仍折叠，证明未覆盖 #1205。整合后的生产预览中，内部锚点及 #migration-group-basic 均自动展开，目标距视口顶部均为 80px。
+
+真实侧栏导航创建同一无 hash URL 的历史条目：A 仅展开基础组件、滚动 2339px；B 仅展开输入组件、滚动 2483px。后退到 B、继续后退到 A、前进回 B，折叠数组和滚动值分别完全恢复。见[结构化观察](./evidence/pr1202-navigation-observations.json)、[后退 A](./evidence/pr1202-history-back-A.png)、[前进 B](./evidence/pr1202-history-forward-B.png)。
+
+整合候选站点测试共 47/47、生产构建通过。本轮为本地桌面浏览器验收，未代表线上部署、移动设备或全部浏览器；旧 #1205 远端结果只适用于其原 head。

@@ -6,7 +6,7 @@
     <td-doc-aside ref="tdDocAside" title="Flutter"></td-doc-aside>
 
     <router-view :style="contentStyle" @loaded="contentLoaded" :docType="docType" />
-    <td-theme-generator :device.attr="'mobile'"></td-theme-generator>
+    <td-theme-generator device="mobile"></td-theme-generator>
   </td-doc-layout>
 </template>
 
