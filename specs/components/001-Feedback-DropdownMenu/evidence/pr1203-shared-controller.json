@@ -1,0 +1,117 @@
+{
+  "date": "2026-10-26",
+  "platform": "Darwin arm64",
+  "develop": "304bf7d6696d2c2eb6f2d4efb604ae7ea6310f08",
+  "pr_head": "455666bf85cb0fcad0c973163d79947c5c2af57b",
+  "candidate": "PR head plus local source/test diff; uncommitted supplemental patch",
+  "source_test_diff_sha256": "5998c5735efc86a0417ee938897ef03b776595e69d54205fee8022a639013bb9",
+  "source_test_sha256": {
+    "tdesign-component/lib/src/components/dropdown_menu/t_dropdown_menu.dart": "bd8e433ef5ae4e1879881675ec95a773c9ece4011a181839e77b65334d400fef",
+    "tdesign-component/test/components/dropdown_menu/t_dropdown_menu_test.dart": "ec6fa10f9da3408d3e70ebd76b936744479a4b797216055872b6b00a8a0c3683"
+  },
+  "results": {
+    "3.32.0": {
+      "sdk": {
+        "frameworkVersion": "3.32.0",
+        "channel": "stable",
+        "repositoryUrl": "https://github.com/flutter/flutter.git",
+        "frameworkRevision": "be698c48a6750c8cb8e61c740ca9991bb947aba2",
+        "frameworkCommitDate": "2025-05-19 12:59:14 -0700",
+        "engineRevision": "18818009497c581ede5d8a3b8b833b81d00cebb7",
+        "engineCommitDate": "2025-05-19 10:54:07 -0700",
+        "dartSdkVersion": "3.8.0",
+        "devToolsVersion": "2.45.1",
+        "flutterVersion": "3.32.0"
+      },
+      "tests": {
+        "passed": 105,
+        "failed": 0
+      },
+      "production_coverage": {
+        "LH": 1041,
+        "LF": 1049,
+        "percent": 99.24
+      },
+      "analyze": "No issues found",
+      "dependency_lock_sha256": "855082ce3a28e5864f1dc83a3da498370d230002da2a494244b36a82f1c39703",
+      "lcov_sha256": "c466aef1ebf7e0b8c5f5941c3bf5cc4e86ff4bdc05f76573b2b8188d140c5a30",
+      "log_sha256": {
+        "final-332.log": "756f61debc2837bdfa32d5dcf4641ffbd98b6ddedd4adfa91aa8d05226f0db7b",
+        "final-coverage-332.log": "0154a0be6ccf645fd1fa47dce30e2599cdba4e7bd7db1902948424516622a39b",
+        "final-analyze-332.log": "522d7c4e0277c5619ed9e6e6d91d5387bdf1827a65633f3319e3fb115c4dc2e7"
+      },
+      "tool_tests": {
+        "passed": 25,
+        "failed": 0,
+        "scope": "component/visual scheduler manifests and shared font coverage; no Golden rendering"
+      }
+    },
+    "3.47.7": {
+      "sdk": {
+        "frameworkVersion": "3.47.7",
+        "channel": "stable",
+        "repositoryUrl": "https://github.com/flutter/flutter.git",
+        "frameworkRevision": "abaf9c523780a608bd46686fd5e53740a07077f8",
+        "frameworkCommitDate": "2026-10-08 09:51:21 -0700",
+        "engineRevision": "deb287481e3ce9468f3434937ced4240a70539ca",
+        "engineCommitDate": "2026-10-07 17:09:12.000Z",
+        "engineContentHash": "d8a2d6c768c334d53e16277f837970ffa1e2de81",
+        "engineBuildDate": "2026-10-08 01:51:44.552",
+        "dartSdkVersion": "3.13.5",
+        "devToolsVersion": "2.60.0",
+        "flutterVersion": "3.47.7"
+      },
+      "tests": {
+        "passed": 105,
+        "failed": 0
+      },
+      "production_coverage": {
+        "LH": 1041,
+        "LF": 1049,
+        "percent": 99.24
+      },
+      "analyze": "No issues found",
+      "dependency_lock_sha256": "e061141af014ef72032e23e36abce63c4b3a7bdd4cdec630b91ace32df6ce083",
+      "lcov_sha256": "17c7baadaaac321d72915a4c963423a5cd3f6dc2a81fa51a8062d2b7620bd3fd",
+      "log_sha256": {
+        "final-347.log": "af0dd78c80e93c8502919471da3f0c134354f1f6692520dbae2da6afbae46220",
+        "final-coverage-347.log": "0154a0be6ccf645fd1fa47dce30e2599cdba4e7bd7db1902948424516622a39b",
+        "final-analyze-347.log": "350a604ae2f0a9c16bdcabedbbcb3dc528b908282334aea0bb871f0ec03934c1"
+      },
+      "tool_tests": {
+        "passed": 25,
+        "failed": 0,
+        "scope": "component/visual scheduler manifests and shared font coverage; no Golden rendering"
+      }
+    }
+  },
+  "negative_control": {
+    "source": "unchanged PR head",
+    "tests": "final shared controller callback isolation group",
+    "sdk": "3.47.7",
+    "passed": 2,
+    "failed": 3,
+    "failures": [
+      "stale trigger emits old onClosed",
+      "opening continuation emits old onOpened",
+      "closing continuation emits old onClosed"
+    ],
+    "log_sha256": "b6350673d66a4b29ffd3f4cda5e5d76b21dc42a36bf310f5379751d19c9add71"
+  },
+  "commands": {
+    "working_directory": "tdesign-component",
+    "dependencies": "flutter pub get --offline",
+    "tests": "flutter test --no-pub test/components/dropdown_menu/ test/tool/run_component_regression_test.dart test/tool/run_visual_regression_test.dart --coverage --reporter expanded",
+    "coverage": "dart run tool/check_component_coverage.dart dropdown_menu",
+    "analyze": "flutter analyze --no-pub --fatal-infos",
+    "negative_control": "flutter test --no-pub test/components/dropdown_menu/t_dropdown_menu_test.dart --plain-name \"shared controller callback isolation\" --reporter expanded"
+  },
+  "environment_note": "SDKs resolved sequentially with separate saved locks/LCOV; initial 3.47.7 shader cache decode failure resolved by removing local build and .dart_tool/flutter_build before final passing run. No source or assertion change for that retry.",
+  "raw_artifacts": "artifacts/pr1203-review/ under local checkout; not shipped as specs attachments",
+  "not_verified": [
+    "remote final-head CI",
+    "device behavior",
+    "Golden pixels",
+    "automatic migration of an open panel between shared owners"
+  ]
+}
