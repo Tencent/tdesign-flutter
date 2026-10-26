@@ -163,6 +163,24 @@ void main() {
       expect(states, contains(TPullDownRefreshState.inactive));
     });
 
+    testWidgets('修复回归：静止态 Header 不溢出绘制', (tester) async {
+      // 触发一次完整刷新使 header 被构建，回到 inactive（offset=0）后渲染高度应为 0。
+      final controller = TPullDownRefreshController();
+      await tester.pumpWidget(
+        wrap(
+          pullDownRefresh(onRefresh: () async {}, controller: controller),
+        ),
+      );
+      final refresh = controller.refresh();
+      await tester.pumpAndSettle(const Duration(seconds: 3));
+      await refresh;
+      final header = find.byKey(
+        const ValueKey('t-pull-down-refresh-header'),
+      );
+      expect(header, findsOneWidget);
+      expect(tester.getSize(header).height, 0);
+    });
+
     testWidgets('默认 refreshTimeout 为 3 秒', (tester) async {
       await tester.pumpWidget(
         wrap(
