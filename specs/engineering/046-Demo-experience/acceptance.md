@@ -123,3 +123,15 @@ macOS Flutter 3.32.0 / 3.47.7：Example 严格分析均无诊断，文档示例�
 - [结构化运行记录](./evidence/pr1204-browser-observations.json)；[计数](./evidence/guides-counter.png)、[浅色刷新](./evidence/guides-theme-light-reloaded.png)、[深色刷新](./evidence/guides-theme-dark-reloaded.png)、[中文](./evidence/guides-locale-chinese.png)、[英文](./evidence/guides-locale-english.png)、[资源主题](./evidence/guides-resource-theme.png)均为未经编辑的实际浏览器截图。
 
 该源码提交的远端构建及相关检查已通过。本次只新增截图和验收证据，未改变运行源码、生成片段或 Golden 基线；复用上文同一源码的双版本与 Golden 检查。本轮为桌面浏览器验证，未执行移动设备或其他浏览器验收；截图提交的新 head CI 需另行核对。
+
+### 2026-10-26 同步最新 develop 后复核
+
+合并 develop 942152009bf2520b98681da0a63d130ef9883d46（#1204）；运行候选 22c2284d29102aa654bb8f0b6e6c58cb93d703cc。相对该基线的源码二进制补丁 SHA-256（git diff --binary --no-ext-diff origin/develop -- scripts tdesign-component tdesign-site，不含本记录）为 4c630c97c579d71e72c931e45500606804339e70fc61bf238efd3f15c793aa40。
+
+冲突仅涉及 Spec 046 的 spec / plan / tasks / acceptance，保留接入指南及功能色板的独立契约和原验收边界。功能色板实现及生成片段与同步前 dbb311a01e77dfc438779c1d855582254c0530a2 完全一致；Theme 测试保留 develop 指南新增测试和本 PR 的色板回归。
+
+macOS Flutter 3.32.0 / 3.47.7：Example 严格分析均无诊断，Theme 与 documentation_examples 非 Golden 测试各 24/24；3.32.0 工具及调度器自测 41/41。片段 --check 通过；Node 24.15.0 的站点文档测试 30/30，57 页 / 360 示例映射通过。Linux amd64 Flutter 3.32.0 对同步候选重跑 Theme 测试文件的 Golden 14/14 精确通过，TDESIGN_DEMO_TEST_MODULES=false，未修改任何基线或容差。
+
+与 #1205 d5688e33afc299f52849778f06fa8478bf7a0d09 比较，两者仅重合四份共用 Spec 文件；#1206 无站点导航源码改动，#1205 无功能色板实现或测试。两项修复不重复。当前色板修复不依赖 #1205/#1202；导航仍由 #1202 承载。
+
+本轮未重新执行浏览器或手机验收，原浏览器截图仍只绑定原候选；本地新检查不能外推为最终 head 的远端 CI。
