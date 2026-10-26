@@ -1,0 +1,26 @@
+{
+  "type": "flutter-theme-update",
+  "themeMode": "light",
+  "theme": {
+    "light": {
+      "color": {
+        "brandBusiness": "#D04090",
+        "brandAdditional": "#009688",
+        "brandColor12": "#9C27B0"
+      },
+      "ref": {
+        "brandAlias": "brandColor12"
+      }
+    },
+    "dark": {
+      "color": {
+        "brandBusiness": "#EF83BB",
+        "brandAdditional": "#67D9CB",
+        "brandColor12": "#CE93D8"
+      },
+      "ref": {
+        "brandAlias": "brandColor12"
+      }
+    }
+  }
+}
