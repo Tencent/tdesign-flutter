@@ -57,3 +57,16 @@ Base: `182f8cd956edeee4dfd7ef977176309f051e3c3c`. Binary diff SHA-256 (`git diff
 - Node 24.15.0 / macOS: theme bridge and documentation tests 33/33 passed; 57 component pages / 360 generated example mappings passed; Vite production build passed in 3.32s (existing chunk size warning only).
 - `git diff --check origin/develop` passed. Flutter directives, repository document adapters and BASE_URL image rewriting retained. No component source changes; Flutter/Golden/device tests are outside this cleanup scope.
 - Current FAQ, audit dispositions and unused-version cleanup come from develop. No push, remote PR mutation, deployment or current remote CI verification.
+
+
+## 文档锚点与历史恢复
+
+来源 PR #1156 `a9a44f1985af4f7b4ca3b46b53f26d5c7d90085e`；独立基线 develop `673ddf8cc69d41632f68832a9079385623af7df1`。仅包含本章节职责；验证结果仅适用于以下本地候选，不继承原 PR CI 或其他拆分分支结果。
+
+2026-10-26 本地验证：相对上述基线的源码二进制补丁 SHA-256（scripts / tdesign-component / tdesign-site，不含本记录）为 `5a33996bd87ebd61b6ef8615f4bc499f08c48bd42e3e35e33ab17375b683dfb0`。
+
+Node 24.22.1：导航、主题桥及站点文档测试 47/47；57 页/360 示例映射、6 份同步输出检查和 Vite 生产构建通过。仅改站点，未运行 Flutter 或 Golden。
+
+本机内置浏览器访问当前分支生产预览 http://127.0.0.1:19116/flutter/：首次验证发现 Markdown 将分组锚点渲染为空段落中的 a，锚点不是 details 的祖先，原逻辑只定位不展开。修复识别相邻折叠章节的空锚点，并增加对应回归及非空段落不误展开测试。修复后 migration-group-basic 和 migration-component-button 均展开对应章节，目标距视口顶部 80px；跨页 FAQ 返回恢复滚动 2321px。相同无 hash URL 的独立历史条目 B / C 分别恢复 basic / display 折叠状态及 2051px / 2159px，前进至 C 仍恢复对应状态。必要截图见本地 artifacts/pr1156-split-local-20261026/navigation-browser-anchor.png。
+
+这是本机浏览器聚焦检查，不代表全部浏览器、移动视口、发布站点或设备验收。未推送、未执行本分支远端 CI。
