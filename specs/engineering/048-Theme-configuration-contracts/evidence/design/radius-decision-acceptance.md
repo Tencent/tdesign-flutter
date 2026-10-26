@@ -25,7 +25,7 @@ Badge气泡普通角10、尖角1、dot8、padding4/6不变；SideBar line相邻�
 
 每个SDK的组件命令：`flutter test test/components/{badge,sidebar,action_sheet,tabbar}/*test.dart`（实际枚举排除golden文件），另含`test/theme/component_token_ownership_test.dart`及`test/tool/{run_component_regression,run_visual_regression,check_component_coverage}_test.dart`，参数`--exclude-tags golden --coverage --reporter expanded`。覆盖率由`tool/check_component_coverage.dart`分别过滤并通过既有95%门槛，原始结果见本目录`radius-coverage-<SDK>.txt`。
 
-页面命令：在example目录以`TDESIGN_THEME_COMPONENT=badge,side-bar,tab-bar,action-sheet`运行`flutter test --dart-define=TDESIGN_DEMO_TEST_MODULES=false test/theme/all_component_web_theme_test.dart test/badge/badge_page_test.dart test/sidebar/sidebar_anchor_test.dart test/sidebar/sidebar_demo_test.dart test/sidebar/sidebar_page_test.dart --exclude-tags golden --reporter expanded`。每SDK包含4页×light/dark，共8组结果，见`radius-results-<SDK>.json`。SideBar通过真实点击“自定义样式”进入tag示例，确保圆角测试实际检查目标内块。
+页面命令：在example目录以`TDESIGN_THEME_COMPONENT=badge,side-bar,tab-bar,action-sheet`运行`flutter test --dart-define=TDESIGN_DEMO_TEST_MODULES=false test/theme/all_component_web_theme_test.dart test/badge/badge_page_test.dart test/sidebar/sidebar_anchor_test.dart test/sidebar/sidebar_demo_test.dart test/sidebar/sidebar_page_test.dart --exclude-tags golden --reporter expanded`。每SDK包含4页×light/dark，共8组结果，见[radius-results.json](radius-results.json)。SideBar通过真实点击“自定义样式”进入tag示例，确保圆角测试实际检查目标内块。
 
 聚焦断言验证默认3/6、相关圆角token原位实时更新、无关圆角档不影响目标属性、Element保留及无框架异常；同时验证气泡专有角与line反向角保持原值。共享Badge消费者ActionSheet及TabBar纳入回归。本批没有重新运行全部57页，其他页面沿用裁定前检查点，不能将本批结果称为57页新全量验收。
 

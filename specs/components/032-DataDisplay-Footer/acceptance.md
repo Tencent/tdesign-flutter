@@ -60,8 +60,6 @@ t_footer_test.dart: 733d433124333f904cad34dd208b8872788beaa066f21605aae296081a62
 
 三栏在一张画布中统一缩放，各场景外部容器宽高相同、顶部对齐；浅灰边框仅用于标出测试容器边界，不属于组件样式。避免 GitHub 表格分别缩放图片、垂直居中导致的比较偏差。
 
-![统一比例和起点的三方对照](evidence/footer-comparison.jpg)
-
-独立原图：[develop](evidence/footer-develop.jpg) · [原 PR](evidence/footer-pr1113-original.jpg) · [最终修复](evidence/footer-final.jpg)
+历史三方对照截图已按 Spec 图片规则清理，保留上述候选、环境、场景和观察范围。后续视觉回归引用 [Footer Golden 测试](../../../tdesign-component/example/test/footer/footer_demo_golden_test.dart)及[基线目录](../../../tdesign-component/example/test/footer/goldens/)；现有基线不代表本次重跑或覆盖全部 Web 场景。
 
 推送前在独立交付目录复验双版本组件、Demo、严格分析和 Linux 明暗 Golden；本地结果不等同于推送后最终提交的远端 CI。
