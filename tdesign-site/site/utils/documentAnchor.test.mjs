@@ -46,31 +46,7 @@ test('group and appendix links open the target details itself', () => {
   }
 });
 
-test('Markdown group markers open the adjacent folded section', () => {
-  for (const id of ['migration-group-basic', 'migration-legacy-types']) {
-    const section = { tagName: 'DETAILS', open: false };
-    const paragraph = {
-      tagName: 'P', children: [{}], textContent: '\n',
-      nextElementSibling: section, parentElement: null,
-    };
-    const anchor = { tagName: 'A', parentElement: paragraph };
-    assert.equal(revealDocumentAnchor(`#${id}`, { getElementById: () => anchor }), anchor);
-    assert.equal(section.open, true);
-  }
-});
-
-test('ordinary anchors do not expand a section after a nonempty paragraph', () => {
-  const section = { tagName: 'DETAILS', open: false };
-  const paragraph = {
-    tagName: 'P', children: [{}], textContent: 'Read this first',
-    nextElementSibling: section, parentElement: null,
-  };
-  const anchor = { tagName: 'A', parentElement: paragraph };
-  revealDocumentAnchor('#intro', { getElementById: () => anchor });
-  assert.equal(section.open, false);
-});
-
-test('cross-page anchors wait for rendered content and reserve 80px', async () => {
+test('cross-page anchors wait for rendered content and use existing document anchor spacing', async () => {
   const { navigation, inner, target } = fixture();
   navigation.begin(guide, start);
   let resolved = false;
@@ -80,7 +56,7 @@ test('cross-page anchors wait for rendered content and reserve 80px', async () =
   assert.equal(resolved, false);
   assert.equal(inner.open, false);
   navigation.ready(guide.fullPath);
-  assert.deepEqual(await pending, { el: target, top: 80 });
+  assert.deepEqual(await pending, { el: target });
   assert.equal(inner.open, true);
 });
 
@@ -115,7 +91,7 @@ test('same-page hash navigation resolves without another mounted event', () => {
   navigation.ready(guide.fullPath);
   const next = { ...guide, fullPath: '/guide#%E6%8C%89%E9%92%AE' };
   navigation.begin(next, guide);
-  assert.deepEqual(navigation.scroll(next, null), { el: target, top: 80 });
+  assert.deepEqual(navigation.scroll(next, null), { el: target });
 });
 
 test('ready-before-scroll and top-zero history positions are retained', () => {

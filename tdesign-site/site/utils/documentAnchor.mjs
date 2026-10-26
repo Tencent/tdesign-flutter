@@ -8,15 +8,6 @@ export function revealDocumentAnchor(hash, root = document) {
   const sectionId = target.getAttribute?.('data-expand-details');
   const explicitSection = sectionId && root.getElementById(sectionId);
   if (explicitSection?.tagName === 'DETAILS') explicitSection.open = true;
-  // Markdown renders a standalone <a id> before <details> inside an empty
-  // paragraph. That anchor labels the following folded section.
-  if (target.tagName === 'A') {
-    const parent = target.parentElement;
-    const marker = parent?.tagName === 'P' && parent.children.length === 1 &&
-      parent.textContent.trim() === '' ? parent : target;
-    const section = marker.nextElementSibling;
-    if (section?.tagName === 'DETAILS') section.open = true;
-  }
   for (let parent = target; parent; parent = parent.parentElement) {
     if (parent.tagName === 'DETAILS') parent.open = true;
   }
@@ -55,7 +46,7 @@ export function createDocumentNavigation(
     }
     if (!to.hash) return { top: 0 };
     const target = revealDocumentAnchor(to.hash, getRoot());
-    return target ? { el: target, top: 80 } : false;
+    return target ? { el: target } : false;
   }
 
   return {
@@ -66,7 +57,7 @@ export function createDocumentNavigation(
           folds: details().map(detail => detail.open),
         });
       }
-      navigation.pending?.resolve(false);
+      navigation.pending?.(false);
       navigation = {
         fullPath: to.fullPath,
         path: to.path,
@@ -78,9 +69,8 @@ export function createDocumentNavigation(
     ready(fullPath) {
       if (fullPath !== navigation.fullPath) return;
       navigation.ready = true;
-      const pending = navigation.pending;
+      navigation.pending?.(true);
       navigation.pending = null;
-      if (pending) pending.resolve(position(pending.to, pending.savedPosition));
     },
     scroll(to, savedPosition) {
       if (to.fullPath !== navigation.fullPath) return false;
@@ -90,7 +80,7 @@ export function createDocumentNavigation(
       if (!savedPosition) folds.delete(navigation.entryPosition);
       if (navigation.ready) return position(to, savedPosition);
       return new Promise(resolve => {
-        navigation.pending = { to, savedPosition, resolve };
+        navigation.pending = ready => resolve(ready ? position(to, savedPosition) : false);
       });
     },
   };

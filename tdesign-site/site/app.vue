@@ -200,11 +200,6 @@ export default defineComponent({
 </script>
 
 <style lang="less">
-// Keep migration anchor spacing with the document navigation shell.
-td-doc-content :is(a, details)[id^="migration-"] {
-  scroll-margin-top: 80px;
-}
-
 :root,
 :root[theme-mode='light'] {
   --td-brand-color-1: #f2f3ff;
