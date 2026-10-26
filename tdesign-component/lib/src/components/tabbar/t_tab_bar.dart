@@ -1136,7 +1136,8 @@ class TTabBarPopUpBtnConfig {
   /// 选项list
   final List<TTabBarMenuItem> items;
 
-  /// 统一在 onChanged 中处理各item点击事件
+  /// 选择菜单项时同步触发，包含重复选择；不改变主标签值。
+  /// 自动关闭菜单前通知。
   final ValueChanged<String> onChanged;
 
   /// 弹窗UI配置
@@ -1303,6 +1304,25 @@ class _TabBarPopupDialogState extends State<_TabBarPopupDialog> {
   RelativeRect? position;
   Size? size;
 
+  void _selectItem(String value) {
+    final route = ModalRoute.of(context);
+    final navigator = route?.navigator;
+    widget.onClickMenu(value);
+    // The callback can navigate, close this menu, or remove its owner.
+    // Close only this route without reading context after the callback.
+    if (route == null ||
+        navigator == null ||
+        !navigator.mounted ||
+        !route.isActive) {
+      return;
+    }
+    if (route.isCurrent) {
+      navigator.pop();
+    } else {
+      navigator.removeRoute(route);
+    }
+  }
+
   @override
   void initState() {
     super.initState();
@@ -1370,8 +1390,7 @@ class _TabBarPopupDialogState extends State<_TabBarPopupDialog> {
           (e) => GestureDetector(
             behavior: HitTestBehavior.opaque,
             onTap: () {
-              widget.onClickMenu(e.value);
-              Navigator.of(context).pop();
+              _selectItem(e.value);
             },
             child: SizedBox(height: popUpItemHeight, child: e),
           ),
@@ -1510,8 +1529,7 @@ class _TabBarPopupDialogState extends State<_TabBarPopupDialog> {
                             (item) => GestureDetector(
                               behavior: HitTestBehavior.opaque,
                               onTap: () {
-                                widget.onClickMenu(item.value);
-                                Navigator.of(context).pop();
+                                _selectItem(item.value);
                               },
                               child: item,
                             ),

@@ -41,7 +41,7 @@
 - `TDrawer` 是可用于 `Scaffold.drawer` / `Scaffold.endDrawer` 的声明式 Widget，只持有内容与组件视觉/交互参数。
 - `showTDrawer(...)` 的 `placement` 非空默认 `right`；Demo 的基础与图标示例显式使用小程序公开示例的 `left`，左右方向都有回归。
 - `showTDrawer(...)` 的 `showOverlay`、`closeOnOverlayClick` 非空默认 `true`；`onOverlayClick` 每次有效蒙层点击触发一次，是否关闭只由 `closeOnOverlayClick` 决定。
-- `showTDrawer(...)` 的 `destroyOnClose` 非空默认 `false` 并透传 Popup；`onClose` 在一次展示周期真正结束后触发；`topInset` 替代旧 `drawerTop`。
+- `showTDrawer(...)` 的 `destroyOnClose` 非空默认 `false`，保留 1.0.0 的遮挡与关闭规则；`onClose` 在一次展示周期真正结束后触发；`topInset` 替代旧 `drawerTop`。
 - `TDrawer.enableFeedback`、`TDrawer.showDivider`、`TDrawer.showLastDivider` 为组件实例状态，非空默认 `true`，Theme 不保存同义开关。
 - `showDivider` 控制菜单项分隔线，不在列表四周额外绘制整圈边框；末项是否显示分隔线由 `showLastDivider` 决定。
 - 标题 Widget 默认按文字方向起始侧对齐；面板实例或 Theme 背景色同时作为菜单项未显式配置背景时的默认值。
@@ -87,3 +87,11 @@
 跨组件配置职责见 [Theme 契约](../../engineering/048-Theme-configuration-contracts/spec.md)，视觉方法见 [Golden 规范](../../engineering/044-Testing-golden-regression/spec.md)。
 
 发布归类：本轮与 Button/NavBar 的默认文字槽调整采用同一 patch 策略。未配置、空样式或部分显式样式仍可能改变字体、颜色、换行、尺寸和省略位置；原生 Text 的字体也可能受新默认值影响，段落参数沿用既有语义。保留旧外观需在实例或内容内部主题中明确所需字段；不以参数签名不变或测试通过承诺零兼容风险。
+
+## destroyOnClose 关闭生命周期
+
+保持 1.0.0 的一次性展示行为：默认 false 在不透明路由遮挡时保留内容 State；true 时允许释放，返回时重新构建。无论取值如何，实际关闭完成后均销毁内容，不等到 Navigator 卸载。TDrawerHandle 仍只提供 isShowing 和 close，不新增重开入口或其他公开 API。
+
+Drawer 通过内部入口共享 Popup 展示与回调实现，但不创建关闭后保留容器；不改变 onClose 的既有时机、Controller 绑定规则或 destroyOnClose 默认值。该历史参数继续控制遮挡策略，不采用 Popup/Picker 本次修正后的关闭保留语义。此差异用于避免保留无法重开的 Drawer 会话，不应将 Popup/Picker 的生命周期 breaking 提醒外推到 Drawer。
+
+正式回归在已登记的 Popup 选项及 Drawer 测试中覆盖默认/显式 false/true、句柄关闭、系统返回、蒙层点击、遮挡后关闭、直接移除、遮挡返回、关闭动画结束后释放、连续丢弃句柄，以及无隐藏会话残留。

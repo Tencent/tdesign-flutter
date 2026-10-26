@@ -16,3 +16,9 @@
 ## 文字槽交付
 
 组件范围和已验证边界见 acceptance.md；共享收口事项统一维护在 [Theme tasks](../../engineering/048-Theme-configuration-contracts/tasks.md#文字槽-review-收口)，不在各组件重复记录分支、推送与 CI 流程。上述既有设备、设计和 Review 待办不因此关闭。
+
+## 菜单回调路由修复
+
+- [x] 实现原菜单定向关闭，登记 48 项正式回归。
+- [x] 完成独立候选双版本验收及本地 Review。
+- [ ] 提交后核对精确 head CI；暂不合并。
