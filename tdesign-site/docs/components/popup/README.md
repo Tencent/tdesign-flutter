@@ -13,17 +13,29 @@ isComponent: true
 
 ## FAQ
 
-### 1.0.0 → 1.0.1 升级需要适配什么？
+### 从 1.0.0 升级到 1.0.1 后，蒙层配置需要如何适配？
 
-- `TPopupOverlayConfig` 改为 `final`：原继承、`implements` 和相关 mock 需改用构造或工厂组合；动态配置需重新创建。
+- `TPopupOverlayConfig` 改为 `final`：已有继承、`implements` 及相关 mock 需改用直接构造或工厂组合。这是源码不兼容变更；依赖动态 getter 的配置需按业务状态重新创建。
+- 旧 `onClick` 构造参数和成员仍可用，但已废弃，推荐使用 `onTap`。非空 `onTap` 优先，否则使用 `onClick`，每次点击只通知一次。
+
+将废弃提示视为错误的静态检查也需要适配。
+
+### 为什么重新打开后配置没有变化？
+
+`handle.open()` 沿用创建句柄时的 `options`，不会应用新配置。这是 1.0.0 已有行为。
+
+更换配置需重新构造 `TPopupOptions`，通过 `TPopup.show()` 创建新会话。新会话不会自动关闭旧会话；替换时请先关闭旧会话，再按下一问处理保留内容和资源。
 
 <div id="popup-session-reuse" style="position: relative; top: -128px"></div>
 
-### 替换会话时如何避免资源冲突？
+### 从 1.0.0 升级到 1.0.1 后，替换会话需要注意什么？
 
-- **复用状态**：默认 false 下，同一句柄在同一 Navigator 内调用 `open()`。
-- **创建新会话**：使用独立 GlobalKey/Controller；转交原资源时，旧会话须设置 `destroyOnClose: true`，并等待内容卸载。
-- **`destroyOnClose: false`（默认）**：关闭后内容保留至 Navigator 卸载，丢弃句柄不释放，`onClosed` 不代表已卸载；定时器和订阅需业务管理。
-- **`destroyOnClose: true`**：关闭后销毁；被不透明路由遮挡时仍保留，与 1.0.0 不同。
+Popup 和 `TPickerPopup` 的 `destroyOnClose` 默认为 `false`，关闭后仍保留内容 State，所属 Navigator 卸载时释放。
 
-Drawer 保留原规则；ActionSheet 的参数限制见[其 FAQ](/flutter/components/action-sheet?tab=api#faq)。
+- **复用原状态**：调用 `handle.open()`，沿用原配置。
+- **创建新会话**：推荐使用独立的 GlobalKey 和 Controller，避免与旧内容冲突。
+- **转交原有资源**：创建旧会话时设置 `destroyOnClose: true`，待内容卸载后再创建新会话。
+
+`false` 时，`onClosed` 不代表内容已卸载。复用同一 GlobalKey 会触发重复 Key 诊断；共享 ScrollController 可能导致单位置访问失败。
+
+Drawer 仍保持关闭后释放，不适用上述保留规则。

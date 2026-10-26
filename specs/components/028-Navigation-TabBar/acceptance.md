@@ -55,6 +55,10 @@ FAQ 仅保留 1.0.0 → 1.0.1 的不兼容风险及最小适配方法；普通�
 
 已同步 #1200 的 ThemeData 兼容补修，保留命名迁移、FAQ 和原路由/生命周期修复；公开 getter 的旧 implements 适配风险仍存在，breaking 日志明确限定本次迁移涉及的类。合并后两 SDK 各1206项组件/工具、129项示例/API、严格分析、57份API和片段检查通过，八组件覆盖率超过95%，站点35项及映射通过。输入指纹和验证边界见[最新验收](./evidence/api-naming.md#同步-develop-9203d362-后的验收)，远端CI以推送后head为准，不合并。
 
-## 通用兼容说明归并
+## 通用兼容说明归并（历史展示方案）
 
 implements 与同名成员说明归并到 #1196 的十类迁移表；五个组件 FAQ 仅保留特有升级问题，Checkbox 移除空 FAQ，Popup 契约说明不变。日志转向实际 PR 升级说明，不增加重复条目。站点35项、文档映射及README检查通过，逐页预览完成；源码/测试/API/CHANGELOG哈希未变。细节与未重跑范围见[归并验收](./evidence/api-naming.md#通用兼容说明归并)，不合并。
+
+## 撤出无关 FAQ
+
+五个新增 FAQ 已撤出，Popup FAQ 和 Popup Spec 恢复 develop 9203d362 原文；这些行为来源于其他已合入PR，不属于本次命名迁移。实现、API注释及所有组件文件哈希不变，PR中的七条API日志和implements升级说明原样保留。文档35项、57份文档/360份示例映射、README同步及diff检查通过；未重跑Flutter或Golden。范围与来源见[当前验收](./evidence/api-naming.md#撤出无关-faq)，远端CI按新head核对，暂不合并。

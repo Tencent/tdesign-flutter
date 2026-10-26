@@ -1,6 +1,6 @@
 # 六组件命名迁移独立验收
 
-实现验收以“同步 develop 9203d362 后的验收”为准；当前文档展示以末节“通用兼容说明归并”为准，先前阶段仅对应其原候选与范围。
+实现验收以“同步 develop 9203d362 后的验收”为准；当前文档范围以末节“撤出无关 FAQ”为准，先前阶段仅对应其原候选与范围。
 
 ## 初始拆分边界（历史）
 
@@ -78,8 +78,20 @@ Drawer 的 TDrawer.onItemTap，以及 TabBar 的 TTabBarItemConfig.notifyOnResel
 
 ## 通用兼容说明归并
 
+本节为历史展示方案，当前范围以末尾“撤出无关 FAQ”为准。
+
 基于 bf86d3a6，仅调整文档。公开 getter 的 implements 适配与同名业务成员冲突集中到 #1196 的升级说明：一张表覆盖十个目标类、新 getter 和旧 getter 转发关系。breaking 日志保留事实，改为指向该 PR 升级说明；不再让用户查组件 FAQ 寻找通用语言规则。
 
 NoticeBar、Drawer、Popover、Steps、TabBar FAQ 各自仅保留手势或文字/布局变化，问题标题对应具体场景。Checkbox 移除没有独立事项的 FAQ。Popup 的 final、生命周期和资源冲突 FAQ 完整保留；不新增全局 FAQ、base/final 限制、公开接口或重复修复日志。旧 ThemeData implements 的内部解析问题仍无用户适配要求。
 
 站点 Node 35 项、57 份组件文档/360 份示例映射与 README 同步检查通过。五个特有 FAQ 已逐页浏览器预览，Checkbox 确认不再展示 FAQ；截图、原始日志和 PR 草稿在工作区 artifacts/pr1196-faq-generic-cleanup，不入库。生产源码、测试、工具、API/示例资源和 CHANGELOG 与 bf86d3a6 逐文件哈希一致，Popup 组件 README 也未变；本轮不重复执行双 SDK 或 Golden，原1206/129项只绑定未变实现。推送后CI另按最新head确认，不合并。
+
+## 撤出无关 FAQ
+
+基于 425c7d9c，按当前 develop `9203d362e86778a18faf194bc13c6f57500fce01` 恢复 NoticeBar、Drawer、Popover、Steps、TabBar 的 README，撤出本 PR 新增的五个 FAQ；Popup README 和相关 Popup Spec 同样逐字节恢复 develop 原文。当前 PR 不再携带这些文件的差异，不撤销其已合入实现。
+
+来源已分别核对引入提交、PR 与 develop API 文档：NoticeBar 过滤来自 #1192；四组件的自定义字体与 TabBar 自然高度主要来自 #1184，Popover 测量还包含 #1182；Popup final 与生命周期分别来自 #1199 / #1197。它们都不是 #1196 引入的行为，已有 API 说明和 Popup FAQ 保留，不再由命名迁移 PR 重复整理。
+
+本轮仅调整文档范围。tdesign-component 全部受版本管理文件的哈希与 425c7d9c 一致，包含实现、API 注释、生成 API、测试、资源及 CHANGELOG；PR 中的七条日志（含括号说明与2.0.0旧入口删除计划）和 implements 升级表/说明保持逐字节不变，仅更新范围、归因和验证段落。
+
+站点 Node 35 项、57 份组件文档/360 份示例映射及 README 同步检查通过，git diff --check 通过。未重跑 Flutter、双 SDK、真机或 Golden；既有1206/129项及此前CI只绑定原实现，不冒充新head远端结果。校验清单、日志及PR正文草稿在工作区 artifacts/pr1196-withdraw-unrelated-faq，不入库。推送后核对最新head，不合并。

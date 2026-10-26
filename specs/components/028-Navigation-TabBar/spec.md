@@ -216,4 +216,8 @@
 
 已有 implements 类须补齐新增 getter，不能依靠默认实现；已有子类的同名业务成员也可能与新增 getter 冲突：类型不兼容时报 invalid_override，类型兼容仍可能进入组件分派，需核对语义或重命名业务成员。旧入口保留并提示废弃，2.0.0 删除计划与严格诊断风险须一并披露。保留 getter 是有意的 API 设计选择，不能将其破坏性归因于同步 develop 或用户既有代码错误。
 
-新增公开 getter 的 implements 适配和子类同名成员冲突集中在 PR 升级说明中，列明十个受影响类、对应新成员及转发关系，不在各组件 FAQ 重复展开通用语言规则。组件升级 FAQ 只保留各自实际的手势、视觉或生命周期变化及最小适配方法；Checkbox 没有此类独立事项时不保留空 FAQ。普通改名、废弃提示、删除计划、新旧参数优先级和兼容的既有用法保留在 API 文档，不放入升级 FAQ；不在全局 FAQ 汇总具体组件清单。Drawer/TabBar 不要求旧 ThemeData implements 补内部解析成员，该兼容补修已随 #1200 合入 develop，并同步到本分支；本次命名迁移的公开 getter 仍有独立的 implements 适配风险。Popup FAQ 保留 final、关闭保留及资源复用风险，相关组件按需要链接过去。更新日志只记录当前变更，不重复加入内部解析补修或 FAQ 整理条目。
+新增公开 getter 的 implements 适配和子类同名成员冲突集中在 PR 升级说明中，列明十个受影响类、对应新成员及转发关系；七条 API 日志保留各自的适配提醒和旧入口 2.0.0 删除计划。普通调用、旧入口、API 注释及生成文档保持本次既定实现，不因文档范围整理而改变。
+
+本 PR 不新增手势或文字默认值 FAQ：NoticeBar 手势来自已合入的 #1192，Drawer/Popover/Steps/TabBar 自定义文字主要来自 #1184，Popover 测量还包含 #1182 的前置修复。Popup final 与生命周期分别来自 #1199 / #1197，Popup FAQ 和相关 Spec 沿用当前 develop 原文，不在本 PR 二次改写。各来源的既有 API 文档、测试和修复仍保留，不把撤出 FAQ 理解成撤销实现。
+
+Drawer/TabBar 旧 ThemeData implements 的内部解析问题已由 #1200 修复并同步，不增加业务补内部成员的要求；本次公开 getter 的 implements 风险仍独立存在。不新增全局 FAQ 或重复更新日志，不为本次命名迁移引入 base/final 限制。

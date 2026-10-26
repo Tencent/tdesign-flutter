@@ -112,10 +112,10 @@ TPopupOverlayConfig 改为 final，库外不能 extends 或 implements；推荐�
 
 原因：配置对象负责不可变配置值，业务使用构造与组合；避免未来新增配置成员都要求外部 implements 补齐。final 不保证任意新增必填参数、改默认值或改变行为都兼容，也不等于限制 Popup 的 child/builder/回调扩展。旧动态 getter 每次读取的行为与配置快照不一定等价，handle.open() 沿用创建句柄时的 options，不会应用新配置；更换配置须重新构造 TPopupOptions，通过 TPopup.show() 创建新会话，不承诺活动 Popup 自动响应外部配置变化。
 
-旧 onClick 普通调用和成员访问保持可用并提示废弃；旧继承、implements 以及相关 mock 仍需迁移；Popup 组件升级 FAQ 仅说明 final 的源码迁移影响与构造/组合替代，明确 1.0.0 到 1.0.1 的适配范围；普通废弃兼容及配置调用方式由 API 文档说明，不表述其他版本方向；不用新增一个 getter 的转发作为 final 的适配方案。消费者测试验证旧 implements/extends 被诊断、普通 const 构造与业务工厂可用，并覆盖真实遮罩点击和关闭先后。该配置契约已随 #1199 合入 develop；final 限制仍属于源码 breaking。本 PR 沿用该契约，只叠加上节 destroyOnClose 生命周期修复，不再次调整配置 API。
+旧 onClick 普通调用和成员访问保持可用并提示废弃；旧继承、implements 以及相关 mock 仍需迁移；Popup 组件文档的 FAQ 说明接口现状、源码迁移影响、组合替代和新配置的实际应用方式，明确 1.0.0 到 1.0.1 的适配范围，不表述其他版本方向；不用新增一个 getter 的转发作为 final 的适配方案。消费者测试验证旧 implements/extends 被诊断、普通 const 构造与业务工厂可用，并覆盖真实遮罩点击和关闭先后。该配置契约已随 #1199 合入 develop；final 限制仍属于源码 breaking。本 PR 沿用该契约，只叠加上节 destroyOnClose 生命周期修复，不再次调整配置 API。
 
 
-show() 创建独立会话并立即显示，不需要随后调用 open()；open() 沿用原句柄创建时的配置，已显示时不重复打开。更换配置通过 show() 创建新会话，不会自动关闭旧会话。该重开行为在 1.0.0 已存在，由 API 注释说明，不作为本次不兼容升级 FAQ。本次不新增 update()、dispose()、宿主 API 或 maintainState，也不修改默认值、回调时机或 Controller 绑定规则。
+show() 创建独立会话并立即显示，不需要随后调用 open()；open() 沿用原句柄创建时的配置，已显示时不重复打开。更换配置通过 show() 创建新会话，不会自动关闭旧会话。该重开行为在 1.0.0 已存在，API 注释与 FAQ 必须区分既有行为和本次源码迁移。本次不新增 update()、dispose()、宿主 API 或 maintainState，也不修改默认值、回调时机或 Controller 绑定规则。
 
 组件 FAQ 在生成 API 入口后维护；文档校验允许该问答区，但仍拒绝复制 API 表、重复生成入口和额外演示章节。全局 FAQ 不重复 Popup 详情。
 
@@ -127,9 +127,9 @@ Popup FAQ 保留变化、推荐用法与关键资源风险；重复 close 不销
 ActionSheet 的 showList/showGrid 通过 _show、showGridSections 直接调用 TPopup.show；两处 TPopupOptions.bottom 均不传 destroyOnClose，因而沿用 false 保留策略。返回值为 TPopupHandle，可同句柄 open 重开，所属 Navigator 卸载时清理。此间接生命周期影响此前范围说明遗漏，本轮补齐记录，不改变实现。三个入口都没有 destroyOnClose 参数，不能让用户直接设置 true；ActionSheet FAQ 须独立注明参数限制，再链接通用资源风险。不可把“仅 Popup/Picker 受影响”作为完整结论，也不新增参数或更改默认值来规避该限制。
 
 
-## 蒙层配置与会话契约的文档边界
+## 蒙层配置与原会话重开的 FAQ 详细边界
 
-FAQ 仅保留 1.0.0 到 1.0.1 的 final、关闭保留及资源冲突适配风险；回调优先级、废弃兼容和 open/show 的既有用法保留在 API 文档，不重复放入 FAQ。以下技术契约不变。库外 extends/implements 及相关 mock 应改为构造与组合；不能仅增加 onTap getter 或通过 noSuchMethod 绕过 final。旧 onClick 构造参数与成员保留并提示废弃；非空 onTap 优先，null 回退 onClick，每次点击仅通知一次，旧 onClick 成员返回实际生效的回调。将废弃提示提升为错误的检查仍需适配。
+FAQ 前两问仅保留 1.0.0 到 1.0.1 的适配风险、回调优先级及实际用法；不改变配置 final、onTap/onClick 或 open/show 的既有契约。库外 extends/implements 及相关 mock 应改为构造与组合；不能仅增加 onTap getter 或通过 noSuchMethod 绕过 final。旧 onClick 构造参数与成员保留并提示废弃；非空 onTap 优先，null 回退 onClick，每次点击仅通知一次，旧 onClick 成员返回实际生效的回调。将废弃提示提升为错误的检查仍需适配。
 
 工厂组合示例从 FAQ 移至此处，避免在用户页面重复展开设计说明：
 
