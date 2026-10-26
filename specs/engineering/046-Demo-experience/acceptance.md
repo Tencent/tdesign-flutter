@@ -68,3 +68,11 @@ Base: `182f8cd956edeee4dfd7ef977176309f051e3c3c`. Binary diff SHA-256 (`git diff
 macOS Flutter 3.32.0 / 3.47.7：Example 严格分析均无诊断，Theme 非 Golden 功能测试各 17/17，包含新增的不等长、稀疏/别名、空色板 3 项；3.32.0 工具与调度器自测 41/41。示例片段从实际源码重新生成，--check 通过。Linux amd64 / Flutter 3.32.0：现有 Theme 测试文件 Golden 8/8 精确比对通过，使用 TDESIGN_DEMO_TEST_MODULES=false；未修改任何基线或容差。页面默认颜色与指南视觉均保持既有基线。
 
 设备上的色板与代码面板仍未人工验证，见 tasks.md；未推送、未执行本分支远端 CI。
+
+### 2026-10-26 在线站点运行检查
+
+运行候选为 PR #1206 `b85ebcfab1b26b7913da4ad20b2d82a49978b140`，使用其 CI 在线预览的 Theme 页面。本轮为真实浏览器运行检查；用户澄清验收对象为站点展示，未连接手机，不记为手机实机验收。
+
+通过站点既有同源主题消息通道加载[测试配置](./evidence/functional-palette-browser-theme.json)，未修改预览源码。浅色、深色均显示新增业务色、稀疏键 brandColor12 和别名 brandAlias；四类功能色实际数量为 20/16/16/16，没有旧的数量不等提示，别名与目标同色。站点代码面板正常展示真实生成片段，包含导入、实际键名与 entries.length。空配置沿用聚焦 Widget 测试结果，本轮没有声称完成其浏览器检查。检查后重新加载预览，撤销临时主题配置。
+
+[浅色运行截图](./evidence/functional-palette-browser-light.png) · [深色运行截图](./evidence/functional-palette-browser-dark.png)。截图仅为验收证据，未更新任何 Golden 基线或修改运行源码；此前源码候选的 CI 已完成，新增证据提交的 CI 按最终 head 单独核对。
