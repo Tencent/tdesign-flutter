@@ -98,6 +98,44 @@ export default defineComponent({
   scroll-margin-top: 80px;
 }
 
+// Shared site styles only cover tables directly below the document root.
+.migration-guide details {
+  margin: 16px 0;
+  overflow-x: auto;
+
+  summary {
+    cursor: pointer;
+    padding: 8px 0;
+  }
+
+  table {
+    width: 100%;
+    min-width: 640px;
+    table-layout: fixed;
+    border-collapse: collapse;
+    margin: 16px 0;
+    background: var(--bg-color-table);
+    box-shadow: var(--table-box-shadow);
+  }
+
+  thead { background: var(--bg-color-tag); }
+
+  th, td {
+    padding: 16px;
+    line-height: 22px;
+    text-align: left;
+    vertical-align: top;
+    overflow-wrap: anywhere;
+    border-bottom: 1px solid var(--component-stroke);
+  }
+
+  th:nth-child(1), td:nth-child(1) { width: 32%; }
+  th:nth-child(2), td:nth-child(2) { width: 30%; }
+  th:nth-child(3), td:nth-child(3) { width: 38%; }
+
+  tbody tr:hover { background: var(--bg-color-table-hover); }
+}
+
 // Guides use the same phone sidebar spacing as component pages.
 td-doc-content.flutter-preview-layout {
   --content-padding-right: 400px;
