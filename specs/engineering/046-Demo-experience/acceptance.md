@@ -70,3 +70,6 @@ Node 24.22.1：导航、主题桥及站点文档测试 47/47；57 页/360 示例
 本机内置浏览器访问当前分支生产预览 http://127.0.0.1:19116/flutter/：首次验证发现 Markdown 将分组锚点渲染为空段落中的 a，锚点不是 details 的祖先，原逻辑只定位不展开。修复识别相邻折叠章节的空锚点，并增加对应回归及非空段落不误展开测试。修复后 migration-group-basic 和 migration-component-button 均展开对应章节，目标距视口顶部 80px；跨页 FAQ 返回恢复滚动 2321px。相同无 hash URL 的独立历史条目 B / C 分别恢复 basic / display 折叠状态及 2051px / 2159px，前进至 C 仍恢复对应状态。必要截图见本地 artifacts/pr1156-split-local-20261026/navigation-browser-anchor.png。
 
 这是本机浏览器聚焦检查，不代表全部浏览器、移动视口、发布站点或设备验收。未推送、未执行本分支远端 CI。
+
+
+[迁移指南折叠锚点展开与定位的浏览器截图](./evidence/navigation-folded-anchor.png)。截图为本地浏览器证据，不代表移动设备验收。
