@@ -18,18 +18,19 @@ import 't_slider_theme.dart';
 /// 显示在滑块提示中的格式化文案。
 typedef TSliderThumbFormatter = String Function(double value);
 
-/// Slider visual structure.
+/// 滑块视觉结构。
 enum TSliderVariant {
-  /// Standard thin track.
+  /// 标准细轨道。
   normal,
 
-  /// Capsule track with a 3px inset active segment and 20px thumbs.
+  /// 胶囊轨道，激活区四周内缩 3px，20px thumb 在胶囊内四周等距留白。
   capsule,
 }
 
 const double _kScaleTickRadius = 3;
 const double _kCapsuleTrackInset = 3;
 const double _kCapsuleGapWidth = 2;
+const double _kThumbRadius = 10;
 
 SliderThemeData _sliderThemeFromTDesign(BuildContext context) {
   final token = context.tTheme;
@@ -388,36 +389,31 @@ Rect _preferredTrackRect({
   );
 }
 
-Rect _capsuleMaterialTrackRect({
-  required RenderBox parentBox,
-  required Offset offset,
-  required SliderThemeData sliderTheme,
-  required double horizontalInset,
-}) {
-  final visualRect = _preferredTrackRect(
-    parentBox: parentBox,
-    offset: offset,
-    sliderTheme: sliderTheme,
-    horizontalInset: horizontalInset,
-  );
-  // Material reserves half a track height at each end for discrete values.
-  // Extend its coordinate track so values map across the visible inset track.
-  final extension = visualRect.height / 2 - _kCapsuleTrackInset;
+/// thumb 行程相对可见胶囊两端的内缩量，即半个轨道高度；胶囊轨道高于
+/// thumb 直径时，减去 thumb 半径正好等于上下留白。
+double _capsuleThumbInset(double trackHeight) =>
+    trackHeight > _kThumbRadius ? trackHeight / 2 : 0.0;
+
+/// 交给 Material 的坐标轨道：两端各收进半个轨道高度，即 thumb 行程。
+Rect _capsuleCoordinationTrackRect(Rect visualRect) {
+  final inset = _capsuleThumbInset(visualRect.height);
+  final left = visualRect.left + inset;
   return Rect.fromLTRB(
-    visualRect.left - extension,
+    left,
     visualRect.top,
-    visualRect.right + extension,
+    math.max(left, visualRect.right - inset),
     visualRect.bottom,
   );
 }
 
-Rect _capsuleVisualTrackRect(Rect materialRect) {
-  final extension = materialRect.height / 2 - _kCapsuleTrackInset;
+/// 由坐标轨道还原可见的胶囊轨道。
+Rect _capsuleVisualTrackRect(Rect coordinationRect) {
+  final inset = _capsuleThumbInset(coordinationRect.height);
   return Rect.fromLTRB(
-    materialRect.left + extension,
-    materialRect.top,
-    materialRect.right - extension,
-    materialRect.bottom,
+    coordinationRect.left - inset,
+    coordinationRect.top,
+    coordinationRect.right + inset,
+    coordinationRect.bottom,
   );
 }
 
@@ -445,23 +441,22 @@ void _paintCapsuleSegments(
     RRect.fromRectAndRadius(innerRect, Radius.circular(innerRect.height / 2)),
   );
   final count = divisions ?? 1;
-  // Figma spaces divider centers across the outer capsule's usable width;
-  // the painted inner track keeps its 3px inset on every side.
-  final dividerLeft = trackRect.left + _kCapsuleTrackInset / 2;
-  final dividerStep = (trackRect.width - _kCapsuleTrackInset) / count;
+  // 分段边界对齐 thumb 落点：分段在 thumb 行程上等分。
+  final inset = _capsuleThumbInset(trackRect.height);
+  final dividerLeft = trackRect.left + inset;
+  final dividerStep = math.max(0.0, trackRect.width - 2 * inset) / count;
   final gapHalf = dividerStep > _kCapsuleGapWidth ? _kCapsuleGapWidth / 2 : 0.0;
   for (var index = 0; index < count; index++) {
     // Leave a 2px unpainted gap when the division is wide enough.
-    final left = math.max(
-      innerRect.left,
-      index == 0 ? innerRect.left : dividerLeft + index * dividerStep + gapHalf,
-    );
-    final right = math.min(
-      innerRect.right,
-      index == count - 1
-          ? innerRect.right
-          : dividerLeft + (index + 1) * dividerStep - gapHalf,
-    );
+    final left = index == 0
+        ? innerRect.left
+        : math.max(innerRect.left, dividerLeft + index * dividerStep + gapHalf);
+    final right = index == count - 1
+        ? innerRect.right
+        : math.min(
+            innerRect.right,
+            dividerLeft + (index + 1) * dividerStep - gapHalf,
+          );
     if (right <= left) {
       continue;
     }
@@ -588,6 +583,10 @@ class _CapsuleSliderTrackShape extends RoundedRectSliderTrackShape {
   final Color disabledOuterColor;
   final int? divisions;
 
+  /// 坐标轨道已是 thumb 行程，不让 Material 再按轨道高度内缩，否则两端会有死区。
+  @override
+  bool get isRounded => false;
+
   @override
   Rect getPreferredRect({
     required RenderBox parentBox,
@@ -595,11 +594,13 @@ class _CapsuleSliderTrackShape extends RoundedRectSliderTrackShape {
     required SliderThemeData sliderTheme,
     bool isEnabled = false,
     bool isDiscrete = false,
-  }) => _capsuleMaterialTrackRect(
-    parentBox: parentBox,
-    offset: offset,
-    sliderTheme: sliderTheme,
-    horizontalInset: horizontalInset,
+  }) => _capsuleCoordinationTrackRect(
+    _preferredTrackRect(
+      parentBox: parentBox,
+      offset: offset,
+      sliderTheme: sliderTheme,
+      horizontalInset: horizontalInset,
+    ),
   );
 
   @override
@@ -673,6 +674,10 @@ class _CapsuleRangeSliderTrackShape extends RoundedRectRangeSliderTrackShape {
   final Color disabledOuterColor;
   final int? divisions;
 
+  /// 同 [_CapsuleSliderTrackShape]。
+  @override
+  bool get isRounded => false;
+
   @override
   Rect getPreferredRect({
     required RenderBox parentBox,
@@ -680,11 +685,13 @@ class _CapsuleRangeSliderTrackShape extends RoundedRectRangeSliderTrackShape {
     required SliderThemeData sliderTheme,
     bool isEnabled = false,
     bool isDiscrete = false,
-  }) => _capsuleMaterialTrackRect(
-    parentBox: parentBox,
-    offset: offset,
-    sliderTheme: sliderTheme,
-    horizontalInset: horizontalInset,
+  }) => _capsuleCoordinationTrackRect(
+    _preferredTrackRect(
+      parentBox: parentBox,
+      offset: offset,
+      sliderTheme: sliderTheme,
+      horizontalInset: horizontalInset,
+    ),
   );
 
   @override
@@ -776,7 +783,7 @@ class _TDesignSliderThumbShape extends SliderComponentShape {
 
   @override
   Size getPreferredSize(bool isEnabled, bool isDiscrete) =>
-      const Size.fromRadius(10);
+      const Size.fromRadius(_kThumbRadius);
 
   @override
   void paint(
@@ -816,7 +823,7 @@ class _TDesignRangeSliderThumbShape extends RangeSliderThumbShape {
 
   @override
   Size getPreferredSize(bool isEnabled, bool isDiscrete) =>
-      const Size.fromRadius(10);
+      const Size.fromRadius(_kThumbRadius);
 
   @override
   void paint(
@@ -853,7 +860,7 @@ void _paintTDesignThumb(
   required Color borderColor,
   required Color disabledBorderColor,
 }) {
-  const radius = 10.0;
+  const radius = _kThumbRadius;
   final fill = Color.lerp(
     sliderTheme.disabledThumbColor,
     sliderTheme.thumbColor,

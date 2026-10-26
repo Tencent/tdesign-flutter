@@ -225,13 +225,48 @@ void main() {
         matching: find.byType(RotatedBox),
       ),
     );
+    // 刻度落在 thumb 行程上：两端各内缩「轨道端部内缩 + 半个轨道厚度」。
+    final verticalSliderTheme = SliderTheme.of(
+      tester.element(
+        find.descendant(
+          of: find.byKey(const ValueKey('slider-vertical-scale-range')),
+          matching: find.byType(RangeSlider),
+        ),
+      ),
+    );
+    final labelInset =
+        tester.element(verticalSectionTitle).tTheme.spacer2 +
+        verticalSliderTheme.trackHeight! / 2;
     expect(
       tester.getCenter(scaleLabelFinder.at(0)).dy,
-      closeTo(verticalTrackRect.top + 16, 0.01),
+      closeTo(verticalTrackRect.top + labelInset, 0.01),
     );
     expect(
       tester.getCenter(scaleLabelFinder.at(5)).dy,
-      closeTo(verticalTrackRect.bottom - 16, 0.01),
+      closeTo(verticalTrackRect.bottom - labelInset, 0.01),
+    );
+    // 胶囊数值与 thumb 中心同高，不再上下错开。
+    final capsuleTrackRect = tester.getRect(
+      find.ancestor(
+        of: find.byKey(const ValueKey('slider-vertical-capsule')),
+        matching: find.byType(RotatedBox),
+      ),
+    );
+    final capsuleInset =
+        tester.element(verticalSectionTitle).tTheme.spacer2 +
+        tester.element(verticalSectionTitle).tTheme.spacer3 / 2;
+    expect(
+      tester
+          .getCenter(
+            find.byKey(const ValueKey('slider-vertical-capsule-label')),
+          )
+          .dy,
+      closeTo(
+        capsuleTrackRect.top +
+            capsuleInset +
+            0.35 * (capsuleTrackRect.height - capsuleInset * 2),
+        0.01,
+      ),
     );
     for (final key in [
       'slider-vertical-label',

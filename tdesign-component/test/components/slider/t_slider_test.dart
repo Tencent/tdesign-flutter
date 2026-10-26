@@ -301,10 +301,11 @@ void main() {
       expect(normalTrackRect.left, 18);
       expect(normalTrackRect.right, normalBox.size.width - 18);
       expect(capsuleTheme.trackHeight, 28);
-      // Material's discrete centers are inset by half the track height;
-      // the visual capsule still starts 18px from each edge.
-      expect(capsuleTrackRect.left, 7);
-      expect(capsuleTrackRect.right, capsuleBox.size.width - 7);
+      // The coordinate track is the thumb travel: the visible capsule inset
+      // (18) plus half the track height (14), leaving a 4px margin that
+      // matches the space above and below the 20px thumb.
+      expect(capsuleTrackRect.left, 32);
+      expect(capsuleTrackRect.right, capsuleBox.size.width - 32);
       expect(
         capsuleTickShape.getPreferredSize(
           sliderTheme: capsuleTheme,
@@ -502,11 +503,11 @@ void main() {
         isEnabled: true,
         isDiscrete: true,
       );
-      expect(trackRect.left, 7);
-      expect(trackRect.right, renderBox.size.width - 7);
+      // Thumb centers keep a 2px margin, the same as above and below the thumb,
+      // so the travel starts 16 (capsule inset) + 12 (half the track) in.
+      expect(trackRect.left, 28);
+      expect(trackRect.right, renderBox.size.width - 28);
       expect(trackRect.height, 24);
-      expect(trackRect.left + trackRect.height / 2, 19);
-      expect(trackRect.right - trackRect.height / 2, renderBox.size.width - 19);
     });
 
     testWidgets('capsule ticks divide only the interior of the track', (
@@ -546,8 +547,9 @@ void main() {
               );
         final sliderOffset =
             tester.getTopLeft(sliderFinder) - tester.getTopLeft(boundaryFinder);
-        final first = trackRect.left + trackRect.height / 2;
-        final last = trackRect.right - trackRect.height / 2;
+        // 坐标轨道就是 thumb 行程，两端即 0 / 最大值时的 thumb 中心。
+        final first = trackRect.left;
+        final last = trackRect.right;
         final interior = first + (last - first) * 2 / 5;
         final y = (sliderOffset.dy + trackRect.center.dy).round();
 
@@ -580,10 +582,10 @@ void main() {
         expect(pixel(last), isNot(Colors.white));
         expect(pixel(interior), isNot(pixel(interior + 4)));
         if (slider is TSlider) {
-          final visualLeft = trackRect.left + trackRect.height / 2 - 3;
-          final visualWidth = trackRect.width - trackRect.height + 6;
-          final dividerLeft = visualLeft + 1.5;
-          final dividerStep = (visualWidth - 3) / 5;
+          // Dividers follow the thumb travel: the first thumb center, then one
+          // step of the usable travel per division.
+          final dividerLeft = first;
+          final dividerStep = (last - first) / 5;
           final selectedGap = (dividerLeft + 2 * dividerStep).floorToDouble();
           final inactiveGap = (dividerLeft + 4 * dividerStep).floorToDouble();
           final outerColor = TThemeData.defaultData().componentBorder;
@@ -610,6 +612,196 @@ void main() {
           divisions: 5,
           variant: TSliderVariant.capsule,
           onChanged: (_) {},
+        ),
+      );
+    });
+
+    testWidgets('capsule thumbs stay inside the visible capsule', (
+      tester,
+    ) async {
+      const boundaryKey = ValueKey('capsule-thumb-bounds');
+
+      Future<void> expectThumbsInsideCapsule(Widget slider) async {
+        await tester.pumpWidget(
+          wrap(
+            RepaintBoundary(
+              key: boundaryKey,
+              child: SizedBox(width: 320, height: 48, child: slider),
+            ),
+          ),
+        );
+        await tester.pumpAndSettle();
+
+        final boundaryFinder = find.byKey(boundaryKey);
+        final sliderFinder = find.byWidgetPredicate(
+          (widget) => widget is Slider || widget is RangeSlider,
+        );
+        final sliderBox = tester.renderObject<RenderBox>(sliderFinder);
+        // 可见胶囊的两端就是水平内缩 token，与实现的坐标轨道换算无关。
+        final inset = TThemeData.defaultData().spacer2;
+        final sliderOffset =
+            tester.getTopLeft(sliderFinder) - tester.getTopLeft(boundaryFinder);
+        final y = (sliderOffset.dy + sliderBox.size.height / 2).round();
+
+        final boundary = tester.renderObject<RenderRepaintBoundary>(
+          boundaryFinder,
+        );
+        final pixels = await tester.runAsync(() async {
+          final image = await boundary.toImage(pixelRatio: 1);
+          final data = await image.toByteData(
+            format: ui.ImageByteFormat.rawRgba,
+          );
+          final result = (
+            width: image.width,
+            bytes: data!.buffer.asUint8List(),
+          );
+          image.dispose();
+          return result;
+        });
+        double? firstPainted;
+        double? lastPainted;
+        for (var x = 0; x < pixels!.width; x++) {
+          // 阈值 64 忽略 thumb 投影的极淡外缘，只统计轨道与 thumb 本体。
+          if (pixels.bytes[(y * pixels.width + x) * 4 + 3] > 64) {
+            firstPainted ??= x.toDouble();
+            lastPainted = x.toDouble();
+          }
+        }
+
+        expect(firstPainted, isNotNull, reason: 'capsule track is painted');
+        // 允许 1px 抗锯齿：thumb 不应越过可见胶囊的左右边界。
+        expect(
+          firstPainted! + 1,
+          greaterThanOrEqualTo(inset + sliderOffset.dx),
+        );
+        expect(
+          lastPainted! - 1,
+          lessThanOrEqualTo(sliderBox.size.width - inset + sliderOffset.dx),
+        );
+
+        // 左右留白与上下留白一致，thumb 不贴着胶囊两端。
+        final theme = SliderTheme.of(tester.element(sliderFinder));
+        final isRange = slider is TRangeSlider;
+        final thumbSize = isRange
+            ? theme.rangeThumbShape!.getPreferredSize(true, false)
+            : theme.thumbShape!.getPreferredSize(true, false);
+        final trackRect = isRange
+            ? theme.rangeTrackShape!.getPreferredRect(
+                parentBox: sliderBox,
+                sliderTheme: theme,
+                isEnabled: true,
+                isDiscrete: false,
+              )
+            : theme.trackShape!.getPreferredRect(
+                parentBox: sliderBox,
+                sliderTheme: theme,
+                isEnabled: true,
+                isDiscrete: false,
+              );
+        // 坐标轨道就是 thumb 行程，两端即 0 / 最大值时的 thumb 中心。
+        final firstCenter = trackRect.left;
+        final lastCenter = trackRect.right;
+        final verticalMargin = (trackRect.height - thumbSize.height) / 2;
+        expect(firstCenter - thumbSize.width / 2 - inset, verticalMargin);
+        expect(
+          sliderBox.size.width - inset - (lastCenter + thumbSize.width / 2),
+          verticalMargin,
+        );
+      }
+
+      await expectThumbsInsideCapsule(
+        TSlider(value: 0, variant: TSliderVariant.capsule, onChanged: (_) {}),
+      );
+      await expectThumbsInsideCapsule(
+        TSlider(value: 1, variant: TSliderVariant.capsule, onChanged: (_) {}),
+      );
+      await expectThumbsInsideCapsule(
+        TRangeSlider(
+          value: const RangeValues(0, 1),
+          variant: TSliderVariant.capsule,
+          onChanged: (_) {},
+        ),
+      );
+    });
+
+    testWidgets('capsule thumb maps the value linearly across the travel', (
+      tester,
+    ) async {
+      const boundaryKey = ValueKey('capsule-thumb-linear');
+      const width = 320.0;
+      const value = 0.08;
+
+      await tester.pumpWidget(
+        MaterialApp(
+          theme: TThemeBuilder.dark(TThemeData.defaultData()),
+          home: Scaffold(
+            body: Center(
+              child: RepaintBoundary(
+                key: boundaryKey,
+                child: SizedBox(
+                  width: width,
+                  height: 48,
+                  child: TSlider(
+                    value: value,
+                    variant: TSliderVariant.capsule,
+                    onChanged: (_) {},
+                  ),
+                ),
+              ),
+            ),
+          ),
+        ),
+      );
+      await tester.pumpAndSettle();
+
+      const boundaryFinder = boundaryKey;
+      final sliderFinder = find.byType(Slider);
+      final sliderOffset =
+          tester.getTopLeft(sliderFinder) -
+          tester.getTopLeft(find.byKey(boundaryFinder));
+      final boundary = tester.renderObject<RenderRepaintBoundary>(
+        find.byKey(boundaryFinder),
+      );
+      final y =
+          tester.getTopLeft(sliderFinder).dy -
+          tester.getTopLeft(find.byKey(boundaryFinder)).dy +
+          24;
+      final pixels = await tester.runAsync(() async {
+        final image = await boundary.toImage(pixelRatio: 1);
+        final data = await image.toByteData(format: ui.ImageByteFormat.rawRgba);
+        final result = (width: image.width, bytes: data!.buffer.asUint8List());
+        image.dispose();
+        return result;
+      });
+
+      // 深色主题下轨道是灰、thumb 是白，用亮度区分 thumb 本体。
+      double? thumbLeft;
+      double? thumbRight;
+      for (var x = 0; x < pixels!.width; x++) {
+        final index = (y.round() * pixels.width + x) * 4;
+        final alpha = pixels.bytes[index + 3];
+        final brightness =
+            (pixels.bytes[index] +
+                pixels.bytes[index + 1] +
+                pixels.bytes[index + 2]) /
+            3;
+        if (alpha > 200 && brightness > 200) {
+          thumbLeft ??= x.toDouble();
+          thumbRight = x.toDouble();
+        }
+      }
+      expect(thumbLeft, isNotNull, reason: 'thumb is painted');
+
+      final token = TThemeData.defaultData();
+      const thumbRadius = 10.0;
+      final margin = (token.spacer3 - thumbRadius * 2) / 2;
+      final travelLeft = token.spacer2 + margin + thumbRadius;
+      final travelRight = width - travelLeft;
+      expect(
+        (thumbLeft! + thumbRight!) / 2,
+        closeTo(
+          travelLeft + value * (travelRight - travelLeft) + sliderOffset.dx,
+          1,
         ),
       );
     });

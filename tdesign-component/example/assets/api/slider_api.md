@@ -50,13 +50,13 @@
 
 ### TSliderVariant
 
-Slider visual structure.
+滑块视觉结构。
 #### 枚举值
 
 | 名称 | 类型 | 默认值 | 说明 | 必传 |
 | --- | --- | --- | --- | --- |
-| normal | TSliderVariant | - | Standard thin track. | - |
-| capsule | TSliderVariant | - | Capsule track with a 3px inset active segment and 20px thumbs. | - |
+| normal | TSliderVariant | - | 标准细轨道。 | - |
+| capsule | TSliderVariant | - | 胶囊轨道，激活区四周内缩 3px，20px thumb 在胶囊内四周等距留白。 | - |
 
 
 ### TSliderThumbFormatter
