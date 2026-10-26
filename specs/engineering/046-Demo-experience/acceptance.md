@@ -95,6 +95,34 @@ Node 24.22.1：导航、主题桥及站点文档测试 47/47；57 页/360 示例
 
 整合候选站点测试共 47/47、生产构建通过。本轮为本地桌面浏览器验收，未代表线上部署、移动设备或全部浏览器；旧 #1205 远端结果只适用于其原 head。
 
+
+
+## 主题功能色板
+
+来源 PR #1156 `a9a44f1985af4f7b4ca3b46b53f26d5c7d90085e`；独立基线 develop `673ddf8cc69d41632f68832a9079385623af7df1`。仅包含本章节职责；验证结果仅适用于以下本地候选，不继承原 PR CI 或其他拆分分支结果。
+
+2026-10-26 本地验证：相对上述基线的源码二进制补丁 SHA-256（scripts / tdesign-component / tdesign-site，不含本记录）为 `0be40213b40d94ea65c94e4e304c9d5ae38e3a9576281c3b475ff006bf7d16f0`。
+
+macOS Flutter 3.32.0 / 3.47.7：Example 严格分析均无诊断，Theme 非 Golden 功能测试各 17/17，包含新增的不等长、稀疏/别名、空色板 3 项；3.32.0 工具与调度器自测 41/41。示例片段从实际源码重新生成，--check 通过。Linux amd64 / Flutter 3.32.0：现有 Theme 测试文件 Golden 8/8 精确比对通过，使用 TDESIGN_DEMO_TEST_MODULES=false；未修改任何基线或容差。页面默认颜色与指南视觉均保持既有基线。
+
+设备上的色板与代码面板仍未人工验证，见 tasks.md；未推送、未执行本分支远端 CI。
+
+### 2026-10-26 在线站点运行检查
+
+运行候选为 PR #1206 `b85ebcfab1b26b7913da4ad20b2d82a49978b140`，使用其 CI 在线预览的 Theme 页面。本轮为真实浏览器运行检查；用户澄清验收对象为站点展示，未连接手机，不记为手机实机验收。
+
+通过站点既有同源主题消息通道加载[测试配置](./evidence/functional-palette-browser-theme.json)，未修改预览源码。浅色、深色均显示新增业务色、稀疏键 brandColor12 和别名 brandAlias；四类功能色实际数量为 20/16/16/16，没有旧的数量不等提示，别名与目标同色。站点代码面板正常展示真实生成片段，包含导入、实际键名与 entries.length。空配置沿用聚焦 Widget 测试结果，本轮没有声称完成其浏览器检查。检查后重新加载预览，撤销临时主题配置。
+
+[浅色运行截图](./evidence/functional-palette-browser-light.png) · [深色运行截图](./evidence/functional-palette-browser-dark.png)。截图仅为验收证据，未更新任何 Golden 基线或修改运行源码；此前源码候选的 CI 已完成，新增证据提交的 CI 按最终 head 单独核对。
+
+
+### 2026-10-26 条目收集精简复核
+
+移除中间 colors Map，先按固定分类筛选候选键，再解析非空颜色并直接生成 MapEntry。保留当前/默认/引用键集合、分类及组内顺序和渲染方式，不新增辅助类。示例片段从源码重新生成。
+
+相对 develop 673ddf8cc69d41632f68832a9079385623af7df1 的源码二进制补丁 SHA-256（scripts / tdesign-component / tdesign-site，不含本记录）为 `e7450afca3330fca46257521c16a139f47111d39bbffc162b9a757e47394a96a`。Flutter 3.32.0 / 3.47.7 严格分析无诊断，Theme 非 Golden 功能测试各 17/17；片段生成及 --check 通过，站点片段测试 7/7，57 页/360 示例映射通过。Linux Flutter 3.32.0 现有 Golden 8/8 精确比对通过，未更新基线或容差。此前浏览器截图继续绑定原运行候选；本轮通过功能及像素比对验证行为和默认视觉保持一致，未声称重新执行在线浏览器验收。远端 CI 按最终提交另行核对。
+
+
 ## 可运行接入指南
 
 来源 PR #1156 `a9a44f1985af4f7b4ca3b46b53f26d5c7d90085e`；独立基线 develop `673ddf8cc69d41632f68832a9079385623af7df1`。仅包含本章节职责；验证结果仅适用于以下本地候选，不继承原 PR CI 或其他拆分分支结果。
@@ -141,5 +169,26 @@ macOS Flutter 3.32.0 / 3.47.7：Example 严格分析均无诊断，文档示例�
 站点目录 Git tree f076189826367459837dccf8e68d423b64ac9d7f（git rev-parse HEAD:tdesign-site），Node 24.15.0 / pnpm 11.20.0：冻结安装成功，实际安装版本 0.18.1；站点测试 51/51、57 页 / 360 示例映射和生产构建通过。
 
 本机浏览器：移动端默认圆角 6px，调节后 4px，重置恢复 6px；内部锚点自动展开并定位在顶部 80px，跳转 FAQ 后后退恢复章节展开及滚动 2640px。
+
+
+### 2026-10-26 同步最新 develop 后复核
+
+合并 develop 942152009bf2520b98681da0a63d130ef9883d46（#1204）；运行候选 22c2284d29102aa654bb8f0b6e6c58cb93d703cc。相对该基线的源码二进制补丁 SHA-256（git diff --binary --no-ext-diff origin/develop -- scripts tdesign-component tdesign-site，不含本记录）为 4c630c97c579d71e72c931e45500606804339e70fc61bf238efd3f15c793aa40。
+
+冲突仅涉及 Spec 046 的 spec / plan / tasks / acceptance，保留接入指南及功能色板的独立契约和原验收边界。功能色板实现及生成片段与同步前 dbb311a01e77dfc438779c1d855582254c0530a2 完全一致；Theme 测试保留 develop 指南新增测试和本 PR 的色板回归。
+
+macOS Flutter 3.32.0 / 3.47.7：Example 严格分析均无诊断，Theme 与 documentation_examples 非 Golden 测试各 24/24；3.32.0 工具及调度器自测 41/41。片段 --check 通过；Node 24.15.0 的站点文档测试 30/30，57 页 / 360 示例映射通过。Linux amd64 Flutter 3.32.0 对同步候选重跑 Theme 测试文件的 Golden 14/14 精确通过，TDESIGN_DEMO_TEST_MODULES=false，未修改任何基线或容差。
+
+与 #1205 d5688e33afc299f52849778f06fa8478bf7a0d09 比较，两者仅重合四份共用 Spec 文件；#1206 无站点导航源码改动，#1205 无功能色板实现或测试。两项修复不重复。当前色板修复不依赖 #1205/#1202；导航仍由 #1202 承载。
+
+本轮未重新执行浏览器或手机验收，原浏览器截图仍只绑定原候选；本地新检查不能外推为最终 head 的远端 CI。
+
+### PR #1206：site-components 回退至 main 版本
+
+依据 Flutter main d0de29e8，依赖从 ^0.20.0 回退为 ^0.18.1，锁文件实际解析 0.18.1；hybrids 连带回退至 8.2.2。其他依赖版本及运行源码未变。
+
+站点目录 Git tree cb22fb30b5cffebb6b28e721a2323661f50c335e（git rev-parse HEAD:tdesign-site），Node 24.15.0 / pnpm 11.20.0：冻结安装成功，实际安装版本 0.18.1；站点测试 39/39、57 页 / 360 示例映射和生产构建通过。
+
+本机浏览器：Theme 页面及功能色生成代码面板可展示。纯站点生产预览未包含 Flutter 构建资产，不作为 Flutter iframe 功能验收。
 
 本轮未重跑完整 Flutter 演示、真机或两个官网全量回归；原截图和 Flutter 测试仍绑定原候选。最终远端 CI 单独核对。
