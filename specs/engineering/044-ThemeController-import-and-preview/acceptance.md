@@ -34,6 +34,6 @@
 
 依赖 @tdesign/theme-generator@1.3.0；Node 24.15.0 / macOS，Flutter 示例预览 3.47.7。npm run test:theme 19/19、npm run test:example-code 28/28（57 页、360 映射、6 份同步输出）及 Vite 生产构建通过；默认 CSS fixtures 未修改。另以本机 Flutter 3.32.0 执行 flutter analyze --fatal-infos，通过且无诊断。
 
-本机浏览器验证：普通 device="mobile" 初始 6px，选择“大圆角”预设后 4px，确认重置后 6px；明暗切换和 Button → Divider → Button 后仍为 6px，Flutter iframe 正常显示。见[结构化观察](./evidence/pr1202-theme-observations.json)、[浅色截图](./evidence/pr1202-theme-default-light.png)、[深色截图](./evidence/pr1202-theme-default-dark.png)。导航见 [Spec 046](../046-Demo-experience/acceptance.md)。
+本机浏览器验证：普通 device="mobile" 初始 6px，选择“大圆角”预设后 4px，确认重置后 6px；明暗切换和 Button → Divider → Button 后仍为 6px，Flutter iframe 正常显示。见[结构化观察](./evidence/pr1202-theme-observations.json)。导航见 [Spec 046](../046-Demo-experience/acceptance.md)。
 
 仅为本地桌面浏览器及站点测试证据，未做 uni 官网完整回归、全部 Flutter 官网组件回归、真机或 Golden 验收。远端 CI 需按推送后的最终 head 独立核对。

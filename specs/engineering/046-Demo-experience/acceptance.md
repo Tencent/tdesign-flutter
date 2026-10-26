@@ -72,7 +72,7 @@ Node 24.22.1：导航、主题桥及站点文档测试 47/47；57 页/360 示例
 这是本机浏览器聚焦检查，不代表全部浏览器、移动视口、发布站点或设备验收。未推送、未执行本分支远端 CI。
 
 
-[迁移指南折叠锚点展开与定位的浏览器截图](./evidence/navigation-folded-anchor.png)。截图为本地浏览器证据，不代表移动设备验收。
+本节按文字记录折叠展开与定位结论，不归档页面截图。
 
 
 ### 2026-10-26 PR #1205 在线导航复验
@@ -81,9 +81,9 @@ Node 24.22.1：导航、主题桥及站点文档测试 47/47；57 页/360 示例
 
 - 分组 `#migration-group-basic` 与折叠块内部 `#migration-component-icon` 深链接均自动展开基础组件章节；内部目标距视口顶部 80px。截图另向上滚动以完整展示章节上下文，不把截图后的滚动位置当成定位断言。
 - 通过真实侧栏导航访问“迁移指南 → FAQ → 同一迁移指南”，两次 URL 均为 `/flutter/migration-1-0`。第一次仅展开基础组件，滚动位置 2051；第二次仅展开输入组件，滚动位置 2123。浏览器连续后退恢复第一次，连续前进恢复第二次，折叠数组与滚动值均与各自离开前完全一致。
-- [结构化运行记录](./evidence/pr1205-browser-observations.json)；[分组深链接](./evidence/navigation-group-anchor.png)、[内部深链接](./evidence/navigation-inside-anchor.png)、[后退恢复](./evidence/navigation-history-back-A.png)、[前进恢复](./evidence/navigation-history-forward-B.png)均为未经编辑的在线站点运行截图。
+- [结构化运行记录](./evidence/pr1205-browser-observations.json)保留各项实际观察与结果；不另存页面截图。
 
-该源码提交的远端构建及相关检查已通过。本次只新增截图与验收证据，站点实现不变，复用已有 47/47 测试及构建结果；无需重跑 Flutter 或 Golden。本轮为桌面浏览器验证，未执行移动设备或其他浏览器验收；截图提交的新 head CI 需另行核对。
+该源码提交的远端构建及相关检查已通过。站点实现不变，验收复用已有 47/47 测试及构建结果；无需重跑 Flutter 或 Golden。本轮为桌面浏览器验证，未执行移动设备或其他浏览器验收；证据提交的新 head CI 需另行核对。
 
 ### 2026-10-26 PR #1202 整合复验
 
@@ -91,7 +91,7 @@ Node 24.22.1：导航、主题桥及站点文档测试 47/47；57 页/360 示例
 
 仅升级主题生成器的对照版本中，内部 #migration-component-icon 章节仍折叠，证明未覆盖 #1205。整合后的生产预览中，内部锚点及 #migration-group-basic 均自动展开，目标距视口顶部均为 80px。
 
-真实侧栏导航创建同一无 hash URL 的历史条目：A 仅展开基础组件、滚动 2339px；B 仅展开输入组件、滚动 2483px。后退到 B、继续后退到 A、前进回 B，折叠数组和滚动值分别完全恢复。见[结构化观察](./evidence/pr1202-navigation-observations.json)、[后退 A](./evidence/pr1202-history-back-A.png)、[前进 B](./evidence/pr1202-history-forward-B.png)。
+真实侧栏导航创建同一无 hash URL 的历史条目：A 仅展开基础组件、滚动 2339px；B 仅展开输入组件、滚动 2483px。后退到 B、继续后退到 A、前进回 B，折叠数组和滚动值分别完全恢复。见[结构化观察](./evidence/pr1202-navigation-observations.json)。
 
 整合候选站点测试共 47/47、生产构建通过。本轮为本地桌面浏览器验收，未代表线上部署、移动设备或全部浏览器；旧 #1205 远端结果只适用于其原 head。
 
@@ -209,7 +209,7 @@ Markdown 源由 85,538 字符减少至 70,984 字符（17.0%）；388 项旧类�
 
 Node 24.15.0：站点测试 56/56、57 页/360 示例映射、8 份文档同步检查、diff 检查及生产构建通过。迁移消费者在 Flutter 3.32.0 / 3.47.7 下严格分析均无诊断，测试各 24/24；后续文案精简未改变消费者源码和示例代码。未修改库公开 API 或 Golden。
 
-[逐项浏览器记录](./evidence/pr1202-migration-compact-browser.json)：生产预览中逐一激活 461 处正文/目录链接，检查 61 处页面/API 页签往返，以及 64 个当前或旧标题片段。移除零宽的重复 H1 permalink 前共 558 处链接均通过；最终 557 处链接是此前清单的子集，无新目标，复查分组展开与详细改法均定位在顶部 80px。搜索控件不存在；重复点击、附录展开与历史恢复已验证。[最终截图](./evidence/pr1202-migration-compact-local.png)。
+[逐项浏览器记录](./evidence/pr1202-migration-compact-browser.json)：生产预览中逐一激活 461 处正文/目录链接，检查 61 处页面/API 页签往返，以及 64 个当前或旧标题片段。移除零宽的重复 H1 permalink 前共 558 处链接均通过；最终 557 处链接是此前清单的子集，无新目标，复查分组展开与详细改法均定位在顶部 80px。搜索控件不存在；重复点击、附录展开与历史恢复已验证。不另存页面截图。
 
 正式官网 60 个不同目标的[HTTP 记录](./evidence/pr1202-migration-official-http.json)均为 200；对应浏览器检查 58/60，Skeleton / 自定义主题页面存在动态模块加载失败，已保留在浏览器记录的 earlierOfficialBrowserCheck 中。文案精简未改变正式 URL，未重复执行外部检查，不把 HTTP 200 当成渲染通过。
 
