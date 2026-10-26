@@ -3,6 +3,7 @@ title: 从 0.2.7 升级到 1.0
 description: 0.2.7 使用方升级到 1.0 的接口与行为迁移说明。
 spline: explain
 docClass: migration-guide
+tocLevel: [2]
 ---
 
 # 从 0.2.7 升级到 1.0
@@ -34,349 +35,127 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 按项目实际使用的组件展开分组。每项列出旧入口、新入口和关键差异；组件名称链接到 API，“具体改法”链接到下方示例与行为说明。查找旧枚举、Controller 或 State 时，展开[旧类型名称对照](#migration-legacy-types)，再使用浏览器或编辑器查找。
 
 <a id="选择你正在迁移的组件"></a>
-- [主题与全局配置](#migration-group-global)（1项）
-- [按钮、文字与基础组件](#migration-group-basic)（6项）
-- [页面导航与页签](#migration-group-navigation)（8项）
-- [表单、输入与选择](#migration-group-input)（16项）
-- [内容与数据展示](#migration-group-display)（15项）
-- [浮层、提示与交互反馈](#migration-group-feedback)（11项）
 
 <a id="migration-group-global"></a>
 <details>
-<summary>主题与全局配置</summary>
-
+<summary>主题与全局配置（1项）</summary>
 
 先处理全局主题，再迁移各组件的局部样式。
 
-<a id="migration-component-theme"></a>
-- **[Theme 主题](https://tdesign.tencent.com/flutter/components/theme?tab=api)**：`TDTheme / TDThemeData` → `context.tTheme / TThemeData / TThemeBuilder`。
-
-  **关键调整**：先迁移全局主题，再调整组件 Theme 与局部文字样式。 [具体改法](#migration-theme)
+| 组件（API） | 旧入口 → 新入口 | 关键变化与改法 |
+| --- | --- | --- |
+| <a id="migration-component-theme"></a>[Theme 主题](https://tdesign.tencent.com/flutter/components/theme?tab=api) | `TDTheme / TDThemeData`<br>→ `context.tTheme / TThemeData / TThemeBuilder` | 先迁移全局主题，再调整组件 Theme 与局部文字样式。 [具体改法](#migration-theme) |
 
 </details>
 
 <a id="migration-group-basic"></a>
 <details>
-<summary>按钮、文字与基础组件</summary>
-
+<summary>按钮、文字与基础组件（6项）</summary>
 
 从页面上常用的按钮、文字、图标等开始，核对内容槽和样式配置。
 
-<a id="migration-component-button"></a>
-- **[Button 按钮](https://tdesign.tencent.com/flutter/components/button?tab=api)**：`TDButton` → `TButton`。
-
-  **关键调整**：内容改为 `child`，点击用 `onPressed`；传 `null` 禁用，空函数仍可点击。 [具体改法](#migration-button)
-
-<a id="migration-component-divider"></a>
-- **[Divider 分割线](https://tdesign.tencent.com/flutter/components/divider?tab=api)**：`TDDivider` → `TDivider`。
-
-  **需要调整**：`text/widget` 合并为 `child`，`direction` → `layout`，`alignment` → `align`，`isDashed` → `dashed`。线色、粗细、间隔使用 `TDividerThemeData`；旧 `margin` 改由外层 Padding 表达，不能原样搬入构造。
-
-<a id="migration-component-fab"></a>
-- **[Fab 悬浮按钮](https://tdesign.tencent.com/flutter/components/fab?tab=api)**：`TDFab` → `TFab`。
-
-  **需要调整**：`onClick` → `onPressed`，`icon` 改传 Widget。旧 `size/shape/theme` 没有对应实例参数；默认动作按当前内置规格展示，完整自定义使用 `child`，拖动边界使用 `xBounds/yBounds`。
-
-<a id="migration-component-icon"></a>
-- **[Icon 图标](https://tdesign.tencent.com/flutter/components/icon?tab=api)**：`TDIcons / Icon` → `TIcons / TIcon`。
-
-  **需要调整**：图标数据使用外部包 `tdesign_flutter_icons` 导出的 `TIcons`，展示使用 `TIcon(TIcons.add, size: ..., color: ...)`。在图标包 0.0.6 中，`TDIcons.list/video_camera_3/video_camera_3_filled` 没有同名新常量；旧 all Map 改为 `TIcons.allIconsMap`，键名也需核对。图标字体及 Widget 的迁移不能仅替换类名前缀。
-
-<a id="migration-component-link"></a>
-- **[Link 链接](https://tdesign.tencent.com/flutter/components/link?tab=api)**：`TDLink` → `TLink`。
-
-  **需要调整**：字符串内容改为 `child: Text(...)`，事件使用 `onPressed`，前后图标用 `prefixIcon/suffixIcon`。旧样式及状态配置改为 `TLinkThemeData`、`size/colorPreset/underline`，不再传旧 `TDLinkStyle`。
-
-<a id="migration-component-text"></a>
-- **[Text 文本](https://tdesign.tencent.com/flutter/components/text?tab=api)**：`TDText / TDTextSpan` → `TText / TTextSpan`。
-
-  **关键调整**：文字样式改为 `TextStyle`，缩放改为 `textScaler`；旧全局文字开关已移除。 [具体改法](#migration-theme)
+| 组件（API） | 旧入口 → 新入口 | 关键变化与改法 |
+| --- | --- | --- |
+| <a id="migration-component-button"></a>[Button 按钮](https://tdesign.tencent.com/flutter/components/button?tab=api) | `TDButton`<br>→ `TButton` | 内容改为 `child`，点击用 `onPressed`；传 `null` 禁用，空函数仍可点击。 [具体改法](#migration-button) |
+| <a id="migration-component-divider"></a>[Divider 分割线](https://tdesign.tencent.com/flutter/components/divider?tab=api) | `TDDivider`<br>→ `TDivider` | `text/widget` 合并为 `child`，`direction` → `layout`，`alignment` → `align`，`isDashed` → `dashed`。线色、粗细、间隔使用 `TDividerThemeData`；旧 `margin` 改由外层 Padding 表达，不能原样搬入构造。 |
+| <a id="migration-component-fab"></a>[Fab 悬浮按钮](https://tdesign.tencent.com/flutter/components/fab?tab=api) | `TDFab`<br>→ `TFab` | `onClick` → `onPressed`，`icon` 改传 Widget。旧 `size/shape/theme` 没有对应实例参数；默认动作按当前内置规格展示，完整自定义使用 `child`，拖动边界使用 `xBounds/yBounds`。 |
+| <a id="migration-component-icon"></a>[Icon 图标](https://tdesign.tencent.com/flutter/components/icon?tab=api) | `TDIcons / Icon`<br>→ `TIcons / TIcon` | 图标数据使用外部包 `tdesign_flutter_icons` 导出的 `TIcons`，展示使用 `TIcon(TIcons.add, size: ..., color: ...)`。在图标包 0.0.6 中，`TDIcons.list/video_camera_3/video_camera_3_filled` 没有同名新常量；旧 all Map 改为 `TIcons.allIconsMap`，键名也需核对。图标字体及 Widget 的迁移不能仅替换类名前缀。 |
+| <a id="migration-component-link"></a>[Link 链接](https://tdesign.tencent.com/flutter/components/link?tab=api) | `TDLink`<br>→ `TLink` | 字符串内容改为 `child: Text(...)`，事件使用 `onPressed`，前后图标用 `prefixIcon/suffixIcon`。旧样式及状态配置改为 `TLinkThemeData`、`size/colorPreset/underline`，不再传旧 `TDLinkStyle`。 |
+| <a id="migration-component-text"></a>[Text 文本](https://tdesign.tencent.com/flutter/components/text?tab=api) | `TDText / TDTextSpan`<br>→ `TText / TTextSpan` | 文字样式改为 `TextStyle`，缩放改为 `textScaler`；旧全局文字开关已移除。 [具体改法](#migration-theme) |
 
 </details>
 
 <a id="migration-group-navigation"></a>
 <details>
-<summary>页面导航与页签</summary>
-
+<summary>页面导航与页签（8项）</summary>
 
 重点区分顶部页签、底部导航以及各自的控制器和受控值。
 
-<a id="migration-component-back-top"></a>
-- **[BackTop 返回顶部](https://tdesign.tencent.com/flutter/components/back-top?tab=api)**：`TDBackTop` → `TBackTop`。
-
-  **需要调整**：`onClick` → `onPressed`；绑定 `ScrollController` 时组件可执行回顶，无控制器时由回调实现。使用 `shape/colorPreset/showText/visibilityOffset`；旧视觉样式迁到 `TBackTopThemeData`。
-
-<a id="migration-component-drawer"></a>
-- **[Drawer 抽屉](https://tdesign.tencent.com/flutter/components/drawer?tab=api)**：`TDDrawer / TDDrawerWidget` → `TDrawer / showTDrawer`。
-
-  **需要调整**：内容用 `TDrawer(items: ..., title: ..., footer: ...)`，打开浮层用 `showTDrawer` 并保留返回句柄。旧 `TDDrawerWidget` 不再单独实例化；方向用 `TDrawerPlacement`，样式按 `TDrawerThemeData` 配置。
-
-<a id="migration-component-indexes"></a>
-- **[Indexes 索引](https://tdesign.tencent.com/flutter/components/indexes?tab=api)**：`TDIndexes` → `TIndexes`。
-
-  **需要调整**：提供 `indexList` 与必填 `builderContent`；`initialIndex` 仅用于初始定位，不是受控 `value`。滚动接入 `scrollController`，通过 `onChanged/onSelect` 获取通知；外观使用 `TIndexesThemeData`。
-
-<a id="migration-component-navbar"></a>
-- **[Navbar 导航栏](https://tdesign.tencent.com/flutter/components/navbar?tab=api)**：`TDNavBar` → `TNavBar`。
-
-  **需要调整**：`title/titleWidget` 合并为 Widget `title`，`leftBarItems/rightBarItems` 改为 `leading/actions` 的 `TNavBarItem`。返回按钮由 `useDefaultBack/onBack` 表达；背景、颜色、边线和阴影使用 `TNavBarThemeData`，高度与安全区仍按实例配置。
-
-<a id="migration-component-side-bar"></a>
-- **[SideBar 侧边栏](https://tdesign.tencent.com/flutter/components/side-bar?tab=api)**：`TDSideBar` → `TSideBar`。
-
-  **需要调整**：去掉 `TDSideBarController.selectTo`，由必填 `value` 和 `onChanged` 管理选择；数据改为 `children: List<TSideBarItem>`。旧控制器加载状态迁到 `loading/loadingWidget`，尺寸仍按 `width/height` 配置。
-
-<a id="migration-component-steps"></a>
-- **[Steps 步骤条](https://tdesign.tencent.com/flutter/components/steps?tab=api)**：`TDSteps` → `TSteps.progress / selectable / display`。
-
-  **需要调整**：先选 `TSteps.progress`、`selectable` 或 `display`。步骤数据使用 `TStepsItemData`，旧 `activeIndex` 改为 `value`；前两种模式由 `value` 持有当前索引，选择模式必须提供 `onChange`，展示模式不接选择状态。
-
-<a id="migration-component-tab-bar"></a>
-- **[TabBar 标签栏](https://tdesign.tencent.com/flutter/components/tab-bar?tab=api)**：`TDBottomTabBar` → `TTabBar`。
-
-  **关键调整**：底部导航使用受控 `value/onChanged`；旧 basic/component/outline 分别核对 `type/itemStyle/style`，展开面板需业务组合。 [具体改法](#migration-tabs)
-
-<a id="migration-component-tabs"></a>
-- **[Tabs 选项卡](https://tdesign.tencent.com/flutter/components/tabs?tab=api)**：`TDTabBar / TDTabBarView` → `TTabsBar / TTabsBarView`。
-
-  **关键调整**：顶部页签使用 `TTabsBar / TTabsBarView`，共享控制器；旧 `isSlideSwitch` 改为 `physics`，默认不可滑动。 [具体改法](#migration-tabs)
+| 组件（API） | 旧入口 → 新入口 | 关键变化与改法 |
+| --- | --- | --- |
+| <a id="migration-component-back-top"></a>[BackTop 返回顶部](https://tdesign.tencent.com/flutter/components/back-top?tab=api) | `TDBackTop`<br>→ `TBackTop` | `onClick` → `onPressed`；绑定 `ScrollController` 时组件可执行回顶，无控制器时由回调实现。使用 `shape/colorPreset/showText/visibilityOffset`；旧视觉样式迁到 `TBackTopThemeData`。 |
+| <a id="migration-component-drawer"></a>[Drawer 抽屉](https://tdesign.tencent.com/flutter/components/drawer?tab=api) | `TDDrawer / TDDrawerWidget`<br>→ `TDrawer / showTDrawer` | 内容用 `TDrawer(items: ..., title: ..., footer: ...)`，打开浮层用 `showTDrawer` 并保留返回句柄。旧 `TDDrawerWidget` 不再单独实例化；方向用 `TDrawerPlacement`，样式按 `TDrawerThemeData` 配置。 |
+| <a id="migration-component-indexes"></a>[Indexes 索引](https://tdesign.tencent.com/flutter/components/indexes?tab=api) | `TDIndexes`<br>→ `TIndexes` | 提供 `indexList` 与必填 `builderContent`；`initialIndex` 仅用于初始定位，不是受控 `value`。滚动接入 `scrollController`，通过 `onChanged/onSelect` 获取通知；外观使用 `TIndexesThemeData`。 |
+| <a id="migration-component-navbar"></a>[Navbar 导航栏](https://tdesign.tencent.com/flutter/components/navbar?tab=api) | `TDNavBar`<br>→ `TNavBar` | `title/titleWidget` 合并为 Widget `title`，`leftBarItems/rightBarItems` 改为 `leading/actions` 的 `TNavBarItem`。返回按钮由 `useDefaultBack/onBack` 表达；背景、颜色、边线和阴影使用 `TNavBarThemeData`，高度与安全区仍按实例配置。 |
+| <a id="migration-component-side-bar"></a>[SideBar 侧边栏](https://tdesign.tencent.com/flutter/components/side-bar?tab=api) | `TDSideBar`<br>→ `TSideBar` | 去掉 `TDSideBarController.selectTo`，由必填 `value` 和 `onChanged` 管理选择；数据改为 `children: List<TSideBarItem>`。旧控制器加载状态迁到 `loading/loadingWidget`，尺寸仍按 `width/height` 配置。 |
+| <a id="migration-component-steps"></a>[Steps 步骤条](https://tdesign.tencent.com/flutter/components/steps?tab=api) | `TDSteps`<br>→ `TSteps.progress / selectable / display` | 先选 `TSteps.progress`、`selectable` 或 `display`。步骤数据使用 `TStepsItemData`，旧 `activeIndex` 改为 `value`；前两种模式由 `value` 持有当前索引，选择模式必须提供 `onChange`，展示模式不接选择状态。 |
+| <a id="migration-component-tab-bar"></a>[TabBar 标签栏](https://tdesign.tencent.com/flutter/components/tab-bar?tab=api) | `TDBottomTabBar`<br>→ `TTabBar` | 底部导航使用受控 `value/onChanged`；旧 basic/component/outline 分别核对 `type/itemStyle/style`，展开面板需业务组合。 [具体改法](#migration-tabs) |
+| <a id="migration-component-tabs"></a>[Tabs 选项卡](https://tdesign.tencent.com/flutter/components/tabs?tab=api) | `TDTabBar / TDTabBarView`<br>→ `TTabsBar / TTabsBarView` | 顶部页签使用 `TTabsBar / TTabsBarView`，共享控制器；旧 `isSlideSwitch` 改为 `physics`，默认不可滑动。 [具体改法](#migration-tabs) |
 
 </details>
 
 <a id="migration-group-input"></a>
 <details>
-<summary>表单、输入与选择</summary>
-
+<summary>表单、输入与选择（16项）</summary>
 
 先确认值由谁持有，再处理回调、表单校验和确认/取消流程。
 
-<a id="migration-component-calendar"></a>
-- **[Calendar 日历](https://tdesign.tencent.com/flutter/components/calendar?tab=api)**：`TDCalendar` → `TCalendar`。
-
-  **关键调整**：值改为 `List<DateTime>`；单选/多选/区间由 `variant` 决定，旧 `TDCalendarPopup` 改用 `TPopup + TCalendar` 组合确认。 [具体改法](#migration-picker)
-
-<a id="migration-component-cascader"></a>
-- **[Cascader 级联选择器](https://tdesign.tencent.com/flutter/components/cascader?tab=api)**：`TDCascader / TDMultiCascader` → `TCascader`。
-
-  **需要调整**：旧 Map 数据改为 `TCascaderOption` 树，受控 `value` 是一条 `List<Object?>` 路径。旧 `TDMultiCascader` 的 multi 表示多级，回调中的逐层模型需转为 value 路径；旧自动关闭、字母排序和 Tab/Action 扩展改由业务处理，不能把它理解为多选开关。
-
-<a id="migration-component-checkbox"></a>
-- **[CheckBox 多选框](https://tdesign.tencent.com/flutter/components/checkbox?tab=api)**：`TDCheckbox / TDCheckboxGroup` → `TCheckbox / TCheckboxGroup`。
-
-  **关键调整**：单项使用 `value/onChanged`，组使用 `options` 与受控列表；图标/组选项使用 `customIconBuilder/itemBuilder`，旧 id/controller 不再作为状态源。 [具体改法](#migration-controlled)
-
-<a id="migration-component-date-time-picker"></a>
-- **[DateTimePicker 时间选择器](https://tdesign.tencent.com/flutter/components/date-time-picker?tab=api)**：`TDDatePicker` → `TDateTimePicker`。
-
-  **关键调整**：`DatePickerModel` 改为 `TDateTimePickerValue`；边界用 `start/end`、步进用 `steps`，确认在外部管理。 [具体改法](#migration-picker)
-
-<a id="migration-component-form"></a>
-- **[Form 表单](https://tdesign.tencent.com/flutter/components/form?tab=api)**：`TDForm / FormController` → `TForm / TFormField / TFormController`。
-
-  **关键调整**：旧 `items/rules/data` 改为字段树，由 `TFormField` 连接业务值和校验。 [具体改法](#migration-form)
-
-<a id="migration-component-input"></a>
-- **[Input 输入框](https://tdesign.tencent.com/flutter/components/input?tab=api)**：`TDInput` → `TInput`。
-
-  **关键调整**：`controller` 与 `initialValue` 互斥；占位与插槽用 `hintText/prefix/suffix`；旧 `TDInputType` 是布局枚举，多行用 `TTextarea`。 [具体改法](#migration-controlled)
-
-<a id="migration-component-picker"></a>
-- **[Picker 选择器](https://tdesign.tencent.com/flutter/components/picker?tab=api)**：`TDPicker / TDMultiPicker / TDMultiLinkedPicker` → `TPicker + TPickerColumns / TPickerLinked`。
-
-  **关键调整**：列数据改为 `TPickerColumns / TPickerLinked`；`onChanged` 更新草稿，`TPickerPopup` 组合确认/取消。列停止通知用 `onColumnScrollEnd`。 [具体改法](#migration-picker)
-
-<a id="migration-component-radio"></a>
-- **[Radio 单选框](https://tdesign.tencent.com/flutter/components/radio?tab=api)**：`TDRadio / TDRadioGroup` → `TRadio / TRadioGroup<T>`。
-
-  **关键调整**：单项放在同类型 `TRadioGroup<T>` 中，由组统一持有选中值与回调。 [具体改法](#migration-controlled)
-
-<a id="migration-component-rate"></a>
-- **[Rate 评分](https://tdesign.tencent.com/flutter/components/rate?tab=api)**：`TDRate` → `TRate`。
-
-  **需要调整**：使用必填 `double value`、`onChanged` 和 `allowHalf`，`count` 为总星数。1.0 没有独立 readOnly 参数，`onChanged: null` 表示不可交互；图标构建使用 `icon`，文字用 `texts`，不要直接搬旧指示器位置枚举。
-
-<a id="migration-component-search"></a>
-- **[Search 搜索框](https://tdesign.tencent.com/flutter/components/search?tab=api)**：`TDSearchBar` → `TSearchBar`。
-
-  **需要调整**：`placeHolder/onTextChanged/onActionClick` 分别改为 `hintText/onChanged/onActionPressed`。用 `actionText` 定义操作文字；`controller` 与 `initialValue` 不可同时配置，自动聚焦用 `autofocus`。旧 `TDSearchStyle` 改按 Theme 和实例形态配置。
-
-<a id="migration-component-slider"></a>
-- **[Slider 滑动选择器](https://tdesign.tencent.com/flutter/components/slider?tab=api)**：`TDSlider / TDRangeSlider` → `TSlider / TRangeSlider`。
-
-  **需要调整**：单值用 `TSlider(value: double)`，区间用 `TRangeSlider(value: RangeValues)`；`onChanged: null` 表示禁用。用 `variant` 选择普通/胶囊，格式化用 `thumbFormatter/scaleFormatter`；旧 Track/Thumb 类和 mixin 无公开继承替代。
-
-<a id="migration-component-stepper"></a>
-- **[Stepper 步进器](https://tdesign.tencent.com/flutter/components/stepper?tab=api)**：`TDStepper` → `TStepper`。
-
-  **需要调整**：提供必填 `value`，在 `onChanged` 接受候选数值后重建；边界和步长用 `min/max/step`。旧 `defaultValue/eventController` 不再有效，`onChanged: null` 表示禁用；自建状态不应再与控制器双向通知。 [具体改法](#migration-controlled)
-
-<a id="migration-component-switch"></a>
-- **[Switch 开关](https://tdesign.tencent.com/flutter/components/switch?tab=api)**：`TDSwitch` → `TSwitch`。
-
-  **需要调整**：提供必填 `value` 并在 `onChanged` 回写，`onChanged: null` 表示禁用；旧 fill 改为 `TSwitchVariant.filled`，text/icon 按同名 variant；旧 loading 形态改为 `loading: true`。`loading` 表达加载状态，文字用 `openText/closeText`；具体配色从 `TSwitchThemeData` 配置。 [具体改法](#migration-controlled)
-
-<a id="migration-component-textarea"></a>
-- **[Textarea 多行文本框](https://tdesign.tencent.com/flutter/components/textarea?tab=api)**：`TDTextarea` → `TTextarea`。
-
-  **关键调整**：使用 `TTextarea` 承接多行输入；旧装饰与 padding 按 Theme 和外层布局调整。长度限制仍用 `maxLength/maxCharacter/indicator`。 [具体改法](#migration-controlled)
-
-<a id="migration-component-tree-select"></a>
-- **[TreeSelect 树形选择](https://tdesign.tencent.com/flutter/components/tree-select?tab=api)**：`TDTreeSelect / TDSelectOption` → `TTreeSelect / TTreeSelectOption`。
-
-  **需要调整**：旧 `TDSelectOption` 改为 `TTreeSelectOption(label/value/children)`；受控 `value` 是 `List<List<Object?>>`，单选也按路径列表传入。`multiple` 决定多选，`onChanged: null` 表示禁用；移除旧副作用控制器。
-
-<a id="migration-component-upload"></a>
-- **[Upload 上传](https://tdesign.tencent.com/flutter/components/upload?tab=api)**：`TDUpload` → `TUpload`。
-
-  **关键调整**：文件列表由 `files/onChanged` 管理；网络上传、进度和持久化由业务负责。 [具体改法](#migration-upload)
+| 组件（API） | 旧入口 → 新入口 | 关键变化与改法 |
+| --- | --- | --- |
+| <a id="migration-component-calendar"></a>[Calendar 日历](https://tdesign.tencent.com/flutter/components/calendar?tab=api) | `TDCalendar`<br>→ `TCalendar` | 值改为 `List<DateTime>`；单选/多选/区间由 `variant` 决定，旧 `TDCalendarPopup` 改用 `TPopup + TCalendar` 组合确认。 [具体改法](#migration-picker) |
+| <a id="migration-component-cascader"></a>[Cascader 级联选择器](https://tdesign.tencent.com/flutter/components/cascader?tab=api) | `TDCascader / TDMultiCascader`<br>→ `TCascader` | 旧 Map 数据改为 `TCascaderOption` 树，受控 `value` 是一条 `List<Object?>` 路径。旧 `TDMultiCascader` 的 multi 表示多级，回调中的逐层模型需转为 value 路径；旧自动关闭、字母排序和 Tab/Action 扩展改由业务处理，不能把它理解为多选开关。 |
+| <a id="migration-component-checkbox"></a>[CheckBox 多选框](https://tdesign.tencent.com/flutter/components/checkbox?tab=api) | `TDCheckbox / TDCheckboxGroup`<br>→ `TCheckbox / TCheckboxGroup` | 单项使用 `value/onChanged`，组使用 `options` 与受控列表；图标/组选项使用 `customIconBuilder/itemBuilder`，旧 id/controller 不再作为状态源。 [具体改法](#migration-controlled) |
+| <a id="migration-component-date-time-picker"></a>[DateTimePicker 时间选择器](https://tdesign.tencent.com/flutter/components/date-time-picker?tab=api) | `TDDatePicker`<br>→ `TDateTimePicker` | `DatePickerModel` 改为 `TDateTimePickerValue`；边界用 `start/end`、步进用 `steps`，确认在外部管理。 [具体改法](#migration-picker) |
+| <a id="migration-component-form"></a>[Form 表单](https://tdesign.tencent.com/flutter/components/form?tab=api) | `TDForm / FormController`<br>→ `TForm / TFormField / TFormController` | 旧 `items/rules/data` 改为字段树，由 `TFormField` 连接业务值和校验。 [具体改法](#migration-form) |
+| <a id="migration-component-input"></a>[Input 输入框](https://tdesign.tencent.com/flutter/components/input?tab=api) | `TDInput`<br>→ `TInput` | `controller` 与 `initialValue` 互斥；占位与插槽用 `hintText/prefix/suffix`；旧 `TDInputType` 是布局枚举，多行用 `TTextarea`。 [具体改法](#migration-controlled) |
+| <a id="migration-component-picker"></a>[Picker 选择器](https://tdesign.tencent.com/flutter/components/picker?tab=api) | `TDPicker / TDMultiPicker / TDMultiLinkedPicker`<br>→ `TPicker + TPickerColumns / TPickerLinked` | 列数据改为 `TPickerColumns / TPickerLinked`；`onChanged` 更新草稿，`TPickerPopup` 组合确认/取消。列停止通知用 `onColumnScrollEnd`。 [具体改法](#migration-picker) |
+| <a id="migration-component-radio"></a>[Radio 单选框](https://tdesign.tencent.com/flutter/components/radio?tab=api) | `TDRadio / TDRadioGroup`<br>→ `TRadio / TRadioGroup<T>` | 单项放在同类型 `TRadioGroup<T>` 中，由组统一持有选中值与回调。 [具体改法](#migration-controlled) |
+| <a id="migration-component-rate"></a>[Rate 评分](https://tdesign.tencent.com/flutter/components/rate?tab=api) | `TDRate`<br>→ `TRate` | 使用必填 `double value`、`onChanged` 和 `allowHalf`，`count` 为总星数。1.0 没有独立 readOnly 参数，`onChanged: null` 表示不可交互；图标构建使用 `icon`，文字用 `texts`，不要直接搬旧指示器位置枚举。 |
+| <a id="migration-component-search"></a>[Search 搜索框](https://tdesign.tencent.com/flutter/components/search?tab=api) | `TDSearchBar`<br>→ `TSearchBar` | `placeHolder/onTextChanged/onActionClick` 分别改为 `hintText/onChanged/onActionPressed`。用 `actionText` 定义操作文字；`controller` 与 `initialValue` 不可同时配置，自动聚焦用 `autofocus`。旧 `TDSearchStyle` 改按 Theme 和实例形态配置。 |
+| <a id="migration-component-slider"></a>[Slider 滑动选择器](https://tdesign.tencent.com/flutter/components/slider?tab=api) | `TDSlider / TDRangeSlider`<br>→ `TSlider / TRangeSlider` | 单值用 `TSlider(value: double)`，区间用 `TRangeSlider(value: RangeValues)`；`onChanged: null` 表示禁用。用 `variant` 选择普通/胶囊，格式化用 `thumbFormatter/scaleFormatter`；旧 Track/Thumb 类和 mixin 无公开继承替代。 |
+| <a id="migration-component-stepper"></a>[Stepper 步进器](https://tdesign.tencent.com/flutter/components/stepper?tab=api) | `TDStepper`<br>→ `TStepper` | 提供必填 `value`，在 `onChanged` 接受候选数值后重建；边界和步长用 `min/max/step`。旧 `defaultValue/eventController` 不再有效，`onChanged: null` 表示禁用；自建状态不应再与控制器双向通知。 [具体改法](#migration-controlled) |
+| <a id="migration-component-switch"></a>[Switch 开关](https://tdesign.tencent.com/flutter/components/switch?tab=api) | `TDSwitch`<br>→ `TSwitch` | 提供必填 `value` 并在 `onChanged` 回写，`onChanged: null` 表示禁用；旧 fill 改为 `TSwitchVariant.filled`，text/icon 按同名 variant；旧 loading 形态改为 `loading: true`。`loading` 表达加载状态，文字用 `openText/closeText`；具体配色从 `TSwitchThemeData` 配置。 [具体改法](#migration-controlled) |
+| <a id="migration-component-textarea"></a>[Textarea 多行文本框](https://tdesign.tencent.com/flutter/components/textarea?tab=api) | `TDTextarea`<br>→ `TTextarea` | 使用 `TTextarea` 承接多行输入；旧装饰与 padding 按 Theme 和外层布局调整。长度限制仍用 `maxLength/maxCharacter/indicator`。 [具体改法](#migration-controlled) |
+| <a id="migration-component-tree-select"></a>[TreeSelect 树形选择](https://tdesign.tencent.com/flutter/components/tree-select?tab=api) | `TDTreeSelect / TDSelectOption`<br>→ `TTreeSelect / TTreeSelectOption` | 旧 `TDSelectOption` 改为 `TTreeSelectOption(label/value/children)`；受控 `value` 是 `List<List<Object?>>`，单选也按路径列表传入。`multiple` 决定多选，`onChanged: null` 表示禁用；移除旧副作用控制器。 |
+| <a id="migration-component-upload"></a>[Upload 上传](https://tdesign.tencent.com/flutter/components/upload?tab=api) | `TDUpload`<br>→ `TUpload` | 文件列表由 `files/onChanged` 管理；网络上传、进度和持久化由业务负责。 [具体改法](#migration-upload) |
 
 </details>
 
 <a id="migration-group-display"></a>
 <details>
-<summary>内容与数据展示</summary>
-
+<summary>内容与数据展示（15项）</summary>
 
 检查数据结构、内容插槽、状态以及具体尺寸的含义。
 
-<a id="migration-component-avatar"></a>
-- **[Avatar 头像](https://tdesign.tencent.com/flutter/components/avatar?tab=api)**：`TDAvatar` → `TAvatar`。
-
-  **需要调整**：旧 `type` 改为 `image: ImageProvider` 或 `child` 的内容选择；网络图片先包装 `NetworkImage`。`size/shape` 仍是实例规格，具体颜色和尺寸使用 `TAvatarThemeData`；带样式的文字用 `child: Text(...)`。
-
-<a id="migration-component-badge"></a>
-- **[Badge 徽标](https://tdesign.tencent.com/flutter/components/badge?tab=api)**：`TDBadge` → `TBadge`。
-
-  **需要调整**：数字文本改为字符串 `label`，结构用 `variant`，数字0显隐用 `showZero`。旧 `redPoint` 对应 `TBadgeVariant.dot`；组合组件的旧 `BadgeConfig` 改为 `TBadgeConfig` 或 `.custom`，不再传旧 `showBadge/tdBadge`。
-
-<a id="migration-component-cell"></a>
-- **[Cell 单元格](https://tdesign.tencent.com/flutter/components/cell?tab=api)**：`TDCell / TDCellGroup` → `TCell / TCellGroup`。
-
-  **需要调整**：文字与图片改为 `title/subtitle/prefix/image/note/trailing` 的 Widget 槽；连续列表使用 `TCellGroup(cells: ...)`。旧单元格样式改按 `TCellThemeData`，组背景和分隔线由组管理，不重复添加 Divider。
-
-<a id="migration-component-collapse"></a>
-- **[Collapse 折叠面板](https://tdesign.tencent.com/flutter/components/collapse?tab=api)**：`TDCollapse / TDCollapsePanel` → `TCollapse / TCollapsePanel`。
-
-  **需要调整**：提供 `children` 和受控 `List<T> value`，在 `onChanged` 回写；用 `mode` 决定展开模式。每个 `TCollapsePanel` 要有 `value/headerBuilder/body`，展开图标等自定义使用当前 builder，旧 Style 不直接复用。
-
-<a id="migration-component-empty"></a>
-- **[Empty 空状态](https://tdesign.tencent.com/flutter/components/empty?tab=api)**：`TDEmpty` → `TEmpty`。
-
-  **需要调整**：旧 `type` 改为 `icon` 或 `image` 加 `emptyText/operation`。原插图类型、点击辅助类型不再作为公开入口；需要保留旧业务插图时传自己的 Widget，具体尺寸由 `TEmptyThemeData` 配置。
-
-<a id="migration-component-footer"></a>
-- **[Footer 页脚](https://tdesign.tencent.com/flutter/components/footer?tab=api)**：`TDFooter` → `TFooter`。
-
-  **需要调整**：使用 `logo: Widget`、`text: String` 与 `links: List<Widget>`；旧 `TDFooterType` 不再决定布局。链接内容由业务创建 `TLink` 等 Widget，外观使用 `TFooterThemeData`，不把旧枚举直接改名。
-
-<a id="migration-component-image"></a>
-- **[Image 图片](https://tdesign.tencent.com/flutter/components/image?tab=api)**：`TDImage` → `TImage`。
-
-  **需要调整**：`imgUrl` → `src`，本地文件可用 `imageFile`。旧 type 中适配方式拆到 `fit`，方形/圆角/圆形拆到 `shape`；宽高仍显式传入，加载与失败用现有 builder/widget，旧完整 Image 透传参数须逐项核对。
-
-<a id="migration-component-image-viewer"></a>
-- **[ImageViewer 图片预览](https://tdesign.tencent.com/flutter/components/image-viewer?tab=api)**：`TDImageViewer / TDImageViewerWidget` → `TImageViewer.show`。
-
-  **需要调整**：`TDImageViewer/TDImageViewerWidget` 改为 `TImageViewer.show`，图片用 `List<ImageProvider>`，配置 `initialIndex/onIndexChanged`。`TDImageDialog` 是另一种业务对话框，应迁为 `TDialog` 的图片内容槽，不应迁成全屏预览。
-
-<a id="migration-component-progress"></a>
-- **[Progress 进度条](https://tdesign.tencent.com/flutter/components/progress?tab=api)**：`TDProgress` → `TProgress`。
-
-  **需要调整**：不再调用普通 `TProgress(...)` 传 type；选用 `.linear/.plump/.circular/.microCircular/.button/.microButton`。`value` 仍是0到1的进度比例，旧 `progressStatus` 改为 `status`，`label` 传 Widget；圆环外框用 Theme 的 `circleSize`。
-
-<a id="migration-component-result"></a>
-- **[Result 结果](https://tdesign.tencent.com/flutter/components/result?tab=api)**：`TDResult` → `TResult`。
-
-  **需要调整**：`theme` → `status`，旧 `TDResultTheme.defaultTheme` 对应 `TResultStatus.info`，其余 success/warning/error 按同名状态核对。`title/description/icon` 保留内容职责，标题样式使用 `TResultThemeData`。
-
-<a id="migration-component-skeleton"></a>
-- **[Skeleton 骨架屏](https://tdesign.tencent.com/flutter/components/skeleton?tab=api)**：`TDSkeleton / TDSkeletonRowCol*` → `TSkeleton / TSkeleton.custom`。
-
-  **需要调整**：旧 `rowCol` 不再接受旧 RowCol 类；标准布局用 `variant`，自定义布局用 `TSkeleton.custom(layout: TSkeletonLayout(...))`。动画仍由 `animation/delay` 表达；不可把旧布局对象改前缀后复用。
-
-<a id="migration-component-swiper"></a>
-- **[Swiper 轮播图](https://tdesign.tencent.com/flutter/components/swiper?tab=api)**：`Swiper + TDSwiperPagination` → `TSwiper / TSwiperController`。
-
-  **关键调整**：使用 `children` 或 `itemBuilder/itemCount`，默认不循环、不自动播放；旧第三方控制器/分页配置需重写。 [具体改法](#migration-tabs)
-
-<a id="migration-component-table"></a>
-- **[Table 表格](https://tdesign.tencent.com/flutter/components/table?tab=api)**：`TDTable / TDTableCol` → `TTable<T> / TTableColumn<T>`。
-
-  **需要调整**：`TDTableCol` 改为 `TTableColumn<T>(id/header/cellBuilder)`，表格必填 `columns/data`。选择用 `selectedRows/onSelectionChanged`，排序用 `sort/onSortChanged` 受控回写；旧自动排序、回调签名和行选择函数需改写。
-
-<a id="migration-component-tag"></a>
-- **[Tag 标签](https://tdesign.tencent.com/flutter/components/tag?tab=api)**：`TDTag / TDSelectTag` → `TTag / TSelectTag`。
-
-  **需要调整**：保留 `text` 字符串；`theme` → `colorPreset`，描边/浅色等呈现改为 `variant`。`TSelectTag` 必填 `value` 并在 `onChanged` 回写，关闭用 `onCloseTap`；普通 `TTag` 的旧 disable 要反向转为 enabled，字体和圆角改按组件 Theme。
-
-<a id="migration-component-time-counter"></a>
-- **[TimeCounter 计时器](https://tdesign.tencent.com/flutter/components/time-counter?tab=api)**：`TDTimeCounter` → `TTimeCounter`。
-
-  **需要调整**：`onChange` → `onChanged`，`time` 和回调值均为毫秒整数；`theme` 改为 `variant`，defaultTheme 对应 plain。旧 `TDTimeCounterStyle` 不是形态枚举：现有颜色/圆角用 `TTimeCounterThemeData`，任意数字块布局用 `content` 构建器。
+| 组件（API） | 旧入口 → 新入口 | 关键变化与改法 |
+| --- | --- | --- |
+| <a id="migration-component-avatar"></a>[Avatar 头像](https://tdesign.tencent.com/flutter/components/avatar?tab=api) | `TDAvatar`<br>→ `TAvatar` | 旧 `type` 改为 `image: ImageProvider` 或 `child` 的内容选择；网络图片先包装 `NetworkImage`。`size/shape` 仍是实例规格，具体颜色和尺寸使用 `TAvatarThemeData`；带样式的文字用 `child: Text(...)`。 |
+| <a id="migration-component-badge"></a>[Badge 徽标](https://tdesign.tencent.com/flutter/components/badge?tab=api) | `TDBadge`<br>→ `TBadge` | 数字文本改为字符串 `label`，结构用 `variant`，数字0显隐用 `showZero`。旧 `redPoint` 对应 `TBadgeVariant.dot`；组合组件的旧 `BadgeConfig` 改为 `TBadgeConfig` 或 `.custom`，不再传旧 `showBadge/tdBadge`。 |
+| <a id="migration-component-cell"></a>[Cell 单元格](https://tdesign.tencent.com/flutter/components/cell?tab=api) | `TDCell / TDCellGroup`<br>→ `TCell / TCellGroup` | 文字与图片改为 `title/subtitle/prefix/image/note/trailing` 的 Widget 槽；连续列表使用 `TCellGroup(cells: ...)`。旧单元格样式改按 `TCellThemeData`，组背景和分隔线由组管理，不重复添加 Divider。 |
+| <a id="migration-component-collapse"></a>[Collapse 折叠面板](https://tdesign.tencent.com/flutter/components/collapse?tab=api) | `TDCollapse / TDCollapsePanel`<br>→ `TCollapse / TCollapsePanel` | 提供 `children` 和受控 `List<T> value`，在 `onChanged` 回写；用 `mode` 决定展开模式。每个 `TCollapsePanel` 要有 `value/headerBuilder/body`，展开图标等自定义使用当前 builder，旧 Style 不直接复用。 |
+| <a id="migration-component-empty"></a>[Empty 空状态](https://tdesign.tencent.com/flutter/components/empty?tab=api) | `TDEmpty`<br>→ `TEmpty` | 旧 `type` 改为 `icon` 或 `image` 加 `emptyText/operation`。原插图类型、点击辅助类型不再作为公开入口；需要保留旧业务插图时传自己的 Widget，具体尺寸由 `TEmptyThemeData` 配置。 |
+| <a id="migration-component-footer"></a>[Footer 页脚](https://tdesign.tencent.com/flutter/components/footer?tab=api) | `TDFooter`<br>→ `TFooter` | 使用 `logo: Widget`、`text: String` 与 `links: List<Widget>`；旧 `TDFooterType` 不再决定布局。链接内容由业务创建 `TLink` 等 Widget，外观使用 `TFooterThemeData`，不把旧枚举直接改名。 |
+| <a id="migration-component-image"></a>[Image 图片](https://tdesign.tencent.com/flutter/components/image?tab=api) | `TDImage`<br>→ `TImage` | `imgUrl` → `src`，本地文件可用 `imageFile`。旧 type 中适配方式拆到 `fit`，方形/圆角/圆形拆到 `shape`；宽高仍显式传入，加载与失败用现有 builder/widget，旧完整 Image 透传参数须逐项核对。 |
+| <a id="migration-component-image-viewer"></a>[ImageViewer 图片预览](https://tdesign.tencent.com/flutter/components/image-viewer?tab=api) | `TDImageViewer / TDImageViewerWidget`<br>→ `TImageViewer.show` | `TDImageViewer/TDImageViewerWidget` 改为 `TImageViewer.show`，图片用 `List<ImageProvider>`，配置 `initialIndex/onIndexChanged`。`TDImageDialog` 是另一种业务对话框，应迁为 `TDialog` 的图片内容槽，不应迁成全屏预览。 |
+| <a id="migration-component-progress"></a>[Progress 进度条](https://tdesign.tencent.com/flutter/components/progress?tab=api) | `TDProgress`<br>→ `TProgress` | 不再调用普通 `TProgress(...)` 传 type；选用 `.linear/.plump/.circular/.microCircular/.button/.microButton`。`value` 仍是0到1的进度比例，旧 `progressStatus` 改为 `status`，`label` 传 Widget；圆环外框用 Theme 的 `circleSize`。 |
+| <a id="migration-component-result"></a>[Result 结果](https://tdesign.tencent.com/flutter/components/result?tab=api) | `TDResult`<br>→ `TResult` | `theme` → `status`，旧 `TDResultTheme.defaultTheme` 对应 `TResultStatus.info`，其余 success/warning/error 按同名状态核对。`title/description/icon` 保留内容职责，标题样式使用 `TResultThemeData`。 |
+| <a id="migration-component-skeleton"></a>[Skeleton 骨架屏](https://tdesign.tencent.com/flutter/components/skeleton?tab=api) | `TDSkeleton / TDSkeletonRowCol*`<br>→ `TSkeleton / TSkeleton.custom` | 旧 `rowCol` 不再接受旧 RowCol 类；标准布局用 `variant`，自定义布局用 `TSkeleton.custom(layout: TSkeletonLayout(...))`。动画仍由 `animation/delay` 表达；不可把旧布局对象改前缀后复用。 |
+| <a id="migration-component-swiper"></a>[Swiper 轮播图](https://tdesign.tencent.com/flutter/components/swiper?tab=api) | `Swiper + TDSwiperPagination`<br>→ `TSwiper / TSwiperController` | 使用 `children` 或 `itemBuilder/itemCount`，默认不循环、不自动播放；旧第三方控制器/分页配置需重写。 [具体改法](#migration-tabs) |
+| <a id="migration-component-table"></a>[Table 表格](https://tdesign.tencent.com/flutter/components/table?tab=api) | `TDTable / TDTableCol`<br>→ `TTable<T> / TTableColumn<T>` | `TDTableCol` 改为 `TTableColumn<T>(id/header/cellBuilder)`，表格必填 `columns/data`。选择用 `selectedRows/onSelectionChanged`，排序用 `sort/onSortChanged` 受控回写；旧自动排序、回调签名和行选择函数需改写。 |
+| <a id="migration-component-tag"></a>[Tag 标签](https://tdesign.tencent.com/flutter/components/tag?tab=api) | `TDTag / TDSelectTag`<br>→ `TTag / TSelectTag` | 保留 `text` 字符串；`theme` → `colorPreset`，描边/浅色等呈现改为 `variant`。`TSelectTag` 必填 `value` 并在 `onChanged` 回写，关闭用 `onCloseTap`；普通 `TTag` 的旧 disable 要反向转为 enabled，字体和圆角改按组件 Theme。 |
+| <a id="migration-component-time-counter"></a>[TimeCounter 计时器](https://tdesign.tencent.com/flutter/components/time-counter?tab=api) | `TDTimeCounter`<br>→ `TTimeCounter` | `onChange` → `onChanged`，`time` 和回调值均为毫秒整数；`theme` 改为 `variant`，defaultTheme 对应 plain。旧 `TDTimeCounterStyle` 不是形态枚举：现有颜色/圆角用 `TTimeCounterThemeData`，任意数字块布局用 `content` 构建器。 |
 
 </details>
 
 <a id="migration-group-feedback"></a>
 <details>
-<summary>浮层、提示与交互反馈</summary>
-
+<summary>浮层、提示与交互反馈（11项）</summary>
 
 核对打开与关闭方式、返回结果、时长、异步结束和资源释放。
 
-<a id="migration-component-action-sheet"></a>
-- **[ActionSheet 动作面板](https://tdesign.tencent.com/flutter/components/action-sheet?tab=api)**：`TDActionSheet` → `TActionSheet`。
-
-  **需要调整**：按旧列表/宫格/分组意图选择 `showList/showGrid/showGridSections`，数据改为 `TActionSheetItem<T>`。`onClose` → `onClosed`；旧 `visible/theme` 不再驱动显示，保留返回的公开结果按入口契约处理。
-
-<a id="migration-component-dialog"></a>
-- **[Dialog 对话框](https://tdesign.tencent.com/flutter/components/dialog?tab=api)**：`TDAlertDialog / TDConfirmDialog / TDInputDialog` → `TDialog / TConfirmDialog / TDialogAction`。
-
-  **需要调整**：单确认用 `TConfirmDialog`，多操作用 `TDialog(actions: [TDialogAction(...)])`；title/content 改传 Widget。旧输入弹窗和图片弹窗分别组合 `TInput` 或图片内容，业务持有输入与提交逻辑，不用全屏预览替代图片弹窗。 [具体改法](#migration-overlay)
-
-<a id="migration-component-dropdown-menu"></a>
-- **[DropdownMenu 下拉菜单](https://tdesign.tencent.com/flutter/components/dropdown-menu?tab=api)**：`TDDropdownMenu / TDDropdownItem` → `TDropdownMenu / TDropdownMenuItem`。
-
-  **需要调整**：旧 `TDDropdownItem` 改为 `TDropdownMenuItem(label/panelBuilder)` 描述；选择内容使用 `TDropdownSingleSelectPanel/TDropdownMultiSelectPanel`。受控值保存在业务或面板，外部菜单开关用 `TDropdownMenuController`；重验关闭原因、滚动和锚点。
-
-<a id="migration-component-loading"></a>
-- **[Loading 加载](https://tdesign.tencent.com/flutter/components/loading?tab=api)**：`TDLoading` → `TLoading`。
-
-  **需要调整**：`size` 现在是逻辑像素数值，不再传 `TDLoadingSize`；`icon` 仍使用当前 `TLoadingIcon`。颜色、排版和运动样式按 `TLoadingThemeData`，异步加载层用 `TLoadingController` 并在结束/卸载时关闭。
-
-<a id="migration-component-message"></a>
-- **[Message 全局提示](https://tdesign.tencent.com/flutter/components/message?tab=api)**：`TDMessage` → `TMessage`。
-
-  **需要调整**：`theme` → `status`，`duration` 改为 `Duration`；旧 `visible` 用 Widget 树或命令句柄管理。`link` 改为 `action` Widget；`MessageMarquee.speed/delay` 毫秒改为 Duration，loop 的0/1语义改为 repeat false/true。
-
-<a id="migration-component-notice-bar"></a>
-- **[NoticeBar 消息提醒](https://tdesign.tencent.com/flutter/components/notice-bar?tab=api)**：`TDNoticeBar` → `TNoticeBar`。
-
-  **需要调整**：`theme` → `status`，组合内容用 `prefix/operation`；点击用 `onPressed` 区分目标，旧 `onTap` 不能直接复制。滚动周期 `interval` 使用 Duration，`direction/items` 决定展示方式；外观使用 `TNoticeBarThemeData`。
-
-<a id="migration-component-popover"></a>
-- **[Popover 弹出气泡](https://tdesign.tencent.com/flutter/components/popover?tab=api)**：`TDPopover / TDPopoverWidget` → `TPopover`。
-
-  **需要调整**：锚点内容使用 `TPopoverAnchor`，一次性展示使用 `TPopover.showPopover`；旧 Widget/回调与命令方式需按实际触发方式拆分。`theme` 的配色意图迁到 `colorPreset`，间距、箭头和圆角迁 `TPopoverThemeData`。
-
-<a id="migration-component-popup"></a>
-- **[Popup 弹出层](https://tdesign.tencent.com/flutter/components/popup?tab=api)**：`TDPopup*Panel / TDSlidePopupRoute` → `TPopup.show + TPopupOptions + TPopupHandle`。
-
-  **关键调整**：通过 `TPopup.show`、方向专属 Options 和 Handle 管理展示、关闭及结果；旧确认面板改为组合。 [具体改法](#migration-overlay)
-
-<a id="migration-component-pull-down-refresh"></a>
-- **[PullDownRefresh 下拉刷新](https://tdesign.tencent.com/flutter/components/pull-down-refresh?tab=api)**：`TDRefreshHeader` → `TPullDownRefresh`。
-
-  **需要调整**：不再将 `TDRefreshHeader` 传给原第三方刷新库；使用 `TPullDownRefresh(child: ..., onRefresh: ..., onLoadMore: ...)` 包装内容。异步结果由回调或 `TPullDownRefreshController` 管理，旧 Header 继承/无限刷新专属参数无逐项兼容承诺。
-
-<a id="migration-component-swipe-cell"></a>
-- **[SwipeCell 滑动操作](https://tdesign.tencent.com/flutter/components/swipe-cell?tab=api)**：`TDSwipeCell / TDSwipeCellAction` → `TSwipeCell / TSwipeCellAction`。
-
-  **需要调整**：旧 `cell/left/right/disabled` 改为 `child/start/end/enabled`；面板用 `TSwipeCellPanel`，动作回调用 `onPressed(context)`。开关通知统一为 `onOpenChanged`；旧互斥组、拖拽删除和二次确认需业务实现。
-
-<a id="migration-component-toast"></a>
-- **[Toast 轻提示](https://tdesign.tencent.com/flutter/components/toast?tab=api)**：`TDToast` → `TToast`。
-
-  **关键调整**：时长改为 `Duration`；持续加载用 `Duration.zero`，保存返回 ID 后主动关闭；旧 `TDToastConfig` 的样式与拦截分别迁到 Theme / `TOverlayConfig`。 [具体改法](#migration-overlay)
+| 组件（API） | 旧入口 → 新入口 | 关键变化与改法 |
+| --- | --- | --- |
+| <a id="migration-component-action-sheet"></a>[ActionSheet 动作面板](https://tdesign.tencent.com/flutter/components/action-sheet?tab=api) | `TDActionSheet`<br>→ `TActionSheet` | 按旧列表/宫格/分组意图选择 `showList/showGrid/showGridSections`，数据改为 `TActionSheetItem<T>`。`onClose` → `onClosed`；旧 `visible/theme` 不再驱动显示，保留返回的公开结果按入口契约处理。 |
+| <a id="migration-component-dialog"></a>[Dialog 对话框](https://tdesign.tencent.com/flutter/components/dialog?tab=api) | `TDAlertDialog / TDConfirmDialog / TDInputDialog`<br>→ `TDialog / TConfirmDialog / TDialogAction` | 单确认用 `TConfirmDialog`，多操作用 `TDialog(actions: [TDialogAction(...)])`；title/content 改传 Widget。旧输入弹窗和图片弹窗分别组合 `TInput` 或图片内容，业务持有输入与提交逻辑，不用全屏预览替代图片弹窗。 [具体改法](#migration-overlay) |
+| <a id="migration-component-dropdown-menu"></a>[DropdownMenu 下拉菜单](https://tdesign.tencent.com/flutter/components/dropdown-menu?tab=api) | `TDDropdownMenu / TDDropdownItem`<br>→ `TDropdownMenu / TDropdownMenuItem` | 旧 `TDDropdownItem` 改为 `TDropdownMenuItem(label/panelBuilder)` 描述；选择内容使用 `TDropdownSingleSelectPanel/TDropdownMultiSelectPanel`。受控值保存在业务或面板，外部菜单开关用 `TDropdownMenuController`；重验关闭原因、滚动和锚点。 |
+| <a id="migration-component-loading"></a>[Loading 加载](https://tdesign.tencent.com/flutter/components/loading?tab=api) | `TDLoading`<br>→ `TLoading` | `size` 现在是逻辑像素数值，不再传 `TDLoadingSize`；`icon` 仍使用当前 `TLoadingIcon`。颜色、排版和运动样式按 `TLoadingThemeData`，异步加载层用 `TLoadingController` 并在结束/卸载时关闭。 |
+| <a id="migration-component-message"></a>[Message 全局提示](https://tdesign.tencent.com/flutter/components/message?tab=api) | `TDMessage`<br>→ `TMessage` | `theme` → `status`，`duration` 改为 `Duration`；旧 `visible` 用 Widget 树或命令句柄管理。`link` 改为 `action` Widget；`MessageMarquee.speed/delay` 毫秒改为 Duration，loop 的0/1语义改为 repeat false/true。 |
+| <a id="migration-component-notice-bar"></a>[NoticeBar 消息提醒](https://tdesign.tencent.com/flutter/components/notice-bar?tab=api) | `TDNoticeBar`<br>→ `TNoticeBar` | `theme` → `status`，组合内容用 `prefix/operation`；点击用 `onPressed` 区分目标，旧 `onTap` 不能直接复制。滚动周期 `interval` 使用 Duration，`direction/items` 决定展示方式；外观使用 `TNoticeBarThemeData`。 |
+| <a id="migration-component-popover"></a>[Popover 弹出气泡](https://tdesign.tencent.com/flutter/components/popover?tab=api) | `TDPopover / TDPopoverWidget`<br>→ `TPopover` | 锚点内容使用 `TPopoverAnchor`，一次性展示使用 `TPopover.showPopover`；旧 Widget/回调与命令方式需按实际触发方式拆分。`theme` 的配色意图迁到 `colorPreset`，间距、箭头和圆角迁 `TPopoverThemeData`。 |
+| <a id="migration-component-popup"></a>[Popup 弹出层](https://tdesign.tencent.com/flutter/components/popup?tab=api) | `TDPopup*Panel / TDSlidePopupRoute`<br>→ `TPopup.show + TPopupOptions + TPopupHandle` | 通过 `TPopup.show`、方向专属 Options 和 Handle 管理展示、关闭及结果；旧确认面板改为组合。 [具体改法](#migration-overlay) |
+| <a id="migration-component-pull-down-refresh"></a>[PullDownRefresh 下拉刷新](https://tdesign.tencent.com/flutter/components/pull-down-refresh?tab=api) | `TDRefreshHeader`<br>→ `TPullDownRefresh` | 不再将 `TDRefreshHeader` 传给原第三方刷新库；使用 `TPullDownRefresh(child: ..., onRefresh: ..., onLoadMore: ...)` 包装内容。异步结果由回调或 `TPullDownRefreshController` 管理，旧 Header 继承/无限刷新专属参数无逐项兼容承诺。 |
+| <a id="migration-component-swipe-cell"></a>[SwipeCell 滑动操作](https://tdesign.tencent.com/flutter/components/swipe-cell?tab=api) | `TDSwipeCell / TDSwipeCellAction`<br>→ `TSwipeCell / TSwipeCellAction` | 旧 `cell/left/right/disabled` 改为 `child/start/end/enabled`；面板用 `TSwipeCellPanel`，动作回调用 `onPressed(context)`。开关通知统一为 `onOpenChanged`；旧互斥组、拖拽删除和二次确认需业务实现。 |
+| <a id="migration-component-toast"></a>[Toast 轻提示](https://tdesign.tencent.com/flutter/components/toast?tab=api) | `TDToast`<br>→ `TToast` | 时长改为 `Duration`；持续加载用 `Duration.zero`，保存返回 ID 后主动关闭；旧 `TDToastConfig` 的样式与拦截分别迁到 Theme / `TOverlayConfig`。 [具体改法](#migration-overlay) |
 
 </details>
 

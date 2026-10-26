@@ -193,3 +193,25 @@ test('migration site uses its page header while portable Markdown retains its ti
   assert.match(adapted, /<a id="从-0-2-7-升级到-1-0"><\/a>/);
   assert.match(readFileSync(path.join(root, 'tdesign-component/MIGRATION.md'), 'utf8'), /^# 从 0\.2\.7 升级到 1\.0$/m);
 });
+
+test('migration component groups and legacy appendix render as complete tables', () => {
+  const require = createRequire(import.meta.url);
+  const pluginRequire = createRequire(require.resolve('vite-plugin-tdoc'));
+  const MarkdownIt = pluginRequire('markdown-it');
+  const guide = readFileSync(path.join(root, migrationSource), 'utf8');
+  const tokens = new MarkdownIt({ html: true }).parse(guide, {});
+  const rows = [];
+  let bodyRows = null;
+  for (const token of tokens) {
+    if (token.type === 'tbody_open') bodyRows = 0;
+    if (token.type === 'tr_open' && bodyRows !== null) bodyRows++;
+    if (token.type === 'tbody_close') {
+      rows.push(bodyRows);
+      bodyRows = null;
+    }
+  }
+  assert.deepEqual(rows, [1, 6, 8, 16, 15, 11, 388]);
+  const rendered = new MarkdownIt({ html: true }).render(guide);
+  assert.equal([...rendered.matchAll(/<td><a id="migration-component-/g)].length, 57);
+  assert.equal([...rendered.matchAll(/<summary>/g)].length, 7);
+});

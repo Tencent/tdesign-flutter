@@ -100,17 +100,21 @@ export default defineComponent({
 
 // Shared site styles only cover tables directly below the document root.
 .migration-guide details {
-  margin: 16px 0;
+  margin: 12px 0;
+  padding: 0 16px;
+  border: 1px solid var(--component-stroke);
+  border-radius: 6px;
   overflow-x: auto;
 
   summary {
     cursor: pointer;
-    padding: 8px 0;
+    padding: 16px 0;
+    font-weight: 600;
   }
 
   table {
     width: 100%;
-    min-width: 640px;
+    min-width: 600px;
     table-layout: fixed;
     border-collapse: collapse;
     margin: 16px 0;
@@ -134,6 +138,12 @@ export default defineComponent({
   th:nth-child(3), td:nth-child(3) { width: 38%; }
 
   tbody tr:hover { background: var(--bg-color-table-hover); }
+}
+
+// Component mappings need more room for the action than for their API name.
+.migration-guide details:not([id]) {
+  th:nth-child(1), td:nth-child(1) { width: 22%; }
+  th:nth-child(3), td:nth-child(3) { width: 48%; }
 }
 
 // Guides use the same phone sidebar spacing as component pages.
