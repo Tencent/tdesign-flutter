@@ -56,10 +56,12 @@ t_footer_test.dart: 733d433124333f904cad34dd208b8872788beaa066f21605aae296081a62
 
 原 PR `52c32c2b` 与 `develop@304bf7d6` 同步后，仅交付 Footer 补丁；移除 develop 已淘汰的旧 Spec / Golden 路径，保留现行目录、品牌与版权组合及原有视觉基线。
 
-三张图来自同一个 Flutter 3.47.7 Web 页面，分别使用 develop、原 PR 和最终修复的 Footer 实现；共用当前 TLink / Theme、默认字体与容器约束，用于隔离比较 Footer 布局差异，不代表三个历史部署环境的全量运行。场景为 375 宽度单链接、375 宽度双链接、80 宽度双链接及品牌与版权组合。
+对比图来自同一个 Flutter 3.47.7 Web 页面，以等宽三栏分别使用 develop、原 PR 和最终修复的 Footer 实现；共用当前 TLink / Theme、默认字体与容器约束，用于隔离比较 Footer 布局差异，不代表三个历史部署环境的全量运行。场景为 375 宽度单链接、375 宽度双链接、80 宽度双链接及品牌与版权组合。
 
-| develop 304bf7d6 | 原 PR 52c32c2b | 最终修复 |
-| --- | --- | --- |
-| ![develop](evidence/footer-develop.jpg) | ![原 PR](evidence/footer-pr1113-original.jpg) | ![最终修复](evidence/footer-final.jpg) |
+三栏在一张画布中统一缩放，各场景外部容器宽高相同、顶部对齐；浅灰边框仅用于标出测试容器边界，不属于组件样式。避免 GitHub 表格分别缩放图片、垂直居中导致的比较偏差。
+
+![统一比例和起点的三方对照](evidence/footer-comparison.jpg)
+
+独立原图：[develop](evidence/footer-develop.jpg) · [原 PR](evidence/footer-pr1113-original.jpg) · [最终修复](evidence/footer-final.jpg)
 
 推送前在独立交付目录复验双版本组件、Demo、严格分析和 Linux 明暗 Golden；本地结果不等同于推送后最终提交的远端 CI。
