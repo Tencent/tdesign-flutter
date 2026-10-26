@@ -16,16 +16,12 @@ class ThemeFunctionColorExample extends StatelessWidget {
       ...defaults.colorMap.keys,
       ...defaults.refMap.keys,
     };
-    final colors = <String, Color>{};
-    for (final key in keys) {
-      final color = theme.colorMap[key];
-      if (color != null) {
-        colors[key] = color;
-      }
-    }
-    final entries = [
-      for (final prefix in ['brand', 'error', 'warning', 'success'])
-        ...colors.entries.where((entry) => entry.key.startsWith(prefix)),
+    final entries = <MapEntry<String, Color>>[
+      for (final prefix in const ['brand', 'error', 'warning', 'success'])
+        for (final key in keys)
+          if (key.startsWith(prefix))
+            if (theme.colorMap[key] case final Color color)
+              MapEntry(key, color),
     ];
     return ListView.builder(
       physics: const NeverScrollableScrollPhysics(),

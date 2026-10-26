@@ -76,3 +76,10 @@ macOS Flutter 3.32.0 / 3.47.7：Example 严格分析均无诊断，Theme 非 Gol
 通过站点既有同源主题消息通道加载[测试配置](./evidence/functional-palette-browser-theme.json)，未修改预览源码。浅色、深色均显示新增业务色、稀疏键 brandColor12 和别名 brandAlias；四类功能色实际数量为 20/16/16/16，没有旧的数量不等提示，别名与目标同色。站点代码面板正常展示真实生成片段，包含导入、实际键名与 entries.length。空配置沿用聚焦 Widget 测试结果，本轮没有声称完成其浏览器检查。检查后重新加载预览，撤销临时主题配置。
 
 [浅色运行截图](./evidence/functional-palette-browser-light.png) · [深色运行截图](./evidence/functional-palette-browser-dark.png)。截图仅为验收证据，未更新任何 Golden 基线或修改运行源码；此前源码候选的 CI 已完成，新增证据提交的 CI 按最终 head 单独核对。
+
+
+### 2026-10-26 条目收集精简复核
+
+移除中间 colors Map，先按固定分类筛选候选键，再解析非空颜色并直接生成 MapEntry。保留当前/默认/引用键集合、分类及组内顺序和渲染方式，不新增辅助类。示例片段从源码重新生成。
+
+相对 develop 673ddf8cc69d41632f68832a9079385623af7df1 的源码二进制补丁 SHA-256（scripts / tdesign-component / tdesign-site，不含本记录）为 `e7450afca3330fca46257521c16a139f47111d39bbffc162b9a757e47394a96a`。Flutter 3.32.0 / 3.47.7 严格分析无诊断，Theme 非 Golden 功能测试各 17/17；片段生成及 --check 通过，站点片段测试 7/7，57 页/360 示例映射通过。Linux Flutter 3.32.0 现有 Golden 8/8 精确比对通过，未更新基线或容差。此前浏览器截图继续绑定原运行候选；本轮通过功能及像素比对验证行为和默认视觉保持一致，未声称重新执行在线浏览器验收。远端 CI 按最终提交另行核对。
