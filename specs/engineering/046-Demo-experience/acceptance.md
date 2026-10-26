@@ -133,3 +133,13 @@ macOS Flutter 3.32.0 / 3.47.7：Example 严格分析均无诊断，文档示例�
 - [结构化运行记录](./evidence/pr1204-browser-observations.json)；[计数](./evidence/guides-counter.png)、[浅色刷新](./evidence/guides-theme-light-reloaded.png)、[深色刷新](./evidence/guides-theme-dark-reloaded.png)、[中文](./evidence/guides-locale-chinese.png)、[英文](./evidence/guides-locale-english.png)、[资源主题](./evidence/guides-resource-theme.png)均为未经编辑的实际浏览器截图。
 
 该源码提交的远端构建及相关检查已通过。本次只新增截图和验收证据，未改变运行源码、生成片段或 Golden 基线；复用上文同一源码的双版本与 Golden 检查。本轮为桌面浏览器验证，未执行移动设备或其他浏览器验收；截图提交的新 head CI 需另行核对。
+
+### PR #1202：site-components 回退至 main 版本
+
+依据 Flutter main d0de29e8，依赖从 ^0.20.0 回退为 ^0.18.1，锁文件实际解析 0.18.1；hybrids 连带回退至 8.2.2。其他依赖版本及运行源码未变。
+
+站点目录 Git tree f076189826367459837dccf8e68d423b64ac9d7f（git rev-parse HEAD:tdesign-site），Node 24.15.0 / pnpm 11.20.0：冻结安装成功，实际安装版本 0.18.1；站点测试 51/51、57 页 / 360 示例映射和生产构建通过。
+
+本机浏览器：移动端默认圆角 6px，调节后 4px，重置恢复 6px；内部锚点自动展开并定位在顶部 80px，跳转 FAQ 后后退恢复章节展开及滚动 2640px。
+
+本轮未重跑完整 Flutter 演示、真机或两个官网全量回归；原截图和 Flutter 测试仍绑定原候选。最终远端 CI 单独核对。
