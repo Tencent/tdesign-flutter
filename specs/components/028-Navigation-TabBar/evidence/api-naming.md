@@ -1,6 +1,6 @@
 # 六组件命名迁移独立验收
 
-当前结论以末节“同步 develop 9203d362 后的验收”为准；先前阶段只对应其原候选与范围。
+实现验收以“同步 develop 9203d362 后的验收”为准；当前文档展示以末节“通用兼容说明归并”为准，先前阶段仅对应其原候选与范围。
 
 ## 初始拆分边界（历史）
 
@@ -10,7 +10,7 @@
 
 新旧参数同时提供时非空新参数优先；未提供新参数时通过旧 getter 分派，保留已覆盖的继承用法、const 和旧构造函数类型。旧入口废弃，计划 2.0.0 删除。默认值、触发逻辑、受控值、手势过滤及 Controller 绑定规则不变。
 
-这不是零 breaking：业务旧 implements 若实现新增 getter 的类，仍需补齐成员。FAQ 以 TTabBarItemConfig 的 notifyOnReselect 转发到 allowMultipleTaps 举例；包外消费者测试验证缺失诊断和补齐后零诊断，不使用 noSuchMethod。普通构造调用和继承默认实现不受该缺失成员问题影响，旧调用可能产生弃用诊断。
+这不是零 breaking：业务旧 implements 若实现新增 getter 的类，仍需补齐成员。升级说明列出 TTabBarItemConfig 的 notifyOnReselect 转发到 allowMultipleTaps 等关系；包外消费者测试验证缺失诊断和补齐后零诊断，不使用 noSuchMethod。普通构造调用和继承默认实现不受该缺失成员问题影响，旧调用可能产生弃用诊断。
 
 不改变 Popup 的 onClick、继承规则、copyWith 或 destroyOnClose；showTDrawer 内部继续使用旧 Popup onClick，因此独立于 Popup 2.0 草稿。菜单路由修复由 #1198 交付，本 PR 不含该实现或矩阵。
 
@@ -49,7 +49,7 @@ API 由源码重新生成；共享测试字体与字形清单直接沿用 develo
 本地 Review 无阻塞项：旧 getter 继承分派、新参数非空优先和默认回调行为保留；已有 implements 需补齐 getter、弃用诊断及 2.0.0 旧入口删除风险不变。相对当前 develop 不新增 Popup/Picker/Drawer 生命周期变更；已合入的生命周期风险不因此消失。历史 749 项等结果不代替本节，新 head CI/Review 推送后单独核对，不合并 PR。
 
 
-## 分组件升级 FAQ 收口验收
+## 分组件升级 FAQ 收口验收（历史展示方案）
 
 基于 ffc98c11，仅整理站点文档与 Spec。NoticeBar、Checkbox、Drawer、Popover、Steps、TabBar 的 1.0.0 → 1.0.1 提醒移入各自组件；全局 FAQ 删除原重复汇总。升级 FAQ 只保留新增公开 getter 的 implements 适配、同名成员冲突及实际的手势/视觉/生命周期风险。普通改名、废弃与删除计划、参数优先级和未改变的既有行为由 API 文档说明，不再混入升级 FAQ。Popup 保留 final 和会话保留/资源冲突两问，稳定锚点 popup-session-reuse 不变，相关组件链接仍有效。
 
@@ -75,3 +75,11 @@ Drawer 的 TDrawer.onItemTap，以及 TabBar 的 TTabBarItemConfig.notifyOnResel
 八组件生产覆盖率均超过95%：Drawer 296/302（98.01%）、TabBar 682/690（98.84%）；其余范围见本地 coverage 日志。站点 Node 35 项与57份文档/360份示例映射通过。两 SDK 的2330份源码、测试与生成资源逐字节一致，输入清单SHA-256 `9b3e4643011b6e31584ecbdacdac81715ecd798f8c9e4cd837c0098805a4474e`；相对新develop的组件输入补丁SHA-256 `4f803b14b56d55811ea5df605c1b916c09d8fc969c761e520064478f46b598aa`。记录之后只调整Spec和PR说明，不改变已验证源码。
 
 原始日志、SDK隔离快照、输入清单及补丁在工作区 artifacts/pr1196-sync-develop-9203d362，不入库。未测试真机/Web release交互，不在macOS运行或更新Linux Golden。旧1175/129或其他head的CI不代替本节；推送后核对最新head，暂不合并。
+
+## 通用兼容说明归并
+
+基于 bf86d3a6，仅调整文档。公开 getter 的 implements 适配与同名业务成员冲突集中到 #1196 的升级说明：一张表覆盖十个目标类、新 getter 和旧 getter 转发关系。breaking 日志保留事实，改为指向该 PR 升级说明；不再让用户查组件 FAQ 寻找通用语言规则。
+
+NoticeBar、Drawer、Popover、Steps、TabBar FAQ 各自仅保留手势或文字/布局变化，问题标题对应具体场景。Checkbox 移除没有独立事项的 FAQ。Popup 的 final、生命周期和资源冲突 FAQ 完整保留；不新增全局 FAQ、base/final 限制、公开接口或重复修复日志。旧 ThemeData implements 的内部解析问题仍无用户适配要求。
+
+站点 Node 35 项、57 份组件文档/360 份示例映射与 README 同步检查通过。五个特有 FAQ 已逐页浏览器预览，Checkbox 确认不再展示 FAQ；截图、原始日志和 PR 草稿在工作区 artifacts/pr1196-faq-generic-cleanup，不入库。生产源码、测试、工具、API/示例资源和 CHANGELOG 与 bf86d3a6 逐文件哈希一致，Popup 组件 README 也未变；本轮不重复执行双 SDK 或 Golden，原1206/129项只绑定未变实现。推送后CI另按最新head确认，不合并。
