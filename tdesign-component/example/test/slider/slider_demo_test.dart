@@ -209,15 +209,16 @@ void main() {
         .tTheme
         .bgColorContainer;
     final verticalSectionSurface = find.ancestor(
-      of: verticalSectionTitle,
+      of: find.byKey(const ValueKey('slider-vertical')),
       matching: find.byWidgetPredicate(
         (widget) => widget is ColoredBox && widget.color == surfaceColor,
       ),
     );
     expect(verticalSectionSurface, findsOneWidget);
+    // 区块标题由页面统一渲染，位于示例内容（surface）上方。
     expect(
-      tester.getTopLeft(verticalSectionTitle).dx,
-      tester.getTopLeft(verticalSectionSurface).dx,
+      tester.getBottomLeft(verticalSectionTitle).dy,
+      lessThanOrEqualTo(tester.getTopLeft(verticalSectionSurface).dy),
     );
     final verticalTrackRect = tester.getRect(
       find.ancestor(
