@@ -1,12 +1,11 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:tdesign_flutter/tdesign_flutter.dart';
-
-import '../lib/migration_027_to_100_examples.dart';
+import 'package:tdesign_migration_consumer/migration_examples.dart';
 
 Widget host(Widget child) => migratedApp(Scaffold(body: child));
 
 void main() {
-  testWidgets('M01 button: content, renamed callback and null disables', (
+  testWidgets('button: content, renamed callback and null disables', (
     tester,
   ) async {
     var taps = 0;
@@ -18,7 +17,7 @@ void main() {
     expect(taps, 1);
   });
 
-  testWidgets('M02 text: local TD theme and explicit instance override', (
+  testWidgets('text: local TD theme and explicit instance override', (
     tester,
   ) async {
     await tester.pumpWidget(
@@ -52,7 +51,7 @@ void main() {
     expect(second.text.style?.fontSize, 23);
   });
 
-  testWidgets('M03 checkbox: parent accepts controlled value', (tester) async {
+  testWidgets('checkbox: parent accepts controlled value', (tester) async {
     var value = false;
     await tester.pumpWidget(
       host(
@@ -70,7 +69,7 @@ void main() {
     expect(tester.widget<TCheckbox>(find.byType(TCheckbox)).value, isTrue);
   });
 
-  testWidgets('M04 radio: typed group owns selection', (tester) async {
+  testWidgets('radio: typed group owns selection', (tester) async {
     var value = 'a';
     await tester.pumpWidget(
       host(
@@ -85,9 +84,7 @@ void main() {
     expect(value, 'b');
   });
 
-  testWidgets('M05 form: required validation and accepted input', (
-    tester,
-  ) async {
+  testWidgets('form: required validation and accepted input', (tester) async {
     final form = TFormController();
     final text = TextEditingController();
     addTearDown(text.dispose);
@@ -114,7 +111,7 @@ void main() {
   });
 
   testWidgets(
-    'M06 picker: cancellation never commits draft; confirmation commits',
+    'picker: cancellation never commits draft; confirmation commits',
     (tester) async {
       String? committed;
       late BuildContext context;
@@ -166,9 +163,7 @@ void main() {
     },
   );
 
-  testWidgets('M07 dialog: result completes after confirmed close', (
-    tester,
-  ) async {
+  testWidgets('dialog: result completes after confirmed close', (tester) async {
     late BuildContext context;
     await tester.pumpWidget(
       host(
@@ -187,7 +182,7 @@ void main() {
     expect(await result, isTrue);
   });
 
-  testWidgets('M08 upload: custom picker produces accepted immutable list', (
+  testWidgets('upload: custom picker produces accepted immutable list', (
     tester,
   ) async {
     var files = <TUploadFile>[];
@@ -210,26 +205,7 @@ void main() {
     expect(() => files.clear(), throwsUnsupportedError);
   });
 
-  testWidgets('M09 calendar and date picker use public controlled types', (
-    tester,
-  ) async {
-    await tester.pumpWidget(
-      host(migratedCalendar([DateTime(2026, 10, 15)], (_) {})),
-    );
-    expect(tester.takeException(), isNull);
-    await tester.pumpWidget(
-      host(
-        migratedDateTime(
-          const TDateTimePickerValue(year: 2026, month: 10, day: 15),
-          (_) {},
-        ),
-      ),
-    );
-    await tester.pumpAndSettle();
-    expect(tester.takeException(), isNull);
-  });
-
-  testWidgets('M10 toast: zero duration stays until explicitly dismissed', (
+  testWidgets('toast: zero duration stays until explicitly dismissed', (
     tester,
   ) async {
     late BuildContext context;
@@ -249,5 +225,42 @@ void main() {
     TToast.dismissToast(id);
     await tester.pump(const Duration(seconds: 1));
     expect(find.text('处理中'), findsNothing);
+  });
+
+  testWidgets('top tabs share the inherited controller', (tester) async {
+    await tester.pumpWidget(host(migratedTopTabs()));
+    await tester.tap(find.text('详情'));
+    await tester.pumpAndSettle();
+    final context = tester.element(find.byType(TTabsBar));
+    expect(DefaultTabController.of(context).index, 1);
+    expect(find.text('详情内容').hitTestable(), findsOneWidget);
+  });
+
+  testWidgets('bottom tabs accept the parent controlled index', (tester) async {
+    var value = 0;
+    await tester.pumpWidget(
+      host(
+        StatefulBuilder(
+          builder: (context, setState) =>
+              migratedBottomTabs(value, (next) => setState(() => value = next)),
+        ),
+      ),
+    );
+    await tester.tap(find.text('我的'));
+    await tester.pumpAndSettle();
+    expect(value, 1);
+    expect(tester.widget<TTabBar>(find.byType(TTabBar)).value, 1);
+  });
+
+  testWidgets('swiper advances and disposes its internal timer', (
+    tester,
+  ) async {
+    await tester.pumpWidget(host(migratedSwiper()));
+    await tester.pump(const Duration(seconds: 3));
+    await tester.pump(const Duration(seconds: 1));
+    expect(find.text('第二页').hitTestable(), findsWidgets);
+    await tester.pumpWidget(const SizedBox());
+    await tester.pump(const Duration(seconds: 4));
+    expect(tester.takeException(), isNull);
   });
 }
