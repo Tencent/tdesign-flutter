@@ -57,3 +57,30 @@ Base: `182f8cd956edeee4dfd7ef977176309f051e3c3c`. Binary diff SHA-256 (`git diff
 - Node 24.15.0 / macOS: theme bridge and documentation tests 33/33 passed; 57 component pages / 360 generated example mappings passed; Vite production build passed in 3.32s (existing chunk size warning only).
 - `git diff --check origin/develop` passed. Flutter directives, repository document adapters and BASE_URL image rewriting retained. No component source changes; Flutter/Golden/device tests are outside this cleanup scope.
 - Current FAQ, audit dispositions and unused-version cleanup come from develop. No push, remote PR mutation, deployment or current remote CI verification.
+
+
+## 文档锚点与历史恢复
+
+来源 PR #1156 `a9a44f1985af4f7b4ca3b46b53f26d5c7d90085e`；独立基线 develop `673ddf8cc69d41632f68832a9079385623af7df1`。仅包含本章节职责；验证结果仅适用于以下本地候选，不继承原 PR CI 或其他拆分分支结果。
+
+2026-10-26 本地验证：相对上述基线的源码二进制补丁 SHA-256（scripts / tdesign-component / tdesign-site，不含本记录）为 `5a33996bd87ebd61b6ef8615f4bc499f08c48bd42e3e35e33ab17375b683dfb0`。
+
+Node 24.22.1：导航、主题桥及站点文档测试 47/47；57 页/360 示例映射、6 份同步输出检查和 Vite 生产构建通过。仅改站点，未运行 Flutter 或 Golden。
+
+本机内置浏览器访问当前分支生产预览 http://127.0.0.1:19116/flutter/：首次验证发现 Markdown 将分组锚点渲染为空段落中的 a，锚点不是 details 的祖先，原逻辑只定位不展开。修复识别相邻折叠章节的空锚点，并增加对应回归及非空段落不误展开测试。修复后 migration-group-basic 和 migration-component-button 均展开对应章节，目标距视口顶部 80px；跨页 FAQ 返回恢复滚动 2321px。相同无 hash URL 的独立历史条目 B / C 分别恢复 basic / display 折叠状态及 2051px / 2159px，前进至 C 仍恢复对应状态。必要截图见本地 artifacts/pr1156-split-local-20261026/navigation-browser-anchor.png。
+
+这是本机浏览器聚焦检查，不代表全部浏览器、移动视口、发布站点或设备验收。未推送、未执行本分支远端 CI。
+
+
+[迁移指南折叠锚点展开与定位的浏览器截图](./evidence/navigation-folded-anchor.png)。截图为本地浏览器证据，不代表移动设备验收。
+
+
+### 2026-10-26 PR #1205 在线导航复验
+
+运行源码 `2695c64d96cc5fb0dd65f03731c158ec87b48f75`；[在线预览](https://preview-pr-1205-40282829021-1-tdesign-flutter.surge.sh/flutter/migration-1-0) 的部署任务 40282829021 下载构建任务 40282224119 的产物，构建 head 与上述提交一致。
+
+- 分组 `#migration-group-basic` 与折叠块内部 `#migration-component-icon` 深链接均自动展开基础组件章节；内部目标距视口顶部 80px。截图另向上滚动以完整展示章节上下文，不把截图后的滚动位置当成定位断言。
+- 通过真实侧栏导航访问“迁移指南 → FAQ → 同一迁移指南”，两次 URL 均为 `/flutter/migration-1-0`。第一次仅展开基础组件，滚动位置 2051；第二次仅展开输入组件，滚动位置 2123。浏览器连续后退恢复第一次，连续前进恢复第二次，折叠数组与滚动值均与各自离开前完全一致。
+- [结构化运行记录](./evidence/pr1205-browser-observations.json)；[分组深链接](./evidence/navigation-group-anchor.png)、[内部深链接](./evidence/navigation-inside-anchor.png)、[后退恢复](./evidence/navigation-history-back-A.png)、[前进恢复](./evidence/navigation-history-forward-B.png)均为未经编辑的在线站点运行截图。
+
+该源码提交的远端构建及相关检查已通过。本次只新增截图与验收证据，站点实现不变，复用已有 47/47 测试及构建结果；无需重跑 Flutter 或 Golden。本轮为桌面浏览器验证，未执行移动设备或其他浏览器验收；截图提交的新 head CI 需另行核对。
