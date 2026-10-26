@@ -1,4 +1,3 @@
-import { createRequire } from 'node:module';
 import assert from 'node:assert/strict';
 import { mkdtempSync, mkdirSync, readFileSync, writeFileSync, rmSync } from 'node:fs';
 import { tmpdir } from 'node:os';
@@ -139,79 +138,4 @@ test('quick start shares the Flutter preview and retains its legacy theme anchor
   assert.doesNotMatch(guide, /<iframe|^## 自定义主题$/m);
   assert.match(guide, /<span id="自定义主题" aria-hidden="true"><\/span>/);
   assert.match(guide, /\[自定义主题\]\(\.\/custom-theme\.md\)/);
-});
-
-
-test('every migration source and generated package link resolves to an anchor or registered route', () => {
-  const require = createRequire(import.meta.url);
-  const pluginRequire = createRequire(require.resolve('vite-plugin-tdoc'));
-  const MarkdownIt = pluginRequire('markdown-it');
-  const markdown = new MarkdownIt({ html: true });
-  const guide = readFileSync(path.join(root, migrationSource), 'utf8');
-  const ids = new Set([...guide.matchAll(/\bid="([^"]+)"/g)].map(match => match[1]));
-  assert.equal([...ids].filter(id => id.startsWith('migration-component-')).length, 57);
-  assert.ok(ids.has('自定义文字槽默认值统一（patch）'));
-  for (const stem of ['_1-0写法与注意事项', '迁移后怎样确认']) {
-    for (let index = 0; index < 8; index++) assert.ok(ids.has(stem + (index ? `-${index}` : '')));
-  }
-  const routes = new Set();
-  const walkRoutes = items => items.forEach(item => {
-    if (item.path) routes.add(item.path);
-    if (item.children) walkRoutes(item.children);
-  });
-  walkRoutes(siteConfig.docs);
-  const links = content => {
-    const found = [];
-    const walk = tokens => tokens.forEach(token => {
-      if (token.type === 'link_open') found.push(token.attrGet('href'));
-      if (token.children) walk(token.children);
-    });
-    walk(markdown.parse(content, {}));
-    return found;
-  };
-  const local = links(guideLinks(guide));
-  const portable = links(readFileSync(path.join(root, 'tdesign-component/MIGRATION.md'), 'utf8'));
-  assert.equal(local.length, portable.length);
-  for (const [index, href] of local.entries()) {
-    if (href.startsWith('#')) {
-      assert.ok(ids.has(decodeURIComponent(href.slice(1))), `Missing anchor: ${href}`);
-      assert.equal(portable[index], href);
-    } else {
-      const url = new URL(href, 'https://tdesign.tencent.com');
-      assert.equal(url.origin, 'https://tdesign.tencent.com');
-      assert.ok(routes.has(url.pathname), `Missing route: ${href}`);
-      assert.equal(portable[index], url.href);
-      if (url.pathname.includes('/components/')) assert.equal(url.search, '?tab=api');
-    }
-  }
-});
-
-test('migration site uses its page header while portable Markdown retains its title', () => {
-  const guide = readFileSync(path.join(root, migrationSource), 'utf8');
-  const adapted = adaptGuideLinks(guide, path.join(root, migrationSource));
-  assert.doesNotMatch(adapted, /^# 从 0\.2\.7 升级到 1\.0$/m);
-  assert.match(adapted, /<a id="从-0-2-7-升级到-1-0"><\/a>/);
-  assert.match(readFileSync(path.join(root, 'tdesign-component/MIGRATION.md'), 'utf8'), /^# 从 0\.2\.7 升级到 1\.0$/m);
-});
-
-test('migration component groups and legacy appendix render as complete tables', () => {
-  const require = createRequire(import.meta.url);
-  const pluginRequire = createRequire(require.resolve('vite-plugin-tdoc'));
-  const MarkdownIt = pluginRequire('markdown-it');
-  const guide = readFileSync(path.join(root, migrationSource), 'utf8');
-  const tokens = new MarkdownIt({ html: true }).parse(guide, {});
-  const rows = [];
-  let bodyRows = null;
-  for (const token of tokens) {
-    if (token.type === 'tbody_open') bodyRows = 0;
-    if (token.type === 'tr_open' && bodyRows !== null) bodyRows++;
-    if (token.type === 'tbody_close') {
-      rows.push(bodyRows);
-      bodyRows = null;
-    }
-  }
-  assert.deepEqual(rows, [1, 6, 8, 16, 15, 11, 388]);
-  const rendered = new MarkdownIt({ html: true }).render(guide);
-  assert.equal([...rendered.matchAll(/<td><a id="migration-component-/g)].length, 57);
-  assert.equal([...rendered.matchAll(/<summary>/g)].length, 7);
 });

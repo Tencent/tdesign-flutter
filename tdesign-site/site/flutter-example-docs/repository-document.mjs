@@ -1,6 +1,6 @@
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { guideLinks, migrationSource } from '../../../scripts/documentation.mjs';
+import { guideLinks } from '../../../scripts/documentation.mjs';
 
 const root = fileURLToPath(new URL('../../../', import.meta.url));
 
@@ -18,10 +18,5 @@ export function adaptRepositoryDocument(source, file) {
 export function adaptGuideLinks(source, file) {
   const guides = path.join(root, 'tdesign-site/site/docs');
   if (path.dirname(path.resolve(file)) !== guides) return source;
-  const adapted = guideLinks(source);
-  // The site already renders this title in td-doc-header. Keep its old fragment
-  // without repeating the visible heading; the portable Markdown keeps its H1.
-  return path.resolve(file) === path.join(root, migrationSource)
-    ? adapted.replace(/^# 从 0\.2\.7 升级到 1\.0[ \t]*$/m, '<a id="从-0-2-7-升级到-1-0"></a>')
-    : adapted;
+  return guideLinks(source);
 }
