@@ -4,7 +4,7 @@ import 't_steps_horizontal.dart';
 import 't_steps_mode.dart';
 import 't_steps_vertical.dart';
 
-/// Steps步骤条数据类型
+/// 步骤条的数据模型。
 class TStepsItemData {
   const TStepsItemData({
     this.title,
@@ -33,10 +33,16 @@ class TStepsItemData {
   /// 失败图标
   final IconData? errorIcon;
 
-  /// 自定义内容
+  /// 自定义说明；优先于 content。
+  ///
+  /// 子树默认使用当前方向的说明文字样式，不强制内置行数/省略。
+  /// 显式文字样式和内容内部更近的局部文字主题优先。
   final Widget? customContent;
 
-  /// 自定义标题
+  /// 自定义标题；优先于 title。
+  ///
+  /// 子树默认使用当前方向及步骤状态的标题文字样式，不强制内置行数/省略。
+  /// 显式文字样式和内容内部更近的局部文字主题优先。
   final Widget? customTitle;
 }
 
@@ -69,7 +75,6 @@ enum TStepsStatus {
   error,
 }
 
-/// Steps步骤条
 class TSteps extends StatelessWidget {
   /// 普通进度步骤条。
   ///

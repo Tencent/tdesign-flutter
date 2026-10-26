@@ -3,11 +3,11 @@ import 'package:tdesign_flutter_icons/tdesign_flutter_icons.dart' show TIcons;
 
 import '../../theme/t_colors.dart';
 import '../../theme/t_fonts.dart';
+import '../../theme/t_internal_material.dart';
 import '../../theme/t_theme.dart';
 import '../text/t_text.dart';
 import 't_empty_theme_data.dart';
 
-/// 用于空数据、网络异常和操作引导的空状态组件。
 class TEmpty extends StatelessWidget {
   const TEmpty({
     this.icon = TIcons.info_circle_filled,
@@ -17,7 +17,7 @@ class TEmpty extends StatelessWidget {
     Key? key,
   }) : super(key: key);
 
-  /// 默认图标；[image] 非空时不显示。
+  /// 默认图标；image 非空时不显示，显式 null 仍回退为 info_circle_filled。
   final IconData? icon;
 
   /// 自定义图片或插画；优先于 [icon]。
@@ -44,7 +44,7 @@ class TEmpty extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           image ??
-              Icon(
+              TInternalIcon(
                 icon ?? TIcons.info_circle_filled,
                 size: 96,
                 color: context.tTheme.textColorPlaceholder,
@@ -52,9 +52,11 @@ class TEmpty extends StatelessWidget {
           Padding(padding: EdgeInsets.only(top: image == null ? 22 : 16)),
           TText(
             emptyText ?? '',
-            fontWeight: FontWeight.w400,
             font: emptyTextFont ?? context.tTheme.fontBodyMedium,
-            textColor: emptyTextColor ?? context.tTheme.textColorPlaceholder,
+            style: TextStyle(
+              fontWeight: FontWeight.w400,
+              color: emptyTextColor ?? context.tTheme.textColorPlaceholder,
+            ),
           ),
           if (operation != null)
             Padding(padding: const EdgeInsets.only(top: 32), child: operation),

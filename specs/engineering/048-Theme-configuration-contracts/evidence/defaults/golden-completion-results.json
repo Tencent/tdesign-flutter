@@ -1,0 +1,651 @@
+{
+  "referenceBase": "f5d8df2f2bc43224406319b4944930454458930c",
+  "previousHead": "ca5c7c61379e9ef850b7cc6866089d4d90468f6b",
+  "environment": "Flutter 3.32.0 Linux amd64, DPR1, text scale1, bundled Roboto/CJK/TIcons",
+  "comparator": "Flutter LocalFileComparator exact pixels; no tolerance change",
+  "comparisonMethod": "RGBA exact comparison; differing canvas sizes padded transparent at origin; percentages use maximum canvas",
+  "images": [
+    {
+      "target": "tdesign-component/test/components/backtop/goldens/backtop_state_matrix_dark.png",
+      "action": "replace-font-baseline",
+      "beforeSource": "ca5c7c61 committed baseline",
+      "reason": "test-font-token-and-cjk-fallback",
+      "beforeSize": [
+        296,
+        160
+      ],
+      "afterSize": [
+        296,
+        160
+      ],
+      "diffPixels": 1203,
+      "diffPercent": 2.540118243243243,
+      "diffBBox": [
+        28,
+        24,
+        272,
+        136
+      ],
+      "beforeSha256": "4d51298b2f76b9214a8e0502b15ba1d10c1adb1bdb47446e685ec0a9612236db",
+      "afterSha256": "543648f9ae2204967718eae69646c3c685be31ace42ef159e5549898b6dcebeb"
+    },
+    {
+      "target": "tdesign-component/test/components/backtop/goldens/backtop_state_matrix_light.png",
+      "action": "replace-font-baseline",
+      "beforeSource": "ca5c7c61 committed baseline",
+      "reason": "test-font-token-and-cjk-fallback",
+      "beforeSize": [
+        296,
+        160
+      ],
+      "afterSize": [
+        296,
+        160
+      ],
+      "diffPixels": 1206,
+      "diffPercent": 2.5464527027027026,
+      "diffBBox": [
+        28,
+        24,
+        268,
+        128
+      ],
+      "beforeSha256": "133921ad78bc2642dcf2ceb91feabc3395050b682945017d098e82a7cb4ba2d6",
+      "afterSha256": "10fa720d712be4ceeb09ae23fc34543ca17624a59beafaf69954f51053e7ecb3"
+    },
+    {
+      "target": "tdesign-component/test/components/cell/goldens/cell_card_default_radius_dark.png",
+      "action": "add-default-baseline",
+      "beforeSource": "f5d8df2f production with identical new harness",
+      "reason": "card-radius-8-to-9",
+      "beforeSize": [
+        375,
+        162
+      ],
+      "afterSize": [
+        375,
+        162
+      ],
+      "diffPixels": 112,
+      "diffPercent": 0.18436213991769546,
+      "diffBBox": [
+        16,
+        88,
+        359,
+        146
+      ],
+      "beforeSha256": "69b41fe08947e29225bc5abbb77bf01095577b32e09170458a053c1237fb80b9",
+      "afterSha256": "cb24a2e9efef0e65eed8956be343d5563f0c1df8ab522a20bd0fb2e68d177ac8"
+    },
+    {
+      "target": "tdesign-component/test/components/cell/goldens/cell_card_default_radius_light.png",
+      "action": "add-default-baseline",
+      "beforeSource": "f5d8df2f production with identical new harness",
+      "reason": "card-radius-8-to-9",
+      "beforeSize": [
+        375,
+        162
+      ],
+      "afterSize": [
+        375,
+        162
+      ],
+      "diffPixels": 110,
+      "diffPercent": 0.18106995884773663,
+      "diffBBox": [
+        16,
+        88,
+        359,
+        146
+      ],
+      "beforeSha256": "a66c88888fa233e083013601cc8d955dc6f72a6b9f6fc0096a701e7ebe0bd14b",
+      "afterSha256": "74ac18ba63436bdd6b77e816dd9032e7b8bfd73af9f159018f5bd351cfdd8426"
+    },
+    {
+      "target": "tdesign-component/test/components/tabs/goldens/tabs_tag_default_padding_dark_initial.png",
+      "action": "add-default-baseline",
+      "beforeSource": "f5d8df2f production with identical new harness",
+      "reason": "tag-inner-padding-8-to-16",
+      "beforeSize": [
+        224,
+        48
+      ],
+      "afterSize": [
+        272,
+        48
+      ],
+      "diffPixels": 5987,
+      "diffPercent": 45.85631127450981,
+      "diffBBox": [
+        12,
+        0,
+        272,
+        48
+      ],
+      "beforeSha256": "b738ee8fec430ec4281b113478f68052c19e32ddf399228de3779fba56aa2d8a",
+      "afterSha256": "afb20044e5dad1ffbdf3730195f0b833a99e9966466d96e87c593d66bd7f408c"
+    },
+    {
+      "target": "tdesign-component/test/components/tabs/goldens/tabs_tag_default_padding_dark_selected.png",
+      "action": "add-default-baseline",
+      "beforeSource": "f5d8df2f production with identical new harness",
+      "reason": "tag-inner-padding-8-to-16",
+      "beforeSize": [
+        224,
+        48
+      ],
+      "afterSize": [
+        272,
+        48
+      ],
+      "diffPixels": 6422,
+      "diffPercent": 49.18811274509804,
+      "diffBBox": [
+        12,
+        0,
+        272,
+        48
+      ],
+      "beforeSha256": "dccc955f56dfdf50e1f7f08dd5f7a237a6bd670035a903a8b0004f0eadbdf93d",
+      "afterSha256": "abe5256da682b57d0704d07287cf6da6e7711971c4257b8eef115a468a1a88d8"
+    },
+    {
+      "target": "tdesign-component/test/components/tabs/goldens/tabs_tag_default_padding_light_initial.png",
+      "action": "add-default-baseline",
+      "beforeSource": "f5d8df2f production with identical new harness",
+      "reason": "tag-inner-padding-8-to-16",
+      "beforeSize": [
+        224,
+        48
+      ],
+      "afterSize": [
+        272,
+        48
+      ],
+      "diffPixels": 5990,
+      "diffPercent": 45.87928921568628,
+      "diffBBox": [
+        12,
+        0,
+        272,
+        48
+      ],
+      "beforeSha256": "7aac7be03f22376bb3ad8ac4399f7e44a313df5ac9ef5b64b44f2168fe615c56",
+      "afterSha256": "f4482ff0415b96f96f6c7e9a61f75ed5096d73b1ecd6d8e0d7c0501d3e751047"
+    },
+    {
+      "target": "tdesign-component/test/components/tabs/goldens/tabs_tag_default_padding_light_selected.png",
+      "action": "add-default-baseline",
+      "beforeSource": "f5d8df2f production with identical new harness",
+      "reason": "tag-inner-padding-8-to-16",
+      "beforeSize": [
+        224,
+        48
+      ],
+      "afterSize": [
+        272,
+        48
+      ],
+      "diffPixels": 6416,
+      "diffPercent": 49.1421568627451,
+      "diffBBox": [
+        12,
+        0,
+        272,
+        48
+      ],
+      "beforeSha256": "f9946741cf29d34dd11ddb57b0d888ff28d6436feb3741ab0a6f4204f602f529",
+      "afterSha256": "7ea9f6e4e822a5262d2848be936d135b12526a6a71f258bd02422d11dc334a3d"
+    }
+  ],
+  "validation": {
+    "flutter3.32.0": {
+      "functionalTests": 226,
+      "strictAnalyze": "passed"
+    },
+    "flutter3.47.7": {
+      "functionalTests": 226,
+      "strictAnalyze": "passed"
+    },
+    "linux3.32.0": {
+      "newReferenceCases": 6,
+      "updatedCases": 8,
+      "immediateExactVerificationCases": 8,
+      "changedBaselines": 2,
+      "addedBaselines": 6,
+      "originalApprovedImagesUnchanged": 96
+    },
+    "productionSourceChanges": []
+  },
+  "commands": {
+    "nonVisual": "flutter test <cell/backtop/tabs manifest componentTests> test/theme/component_token_ownership_test.dart test/tool/run_visual_regression_test.dart test/tool/run_component_regression_test.dart test/tool/check_component_coverage_test.dart --no-pub --exclude-tags golden --reporter expanded",
+    "analysis": "flutter analyze --fatal-infos",
+    "visual": "flutter test test/components/backtop/t_backtop_golden_test.dart test/components/cell/t_cell_golden_test.dart test/components/tabs/t_tag_padding_golden_test.dart --no-pub --reporter expanded",
+    "update": "same visual command with --update-goldens, once; immediate same command without update passed"
+  },
+  "fingerprints": {
+    "tdesign-component/test/helpers/component_golden_fonts.dart": "acbd2af3afdfbfd8a671d7df08289dfe6c1c065a0978ce6855ef8e5274f5618b",
+    "tdesign-component/test/components/backtop/t_backtop_golden_test.dart": "bd30102e567b443bc72d5be05bc0ac980ac4f8b8d05ce2a1264113157021a6ae",
+    "tdesign-component/test/components/cell/t_cell_golden_test.dart": "2b2229b6aa64674eed9a033630d21221def0a051f455e82295bfdefd210a902f",
+    "tdesign-component/test/components/tabs/t_tag_padding_golden_test.dart": "fe1b72761000da4910a1e05c75505736ca1703484e1fe08e7952d3fc0a4950bc",
+    "tdesign-component/tool/component_test_manifest.dart": "40acc30481b9664f4dfb78659d863ea326b8b37513a71ec11a00fbfe94102645"
+  },
+  "currentPRGoldenInventory": [
+    {
+      "target": "tdesign-component/example/test/backtop/goldens/backtop_page_circle_scrolled_dark.png",
+      "sha256": "602587cddfba1234e10605c6d57597e5ea1027b8388975115a9f6eddf0b2685f"
+    },
+    {
+      "target": "tdesign-component/example/test/backtop/goldens/backtop_page_circle_scrolled_light.png",
+      "sha256": "4661cb562a73d32224e48c9a36ec1878e0aa551286122c479fc53da0ccb90ab5"
+    },
+    {
+      "target": "tdesign-component/example/test/backtop/goldens/backtop_page_half-round_scrolled_dark.png",
+      "sha256": "b64be9ffef8aafcb7956a6fe2103210f958957634c5a305974e5f8939717b5da"
+    },
+    {
+      "target": "tdesign-component/example/test/backtop/goldens/backtop_page_half-round_scrolled_light.png",
+      "sha256": "219a5efcdc948224bf71d807c39a1b30b933fc9fc136c0e2f5896a73b7931811"
+    },
+    {
+      "target": "tdesign-component/example/test/badge/goldens/badge_page_dark.png",
+      "sha256": "640b9b64d72662da39843e1e86e5c3ad1c4235200363da1314a166bb2d247f52"
+    },
+    {
+      "target": "tdesign-component/example/test/badge/goldens/badge_page_light.png",
+      "sha256": "9d2c86e37c89b85c03732b79622bd6420c11b414a9020bf21076bc1833f0e926"
+    },
+    {
+      "target": "tdesign-component/example/test/dropdown_menu/goldens/dropdown_menu_double_column_opened_dark.png",
+      "sha256": "2bc0c3841e3508130e63164db913740b3c43cefcaa49c4ae8984a7a70ef8a730"
+    },
+    {
+      "target": "tdesign-component/example/test/dropdown_menu/goldens/dropdown_menu_double_column_opened_light.png",
+      "sha256": "ecef4e1824cfa8f4155863ceb1a81df0f59220b6582825b95feac0d363f8c555"
+    },
+    {
+      "target": "tdesign-component/example/test/dropdown_menu/goldens/dropdown_menu_multiple_opened_dark.png",
+      "sha256": "4b74843db3fb7cb04b5b73681509a98220e281a9a07eceafa6321a5812abe32b"
+    },
+    {
+      "target": "tdesign-component/example/test/dropdown_menu/goldens/dropdown_menu_multiple_opened_light.png",
+      "sha256": "81d9df10e2d46965cfb7bbc48b1bd873b6ded3752d9b7612170cbd185ddd526b"
+    },
+    {
+      "target": "tdesign-component/example/test/dropdown_menu/goldens/dropdown_menu_overscroll_opened_dark.png",
+      "sha256": "b7c7351908a109ecb04469ce2da893a19651de9944e350d207fe54e9f19239a5"
+    },
+    {
+      "target": "tdesign-component/example/test/dropdown_menu/goldens/dropdown_menu_overscroll_opened_light.png",
+      "sha256": "24338bafa7f19c58a28136884b70e98b4e300da455873e10503e54a035f3c261"
+    },
+    {
+      "target": "tdesign-component/example/test/dropdown_menu/goldens/dropdown_menu_page_dark.png",
+      "sha256": "4f9350280f3c9f18378cacce26f158fd4e2ec894a0a74c1323373ec24e8210ed"
+    },
+    {
+      "target": "tdesign-component/example/test/dropdown_menu/goldens/dropdown_menu_page_light.png",
+      "sha256": "377cabef28760f8f5b1447e7856d852a399e59d0b6994711440e925a012c828a"
+    },
+    {
+      "target": "tdesign-component/example/test/dropdown_menu/goldens/dropdown_menu_single_column_opened_dark.png",
+      "sha256": "41298fd0e5c71e3ca4394cd0a9677f99ebfe3e2437b71aaa20bb3868a8e7f4ef"
+    },
+    {
+      "target": "tdesign-component/example/test/dropdown_menu/goldens/dropdown_menu_single_column_opened_light.png",
+      "sha256": "6c359113b5a8786c13a5dee8e7f8b878075d38ca16bcd1e746d7ccce9aca9180"
+    },
+    {
+      "target": "tdesign-component/example/test/dropdown_menu/goldens/dropdown_menu_single_opened_dark.png",
+      "sha256": "fa9c4dc6bbfc04b2d0cc9cd986712e744f6cb943a9cc742ffedcb767b84ad4e0"
+    },
+    {
+      "target": "tdesign-component/example/test/dropdown_menu/goldens/dropdown_menu_single_opened_light.png",
+      "sha256": "869e602e71b8894bb8aeb1c555affab5bd7730cd3bfe104fdc8acb78b8cd75a9"
+    },
+    {
+      "target": "tdesign-component/example/test/dropdown_menu/goldens/dropdown_menu_single_selected_dark.png",
+      "sha256": "d6997a8de3b7ae24338d95ad690825172e4a26d8242f4481951c9365a680a0f4"
+    },
+    {
+      "target": "tdesign-component/example/test/dropdown_menu/goldens/dropdown_menu_single_selected_light.png",
+      "sha256": "c05272e7e6e9dd252eda2400e93e9183e38cd96963c663296ed44aa78a7d9824"
+    },
+    {
+      "target": "tdesign-component/example/test/dropdown_menu/goldens/dropdown_menu_sorter_opened_dark.png",
+      "sha256": "794bc96044e7768a6d7f5c1d9882f41bb58c3101b2419de7e4caf933dfcae609"
+    },
+    {
+      "target": "tdesign-component/example/test/dropdown_menu/goldens/dropdown_menu_sorter_opened_light.png",
+      "sha256": "dcc04ce2cb9e83b5b783f9a3d7a5a81f180df0923788f58bfaf4d62d74cbb4b0"
+    },
+    {
+      "target": "tdesign-component/example/test/link/goldens/link_feedback_dark.png",
+      "sha256": "d80d19a74a86b3e54d76ea3d2a409651aef328eae64c21620f7d76ad4d5805ca"
+    },
+    {
+      "target": "tdesign-component/example/test/link/goldens/link_feedback_light.png",
+      "sha256": "c88256fc2852b93df607c040d1a4af216bcfeb7753f3d67ff54116cdc06a91d4"
+    },
+    {
+      "target": "tdesign-component/example/test/navbar/goldens/navbar_action_toast_dark.png",
+      "sha256": "45413a7ce8774449e205f55798b6f6f57c686f466672a3ffb8ec5470c73a4075"
+    },
+    {
+      "target": "tdesign-component/example/test/navbar/goldens/navbar_action_toast_light.png",
+      "sha256": "b9515d2958e8312f0354100814ea71bd96962bf3bc82ba8f29575f5ee8fac083"
+    },
+    {
+      "target": "tdesign-component/example/test/navbar/goldens/navbar_back_toast_dark.png",
+      "sha256": "1ec354ee90baf058eecd57797b74148953f6d2b2859e299a85cebc0859252391"
+    },
+    {
+      "target": "tdesign-component/example/test/navbar/goldens/navbar_back_toast_light.png",
+      "sha256": "d62c56d2a0f49f4af8d76c2b8e75227fd9e83bd76136de6ad24d5edd59fb3ad3"
+    },
+    {
+      "target": "tdesign-component/example/test/navbar/goldens/navbar_close_toast_dark.png",
+      "sha256": "3e0deaf3b3bcc05b10f96230c82238d1587360679b84f169925c3f28453b1577"
+    },
+    {
+      "target": "tdesign-component/example/test/navbar/goldens/navbar_close_toast_light.png",
+      "sha256": "47dd6c370f2e9ca536bdefa55a9724b4e44e1ec323e40acbea79362e9c113691"
+    },
+    {
+      "target": "tdesign-component/example/test/navbar/goldens/navbar_home_toast_dark.png",
+      "sha256": "bbbb845a5b684aaa019d1c3e96e8b5e791ba2daa57d521cfa9d5b34537a540ed"
+    },
+    {
+      "target": "tdesign-component/example/test/navbar/goldens/navbar_home_toast_light.png",
+      "sha256": "eeda19f57d04d355b1f322e36d6d5bdc45a1f52d62ca4d63f1d00d6001fbf498"
+    },
+    {
+      "target": "tdesign-component/example/test/notice_bar/goldens/notice_bar_close_post_action_dark.png",
+      "sha256": "4a84ff450564fa86c6bc70024898eebd9c8f97b4f995b38782dd18765089342b"
+    },
+    {
+      "target": "tdesign-component/example/test/notice_bar/goldens/notice_bar_close_post_action_light.png",
+      "sha256": "537dd6b46b2eda08b7b4c3f3ecadc50d6efa182b1f7a37c26ca6d1bf28f03310"
+    },
+    {
+      "target": "tdesign-component/example/test/notice_bar/goldens/notice_bar_entrance_post_action_dark.png",
+      "sha256": "c7f5ff126b4725385c74c58e1cd85185a82525a4f586a5e87c76a56c07d5e2fc"
+    },
+    {
+      "target": "tdesign-component/example/test/notice_bar/goldens/notice_bar_entrance_post_action_light.png",
+      "sha256": "dc863fea04d2c37f2ed01af2fb8c572014e332ac07401648bb4963dbd8810847"
+    },
+    {
+      "target": "tdesign-component/example/test/popover/goldens/popover_custom_option_1_post_action_dark.png",
+      "sha256": "9021578265eb7e7d322ebdfcae03431d27f60941c97c87305631c4e6b80b1355"
+    },
+    {
+      "target": "tdesign-component/example/test/popover/goldens/popover_custom_option_1_post_action_light.png",
+      "sha256": "0ad2cb9142eac22e06f5b10a18821b42822a15162af94967bddc300b84616e55"
+    },
+    {
+      "target": "tdesign-component/example/test/popover/goldens/popover_custom_option_2_post_action_dark.png",
+      "sha256": "07de57a638113ba4005adec79d6843c7f1fa367208bc7fae515e8ae872270b45"
+    },
+    {
+      "target": "tdesign-component/example/test/popover/goldens/popover_custom_option_2_post_action_light.png",
+      "sha256": "7cc9201aeb84fa2d22d79b04d2cad3df5084b7310875dfc252cea8a50b8adef3"
+    },
+    {
+      "target": "tdesign-component/example/test/popover/goldens/popover_custom_option_3_post_action_dark.png",
+      "sha256": "6e24412683d81176ad9b42d2acfc006a663c7a82f44fb6fdea39730600a96243"
+    },
+    {
+      "target": "tdesign-component/example/test/popover/goldens/popover_custom_option_3_post_action_light.png",
+      "sha256": "97c9bddd2ab47884105b0a6e81f69392d675f662c1ae7a135cb69d64db749c19"
+    },
+    {
+      "target": "tdesign-component/example/test/refresh/goldens/pull_down_refresh_basic_post_action_dark.png",
+      "sha256": "66dbda88e923da02c089de44350857b4a263c974f3144ee903b9141f7aec3725"
+    },
+    {
+      "target": "tdesign-component/example/test/refresh/goldens/pull_down_refresh_basic_post_action_light.png",
+      "sha256": "9ec0a24adc83630663c1f506cd9e794663acbdf9c3f57b89afc85633903fdaae"
+    },
+    {
+      "target": "tdesign-component/example/test/refresh/goldens/pull_down_refresh_custom_text_post_action_dark.png",
+      "sha256": "d082b9432120a7b2d486a83fd06e9ba8bb13cedba9b676b937f73a24a7a2ad73"
+    },
+    {
+      "target": "tdesign-component/example/test/refresh/goldens/pull_down_refresh_custom_text_post_action_light.png",
+      "sha256": "bf8de91ab2007ef6bebe18d7c218c70511a749c137525b0af8ce37d711e4be8a"
+    },
+    {
+      "target": "tdesign-component/example/test/refresh/goldens/pull_down_refresh_timeout_post_action_dark.png",
+      "sha256": "49a05c13b8800d98445107a3e4d9ead8f1f632a4d34d66932c3ca832f08952df"
+    },
+    {
+      "target": "tdesign-component/example/test/refresh/goldens/pull_down_refresh_timeout_post_action_light.png",
+      "sha256": "fc319e7b0608745516dee37df37685dd4f464c92fb1cc9836f6de411235bcef2"
+    },
+    {
+      "target": "tdesign-component/example/test/sidebar/goldens/sidebar_tag_selected_item_dark.png",
+      "sha256": "450cd445b401d2e32c2ad2e94508970e599bf0d4e95e9dc9efff9c35aed0332e"
+    },
+    {
+      "target": "tdesign-component/example/test/sidebar/goldens/sidebar_tag_selected_item_light.png",
+      "sha256": "ffd4abc91b19ed4501b53ec0f2d71c9547bc4546f3466300164218566f823737"
+    },
+    {
+      "target": "tdesign-component/example/test/sidebar_tag/goldens/sidebar_tag_page_dark.png",
+      "sha256": "054febcb725f5729c30c93d1db34184fec6e1f47f6e2f7ec9e82d9d702398e07"
+    },
+    {
+      "target": "tdesign-component/example/test/sidebar_tag/goldens/sidebar_tag_page_light.png",
+      "sha256": "767568ad12df56a2070dc3fd649359b0bb5b4eded8ea91196a6bbfd3960dd26c"
+    },
+    {
+      "target": "tdesign-component/example/test/tab_bar/goldens/tab_bar_menu_selected_toast_dark.png",
+      "sha256": "fa15cd7d6f2219cbff395f795d3bee03396530460593a81415ce63ca00214f9e"
+    },
+    {
+      "target": "tdesign-component/example/test/tab_bar/goldens/tab_bar_menu_selected_toast_light.png",
+      "sha256": "472e5d3ef772cdb283ee9417fd3a5fad147ff4c2ac692d9a7a803dc9b3b29e85"
+    },
+    {
+      "target": "tdesign-component/example/test/tab_bar/goldens/tab_bar_text_toast_dark.png",
+      "sha256": "4c0a32b41c024b1c403eb985f615b7ed30c636f79bae6c39053b167f7ea239b5"
+    },
+    {
+      "target": "tdesign-component/example/test/tab_bar/goldens/tab_bar_text_toast_light.png",
+      "sha256": "124971b35a998d7bdb01ce2e2967c5cca49bc7644944efe49c7b5ed5e53c9b1a"
+    },
+    {
+      "target": "tdesign-component/example/test/table/goldens/table_fixed_first_scrolled_dark.png",
+      "sha256": "e1fead37bd79e46d39c8fc5389916dbcba548369ab1e18945a710fc0ae3b6bd6"
+    },
+    {
+      "target": "tdesign-component/example/test/table/goldens/table_fixed_first_scrolled_light.png",
+      "sha256": "0b6ca57f15aade635da11ee199a5b96fb1c5560112904887e525457bf2bd8301"
+    },
+    {
+      "target": "tdesign-component/example/test/table/goldens/table_fixed_last_scrolled_dark.png",
+      "sha256": "c0a7a5d5e718d7a8bea605318d6012bf60be42e13c646086bc672c2dd8a69344"
+    },
+    {
+      "target": "tdesign-component/example/test/table/goldens/table_fixed_last_scrolled_light.png",
+      "sha256": "7aa61a85aa05bed48a62e0174a44fa9a5b80b84aad49ea3eeb6518378f4d9455"
+    },
+    {
+      "target": "tdesign-component/example/test/table/goldens/table_horizontal_scrolled_dark.png",
+      "sha256": "6100580e715ebfe2506d34429de2eb74d5de73b34fafbf7e1c7444002fd771b1"
+    },
+    {
+      "target": "tdesign-component/example/test/table/goldens/table_horizontal_scrolled_light.png",
+      "sha256": "1c791cba4622eb4145fbeb0a040e8233d5085f41723a52783b9e86591e10148b"
+    },
+    {
+      "target": "tdesign-component/example/test/table/goldens/table_page_dark.png",
+      "sha256": "cefed575265e4abd586feab0645445b430e8b3bdc81e4feb07716ee21b328109"
+    },
+    {
+      "target": "tdesign-component/example/test/table/goldens/table_page_light.png",
+      "sha256": "d66df994cd73d8f13d9d15487da92e1e0b61a88346c5ff7f3bdce878ce797f54"
+    },
+    {
+      "target": "tdesign-component/example/test/table/goldens/table_scrolled_dark.png",
+      "sha256": "af99e53c4eb312511c8f5e2ea50e293a100681565d300edaa6ff293011610d30"
+    },
+    {
+      "target": "tdesign-component/example/test/table/goldens/table_scrolled_light.png",
+      "sha256": "c2a7ddb624a9cbdea822e31c9ba430e17c86b46c9de845542d2c86d8ddc8141c"
+    },
+    {
+      "target": "tdesign-component/example/test/table/goldens/table_sort_ascending_dark.png",
+      "sha256": "767a386da59c9f9f3ef218d1950338888f36dd8c2c6c203980b9476c5354e957"
+    },
+    {
+      "target": "tdesign-component/example/test/table/goldens/table_sort_ascending_light.png",
+      "sha256": "69bad0345c51a9bcac998a69ca50abc129402aa1ea4122066ee9ebf652bfcade"
+    },
+    {
+      "target": "tdesign-component/example/test/table/goldens/table_sort_descending_dark.png",
+      "sha256": "1638298c827bb7cb62db83bd1001523817a7d3c24d8075af25bda716e6243175"
+    },
+    {
+      "target": "tdesign-component/example/test/table/goldens/table_sort_descending_light.png",
+      "sha256": "75b53700d31c6c8fb43651e0752794f8b4fe72b95d2d352715ca7de2e04e6f39"
+    },
+    {
+      "target": "tdesign-component/example/test/table/goldens/table_sorted_dark.png",
+      "sha256": "3d9af1aa5cb79898ae30a3c0f22c64c0bc8885e645636d19fb437132681df992"
+    },
+    {
+      "target": "tdesign-component/example/test/table/goldens/table_sorted_light.png",
+      "sha256": "91b4dc6cefbf6656707d87a3170896ddbf8f0974e89dfbaa3c5caa3c0fa4e38b"
+    },
+    {
+      "target": "tdesign-component/example/test/toast/goldens/toast_cover_opened_dark.png",
+      "sha256": "583d2fa845d43706065ea0f27fffc61ec8363111bd6477752867e0cbf70dc1b2"
+    },
+    {
+      "target": "tdesign-component/example/test/toast/goldens/toast_cover_opened_light.png",
+      "sha256": "e07739acd7c6d1fe89b11d806242ac715ec695512de7f77676a4dac922a6f89b"
+    },
+    {
+      "target": "tdesign-component/example/test/toast/goldens/toast_horizontal_icon_opened_dark.png",
+      "sha256": "82cb5c9a69dce284b9202009f846146f0b33e68121f01f58fe675ec9021f7b46"
+    },
+    {
+      "target": "tdesign-component/example/test/toast/goldens/toast_horizontal_icon_opened_light.png",
+      "sha256": "7edbb72bb4fd43c18200ac6b9f8cecfdf028834f54528bf08acc09daa97d0166"
+    },
+    {
+      "target": "tdesign-component/example/test/toast/goldens/toast_manual_opened_dark.png",
+      "sha256": "a13a17446067abc5177626ae87c6c6b6f2f0a0b8d9075b020b8f9d1119516d62"
+    },
+    {
+      "target": "tdesign-component/example/test/toast/goldens/toast_manual_opened_light.png",
+      "sha256": "45893ff1efd6db1fe022218b66b917c94b22f96821337ef54e29944faa15022f"
+    },
+    {
+      "target": "tdesign-component/example/test/toast/goldens/toast_multiple_text_opened_dark.png",
+      "sha256": "b3680823953e16eb713f47a3123cec71638c1f06354f62959bacc3cc70b3ef79"
+    },
+    {
+      "target": "tdesign-component/example/test/toast/goldens/toast_multiple_text_opened_light.png",
+      "sha256": "86f85dac07a0d1f025954b399ee2418bf01e8879e9134808a1fd5ea7702f5d71"
+    },
+    {
+      "target": "tdesign-component/example/test/toast/goldens/toast_text_opened_dark.png",
+      "sha256": "a13a17446067abc5177626ae87c6c6b6f2f0a0b8d9075b020b8f9d1119516d62"
+    },
+    {
+      "target": "tdesign-component/example/test/toast/goldens/toast_text_opened_light.png",
+      "sha256": "45893ff1efd6db1fe022218b66b917c94b22f96821337ef54e29944faa15022f"
+    },
+    {
+      "target": "tdesign-component/test/components/backtop/goldens/backtop_state_matrix_dark.png",
+      "sha256": "543648f9ae2204967718eae69646c3c685be31ace42ef159e5549898b6dcebeb"
+    },
+    {
+      "target": "tdesign-component/test/components/backtop/goldens/backtop_state_matrix_light.png",
+      "sha256": "10fa720d712be4ceeb09ae23fc34543ca17624a59beafaf69954f51053e7ecb3"
+    },
+    {
+      "target": "tdesign-component/test/components/badge/goldens/t_badge_dark.png",
+      "sha256": "acad0f0516f01fa379e3b240abf665835cba851c4a1cc4aaa84b3a77fd942413"
+    },
+    {
+      "target": "tdesign-component/test/components/badge/goldens/t_badge_light.png",
+      "sha256": "01ba4559ba3fee5c3188b6c17437391696f404a7125ddbe99c5bbf65f72ccc75"
+    },
+    {
+      "target": "tdesign-component/test/components/cell/goldens/cell_card_default_radius_dark.png",
+      "sha256": "cb24a2e9efef0e65eed8956be343d5563f0c1df8ab522a20bd0fb2e68d177ac8"
+    },
+    {
+      "target": "tdesign-component/test/components/cell/goldens/cell_card_default_radius_light.png",
+      "sha256": "74ac18ba63436bdd6b77e816dd9032e7b8bfd73af9f159018f5bd351cfdd8426"
+    },
+    {
+      "target": "tdesign-component/test/components/table/goldens/t_table_api_dark.png",
+      "sha256": "fe3f082ed6f4ee93c990c94c584bef56a5aad5c866c77b13167c9cfd6e90b685"
+    },
+    {
+      "target": "tdesign-component/test/components/table/goldens/t_table_api_light.png",
+      "sha256": "f84b0224848479d236d3aa2cc4d83c6938398931ce8aa37f40ac04fbb72d1a9f"
+    },
+    {
+      "target": "tdesign-component/test/components/tabs/goldens/tabs_tag_default_padding_dark_initial.png",
+      "sha256": "afb20044e5dad1ffbdf3730195f0b833a99e9966466d96e87c593d66bd7f408c"
+    },
+    {
+      "target": "tdesign-component/test/components/tabs/goldens/tabs_tag_default_padding_dark_selected.png",
+      "sha256": "abe5256da682b57d0704d07287cf6da6e7711971c4257b8eef115a468a1a88d8"
+    },
+    {
+      "target": "tdesign-component/test/components/tabs/goldens/tabs_tag_default_padding_light_initial.png",
+      "sha256": "f4482ff0415b96f96f6c7e9a61f75ed5096d73b1ecd6d8e0d7c0501d3e751047"
+    },
+    {
+      "target": "tdesign-component/test/components/tabs/goldens/tabs_tag_default_padding_light_selected.png",
+      "sha256": "7ea9f6e4e822a5262d2848be936d135b12526a6a71f258bd02422d11dc334a3d"
+    },
+    {
+      "target": "tdesign-component/test/components/text/goldens/centering_dark_1.0.png",
+      "sha256": "96bc903b4ba16443f7292cf36984ac41067241f66cc1d680bd32171fc890d915"
+    },
+    {
+      "target": "tdesign-component/test/components/text/goldens/centering_dark_1.5.png",
+      "sha256": "fc85643ae39d616071eb927c5fdb2c0274217c7c328cdf6b9248fe01a9597ee1"
+    },
+    {
+      "target": "tdesign-component/test/components/text/goldens/centering_dark_2.0.png",
+      "sha256": "7424624b36650d9a3368838672c4ed1c051b8c64ad5d49735b79fc4dd4dc60f5"
+    },
+    {
+      "target": "tdesign-component/test/components/text/goldens/centering_light_1.0.png",
+      "sha256": "186cb1ac3c06de9043bdc1fac8808d245a3d3738ebdbc9c681b65865aa8bc34d"
+    },
+    {
+      "target": "tdesign-component/test/components/text/goldens/centering_light_1.5.png",
+      "sha256": "b33a93f13dd4b6cf7648c28e8d71fb3752df738ec7896affb99a55f2a5619e89"
+    },
+    {
+      "target": "tdesign-component/test/components/text/goldens/centering_light_2.0.png",
+      "sha256": "15b7b7a0189b8fd6444002c82629269d4487419c85d4b13dc920c5e8cb63d3d4"
+    },
+    {
+      "target": "tdesign-component/test/components/text/goldens/remaining_navigation_dark_1_0.png",
+      "sha256": "cd26b110304beb6b29d81a3962fbf45413d90935c6e181c80179d328e0e1653c"
+    },
+    {
+      "target": "tdesign-component/test/components/text/goldens/remaining_navigation_dark_3_0.png",
+      "sha256": "8f2e2db989eb9cd6e51bb1d30344cc6e7b760b08df7f3ed907120ba6d69aec86"
+    },
+    {
+      "target": "tdesign-component/test/components/text/goldens/remaining_navigation_light_1_0.png",
+      "sha256": "d38697233f71b0cfc5e6ada0dae6816092c34a1c1070758de0a4ebdecc65393e"
+    },
+    {
+      "target": "tdesign-component/test/components/text/goldens/remaining_navigation_light_3_0.png",
+      "sha256": "18502c999094f408cc99311b1c2d0328b6a9ceac794aad899bf18c90be74ddbd"
+    }
+  ]
+}

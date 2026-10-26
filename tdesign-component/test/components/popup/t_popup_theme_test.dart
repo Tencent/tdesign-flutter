@@ -7,8 +7,6 @@ void main() {
   group('TPopupThemeData 纯函数', () {
     const theme = TPopupThemeData(
       barrierColor: Colors.black54,
-      barrierOpacity: 0.5,
-      transitionDuration: Duration(milliseconds: 300),
       panelRadius: 8,
       panelBackgroundColor: Colors.white,
       edgeHeight: 240,
@@ -40,14 +38,14 @@ void main() {
 
     test('copyWith 覆盖字段', () {
       final copied = theme.copyWith(
-        barrierOpacity: 0.8,
+        barrierColor: Colors.black87,
         panelBackgroundColor: Colors.blue,
         edgeHeight: 300,
         drawerWidth: 320,
         centerSize: const Size(260, 220),
       );
       expect(copied, isA<TPopupThemeData>());
-      expect(copied.barrierOpacity, 0.8);
+      expect(copied.barrierColor, Colors.black87);
       expect(copied.panelBackgroundColor, Colors.blue);
       expect(copied.edgeHeight, 300);
       expect(copied.drawerWidth, 320);
@@ -57,7 +55,6 @@ void main() {
     test('lerp 在 t=0 / 0.5 / 1 返回 TPopupThemeData', () {
       const other = TPopupThemeData(
         barrierColor: Colors.black12,
-        barrierOpacity: 0.2,
         panelRadius: 16,
         panelBackgroundColor: Colors.blue,
         edgeHeight: 320,

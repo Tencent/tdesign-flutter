@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../../tdesign_flutter.dart' show TPicker, TPopup;
+import '../components/text/t_text_style_scope.dart';
 import '../theme/t_spacers.dart';
 import '../theme/t_theme.dart';
 
@@ -26,14 +27,25 @@ class TToolbarPressable extends StatefulWidget {
   /// 按下时的目标透明度。
   static const double kToolbarPressedOpacity = 0.5;
 
+  /// 工具栏按钮内容。
   final Widget child;
+
+  /// 点击回调；为空时不响应点击或显示按压反馈。
   final VoidCallback? onTap;
+
+  /// 内容内边距；为空时使用全局 spacer 水平间距和 spacer1 垂直间距。
   final EdgeInsetsGeometry? padding;
+
+  /// 是否允许交互，默认 true；还需要 [onTap] 非空。
   final bool enabled;
+
+  /// 按压透明度动画时长，默认 100ms。
   final Duration pressDuration;
+
+  /// 按下时整体透明度，默认 0.5。
   final double pressedOpacity;
 
-  /// 为子树 [Text] 提供默认样式（merge 语义，子控件已有样式优先）。
+  /// 为子树 Text/TText 提供默认样式（merge 语义，子控件已有样式优先）。
   final TextStyle? mergeTextStyle;
 
   /// 为子树 [Icon] 提供默认样式。
@@ -59,24 +71,31 @@ class _TToolbarPressableState extends State<TToolbarPressable> {
   @override
   Widget build(BuildContext context) {
     final theme = context.tTheme;
-    final padding = widget.padding ??
-        EdgeInsets.symmetric(
-          horizontal: theme.spacer8,
-          vertical: theme.spacer12,
-        );
+    final padding =
+        widget.padding ??
+        EdgeInsets.symmetric(horizontal: theme.spacer, vertical: theme.spacer1);
 
     var child = widget.child;
     if (widget.mergeTextStyle != null) {
-      child = DefaultTextStyle.merge(
+      final defaults = DefaultTextStyle.of(context);
+      child = TTextStyleScope(
         style: widget.mergeTextStyle!,
-        child: child,
+        // Preserve native Text's partial merge without exposing Material
+        // defaults to TText, whose typography comes from the slot theme.
+        child: DefaultTextStyle(
+          style: defaults.style.merge(widget.mergeTextStyle),
+          textAlign: defaults.textAlign,
+          softWrap: defaults.softWrap,
+          overflow: defaults.overflow,
+          maxLines: defaults.maxLines,
+          textWidthBasis: defaults.textWidthBasis,
+          textHeightBehavior: defaults.textHeightBehavior,
+          child: child,
+        ),
       );
     }
     if (widget.mergeIconTheme != null) {
-      child = IconTheme.merge(
-        data: widget.mergeIconTheme!,
-        child: child,
-      );
+      child = IconTheme.merge(data: widget.mergeIconTheme!, child: child);
     }
 
     final enabled = widget.enabled && widget.onTap != null;

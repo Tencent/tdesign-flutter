@@ -1,6 +1,5 @@
 import 'dart:io';
 
-import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:tdesign_flutter/tdesign_flutter.dart';
@@ -74,7 +73,11 @@ class _TabsScene extends StatelessWidget {
                         tabs: [
                           TTab(text: 'News'),
                           TTab(
-                            child: TBadge(label: '8', child: Text('Inbox')),
+                            child: TBadge(
+                              label: '8',
+                              offset: Offset(-1, 0),
+                              child: Text('Inbox'),
+                            ),
                           ),
                           TTab(
                             text: 'Disabled',

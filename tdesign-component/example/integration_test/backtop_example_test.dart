@@ -1,6 +1,5 @@
 import 'dart:async';
 
-import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:integration_test/integration_test.dart';
 import 'package:provider/provider.dart';
@@ -33,7 +32,7 @@ void main() {
     expect(find.byKey(floatingKey).hitTestable(), findsOneWidget);
     var backTop = tester.widget<TBackTop>(find.byKey(floatingKey));
     expect(backTop.shape, TBackTopShape.circle);
-    expect(backTop.colorScheme, TBackTopColorScheme.light);
+    expect(backTop.colorPreset, TBackTopColorPreset.light);
     await binding.takeScreenshot('backtop-visible-after-scroll');
 
     await tester.tap(find.byKey(floatingKey));
@@ -46,7 +45,7 @@ void main() {
     await tester.pumpAndSettle();
     backTop = tester.widget<TBackTop>(find.byKey(floatingKey));
     expect(backTop.shape, TBackTopShape.halfCircle);
-    expect(backTop.colorScheme, TBackTopColorScheme.dark);
+    expect(backTop.colorPreset, TBackTopColorPreset.dark);
     expect(find.byKey(floatingKey).hitTestable(), findsOneWidget);
     await binding.takeScreenshot('backtop-half-round-after-scroll');
     await tester.tap(find.byKey(floatingKey));

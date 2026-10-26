@@ -1,3 +1,5 @@
+import 'dart:math' as math;
+
 import 'package:flutter/foundation.dart' show listEquals;
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -5,12 +7,12 @@ import 'package:tdesign_flutter_icons/tdesign_flutter_icons.dart' show TIcons;
 
 import '../../theme/t_colors.dart';
 import '../../theme/t_fonts.dart';
+import '../../theme/t_internal_material.dart';
 import '../../theme/t_radius.dart';
 import '../../theme/t_spacers.dart';
 import '../../theme/t_theme.dart';
 import '../icon/t_icon.dart';
-import '../icon/t_icon_theme_data.dart';
-import '../text/t_text.dart';
+import '../text/t_text_styled.dart';
 import '../text/t_text_theme_data.dart';
 import 't_cascader_defaults.dart';
 import 't_cascader_theme_data.dart';
@@ -21,16 +23,9 @@ import 't_cascader_theme_data.dart';
 /// [TCascaderOption] 和列表，不要原地修改已有列表。
 class TCascaderOption {
   const TCascaderOption({
-    /// 展示文案。
     required this.label,
-
-    /// 选项值。
     required this.value,
-
-    /// 子选项。
     this.children = const [],
-
-    /// 是否禁用。
     this.disabled = false,
   });
 
@@ -47,32 +42,14 @@ class TCascaderOption {
   final bool disabled;
 }
 
-/// 严格受控的级联选择器。
 class TCascader extends StatefulWidget {
   const TCascader({
     super.key,
-
-    /// 根选项列表。
     required this.options,
-
-    /// 受控选中路径。
     required this.value,
-
-    /// 选中路径变化回调；为 null 时禁用。
-    ///
-    /// 分支点击只发出候选路径；调用方需回写 [value]，组件才会推进活动层级。
     this.onChanged,
-
-    /// 导航展示形态。
     this.variant = TCascaderVariant.tab,
-
-    /// 未选择层级的占位文案。
     this.placeholder = '请选择',
-
-    /// 各层级的次级标题。
-    ///
-    /// 组件按内部活动层级读取对应内容，因此调用方无需持有或控制层级状态；
-    /// 列表没有对应层级或对应内容为空时不显示次级标题。
     this.subtitles = const [],
   });
 
@@ -94,6 +71,9 @@ class TCascader extends StatefulWidget {
   final String placeholder;
 
   /// 各层级的次级标题。
+  ///
+  /// 组件按内部活动层级读取对应内容，因此调用方无需持有或控制层级状态；
+  /// 列表没有对应层级或对应内容为空时不显示次级标题。
   final List<String> subtitles;
 
   @override
@@ -172,9 +152,7 @@ class _TCascaderState extends State<TCascader> {
     final selected = _selectedOptions();
     final options = _optionsAt(_activeLevel);
     final backgroundColor =
-        theme?.backgroundColor ??
-        material.tExplicitColorScheme?.surface ??
-        context.tTheme.bgColorContainer;
+        theme?.backgroundColor ?? context.tTheme.bgColorContainer;
     final borderRadius = BorderRadius.circular(
       theme?.borderRadius ?? context.tTheme.radiusDefault,
     );
@@ -193,30 +171,113 @@ class _TCascaderState extends State<TCascader> {
                 borderRadius: borderRadius,
               ),
               clipBehavior: Clip.antiAlias,
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  _buildNavigation(context, selected, theme),
-                  Divider(
-                    height: 1,
-                    thickness: 1,
-                    color:
-                        theme?.dividerColor ??
-                        material.tExplicitDividerColor ??
-                        context.tTheme.componentStrokeColor,
-                  ),
-                  if (_activeLevel < widget.subtitles.length &&
-                      widget.subtitles[_activeLevel].isNotEmpty)
-                    _buildSubtitle(context),
-                  Expanded(
-                    child: ListView.builder(
-                      padding: EdgeInsets.zero,
-                      itemCount: options.length,
-                      itemBuilder: (context, index) =>
-                          _buildOption(context, options[index], theme),
-                    ),
-                  ),
-                ],
+              child: LayoutBuilder(
+                builder: (context, constraints) {
+                  final styles = _resolveTextStyles(context, theme);
+                  var rowHeight = 56.0;
+                  for (final style in [
+                    styles.normal,
+                    styles.active,
+                    styles.selected,
+                    styles.disabled,
+                  ]) {
+                    rowHeight = math.max(
+                      rowHeight,
+                      TTextStyled(
+                        '国Ag',
+                        style: style,
+                        centerLeading: true,
+                      ).naturalSize(context).height,
+                    );
+                  }
+                  final bodyReserve = math.min(
+                    rowHeight,
+                    constraints.maxHeight / 2,
+                  );
+                  final navReserve = math.min(
+                    rowHeight,
+                    math.max(0, constraints.maxHeight - bodyReserve - 1),
+                  );
+                  final hasSubtitle =
+                      _activeLevel < widget.subtitles.length &&
+                      widget.subtitles[_activeLevel].isNotEmpty;
+                  var subtitleHeight = 0.0;
+                  if (hasSubtitle) {
+                    final font = context.tTheme.fontBodyMedium;
+                    subtitleHeight =
+                        TTextStyled(
+                              widget.subtitles[_activeLevel],
+                              style: TextStyle(
+                                fontSize: font?.size,
+                                height: font?.height,
+                                fontWeight: font?.fontWeight,
+                              ),
+                            )
+                            .naturalSize(
+                              context,
+                              maxWidth: math.max(
+                                0,
+                                constraints.maxWidth -
+                                    context.tTheme.spacer2 * 2,
+                              ),
+                            )
+                            .height +
+                        20 +
+                        context.tTheme.spacer;
+                    subtitleHeight = math.min(
+                      subtitleHeight,
+                      math.max(
+                        0,
+                        constraints.maxHeight - bodyReserve - navReserve - 1,
+                      ),
+                    );
+                  }
+                  final navHeight = math.max(
+                    0.0,
+                    constraints.maxHeight - bodyReserve - subtitleHeight - 1,
+                  );
+                  return Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      ConstrainedBox(
+                        constraints: BoxConstraints(maxHeight: navHeight),
+                        child: TInternalScrollScope(
+                          child: SingleChildScrollView(
+                            child: _buildNavigation(context, selected, theme),
+                          ),
+                        ),
+                      ),
+                      TInternalDivider(
+                        height: 1,
+                        thickness: 1,
+                        color:
+                            theme?.dividerColor ??
+                            context.tTheme.componentStroke,
+                      ),
+                      if (hasSubtitle)
+                        ConstrainedBox(
+                          constraints: BoxConstraints(
+                            maxHeight: subtitleHeight,
+                          ),
+                          child: TInternalScrollScope(
+                            child: SingleChildScrollView(
+                              child: _buildSubtitle(context),
+                            ),
+                          ),
+                        ),
+                      Expanded(
+                        child: TInternalScrollScope(
+                          child: ListView.builder(
+                            padding: EdgeInsets.zero,
+                            itemCount: options.length,
+                            itemBuilder: (context, index) =>
+                                _buildOption(context, options[index], theme),
+                          ),
+                        ),
+                      ),
+                    ],
+                  );
+                },
               ),
             ),
           ),
@@ -231,7 +292,7 @@ class _TCascaderState extends State<TCascader> {
     TCascaderThemeData? theme,
   ) {
     final styles = _resolveTextStyles(context, theme);
-    final activeColor = styles.active.color ?? context.tTheme.brandNormalColor;
+    final activeColor = styles.active.color ?? context.tTheme.brandColor;
     final entries = <_CascaderNavigationEntry>[
       for (var index = 0; index < selected.length; index++)
         _CascaderNavigationEntry(
@@ -255,10 +316,10 @@ class _TCascaderState extends State<TCascader> {
         padding:
             theme?.navigationPadding ??
             EdgeInsets.fromLTRB(
-              context.tTheme.spacer16,
+              context.tTheme.spacer2,
               0,
-              context.tTheme.spacer16,
-              context.tTheme.spacer4,
+              context.tTheme.spacer2,
+              4.0,
             ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -276,14 +337,16 @@ class _TCascaderState extends State<TCascader> {
         ),
       );
     }
-    return SingleChildScrollView(
-      scrollDirection: Axis.horizontal,
-      padding: theme?.navigationPadding,
-      child: Row(
-        children: [
-          for (final entry in entries)
-            _buildTabNavigationEntry(context, entry, styles, activeColor),
-        ],
+    return TInternalScrollScope(
+      child: SingleChildScrollView(
+        scrollDirection: Axis.horizontal,
+        padding: theme?.navigationPadding,
+        child: Row(
+          children: [
+            for (final entry in entries)
+              _buildTabNavigationEntry(context, entry, styles, activeColor),
+          ],
+        ),
       ),
     );
   }
@@ -300,58 +363,74 @@ class _TCascaderState extends State<TCascader> {
       onTap: entry.onTap,
       enabled: entry.enabled,
       selected: entry.active,
-      child: SizedBox(
-        height: 44,
-        child: Row(
-          children: [
-            SizedBox(
-              width: 8,
-              height: 44,
-              child: Stack(
-                alignment: Alignment.center,
-                children: [
-                  if (index > 0)
-                    Positioned(
-                      top: 0,
-                      bottom: 26,
-                      child: Container(width: 1, color: activeColor),
+      child: ConstrainedBox(
+        constraints: const BoxConstraints(minHeight: 44),
+        child: IntrinsicHeight(
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              SizedBox(
+                width: 8,
+                height: 0,
+                child: Stack(
+                  alignment: Alignment.center,
+                  children: [
+                    if (index > 0)
+                      Align(
+                        alignment: Alignment.topCenter,
+                        child: FractionallySizedBox(
+                          heightFactor: .5,
+                          child: Padding(
+                            padding: const EdgeInsets.only(bottom: 4),
+                            child: Container(width: 1, color: activeColor),
+                          ),
+                        ),
+                      ),
+                    if (index < length - 1)
+                      Align(
+                        alignment: Alignment.bottomCenter,
+                        child: FractionallySizedBox(
+                          heightFactor: .5,
+                          child: Padding(
+                            padding: const EdgeInsets.only(top: 4),
+                            child: Container(width: 1, color: activeColor),
+                          ),
+                        ),
+                      ),
+                    Container(
+                      width: 8,
+                      height: 8,
+                      decoration: BoxDecoration(
+                        color: entry.selected
+                            ? activeColor
+                            : context.tTheme.bgColorContainer,
+                        border: Border.all(color: activeColor),
+                        shape: BoxShape.circle,
+                      ),
                     ),
-                  if (index < length - 1)
-                    Positioned(
-                      top: 26,
-                      bottom: 0,
-                      child: Container(width: 1, color: activeColor),
-                    ),
-                  Container(
-                    width: 8,
-                    height: 8,
-                    decoration: BoxDecoration(
-                      color: entry.selected
-                          ? activeColor
-                          : context.tTheme.bgColorContainer,
-                      border: Border.all(color: activeColor),
-                      shape: BoxShape.circle,
-                    ),
+                  ],
+                ),
+              ),
+              SizedBox(width: context.tTheme.spacer2),
+              Expanded(
+                child: Align(
+                  alignment: Alignment.centerLeft,
+                  child: TTextStyled(
+                    entry.label,
+                    centerLeading: true,
+                    style: entry.active ? styles.active : styles.normal,
                   ),
-                ],
+                ),
               ),
-            ),
-            SizedBox(width: context.tTheme.spacer16),
-            Expanded(
-              child: TText(
-                entry.label,
-                style: entry.active ? styles.active : styles.normal,
+              Center(
+                child: TIcon(
+                  TIcons.chevron_right,
+                  size: 22,
+                  color: context.tTheme.textColorPlaceholder,
+                ),
               ),
-            ),
-            TIcon(
-              TIcons.chevron_right,
-              size: 22,
-              color: _resolveIconColor(
-                context,
-                context.tTheme.textColorPlaceholder,
-              ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );
@@ -368,17 +447,22 @@ class _TCascaderState extends State<TCascader> {
       enabled: entry.enabled,
       selected: entry.active,
       child: Container(
-        height: 48,
-        padding: EdgeInsets.symmetric(horizontal: context.tTheme.spacer16),
+        constraints: const BoxConstraints(minHeight: 48),
+        padding: EdgeInsets.symmetric(horizontal: context.tTheme.spacer2),
         decoration: BoxDecoration(
           border: entry.active
               ? Border(bottom: BorderSide(width: 2, color: activeColor))
               : null,
         ),
-        alignment: Alignment.center,
-        child: TText(
-          entry.label,
-          style: entry.active ? styles.active : styles.normal,
+        child: Align(
+          alignment: Alignment.center,
+          heightFactor: 1,
+          widthFactor: 1,
+          child: TTextStyled(
+            entry.label,
+            centerLeading: true,
+            style: entry.active ? styles.active : styles.normal,
+          ),
         ),
       ),
     );
@@ -388,12 +472,12 @@ class _TCascaderState extends State<TCascader> {
     final tokenFont = context.tTheme.fontBodyMedium;
     return Padding(
       padding: EdgeInsets.fromLTRB(
-        context.tTheme.spacer16,
+        context.tTheme.spacer2,
         20,
-        context.tTheme.spacer16,
-        0,
+        context.tTheme.spacer2,
+        context.tTheme.spacer,
       ),
-      child: TText(
+      child: TTextStyled(
         widget.subtitles[_activeLevel],
         key: const ValueKey('cascader-subtitle'),
         style: TextStyle(
@@ -416,11 +500,7 @@ class _TCascaderState extends State<TCascader> {
         _activeLevel < widget.value.length &&
         widget.value[_activeLevel] == option.value;
     final isLeaf = option.children.isEmpty;
-    final material = Theme.of(context);
-    final iconColor = _resolveIconColor(
-      context,
-      material.tExplicitColorScheme?.primary ?? context.tTheme.brandNormalColor,
-    );
+    final iconColor = context.tTheme.brandColor;
     final indicatorColor = theme?.indicatorColor ?? iconColor;
     final onTap = !_enabled || option.disabled
         ? null
@@ -436,15 +516,16 @@ class _TCascaderState extends State<TCascader> {
       onTap: onTap,
       enabled: _enabled && !option.disabled,
       selected: selected,
-      child: SizedBox(
-        height: 56,
+      child: ConstrainedBox(
+        constraints: const BoxConstraints(minHeight: 56),
         child: Padding(
-          padding: EdgeInsets.symmetric(horizontal: context.tTheme.spacer16),
+          padding: EdgeInsets.symmetric(horizontal: context.tTheme.spacer2),
           child: Row(
             children: [
               Expanded(
-                child: TText(
+                child: TTextStyled(
                   option.label,
+                  centerLeading: true,
                   style: option.disabled
                       ? styles.disabled
                       : selected
@@ -458,10 +539,7 @@ class _TCascaderState extends State<TCascader> {
                 TIcon(
                   TIcons.chevron_right,
                   size: 22,
-                  color: _resolveIconColor(
-                    context,
-                    context.tTheme.textColorPlaceholder,
-                  ),
+                  color: context.tTheme.textColorPlaceholder,
                 ),
             ],
           ),
@@ -474,49 +552,19 @@ class _TCascaderState extends State<TCascader> {
     BuildContext context,
     TCascaderThemeData? theme,
   ) {
-    final material = Theme.of(context);
     final tokenFont = context.tTheme.fontBodyLarge;
-    final inherited = context.tExplicitDefaultTextStyle;
-    final defaultStyle = _isAutomaticMaterialTextStyle(material, inherited)
-        ? null
-        : inherited;
-    final textTheme = material.extension<TTextThemeData>();
-    final themeFont = textTheme?.font;
-    final normal =
-        TextStyle(
-              color: context.tTheme.textColorPrimary,
-              fontSize: tokenFont?.size,
-              height: tokenFont?.height,
-              fontWeight: tokenFont?.fontWeight,
-            )
-            .merge(material.tExplicitTextTheme?.bodyLarge)
-            .copyWith(
-              color:
-                  material.tExplicitColorScheme?.onSurface ??
-                  context.tTheme.textColorPrimary,
-            )
-            .merge(defaultStyle)
-            .merge(
-              themeFont == null
-                  ? null
-                  : TextStyle(
-                      fontSize: themeFont.size,
-                      height: themeFont.height,
-                      fontWeight: themeFont.fontWeight,
-                    ),
-            )
-            .merge(textTheme?.textStyle)
-            .merge(theme?.textStyle);
+    final textTheme = Theme.of(context).extension<TTextThemeData>();
+    final normal = TextStyle(
+      color: context.tTheme.textColorPrimary,
+      fontSize: tokenFont?.size,
+      height: tokenFont?.height,
+      fontWeight: tokenFont?.fontWeight,
+    ).merge(textTheme?.textStyle).merge(theme?.textStyle);
     final active = normal
-        .copyWith(
-          color:
-              material.tExplicitColorScheme?.primary ??
-              context.tTheme.brandNormalColor,
-          fontWeight: FontWeight.w600,
-        )
+        .copyWith(color: context.tTheme.brandColor, fontWeight: FontWeight.w600)
         .merge(theme?.activeTextStyle);
     final disabled = normal
-        .copyWith(color: context.tTheme.textDisabledColor)
+        .copyWith(color: context.tTheme.textColorDisabled)
         .merge(theme?.disabledTextStyle);
     final selected = normal.merge(theme?.activeTextStyle);
     return _CascaderTextStyles(
@@ -526,41 +574,6 @@ class _TCascaderState extends State<TCascader> {
       selected: selected,
     );
   }
-}
-
-bool _isAutomaticMaterialTextStyle(ThemeData material, TextStyle? style) {
-  if (style == null ||
-      (style.debugLabel?.contains(
-            'fallback style; consider putting your text in a Material',
-          ) ??
-          false)) {
-    return true;
-  }
-  final textTheme = material.textTheme;
-  return <TextStyle?>[
-    textTheme.displayLarge,
-    textTheme.displayMedium,
-    textTheme.displaySmall,
-    textTheme.headlineLarge,
-    textTheme.headlineMedium,
-    textTheme.headlineSmall,
-    textTheme.titleLarge,
-    textTheme.titleMedium,
-    textTheme.titleSmall,
-    textTheme.bodyLarge,
-    textTheme.bodyMedium,
-    textTheme.bodySmall,
-    textTheme.labelLarge,
-    textTheme.labelMedium,
-    textTheme.labelSmall,
-  ].contains(style);
-}
-
-Color _resolveIconColor(BuildContext context, Color fallback) {
-  final material = Theme.of(context);
-  return material.extension<TIconThemeData>()?.color ??
-      context.tExplicitIconTheme?.color ??
-      fallback;
 }
 
 class _CascaderPressable extends StatelessWidget {

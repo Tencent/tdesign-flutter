@@ -5,8 +5,11 @@ import 'package:flutter/material.dart';
 
 import '../../theme/t_colors.dart';
 import '../../theme/t_fonts.dart';
+import '../../theme/t_internal_material.dart';
 import '../../theme/t_radius.dart';
+import '../../theme/t_sizes.dart';
 import '../../theme/t_theme.dart';
+import '../text/t_text_styled.dart';
 import 't_swiper_theme_data.dart';
 import 't_swiper_types.dart';
 
@@ -14,7 +17,8 @@ import 't_swiper_types.dart';
 ///
 /// 使用 [jumpTo]、[animateTo]、[next] 和 [previous] 发起切换，通过 [index]
 /// 或监听 Controller 获取当前业务索引。一个 Controller 同时只能附加一个
-/// [TSwiper]，由调用方创建的实例也由调用方负责释放。
+/// [TSwiper]，重复绑定其他实例会抛出 [StateError]。
+/// 由调用方创建的实例也由调用方负责释放。
 class TSwiperController extends ChangeNotifier {
   TSwiperController({this.initialIndex = 0}) : _index = initialIndex {
     if (initialIndex < 0) {
@@ -26,7 +30,7 @@ class TSwiperController extends ChangeNotifier {
     }
   }
 
-  /// 首次附加时展示的页面。
+  /// 首次附加时展示的页面；必须大于或等于 0 且小于页面数，否则抛出参数或范围异常。
   final int initialIndex;
 
   int _index;
@@ -43,26 +47,59 @@ class TSwiperController extends ChangeNotifier {
   bool get hasClients => _jumpTo != null;
 
   /// 立即跳转到目标页。
-  void jumpTo(int index) => _jumpTo?.call(index);
+  void jumpTo(
+    /// 目标页面的业务索引，从 0 开始；超出范围时按绑定 Swiper 的规则归一化。
+    int index,
+  ) => _jumpTo?.call(index);
 
   /// 动画切换到目标页；循环模式始终向前到达目标。
   ///
   /// 未提供 [duration] 或 [curve] 时，继承所附加 [TSwiper] 的动画配置。
-  Future<void> animateTo(int index, {Duration? duration, Curve? curve}) async {
+  ///
+  /// ## 返回值
+  /// 所绑定轮播的切换请求完成时结束；未绑定时立即完成，不执行切换。
+  Future<void> animateTo(
+    /// 目标页面的业务索引，从 0 开始；循环模式向前切换到该页面。
+    int index, {
+
+    /// 本次切换动画时长；为空时使用绑定 Swiper 的动画配置。
+    Duration? duration,
+
+    /// 本次切换动画曲线；为空时使用绑定 Swiper 的动画配置。
+    Curve? curve,
+  }) async {
     await _animateTo?.call(index, duration, curve);
   }
 
   /// 切换到下一页。
   ///
   /// 未提供 [duration] 或 [curve] 时，继承所附加 [TSwiper] 的动画配置。
-  Future<void> next({Duration? duration, Curve? curve}) async {
+  ///
+  /// ## 返回值
+  /// 所绑定轮播的切换请求完成时结束；未绑定时立即完成，不执行切换。
+  Future<void> next({
+    /// 本次切换动画时长；为空时使用绑定 Swiper 的动画配置。
+    Duration? duration,
+
+    /// 本次切换动画曲线；为空时使用绑定 Swiper 的动画配置。
+    Curve? curve,
+  }) async {
     await _next?.call(duration, curve);
   }
 
   /// 切换到上一页。
   ///
   /// 未提供 [duration] 或 [curve] 时，继承所附加 [TSwiper] 的动画配置。
-  Future<void> previous({Duration? duration, Curve? curve}) async {
+  ///
+  /// ## 返回值
+  /// 所绑定轮播的切换请求完成时结束；未绑定时立即完成，不执行切换。
+  Future<void> previous({
+    /// 本次切换动画时长；为空时使用绑定 Swiper 的动画配置。
+    Duration? duration,
+
+    /// 本次切换动画曲线；为空时使用绑定 Swiper 的动画配置。
+    Curve? curve,
+  }) async {
     await _previous?.call(duration, curve);
   }
 
@@ -98,7 +135,6 @@ class TSwiperController extends ChangeNotifier {
   }
 }
 
-/// Controller 驱动的轮播组件。
 class TSwiper extends StatefulWidget {
   const TSwiper({
     this.children,
@@ -113,7 +149,6 @@ class TSwiper extends StatefulWidget {
     this.animationCurve = Curves.easeInOut,
     this.pagination,
     this.paginationPlacement,
-    this.paginationAlignment,
     this.paginationItemBuilder,
     this.previousIcon,
     this.nextIcon,
@@ -144,6 +179,7 @@ class TSwiper extends StatefulWidget {
   final int? itemCount;
 
   /// 外部控制器；未提供时组件会创建并自行释放内部控制器。
+  /// 建议独立轮播分别使用 Controller；绑定规则见 [TSwiperController]。
   final TSwiperController? controller;
 
   /// 当前实际展示页发生变化时触发。
@@ -159,6 +195,7 @@ class TSwiper extends StatefulWidget {
   final Duration autoplayInterval;
 
   /// 自动播放、内置控制按钮及 Controller 未显式覆盖时的切换动画时长。
+  /// 必须大于 Duration.zero，否则抛出 ArgumentError。
   final Duration animationDuration;
 
   /// 自动播放、内置控制按钮及 Controller 未显式覆盖时的切换动画曲线。
@@ -169,13 +206,6 @@ class TSwiper extends StatefulWidget {
 
   /// 指示器位置；为空时默认为覆盖在轮播内容上。
   final TSwiperPaginationPlacement? paginationPlacement;
-
-  /// 指示器对齐；切换按钮默认居中，其他横向指示器默认底部居中，
-  /// 其他竖向指示器默认右侧居中。
-  ///
-  /// 覆盖模式下控制指示器在轮播内容中的位置；外置模式下控制指示器
-  /// 在下方或右侧外部区域内的对齐。
-  final AlignmentGeometry? paginationAlignment;
 
   /// 自定义 dots 和 dotsBar 的单个标记。
   ///
@@ -265,7 +295,8 @@ class TSwiper extends StatefulWidget {
 }
 
 class _TSwiperState extends State<TSwiper> with WidgetsBindingObserver {
-  static const _cardAdjacentScale = 126 / 192;
+  static const _cardAdjacentScale = 0.8;
+  static const _cardPadding = 6.0;
 
   late TSwiperController _controller;
   late bool _ownsController;
@@ -346,7 +377,7 @@ class _TSwiperState extends State<TSwiper> with WidgetsBindingObserver {
         'must be positive',
       );
     }
-    if (!identical(oldWidget.controller, widget.controller)) {
+    if (!identical(_ownsController ? null : _controller, widget.controller)) {
       if (widget.controller?.hasClients ?? false) {
         throw StateError('TSwiperController can only control one TSwiper.');
       }
@@ -542,7 +573,6 @@ class _TSwiperState extends State<TSwiper> with WidgetsBindingObserver {
         widget.paginationPlacement ?? TSwiperPaginationPlacement.overlay;
     final effect = widget.pageEffect ?? TSwiperPageEffect.none;
     final alignment =
-        widget.paginationAlignment ??
         theme?.paginationAlignment ??
         (pagination == TSwiperPaginationVariant.controls
             ? Alignment.center
@@ -557,19 +587,21 @@ class _TSwiperState extends State<TSwiper> with WidgetsBindingObserver {
       clipBehavior: widget.clipBehavior,
       child: NotificationListener<ScrollNotification>(
         onNotification: _handleScrollNotification,
-        child: PageView.builder(
-          controller: _pageController,
-          itemCount: widget.loop ? null : _count,
-          onPageChanged: _handlePageChanged,
-          scrollDirection: widget.scrollDirection,
-          physics: widget.physics,
-          pageSnapping: widget.pageSnapping,
-          padEnds: widget.padEnds,
-          clipBehavior: widget.clipBehavior,
-          reverse: widget.reverse,
-          dragStartBehavior: widget.dragStartBehavior,
-          allowImplicitScrolling: widget.allowImplicitScrolling,
-          itemBuilder: (context, page) => _buildPage(context, page, effect),
+        child: TInternalScrollScope(
+          child: PageView.builder(
+            controller: _pageController,
+            itemCount: widget.loop ? null : _count,
+            onPageChanged: _handlePageChanged,
+            scrollDirection: widget.scrollDirection,
+            physics: widget.physics,
+            pageSnapping: widget.pageSnapping,
+            padEnds: widget.padEnds,
+            clipBehavior: widget.clipBehavior,
+            reverse: widget.reverse,
+            dragStartBehavior: widget.dragStartBehavior,
+            allowImplicitScrolling: widget.allowImplicitScrolling,
+            itemBuilder: (context, page) => _buildPage(context, page, effect),
+          ),
         ),
       ),
     );
@@ -622,32 +654,67 @@ class _TSwiperState extends State<TSwiper> with WidgetsBindingObserver {
         final current = _pageController.hasClients
             ? _pageController.page ?? _pageController.initialPage.toDouble()
             : _pageController.initialPage.toDouble();
-        final distance = (current - page).abs().clamp(0.0, 1.0);
+        final position = (current - page).clamp(-1.0, 1.0);
+        final distance = position.abs();
+        final padding = widget.scrollDirection == Axis.horizontal
+            ? const EdgeInsets.symmetric(horizontal: _cardPadding)
+            : const EdgeInsets.symmetric(vertical: _cardPadding);
+        final edgeAlignment = widget.scrollDirection == Axis.horizontal
+            ? position > 0
+                  ? Alignment.centerRight
+                  : Alignment.centerLeft
+            : position > 0
+            ? Alignment.bottomCenter
+            : Alignment.topCenter;
         switch (effect) {
           case TSwiperPageEffect.none:
             return child!;
           case TSwiperPageEffect.cardMargin:
-            return Padding(
-              padding: widget.scrollDirection == Axis.horizontal
-                  ? const EdgeInsets.symmetric(horizontal: 6)
-                  : const EdgeInsets.symmetric(vertical: 6),
-              child: child,
-            );
+            return Padding(padding: padding, child: child);
           case TSwiperPageEffect.scale:
-            final crossAxisScale = 1 - distance * (1 - _cardAdjacentScale);
-            return Transform.scale(
-              scaleX: widget.scrollDirection == Axis.vertical
-                  ? crossAxisScale
-                  : 1,
-              scaleY: widget.scrollDirection == Axis.horizontal
-                  ? crossAxisScale
-                  : 1,
-              child: child,
+            final scale = 1 - distance * (1 - _cardAdjacentScale);
+            return Padding(
+              padding: padding,
+              child: Transform.scale(
+                scale: scale,
+                alignment: distance == 0 ? Alignment.center : edgeAlignment,
+                child: child,
+              ),
             );
           case TSwiperPageEffect.scaleAndFade:
-            return Opacity(
-              opacity: 1 - distance * 0.3,
-              child: Transform.scale(scale: 1 - distance * 0.2, child: child),
+            return LayoutBuilder(
+              builder: (context, constraints) {
+                final pageExtent = widget.scrollDirection == Axis.horizontal
+                    ? constraints.maxWidth
+                    : constraints.maxHeight;
+                final offset = position * pageExtent * _cardAdjacentScale;
+                return Transform.translate(
+                  offset: widget.scrollDirection == Axis.horizontal
+                      ? Offset(offset, 0)
+                      : Offset(0, offset),
+                  child: ClipRect(
+                    clipper: distance == 0
+                        ? null
+                        : _TSwiperScaleFadeClipper(
+                            axis: widget.scrollDirection,
+                            beforeCurrent: position > 0,
+                            pageExtent: pageExtent,
+                            viewportFraction: widget.viewportFraction,
+                            padEnds: widget.padEnds,
+                          ),
+                    child: Padding(
+                      padding: padding,
+                      child: Opacity(
+                        opacity: 1 - distance * 0.3,
+                        child: Transform.scale(
+                          scale: 1 - distance * (1 - _cardAdjacentScale),
+                          child: child,
+                        ),
+                      ),
+                    ),
+                  ),
+                );
+              },
             );
         }
       },
@@ -768,14 +835,16 @@ class _TSwiperState extends State<TSwiper> with WidgetsBindingObserver {
             context.tTheme.textColorPlaceholder,
         borderRadius: BorderRadius.circular(context.tTheme.radiusRound),
       ),
-      child: SizedBox(
-        height: 24,
+      child: ConstrainedBox(
+        constraints: BoxConstraints(minHeight: context.tTheme.size8),
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 8),
           child: Center(
             widthFactor: 1,
-            child: Text(
+            heightFactor: 1,
+            child: TTextStyled(
               '${_index + 1}/$_count',
+              centerLeading: true,
               style: defaultStyle.merge(theme?.fractionStyle),
             ),
           ),
@@ -804,21 +873,23 @@ class _TSwiperState extends State<TSwiper> with WidgetsBindingObserver {
               ? Icons.keyboard_arrow_down
               : Icons.keyboard_arrow_up);
     final fallbackStyle = IconButton.styleFrom(
-      backgroundColor: context.tTheme.fontGyColor3,
+      backgroundColor: context.tTheme.fontGray3,
       foregroundColor: context.tTheme.textColorAnti,
-      disabledBackgroundColor: context.tTheme.fontGyColor3.withValues(
-        alpha: 0.35,
-      ),
+      disabledBackgroundColor: context.tTheme.fontGray3.withValues(alpha: 0.35),
       disabledForegroundColor: context.tTheme.textColorAnti.withValues(
         alpha: 0.55,
       ),
       minimumSize: const Size.square(32),
+      iconSize: 18,
       tapTargetSize: MaterialTapTargetSize.padded,
       padding: EdgeInsets.zero,
     );
-    final style = fallbackStyle
-        .merge(IconButtonTheme.of(context).style)
-        .merge(theme?.controlStyle);
+    final style = theme?.controlStyle == null
+        ? fallbackStyle
+        : TInternalMaterialTheme.mergeButtonStyle(
+            fallbackStyle,
+            theme!.controlStyle!,
+          );
     return SizedBox(
       width: widget.scrollDirection == Axis.horizontal ? double.infinity : null,
       height: widget.scrollDirection == Axis.vertical ? double.infinity : null,
@@ -826,21 +897,19 @@ class _TSwiperState extends State<TSwiper> with WidgetsBindingObserver {
         direction: widget.scrollDirection,
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          IconButton(
+          TInternalIconButton(
             tooltip: localizations.previousPageTooltip,
             onPressed: canGoBack
                 ? () => unawaited(_previous(null, null))
                 : null,
             style: style,
-            iconSize: theme?.controlIconSize ?? 18,
-            icon: widget.previousIcon ?? Icon(previousIcon),
+            icon: widget.previousIcon ?? TInternalIcon(previousIcon),
           ),
-          IconButton(
+          TInternalIconButton(
             tooltip: localizations.nextPageTooltip,
             onPressed: canGoForward ? () => unawaited(_next(null, null)) : null,
             style: style,
-            iconSize: theme?.controlIconSize ?? 18,
-            icon: widget.nextIcon ?? Icon(nextIcon),
+            icon: widget.nextIcon ?? TInternalIcon(nextIcon),
           ),
         ],
       ),
@@ -858,5 +927,65 @@ class _TSwiperState extends State<TSwiper> with WidgetsBindingObserver {
     }
     _pageController.dispose();
     super.dispose();
+  }
+}
+
+class _TSwiperScaleFadeClipper extends CustomClipper<Rect> {
+  const _TSwiperScaleFadeClipper({
+    required this.axis,
+    required this.beforeCurrent,
+    required this.pageExtent,
+    required this.viewportFraction,
+    required this.padEnds,
+  });
+
+  static const _outerInset = 16.0;
+  static const _cardPadding = 6.0;
+  static const _translationFactor = 0.8;
+
+  final Axis axis;
+  final bool beforeCurrent;
+  final double pageExtent;
+  final double viewportFraction;
+  final bool padEnds;
+
+  @override
+  Rect getClip(Size size) {
+    final viewportExtent = pageExtent / viewportFraction;
+    final leading = padEnds ? (viewportExtent - pageExtent) / 2 : 0.0;
+    final translatedPageStart = beforeCurrent
+        ? leading - pageExtent + pageExtent * _translationFactor
+        : leading + pageExtent - pageExtent * _translationFactor;
+    final currentStart = leading + _cardPadding;
+    final currentEnd = viewportExtent - leading - _cardPadding;
+    final start = beforeCurrent
+        ? _outerInset - translatedPageStart
+        : currentEnd - translatedPageStart;
+    final end = beforeCurrent
+        ? currentStart - translatedPageStart
+        : viewportExtent - _outerInset - translatedPageStart;
+    if (axis == Axis.horizontal) {
+      return Rect.fromLTRB(
+        start.clamp(0, size.width),
+        0,
+        end.clamp(0, size.width),
+        size.height,
+      );
+    }
+    return Rect.fromLTRB(
+      0,
+      start.clamp(0, size.height),
+      size.width,
+      end.clamp(0, size.height),
+    );
+  }
+
+  @override
+  bool shouldReclip(_TSwiperScaleFadeClipper oldClipper) {
+    return axis != oldClipper.axis ||
+        beforeCurrent != oldClipper.beforeCurrent ||
+        pageExtent != oldClipper.pageExtent ||
+        viewportFraction != oldClipper.viewportFraction ||
+        padEnds != oldClipper.padEnds;
   }
 }

@@ -1,4 +1,3 @@
-import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:tdesign_flutter/tdesign_flutter.dart';
 
@@ -100,7 +99,7 @@ void main() {
       expect(lerped.anchorVerticalPadding, 6);
     });
 
-    test('lerp 保留 nullable 字段的主题回退语义', () {
+    test('lerp 区分固定默认值与动态主题回退', () {
       const fallback = TIndexesThemeData();
       const explicit = TIndexesThemeData(
         indexItemSize: 24,
@@ -108,16 +107,60 @@ void main() {
       );
 
       final beforeSwitch = fallback.lerp(explicit, 0.25);
-      expect(beforeSwitch.indexItemSize, isNull);
+      expect(beforeSwitch.indexItemSize, 21);
       expect(beforeSwitch.activeIndexBackgroundColor, isNull);
 
       final afterSwitch = fallback.lerp(explicit, 0.75);
-      expect(afterSwitch.indexItemSize, 24);
+      expect(afterSwitch.indexItemSize, 23);
       expect(afterSwitch.activeIndexBackgroundColor, Colors.blue);
+
+      final reverseBeforeSwitch = explicit.lerp(fallback, 0.25);
+      expect(reverseBeforeSwitch.indexItemSize, 23);
+      expect(reverseBeforeSwitch.activeIndexBackgroundColor, Colors.blue);
+
+      final reverseAfterSwitch = explicit.lerp(fallback, 0.75);
+      expect(reverseAfterSwitch.indexItemSize, 21);
+      expect(reverseAfterSwitch.activeIndexBackgroundColor, isNull);
 
       final bothFallback = fallback.lerp(const TIndexesThemeData(), 0.5);
       expect(bothFallback.indexItemSize, isNull);
       expect(bothFallback.activeIndexBackgroundColor, isNull);
+    });
+
+    test('lerp 使用运行时固定默认值计算连续字段的中间态', () {
+      const fallback = TIndexesThemeData();
+      const explicit = TIndexesThemeData(
+        indexListMaxHeight: 0.6,
+        indexItemSize: 24,
+        indexItemSpacing: 6,
+        tipMaxWidth: 119,
+      );
+
+      final forward = fallback.lerp(explicit, 0.25);
+      expect(forward.indexListMaxHeight, closeTo(0.75, 0.0001));
+      expect(forward.indexItemSize, 21);
+      expect(forward.indexItemSpacing, 3);
+      expect(forward.tipMaxWidth, 104);
+
+      final reverse = explicit.lerp(fallback, 0.25);
+      expect(reverse.indexListMaxHeight, closeTo(0.65, 0.0001));
+      expect(reverse.indexItemSize, 23);
+      expect(reverse.indexItemSpacing, 5);
+      expect(reverse.tipMaxWidth, 114);
+    });
+
+    test('ThemeData.lerp 使用相同的固定默认值和动态回退语义', () {
+      final begin = ThemeData(extensions: const [TIndexesThemeData()]);
+      final end = ThemeData(
+        extensions: const [
+          TIndexesThemeData(indexItemSize: 24, activeIndexColor: Colors.blue),
+        ],
+      );
+
+      final theme = ThemeData.lerp(begin, end, 0.25);
+      final indexesTheme = theme.extension<TIndexesThemeData>()!;
+      expect(indexesTheme.indexItemSize, 21);
+      expect(indexesTheme.activeIndexColor, isNull);
     });
   });
 
@@ -133,6 +176,42 @@ void main() {
         ),
       );
       expect(find.byType(TIndexes), findsOneWidget);
+      expect(
+        tester.widget<TIndexes>(find.byType(TIndexes)).useSafeArea,
+        isFalse,
+      );
+      final rootContainer = tester.widget<Container>(
+        find
+            .descendant(
+              of: find.byType(TIndexes),
+              matching: find.byType(Container),
+            )
+            .first,
+      );
+      expect(rootContainer.child, isA<Stack>());
+    });
+
+    testWidgets('显式开启时使用 SafeArea 避让系统区域', (tester) async {
+      await tester.pumpWidget(
+        wrapWithTheme(
+          TIndexes(
+            indexList: const ['A', 'B'],
+            useSafeArea: true,
+            builderContent: (context, index) =>
+                ListTile(title: Text('内容$index')),
+          ),
+        ),
+      );
+
+      final rootContainer = tester.widget<Container>(
+        find
+            .descendant(
+              of: find.byType(TIndexes),
+              matching: find.byType(Container),
+            )
+            .first,
+      );
+      expect(rootContainer.child, isA<SafeArea>());
     });
 
     testWidgets('侧边索引默认视觉使用 token 尺寸、颜色和字体', (tester) async {
@@ -163,13 +242,15 @@ void main() {
       );
       expect(
         activeDecoration.decoration,
-        BoxDecoration(
-          borderRadius: BorderRadius.circular(token.radiusCircle),
-          color: token.brandNormalColor,
+        ShapeDecoration(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(20),
+          ),
+          color: token.brandColor,
         ),
       );
       final activeText = tester.widget<TText>(_tTextFinder('A').last);
-      expect(activeText.textColor, token.textColorAnti);
+      expect(activeText.style?.color, token.textColorAnti);
       expect(activeText.font, token.fontBodySmall);
 
       final inactiveDecoration = tester.widget<DecoratedBox>(
@@ -177,7 +258,7 @@ void main() {
       );
       expect(inactiveDecoration.decoration, const BoxDecoration());
       final inactiveText = tester.widget<TText>(_tTextFinder('B').last);
-      expect(inactiveText.textColor, token.textColorPrimary);
+      expect(inactiveText.style?.color, token.textColorPrimary);
       expect(inactiveText.font, token.fontBodySmall);
     });
 
@@ -201,31 +282,30 @@ void main() {
             (widget) =>
                 widget is Container &&
                 widget.padding != null &&
-                widget.decoration is BoxDecoration,
+                widget.decoration is ShapeDecoration,
           ),
         ),
       );
       expect(
         anchorContainer.padding,
-        EdgeInsets.symmetric(
-          vertical: token.spacer4,
-          horizontal: token.spacer16,
-        ),
+        EdgeInsets.symmetric(vertical: 4.0, horizontal: token.spacer2),
       );
       expect(
         anchorContainer.margin,
-        EdgeInsets.symmetric(horizontal: token.spacer8),
+        EdgeInsets.symmetric(horizontal: token.spacer),
       );
-      final decoration = anchorContainer.decoration! as BoxDecoration;
+      final decoration = anchorContainer.decoration! as ShapeDecoration;
       expect(decoration.color, token.bgColorContainer);
       expect(
-        decoration.borderRadius,
-        BorderRadius.circular(token.radiusCircle),
+        decoration.shape,
+        RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(token.radiusRound),
+          side: BorderSide(color: token.componentStroke),
+        ),
       );
-      expect(decoration.border, Border.all(color: token.componentStrokeColor));
 
       final anchorText = tester.widget<TText>(_tTextFinder('A').last);
-      expect(anchorText.textColor, token.brandNormalColor);
+      expect(anchorText.style?.color, token.brandColor);
       expect(anchorText.font, token.fontMarkMedium);
     });
 
@@ -353,7 +433,7 @@ void main() {
         find.byType(SliverStickyHeader).first,
       );
       expect(header.sticky, isTrue);
-      expect(header.pinnedOffset, TThemeData.defaultData().spacer8);
+      expect(header.pinnedOffset, TThemeData.defaultData().spacer);
     });
 
     testWidgets('滚动方向和 sticky 只由组件实例控制', (tester) async {
@@ -592,16 +672,16 @@ void main() {
       );
       expect(
         (tester.widget<DecoratedBox>(_indexesListDecoratedBox('A')).decoration
-                as BoxDecoration)
+                as ShapeDecoration)
             .color,
         Colors.red,
       );
       expect(
-        tester.widget<TText>(_tTextFinder('A').last).textColor,
+        tester.widget<TText>(_tTextFinder('A').last).style?.color,
         Colors.yellow,
       );
       expect(
-        tester.widget<TText>(_tTextFinder('B').last).textColor,
+        tester.widget<TText>(_tTextFinder('B').last).style?.color,
         Colors.green,
       );
     });
@@ -620,10 +700,7 @@ void main() {
       expect(tester.takeException(), isAssertionError);
       await tester.pumpWidget(const SizedBox());
       expect(
-        () => TIndexes(
-          indexListMaxHeight: 1.1,
-          builderContent: (_, __) => const SizedBox(),
-        ),
+        () => TIndexesThemeData(indexListMaxHeight: 1.1),
         throwsAssertionError,
       );
       await tester.pumpWidget(

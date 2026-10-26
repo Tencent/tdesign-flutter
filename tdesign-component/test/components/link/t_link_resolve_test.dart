@@ -1,4 +1,3 @@
-import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:tdesign_flutter/src/components/link/t_link_resolve.dart';
 import 'package:tdesign_flutter/tdesign_flutter.dart';
@@ -55,7 +54,7 @@ void main() {
     expect(style.color, Colors.red);
   });
 
-  testWidgets('图标尺寸与间距对齐小程序', (tester) async {
+  testWidgets('图标尺寸与间距符合默认配置', (tester) async {
     await tester.pumpWidget(wrap(const SizedBox()));
     final context = tester.element(find.byType(SizedBox));
 
@@ -89,7 +88,7 @@ void main() {
     expect(
       TLinkResolve.resolveColor(
         context: context,
-        colorScheme: TLinkColorScheme.defaultTheme,
+        colorPreset: TLinkColorPreset.defaultTheme,
         theme: null,
         isDisabled: false,
         isActive: false,
@@ -99,29 +98,29 @@ void main() {
     expect(
       TLinkResolve.resolveColor(
         context: context,
-        colorScheme: TLinkColorScheme.defaultTheme,
+        colorPreset: TLinkColorPreset.defaultTheme,
         theme: null,
         isDisabled: false,
         isActive: true,
       ),
-      token.brandClickColor,
+      token.brandColorActive,
     );
     expect(
       TLinkResolve.resolveColor(
         context: context,
-        colorScheme: TLinkColorScheme.primary,
+        colorPreset: TLinkColorPreset.primary,
         theme: null,
         isDisabled: true,
         isActive: false,
       ),
-      token.brandDisabledColor,
+      token.brandColorDisabled,
     );
   });
 
   testWidgets('所有语义颜色方案均覆盖三种状态', (tester) async {
     await tester.pumpWidget(wrap(const SizedBox()));
     final context = tester.element(find.byType(SizedBox));
-    for (final scheme in TLinkColorScheme.values) {
+    for (final scheme in TLinkColorPreset.values) {
       for (final state in const [
         (false, false),
         (false, true),
@@ -130,7 +129,7 @@ void main() {
         expect(
           TLinkResolve.resolveColor(
             context: context,
-            colorScheme: scheme,
+            colorPreset: scheme,
             theme: null,
             isDisabled: state.$1,
             isActive: state.$2,

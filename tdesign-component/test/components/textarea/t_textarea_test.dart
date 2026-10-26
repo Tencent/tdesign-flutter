@@ -1,9 +1,17 @@
-import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:tdesign_flutter/tdesign_flutter.dart';
 
 void main() {
+  double alphabeticBaseline(WidgetTester tester, Finder finder) {
+    final renderBox = tester.renderObject<RenderBox>(finder);
+    final localBaseline = renderBox.getDryBaseline(
+      renderBox.constraints,
+      TextBaseline.alphabetic,
+    );
+    return tester.getTopLeft(finder).dy + localBaseline!;
+  }
+
   Widget wrap(Widget child, {TInputThemeData? inputTheme}) {
     var theme = TThemeBuilder.light(TThemeData.defaultData());
     if (inputTheme != null) {
@@ -58,8 +66,7 @@ void main() {
     expect(field.textInputAction, TextInputAction.newline);
     expect(field.textAlign, TextAlign.center);
     expect(find.text('标题'), findsOneWidget);
-    expect(field.decoration?.filled, isFalse);
-    expect(field.decoration?.fillColor, Colors.transparent);
+
     controller.dispose();
     focusNode.dispose();
   });
@@ -86,13 +93,10 @@ void main() {
     expect(completed, isTrue);
   });
 
-  testWidgets('multiline minimum rows can come from theme', (tester) async {
-    await tester.pumpWidget(
-      wrap(
-        const TTextarea(),
-        inputTheme: const TInputThemeData(multilineMinLines: 6),
-      ),
-    );
+  testWidgets('multiline minimum rows are selected by the instance', (
+    tester,
+  ) async {
+    await tester.pumpWidget(wrap(const TTextarea(minLines: 6)));
     expect(tester.widget<TextField>(find.byType(TextField)).minLines, 6);
   });
 
@@ -156,10 +160,45 @@ void main() {
     expect(label.style?.height, token.fontBodyMedium?.height);
     expect(label.style?.color, token.textColorPrimary);
 
-    final field = tester.widget<TextField>(find.byType(TextField));
-    expect(field.decoration?.hintStyle?.fontSize, token.fontBodyMedium?.size);
-    expect(field.decoration?.hintStyle?.height, token.fontBodyMedium?.height);
-    expect(field.decoration?.hintStyle?.color, token.textColorPlaceholder);
+    expect(
+      tester
+          .widget<Text>(
+            find
+                .text(
+                  tester.widget<TTextarea>(find.byType(TTextarea)).hintText!,
+                )
+                .last,
+          )
+          .style
+          ?.fontSize,
+      token.fontBodyMedium?.size,
+    );
+    expect(
+      tester
+          .widget<Text>(
+            find
+                .text(
+                  tester.widget<TTextarea>(find.byType(TTextarea)).hintText!,
+                )
+                .last,
+          )
+          .style
+          ?.height,
+      token.fontBodyMedium?.height,
+    );
+    expect(
+      tester
+          .widget<Text>(
+            find
+                .text(
+                  tester.widget<TTextarea>(find.byType(TTextarea)).hintText!,
+                )
+                .last,
+          )
+          .style
+          ?.color,
+      token.textColorPlaceholder,
+    );
 
     final indicator = tester.widget<Text>(find.text('0/200'));
     expect(indicator.style?.fontSize, token.fontBodySmall?.size);
@@ -167,13 +206,89 @@ void main() {
     expect(indicator.style?.color, token.textColorPlaceholder);
     expect(
       find.byWidgetPredicate(
-        (widget) => widget is SizedBox && widget.height == token.spacer8,
+        (widget) => widget is SizedBox && widget.height == token.spacer,
       ),
-      findsAtLeastNWidgets(2),
+      findsAtLeastNWidgets(1),
+    );
+    expect(
+      find.byWidgetPredicate(
+        (widget) => widget is SizedBox && widget.width == token.spacer2,
+      ),
+      findsOneWidget,
     );
   });
 
-  testWidgets('textarea label uses text theme and disabled semantics', (
+  testWidgets('label defaults to horizontal layout with token spacing', (
+    tester,
+  ) async {
+    final token = TThemeData.defaultData();
+    await tester.pumpWidget(
+      wrap(
+        const SizedBox(
+          width: 375,
+          child: TTextarea(label: '标签文字', hintText: '请输入文字'),
+        ),
+      ),
+    );
+
+    final labelRect = tester.getRect(find.text('标签文字'));
+    final fieldRect = tester.getRect(find.byType(TextField));
+    expect(fieldRect.left - labelRect.right, token.spacer2);
+    expect(labelRect.top, tester.getRect(find.text('请输入文字')).top);
+    expect(
+      alphabeticBaseline(tester, find.text('标签文字')),
+      closeTo(alphabeticBaseline(tester, find.text('请输入文字')), 0.01),
+    );
+  });
+
+  testWidgets('bounded textarea keeps the indicator 16px from the bottom', (
+    tester,
+  ) async {
+    await tester.pumpWidget(
+      wrap(
+        const SizedBox(
+          width: 375,
+          height: 162,
+          child: TTextarea(
+            label: '标签文字',
+            hintText: '请输入文字',
+            minLines: 3,
+            maxLength: 500,
+            indicator: true,
+          ),
+        ),
+      ),
+    );
+
+    final textareaRect = tester.getRect(find.byType(TTextarea));
+    final indicatorRect = tester.getRect(find.text('0/500'));
+    expect(textareaRect.bottom - indicatorRect.bottom, 16);
+  });
+
+  testWidgets('vertical layout stacks label above editor with token spacing', (
+    tester,
+  ) async {
+    final token = TThemeData.defaultData();
+    await tester.pumpWidget(
+      wrap(
+        const SizedBox(
+          width: 375,
+          child: TTextarea(
+            label: '标签文字',
+            hintText: '请输入文字',
+            layout: TTextareaLayout.vertical,
+          ),
+        ),
+      ),
+    );
+
+    final labelRect = tester.getRect(find.text('标签文字'));
+    final fieldRect = tester.getRect(find.byType(TextField));
+    expect(fieldRect.top - labelRect.bottom, token.spacer);
+    expect(fieldRect.left, labelRect.left);
+  });
+
+  testWidgets('textarea label uses TDesign token and disabled semantics', (
     tester,
   ) async {
     final token = TThemeData.defaultData();
@@ -192,8 +307,8 @@ void main() {
     );
 
     final enabled = tester.widget<Text>(find.text('enabled')).style;
-    expect(enabled?.color, Colors.purple);
-    expect(enabled?.fontWeight, FontWeight.bold);
+    expect(enabled?.color, token.textColorPrimary);
+    expect(enabled?.fontWeight, token.fontBodyMedium?.fontWeight);
 
     await tester.pumpWidget(
       MaterialApp(
@@ -209,7 +324,7 @@ void main() {
     );
     expect(
       tester.widget<Text>(find.text('disabled')).style?.color,
-      token.textDisabledColor,
+      token.textColorDisabled,
     );
   });
 
@@ -235,11 +350,14 @@ void main() {
     );
     expect(find.text('字段'), findsOneWidget);
     expect(
-      find.byWidgetPredicate(
-        (widget) =>
-            widget is Padding && widget.padding == const EdgeInsets.all(16),
+      find.descendant(
+        of: find.byType(TTextarea),
+        matching: find.byWidgetPredicate(
+          (widget) =>
+              widget is Padding && widget.padding == const EdgeInsets.all(16),
+        ),
       ),
-      findsOneWidget,
+      findsNothing,
     );
   });
 
@@ -271,9 +389,9 @@ void main() {
       TInputStatus.error: 'error',
     };
     final colors = {
-      TInputStatus.success: token.successNormalColor,
-      TInputStatus.warning: token.warningNormalColor,
-      TInputStatus.error: token.errorNormalColor,
+      TInputStatus.success: token.successColor,
+      TInputStatus.warning: token.warningColor,
+      TInputStatus.error: token.errorColor,
     };
 
     for (final entry in cases.entries) {

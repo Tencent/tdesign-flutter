@@ -1,0 +1,111 @@
+import 'package:flutter_test/flutter_test.dart';
+import 'package:tdesign_flutter/tdesign_flutter.dart';
+
+import '../demo_page_test_utils.dart';
+import 'image_viewer_demo_test_spec.dart';
+
+void main() {
+  registerDemoStructureTests(imageViewerDemoPageTestSpec);
+
+  testWidgets('公开 Demo 仅展示两个设计入口及正确按钮样式', (tester) async {
+    await pumpDemoPageAtPhoneViewport(
+      tester,
+      imageViewerDemoPageTestSpec,
+      ThemeMode.light,
+    );
+
+    final buttons = tester.widgetList<TButton>(find.byType(TButton)).toList();
+    expect(buttons, hasLength(2));
+    for (final button in buttons) {
+      expect(button.size, TButtonSize.large);
+      expect(button.variant, TButtonVariant.outline);
+      expect(button.colorPreset, TButtonColorPreset.primary);
+      expect(tester.getSize(find.byWidget(button)).width, 343);
+    }
+  });
+
+  testWidgets('基础入口打开页码但不展示操作按钮', (tester) async {
+    await pumpDemoPageAtPhoneViewport(
+      tester,
+      imageViewerDemoPageTestSpec,
+      ThemeMode.light,
+    );
+
+    await tester.tap(find.widgetWithText(TButton, '基础图片预览'));
+    await tester.pumpAndSettle();
+    expect(find.text('1/2'), findsOneWidget);
+    expect(find.byTooltip('Close'), findsNothing);
+    expect(find.byTooltip('Delete'), findsNothing);
+  });
+
+  testWidgets('操作入口展示关闭和删除并打开删除确认', (tester) async {
+    await pumpDemoPageAtPhoneViewport(
+      tester,
+      imageViewerDemoPageTestSpec,
+      ThemeMode.light,
+    );
+
+    await tester.tap(find.widgetWithText(TButton, '带操作图片预览'));
+    await tester.pumpAndSettle();
+    expect(find.text('1/2'), findsOneWidget);
+    expect(find.byTooltip('Close'), findsOneWidget);
+    expect(find.byTooltip('Delete'), findsOneWidget);
+
+    await tester.tap(find.byTooltip('Delete'));
+    await tester.pumpAndSettle();
+    expect(find.text('要删除这张照片吗？'), findsOneWidget);
+    expect(find.text('删除'), findsOneWidget);
+  });
+
+  for (final deleteLast in [false, true]) {
+    testWidgets('真实删除、取消、删空与重新体验 last=$deleteLast', (tester) async {
+      await pumpDemoPageAtPhoneViewport(
+        tester,
+        imageViewerDemoPageTestSpec,
+        ThemeMode.light,
+      );
+      await tester.tap(find.widgetWithText(TButton, '带操作图片预览'));
+      await tester.pumpAndSettle();
+      if (deleteLast) {
+        await tester.drag(find.byType(TSwiper), const Offset(-400, 0));
+        await tester.pumpAndSettle();
+      }
+      final initialPage = deleteLast ? '2/2' : '1/2';
+      expect(find.text(initialPage), findsOneWidget);
+      await tester.tap(find.byTooltip('Delete'));
+      await tester.pumpAndSettle();
+      expect(find.text('要删除这张照片吗？'), findsOneWidget);
+      await tester.tap(find.textContaining(RegExp('取消|Cancel')));
+      await tester.pumpAndSettle();
+      expect(find.text(initialPage), findsOneWidget);
+
+      for (var remaining = 1; remaining >= 0; remaining--) {
+        await tester.tap(find.byTooltip('Delete'));
+        await tester.pumpAndSettle();
+        await tester.tap(find.text('删除'));
+        await tester.pumpAndSettle();
+        expect(tester.takeException(), isNull);
+        if (remaining == 1) {
+          expect(find.text('1/1'), findsOneWidget);
+          expect(
+            tester.widget<TSwiper>(find.byType(TSwiper)).children,
+            hasLength(1),
+          );
+          await tester.drag(find.byType(TSwiper), const Offset(-400, 0));
+          await tester.pumpAndSettle();
+          expect(find.text('1/1'), findsOneWidget);
+        }
+      }
+      expect(find.byType(TSwiper), findsNothing);
+      expect(find.text('图片已全部删除'), findsOneWidget);
+      TToast.dismissAll();
+      await tester.pump();
+      await tester.tap(find.text('重新体验带操作图片预览'));
+      await tester.pumpAndSettle();
+      expect(find.text('1/2'), findsOneWidget);
+      await tester.tap(find.byTooltip('Close'));
+      await tester.pumpAndSettle();
+      expect(tester.takeException(), isNull);
+    });
+  }
+}

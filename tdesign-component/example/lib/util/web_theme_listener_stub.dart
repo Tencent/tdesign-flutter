@@ -1,11 +1,8 @@
-// 非 Web 平台的 stub 实现
+import 'package:tdesign_flutter/tdesign_flutter.dart';
 
-import 'package:flutter/material.dart';
+/// 非 Web 平台不监听浏览器消息；返回空操作释放函数。
+VoidCallback listenToWebThemeUpdates({
+  required void Function(TThemeData theme, ThemeMode? mode) onUpdate,
+}) => _noop;
 
-import '../provider/theme_mode_provider.dart';
-
-/// 非 Web 平台的 stub 实现（空操作）
-void setupThemeModeListener(ThemeModeProvider themeModeProvider) {
-  // 非 Web 平台不需要实现，空操作即可
-}
-
+void _noop() {}

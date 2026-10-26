@@ -1,97 +1,41 @@
-name: Auto Release
+name: auto-release
 
 on:
   pull_request:
-    branches: [develop]
-    types: [opened, synchronize, reopened, closed]
-    paths:
-      - "tdesign-component/pubspec.yaml"
-  issue_comment:
-    types: [edited]
+    types: [closed]
+    paths: ['tdesign-component/pubspec.yaml']
+
+permissions:
+  contents: read
+  id-token: write
 
 jobs:
-  generator:
+  release:
+    if: github.event.pull_request.merged && startsWith(github.head_ref, 'release/')
     runs-on: ubuntu-latest
-    if: >
-      github.event_name == 'pull_request' &&
-      github.event.pull_request.merged == false &&
-      startsWith(github.head_ref, 'release/')
     steps:
-      - run: echo "The head of this PR starts with 'release/'"
-      - uses: actions/checkout@v4
-      - uses: TDesignOteam/tdesign-tag-action@main
-        id: tag-action
+      - uses: actions/checkout@v7
+
+      - uses: TDesignOteam/tdesign-changelog-action@next
         with:
-          token: ${{ secrets.GITHUB_TOKEN }}
-          version_file: ./tdesign-component/pubspec.yaml
-      - uses: TDesignOteam/tdesign-changelog-action@main
-        id: changelog
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          tag: ${{ steps.tag-action.outputs.version }}
-      - name: Add comment
-        uses: peter-evans/create-or-update-comment@v1
-        with:
-          issue-number: ${{ github.event.pull_request.number }}
-          body: |
-            ${{ steps.changelog.outputs.changelog }}
-  comment_add_log:
+          token: ${{ secrets.TDESIGN_BOT_TOKEN }}
+          manifest-path: tdesign-component/pubspec.yaml
+
+  dry-run-publish:
+    if: github.event.pull_request.merged && startsWith(github.head_ref, 'release/')
     runs-on: ubuntu-latest
-    if: >
-      github.event_name == 'issue_comment'
-      && github.event.issue.pull_request
-      && github.event.sender.login == github.event.issue.user.login
-      && startsWith(github.event.comment.body, '## 🌈 ')
     steps:
-      - id: comment
-        shell: bash
-        run: |
-          result=$(curl ${{github.event.issue.pull_request.url}} -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}")
-          headrefreg='"ref": "(release/[[:digit:]]{1,2}\.[[:digit:]]{1,2}\.[[:digit:]]{1,2})",'
-          if [[ $result =~ $headrefreg ]]
-          then
-            echo "属于 release pr 的 comment ${BASH_REMATCH[1]}" 
-          else
-            echo "不属于 release pr 的 comment" && exit 1
-          fi
-          echo "::set-output name=branch::${BASH_REMATCH[1]}"
-      # zsh $match[1]
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v7
+
+      - uses: flutter-actions/setup-flutter@v4
         with:
-          ref: ${{ steps.comment.outputs.branch }}
-      - name: Commit and push if needed
-        env:
-          BODY: ${{ github.event.comment.body }}
-        run: |
-          txt=$(cat tdesign-site/CHANGELOG.md)
-          echo "${txt%%##*}$BODY${txt##*---}" > tdesign-site/CHANGELOG.md
-          git add .
-          git config --local user.email "github-actions[bot]@users.noreply.github.com"
-          git config --local user.name "github-actions[bot]"
-          git commit -m "chore: changelog's changes"
-          git push
-          echo "💾 pushed changelog's changes"
-  merge_tag:
-    runs-on: ubuntu-latest
-    if: >
-      github.event_name == 'pull_request' &&
-      github.event.pull_request.merged == true &&
-      startsWith(github.head_ref, 'release/')
-    steps:
-      - uses: actions/checkout@v4
-        with:
-          ref: develop
-          token: ${{ secrets.PERSONAL_TOKEN }}
-      - uses: TDesignOteam/tdesign-tag-action@main
-        id: tag-action
-        with:
-          token: ${{ secrets.GITHUB_TOKEN }}
-          version_file: ./tdesign-component/pubspec.yaml
-      - name: tag and push if needed
-        run: |
-          echo "${{ steps.tag-action.outputs.version }}"
-          git config --local user.email "github-actions[bot]@users.noreply.github.com"
-          git config --local user.name "github-actions[bot]"
-          git tag ${{ steps.tag-action.outputs.version }}
-          git push origin ${{ steps.tag-action.outputs.version }}
+          channel: stable
+          version: 3.32.0
+
+      - name: install
+        working-directory: ./tdesign-component
+        run: flutter pub get
+
+      - name: dry run publish
+        working-directory: ./tdesign-component
+        run: flutter pub publish --dry-run

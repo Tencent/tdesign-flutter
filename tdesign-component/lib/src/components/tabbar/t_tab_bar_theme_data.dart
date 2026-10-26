@@ -1,11 +1,15 @@
 import 'dart:ui' show lerpDouble;
 
 import 'package:flutter/material.dart';
+import 'package:meta/meta.dart';
+
+import '../../theme/t_token_double_lerp.dart';
 
 /// 底部标签栏 ThemeExtension
 ///
-/// 管理 TTabBar 的子树级视觉默认值（高度、颜色、间距与分割线等）。
-/// 构造器参数优先级高于 ThemeData。
+/// 管理 TTabBar 的子树级视觉默认值（高度、颜色与分割线等）。
+///
+/// {@category ComponentTheme}
 class TTabBarThemeData extends ThemeExtension<TTabBarThemeData> {
   /// 默认高度
   final double? barHeight;
@@ -19,100 +23,111 @@ class TTabBarThemeData extends ThemeExtension<TTabBarThemeData> {
   /// 默认背景颜色
   final Color? backgroundColor;
 
-  /// 默认 icon 与文本中间距离
-  final double? centerDistance;
-
   /// 默认分割线高度
   final double? dividerHeight;
 
   /// 默认分割线厚度
   final double? dividerThickness;
 
-  /// 默认分割线颜色
+  /// 竖向分割线颜色；未设置时读取全局灰阶 3。
   final Color? dividerColor;
-
-  /// 默认上边线样式
-  final BorderSide? topBorder;
 
   const TTabBarThemeData({
     this.barHeight,
     this.selectedBgColor,
     this.unselectedBgColor,
     this.backgroundColor,
-    this.centerDistance,
     this.dividerHeight,
     this.dividerThickness,
     this.dividerColor,
-    this.topBorder,
   });
 
+  /// 复制主题配置。
+  ///
+  /// ## 返回值
+  /// 返回主题副本；非空参数替换对应配置，null 参数保留当前配置。
   @override
   TTabBarThemeData copyWith({
     double? barHeight,
     Color? selectedBgColor,
     Color? unselectedBgColor,
     Color? backgroundColor,
-    double? centerDistance,
     double? dividerHeight,
     double? dividerThickness,
     Color? dividerColor,
-    BorderSide? topBorder,
   }) {
-    return TTabBarThemeData(
-      barHeight: barHeight ?? this.barHeight,
-      selectedBgColor: selectedBgColor ?? this.selectedBgColor,
-      unselectedBgColor: unselectedBgColor ?? this.unselectedBgColor,
-      backgroundColor: backgroundColor ?? this.backgroundColor,
-      centerDistance: centerDistance ?? this.centerDistance,
-      dividerHeight: dividerHeight ?? this.dividerHeight,
-      dividerThickness: dividerThickness ?? this.dividerThickness,
-      dividerColor: dividerColor ?? this.dividerColor,
-      topBorder: topBorder ?? this.topBorder,
+    return _InterpolatedTTabBarThemeData(
+      TTabBarThemeData(
+        barHeight: barHeight ?? this.barHeight,
+        selectedBgColor: selectedBgColor ?? this.selectedBgColor,
+        unselectedBgColor: unselectedBgColor ?? this.unselectedBgColor,
+        backgroundColor: backgroundColor ?? this.backgroundColor,
+        dividerHeight: dividerHeight ?? this.dividerHeight,
+        dividerThickness: dividerThickness ?? this.dividerThickness,
+        dividerColor: dividerColor ?? this.dividerColor,
+      ),
+      barHeightTransition: barHeight == null
+          ? _tabBarTransition(this)?._barHeightTransition
+          : null,
     );
   }
 
+  /// 生成主题过渡配置。
+  ///
+  /// ## 返回值
+  /// 按 t 在当前主题和目标主题之间生成过渡主题。
+  /// other 为空或类型不匹配时返回当前主题；字段各自采用其类型的插值规则。
   @override
-  TTabBarThemeData lerp(ThemeExtension<TTabBarThemeData>? other, double t) {
+  TTabBarThemeData lerp(
+    /// 目标主题；为空或类型不匹配时保留当前主题。
+    ThemeExtension<TTabBarThemeData>? other,
+
+    /// 插值进度；通常 0 表示当前主题，1 表示目标主题。
+    double t,
+  ) {
     if (other is! TTabBarThemeData) {
       return this;
     }
-    return TTabBarThemeData(
-      barHeight: _lerpDoubleWithDefault(barHeight, other.barHeight, 56, t),
-      selectedBgColor: _lerpOptionalColor(
-        selectedBgColor,
-        other.selectedBgColor,
-        t,
+    return _InterpolatedTTabBarThemeData(
+      TTabBarThemeData(
+        barHeight: _lerpDoubleWithDefault(barHeight, other.barHeight, 56, t),
+        selectedBgColor: _lerpOptionalColor(
+          selectedBgColor,
+          other.selectedBgColor,
+          t,
+        ),
+        unselectedBgColor: _lerpOptionalColor(
+          unselectedBgColor,
+          other.unselectedBgColor,
+          t,
+        ),
+        backgroundColor: _lerpOptionalColor(
+          backgroundColor,
+          other.backgroundColor,
+          t,
+        ),
+        dividerHeight: _lerpDoubleWithDefault(
+          dividerHeight,
+          other.dividerHeight,
+          32,
+          t,
+        ),
+        dividerThickness: _lerpDoubleWithDefault(
+          dividerThickness,
+          other.dividerThickness,
+          0.5,
+          t,
+        ),
+        dividerColor: _lerpOptionalColor(dividerColor, other.dividerColor, t),
       ),
-      unselectedBgColor: _lerpOptionalColor(
-        unselectedBgColor,
-        other.unselectedBgColor,
+      barHeightTransition: TokenValueLerp.between(
+        barHeight,
+        _tabBarTransition(this)?._barHeightTransition,
+        other.barHeight,
+        _tabBarTransition(other)?._barHeightTransition,
         t,
+        (a, b, t) => lerpDouble(a, b, t)!,
       ),
-      backgroundColor: _lerpOptionalColor(
-        backgroundColor,
-        other.backgroundColor,
-        t,
-      ),
-      centerDistance: _lerpDoubleWithDefault(
-        centerDistance,
-        other.centerDistance,
-        0,
-        t,
-      ),
-      dividerHeight: _lerpDoubleWithDefault(
-        dividerHeight,
-        other.dividerHeight,
-        32,
-        t,
-      ),
-      dividerThickness: _lerpDoubleWithDefault(
-        dividerThickness,
-        other.dividerThickness,
-        0.5,
-        t,
-      ),
-      dividerColor: _lerpOptionalColor(dividerColor, other.dividerColor, t),
-      topBorder: _lerpOptionalBorderSide(topBorder, other.topBorder, t),
     );
   }
 
@@ -137,15 +152,39 @@ class TTabBarThemeData extends ThemeExtension<TTabBarThemeData> {
     }
     return Color.lerp(a, b, t);
   }
+}
 
-  static BorderSide? _lerpOptionalBorderSide(
-    BorderSide? a,
-    BorderSide? b,
-    double t,
-  ) {
-    if (a == null || b == null) {
-      return t < 0.5 ? a : b;
-    }
-    return BorderSide.lerp(a, b, t);
-  }
+class _InterpolatedTTabBarThemeData extends TTabBarThemeData {
+  _InterpolatedTTabBarThemeData(
+    TTabBarThemeData data, {
+    TokenValueLerp<double>? barHeightTransition,
+  }) : _barHeightTransition = barHeightTransition,
+       super(
+         barHeight: data.barHeight,
+         selectedBgColor: data.selectedBgColor,
+         unselectedBgColor: data.unselectedBgColor,
+         backgroundColor: data.backgroundColor,
+         dividerHeight: data.dividerHeight,
+         dividerThickness: data.dividerThickness,
+         dividerColor: data.dividerColor,
+       );
+
+  final TokenValueLerp<double>? _barHeightTransition;
+}
+
+// Only library-owned interpolation objects carry deferred token state.
+// External implements satisfy the historic public interface, not private getters.
+_InterpolatedTTabBarThemeData? _tabBarTransition(TTabBarThemeData theme) =>
+    theme is _InterpolatedTTabBarThemeData ? theme : null;
+
+double _resolveTabBarHeight(TTabBarThemeData theme, double fallback) =>
+    _tabBarTransition(theme)?._barHeightTransition?.resolve(fallback) ??
+    theme.barHeight ??
+    fallback;
+
+/// Internal resolution bridge; excluded from the package's public exports.
+@internal
+extension TTabBarThemeDataResolution on TTabBarThemeData {
+  double resolveBarHeight(double fallback) =>
+      _resolveTabBarHeight(this, fallback);
 }

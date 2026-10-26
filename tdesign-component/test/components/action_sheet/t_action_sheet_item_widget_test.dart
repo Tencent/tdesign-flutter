@@ -1,4 +1,3 @@
-import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:tdesign_flutter/src/components/action_sheet/t_action_sheet_item_widget.dart';
 import 'package:tdesign_flutter/tdesign_flutter.dart';
@@ -60,7 +59,7 @@ void main() {
               value: 'badge',
               label: '带角标',
               icon: Icon(Icons.star),
-              badge: TBadge(label: '3'),
+              badge: TBadgeConfig(label: '3'),
             ),
           ),
         ),
@@ -69,7 +68,7 @@ void main() {
       expect(find.text('带角标'), findsOneWidget);
     });
 
-    testWidgets('badge 接受任意 Widget 且无需帧后测量', (tester) async {
+    testWidgets('badge 配置接受完全自定义外观且无需帧后测量', (tester) async {
       await tester.pumpWidget(
         wrapWithTheme(
           const TActionSheetItemWidget(
@@ -77,7 +76,9 @@ void main() {
               value: 'custom-badge',
               label: '自定义角标',
               icon: Icon(Icons.star),
-              badge: SizedBox(key: Key('custom-badge'), width: 12, height: 6),
+              badge: TBadgeConfig.custom(
+                badge: SizedBox(key: Key('custom-badge'), width: 12, height: 6),
+              ),
             ),
           ),
         ),
@@ -86,9 +87,35 @@ void main() {
       expect(find.byKey(const Key('custom-badge')), findsOneWidget);
       expect(
         tester.getCenter(find.byKey(const Key('custom-badge'))),
-        tester.getTopRight(find.byType(Stack).first),
+        tester.getTopRight(find.byType(TBadge)) + const Offset(-2, -1),
       );
       expect(tester.takeException(), isNull);
+    });
+
+    testWidgets('RTL 下宫格徽标默认位置跟随逻辑尾端', (tester) async {
+      const badgeKey = Key('rtl-custom-badge');
+      await tester.pumpWidget(
+        wrapWithTheme(
+          const Directionality(
+            textDirection: TextDirection.rtl,
+            child: TActionSheetItemWidget(
+              item: TActionSheetItem(
+                value: 'rtl-badge',
+                label: '自定义角标',
+                icon: Icon(Icons.star),
+                badge: TBadgeConfig.custom(
+                  badge: SizedBox(key: badgeKey, width: 12, height: 6),
+                ),
+              ),
+            ),
+          ),
+        ),
+      );
+
+      expect(
+        tester.getCenter(find.byKey(badgeKey)),
+        tester.getTopLeft(find.byType(TBadge)) + const Offset(2, -1),
+      );
     });
 
     testWidgets('点击触发 onSelected 并返回业务值', (tester) async {
@@ -125,7 +152,7 @@ void main() {
       expect(
         find.byWidgetPredicate(
           (widget) =>
-              widget is SizedBox && widget.width == 48 && widget.height == 48,
+              widget is SizedBox && widget.width == 40 && widget.height == 40,
         ),
         findsOneWidget,
       );
@@ -242,7 +269,7 @@ void main() {
       expect(divider.color, TThemeData.defaultData().bgColorPage);
       expect(
         (divider.padding! as EdgeInsets).top,
-        TThemeData.defaultData().spacer16,
+        TThemeData.defaultData().spacer2,
       );
       await tester.pumpWidget(wrapWithTheme(widget));
       expect(find.text('取消'), findsOneWidget);
@@ -266,7 +293,7 @@ void main() {
       expect(divider.color, TThemeData.defaultData().bgColorPage);
       expect(
         (divider.padding! as EdgeInsets).top,
-        TThemeData.defaultData().spacer8,
+        TThemeData.defaultData().spacer,
       );
       await tester.pumpWidget(wrapWithTheme(widget));
       expect(find.byType(GestureDetector), findsOneWidget);

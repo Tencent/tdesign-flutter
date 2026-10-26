@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 
 import '../../theme/t_colors.dart';
+import '../../theme/t_internal_material.dart';
 import '../../theme/t_theme.dart';
 import '../badge/t_badge.dart';
 import '../loading/t_loading.dart';
@@ -17,7 +19,6 @@ class _SideBarItemData {
     this.icon,
     this.label,
     this.badge,
-    this.textStyle,
   });
 
   final int index;
@@ -26,31 +27,20 @@ class _SideBarItemData {
   final bool? disabled;
   final IconData? icon;
   final String? label;
-  final TBadge? badge;
-  final TextStyle? textStyle;
+  final TBadgeConfig? badge;
 }
 
-/// 受控的侧边导航栏。
-///
-/// [value] 由调用方持有；用户选择可用项时通过 [onChanged] 报告新的值。
-/// 未提供 [onChanged] 时，整个侧边栏以禁用态展示。
 class TSideBar extends StatefulWidget {
   const TSideBar({
     Key? key,
     required this.value,
-    this.selectedColor,
     this.children = const [],
     this.onChanged,
     this.height,
-    this.contentPadding,
-    this.selectedTextStyle,
     this.variant = TSideBarVariant.line,
     this.width = 103,
     this.loading = false,
     this.loadingWidget,
-    this.selectedBgColor,
-    this.unSelectedBgColor,
-    this.unSelectedColor,
   }) : assert(width > 0),
        assert(height == null || height >= 0),
        super(key: key);
@@ -64,16 +54,6 @@ class TSideBar extends StatefulWidget {
   /// 选中值变化回调；为 null 时禁用整栏。
   final ValueChanged<int>? onChanged;
 
-  /// 选中文字、图标与指示线颜色；优先于组件 Theme，同层 selectedTextStyle.color 优先。
-  final Color? selectedColor;
-
-  /// 未选中颜色（优先级高于 ThemeData）。
-  final Color? unSelectedColor;
-
-  /// 选中文字样式；按 TextStyle.merge 合并组件 Theme，实例显式字段优先。
-  /// 未指定颜色时依次回退实例 selectedColor、组件 Theme 的文字颜色与 selectedColor、品牌色 Token。
-  final TextStyle? selectedTextStyle;
-
   /// 展示变体；属于组件实例的结构状态，不从 Theme 读取。
   final TSideBarVariant variant;
 
@@ -83,20 +63,11 @@ class TSideBar extends StatefulWidget {
   /// 高度；未设置时占满当前可用屏幕高度，不从 Theme 读取。
   final double? height;
 
-  /// 自定义文本框内边距（优先级高于 ThemeData）。
-  final EdgeInsetsGeometry? contentPadding;
-
   /// 是否展示加载态。
   final bool loading;
 
   /// 自定义加载态内容。
   final Widget? loadingWidget;
-
-  /// 选择的背景颜色（优先级高于 ThemeData）。
-  final Color? selectedBgColor;
-
-  /// 未选择的背景颜色（优先级高于 ThemeData）。
-  final Color? unSelectedBgColor;
 
   @override
   State<TSideBar> createState() => _TSideBarState();
@@ -155,24 +126,48 @@ class _TSideBarState extends State<TSideBar> {
       return;
     }
 
-    // ListView 会延迟创建视口外条目。先按默认行高接近目标，再以实际位置校正。
-    final position = _scrollerController.position;
-    final estimatedOffset = (item.index * _estimatedItemHeight).clamp(
-      position.minScrollExtent,
-      position.maxScrollExtent,
-    );
-    await _scrollerController.animateTo(
-      estimatedOffset,
-      duration: const Duration(milliseconds: 150),
-      curve: Curves.easeInOut,
-    );
-    if (!mounted) {
-      return;
-    }
-
-    final resolvedContext = item.key.currentContext;
-    if (resolvedContext != null) {
-      await _ensureItemVisible(resolvedContext);
+    // 延迟列表先按实际已布局项目的高度接近目标，避免字体增长后
+    // 固定 56dp 估算停在错误位置；每次布局后再校正。
+    for (var attempt = 0; attempt < displayChildren.length; attempt++) {
+      if (!mounted || !_scrollerController.hasClients) {
+        return;
+      }
+      final resolved = item.key.currentContext;
+      if (resolved != null) {
+        await _ensureItemVisible(resolved);
+        return;
+      }
+      _SideBarItemData? nearest;
+      RenderBox? box;
+      for (final candidate in displayChildren) {
+        final render = candidate.key.currentContext?.findRenderObject();
+        if (render is RenderBox &&
+            render.hasSize &&
+            render.size.height > 0 &&
+            (nearest == null ||
+                (candidate.index - item.index).abs() <
+                    (nearest.index - item.index).abs())) {
+          nearest = candidate;
+          box = render;
+        }
+      }
+      final position = _scrollerController.position;
+      final estimated = nearest == null || box == null
+          ? item.index * _estimatedItemHeight
+          : RenderAbstractViewport.of(box).getOffsetToReveal(box, 0).offset +
+                (item.index - nearest.index) * box.size.height;
+      final target = estimated.clamp(
+        position.minScrollExtent,
+        position.maxScrollExtent,
+      );
+      if (target == position.pixels) {
+        return;
+      }
+      await _scrollerController.animateTo(
+        target,
+        duration: const Duration(milliseconds: 150),
+        curve: Curves.easeInOut,
+      );
     }
   }
 
@@ -205,7 +200,6 @@ class _TSideBarState extends State<TSideBar> {
             value: entry.value.value,
             icon: entry.value.icon,
             label: entry.value.label,
-            textStyle: entry.value.textStyle,
             badge: entry.value.badge,
           ),
         )
@@ -222,14 +216,7 @@ class _TSideBarState extends State<TSideBar> {
   @override
   Widget build(BuildContext context) {
     final theme = _resolveTheme();
-    final selectedColor =
-        widget.selectedTextStyle?.color ??
-        widget.selectedColor ??
-        theme.selectedTextStyle?.color ??
-        theme.selectedColor;
-    final selectedTextStyle = theme.selectedTextStyle == null
-        ? widget.selectedTextStyle
-        : theme.selectedTextStyle!.merge(widget.selectedTextStyle);
+    final selectedTextStyle = theme.selectedTextStyle;
     if (widget.loading) {
       if (widget.loadingWidget != null) {
         return widget.loadingWidget!;
@@ -250,43 +237,38 @@ class _TSideBarState extends State<TSideBar> {
         context: context,
         removeTop: true,
         removeBottom: true,
-        child: ListView.builder(
-          physics: const ClampingScrollPhysics(),
-          itemCount: displayChildren.length,
-          controller: _scrollerController,
-          itemBuilder: (BuildContext context, int index) {
-            final ele = displayChildren[index];
-            return TWrapSideBarItem(
-              key: ele.key,
-              variant: widget.variant,
-              value: ele.value,
-              icon: ele.icon,
-              disabled: ele.disabled ?? false,
-              label: ele.label ?? '',
-              badge: ele.badge,
-              textStyle: ele.textStyle,
-              selected: currentIndex == ele.index,
-              selectedColor: selectedColor,
-              unSelectedColor: widget.unSelectedColor ?? theme.unSelectedColor,
-              selectedTextStyle: selectedTextStyle?.copyWith(
-                color: selectedColor,
-              ),
-              contentPadding: widget.contentPadding ?? theme.contentPadding,
-              topAdjacent:
-                  currentIndex != null && currentIndex! + 1 == ele.index,
-              bottomAdjacent:
-                  currentIndex != null && currentIndex! - 1 == ele.index,
-              selectedBgColor:
-                  widget.selectedBgColor ??
-                  theme.selectedBgColor ??
-                  context.tTheme.bgColorContainer,
-              unSelectedBgColor:
-                  widget.unSelectedBgColor ??
-                  theme.unSelectedBgColor ??
-                  context.tTheme.bgColorSecondaryContainer,
-              onTap: widget.onChanged == null ? null : () => onSelect(ele),
-            );
-          },
+        child: TInternalScrollScope(
+          child: ListView.builder(
+            physics: const ClampingScrollPhysics(),
+            itemCount: displayChildren.length,
+            controller: _scrollerController,
+            itemBuilder: (BuildContext context, int index) {
+              final ele = displayChildren[index];
+              return TWrapSideBarItem(
+                key: ele.key,
+                variant: widget.variant,
+                value: ele.value,
+                icon: ele.icon,
+                disabled: ele.disabled ?? false,
+                label: ele.label ?? '',
+                badge: ele.badge,
+                textStyle: theme.textStyle,
+                selected: currentIndex == ele.index,
+                selectedTextStyle: selectedTextStyle,
+                contentPadding: theme.contentPadding,
+                topAdjacent:
+                    currentIndex != null && currentIndex! + 1 == ele.index,
+                bottomAdjacent:
+                    currentIndex != null && currentIndex! - 1 == ele.index,
+                selectedBgColor:
+                    theme.selectedBgColor ?? context.tTheme.bgColorContainer,
+                unSelectedBgColor:
+                    theme.unSelectedBgColor ??
+                    context.tTheme.bgColorSecondaryContainer,
+                onTap: widget.onChanged == null ? null : () => onSelect(ele),
+              );
+            },
+          ),
         ),
       ),
     );

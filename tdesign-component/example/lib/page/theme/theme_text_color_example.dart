@@ -1,0 +1,68 @@
+import 'package:tdesign_flutter/tdesign_flutter.dart';
+
+import '../../annotation/example_code.dart';
+
+@ExampleCode(group: 'theme')
+class ThemeTextColorExample extends StatefulWidget {
+  const ThemeTextColorExample({super.key});
+
+  @override
+  State<ThemeTextColorExample> createState() => _ThemeTextColorExampleState();
+}
+
+class _ThemeTextColorExampleState extends State<ThemeTextColorExample> {
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    fontMap
+      ..clear()
+      ..addEntries(
+        context.tTheme.colorMap.entries.where(
+          (entry) => entry.key.startsWith('fontGray'),
+        ),
+      )
+      ..addEntries(
+        context.tTheme.colorMap.entries.where(
+          (entry) => entry.key.startsWith('fontWhite'),
+        ),
+      );
+  }
+
+  Widget _buildTextColor(BuildContext context) {
+    final entries = fontMap.entries.toList();
+    return ListView.builder(
+      physics: const NeverScrollableScrollPhysics(),
+      itemCount: entries.length,
+      shrinkWrap: true,
+      itemBuilder: (context, index) {
+        final entry = entries[index];
+        final base = entry.key.startsWith('fontGray')
+            ? Colors.white
+            : Colors.black;
+        final effectiveColor = Color.alphaBlend(entry.value, base);
+        return Container(
+          padding: const EdgeInsets.only(left: 16, right: 16),
+          color: base,
+          child: Container(
+            color: entry.value,
+            child: TText(
+              entry.key,
+              style: TextStyle(
+                color: effectiveColor.computeLuminance() < 0.5
+                    ? Colors.white
+                    : Colors.black,
+              ),
+            ),
+          ),
+        );
+      },
+    );
+  }
+
+  var fontMap = <String, Color>{};
+
+  @override
+  Widget build(BuildContext context) {
+    return _buildTextColor(context);
+  }
+}

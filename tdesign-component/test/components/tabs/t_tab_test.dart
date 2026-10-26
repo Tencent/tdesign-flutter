@@ -1,4 +1,3 @@
-import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:tdesign_flutter/tdesign_flutter.dart';
@@ -96,7 +95,7 @@ void main() {
           ),
         );
 
-        final disabledColor = TThemeData.defaultData().textDisabledColor;
+        final disabledColor = TThemeData.defaultData().textColorDisabled;
         final paragraph = tester.renderObject<RenderParagraph>(find.text('禁用'));
         expect(paragraph.text.style?.color, disabledColor);
         expect(

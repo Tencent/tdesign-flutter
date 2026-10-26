@@ -1,5 +1,6 @@
 import 'dart:math' as math;
 
+import 'package:flutter/gestures.dart' show kTouchSlop;
 import 'package:flutter/material.dart';
 
 import '../../theme/t_colors.dart';
@@ -7,12 +8,15 @@ import '../../theme/t_fonts.dart';
 import '../../theme/t_radius.dart';
 import '../../theme/t_shadows.dart';
 import '../../theme/t_theme.dart';
-import '../../util/context_extension.dart';
+import '../text/t_text.dart';
+import '../text/t_text_resolve.dart';
+import '../text/t_text_style_scope.dart';
 import 't_popover_theme_data.dart';
 import 't_popover_types.dart';
 
 const double _kDefaultPopoverMaxWidth = 300;
 const EdgeInsets _kDefaultPopoverPadding = EdgeInsets.all(12);
+const double _kHorizontalArrowInset = 12;
 
 /// 气泡弹层 Widget
 class TPopoverWidget extends StatefulWidget {
@@ -21,7 +25,7 @@ class TPopoverWidget extends StatefulWidget {
     required this.context,
     required this.content,
     this.offset,
-    this.colorScheme = TPopoverColorScheme.defaultTheme,
+    this.colorPreset = TPopoverColorPreset.defaultTheme,
     this.placement = TPopoverPlacement.top,
     this.showArrow,
     this.arrowSize,
@@ -30,6 +34,7 @@ class TPopoverWidget extends StatefulWidget {
     this.height,
     this.onTap,
     this.onLongTap,
+    this.onTapOutside,
     this.radius,
   });
 
@@ -43,7 +48,7 @@ class TPopoverWidget extends StatefulWidget {
   final double? offset;
 
   /// 弹出气泡预设配色。
-  final TPopoverColorScheme colorScheme;
+  final TPopoverColorPreset colorPreset;
 
   /// 浮层出现位置
   final TPopoverPlacement placement;
@@ -69,6 +74,9 @@ class TPopoverWidget extends StatefulWidget {
   /// 长按事件
   final VoidCallback? onLongTap;
 
+  /// 点击气泡外部时触发。
+  final VoidCallback? onTapOutside;
+
   /// 圆角
   final BorderRadius? radius;
 
@@ -80,6 +88,7 @@ class _TPopoverWidgetState extends State<TPopoverWidget> {
   TPopoverPlacement _resolvedPlacement = TPopoverPlacement.top;
   Offset _arrowTranslation = Offset.zero;
   bool _layoutReady = false;
+  final Map<int, Offset> _outsidePointerDownPositions = {};
 
   @override
   void initState() {
@@ -100,13 +109,27 @@ class _TPopoverWidgetState extends State<TPopoverWidget> {
     }
   }
 
+  void _handleTapOutsideDown(PointerDownEvent event) {
+    _outsidePointerDownPositions[event.pointer] = event.position;
+  }
+
+  void _handleTapOutsideUp(PointerUpEvent event) {
+    final downPosition = _outsidePointerDownPositions.remove(event.pointer);
+    if (downPosition == null ||
+        (event.position - downPosition).distanceSquared >
+            kTouchSlop * kTouchSlop) {
+      return;
+    }
+    widget.onTapOutside?.call();
+  }
+
   TPopoverThemeData get _theme =>
       Theme.of(context).extension<TPopoverThemeData>() ??
       const TPopoverThemeData();
 
   double get _effectiveOffset => widget.offset ?? _theme.offset ?? 4;
 
-  bool get _effectiveShowArrow => widget.showArrow ?? _theme.showArrow ?? true;
+  bool get _effectiveShowArrow => widget.showArrow ?? true;
 
   double get _effectiveArrowSize => widget.arrowSize ?? _theme.arrowSize ?? 8;
 
@@ -117,11 +140,7 @@ class _TPopoverWidgetState extends State<TPopoverWidget> {
   EdgeInsetsGeometry get _resolvedPadding =>
       _effectivePadding ?? _kDefaultPopoverPadding;
 
-  BorderRadius? get _effectiveRadius =>
-      widget.radius ??
-      (_theme.borderRadius == null
-          ? null
-          : BorderRadius.circular(_theme.borderRadius!));
+  BorderRadius? get _effectiveRadius => widget.radius ?? _theme.borderRadius;
 
   TextStyle get _defaultContentTextStyle => TextStyle(
     color: _color,
@@ -223,28 +242,28 @@ class _TPopoverWidgetState extends State<TPopoverWidget> {
 
   /// 初始化主题
   void _initTheme() {
-    switch (widget.colorScheme) {
-      case TPopoverColorScheme.primary:
-        _color = widget.context.tTheme.brandNormalColor;
-        _backgroundColor = widget.context.tTheme.brandLightColor;
+    switch (widget.colorPreset) {
+      case TPopoverColorPreset.primary:
+        _color = widget.context.tTheme.brandColor;
+        _backgroundColor = widget.context.tTheme.brandColorLight;
         break;
-      case TPopoverColorScheme.success:
-        _color = widget.context.tTheme.successNormalColor;
-        _backgroundColor = widget.context.tTheme.successLightColor;
+      case TPopoverColorPreset.success:
+        _color = widget.context.tTheme.successColor;
+        _backgroundColor = widget.context.tTheme.successColorLight;
         break;
-      case TPopoverColorScheme.warning:
-        _color = widget.context.tTheme.warningNormalColor;
-        _backgroundColor = widget.context.tTheme.warningLightColor;
+      case TPopoverColorPreset.warning:
+        _color = widget.context.tTheme.warningColor;
+        _backgroundColor = widget.context.tTheme.warningColorLight;
         break;
-      case TPopoverColorScheme.danger:
-        _color = widget.context.tTheme.errorNormalColor;
-        _backgroundColor = widget.context.tTheme.errorLightColor;
+      case TPopoverColorPreset.danger:
+        _color = widget.context.tTheme.errorColor;
+        _backgroundColor = widget.context.tTheme.errorColorLight;
         break;
-      case TPopoverColorScheme.light:
+      case TPopoverColorPreset.light:
         _color = widget.context.tTheme.grayColor14;
         _backgroundColor = widget.context.tTheme.whiteColor1;
         break;
-      case TPopoverColorScheme.defaultTheme:
+      case TPopoverColorPreset.defaultTheme:
         _color = widget.context.tTheme.textColorAnti;
         _backgroundColor = widget.context.tTheme.grayColor14;
         break;
@@ -287,19 +306,19 @@ class _TPopoverWidgetState extends State<TPopoverWidget> {
       case TPopoverPlacement.topLeft:
         margin = EdgeInsets.only(
           top: _effectiveArrowSize,
-          left: _effectiveArrowSize + 12,
+          left: _kHorizontalArrowInset,
         );
         break;
       case TPopoverPlacement.topRight:
         margin = EdgeInsets.only(
           top: _effectiveArrowSize,
-          right: _effectiveArrowSize + 12,
+          right: _kHorizontalArrowInset,
         );
         break;
       case TPopoverPlacement.bottomLeft:
         margin = EdgeInsets.only(
           bottom: _effectiveArrowSize,
-          left: _effectiveArrowSize + 12,
+          left: _kHorizontalArrowInset,
         );
         break;
       case TPopoverPlacement.bottom:
@@ -308,7 +327,7 @@ class _TPopoverWidgetState extends State<TPopoverWidget> {
       case TPopoverPlacement.bottomRight:
         margin = EdgeInsets.only(
           bottom: _effectiveArrowSize,
-          right: _effectiveArrowSize + 12,
+          right: _kHorizontalArrowInset,
         );
         break;
       case TPopoverPlacement.rightTop:
@@ -351,7 +370,19 @@ class _TPopoverWidgetState extends State<TPopoverWidget> {
   }
 
   Widget _getContainerWidget() {
-    final plainTextSize = _resolvedPlainTextSize();
+    // Layout wrappers do not change slot defaults; explicit child styles and
+    // nearer TD text themes retain control of custom content typography.
+    return TTextStyleScope(
+      style: TTextResolve.resolve(
+        context: context,
+        style: _defaultContentTextStyle,
+      ),
+      child: Builder(builder: _contentContainer),
+    );
+  }
+
+  Widget _contentContainer(BuildContext slotContext) {
+    final plainTextSize = _resolvedPlainTextSize(slotContext);
     final minWidth =
         plainTextSize?.width ?? widget.width ?? _theme.minWidth ?? 0;
     final maxWidth = plainTextSize?.width ?? widget.width ?? _effectiveMaxWidth;
@@ -361,13 +392,6 @@ class _TPopoverWidgetState extends State<TPopoverWidget> {
         widget.height ??
         _theme.maxHeight ??
         double.infinity;
-    final content = widget.content;
-    final styledContent = content is Text
-        ? DefaultTextStyle.merge(
-            style: _defaultContentTextStyle,
-            child: content,
-          )
-        : content;
     return Container(
       key: const Key('t-popover-content'),
       constraints: BoxConstraints(
@@ -382,33 +406,61 @@ class _TPopoverWidgetState extends State<TPopoverWidget> {
             _effectiveRadius ??
             BorderRadius.circular(context.tTheme.radiusDefault),
         color: _backgroundColor,
-        boxShadow: _theme.boxShadow ?? context.tTheme.shadowsTop ?? const [],
+        boxShadow: _theme.boxShadow ?? context.tTheme.shadow3 ?? const [],
       ),
-      child: styledContent,
+      child: widget.content,
     );
   }
 
-  Size? _resolvedPlainTextSize() {
+  Size? _resolvedPlainTextSize(BuildContext slotContext) {
     final content = widget.content;
-    if (content is! Text ||
-        content.data == null ||
-        content.style != null ||
-        content.textSpan != null) {
+    final Text text;
+    final TextStyle style;
+    if (content is TText &&
+        content.data != null &&
+        content.style == null &&
+        content.font == null) {
+      text = content.getRawText(context: slotContext);
+      style = text.style!;
+    } else if (content is Text &&
+        content.data != null &&
+        content.style == null &&
+        content.textSpan == null) {
+      text = content;
+      style = _defaultContentTextStyle;
+    } else {
       return null;
     }
+    final defaults = DefaultTextStyle.of(slotContext);
+    final overflow = text.overflow ?? defaults.overflow;
+    final softWrap = text.softWrap ?? defaults.softWrap;
     final contentMaxWidth =
         (widget.width ?? _effectiveMaxWidth) - _resolvedPadding.horizontal;
-    final textPainter = TextPainter(
-      text: TextSpan(text: content.data, style: _defaultContentTextStyle),
-      locale: content.locale ?? Localizations.localeOf(context),
-      textDirection: content.textDirection ?? Directionality.of(context),
-      textAlign: content.textAlign ?? TextAlign.start,
-      maxLines: content.maxLines,
-      ellipsis: content.overflow == TextOverflow.ellipsis ? '\u2026' : null,
-      textScaler: content.textScaler ?? MediaQuery.textScalerOf(context),
-      textWidthBasis: content.textWidthBasis ?? TextWidthBasis.parent,
-      textHeightBehavior: content.textHeightBehavior,
-    )..layout(maxWidth: contentMaxWidth.clamp(0, double.infinity));
+    final textPainter =
+        TextPainter(
+          text: TextSpan(
+            text: text.data,
+            style: MediaQuery.boldTextOf(slotContext)
+                ? style.merge(const TextStyle(fontWeight: FontWeight.bold))
+                : style,
+          ),
+          strutStyle: text.strutStyle,
+          locale: text.locale ?? Localizations.localeOf(slotContext),
+          textDirection: text.textDirection ?? Directionality.of(slotContext),
+          textAlign: text.textAlign ?? defaults.textAlign ?? TextAlign.start,
+          maxLines: text.maxLines ?? defaults.maxLines,
+          ellipsis: overflow == TextOverflow.ellipsis ? '\u2026' : null,
+          textScaler: text.textScaler ?? MediaQuery.textScalerOf(slotContext),
+          textWidthBasis: text.textWidthBasis ?? defaults.textWidthBasis,
+          textHeightBehavior:
+              text.textHeightBehavior ??
+              defaults.textHeightBehavior ??
+              DefaultTextHeightBehavior.maybeOf(slotContext),
+        )..layout(
+          maxWidth: softWrap || overflow == TextOverflow.ellipsis
+              ? contentMaxWidth.clamp(0, double.infinity)
+              : double.infinity,
+        );
     final naturalWidth = textPainter.width + _resolvedPadding.horizontal;
     final resolvedWidth =
         widget.width ??
@@ -417,6 +469,7 @@ class _TPopoverWidgetState extends State<TPopoverWidget> {
           math.max(_theme.minWidth ?? 0, naturalWidth),
         );
     final naturalHeight = textPainter.height + _resolvedPadding.vertical;
+    textPainter.dispose();
     final resolvedHeight =
         widget.height ??
         (_theme.maxHeight == null
@@ -590,15 +643,18 @@ class _TPopoverWidgetState extends State<TPopoverWidget> {
   }
 
   double _baseArrowCenter(Size popoverSize, TPopoverPlacement placement) {
-    final edgeInset = _effectiveArrowSize * 2;
+    final horizontalArrowCenterInset =
+        _kHorizontalArrowInset + _effectiveArrowSize;
+    final verticalArrowCenterInset = _effectiveArrowSize * 2;
     return switch (placement) {
       TPopoverPlacement.topLeft ||
-      TPopoverPlacement.bottomLeft => edgeInset + 12,
-      TPopoverPlacement.topRight ||
-      TPopoverPlacement.bottomRight => popoverSize.width - edgeInset - 12,
-      TPopoverPlacement.leftTop || TPopoverPlacement.rightTop => edgeInset + 6,
-      TPopoverPlacement.leftBottom ||
-      TPopoverPlacement.rightBottom => popoverSize.height - edgeInset - 6,
+      TPopoverPlacement.bottomLeft => horizontalArrowCenterInset,
+      TPopoverPlacement.topRight || TPopoverPlacement.bottomRight =>
+        popoverSize.width - horizontalArrowCenterInset,
+      TPopoverPlacement.leftTop ||
+      TPopoverPlacement.rightTop => verticalArrowCenterInset + 6,
+      TPopoverPlacement.leftBottom || TPopoverPlacement.rightBottom =>
+        popoverSize.height - verticalArrowCenterInset - 6,
       TPopoverPlacement.top ||
       TPopoverPlacement.bottom => popoverSize.width / 2,
       TPopoverPlacement.left ||
@@ -614,6 +670,12 @@ class _TPopoverWidgetState extends State<TPopoverWidget> {
     required double top,
   }) {
     if (!_effectiveShowArrow) {
+      return Offset.zero;
+    }
+    if (placement == TPopoverPlacement.topLeft ||
+        placement == TPopoverPlacement.topRight ||
+        placement == TPopoverPlacement.bottomLeft ||
+        placement == TPopoverPlacement.bottomRight) {
       return Offset.zero;
     }
     final horizontal =
@@ -775,7 +837,15 @@ class _TPopoverWidgetState extends State<TPopoverWidget> {
         child: popover,
       );
     }
-    return IgnorePointer(
+    if (widget.onTapOutside != null) {
+      popover = TapRegion(
+        key: const Key('t-popover-outside-dismiss'),
+        onTapOutside: _handleTapOutsideDown,
+        onTapUpOutside: _handleTapOutsideUp,
+        child: popover,
+      );
+    }
+    final positionedPopover = IgnorePointer(
       ignoring: !_layoutReady,
       child: Opacity(
         opacity: _layoutReady ? 1 : 0,
@@ -791,6 +861,24 @@ class _TPopoverWidgetState extends State<TPopoverWidget> {
           child: popover,
         ),
       ),
+    );
+    if (widget.onTapOutside == null) {
+      return positionedPopover;
+    }
+    return Stack(
+      fit: StackFit.expand,
+      children: [
+        Positioned.fromRect(
+          rect: anchorRect,
+          child: GestureDetector(
+            key: const Key('t-popover-anchor-dismiss'),
+            behavior: HitTestBehavior.opaque,
+            onTap: widget.onTapOutside,
+            child: const SizedBox.expand(),
+          ),
+        ),
+        positionedPopover,
+      ],
     );
   }
 }

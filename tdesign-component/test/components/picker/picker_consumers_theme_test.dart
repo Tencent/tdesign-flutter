@@ -1,66 +1,105 @@
-import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:tdesign_flutter/src/components/picker/multi_wheel_layout.dart';
 import 'package:tdesign_flutter/tdesign_flutter.dart';
 
 void main() {
+  testWidgets('Picker 继续继承 TTextThemeData 的子树文字默认值', (tester) async {
+    final theme = TThemeBuilder.light(TThemeData.defaultData()).mergeExtension(
+      const TTextThemeData(
+        textStyle: TextStyle(fontSize: 23, color: Colors.purple),
+      ),
+    );
+    await tester.pumpWidget(
+      MaterialApp(
+        theme: theme,
+        home: Scaffold(
+          body: TPicker(
+            items: const TPickerColumns([
+              [TPickerOption(label: '继承项', value: 0)],
+            ]),
+            value: const [0],
+            onChanged: (_) {},
+          ),
+        ),
+      ),
+    );
+    final text = tester.widget<Text>(find.text('继承项'));
+    expect(text.style?.fontSize, 23);
+    expect(text.style?.color, Colors.purple);
+  });
   for (final date in [false, true]) {
-    testWidgets('explicit component text theme date=$date', (tester) async {
-      final changes = <Object>[];
-      await tester.pumpWidget(
-        MaterialApp(
-          theme: ThemeData(
-            extensions: const [
-              TTextThemeData(
-                textStyle: TextStyle(
+    testWidgets(
+      'Material text theme does not override Picker token date=$date',
+      (tester) async {
+        final changes = <Object>[];
+        await tester.pumpWidget(
+          MaterialApp(
+            theme: ThemeData(
+              textTheme: const TextTheme(
+                bodyLarge: TextStyle(
                   fontSize: 31,
                   fontWeight: FontWeight.w800,
                   color: Colors.pink,
                 ),
               ),
-            ],
-          ),
-          home: Scaffold(
-            body: date
-                ? TDateTimePicker(
-                    value: const TDateTimePickerValue(
-                      year: 2024,
-                      month: 6,
-                      day: 15,
-                    ),
-                    onChanged: changes.add,
-                  )
-                : TPicker(
-                    items: TPickerColumns([
-                      List.generate(
-                        12,
-                        (i) => TPickerOption(label: 'Item $i', value: i),
+            ),
+            home: Scaffold(
+              body: date
+                  ? TDateTimePicker(
+                      value: const TDateTimePickerValue(
+                        year: 2024,
+                        month: 6,
+                        day: 15,
                       ),
-                    ]),
-                    value: const [0],
-                    onChanged: changes.add,
-                  ),
+                      onChanged: changes.add,
+                    )
+                  : TPicker(
+                      items: TPickerColumns([
+                        List.generate(
+                          12,
+                          (i) => TPickerOption(label: 'Item $i', value: i),
+                        ),
+                      ]),
+                      value: const [0],
+                      onChanged: changes.add,
+                    ),
+            ),
           ),
-        ),
-      );
-      final wheelFinder = find.byType(ListWheelScrollView).first;
-      final textFinder = find.descendant(
-        of: wheelFinder,
-        matching: find.byType(Text),
-      );
-      final text = tester.widget<Text>(textFinder.first);
-      expect(text.style!.fontSize, 31);
-      expect(text.style!.fontWeight, FontWeight.w800);
-      expect(text.style!.color, Colors.pink);
-    });
+        );
+        final wheelFinder = find.byType(ListWheelScrollView).first;
+        final textFinder = find.descendant(
+          of: wheelFinder,
+          matching: find.byType(Text),
+        );
+        final text = tester.widget<Text>(textFinder.first);
+        expect(
+          text.style!.fontSize,
+          TThemeData.defaultData().fontMarkLarge?.size,
+        );
+        expect(
+          text.style!.fontWeight,
+          isIn([
+            TThemeData.defaultData().fontBodyLarge?.fontWeight,
+            TThemeData.defaultData().fontMarkLarge?.fontWeight,
+          ]),
+        );
+        expect(
+          text.style!.color,
+          isIn([
+            TThemeData.defaultData().textColorPrimary,
+            TThemeData.defaultData().textColorSecondary,
+          ]),
+        );
+      },
+    );
   }
   for (final dateTime in [false, true]) {
     for (final fallback in [false, true]) {
       testWidgets(
         'semantic font tokens dateTime=$dateTime fallback=$fallback',
         (tester) async {
-          final tokens = TThemeData.defaultData().copyWithTThemeData(
-            'semantic-font',
+          final tokens = TThemeData.defaultData().copyWith(
+            name: 'semantic-font',
             fontMap: {
               'fontBodyLarge': Font(
                 size: 18,
@@ -142,10 +181,10 @@ void main() {
   for (final dateTime in [false, true]) {
     for (final explicit in [false, true]) {
       testWidgets(
-        '${dateTime ? 'DateTimePicker' : 'Picker'} typography respects tokens and explicit TextTheme $explicit',
+        '${dateTime ? 'DateTimePicker' : 'Picker'} typography ignores Material TextTheme $explicit',
         (tester) async {
-          final tokens = TThemeData.defaultData().copyWithTThemeData(
-            'font-test',
+          final tokens = TThemeData.defaultData().copyWith(
+            name: 'font-test',
             fontMap: {
               'fontBodyLarge': Font(size: 19, lineHeight: 27),
               'fontMarkLarge': Font(
@@ -196,19 +235,17 @@ void main() {
               ),
             ),
           );
-          final texts = tester.widgetList<TText>(
+          final texts = tester.widgetList<Text>(
             find.descendant(
               of: find.byType(MultiWheelLayout),
-              matching: find.byType(TText),
+              matching: find.byType(Text),
             ),
           );
           expect(texts, isNotEmpty);
           for (final text in texts) {
-            expect(text.style?.fontSize, explicit ? 21 : 19);
-            expect(text.style?.height, explicit ? 1.6 : 27 / 19);
-            if (explicit) {
-              expect(text.style?.fontFamily, 'custom');
-            }
+            expect(text.style?.fontSize, 19);
+            expect(text.style?.height, 27 / 19);
+            expect(text.style?.fontFamily, isNot('custom'));
           }
         },
       );
@@ -218,13 +255,13 @@ void main() {
         '${dateTime ? 'DateTimePicker' : 'Picker'} shell follows ${custom ? 'custom' : 'default'} tokens',
         (tester) async {
           final tokens = custom
-              ? TThemeData.defaultData().copyWithTThemeData(
-                  'wheel-test',
+              ? TThemeData.defaultData().copyWith(
+                  name: 'wheel-test',
                   colorMap: {
                     'bgColorContainer': const Color(0xFF123456),
                     'bgColorSecondaryContainer': const Color(0xFF456789),
                   },
-                  marginMap: {'spacer48': 24},
+                  spacerMap: {'spacer5': 24},
                 )
               : TThemeData.defaultData();
           await tester.pumpWidget(

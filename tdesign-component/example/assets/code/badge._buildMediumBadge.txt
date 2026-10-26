@@ -1,5 +1,0 @@
-Widget _buildMediumBadge(BuildContext context) => const TBadge(
-    label: '8',
-    size: TBadgeSize.medium,
-    child: TAvatar(size: TAvatarSize.medium),
-  );

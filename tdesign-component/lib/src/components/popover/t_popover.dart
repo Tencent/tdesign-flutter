@@ -66,8 +66,12 @@ class _PopoverAnchorLifecycleState extends State<_PopoverAnchorLifecycle> {
 
 /// [TPopoverAnchor] 的触发区域构建器。
 ///
-/// [controller] 用于展开、关闭气泡和查询展开状态；[child] 是传给
-/// [TPopoverAnchor.child] 的可选、不依赖展开状态的子组件。
+/// [context] 触发区域的构建上下文。
+/// [controller] 关联气泡控制器，用于开关气泡与查询状态。
+/// [child] 传入 Anchor 的可选静态子组件。
+///
+/// ## 返回值
+/// 气泡触发区域内容。
 typedef TPopoverAnchorBuilder =
     Widget Function(
       BuildContext context,
@@ -112,7 +116,13 @@ class TPopoverController {
   /// 返回 [context] 最近的 [TPopoverAnchor] 所关联的控制器。
   ///
   /// 未处于 Anchor 的触发区域或气泡内容子树时返回 null。
-  static TPopoverController? maybeOf(BuildContext context) {
+  ///
+  /// ## 返回值
+  /// 最近的 PopoverAnchor 控制器；不在其触发区域或气泡内容子树时为 null。
+  static TPopoverController? maybeOf(
+    /// 当前构建上下文，用于读取祖先配置。
+    BuildContext context,
+  ) {
     return context
         .getInheritedWidgetOfExactType<_TPopoverControllerScope>()
         ?.controller;
@@ -140,6 +150,7 @@ class _TPopoverControllerScope extends InheritedWidget {
 /// [TPopoverAnchor] 声明气泡内容、位置和视觉配置，[TPopoverController] 只负责
 /// `open`、`close` 和 `isOpen`。简单的一次性展示仍可使用
 /// [TPopover.showPopover]。
+/// 蒙层色与圆角由最近的 [TPopoverThemeData] 控制；单个气泡使用局部 Theme。
 ///
 /// 气泡展开时会读取当前的内容、位置、视觉配置和关闭策略；展开期间更新这些
 /// 配置不会刷新已显示的浮层，关闭后再次展开时生效。[builder] 和 [child] 仍按
@@ -151,20 +162,15 @@ class TPopoverAnchor extends StatefulWidget {
     required this.builder,
     this.controller,
     this.child,
-    this.offset,
-    this.colorScheme = TPopoverColorScheme.defaultTheme,
+    this.colorPreset = TPopoverColorPreset.defaultTheme,
     this.closeOnClickOutside = true,
     this.closeOnScroll = true,
     this.placement = TPopoverPlacement.top,
     this.showArrow,
-    this.arrowSize,
-    this.padding,
     this.width,
     this.height,
-    this.overlayColor,
     this.onTap,
     this.onLongTap,
-    this.radius,
     this.onOpen,
     this.onClose,
   });
@@ -183,13 +189,11 @@ class TPopoverAnchor extends StatefulWidget {
   /// 传递给 [builder] 的可选子组件。
   final Widget? child;
 
-  /// 弹层与触发元素的间距。
-  final double? offset;
-
   /// 气泡预设配色。
-  final TPopoverColorScheme colorScheme;
+  final TPopoverColorPreset colorPreset;
 
   /// 点击气泡外部区域时是否关闭弹层。
+  /// 外部目标仍会接收该次点击，因此可在单次点击中从一个气泡切换到另一个气泡。
   final bool closeOnClickOutside;
 
   /// 页面滚动时是否关闭弹层。
@@ -201,29 +205,17 @@ class TPopoverAnchor extends StatefulWidget {
   /// 是否显示气泡箭头。
   final bool? showArrow;
 
-  /// 箭头尺寸。
-  final double? arrowSize;
-
-  /// 内容内边距。
-  final EdgeInsetsGeometry? padding;
-
   /// 内容外框宽度（包含 padding）。
   final double? width;
 
   /// 内容外框高度（包含 padding）。
   final double? height;
 
-  /// 蒙层颜色。
-  final Color? overlayColor;
-
   /// 点击气泡内容时触发。
   final VoidCallback? onTap;
 
   /// 长按气泡内容时触发。
   final VoidCallback? onLongTap;
-
-  /// 气泡圆角。
-  final BorderRadius? radius;
 
   /// 气泡展开后触发。
   final VoidCallback? onOpen;
@@ -280,20 +272,15 @@ class _TPopoverAnchorState extends State<TPopoverAnchor> {
     final session = TPopover._showPopover(
       context: anchorContext,
       content: widget.content,
-      offset: widget.offset,
-      colorScheme: widget.colorScheme,
+      colorPreset: widget.colorPreset,
       closeOnClickOutside: widget.closeOnClickOutside,
       closeOnScroll: widget.closeOnScroll,
       placement: widget.placement,
       showArrow: widget.showArrow,
-      arrowSize: widget.arrowSize,
-      padding: widget.padding,
       width: widget.width,
       height: widget.height,
-      overlayColor: widget.overlayColor,
       onTap: widget.onTap,
       onLongTap: widget.onLongTap,
-      radius: widget.radius,
       controllerProvider: () => _controller,
       onDismissed: () => _handleDismissed(operationEpoch),
       throwOnMissingOverlay: true,
@@ -364,29 +351,27 @@ class _PopoverSession {
   final VoidCallback markNeedsBuild;
 }
 
-/// 气泡弹层
-///
-/// 可通过 [showPopover] 一次性弹出，或通过 [TPopoverAnchor] 建立可控制气泡，
-/// 支持 12 个方向定位和箭头。
 class TPopover {
   /// 显示气泡弹层
+  ///
+  /// ## 返回值
+  /// 气泡关闭时完成的 Future；不是打开完成通知。
   static Future<void> showPopover({
     /// 触发元素的上下文，用于计算气泡锚点位置。
     required BuildContext context,
 
     /// 气泡内容。
     ///
-    /// 直接传入未设置样式的 [Text] 时使用气泡默认文字样式；组合内容应自行定义
-    /// 子组件样式和布局。
+    /// 为整个内容子树的 Text/TText 提供气泡默认文字样式；Row、Padding 等布局
+    /// 包装不会切断传递。显式文字样式和内容内部更近的 TD 文字主题优先。
+    /// 组合内容仍自行管理布局；需要独立外观时应显式配置文字样式或局部主题。
     required Widget content,
 
-    /// 弹层与触发元素的间距。
-    double? offset,
-
     /// 气泡预设配色。
-    TPopoverColorScheme colorScheme = TPopoverColorScheme.defaultTheme,
+    TPopoverColorPreset colorPreset = TPopoverColorPreset.defaultTheme,
 
     /// 点击气泡外部区域时是否关闭弹层。
+    /// 外部目标仍会接收该次点击，因此可在单次点击中从一个气泡切换到另一个气泡。
     bool closeOnClickOutside = true,
 
     /// 页面滚动时是否关闭弹层。
@@ -400,12 +385,6 @@ class TPopover {
     /// 是否显示气泡箭头。
     bool? showArrow,
 
-    /// 箭头尺寸。
-    double? arrowSize,
-
-    /// 内容内边距。
-    EdgeInsetsGeometry? padding,
-
     /// 内容外框宽度（包含 padding）。
     ///
     /// 未设置时按 `content` 的实际布局宽度确定，并受组件主题尺寸约束。
@@ -416,53 +395,37 @@ class TPopover {
     /// 未设置时按 `content` 的实际布局高度确定，并受组件主题尺寸约束。
     double? height,
 
-    /// 蒙层颜色。
-    Color? overlayColor,
-
     /// 点击气泡内容时触发。
     VoidCallback? onTap,
 
     /// 长按气泡内容时触发。
     VoidCallback? onLongTap,
-
-    /// 气泡圆角。
-    BorderRadius? radius,
   }) => _showPopover(
     context: context,
     content: content,
-    offset: offset,
-    colorScheme: colorScheme,
+    colorPreset: colorPreset,
     closeOnClickOutside: closeOnClickOutside,
     closeOnScroll: closeOnScroll,
     placement: placement,
     showArrow: showArrow,
-    arrowSize: arrowSize,
-    padding: padding,
     width: width,
     height: height,
-    overlayColor: overlayColor,
     onTap: onTap,
     onLongTap: onLongTap,
-    radius: radius,
   ).closed;
 
   static _PopoverSession _showPopover({
     required BuildContext context,
     required Widget content,
-    required double? offset,
-    required TPopoverColorScheme colorScheme,
+    required TPopoverColorPreset colorPreset,
     required bool closeOnClickOutside,
     required bool closeOnScroll,
     required TPopoverPlacement placement,
     required bool? showArrow,
-    required double? arrowSize,
-    required EdgeInsetsGeometry? padding,
     required double? width,
     required double? height,
-    required Color? overlayColor,
     required VoidCallback? onTap,
     required VoidCallback? onLongTap,
-    required BorderRadius? radius,
     TPopoverController Function()? controllerProvider,
     VoidCallback? onDismissed,
     bool throwOnMissingOverlay = false,
@@ -489,8 +452,7 @@ class TPopover {
       from: context,
       to: overlay.context,
     );
-    final effectiveOverlayColor =
-        overlayColor ?? theme.barrierColor ?? Colors.transparent;
+    final effectiveOverlayColor = theme.barrierColor ?? Colors.transparent;
     final scrollPosition = Scrollable.maybeOf(context)?.position;
     final route = ModalRoute.of(context);
     late OverlayEntry entry;
@@ -543,38 +505,21 @@ class TPopover {
               color: effectiveOverlayColor,
             ),
           ),
-          if (closeOnClickOutside || closeOnScroll)
-            Listener(
-              behavior: HitTestBehavior.translucent,
-              onPointerMove: closeOnScroll ? (_) => dismiss() : null,
-              onPointerSignal: closeOnScroll ? (_) => dismiss() : null,
-              child: closeOnClickOutside
-                  ? GestureDetector(
-                      key: const Key('t-popover-outside-dismiss'),
-                      behavior: HitTestBehavior.translucent,
-                      onTap: dismiss,
-                      child: const SizedBox.expand(),
-                    )
-                  : const SizedBox.expand(),
-            ),
           TPopoverWidget(
             context: context,
             content: content,
-            offset: offset ?? theme.offset,
-            colorScheme: colorScheme,
+            offset: theme.offset,
+            colorPreset: colorPreset,
             placement: placement,
-            showArrow: showArrow ?? theme.showArrow,
-            arrowSize: arrowSize ?? theme.arrowSize,
-            padding: padding ?? theme.padding,
+            showArrow: showArrow,
+            arrowSize: theme.arrowSize,
+            padding: theme.padding,
             width: width,
             height: height,
             onTap: onTap,
             onLongTap: onLongTap,
-            radius:
-                radius ??
-                (theme.borderRadius == null
-                    ? null
-                    : BorderRadius.circular(theme.borderRadius!)),
+            onTapOutside: closeOnClickOutside ? dismiss : null,
+            radius: theme.borderRadius,
           ),
         ],
       );

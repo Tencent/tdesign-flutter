@@ -1,7 +1,28 @@
+import 'package:flutter/foundation.dart';
+
 import 't_action_sheet_item.dart';
 
 /// 选择动作面板项目时触发
+/// [item] 被点击的原始动作项目。
+///
+/// ## 返回值
+/// 无返回值。
 typedef TActionSheetOnSelected<T> = void Function(TActionSheetItem<T> item);
+
+/// 横向滚动宫格中的一个带标题分组。
+///
+/// 通过 `TActionSheet.showGridSections` 展示。每个分组独立横向滚动，
+/// [title] 显示在该组项目上方；[items] 为空时仍保留标题。
+@immutable
+class TActionSheetGridSection<T> {
+  const TActionSheetGridSection({required this.title, required this.items});
+
+  /// 分组标题。
+  final String title;
+
+  /// 该分组中的宫格项目。
+  final List<TActionSheetItem<T>> items;
+}
 
 /// 宫格布局模式
 enum TActionSheetGridMode {
@@ -47,10 +68,11 @@ sealed class TActionSheetGridLayout {
   /// 布局模式
   final TActionSheetGridMode mode;
 
-  /// 一个可视面板期望容纳的项目数
+  /// 一个可视面板期望容纳的项目数，默认 8。必须大于 0、不得小于 rows，
+  /// 且能被 rows 整除。
   final int count;
 
-  /// 行数
+  /// 行数，默认 2；必须大于 0。
   final int rows;
 
   /// 横向滚动项目的最小宽度；仅滚动布局可能返回非空值。
@@ -103,7 +125,7 @@ final class _TActionSheetScrollGridLayout extends TActionSheetGridLayout {
   final double? itemMinWidth;
 }
 
-/// 动作面板列表内容对齐方式
+/// 动作面板列表内容的物理对齐方式，不随文字方向交换左右。
 enum TActionSheetAlign {
   /// 居中对齐
   center,

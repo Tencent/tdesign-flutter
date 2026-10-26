@@ -1,6 +1,5 @@
 import 'dart:ui' show SemanticsFlag;
 
-import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:tdesign_flutter/src/components/sidebar/t_wrap_sidebar_item.dart';
 import 'package:tdesign_flutter/tdesign_flutter.dart';
@@ -36,6 +35,84 @@ void main() {
     );
   }
 
+  for (final dark in [false, true]) {
+    testWidgets('tag选中块按设计使用6px，邻项反向角保持9px dark=$dark', (tester) async {
+      final defaults = TThemeData.defaultData();
+      final tokens = ValueNotifier(dark ? defaults.dark! : defaults);
+      const tagKey = ValueKey('design-selected-tag');
+      const lineKey = ValueKey('unchanged-line-corner');
+      await tester.pumpWidget(
+        ValueListenableBuilder<TThemeData>(
+          valueListenable: tokens,
+          builder: (context, value, child) => MaterialApp(
+            themeAnimationDuration: Duration.zero,
+            theme: ThemeData(
+              brightness: dark ? Brightness.dark : Brightness.light,
+              extensions: [value],
+            ),
+            home: const Scaffold(
+              body: Center(
+                child: SizedBox(
+                  width: 160,
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      TWrapSideBarItem(
+                        key: tagKey,
+                        variant: TSideBarVariant.tag,
+                        label: '选中',
+                        value: 1,
+                        disabled: false,
+                        selected: true,
+                      ),
+                      TWrapSideBarItem(
+                        key: lineKey,
+                        variant: TSideBarVariant.line,
+                        label: '相邻',
+                        value: 2,
+                        disabled: false,
+                        topAdjacent: true,
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ),
+          ),
+        ),
+      );
+      BorderRadiusGeometry? radius(Key key) => tester
+          .widgetList<Container>(
+            find.descendant(
+              of: find.byKey(key),
+              matching: find.byType(Container),
+            ),
+          )
+          .map((w) => w.decoration)
+          .whereType<BoxDecoration>()
+          .singleWhere((d) => d.borderRadius != null)
+          .borderRadius;
+      const lineRadius = BorderRadius.only(topRight: Radius.circular(9));
+      expect(radius(tagKey), BorderRadius.circular(6));
+      expect(radius(lineKey), lineRadius);
+      final original = tester.element(find.byKey(tagKey));
+      tokens.value = tokens.value.copyWith(
+        radiusMap: {'radiusSmall': 19, 'radiusLarge': 27},
+      );
+      await tester.pumpAndSettle();
+      expect(radius(tagKey), BorderRadius.circular(6));
+      expect(radius(lineKey), lineRadius);
+      tokens.value = tokens.value.copyWith(radiusMap: {'radiusDefault': 13});
+      await tester.pumpAndSettle();
+      expect(radius(tagKey), BorderRadius.circular(13));
+      expect(radius(lineKey), lineRadius);
+      expect(tester.element(find.byKey(tagKey)), same(original));
+      expect(tester.takeException(), isNull);
+      await tester.pumpWidget(const SizedBox());
+      tokens.dispose();
+    });
+  }
+
   group('TSideBarItem', () {
     test('默认构造', () {
       const item = TSideBarItem();
@@ -44,7 +121,6 @@ void main() {
       expect(item.disabled, false);
       expect(item.badge, null);
       expect(item.icon, null);
-      expect(item.textStyle, null);
     });
 
     test('带参数构造', () {
@@ -66,31 +142,59 @@ void main() {
   group('TSideBarThemeData', () {
     test('默认构造', () {
       const data = TSideBarThemeData();
-      expect(data.selectedColor, null);
+      expect(data.selectedTextStyle, null);
     });
 
     test('copyWith', () {
-      const data = TSideBarThemeData(unSelectedColor: Colors.grey);
-      final copied = data.copyWith(selectedColor: Colors.red);
-      expect(copied.selectedColor, Colors.red);
-      expect(copied.unSelectedColor, Colors.grey);
+      const data = TSideBarThemeData(textStyle: TextStyle(color: Colors.grey));
+      final copied = data.copyWith(
+        selectedTextStyle: const TextStyle(color: Colors.red),
+      );
+      expect(copied.selectedTextStyle?.color, Colors.red);
+      expect(copied.textStyle?.color, Colors.grey);
     });
 
     test('lerp', () {
-      const data1 = TSideBarThemeData(selectedColor: Colors.red);
-      const data2 = TSideBarThemeData(selectedColor: Colors.blue);
+      const data1 = TSideBarThemeData(
+        selectedTextStyle: TextStyle(color: Colors.red),
+      );
+      const data2 = TSideBarThemeData(
+        selectedTextStyle: TextStyle(color: Colors.blue),
+      );
       final lerped = data1.lerp(data2, 0.5);
-      expect(lerped.selectedColor, isA<Color>());
+      expect(lerped.selectedTextStyle?.color, isA<Color>());
     });
 
     test('lerp 非 TSideBarThemeData 返回自身', () {
-      const data = TSideBarThemeData(selectedColor: Colors.red);
+      const data = TSideBarThemeData(
+        selectedTextStyle: TextStyle(color: Colors.red),
+      );
       final lerped = data.lerp(null, 0.5);
       expect(lerped, same(data));
     });
   });
 
   group('TSideBar 基础渲染', () {
+    testWidgets('badge 配置由 SideBar 绑定到标签锚点', (tester) async {
+      await tester.pumpWidget(
+        wrapWithTheme(
+          const TSideBar(
+            value: 0,
+            children: [
+              TSideBarItem(
+                value: 0,
+                label: '选项',
+                badge: TBadgeConfig(label: '1'),
+              ),
+            ],
+          ),
+        ),
+      );
+      expect(tester.takeException(), isNull);
+      expect(find.byType(TBadge), findsOneWidget);
+      expect(find.text('1'), findsOneWidget);
+    });
+
     testWidgets('基础渲染', (tester) async {
       await tester.pumpWidget(
         wrapWithTheme(
@@ -154,72 +258,30 @@ void main() {
   });
 
   group('TSideBar 样式与 Theme', () {
-    final colorCases =
-        <
-          String,
-          ({
-            TextStyle? style,
-            Color? color,
-            TSideBarThemeData? theme,
-            Color? expected,
-          })
-        >{
-          '默认颜色': (style: null, color: null, theme: null, expected: null),
-          '仅实例字号回退 Token': (
-            style: const TextStyle(fontSize: 18),
-            color: null,
-            theme: null,
-            expected: null,
+    final colorCases = <String, ({TSideBarThemeData? theme, Color? expected})>{
+      '默认颜色': (theme: null, expected: null),
+      '仅 Theme 字号回退 Token': (
+        theme: const TSideBarThemeData(
+          selectedTextStyle: TextStyle(fontSize: 18),
+        ),
+        expected: null,
+      ),
+      'Theme 文字样式颜色': (
+        theme: const TSideBarThemeData(
+          selectedTextStyle: TextStyle(
+            color: Colors.red,
+            fontWeight: FontWeight.w700,
           ),
-          '仅 Theme 字号回退 Token': (
-            style: null,
-            color: null,
-            theme: const TSideBarThemeData(
-              selectedTextStyle: TextStyle(fontSize: 18),
-            ),
-            expected: null,
-          ),
-          '实例字号保留 Theme 颜色': (
-            style: const TextStyle(fontSize: 18),
-            color: null,
-            theme: const TSideBarThemeData(
-              selectedTextStyle: TextStyle(
-                color: Colors.red,
-                fontWeight: FontWeight.w700,
-              ),
-            ),
-            expected: Colors.red,
-          ),
-          '无文字颜色回退 selectedColor': (
-            style: const TextStyle(fontSize: 18),
-            color: Colors.green,
-            theme: null,
-            expected: Colors.green,
-          ),
-          '实例颜色覆盖 Theme 文字颜色': (
-            style: null,
-            color: Colors.green,
-            theme: const TSideBarThemeData(
-              selectedTextStyle: TextStyle(color: Colors.red, fontSize: 18),
-            ),
-            expected: Colors.green,
-          ),
-          '同层文字颜色优先': (
-            style: const TextStyle(fontSize: 18, color: Colors.purple),
-            color: Colors.green,
-            theme: const TSideBarThemeData(selectedColor: Colors.red),
-            expected: Colors.purple,
-          ),
-          'Theme 字号回退 Theme 颜色': (
-            style: null,
-            color: null,
-            theme: const TSideBarThemeData(
-              selectedColor: Colors.red,
-              selectedTextStyle: TextStyle(fontSize: 18),
-            ),
-            expected: Colors.red,
-          ),
-        };
+        ),
+        expected: Colors.red,
+      ),
+      '显式选中色与字号': (
+        theme: const TSideBarThemeData(
+          selectedTextStyle: TextStyle(fontSize: 18, color: Colors.green),
+        ),
+        expected: Colors.green,
+      ),
+    };
     for (final entry in colorCases.entries) {
       for (final useMaterial3 in [false, true]) {
         for (final brightness in Brightness.values) {
@@ -231,8 +293,6 @@ void main() {
               wrapWithTheme(
                 TSideBar(
                   value: 0,
-                  selectedTextStyle: data.style,
-                  selectedColor: data.color,
                   onChanged: (_) {},
                   children: const [
                     TSideBarItem(value: 0, label: '选中', icon: Icons.star),
@@ -245,7 +305,7 @@ void main() {
             );
             final expectedColor =
                 data.expected ??
-                tester.element(find.byType(TSideBar)).tTheme.brandNormalColor;
+                tester.element(find.byType(TSideBar)).tTheme.brandColor;
             final indicator = find.byWidgetPredicate(
               (widget) =>
                   widget is Container &&
@@ -267,15 +327,11 @@ void main() {
             expect(label.style!.color, expectedColor);
             expect(
               label.style!.fontSize,
-              data.style?.fontSize ??
-                  data.theme?.selectedTextStyle?.fontSize ??
-                  16,
+              data.theme?.selectedTextStyle?.fontSize ?? 16,
             );
             expect(
               label.style!.fontWeight,
-              data.style?.fontWeight ??
-                  data.theme?.selectedTextStyle?.fontWeight ??
-                  FontWeight.w600,
+              data.theme?.selectedTextStyle?.fontWeight ?? FontWeight.w600,
             );
             expect(tester.takeException(), isNull);
           });
@@ -316,11 +372,13 @@ void main() {
         wrapWithTheme(
           TSideBar(value: 0, children: buildItems(), onChanged: (_) {}),
           sideBarTheme: const TSideBarThemeData(
-            selectedColor: Colors.red,
-            unSelectedColor: Colors.grey,
+            textStyle: TextStyle(color: Colors.grey),
             selectedBgColor: Colors.blue,
             unSelectedBgColor: Colors.white,
-            selectedTextStyle: TextStyle(fontWeight: FontWeight.bold),
+            selectedTextStyle: TextStyle(
+              color: Colors.red,
+              fontWeight: FontWeight.bold,
+            ),
             contentPadding: EdgeInsets.all(8),
           ),
         ),
@@ -330,22 +388,22 @@ void main() {
       expect(sideBar.width, 103);
     });
 
-    testWidgets('构造器参数覆盖 ThemeData', (tester) async {
+    testWidgets('组件 Theme 控制全部视觉字段，实例保留 height', (tester) async {
       await tester.pumpWidget(
         wrapWithTheme(
           TSideBar(
             value: 0,
             children: buildItems(),
             onChanged: (_) {},
-            selectedColor: Colors.blue,
-            unSelectedColor: Colors.green,
-            selectedBgColor: Colors.yellow,
-            unSelectedBgColor: Colors.black12,
-            selectedTextStyle: const TextStyle(color: Colors.purple),
-            contentPadding: const EdgeInsets.all(4),
             height: 300,
           ),
-          sideBarTheme: const TSideBarThemeData(selectedColor: Colors.red),
+          sideBarTheme: const TSideBarThemeData(
+            textStyle: TextStyle(color: Colors.green),
+            selectedBgColor: Colors.yellow,
+            unSelectedBgColor: Colors.black12,
+            selectedTextStyle: TextStyle(color: Colors.purple),
+            contentPadding: EdgeInsets.all(4),
+          ),
         ),
       );
       expect(find.byType(TSideBar), findsOneWidget);
@@ -551,20 +609,27 @@ void main() {
       expect(find.byType(TWrapSideBarItem), findsOneWidget);
     });
 
-    testWidgets('未选中项应用 item textStyle', (tester) async {
+    testWidgets('未选中项应用组件 Theme textStyle', (tester) async {
       await tester.pumpWidget(
         wrapWithTheme(
-          const TWrapSideBarItem(
-            variant: TSideBarVariant.line,
-            label: '自定义',
-            value: 3,
-            disabled: false,
-            textStyle: TextStyle(fontSize: 18),
+          const TSideBar(
+            value: 1,
+            children: [
+              TSideBarItem(value: 1, label: '选中'),
+              TSideBarItem(value: 2, label: '自定义', icon: Icons.star),
+            ],
+            onChanged: null,
+          ),
+          sideBarTheme: const TSideBarThemeData(
+            textStyle: TextStyle(fontSize: 18, color: Colors.green),
+            selectedTextStyle: TextStyle(color: Colors.red),
           ),
         ),
       );
 
       expect(tester.widget<Text>(find.text('自定义')).style?.fontSize, 18);
+      expect(tester.widget<Text>(find.text('自定义')).style?.color, Colors.green);
+      expect(tester.widget<Text>(find.text('选中')).style?.color, Colors.red);
     });
 
     testWidgets('带图标和 badge 时保留主行内容', (tester) async {
@@ -576,16 +641,18 @@ void main() {
             value: 3,
             disabled: false,
             icon: Icons.star,
-            badge: TBadge(label: '1'),
+            badge: TBadgeConfig(label: '1'),
           ),
         ),
       );
       expect(find.byType(TWrapSideBarItem), findsOneWidget);
       final icon = tester.getRect(find.byIcon(Icons.star));
       final label = tester.getRect(find.text('短'));
-      final badge = tester.getRect(find.byType(TBadge));
+      final badgeLabel = tester.getRect(find.text('1'));
       expect(icon.right, lessThanOrEqualTo(label.left));
-      expect(badge.top, lessThan(label.top));
+      expect(badgeLabel.top, lessThan(label.top));
+      expect(badgeLabel.center.dx, greaterThanOrEqualTo(label.right));
+      expect(badgeLabel.center.dx - label.right, lessThanOrEqualTo(12));
     });
 
     testWidgets('长标签与浮层 badge 可共同渲染', (tester) async {
@@ -596,7 +663,7 @@ void main() {
             label: '很长很长的标签内容xxx',
             value: 4,
             disabled: false,
-            badge: TBadge(label: '9'),
+            badge: TBadgeConfig(label: '9'),
           ),
         ),
       );
@@ -617,7 +684,7 @@ void main() {
                 label: '这是一个非常非常长的侧边栏标题',
                 value: 5,
                 disabled: false,
-                badge: TBadge(label: '9'),
+                badge: TBadgeConfig(label: '9'),
               ),
             ),
           ),

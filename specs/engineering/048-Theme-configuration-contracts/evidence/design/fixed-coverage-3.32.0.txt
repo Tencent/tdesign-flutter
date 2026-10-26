@@ -1,0 +1,94 @@
+avatar matched files:
+  - lib/src/components/avatar/t_avatar.dart
+  - lib/src/components/avatar/t_avatar_defaults.dart
+  - lib/src/components/avatar/t_avatar_theme_data.dart
+avatar production LH/LF = 288/292 = 98.63%
+
+badge matched files:
+  - lib/src/components/badge/t_badge.dart
+  - lib/src/components/badge/t_badge_internal.dart
+  - lib/src/components/badge/t_badge_layout.dart
+  - lib/src/components/badge/t_badge_resolved_style.dart
+  - lib/src/components/badge/t_badge_fallback.dart
+  - lib/src/components/badge/t_badge_label.dart
+  - lib/src/components/badge/t_badge_theme_data.dart
+badge production LH/LF = 293/300 = 97.67%
+
+button matched files:
+  - lib/src/components/button/t_button_theme_data.dart
+  - lib/src/components/button/t_button.dart
+  - lib/src/components/button/t_button_resolve.dart
+button production LH/LF = 473/478 = 98.95%
+
+backtop matched files:
+  - lib/src/components/backtop/t_backtop.dart
+  - lib/src/components/backtop/t_backtop_theme_data.dart
+backtop production LH/LF = 202/202 = 100.00%
+
+dropdown_menu matched files:
+  - lib/src/components/dropdown_menu/t_dropdown_item.dart
+  - lib/src/components/dropdown_menu/t_dropdown_menu.dart
+  - lib/src/components/dropdown_menu/t_dropdown_theme_data.dart
+dropdown_menu production LH/LF = 1008/1016 = 99.21%
+
+drawer matched files:
+  - lib/src/components/drawer/t_drawer_content.dart
+  - lib/src/components/drawer/t_drawer.dart
+  - lib/src/components/drawer/t_drawer_theme_data.dart
+drawer production LH/LF = 246/247 = 99.60%
+
+refresh matched files:
+  - lib/src/components/refresh/t_pull_down_refresh.dart
+  - lib/src/components/refresh/t_pull_down_refresh_controller.dart
+  - lib/src/components/refresh/t_pull_down_refresh_texts.dart
+refresh production LH/LF = 206/215 = 95.81%
+
+loading matched files:
+  - lib/src/components/loading/t_loading_theme_data.dart
+  - lib/src/components/loading/t_activity_indicator.dart
+  - lib/src/components/loading/t_circle_indicator.dart
+  - lib/src/components/loading/t_loading.dart
+  - lib/src/components/loading/t_point_indicator.dart
+  - lib/src/components/loading/t_loading_controller.dart
+loading production LH/LF = 267/267 = 100.00%
+
+search matched files:
+  - lib/src/components/search/t_search_bar.dart
+  - lib/src/components/search/t_search_bar_theme_data.dart
+search production LH/LF = 239/244 = 97.95%
+
+swiper matched files:
+  - lib/src/components/swiper/t_swiper.dart
+  - lib/src/components/swiper/t_swiper_types.dart
+  - lib/src/components/swiper/t_swiper_theme_data.dart
+swiper production LH/LF = 533/550 = 96.91%
+
+tabs matched files:
+  - lib/src/components/tabs/t_horizontal_tab_bar.dart
+  - lib/src/components/tabs/t_tab.dart
+  - lib/src/components/tabs/t_tab_bar_theme_data.dart
+  - lib/src/components/tabs/t_tab_bar.dart
+  - lib/src/components/tabs/t_tab_bar_view.dart
+tabs production LH/LF = 771/789 = 97.72%
+
+time_counter matched files:
+  - lib/src/components/time_counter/t_time_counter.dart
+  - lib/src/components/time_counter/t_time_counter_controller.dart
+  - lib/src/components/time_counter/t_time_counter_style.dart
+  - lib/src/components/time_counter/t_time_counter_theme_data.dart
+time_counter production LH/LF = 309/313 = 98.72%
+
+toast matched files:
+  - lib/src/components/toast/t_toast.dart
+  - lib/src/components/toast/t_toast_theme_data.dart
+toast production LH/LF = 265/269 = 98.51%
+
+theme matched files:
+  - lib/src/theme/t_internal_material.dart
+  - lib/src/theme/t_radius.dart
+  - lib/src/theme/t_theme.dart
+  - lib/src/theme/t_sizes.dart
+  - lib/src/theme/t_token_double_lerp.dart
+  - lib/src/theme/t_overlay_themes.dart
+  - lib/src/theme/t_shadows.dart
+theme production LH/LF = 838/859 = 97.56%

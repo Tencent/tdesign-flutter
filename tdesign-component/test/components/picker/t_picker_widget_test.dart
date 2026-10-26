@@ -1,9 +1,28 @@
-import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:tdesign_flutter/src/components/picker/picker_item.dart';
 import 'package:tdesign_flutter/tdesign_flutter.dart';
 
+import '../../helpers/custom_text_slot_test_helpers.dart';
+import '../../helpers/text_slot_regression.dart';
+
 void main() {
+  registerNativeParagraphContractTests(
+    'Picker custom item',
+    (child) => SizedBox(
+      height: 300,
+      width: 400,
+      child: TPicker(
+        items: const TPickerColumns([
+          [TPickerOption(label: 'option', value: 'option')],
+        ]),
+        value: const ['option'],
+        onChanged: (_) {},
+        itemBuilder: (_, option, col, index, distance) => child,
+      ),
+    ),
+    reset: false,
+  );
+  _textSlotRegression();
   Widget wrap(Widget child, {TPickerThemeData? pickerTheme}) {
     return MaterialApp(
       theme: ThemeData(
@@ -28,7 +47,72 @@ void main() {
     ],
   ]);
 
-  testWidgets('滚轮统一字号并继承 TextTheme，禁用项可自定义内容', (tester) async {
+  Future<TPopupHandle> openPickerPopup(
+    WidgetTester tester, {
+    TPickerThemeData? pickerTheme,
+  }) async {
+    TPopupHandle? handle;
+    await tester.pumpWidget(
+      MaterialApp(
+        theme: ThemeData(
+          extensions: [
+            TThemeData.defaultData(),
+            if (pickerTheme != null) pickerTheme,
+          ],
+        ),
+        home: Builder(
+          builder: (context) => TextButton(
+            onPressed: () {
+              handle = TPickerPopup.show(
+                context,
+                headerBuilder: (_, close) => TPopupHeader(
+                  cancelButton: TextButton(
+                    onPressed: close,
+                    child: const Text('取消'),
+                  ),
+                  title: const Text('选择'),
+                ),
+                child: TPicker(
+                  items: columns,
+                  value: const ['a', 1],
+                  onChanged: (_) {},
+                ),
+              );
+            },
+            child: const Text('打开'),
+          ),
+        ),
+      ),
+    );
+    await tester.tap(find.text('打开'));
+    await tester.pumpAndSettle();
+    return handle!;
+  }
+
+  testWidgets('TPickerPopup 默认为标准头部和完整滚轮预留 258px', (tester) async {
+    final handle = await openPickerPopup(tester);
+
+    expect(handle.options.height, 258);
+    expect(tester.getSize(find.byType(TPopupHeader)).height, 58);
+    expect(tester.getSize(find.byType(TPicker)).height, 200);
+    expect(
+      tester.getBottomLeft(find.byType(TPicker)).dy -
+          tester.getTopLeft(find.byType(TPopupHeader)).dy,
+      258,
+    );
+  });
+
+  testWidgets('TPickerPopup 总高跟随子树 Picker Theme', (tester) async {
+    final handle = await openPickerPopup(
+      tester,
+      pickerTheme: const TPickerThemeData(height: 240),
+    );
+
+    expect(handle.options.height, 298);
+    expect(tester.getSize(find.byType(TPicker)).height, 240);
+  });
+
+  testWidgets('滚轮统一读取 Token 字号，禁用项可自定义内容', (tester) async {
     final control = FixedExtentScrollController(initialItem: 2);
     addTearDown(control.dispose);
     await tester.pumpWidget(
@@ -77,13 +161,56 @@ void main() {
         ),
       ),
     );
-    final labels = tester.widgetList<TText>(find.byType(TText)).toList();
+    final labels = tester
+        .widgetList<Text>(
+          find.byWidgetPredicate(
+            (widget) =>
+                widget is Text && widget.data?.startsWith('item-') == true,
+          ),
+        )
+        .toList();
     expect(labels, hasLength(5));
-    expect(labels.map((label) => label.style!.fontSize), everyElement(19));
-    expect(labels[2].style!.fontWeight, FontWeight.w800);
-    expect(labels[1].style!.fontWeight, FontWeight.w800);
-    expect(labels[1].style!.color, Colors.pink);
+    expect(labels.map((label) => label.style!.fontSize), everyElement(16));
+    expect(labels[2].style!.fontWeight, FontWeight.w600);
+    expect(
+      labels.map((label) => label.style!.leadingDistribution),
+      everyElement(TextLeadingDistribution.even),
+    );
+    expect(labels[1].style!.fontWeight, FontWeight.w400);
+    expect(labels[1].style!.color, TThemeData.defaultData().textColorSecondary);
     expect(find.text('custom-disabled'), findsOneWidget);
+  });
+
+  testWidgets('默认选项使用 16/24 行盒并在 40px 选项内居中', (tester) async {
+    final control = FixedExtentScrollController();
+    addTearDown(control.dispose);
+    await tester.pumpWidget(
+      wrap(
+        SizedBox(
+          key: const ValueKey('picker-item-box'),
+          width: 100,
+          height: 40,
+          child: PickerItemWidget(
+            fixedExtentScrollController: control,
+            colIndex: 0,
+            index: 0,
+            option: const TPickerOption(label: '选项', value: 0),
+            itemHeight: 40,
+          ),
+        ),
+      ),
+    );
+    final label = find.text('选项');
+    final style = tester.widget<Text>(label).style!;
+    expect(style.fontSize, 16);
+    expect(style.height, 1.5);
+    expect(style.fontWeight, FontWeight.w600);
+    expect(style.leadingDistribution, TextLeadingDistribution.even);
+    expect(tester.getSize(label).height, 24);
+    expect(
+      tester.getCenter(label).dy,
+      tester.getCenter(find.byKey(const ValueKey('picker-item-box'))).dy,
+    );
   });
 
   group('TPicker controlled behavior', () {
@@ -388,7 +515,10 @@ void main() {
         ),
       );
       expect(find.text('selected-A'), findsOneWidget);
-      await tester.drag(find.byType(ListWheelScrollView), const Offset(0, -40));
+      final wheel = tester.widget<ListWheelScrollView>(
+        find.byType(ListWheelScrollView),
+      );
+      (wheel.controller! as FixedExtentScrollController).jumpToItem(1);
       await tester.pumpAndSettle();
       expect(ended, isTrue);
     });
@@ -613,5 +743,178 @@ void main() {
       ),
     );
     expect(find.byType(ListWheelScrollView), findsNothing);
+  });
+}
+
+void _textSlotRegression() {
+  testWidgets('slot picker nullable builder retains built-in fallback', (
+    tester,
+  ) async {
+    final control = FixedExtentScrollController();
+    addTearDown(control.dispose);
+    await tester.pumpWidget(
+      slotHost(
+        PickerItemWidget(
+          fixedExtentScrollController: control,
+          colIndex: 0,
+          index: 0,
+          option: const TPickerOption(label: 'fallback', value: 'a'),
+          itemHeight: 40,
+          itemBuilder: (_, option, col, index, distance) => null,
+        ),
+        false,
+        1,
+      ),
+    );
+    expect(slotParagraph(tester, 'fallback').text.style!.fontSize, 16);
+    expect(
+      slotParagraph(tester, 'fallback').text.style!.fontWeight,
+      FontWeight.w600,
+    );
+  });
+  testWidgets('slot picker selection defaults update while scrolling', (
+    tester,
+  ) async {
+    const items = TPickerColumns([
+      [
+        TPickerOption(label: 'A', value: 'a'),
+        TPickerOption(label: 'B', value: 'b'),
+        TPickerOption(label: 'C', value: 'c'),
+      ],
+    ]);
+    var value = <Object?>['a'];
+    await tester.pumpWidget(
+      slotHost(
+        StatefulBuilder(
+          builder: (context, setState) => TPicker(
+            items: items,
+            value: value,
+            onChanged: (next) => setState(() => value = next.values),
+            itemBuilder: (_, option, col, index, distance) => Padding(
+              padding: const EdgeInsets.all(1),
+              child: TText(option.label),
+            ),
+          ),
+        ),
+        false,
+        1,
+      ),
+    );
+    expect(slotParagraph(tester, 'A').text.style!.fontWeight, FontWeight.w600);
+    final wheel = tester.widget<ListWheelScrollView>(
+      find.byType(ListWheelScrollView),
+    );
+    (wheel.controller! as FixedExtentScrollController).jumpToItem(1);
+    await tester.pumpAndSettle();
+    expect(slotParagraph(tester, 'A').text.style!.fontWeight, FontWeight.w400);
+    expect(slotParagraph(tester, 'B').text.style!.fontWeight, FontWeight.w600);
+    expect(tester.takeException(), isNull);
+  });
+
+  for (final dark in [false, true]) {
+    for (final state in ['selected', 'unselected', 'disabled']) {
+      for (final wrapper in ['direct', 'row', 'padding', 'builder']) {
+        for (final scale in [1.0, 2.0]) {
+          testWidgets('slot picker $state $wrapper dark=$dark scale=$scale', (
+            tester,
+          ) async {
+            final control = FixedExtentScrollController(initialItem: 0);
+            addTearDown(control.dispose);
+            final index = state == 'unselected' ? 1 : 0;
+            Widget item(String label, TPickerItemBuilder? builder) => SizedBox(
+              height: 100,
+              width: 280,
+              child: PickerItemWidget(
+                fixedExtentScrollController: control,
+                colIndex: 0,
+                index: index,
+                option: TPickerOption(label: label, value: label),
+                itemHeight: 40,
+                disabled: state == 'disabled',
+                itemBuilder: builder,
+              ),
+            );
+            final seenStyles = <TextStyle?>[];
+            await tester.pumpWidget(
+              slotHost(
+                Column(
+                  children: [
+                    item('reference', null),
+                    for (final variant in [
+                      'default',
+                      'native',
+                      'nativeLocal',
+                      'nativeExplicit',
+                      'partial',
+                      'explicit',
+                      'local',
+                      'paragraph',
+                    ])
+                      item(variant, (context, option, col, row, distance) {
+                        seenStyles.add(
+                          Theme.of(
+                            context,
+                          ).extension<TTextThemeData>()?.textStyle,
+                        );
+                        return slotContent(option.label, variant, wrapper);
+                      }),
+                  ],
+                ),
+                dark,
+                scale,
+              ),
+            );
+            for (final variant in [
+              'default',
+              'native',
+              'nativeLocal',
+              'nativeExplicit',
+              'partial',
+              'explicit',
+              'local',
+              'paragraph',
+            ]) {
+              expectSlotStyle(tester, variant, 'reference', variant);
+            }
+            expect(seenStyles.every((style) => style?.fontSize == 16), isTrue);
+            expect(tester.takeException(), isNull);
+          });
+        }
+      }
+    }
+  }
+  testWidgets('slot picker shared TD theme overrides state defaults', (
+    tester,
+  ) async {
+    final control = FixedExtentScrollController();
+    addTearDown(control.dispose);
+    await tester.pumpWidget(
+      slotHost(
+        Column(
+          children: [
+            for (final custom in [false, true])
+              PickerItemWidget(
+                fixedExtentScrollController: control,
+                colIndex: 0,
+                index: 0,
+                option: TPickerOption(
+                  label: custom ? 'subject' : 'reference',
+                  value: 'a',
+                ),
+                itemHeight: 40,
+                itemBuilder: custom
+                    ? (context, option, col, index, distance) =>
+                          slotContent(option.label, 'default', 'builder')
+                    : null,
+              ),
+          ],
+        ),
+        false,
+        1,
+        outerStyle: const TextStyle(fontSize: 23, color: Colors.teal),
+      ),
+    );
+    expectSlotStyle(tester, 'subject', 'reference', 'default');
+    expect(slotParagraph(tester, 'subject').text.style!.fontSize, 23);
   });
 }

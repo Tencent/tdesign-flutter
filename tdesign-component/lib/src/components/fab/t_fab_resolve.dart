@@ -3,9 +3,11 @@ import 'package:flutter/material.dart';
 import '../../components/button/t_button.dart';
 import '../../components/button/t_button_theme_data.dart';
 import '../../components/button/t_button_types.dart';
+import '../../theme/t_colors.dart';
+import '../../theme/t_internal_material.dart';
 import '../../theme/t_shadows.dart';
-import '../../theme/t_spacers.dart';
 import '../../theme/t_theme.dart';
+import '../text/t_text_styled.dart';
 import 't_fab_defaults.dart';
 import 't_fab_layout.dart';
 
@@ -60,26 +62,36 @@ class TFabResolve {
     required BuildContext context,
   }) {
     final hasText = text != null && text.isNotEmpty;
-    final effectiveIcon = icon ?? const Icon(TFabDefaults.defaultIconData);
+    final effectiveIcon =
+        icon ?? const TInternalIcon(TFabDefaults.defaultIconData);
 
     // shape 推导：纯图标=圆形，有文字=胶囊形。
     final effectiveShape = TFabDefaults.shapeForText(hasText);
 
     final tButton = TButton(
-      child: hasText ? Text(text) : null,
+      child: hasText
+          ? Builder(
+              builder: (context) => TTextStyled(
+                text,
+                centerLeading: true,
+                style: DefaultTextStyle.of(context).style,
+                selectionColor: context.tTheme.brandColor.withValues(
+                  alpha: 0.4,
+                ),
+              ),
+            )
+          : null,
       icon: effectiveIcon,
       size: TFabDefaults.defaultSize,
       variant: TFabDefaults.defaultVariant,
-      colorScheme: TFabDefaults.defaultColorScheme,
+      colorPreset: TFabDefaults.defaultColorPreset,
+      shape: effectiveShape,
       onPressed: onPressed,
     );
 
     // TFab 默认动作层拥有完整规格；完整自定义通过 TFab.child 组合，避免父级
     // TButtonThemeData 的 padding/gradient 等字段意外改变 Fab 基线。
-    final fabBtnTheme = TButtonThemeData(
-      shape: effectiveShape,
-      iconTextSpacing: context.tTheme.spacer4,
-    );
+    const fabBtnTheme = TButtonThemeData(iconTextSpacing: 4.0);
 
     final shadowShape = switch (effectiveShape) {
       TButtonShape.circle => const CircleBorder(),
@@ -90,7 +102,7 @@ class TFabResolve {
     return DecoratedBox(
       decoration: ShapeDecoration(
         shape: shadowShape,
-        shadows: context.tTheme.shadowsMiddle ?? const [],
+        shadows: context.tTheme.shadow2 ?? const [],
       ),
       child: Theme(
         data: Theme.of(context).mergeExtension(fabBtnTheme),

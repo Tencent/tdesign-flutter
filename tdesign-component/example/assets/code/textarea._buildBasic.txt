@@ -1,2 +1,0 @@
-Widget _buildBasic(BuildContext context) =>
-      const SizedBox(height: 128, child: TTextarea(hintText: '请输入文字'));

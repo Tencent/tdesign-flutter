@@ -1,4 +1,3 @@
-import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:tdesign_flutter/tdesign_flutter.dart';
@@ -52,7 +51,7 @@ void main() {
       );
 
       expect(find.text('controlled'), findsOneWidget);
-      expect(field(tester).decoration?.hintText, '搜索');
+      expect(find.text('搜索'), findsNothing);
 
       await tester.pumpWidget(
         wrap(const TSearchBar(key: ValueKey('initial'), initialValue: 'first')),
@@ -209,7 +208,7 @@ void main() {
 
       expect(
         tester.widget<Text>(find.text('取消')).style?.color,
-        TThemeData.defaultData().textDisabledColor,
+        TThemeData.defaultData().textColorDisabled,
       );
       await tester.tap(find.text('取消'));
       expect(pressed, isFalse);
@@ -240,18 +239,18 @@ void main() {
       );
       expect(decoration.color, token.bgColorSecondaryContainer);
       expect(decoration.borderRadius, BorderRadius.circular(6));
-      expect(tester.getSize(find.byIcon(TIcons.search)), const Size.square(24));
+      expect(tester.getSize(find.byIcon(TIcons.search)), const Size.square(20));
       expect(field(tester).style?.fontSize, token.fontBodyLarge?.size);
       expect(field(tester).style?.height, token.fontBodyLarge?.height);
       expect(
-        field(tester).decoration?.hintStyle?.color,
+        tester.widget<Text>(find.text('搜索')).style?.color,
         token.textColorPlaceholder,
       );
-      expect(field(tester).decoration?.isCollapsed, isTrue);
-      expect(field(tester).decoration?.contentPadding, EdgeInsets.zero);
     });
 
-    testWidgets('instance values override component theme', (tester) async {
+    testWidgets('instance shape and theme visual values have separate owners', (
+      tester,
+    ) async {
       await tester.pumpWidget(
         wrap(
           const TSearchBar(
@@ -260,7 +259,6 @@ void main() {
             textAlignment: TSearchBarAlignment.center,
           ),
           searchTheme: const TSearchBarThemeData(
-            variant: TSearchBarVariant.round,
             height: 48,
             inputBackgroundColor: Colors.red,
             cursorHeight: 20,
@@ -278,14 +276,12 @@ void main() {
 
     test('theme copyWith and lerp cover visual fields', () {
       const base = TSearchBarThemeData(
-        variant: TSearchBarVariant.square,
         height: 40,
         inputBackgroundColor: Colors.white,
         contentPadding: EdgeInsets.all(8),
         actionGap: 10,
       );
       const other = TSearchBarThemeData(
-        variant: TSearchBarVariant.round,
         height: 48,
         inputBackgroundColor: Colors.black,
         contentPadding: EdgeInsets.all(16),
@@ -293,10 +289,7 @@ void main() {
       );
 
       expect(base.copyWith(height: 44).height, 44);
-      expect(base.copyWith().variant, TSearchBarVariant.square);
       expect(base.lerp(null, 0.5), same(base));
-      expect(base.lerp(other, 0.25).variant, TSearchBarVariant.square);
-      expect(base.lerp(other, 0.75).variant, TSearchBarVariant.round);
       expect(base.lerp(other, 0.5).height, 44);
       expect(base.lerp(other, 0.5).actionGap, 15);
     });

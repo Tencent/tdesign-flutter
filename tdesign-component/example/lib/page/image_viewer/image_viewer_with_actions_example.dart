@@ -1,0 +1,110 @@
+import 'dart:async';
+
+import 'package:tdesign_flutter/tdesign_flutter.dart';
+
+import '../../annotation/example_code.dart';
+import '../../base/example_widget.dart';
+
+@ExampleCode(group: 'image-viewer')
+class ImageViewerWithActionsExample extends StatefulWidget {
+  const ImageViewerWithActionsExample({super.key});
+
+  @override
+  State<ImageViewerWithActionsExample> createState() =>
+      _ImageViewerWithActionsExampleState();
+}
+
+class _ImageViewerWithActionsExampleState
+    extends State<ImageViewerWithActionsExample> {
+  static const _initialImages = <ImageProvider<Object>>[
+    AssetImage('assets/img/image.png'),
+    AssetImage('assets/img/t_action_sheet_8.png'),
+  ];
+
+  List<ImageProvider<Object>> _images = _initialImages;
+  bool _opening = false;
+
+  Future<void> _showImages() async {
+    if (_opening) {
+      return;
+    }
+    _opening = true;
+    if (_images.isEmpty) {
+      setState(() => _images = _initialImages);
+    }
+    final navigator = Navigator.of(context, rootNavigator: true);
+    var initialIndex = 0;
+    try {
+      while (mounted && _images.isNotEmpty) {
+        int? deletedIndex;
+        var previewOpen = true;
+        var confirming = false;
+        // 每次预览持有独立快照；删除只发生在旧预览关闭后。
+        final snapshot = List<ImageProvider<Object>>.unmodifiable(_images);
+        await TImageViewer.show(
+          context: context,
+          images: snapshot,
+          initialIndex: initialIndex,
+          showClose: true,
+          showDelete: true,
+          showIndex: true,
+          onDelete: (index) async {
+            if (!mounted || confirming || !previewOpen) {
+              return;
+            }
+            confirming = true;
+            var confirmed = false;
+            final closed = Completer<void>();
+            TActionSheet.showList<int>(
+              context,
+              subtitle: '要删除这张照片吗？',
+              items: [
+                TActionSheetItem(
+                  value: 1,
+                  label: '删除',
+                  textStyle: TextStyle(color: context.tTheme.errorColor),
+                ),
+              ],
+              onSelected: (_) => confirmed = true,
+              onClosed: closed.complete,
+            );
+            await closed.future;
+            confirming = false;
+            if (confirmed && mounted && previewOpen) {
+              deletedIndex = index;
+              navigator.pop();
+            }
+          },
+        ).whenComplete(() => previewOpen = false);
+        final index = deletedIndex;
+        if (!mounted || index == null) {
+          break;
+        }
+        setState(() {
+          _images = [...snapshot]..removeAt(index);
+        });
+        if (_images.isEmpty) {
+          TToast.showText('图片已全部删除', context: context);
+          break;
+        }
+        initialIndex = index.clamp(0, _images.length - 1);
+      }
+    } finally {
+      _opening = false;
+    }
+  }
+
+  Widget _buildWithActions(BuildContext context) => SizedBox(
+    width: double.infinity,
+    child: TButton(
+      size: TButtonSize.large,
+      variant: TButtonVariant.outline,
+      colorPreset: TButtonColorPreset.primary,
+      onPressed: _showImages,
+      child: Text(_images.isEmpty ? '重新体验带操作图片预览' : '带操作图片预览'),
+    ),
+  );
+
+  @override
+  Widget build(BuildContext context) => _buildWithActions(context);
+}

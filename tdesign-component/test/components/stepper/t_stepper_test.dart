@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:tdesign_flutter/tdesign_flutter.dart';
 
@@ -25,6 +25,9 @@ void main() {
   EditableText editableText(WidgetTester tester) =>
       tester.widget<EditableText>(find.byType(EditableText));
 
+  RenderEditable renderEditable(WidgetTester tester) =>
+      tester.allRenderObjects.whereType<RenderEditable>().single;
+
   Size stepperSize(WidgetTester tester) {
     final row = find.descendant(
       of: find.byType(TStepper),
@@ -49,6 +52,54 @@ void main() {
     return tester.widget<DecoratedBox>(finder).decoration as BoxDecoration;
   }
 
+  testWidgets('无关尺寸刻度不缩放 Stepper 的控件、输入区和图标', (tester) async {
+    final child = TStepper(value: 1, onChanged: (_) {});
+    await tester.pumpWidget(wrap(child));
+    final before = tester.getSize(find.byType(TStepper));
+    await tester.pumpWidget(
+      wrap(
+        child,
+        token: TThemeData.defaultData().copyWith(
+          sizeMap: {'size7': 80, 'size8': 96},
+        ),
+      ),
+    );
+    await tester.pumpAndSettle();
+    expect(tester.getSize(find.byType(TStepper)), before);
+    await tester.pumpWidget(
+      wrap(
+        child,
+        token: TThemeData.defaultData().copyWith(sizeMap: {'size2': 10}),
+      ),
+    );
+    await tester.pumpAndSettle();
+    expect(tester.getSize(find.byType(TStepper)).width, before.width + 12);
+    await tester.pumpWidget(
+      wrap(
+        child,
+        stepperTheme: const TStepperThemeData(
+          inputWidth: 64,
+          controlSize: 32,
+          iconSize: 20,
+        ),
+      ),
+    );
+    await tester.pumpAndSettle();
+    expect(tester.getSize(find.byType(TStepper)), isNot(before));
+  });
+
+  testWidgets('全局字号超过档位高度时增高，保留语义字号', (tester) async {
+    final token = TThemeData.defaultData().copyWith(
+      fontMap: {'fontBodySmall': Font(size: 40, lineHeight: 52)},
+    );
+    await tester.pumpWidget(
+      wrap(const TStepper(value: 1, size: TStepperSize.medium), token: token),
+    );
+    expect(editableText(tester).style.fontSize, 40);
+    expect(stepperSize(tester).height, greaterThanOrEqualTo(52));
+    expect(tester.takeException(), isNull);
+  });
+
   group('TStepper controlled behavior', () {
     testWidgets('renders controlled value and TDesign icons', (tester) async {
       await tester.pumpWidget(wrap(TStepper(value: 5, onChanged: (_) {})));
@@ -60,10 +111,9 @@ void main() {
 
     testWidgets('rejected change restores controlled value', (tester) async {
       num? changed;
-      await tester.pumpWidget(wrap(TStepper(
-        value: 5,
-        onChanged: (value) => changed = value,
-      )));
+      await tester.pumpWidget(
+        wrap(TStepper(value: 5, onChanged: (value) => changed = value)),
+      );
 
       await tester.tap(find.byIcon(TIcons.plus));
       await tester.pump();
@@ -74,14 +124,16 @@ void main() {
 
     testWidgets('accepted change follows parent rebuild', (tester) async {
       num value = 5;
-      await tester.pumpWidget(wrap(
-        StatefulBuilder(
-          builder: (context, setState) => TStepper(
-            value: value,
-            onChanged: (next) => setState(() => value = next),
+      await tester.pumpWidget(
+        wrap(
+          StatefulBuilder(
+            builder: (context, setState) => TStepper(
+              value: value,
+              onChanged: (next) => setState(() => value = next),
+            ),
           ),
         ),
-      ));
+      );
 
       await tester.tap(find.byIcon(TIcons.plus));
       await tester.pump();
@@ -93,16 +145,20 @@ void main() {
     testWidgets('buttons clamp at bounds and emit once', (tester) async {
       var calls = 0;
       num? changed;
-      await tester.pumpWidget(wrap(TStepper(
-        value: 2,
-        min: 0,
-        max: 10,
-        step: 5,
-        onChanged: (value) {
-          calls += 1;
-          changed = value;
-        },
-      )));
+      await tester.pumpWidget(
+        wrap(
+          TStepper(
+            value: 2,
+            min: 0,
+            max: 10,
+            step: 5,
+            onChanged: (value) {
+              calls += 1;
+              changed = value;
+            },
+          ),
+        ),
+      );
 
       await tester.tap(find.byIcon(TIcons.minus));
       await tester.pump();
@@ -121,19 +177,24 @@ void main() {
       expect(disabledControls, findsNWidgets(2));
     });
 
-    testWidgets('submitted input emits once and restores rejected value',
-        (tester) async {
+    testWidgets('submitted input emits once and restores rejected value', (
+      tester,
+    ) async {
       var calls = 0;
       num? changed;
-      await tester.pumpWidget(wrap(TStepper(
-        value: 5,
-        min: 0,
-        max: 10,
-        onChanged: (value) {
-          calls += 1;
-          changed = value;
-        },
-      )));
+      await tester.pumpWidget(
+        wrap(
+          TStepper(
+            value: 5,
+            min: 0,
+            max: 10,
+            onChanged: (value) {
+              calls += 1;
+              changed = value;
+            },
+          ),
+        ),
+      );
 
       await tester.enterText(find.byType(EditableText), '8');
       await tester.testTextInput.receiveAction(TextInputAction.done);
@@ -146,10 +207,9 @@ void main() {
 
     testWidgets('focus loss submits valid draft', (tester) async {
       num? changed;
-      await tester.pumpWidget(wrap(TStepper(
-        value: 5,
-        onChanged: (value) => changed = value,
-      )));
+      await tester.pumpWidget(
+        wrap(TStepper(value: 5, onChanged: (value) => changed = value)),
+      );
 
       await tester.enterText(find.byType(EditableText), '8');
       await tester.tapAt(const Offset(8, 8));
@@ -162,13 +222,17 @@ void main() {
     testWidgets('button uses valid draft as its base value', (tester) async {
       var calls = 0;
       num? changed;
-      await tester.pumpWidget(wrap(TStepper(
-        value: 5,
-        onChanged: (value) {
-          calls += 1;
-          changed = value;
-        },
-      )));
+      await tester.pumpWidget(
+        wrap(
+          TStepper(
+            value: 5,
+            onChanged: (value) {
+              calls += 1;
+              changed = value;
+            },
+          ),
+        ),
+      );
 
       await tester.enterText(find.byType(EditableText), '7');
       await tester.tap(find.byIcon(TIcons.plus));
@@ -180,11 +244,11 @@ void main() {
 
     testWidgets('invalid input restores current value', (tester) async {
       num? changed;
-      await tester.pumpWidget(wrap(TStepper(
-        value: 5,
-        min: -10,
-        onChanged: (value) => changed = value,
-      )));
+      await tester.pumpWidget(
+        wrap(
+          TStepper(value: 5, min: -10, onChanged: (value) => changed = value),
+        ),
+      );
 
       await tester.enterText(find.byType(EditableText), '-');
       await tester.testTextInput.receiveAction(TextInputAction.done);
@@ -194,20 +258,23 @@ void main() {
       expect(editableText(tester).controller.text, '5');
     });
 
-    testWidgets('decimal step normalizes floating point precision',
-        (tester) async {
+    testWidgets('decimal step normalizes floating point precision', (
+      tester,
+    ) async {
       num value = 0.2;
-      await tester.pumpWidget(wrap(
-        StatefulBuilder(
-          builder: (context, setState) => TStepper(
-            value: value,
-            min: 0,
-            max: 1,
-            step: 0.1,
-            onChanged: (next) => setState(() => value = next),
+      await tester.pumpWidget(
+        wrap(
+          StatefulBuilder(
+            builder: (context, setState) => TStepper(
+              value: value,
+              min: 0,
+              max: 1,
+              step: 0.1,
+              onChanged: (next) => setState(() => value = next),
+            ),
           ),
         ),
-      ));
+      );
 
       await tester.tap(find.byIcon(TIcons.plus));
       await tester.pump();
@@ -226,14 +293,8 @@ void main() {
     });
 
     test('rejects invalid configuration', () {
-      expect(
-        () => TStepper(value: 11, min: 0, max: 10),
-        throwsAssertionError,
-      );
-      expect(
-        () => TStepper(value: 0, min: 1, max: 0),
-        throwsAssertionError,
-      );
+      expect(() => TStepper(value: 11, min: 0, max: 10), throwsAssertionError);
+      expect(() => TStepper(value: 0, min: 1, max: 0), throwsAssertionError);
       expect(() => TStepper(value: 0, step: 0), throwsAssertionError);
     });
   });
@@ -255,76 +316,71 @@ void main() {
       ];
 
       for (final entry in cases) {
-        await tester.pumpWidget(wrap(TStepper(
-          value: 1,
-          size: entry.$1,
-          onChanged: (_) {},
-        )));
+        await tester.pumpWidget(
+          wrap(TStepper(value: 1, size: entry.$1, onChanged: (_) {})),
+        );
         expect(stepperSize(tester), entry.$2);
         expect(tester.getSize(find.byIcon(TIcons.minus)), entry.$3);
       }
     });
 
-    testWidgets('instance size and variant override component theme',
-        (tester) async {
-      await tester.pumpWidget(wrap(
-        TStepper(
-          value: 1,
-          size: TStepperSize.small,
-          variant: TStepperVariant.outline,
-          onChanged: (_) {},
+    testWidgets('instance size and variant select component geometry', (
+      tester,
+    ) async {
+      await tester.pumpWidget(
+        wrap(
+          TStepper(
+            value: 1,
+            size: TStepperSize.small,
+            variant: TStepperVariant.outline,
+            onChanged: (_) {},
+          ),
         ),
-        stepperTheme: const TStepperThemeData(
-          size: TStepperSize.large,
-          variant: TStepperVariant.filled,
-        ),
-      ));
+      );
 
       expect(stepperSize(tester), const Size(74, 20));
       expect(iconDecoration(tester, TIcons.minus).border, isNotNull);
     });
 
-    testWidgets('normal and filled variants keep 4px segment spacing',
-        (tester) async {
-      for (final variant in [
-        TStepperVariant.normal,
-        TStepperVariant.filled,
-      ]) {
-        await tester.pumpWidget(wrap(TStepper(
-          value: 1,
-          variant: variant,
-          onChanged: (_) {},
-        )));
+    testWidgets('normal and filled variants keep 4px segment spacing', (
+      tester,
+    ) async {
+      for (final variant in [TStepperVariant.normal, TStepperVariant.filled]) {
+        await tester.pumpWidget(
+          wrap(TStepper(value: 1, variant: variant, onChanged: (_) {})),
+        );
         expect(stepperSize(tester).width, 94);
       }
     });
 
     testWidgets('filled applies radiusSmall to every segment', (tester) async {
       final token = TThemeData.defaultData();
-      await tester.pumpWidget(wrap(TStepper(
-        value: 1,
-        variant: TStepperVariant.filled,
-        onChanged: (_) {},
-      )));
+      await tester.pumpWidget(
+        wrap(
+          TStepper(
+            value: 1,
+            variant: TStepperVariant.filled,
+            onChanged: (_) {},
+          ),
+        ),
+      );
 
       final expected = BorderRadius.circular(token.radiusSmall);
-      expect(
-        iconDecoration(tester, TIcons.minus).borderRadius,
-        expected,
-      );
+      expect(iconDecoration(tester, TIcons.minus).borderRadius, expected);
       expect(inputDecoration(tester).borderRadius, expected);
-      expect(
-        iconDecoration(tester, TIcons.plus).borderRadius,
-        expected,
-      );
+      expect(iconDecoration(tester, TIcons.plus).borderRadius, expected);
     });
 
     testWidgets('outline uses contiguous borders', (tester) async {
-      await tester.pumpWidget(wrap(TStepper(
-        value: 1,
-        variant: TStepperVariant.outline,
-        onChanged: (_) {},
-      )));
+      await tester.pumpWidget(
+        wrap(
+          TStepper(
+            value: 1,
+            variant: TStepperVariant.outline,
+            onChanged: (_) {},
+          ),
+        ),
+      );
 
       expect(stepperSize(tester), const Size(86, 24));
       expect(iconDecoration(tester, TIcons.minus).border, isA<Border>());
@@ -335,15 +391,20 @@ void main() {
       expect(inputBorder.right.style, BorderStyle.none);
     });
 
-    testWidgets('min action disabled keeps filled segment background',
-        (tester) async {
+    testWidgets('min action disabled keeps filled segment background', (
+      tester,
+    ) async {
       final token = TThemeData.defaultData();
-      await tester.pumpWidget(wrap(TStepper(
-        value: 0,
-        min: 0,
-        variant: TStepperVariant.filled,
-        onChanged: (_) {},
-      )));
+      await tester.pumpWidget(
+        wrap(
+          TStepper(
+            value: 0,
+            min: 0,
+            variant: TStepperVariant.filled,
+            onChanged: (_) {},
+          ),
+        ),
+      );
 
       expect(
         iconDecoration(tester, TIcons.minus).color,
@@ -355,26 +416,23 @@ void main() {
       );
       expect(
         tester.widget<Icon>(find.byIcon(TIcons.minus)).color,
-        token.textDisabledColor,
+        token.textColorDisabled,
       );
     });
 
-    testWidgets('whole disabled uses disabled background on every segment',
-        (tester) async {
+    testWidgets('whole disabled uses disabled background on every segment', (
+      tester,
+    ) async {
       final token = TThemeData.defaultData();
-      await tester.pumpWidget(wrap(const TStepper(
-        value: 5,
-        variant: TStepperVariant.filled,
-      )));
+      await tester.pumpWidget(
+        wrap(const TStepper(value: 5, variant: TStepperVariant.filled)),
+      );
 
       expect(
         iconDecoration(tester, TIcons.minus).color,
         token.bgColorComponentDisabled,
       );
-      expect(
-        inputDecoration(tester).color,
-        token.bgColorComponentDisabled,
-      );
+      expect(inputDecoration(tester).color, token.bgColorComponentDisabled);
       expect(
         iconDecoration(tester, TIcons.plus).color,
         token.bgColorComponentDisabled,
@@ -382,18 +440,23 @@ void main() {
     });
 
     testWidgets('component theme controls geometry and colors', (tester) async {
-      await tester.pumpWidget(wrap(
-        TStepper(value: 1, onChanged: (_) {}),
-        stepperTheme: const TStepperThemeData(
-          variant: TStepperVariant.filled,
-          controlSize: 32,
-          inputWidth: 70,
-          iconSize: 18,
-          spacing: 6,
-          foregroundColor: Colors.red,
-          backgroundColor: Colors.yellow,
+      await tester.pumpWidget(
+        wrap(
+          TStepper(
+            value: 1,
+            variant: TStepperVariant.filled,
+            onChanged: (_) {},
+          ),
+          stepperTheme: const TStepperThemeData(
+            controlSize: 32,
+            inputWidth: 70,
+            iconSize: 18,
+            spacing: 6,
+            foregroundColor: Colors.red,
+            backgroundColor: Colors.yellow,
+          ),
         ),
-      ));
+      );
 
       expect(stepperSize(tester), const Size(146, 32));
       expect(tester.getSize(find.byIcon(TIcons.minus)), const Size(18, 18));
@@ -401,68 +464,268 @@ void main() {
       expect(inputDecoration(tester).color, Colors.yellow);
     });
 
-    testWidgets(
-        'default line height is centered and component theme can override it',
-        (tester) async {
-      await tester.pumpWidget(wrap(
-        TStepper(value: 1, onChanged: (_) {}),
-      ));
-      expect(editableText(tester).style.height, 1);
+    testWidgets('design line boxes are centered and theme can override them', (
+      tester,
+    ) async {
+      for (final entry in [
+        (TStepperSize.small, 16.0),
+        (TStepperSize.medium, 20.0),
+        (TStepperSize.large, 24.0),
+      ]) {
+        await tester.pumpWidget(
+          wrap(TStepper(value: 1, size: entry.$1, onChanged: (_) {})),
+        );
+        final input = editableText(tester);
+        expect(input.style.fontSize! * input.style.height!, entry.$2);
+        expect(input.style.leadingDistribution, TextLeadingDistribution.even);
+        expect(input.style.fontFamily, 'packages/tdesign_flutter/TCloudNumber');
+        expect(tester.getSize(find.byType(EditableText)).height, entry.$2);
+        expect(
+          tester.getCenter(find.byType(EditableText)).dy,
+          tester.getCenter(find.byType(Row)).dy,
+        );
+      }
 
-      await tester.pumpWidget(wrap(
-        TStepper(value: 1, onChanged: (_) {}),
-        stepperTheme: const TStepperThemeData(
-          textStyle: TextStyle(height: 1.25),
-        ),
-      ));
-      await tester.pumpAndSettle();
-      expect(editableText(tester).style.height, 1.25);
-    });
-
-    testWidgets('DefaultTextStyle and IconTheme control unset foregrounds',
-        (tester) async {
-      await tester.pumpWidget(wrap(
-        DefaultTextStyle(
-          style: const TextStyle(color: Colors.red),
-          child: IconTheme(
-            data: const IconThemeData(color: Colors.green),
-            child: TStepper(value: 1, onChanged: (_) {}),
+      await tester.pumpWidget(
+        wrap(
+          TStepper(value: 1, onChanged: (_) {}),
+          stepperTheme: const TStepperThemeData(
+            textStyle: TextStyle(height: 1.25),
           ),
         ),
-      ));
+      );
+      await tester.pumpAndSettle();
+      expect(editableText(tester).style.height, 1.25);
 
-      expect(editableText(tester).style.color, Colors.red);
+      await tester.pumpWidget(
+        wrap(
+          TStepper(value: 1, onChanged: (_) {}),
+          stepperTheme: const TStepperThemeData(
+            textStyle: TextStyle(fontSize: 20),
+          ),
+        ),
+      );
+      await tester.pumpAndSettle();
+      var input = editableText(tester);
+      expect(input.style.fontSize, 20);
+      expect(input.style.fontSize! * input.style.height!, 20);
+      expect(renderEditable(tester).preferredLineHeight, 20);
+
+      await tester.pumpWidget(
+        wrap(
+          TStepper(value: 1, onChanged: (_) {}),
+          stepperTheme: const TStepperThemeData(controlSize: 16),
+        ),
+      );
+      await tester.pumpAndSettle();
+      input = editableText(tester);
+      expect(input.style.fontSize! * input.style.height!, 16);
+      expect(renderEditable(tester).preferredLineHeight, 16);
+      expect(tester.getSize(find.byType(EditableText)).height, 16);
+
+      expect(tester.takeException(), isNull);
+    });
+
+    testWidgets('rejects a font size larger than the control height in debug', (
+      tester,
+    ) async {
+      await tester.pumpWidget(
+        wrap(
+          TStepper(value: 1, onChanged: (_) {}),
+          stepperTheme: const TStepperThemeData(
+            controlSize: 16,
+            textStyle: TextStyle(fontSize: 20),
+          ),
+        ),
+      );
+
+      final exception = tester.takeException();
+      expect(exception, isA<AssertionError>());
+      expect(exception.toString(), contains('fontSize (20.0)'));
+      expect(exception.toString(), contains('controlSize (16.0)'));
+    });
+
+    testWidgets(
+      'rejects an explicit line box taller than the control in debug',
+      (tester) async {
+        await tester.pumpWidget(
+          wrap(
+            TStepper(value: 1, onChanged: (_) {}),
+            stepperTheme: const TStepperThemeData(
+              controlSize: 20,
+              textStyle: TextStyle(height: 2),
+            ),
+          ),
+        );
+
+        final exception = tester.takeException();
+        expect(exception, isA<AssertionError>());
+        expect(exception.toString(), contains('line height (24.0)'));
+        expect(exception.toString(), contains('controlSize (20.0)'));
+      },
+    );
+
+    testWidgets('rejects an interpolated line box taller than the control', (
+      tester,
+    ) async {
+      final theme =
+          const TStepperThemeData(
+            controlSize: 20,
+            textStyle: TextStyle(fontSize: 20, height: 1),
+          ).lerp(
+            const TStepperThemeData(
+              controlSize: 20,
+              textStyle: TextStyle(fontSize: 10, height: 2),
+            ),
+            0.5,
+          );
+      await tester.pumpWidget(
+        wrap(TStepper(value: 1, onChanged: (_) {}), stepperTheme: theme),
+      );
+
+      final exception = tester.takeException();
+      expect(exception, isA<AssertionError>());
+      expect(exception.toString(), contains('line height (22.5)'));
+      expect(exception.toString(), contains('controlSize (20.0)'));
+    });
+
+    testWidgets(
+      'TDesign token ignores external DefaultTextStyle and IconTheme',
+      (tester) async {
+        await tester.pumpWidget(
+          wrap(
+            DefaultTextStyle(
+              style: const TextStyle(color: Colors.red, fontFamily: 'TestFont'),
+              child: IconTheme(
+                data: const IconThemeData(color: Colors.green),
+                child: TStepper(value: 1, onChanged: (_) {}),
+              ),
+            ),
+          ),
+        );
+
+        expect(
+          editableText(tester).style.color,
+          TThemeData.defaultData().textColorPrimary,
+        );
+        expect(
+          editableText(tester).style.fontFamily,
+          'packages/tdesign_flutter/TCloudNumber',
+        );
+        expect(
+          tester.widget<Icon>(find.byIcon(TIcons.plus)).color,
+          TThemeData.defaultData().textColorPrimary,
+        );
+      },
+    );
+
+    testWidgets('component theme keeps an unscoped custom font family', (
+      tester,
+    ) async {
+      await tester.pumpWidget(
+        wrap(
+          TStepper(value: 1, onChanged: (_) {}),
+          stepperTheme: const TStepperThemeData(
+            textStyle: TextStyle(fontFamily: 'TestFont'),
+          ),
+        ),
+      );
+
+      expect(editableText(tester).style.fontFamily, 'TestFont');
+    });
+
+    testWidgets('component theme keeps a package custom font family', (
+      tester,
+    ) async {
+      await tester.pumpWidget(
+        wrap(
+          TStepper(value: 1, onChanged: (_) {}),
+          stepperTheme: const TStepperThemeData(
+            textStyle: TextStyle(
+              fontFamily: 'TestFont',
+              package: 'test_package',
+            ),
+          ),
+        ),
+      );
+
       expect(
-        tester.widget<Icon>(find.byIcon(TIcons.plus)).color,
-        Colors.green,
+        editableText(tester).style.fontFamily,
+        'packages/test_package/TestFont',
       );
     });
 
-    testWidgets('bare TThemeData supplies token background fallback',
-        (tester) async {
-      final token = TThemeData.defaultData().copyWithTThemeData(
-        'stepper-test',
-        colorMap: {
-          'bgColorSecondaryContainer': Colors.orange,
-        },
-      );
-      await tester.pumpWidget(wrap(
-        TStepper(
-          value: 1,
-          variant: TStepperVariant.filled,
-          onChanged: (_) {},
+    testWidgets('component theme font overrides an inherited package font', (
+      tester,
+    ) async {
+      await tester.pumpWidget(
+        wrap(
+          DefaultTextStyle(
+            style: const TextStyle(
+              fontFamily: 'InheritedFont',
+              package: 'inherited_package',
+            ),
+            child: TStepper(value: 1, onChanged: (_) {}),
+          ),
+          stepperTheme: const TStepperThemeData(
+            textStyle: TextStyle(fontFamily: 'TestFont', fontSize: 18),
+          ),
         ),
-        token: token,
-        bareTheme: true,
-      ));
+      );
+
+      expect(editableText(tester).style.fontFamily, 'TestFont');
+      expect(editableText(tester).style.fontSize, 18);
+    });
+
+    testWidgets('theme-only font size retains TDesign number font', (
+      tester,
+    ) async {
+      await tester.pumpWidget(
+        wrap(
+          DefaultTextStyle(
+            style: const TextStyle(
+              fontFamily: 'InheritedFont',
+              package: 'inherited_package',
+            ),
+            child: TStepper(value: 1, onChanged: (_) {}),
+          ),
+          stepperTheme: const TStepperThemeData(
+            textStyle: TextStyle(fontSize: 18),
+          ),
+        ),
+      );
+
+      expect(
+        editableText(tester).style.fontFamily,
+        'packages/tdesign_flutter/TCloudNumber',
+      );
+      expect(editableText(tester).style.fontSize, 18);
+    });
+
+    testWidgets('bare TThemeData supplies token background fallback', (
+      tester,
+    ) async {
+      final token = TThemeData.defaultData().copyWith(
+        name: 'stepper-test',
+        colorMap: {'bgColorSecondaryContainer': Colors.orange},
+      );
+      await tester.pumpWidget(
+        wrap(
+          TStepper(
+            value: 1,
+            variant: TStepperVariant.filled,
+            onChanged: (_) {},
+          ),
+          token: token,
+          bareTheme: true,
+        ),
+      );
 
       expect(inputDecoration(tester).color, Colors.orange);
     });
 
     test('TStepperThemeData validates, copies and interpolates all fields', () {
       const base = TStepperThemeData(
-        size: TStepperSize.small,
-        variant: TStepperVariant.normal,
         inputWidth: 60,
         controlSize: 20,
         iconSize: 12,
@@ -477,8 +740,6 @@ void main() {
         textStyle: TextStyle(fontSize: 10),
       );
       const other = TStepperThemeData(
-        size: TStepperSize.large,
-        variant: TStepperVariant.outline,
         inputWidth: 100,
         controlSize: 26,
         iconSize: 20,
@@ -493,26 +754,15 @@ void main() {
         textStyle: TextStyle(fontSize: 16),
       );
 
-      expect(
-          base.copyWith(size: TStepperSize.medium).size, TStepperSize.medium);
-      expect(
-        base.copyWith(variant: TStepperVariant.filled).variant,
-        TStepperVariant.filled,
-      );
       expect(base.copyWith(inputWidth: 72).inputWidth, 72);
       expect(base.lerp(null, 0.5), same(base));
-      expect(base.lerp(other, 0.75).size, TStepperSize.large);
-      expect(base.lerp(other, 0.75).variant, TStepperVariant.outline);
       expect(base.lerp(other, 0.5).inputWidth, 80);
       expect(base.lerp(other, 0.5).controlSize, 23);
       expect(base.lerp(other, 0.5).iconSize, 16);
       expect(base.lerp(other, 0.5).spacing, 6);
       expect(base.lerp(other, 0.5).borderWidth, 1.5);
       expect(base.lerp(other, 0.5).textStyle?.fontSize, 13);
-      expect(
-        () => TStepperThemeData(inputWidth: 0),
-        throwsAssertionError,
-      );
+      expect(() => TStepperThemeData(inputWidth: 0), throwsAssertionError);
     });
   });
 }

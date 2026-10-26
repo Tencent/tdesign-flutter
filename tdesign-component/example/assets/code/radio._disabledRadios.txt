@@ -1,9 +1,0 @@
-Widget _disabledRadios(BuildContext context) {
-    return const TRadioGroup<int>(
-      value: 0,
-      options: [
-        TRadioOption(value: 0, label: '单选'),
-        TRadioOption(value: 1, label: '单选'),
-      ],
-    );
-  }

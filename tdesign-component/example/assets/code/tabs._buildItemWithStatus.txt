@@ -1,8 +1,0 @@
-Widget _buildItemWithStatus(BuildContext context) {
-    const tabs = [
-      TTab(text: '选中'),
-      TTab(text: '默认'),
-      TTab(text: '禁用', enabled: false),
-    ];
-    return const DefaultTabController(length: 3, child: TTabsBar(tabs: tabs));
-  }

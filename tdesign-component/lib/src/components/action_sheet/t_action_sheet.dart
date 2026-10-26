@@ -4,6 +4,7 @@ import '../../util/context_extension.dart';
 import '../popup/t_popup.dart';
 import 't_action_sheet_grid.dart';
 import 't_action_sheet_item.dart';
+import 't_action_sheet_item_widget.dart';
 import 't_action_sheet_list.dart';
 import 't_action_sheet_theme_data.dart';
 import 't_action_sheet_types.dart';
@@ -13,7 +14,11 @@ export 't_action_sheet_types.dart';
 
 enum _TActionSheetLayout { list, grid }
 
-/// 动作面板命令式入口
+/// 动作面板命令式入口。
+///
+/// 点击启用项目时先调用 onSelected，再请求关闭；回调为空时仍会关闭。
+/// 点击取消按钮先调用 onCancel，再请求关闭；onClosed 在关闭流程完成后通知。
+/// 各方法返回 TPopupHandle，可主动关闭面板。
 final class TActionSheet {
   const TActionSheet._();
 
@@ -30,6 +35,9 @@ final class TActionSheet {
   /// [onCancel] 点击取消时回调。
   /// [onClosed] 面板关闭后回调。
   /// [onSelected] 点击动作时回调。
+  ///
+  /// ## 返回值
+  /// 已经发起打开的动作面板控制句柄，可用于查询状态与关闭面板。
   static TPopupHandle showList<T>(
     BuildContext context, {
     required List<TActionSheetItem<T>> items,
@@ -71,10 +79,13 @@ final class TActionSheet {
   /// [closeOnOverlayClick] 点击蒙层是否关闭。
   /// [useSafeArea] 是否避让系统安全区。
   /// [layout] 普通、分页或横向滚动宫格布局。
-  /// [itemHeight] 宫格项目高度。
+  /// [itemHeight] 宫格项目高度；显式值保持固定，默认至少 96 并随内置文字增长。
   /// [onCancel] 点击取消时回调。
   /// [onClosed] 面板关闭后回调。
   /// [onSelected] 点击动作时回调。
+  ///
+  /// ## 返回值
+  /// 已经发起打开的动作面板控制句柄，可用于查询状态与关闭面板。
   static TPopupHandle showGrid<T>(
     BuildContext context, {
     required List<TActionSheetItem<T>> items,
@@ -108,6 +119,80 @@ final class TActionSheet {
     );
   }
 
+  /// 显示带标题分组的横向滚动宫格动作面板。
+  /// [context] 用于查找承载弹层的 Navigator。
+  /// [sections] 带标题的分组列表，每组独立横向滚动。
+  /// [cancelText] 取消按钮文字，为 null 时使用本地化文案。
+  /// [showCancel] 是否显示取消按钮。
+  /// [showOverlay] 是否显示蒙层。
+  /// [closeOnOverlayClick] 点击蒙层是否关闭。
+  /// [useSafeArea] 是否避让系统安全区。
+  /// [itemWidth] 横向列表单项宽度，默认为 80。
+  /// [itemHeight] 单项高度；为 null 时使用组件主题，默认至少为 96，并随内置标签的自然高度增长。
+  /// [onCancel] 点击取消时回调。
+  /// [onClosed] 面板关闭后回调。
+  /// [onSelected] 点击项目时回传原始项目。
+  ///
+  /// ## 返回值
+  /// 已经发起打开的动作面板控制句柄，可用于查询状态与关闭面板。
+  static TPopupHandle showGridSections<T>(
+    BuildContext context, {
+    required List<TActionSheetGridSection<T>> sections,
+    String? cancelText,
+    bool showCancel = true,
+    bool showOverlay = true,
+    bool closeOnOverlayClick = true,
+    bool useSafeArea = true,
+    double itemWidth = 80,
+    double? itemHeight,
+    VoidCallback? onCancel,
+    VoidCallback? onClosed,
+    TActionSheetOnSelected<T>? onSelected,
+  }) {
+    assert(itemWidth > 0, 'itemWidth must be greater than 0');
+    final theme = Theme.of(context).extension<TActionSheetThemeData>();
+    final effectiveCancelText = cancelText ?? context.resource.cancel;
+    final effectiveItemHeight =
+        itemHeight ??
+        theme?.gridItemHeight ??
+        actionSheetGridItemHeight(
+          context,
+          sections.expand((section) => section.items),
+        );
+    final popupHeight = TActionSheetSectionGrid.preferredPopupHeight(
+      context,
+      sectionCount: sections.length,
+      titles: sections.map((section) => section.title),
+      itemHeight: effectiveItemHeight,
+      showCancel: showCancel,
+      cancelText: effectiveCancelText,
+    );
+    return TPopup.show(
+      context,
+      options: TPopupOptions.bottom(
+        height: popupHeight,
+        overlay: TPopupOverlayConfig(
+          showOverlay: showOverlay,
+          closeOnClick: showOverlay && closeOnOverlayClick,
+          color: showOverlay ? theme?.barrierColor : Colors.transparent,
+        ),
+        radius: theme?.panelRadius,
+        useSafeArea: useSafeArea,
+        onClosed: onClosed,
+        child: TActionSheetSectionGrid<T>(
+          sections: sections,
+          cancelText: effectiveCancelText,
+          itemWidth: itemWidth,
+          itemHeight: effectiveItemHeight,
+          showCancel: showCancel,
+          onCancel: onCancel,
+          onSelected: onSelected,
+          useSafeArea: false,
+        ),
+      ),
+    );
+  }
+
   static TPopupHandle _show<T>(
     BuildContext context, {
     required _TActionSheetLayout layout,
@@ -128,13 +213,17 @@ final class TActionSheet {
     final theme = Theme.of(context).extension<TActionSheetThemeData>();
     final effectiveAlign = align ?? TActionSheetAlign.center;
     final effectiveCancelText = cancelText ?? context.resource.cancel;
-    final effectiveItemHeight = itemHeight ?? theme?.gridItemHeight ?? 96;
+    final effectiveItemHeight =
+        itemHeight ??
+        theme?.gridItemHeight ??
+        actionSheetGridItemHeight(context, items);
     final popupHeight = switch (layout) {
       _TActionSheetLayout.list => TActionSheetList.preferredPopupHeight(
         context,
         items: items,
         subtitle: subtitle,
         showCancel: showCancel,
+        cancelText: effectiveCancelText,
       ),
       _TActionSheetLayout.grid => TActionSheetGrid.preferredPopupHeight(
         context,
@@ -142,6 +231,7 @@ final class TActionSheet {
         layout: gridLayout,
         itemHeight: effectiveItemHeight,
         showCancel: showCancel,
+        cancelText: effectiveCancelText,
       ),
     };
 

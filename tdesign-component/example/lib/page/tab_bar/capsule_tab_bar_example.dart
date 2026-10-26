@@ -1,0 +1,49 @@
+import 'package:tdesign_flutter/tdesign_flutter.dart';
+import '../../annotation/example_code.dart';
+import '../../base/example_widget.dart';
+
+@ExampleCode(group: 'tabBar')
+class CapsuleTabBarExample extends StatefulWidget {
+  const CapsuleTabBarExample({super.key});
+
+  @override
+  State<CapsuleTabBarExample> createState() => _CapsuleTabBarExampleState();
+}
+
+class _CapsuleTabBarExampleState extends State<CapsuleTabBarExample> {
+  /// 核心片段：导入 material.dart 和 tdesign_flutter.dart。
+  /// 在 StatefulWidget 的 State 中声明 `int _capsuleValue = 0;`，
+  /// 从 build 调用本方法；状态由 State 持有并通过 setState 重建。
+  Widget _capsuleTabBar(BuildContext context) {
+    return TTabBar(
+      type: TTabBarType.iconText,
+      style: TTabBarStyle.capsule,
+      useSafeArea: false,
+      value: _capsuleValue,
+      onChanged: (newValue) => setState(() => _capsuleValue = newValue),
+      navigationTabs: List.generate(
+        4,
+        (index) => TTabBarItemConfig(
+          tabText: 'Item',
+          selectedIcon: const Icon(TIcons.app),
+          unselectedIcon: const Icon(TIcons.app),
+          badge: index == 0
+              ? const TBadgeConfig(variant: TBadgeVariant.dot)
+              : null,
+          allowMultipleTaps: true,
+          onTap: () => TToast.showText(
+            '第 ${index + 1} 项',
+            context: context,
+          ),
+        ),
+      ),
+    );
+  }
+
+  int _capsuleValue = 0;
+
+  @override
+  Widget build(BuildContext context) {
+    return _capsuleTabBar(context);
+  }
+}

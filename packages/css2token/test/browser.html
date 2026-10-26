@@ -1,0 +1,34 @@
+<!doctype html>
+<html lang="zh">
+<head>
+  <meta charset="utf-8">
+  <title>Dart css2token 浏览器验收</title>
+  <style>
+    body { font: 16px system-ui; padding: 24px; background: #fff; color: #222; }
+    body.dark { background: #171717; color: #eee; }
+    button { padding: 8px; margin: 8px; }
+    pre { line-height: 1.65; }
+  </style>
+</head>
+<body>
+  <h1>Dart CSS → Flutter Token 浏览器验收</h1>
+  <button onclick="document.body.className='light'">Light</button>
+  <button onclick="document.body.className='dark'">Dark</button>
+  <p id="summary">等待 Dart 转换…</p>
+  <pre id="results"></pre>
+  <script type="application/json" id="fixtures"></script>
+  <script>
+    fetch('themes.json')
+      .then(response => response.text())
+      .then(text => {
+        document.getElementById('fixtures').textContent = text;
+        const script = document.createElement('script');
+        script.src = 'browser_probe.js';
+        document.body.append(script);
+      })
+      .catch(error => {
+        document.getElementById('summary').textContent = `加载失败：${error}`;
+      });
+  </script>
+</body>
+</html>

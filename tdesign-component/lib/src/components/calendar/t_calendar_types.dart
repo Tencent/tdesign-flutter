@@ -21,11 +21,24 @@ enum DateSelectType {
 
 /// 每周的起始日。
 enum TCalendarFirstDayOfWeek {
+  /// 星期日作为一周第一天。
   sunday,
+
+  /// 星期一作为一周第一天。
   monday,
+
+  /// 星期二作为一周第一天。
   tuesday,
+
+  /// 星期三作为一周第一天。
   wednesday,
+
+  /// 星期四作为一周第一天。
   thursday,
+
+  /// 星期五作为一周第一天。
   friday,
+
+  /// 星期六作为一周第一天。
   saturday,
 }

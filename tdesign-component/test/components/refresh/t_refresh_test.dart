@@ -1,14 +1,20 @@
 import 'dart:async';
 
 import 'package:easy_refresh/easy_refresh.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:tdesign_flutter/src/components/loading/t_circle_indicator.dart';
 import 'package:tdesign_flutter/tdesign_flutter.dart';
 
 void main() {
-  Widget wrap(Widget child, {TLoadingThemeData? loadingTheme}) {
-    var theme = TThemeBuilder.light(TThemeData.defaultData());
+  Widget wrap(
+    Widget child, {
+    TLoadingThemeData? loadingTheme,
+    Brightness brightness = Brightness.light,
+  }) {
+    final tokens = TThemeData.defaultData();
+    var theme = brightness == Brightness.light
+        ? TThemeBuilder.light(tokens)
+        : TThemeBuilder.dark(tokens);
     if (loadingTheme != null) {
       theme = theme.mergeExtension(loadingTheme);
     }
@@ -43,8 +49,54 @@ void main() {
     );
   }
 
+  for (final replace in [false, true]) {
+    testWidgets('stale refresh owner does not unbind latest owner: $replace', (
+      tester,
+    ) async {
+      final controller = TPullDownRefreshController();
+      final replacement = TPullDownRefreshController();
+      var calls = 0;
+      Widget host(bool updated) => wrap(
+        Column(
+          children: [
+            if (!updated || replace)
+              Expanded(
+                child: TPullDownRefresh(
+                  key: const ValueKey('old'),
+                  controller: updated ? replacement : controller,
+                  onRefresh: () async {},
+                  child: ListView(children: const [Text('old')]),
+                ),
+              ),
+            Expanded(
+              child: TPullDownRefresh(
+                key: const ValueKey('latest'),
+                controller: controller,
+                onRefresh: () async {
+                  calls++;
+                },
+                child: ListView(children: const [Text('latest')]),
+              ),
+            ),
+          ],
+        ),
+      );
+      await tester.pumpWidget(host(false));
+      expect(tester.takeException(), isNull);
+      await tester.pumpWidget(host(true));
+      final refresh = controller.refresh();
+      await tester.pumpAndSettle();
+      await refresh;
+      await tester.pump(const Duration(seconds: 1));
+      expect(calls, 1);
+      await tester.pumpWidget(const SizedBox());
+      await controller.refresh();
+      expect(calls, 1);
+    });
+  }
+
   group('TPullDownRefresh 最小化组件', () {
-    test('跨端可见行为默认值与小程序一致', () {
+    test('可见行为默认值符合组件契约', () {
       const widget = TPullDownRefresh(child: SizedBox());
       expect(widget.loadingBarHeight, 50);
       expect(widget.maxBarHeight, 80);
@@ -282,6 +334,27 @@ void main() {
   });
 
   group('TPullDownRefresh 交互状态', () {
+    testWidgets('下拉提示文字读取占位色 Token', (tester) async {
+      await tester.pumpWidget(wrap(pullDownRefresh(onRefresh: () async {})));
+      await tester.pump(const Duration(seconds: 1));
+
+      final gesture = await tester.startGesture(const Offset(200, 150));
+      await gesture.moveBy(const Offset(0, 40));
+      await tester.pump(const Duration(milliseconds: 100));
+
+      expect(
+        find.byWidgetPredicate((widget) => widget is TText),
+        findsOneWidget,
+      );
+      final tip = tester.widget<TText>(
+        find.byWidgetPredicate((widget) => widget is TText),
+      );
+      expect(tip.style?.color, TThemeData.defaultData().textColorPlaceholder);
+
+      await gesture.cancel();
+      await tester.pumpAndSettle();
+    });
+
     testWidgets('下拉时刷新头与滚动内容同步下移', (tester) async {
       await tester.pumpWidget(
         wrap(pullDownRefresh(onRefresh: () => Completer<void>().future)),
@@ -347,6 +420,7 @@ void main() {
           ),
           loadingTheme: const TLoadingThemeData(
             iconColor: Colors.red,
+            textColor: Colors.green,
             duration: 1234,
           ),
         ),
@@ -364,6 +438,49 @@ void main() {
       );
       expect(indicator.color, Colors.red);
       expect(indicator.duration, 1234);
+      expect(tester.widget<TLoading>(find.byType(TLoading)).size, 25);
+      expect(indicator.size, 25);
+      final loadingText = tester.widget<TText>(
+        find.descendant(
+          of: find.byType(TLoading),
+          matching: find.byWidgetPredicate((widget) => widget is TText),
+        ),
+      );
+      expect(loadingText.style?.color, Colors.green);
+      completer.complete();
+      await tester.pump(const Duration(seconds: 1));
+    });
+
+    testWidgets('暗色刷新文案使用上下文禁用色且不改变独立 Loading 默认值', (tester) async {
+      final completer = Completer<void>();
+      final controller = TPullDownRefreshController();
+      final tokens = TThemeData.defaultData();
+      await tester.pumpWidget(
+        wrap(
+          pullDownRefresh(
+            onRefresh: () => completer.future,
+            controller: controller,
+          ),
+          brightness: Brightness.dark,
+        ),
+      );
+
+      unawaited(controller.refresh());
+      for (var i = 0; i < 10; i++) {
+        await tester.pump(const Duration(milliseconds: 100));
+        if (find.byType(TLoading).evaluate().isNotEmpty) {
+          break;
+        }
+      }
+
+      final loadingText = tester.widget<TText>(
+        find.descendant(
+          of: find.byType(TLoading),
+          matching: find.byWidgetPredicate((widget) => widget is TText),
+        ),
+      );
+      expect(loadingText.style?.color, tokens.dark!.textColorDisabled);
+
       completer.complete();
       await tester.pump(const Duration(seconds: 1));
     });
@@ -397,7 +514,7 @@ void main() {
   });
 
   group('loadMore 触底事件', () {
-    testWidgets('触底加载不渲染小程序未定义的可见 footer', (tester) async {
+    testWidgets('触底加载不渲染可见 footer', (tester) async {
       final loadCompleter = Completer<void>();
       await tester.pumpWidget(
         wrap(

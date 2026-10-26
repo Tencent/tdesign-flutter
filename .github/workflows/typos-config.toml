@@ -1,9 +1,14 @@
 default.check-filename = true
+# Preserve the truncated node name returned by Figma in the frozen evidence snapshot.
+default.extend-ignore-re = ['arrow=true, description=false, leftIcon=false, note=false, requir']
 
 [default.extend-words]
 "BA" = "BA"
 "PA" = "PA"
 "heping" = "heping"
+# Keep the miniprogram's published tree-select Token identifiers verbatim in audit data.
+"colum" = "colum"
+"Colum" = "Colum"
 
 [files]
 extend-exclude = ["project.pbxproj"]

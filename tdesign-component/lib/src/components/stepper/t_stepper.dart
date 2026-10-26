@@ -5,7 +5,10 @@ import 'package:flutter/services.dart' show TextInputFormatter;
 import 'package:tdesign_flutter_icons/tdesign_flutter_icons.dart' show TIcons;
 
 import '../../theme/t_colors.dart';
+import '../../theme/t_fonts.dart';
+import '../../theme/t_internal_material.dart';
 import '../../theme/t_radius.dart';
+import '../../theme/t_sizes.dart';
 import '../../theme/t_theme.dart';
 import 't_stepper_defaults.dart';
 import 't_stepper_theme_data.dart';
@@ -14,50 +17,15 @@ import 't_stepper_types.dart';
 
 export 't_stepper_types.dart';
 
-/// TDesign 数值步进器。
-///
-/// 组件严格受控：[value] 是唯一数据源，按钮、输入提交及失焦只通过
-/// [onChanged] 请求变更，父组件需要以新 [value] 重建组件。若父组件不接受
-/// 新值，输入内容会恢复为当前 [value]。
-///
-/// [onChanged] 为 null 时输入框和两个按钮整组禁用。样式优先级为实例
-/// [size]/[variant]、[TStepperThemeData]、Flutter 子树及全局 ThemeData，
-/// 最后回退 TDesign token。
 class TStepper extends StatefulWidget {
   const TStepper({
     super.key,
-
-    /// 受控数值，必须位于 [min] 与 [max] 之间。
     required this.value,
-
-    /// 数值变化请求。
-    ///
-    /// 点击按钮、提交有效输入或输入框失焦时触发；一次操作最多触发一次。
-    /// 为 null 时整组禁用。
     this.onChanged,
-
-    /// 最小值，必须小于或等于 [max]。
     this.min = 0,
-
-    /// 最大值，必须大于或等于 [min]。
     this.max = 100,
-
-    /// 加减按钮使用的步长，必须大于 0。
-    ///
-    /// 输入提交不要求是步长的整数倍，但会限制在 [min] 与 [max] 之间。
-    /// 编辑时以合法输入草稿作为步进起点，并据此判断按钮是否达到边界。
     this.step = 1,
-
-    /// 组件尺寸。
-    ///
-    /// 为空时依次使用 [TStepperThemeData.size] 和
-    /// [TStepperSize.medium]。
     this.size,
-
-    /// 组件形态。
-    ///
-    /// 为空时依次使用 [TStepperThemeData.variant] 和
-    /// [TStepperVariant.normal]。
     this.variant,
   }) : assert(min <= max),
        assert(value >= min && value <= max),
@@ -68,7 +36,10 @@ class TStepper extends StatefulWidget {
   /// 父组件需要在 [onChanged] 后以新值重建组件，否则输入内容会恢复。
   final num value;
 
-  /// 数值变化请求；一次操作最多触发一次，为 null 时整组禁用。
+  /// 数值变化请求。
+  ///
+  /// 点击按钮、提交有效输入或输入框失焦时触发；一次操作最多触发一次。
+  /// 为 null 时加减按钮禁用、编辑器只读；不发出数值变化请求。
   final ValueChanged<num>? onChanged;
 
   /// 最小值，必须小于或等于 [max]。
@@ -77,15 +48,20 @@ class TStepper extends StatefulWidget {
   /// 最大值，必须大于或等于 [min]。
   final num max;
 
-  /// 加减按钮使用的正数步长；直接输入不要求是步长的整数倍。
+  /// 加减按钮使用的步长，必须大于 0。
   ///
-  /// 编辑时合法草稿同时决定步进起点与按钮的边界状态。
+  /// 输入提交不要求是步长的整数倍，但会限制在 [min] 与 [max] 之间。
+  /// 编辑时以合法输入草稿作为步进起点，并据此判断按钮是否达到边界。
   final num step;
 
-  /// 组件尺寸；为空时依次使用组件主题和 [TStepperSize.medium]。
+  /// 组件尺寸。
+  ///
+  /// 为空时以 [TStepperSize.medium] 为最小尺寸，内置文字放大时可增长；显式 size 保持固定。
   final TStepperSize? size;
 
-  /// 组件形态；为空时依次使用组件主题和 [TStepperVariant.normal]。
+  /// 组件形态。
+  ///
+  /// 为空时使用 [TStepperVariant.normal]。
   final TStepperVariant? variant;
 
   @override
@@ -408,7 +384,7 @@ class _StepperButton extends StatelessWidget {
               borderRadius: borderRadius,
             ),
             child: Center(
-              child: Icon(
+              child: TInternalIcon(
                 icon,
                 size: style.iconSize,
                 color: disabled
@@ -491,10 +467,61 @@ class _StepperStyle {
   final TextStyle disabledTextStyle;
 
   static _StepperStyle resolve(BuildContext context, TStepper widget) {
-    return _resolveTheme(
+    final style = _resolveTheme(
       context,
       widget,
       Theme.of(context).extension<TStepperThemeData>(),
+    );
+    assert(_debugTextGeometryFits(style));
+    return style;
+  }
+
+  static bool _debugTextGeometryFits(_StepperStyle style) {
+    final fontSize = style.textStyle.fontSize!;
+    final lineHeight = fontSize * style.textStyle.height!;
+    assert(
+      fontSize <= style.controlSize,
+      'TStepper resolved fontSize ($fontSize) must not exceed '
+      'controlSize (${style.controlSize}).',
+    );
+    assert(
+      lineHeight <= style.controlSize,
+      'TStepper resolved text line height ($lineHeight) must not exceed '
+      'controlSize (${style.controlSize}).',
+    );
+    return true;
+  }
+
+  /// Flutter 的 [TextStyle.merge] 会在覆盖样式未设置 `package` 时保留底层
+  /// 样式的私有 package。把公开字体族（已包含 package 前缀）重新构造成不
+  /// 携带私有 package 的样式，确保更高优先级的字体族不会被错误归入旧包。
+  static TextStyle _flattenFontPackage(TextStyle style) {
+    return TextStyle(
+      inherit: style.inherit,
+      color: style.color,
+      backgroundColor: style.backgroundColor,
+      fontSize: style.fontSize,
+      fontWeight: style.fontWeight,
+      fontStyle: style.fontStyle,
+      letterSpacing: style.letterSpacing,
+      wordSpacing: style.wordSpacing,
+      textBaseline: style.textBaseline,
+      height: style.height,
+      leadingDistribution: style.leadingDistribution,
+      locale: style.locale,
+      foreground: style.foreground,
+      background: style.background,
+      shadows: style.shadows,
+      fontFeatures: style.fontFeatures,
+      fontVariations: style.fontVariations,
+      decoration: style.decoration,
+      decorationColor: style.decorationColor,
+      decorationStyle: style.decorationStyle,
+      decorationThickness: style.decorationThickness,
+      debugLabel: style.debugLabel,
+      fontFamily: style.fontFamily,
+      fontFamilyFallback: style.fontFamilyFallback,
+      overflow: style.overflow,
     );
   }
 
@@ -510,61 +537,98 @@ class _StepperStyle {
         componentTheme.progress,
       );
     }
-    final materialTheme = Theme.of(context);
     final token = context.tTheme;
-    final size = widget.size ?? componentTheme?.size ?? TStepperSize.medium;
-    final variant =
-        widget.variant ?? componentTheme?.variant ?? TStepperVariant.normal;
-    final geometry = stepperGeometry(size);
-    final defaultTextStyle = context.tExplicitDefaultTextStyle;
-    final materialTextStyle =
-        materialTheme.tExplicitTextTheme?.bodySmall ?? const TextStyle();
-    final inheritedFontFamily =
-        defaultTextStyle?.fontFamily ?? materialTextStyle.fontFamily;
+    final size = widget.size ?? TStepperSize.medium;
+    final variant = widget.variant ?? TStepperVariant.normal;
+    final baseGeometry = stepperGeometry(size);
+    final font = switch (size) {
+      TStepperSize.small => token.fontBodyExtraSmall,
+      TStepperSize.medium => token.fontBodySmall,
+      TStepperSize.large => token.fontBodyLarge,
+    };
+    final geometry = (
+      controlSize: baseGeometry.controlSize,
+      inputWidth: baseGeometry.inputWidth,
+      iconSize: baseGeometry.iconSize,
+      fontSize: font?.size ?? baseGeometry.fontSize,
+      lineHeight: font == null
+          ? baseGeometry.lineHeight
+          : font.size * font.height,
+    );
+    var controlSize = componentTheme?.controlSize ?? geometry.controlSize;
+    final grows =
+        componentTheme?.controlSize == null &&
+        (widget.size == null || geometry.fontSize > geometry.controlSize);
+    final rawComponentTextStyle = componentTheme?.textStyle;
+    final componentTextStyle = rawComponentTextStyle == null
+        ? null
+        : _flattenFontPackage(rawComponentTextStyle);
+    // Flutter asset used by Stepper.
+    const resolvedNumberFontFamily = 'packages/tdesign_flutter/TCloudNumber';
     final foregroundColor =
-        componentTheme?.foregroundColor ??
-        defaultTextStyle?.color ??
-        materialTextStyle.color ??
-        token.textColorPrimary;
+        componentTheme?.foregroundColor ?? token.textColorPrimary;
     final disabledForegroundColor =
-        componentTheme?.disabledForegroundColor ?? token.textDisabledColor;
-    final textStyle = materialTextStyle
-        .merge(defaultTextStyle)
+        componentTheme?.disabledForegroundColor ?? token.textColorDisabled;
+    final themedTextStyle = const TextStyle()
         .copyWith(
           fontSize: geometry.fontSize,
           color: foregroundColor,
-          fontFamily: inheritedFontFamily,
+          fontFamily: resolvedNumberFontFamily,
           letterSpacing: 0,
-          height: 1,
         )
-        .merge(componentTheme?.textStyle);
-    final inputTheme = materialTheme.inputDecorationTheme;
-    final inputFillColor = inputTheme.fillColor;
-    final borderColor =
-        componentTheme?.borderColor ??
-        inputTheme.enabledBorder?.borderSide.color ??
-        token.componentBorderColor;
+        .merge(componentTextStyle);
+    final resolvedFontSize = themedTextStyle.fontSize ?? geometry.fontSize;
+    final explicitTextHeight = componentTheme?.textStyle?.height;
+    final resolvedLineHeight = grows && resolvedFontSize > controlSize
+        ? math.max(geometry.lineHeight, resolvedFontSize)
+        : math.min(geometry.lineHeight, controlSize);
+    final textStyle = themedTextStyle.copyWith(
+      fontSize: resolvedFontSize,
+      // Figma 的三档文字分别使用 10/16、12/20、16/24 行盒。Theme 只覆盖
+      // 字号时，按最终字号重新计算倍数；控件高度变小时则收敛到可用高度，
+      // 避免保留基于默认字号计算的旧倍数而裁切文字和光标。
+      height: explicitTextHeight ?? resolvedLineHeight / resolvedFontSize,
+      // 将额外行高均分到字形上下，避免 Android 按字体 ascent/descent
+      // 比例分配 leading 后产生视觉上移。
+      leadingDistribution:
+          componentTheme?.textStyle?.leadingDistribution ??
+          TextLeadingDistribution.even,
+    );
+    final scaler = MediaQuery.textScalerOf(context);
+    if (grows) {
+      controlSize = math.max(
+        controlSize,
+        math.max(resolvedFontSize, resolvedFontSize * textStyle.height!),
+      );
+      controlSize = math.max(
+        controlSize,
+        math.max(
+          scaler.scale(resolvedFontSize),
+          scaler.scale(resolvedFontSize) * textStyle.height!,
+        ),
+      );
+    }
+    final widthGrowth = grows
+        ? math.max(1.0, scaler.scale(resolvedFontSize) / resolvedFontSize)
+        : 1.0;
+    final borderColor = componentTheme?.borderColor ?? token.componentBorder;
 
     return _StepperStyle(
       variant: variant,
-      controlSize: componentTheme?.controlSize ?? geometry.controlSize,
-      inputWidth: componentTheme?.inputWidth ?? geometry.inputWidth,
+      controlSize: controlSize,
+      inputWidth:
+          componentTheme?.inputWidth ?? geometry.inputWidth * widthGrowth,
       iconSize: componentTheme?.iconSize ?? geometry.iconSize,
-      spacing: componentTheme?.spacing ?? stepperSpacing,
+      spacing: componentTheme?.spacing ?? token.size2,
       borderRadius:
           componentTheme?.borderRadius ??
           BorderRadius.circular(token.radiusSmall),
       borderWidth: componentTheme?.borderWidth ?? stepperBorderWidth,
       foregroundColor: foregroundColor,
       disabledForegroundColor: disabledForegroundColor,
-      iconColor:
-          componentTheme?.foregroundColor ??
-          context.tExplicitIconTheme?.color ??
-          foregroundColor,
+      iconColor: foregroundColor,
       backgroundColor:
-          componentTheme?.backgroundColor ??
-          (inputFillColor == Colors.transparent ? null : inputFillColor) ??
-          token.bgColorSecondaryContainer,
+          componentTheme?.backgroundColor ?? token.bgColorSecondaryContainer,
       disabledBackgroundColor:
           componentTheme?.disabledBackgroundColor ??
           token.bgColorComponentDisabled,

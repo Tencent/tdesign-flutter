@@ -5,9 +5,13 @@ import 'package:flutter/material.dart';
 import 'package:tdesign_flutter_icons/tdesign_flutter_icons.dart';
 
 import '../../theme/t_colors.dart';
+import '../../theme/t_fonts.dart';
+import '../../theme/t_internal_material.dart';
+import '../../theme/t_overlay_themes.dart';
 import '../../theme/t_radius.dart';
 import '../../theme/t_shadows.dart';
 import '../../theme/t_theme.dart';
+import '../text/t_text_styled.dart';
 import 't_message_theme_data.dart';
 import 't_message_types.dart';
 
@@ -52,12 +56,6 @@ final class _TMessageSlot {
 
 enum _TMessageDismissCause { programmatic, replaced, widget, unmounted }
 
-/// 顶部消息组件。
-///
-/// 直接构造即渲染消息，并应作为 [Stack] 的子组件使用。页面内的展示与隐藏由父级
-/// Widget 树插入或移除组件；使用自动关闭或关闭按钮时，可在 [onDismissed] 中同步
-/// 移除父级状态。全局 Overlay 消息使用 [TMessage.show]，并通过返回的
-/// [TMessageHandle] 关闭。
 class TMessage extends StatefulWidget {
   static final Expando<_TMessageSlot> _defaultSlots = Expando<_TMessageSlot>(
     'TMessage.defaultSlots',
@@ -110,10 +108,12 @@ class TMessage extends StatefulWidget {
 
   /// 期望的屏幕绝对坐标。
   ///
-  /// [useSafeArea] 为 true 时，最终消息矩形会被约束在安全可视区域内。
+  /// 未显式传入时，消息保留 16 逻辑像素水平外间距；[useSafeArea] 为 true 时，
+  /// 显式坐标也会被约束在含该外间距的系统安全可视区域内。
   final Offset? offset;
 
-  /// 是否避让系统安全区，默认为 true。
+  /// 是否避让系统安全区，默认为 true。设为 false 时显式 [offset] 保持绝对坐标，
+  /// 消息宽度仍使用扣除 16 像素水平外间距后的默认宽度。
   final bool useSafeArea;
 
   /// 消息语义状态
@@ -127,13 +127,16 @@ class TMessage extends StatefulWidget {
 
   /// 消息完成关闭、被句柄移除、被新消息替换或 Overlay 卸载时触发。
   ///
-  /// 每次展示最多触发一次。
+  /// 每次展示最多触发一次；直接构造的消息应放在 Stack 中，关闭后由父级移除组件。
   final VoidCallback? onDismissed;
 
   /// 在 Overlay 中显示消息并返回控制句柄。
   ///
   /// 未显式传入 [offset] 时，新消息会替换同一 Overlay 中上一条默认位置的消息；
   /// 显式传入不同 [offset] 的消息可以同时展示。
+  ///
+  /// ## 返回值
+  /// 已插入 Overlay 的消息控制句柄，可用于查询显示状态与主动关闭。
   static TMessageHandle show({
     /// 用于查找 Overlay 的上下文。
     required BuildContext context,
@@ -151,6 +154,8 @@ class TMessage extends StatefulWidget {
     TMessageStatus status = TMessageStatus.info,
     VoidCallback? onCloseButtonPressed,
     VoidCallback? onDurationEnd,
+
+    /// 消息完成关闭、被句柄移除、被新消息替换或 Overlay 卸载时触发；每次展示最多一次。
     VoidCallback? onDismissed,
     bool useSafeArea = true,
   }) {
@@ -162,7 +167,7 @@ class TMessage extends StatefulWidget {
     final messageKey = GlobalKey<_TMessageState>();
     late OverlayEntry entry;
     final overlay = Overlay.of(context);
-    final captured = InheritedTheme.capture(from: context, to: overlay.context);
+    final captured = TOverlayThemes.capture(from: context, to: overlay.context);
     final slot = offset == null
         ? (_defaultSlots[overlay] ??= _TMessageSlot())
         : null;
@@ -188,14 +193,18 @@ class TMessage extends StatefulWidget {
         slot?.handle = null;
         _defaultSlots[overlay] = null;
       }
-      if (cause != _TMessageDismissCause.unmounted) {
-        entry.remove();
+      entry.remove();
+      if (cause == _TMessageDismissCause.unmounted) {
+        scheduleMicrotask(entry.dispose);
+      } else {
+        entry.dispose();
       }
       onDismissed?.call();
     }
 
     entry = OverlayEntry(
       builder: (context) => captured.wrap(
+        context,
         TMessage(
           key: messageKey,
           content: content,
@@ -228,6 +237,11 @@ class TMessage extends StatefulWidget {
     }
     entry.addListener(entryListener);
     overlay.insert(entry);
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (!overlay.mounted) {
+        dismissEntry(_TMessageDismissCause.unmounted);
+      }
+    });
     previousHandle?._dismiss?.call(_TMessageDismissCause.replaced);
     return handle;
   }
@@ -238,6 +252,8 @@ class TMessage extends StatefulWidget {
 
 class _TMessageState extends State<TMessage>
     with SingleTickerProviderStateMixin {
+  static const double _horizontalMargin = 16;
+
   late final AnimationController _animationController;
   bool _isPresented = true;
   bool _isAnimationRunning = false;
@@ -257,10 +273,10 @@ class _TMessageState extends State<TMessage>
 
   double get _defaultTop => _safePadding.top + kToolbarHeight;
 
-  double get _minimumLeft => _safePadding.left;
+  double get _minimumLeft => _safePadding.left + _horizontalMargin;
 
   double get _maximumRight =>
-      MediaQuery.sizeOf(context).width - _safePadding.right;
+      MediaQuery.sizeOf(context).width - _safePadding.right - _horizontalMargin;
 
   double get _effectiveWidth {
     final availableWidth = math.max(0.0, _maximumRight - _minimumLeft);
@@ -274,7 +290,7 @@ class _TMessageState extends State<TMessage>
     final minimumTop = _safePadding.top;
     final maximumTop = math.max(
       minimumTop,
-      MediaQuery.sizeOf(context).height - _safePadding.bottom - 48,
+      MediaQuery.sizeOf(context).height - _safePadding.bottom - _contentHeight,
     );
     return desiredTop.clamp(minimumTop, maximumTop).toDouble();
   }
@@ -445,14 +461,31 @@ class _TMessageState extends State<TMessage>
     });
   }
 
+  TextStyle _bodyTextStyle(BuildContext context) {
+    final font = context.tTheme.fontBodyMedium;
+    return TextStyle(
+      color: context.tTheme.textColorPrimary,
+      fontSize: font?.size,
+      height: font?.height,
+      fontWeight: font?.fontWeight,
+    );
+  }
+
+  double get _contentHeight => math.max(
+    48,
+    TTextStyled(
+      widget.content,
+      style: _bodyTextStyle(context),
+      maxLines: 1,
+    ).naturalSize(context).height,
+  );
+
   Widget _buildText(BuildContext context) {
-    final style = Theme.of(
-      context,
-    ).textTheme.bodyMedium?.copyWith(color: context.tTheme.textColorPrimary);
+    final style = _bodyTextStyle(context);
     if (widget.marquee == null) {
       return Align(
         alignment: Alignment.centerLeft,
-        child: Text(
+        child: TTextStyled(
           widget.content,
           style: style,
           maxLines: 1,
@@ -461,15 +494,36 @@ class _TMessageState extends State<TMessage>
       );
     }
 
-    final textPainter = TextPainter(
-      text: TextSpan(text: widget.content, style: style),
+    // 测量与绘制共享最终 TD 文本配置，保留系统文字缩放和语言方向。
+    final text = TTextStyled(
+      widget.content,
+      style: style,
       maxLines: 1,
-      textDirection: TextDirection.ltr,
+    ).getRawText(context: context);
+    final defaultTextStyle = DefaultTextStyle.of(context);
+    final effectiveStyle = MediaQuery.boldTextOf(context)
+        ? text.style!.merge(const TextStyle(fontWeight: FontWeight.bold))
+        : text.style;
+    final textPainter = TextPainter(
+      text: TextSpan(text: text.data, style: effectiveStyle),
+      textAlign:
+          text.textAlign ?? defaultTextStyle.textAlign ?? TextAlign.start,
+      maxLines: text.maxLines,
+      textDirection: text.textDirection ?? Directionality.of(context),
+      textScaler: text.textScaler ?? MediaQuery.textScalerOf(context),
+      locale: text.locale ?? Localizations.maybeLocaleOf(context),
+      strutStyle: text.strutStyle,
+      textWidthBasis: text.textWidthBasis ?? defaultTextStyle.textWidthBasis,
+      textHeightBehavior:
+          text.textHeightBehavior ??
+          defaultTextStyle.textHeightBehavior ??
+          DefaultTextHeightBehavior.maybeOf(context),
     )..layout();
     final tween = Tween<Offset>(
       begin: Offset.zero,
       end: Offset(-textPainter.width, 0),
     );
+    textPainter.dispose();
     return ClipRect(
       child: AnimatedBuilder(
         animation: _animationController,
@@ -482,7 +536,7 @@ class _TMessageState extends State<TMessage>
             child: child,
           ),
         ),
-        child: Text(widget.content, style: style, maxLines: 1),
+        child: text,
       ),
     );
   }
@@ -494,22 +548,22 @@ class _TMessageState extends State<TMessage>
     final (icon, color) = switch (widget.status) {
       TMessageStatus.info => (
         TIcons.error_circle_filled,
-        context.tTheme.brandNormalColor,
+        context.tTheme.brandColor,
       ),
       TMessageStatus.success => (
         TIcons.check_circle_filled,
-        context.tTheme.successNormalColor,
+        context.tTheme.successColor,
       ),
       TMessageStatus.warning => (
         TIcons.error_circle_filled,
-        context.tTheme.warningNormalColor,
+        context.tTheme.warningColor,
       ),
       TMessageStatus.error => (
         TIcons.error_circle_filled,
-        context.tTheme.errorNormalColor,
+        context.tTheme.errorColor,
       ),
     };
-    return Icon(icon, color: color, size: 22);
+    return TInternalIcon(icon, color: color, size: 22);
   }
 
   Widget _buildCloseButton(BuildContext context) {
@@ -520,7 +574,10 @@ class _TMessageState extends State<TMessage>
       },
       child:
           widget.closeButton ??
-          Icon(TIcons.close, color: context.tTheme.textColorPlaceholder),
+          TInternalIcon(
+            TIcons.close,
+            color: context.tTheme.textColorPlaceholder,
+          ),
     );
   }
 
@@ -537,7 +594,7 @@ class _TMessageState extends State<TMessage>
         );
     final content = SizedBox(
       width: _effectiveWidth,
-      height: 48,
+      height: _contentHeight,
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 16),
         child: Row(
@@ -550,7 +607,7 @@ class _TMessageState extends State<TMessage>
             if (widget.action != null) ...[
               const SizedBox(width: 8),
               ConstrainedBox(
-                constraints: const BoxConstraints(maxWidth: 96),
+                constraints: const BoxConstraints(maxWidth: 96, maxHeight: 48),
                 child: widget.action,
               ),
             ],
@@ -571,11 +628,14 @@ class _TMessageState extends State<TMessage>
             decoration: ShapeDecoration(
               color: backgroundColor,
               shape: shape,
-              shadows: context.tTheme.shadowsBase ?? const [],
+              shadows: context.tTheme.shadow1 ?? const [],
             ),
-            child: Material(type: MaterialType.transparency, child: content),
+            child: TInternalMaterial(
+              type: MaterialType.transparency,
+              child: content,
+            ),
           )
-        : Material(
+        : TInternalMaterial(
             color: backgroundColor,
             shape: shape,
             elevation: theme.elevation!,

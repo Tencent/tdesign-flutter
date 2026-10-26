@@ -1,0 +1,24 @@
+import 'package:tdesign_flutter/tdesign_flutter.dart';
+import '../../annotation/example_code.dart';
+import '../../base/example_widget.dart';
+
+@ExampleCode(group: 'text')
+class TextDecorationExample extends StatelessWidget {
+  const TextDecorationExample({super.key});
+
+  Widget _buildDecoration(BuildContext context) {
+    return TText(
+      '已失效文本',
+      style: TextStyle(
+        fontWeight: FontWeight.w600,
+        decoration: TextDecoration.lineThrough,
+        decorationColor: context.tTheme.errorColor,
+      ),
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return _buildDecoration(context);
+  }
+}

@@ -5,46 +5,29 @@ const _kDefaultRootColumnWidth = 103.0;
 const _kDefaultItemHeight = 56.0;
 
 /// TTreeSelect 组件级 ThemeExtension。
+///
+/// {@category ComponentTheme}
 class TTreeSelectThemeData extends ThemeExtension<TTreeSelectThemeData> {
   const TTreeSelectThemeData({
-    /// 面板高度。
     this.height,
-
-    /// 根列宽度。
     this.rootColumnWidth,
-
-    /// 所有非根列的固定宽度；为 null 时由组件按可用宽度自动布局。
     this.columnWidth,
-
-    /// 单项最小高度。
     this.itemHeight,
-
-    /// 面板背景色。
     this.backgroundColor,
-
-    /// 根列背景色。
     this.rootBackgroundColor,
-
-    /// 选中项背景色。
     this.selectedBackgroundColor,
-
-    /// 普通文案样式。
     this.textStyle,
-
-    /// 选中文案样式。
     this.selectedTextStyle,
-
-    /// 禁用文案样式。
     this.disabledTextStyle,
-
-    /// 选中图标颜色。
     this.indicatorColor,
   });
 
   /// 面板高度。
+  /// 未配置时为 336 逻辑像素。
   final double? height;
 
   /// 根列宽度。
+  /// 未配置时为 103 逻辑像素。
   final double? rootColumnWidth;
 
   /// 所有非根列的固定宽度；为 null 时由组件按可用宽度自动布局。
@@ -53,29 +36,40 @@ class TTreeSelectThemeData extends ThemeExtension<TTreeSelectThemeData> {
   final double? columnWidth;
 
   /// 单项最小高度。
+  /// 未配置时为 56 逻辑像素。
   final double? itemHeight;
 
   /// 面板背景色。
+  /// null 时使用 bgColorContainer Token。
   final Color? backgroundColor;
 
   /// 根列背景色。
+  /// null 时使用 bgColorSecondaryContainer Token。
   final Color? rootBackgroundColor;
 
   /// 选中项背景色。
+  /// null 时使用 bgColorContainer Token。
   final Color? selectedBackgroundColor;
 
   /// 普通文案样式。
+  /// null 时使用当前全局 Token 解析的文字样式。
   final TextStyle? textStyle;
 
   /// 选中文案样式。
   final TextStyle? selectedTextStyle;
 
   /// 禁用文案样式。
+  /// null 时沿用默认文字样式并使用 textColorDisabled Token。
   final TextStyle? disabledTextStyle;
 
   /// 选中图标颜色。
+  /// null 时使用 brandColor Token。
   final Color? indicatorColor;
 
+  /// 复制主题配置。
+  ///
+  /// ## 返回值
+  /// 返回主题副本；非空参数替换对应配置，null 参数保留当前配置。
   @override
   TTreeSelectThemeData copyWith({
     double? height,
@@ -106,9 +100,17 @@ class TTreeSelectThemeData extends ThemeExtension<TTreeSelectThemeData> {
     );
   }
 
+  /// 生成主题过渡配置。
+  ///
+  /// ## 返回值
+  /// 按 t 在当前主题和目标主题之间生成过渡主题。
+  /// other 为空或类型不匹配时返回当前主题；字段各自采用其类型的插值规则。
   @override
   TTreeSelectThemeData lerp(
+    /// 目标主题；为空或类型不匹配时保留当前主题。
     ThemeExtension<TTreeSelectThemeData>? other,
+
+    /// 插值进度；通常 0 表示当前主题，1 表示目标主题。
     double t,
   ) {
     if (other is! TTreeSelectThemeData) {

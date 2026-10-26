@@ -3,61 +3,26 @@ import 'dart:math' as math;
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 
-import '../../theme/t_radius.dart';
-import '../../theme/t_spacers.dart';
+import '../../theme/t_internal_material.dart';
 import '../../theme/t_theme.dart';
+import '../icon/t_icon.dart';
+import '../loading/t_loading_theme_data.dart';
+import '../text/t_text_style_scope.dart';
+import 't_button_defaults.dart';
 import 't_button_resolve.dart';
 import 't_button_theme_data.dart';
 import 't_button_types.dart';
 
 // ============ TButton Widget ============
 
-/// TD 常规按钮
-///
-/// Material 薄包装，`onPressed: null` 表示禁用；禁用时不会触发
-/// [onLongPress]。
-///
-/// **L1 三维正交**：
-/// - [variant]：变体类型（fill / outline / text / ghost）
-/// - [colorScheme]：配色方案（defaultTheme / primary / danger / light）
-/// - shape：由 Theme [TButtonThemeData.shape] 控制
-///
-/// **示例**：
-/// ```dart
-/// // 基本用法
-/// TButton(
-///   child: Text('填充按钮'),
-///   variant: TButtonVariant.fill,
-///   colorScheme: TButtonColorScheme.primary,
-///   onPressed: () {},
-/// )
-///
-/// // 图标按钮
-/// TButton(
-///   icon: Icon(TIcons.app),
-///   child: Text('按钮'),
-///   onPressed: () {},
-/// )
-///
-/// // 禁用
-/// TButton(
-///   child: Text('禁用'),
-///   onPressed: null,
-/// )
-///
-/// // 通栏（外包布局）
-/// SizedBox(
-///   width: double.infinity,
-///   child: TButton(child: Text('通栏'), onPressed: () {}),
-/// )
-/// ```
 class TButton extends StatefulWidget {
   const TButton({
     Key? key,
     this.child,
     this.size,
     this.variant,
-    this.colorScheme,
+    this.shape = TButtonShape.rectangle,
+    this.colorPreset,
     this.icon,
     this.iconPosition = TButtonIconPosition.left,
     this.onPressed,
@@ -65,21 +30,31 @@ class TButton extends StatefulWidget {
     this.style,
   }) : super(key: key);
 
-  /// 内容（纯文案用 `Text('...')`）
+  /// 按钮内容，纯文案可使用 `Text('...')` 或 `TText('...')`。
+  ///
+  /// 内容文字默认使用按钮尺寸、配色与当前状态解析的文案样式。
+  /// Text/TText 的实例显式样式优先；仅设置部分字段时，其余字段使用按钮默认值。
+  /// 内容内部可通过更近的 TTextThemeData 自行定制；其他调用方主题保持原有行为。
+  /// 外层通用 TTextThemeData 的同名字段由本槽默认覆盖；需保持旧外观时显式指定。
   final Widget? child;
 
-  /// 尺寸，未传时使用 Theme [TButtonThemeData.defaultSize]。
+  /// 尺寸，未传时使用 [TButtonSize.medium]。
   ///
   /// 默认按 48、40、32、28dp 的 TDesign 视觉高度参与布局。
   final TButtonSize? size;
 
-  /// 变体（fill / outline / text / ghost），未传时使用 Theme [TButtonThemeData.defaultVariant]
+  /// 变体（fill / outline / text / ghost），未传时使用 [TButtonVariant.fill]。
   final TButtonVariant? variant;
 
-  /// 配色方案；未传时使用 [TButtonColorScheme.defaultTheme]。
+  /// 按钮结构形状；纯图标的 square/circle 同时决定等宽高布局。
+  /// 具体边框及圆角仍可通过 [style] 配置。
+  final TButtonShape shape;
+
+  /// 内置配色预设；未传时使用 [TButtonColorPreset.defaultTheme]。
   ///
-  /// Theme 提供具体颜色和样式，不选择组件的配色方案。
-  final TButtonColorScheme? colorScheme;
+  /// 不改变 [variant] 的绘制方式，仅选择 TD 默认色板；
+  /// 当前按钮的具体颜色、边框和文字样式通过 [style] 配置。
+  final TButtonColorPreset? colorPreset;
 
   /// 图标（Widget 类型，IconData 需包裹为 `Icon(...)`）
   final Widget? icon;
@@ -96,7 +71,14 @@ class TButton extends StatefulWidget {
   /// 不会触发点击或长按回调。
   final VoidCallback? onLongPress;
 
-  /// P0 逃逸舱：[ButtonStyle] 覆盖所有 resolve 结果。
+  /// 当前按钮的完整 [ButtonStyle] 视觉配置入口，不影响其他按钮。
+  ///
+  /// 外部 Material 按钮主题不控制内置样式；请通过此实例 style 或 TD Theme 定制。
+  /// [ButtonStyle.visualDensity] 不生效；内置布局始终使用标准密度，
+  /// 尺寸由 [size] 规格、全局尺寸刻度与显式内边距、宽高配置决定。
+  /// 反馈和鼠标指针仅由实例 style、TD Theme 或内置默认值控制。
+  /// 状态属性返回 null 时回退该状态的 TD 默认值；不读取 Material 按钮主题。
+  /// 调用方内容保留原主题；child 的默认文字样式由按钮提供，显式文字样式优先。
   ///
   /// 组件默认使用 [MaterialTapTargetSize.shrinkWrap] 保持 TDesign 精确尺寸；
   /// 需要至少 48dp 点击区时可将 [ButtonStyle.tapTargetSize] 设为
@@ -158,52 +140,76 @@ class _TButtonState extends State<TButton> {
   Widget build(BuildContext context) {
     // 获取 Theme
     final theme = Theme.of(context).extension<TButtonThemeData>();
-    final effectiveVariant =
-        widget.variant ?? theme?.defaultVariant ?? TButtonVariant.fill;
-    final effectiveSize =
-        widget.size ?? theme?.defaultSize ?? TButtonSize.medium;
+    final effectiveVariant = widget.variant ?? TButtonVariant.fill;
+    final effectiveSize = widget.size ?? TButtonSize.medium;
     final sizeMetrics = TButtonResolve.sizeMetrics(
       effectiveSize,
       context.tTheme,
+      buttonTheme: theme,
     );
     final hasGradient = theme?.gradient != null;
 
     // 解析 ButtonStyle
     final resolvedStyle = TButtonResolve.resolve(
       variant: effectiveVariant,
-      colorScheme: widget.colorScheme,
+      shape: widget.shape,
+      colorPreset: widget.colorPreset,
       size: effectiveSize,
       icon: widget.icon,
       hasChild: widget.child != null,
-      theme: theme,
       instanceStyle: widget.style,
       context: context,
       hasGradient: hasGradient,
     );
 
+    final enableFeedback = resolvedStyle.enableFeedback ?? true;
+    final preferredMouseCursor = TInternalMaterialTheme.resolveMouseCursor(
+      resolvedStyle.mouseCursor,
+      WidgetStateProperty.resolveWith(
+        (states) => states.contains(WidgetState.disabled)
+            ? SystemMouseCursors.basic
+            : SystemMouseCursors.click,
+      ),
+    );
+
     // 构建带图标的内容
     final hasIcon = widget.icon != null;
     final hasChild = widget.child != null;
-    final iconTextSpacing = theme?.iconTextSpacing ?? context.tTheme.spacer8;
+    final iconTextSpacing =
+        theme?.iconTextSpacing ?? TButtonDefaults.iconTextSpacing;
     final gradient = theme?.gradient;
 
     Widget? content;
     if (hasChild || hasIcon) {
       final children = <Widget>[];
+      final themedIcon = hasIcon
+          ? _TButtonIconTheme(child: widget.icon!)
+          : null;
 
       // 左侧图标
       if (hasIcon && widget.iconPosition == TButtonIconPosition.left) {
-        children.add(widget.icon!);
+        children.add(themedIcon!);
       }
 
       // 内容
       if (hasChild) {
-        children.add(Flexible(child: widget.child!));
+        children.add(
+          Flexible(
+            child: Builder(
+              builder: (context) => TTextStyleScope(
+                // Read after the native button theme is restored (or gradient
+                // Material is built), retaining its resolved state/animation.
+                style: DefaultTextStyle.of(context).style,
+                child: widget.child!,
+              ),
+            ),
+          ),
+        );
       }
 
       // 右侧图标
       if (hasIcon && widget.iconPosition == TButtonIconPosition.right) {
-        children.add(widget.icon!);
+        children.add(themedIcon!);
       }
 
       // 图标与文案间距
@@ -226,18 +232,9 @@ class _TButtonState extends State<TButton> {
 
     if (gradient != null) {
       // 渐变按钮保留自绘装饰层，同时复用 resolvedStyle 中的 P0/ButtonStyle 结果。
-      final appTheme = Theme.of(context);
       final isDisabled = !_isEnabled;
       final states = _statesController.value;
-      final shape =
-          resolvedStyle.shape?.resolve(states) ??
-          RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(
-              _borderRadiusForShape(
-                theme?.effectiveShape ?? TButtonShape.rectangle,
-              ),
-            ),
-          );
+      final shape = resolvedStyle.shape!.resolve(states)!;
       final side = resolvedStyle.side?.resolve(states);
       final effectiveShape = side == null ? shape : shape.copyWith(side: side);
       final backgroundColor = resolvedStyle.backgroundColor?.resolve(states);
@@ -247,35 +244,14 @@ class _TButtonState extends State<TButton> {
       final iconSize =
           resolvedStyle.iconSize?.resolve(states) ?? sizeMetrics.iconSize;
 
-      final textStyle =
-          resolvedStyle.textStyle?.resolve(states) ??
-          TextStyle(
-            fontSize: sizeMetrics.fontSize,
-            height: sizeMetrics.fontHeight,
-            fontWeight: sizeMetrics.fontWeight,
-          );
-      final isIconOnly = widget.icon != null && widget.child == null;
-      final isFixedIconShape =
-          theme?.effectiveShape == TButtonShape.square ||
-          theme?.effectiveShape == TButtonShape.circle;
-      final padding =
-          resolvedStyle.padding?.resolve(states) ??
-          (isIconOnly && isFixedIconShape
-              ? EdgeInsets.all(sizeMetrics.iconOnlyPadding)
-              : EdgeInsets.symmetric(
-                  horizontal: sizeMetrics.horizontalPadding,
-                  vertical: sizeMetrics.verticalPadding,
-                ));
-      final minimumSize =
-          resolvedStyle.minimumSize?.resolve(states) ??
-          Size(
-            isIconOnly && isFixedIconShape ? sizeMetrics.height : 0,
-            sizeMetrics.height,
-          );
+      // The resolver supplies complete TD defaults for every state.
+      final textStyle = resolvedStyle.textStyle!.resolve(states)!;
+      final padding = resolvedStyle.padding!.resolve(states)!;
+      final minimumSize = resolvedStyle.minimumSize!.resolve(states)!;
       final maximumSize = resolvedStyle.maximumSize?.resolve(states);
       final fixedSize = resolvedStyle.fixedSize?.resolve(states);
       final visualDensity =
-          resolvedStyle.visualDensity ?? appTheme.visualDensity;
+          resolvedStyle.visualDensity ?? VisualDensity.standard;
       final densityAdjustment = visualDensity.baseSizeAdjustment;
       final tapTargetSize = resolvedStyle.tapTargetSize!;
       final elevation = resolvedStyle.elevation?.resolve(states) ?? 0;
@@ -297,7 +273,7 @@ class _TButtonState extends State<TButton> {
 
       final styledContent = content == null
           ? null
-          : IconTheme.merge(
+          : TInternalIconTheme.merge(
               data: IconThemeData(color: iconColor, size: iconSize),
               child: content,
             );
@@ -321,37 +297,43 @@ class _TButtonState extends State<TButton> {
 
       final mouseCursor = WidgetStateMouseCursor.resolveWith(
         (cursorStates) =>
-            resolvedStyle.mouseCursor?.resolve(cursorStates) ??
+            preferredMouseCursor?.resolve(cursorStates) ??
             WidgetStateMouseCursor.clickable.resolve(cursorStates),
         debugDescription: 'TButton_MouseCursor',
       );
 
-      final buttonChild = Container(
-        decoration: ShapeDecoration(
-          color: backgroundColor,
-          gradient: backgroundColor == null ? gradient : null,
-          shape: effectiveShape,
-        ),
-        clipBehavior: Clip.antiAlias,
-        child: Material(
-          type: MaterialType.transparency,
-          shape: effectiveShape,
-          clipBehavior: Clip.antiAlias,
-          elevation: elevation,
-          textStyle: textStyle.copyWith(color: foregroundColor),
-          shadowColor: shadowColor,
-          surfaceTintColor: surfaceTintColor,
-          animationDuration: animationDuration,
-          child: InkWell(
-            customBorder: effectiveShape,
-            overlayColor: resolvedStyle.overlayColor,
-            mouseCursor: mouseCursor,
-            enableFeedback: resolvedStyle.enableFeedback ?? true,
-            splashFactory: resolvedStyle.splashFactory,
-            statesController: _statesController,
-            onTap: widget.onPressed,
-            onLongPress: widget.onPressed == null ? null : widget.onLongPress,
-            child: result,
+      // Decorations paint without contributing ShapeBorder.dimensions to layout.
+      // Paint the border once above content, including translucent/outside sides.
+      final fillShape = effectiveShape.copyWith(side: BorderSide.none);
+      final buttonChild = DecoratedBox(
+        position: DecorationPosition.foreground,
+        decoration: ShapeDecoration(shape: effectiveShape),
+        child: DecoratedBox(
+          decoration: ShapeDecoration(
+            color: backgroundColor,
+            gradient: backgroundColor == null ? gradient : null,
+            shape: fillShape,
+          ),
+          child: TInternalMaterial(
+            type: MaterialType.transparency,
+            shape: fillShape,
+            clipBehavior: Clip.antiAlias,
+            elevation: elevation,
+            textStyle: textStyle.copyWith(color: foregroundColor),
+            shadowColor: shadowColor,
+            surfaceTintColor: surfaceTintColor,
+            animationDuration: animationDuration,
+            child: TInternalInkWell(
+              customBorder: effectiveShape,
+              overlayColor: resolvedStyle.overlayColor,
+              mouseCursor: mouseCursor,
+              enableFeedback: enableFeedback,
+              splashFactory: resolvedStyle.splashFactory,
+              statesController: _statesController,
+              onTap: widget.onPressed,
+              onLongPress: widget.onPressed == null ? null : widget.onLongPress,
+              child: result,
+            ),
           ),
         ),
       );
@@ -404,27 +386,87 @@ class _TButtonState extends State<TButton> {
         ),
       );
     } else {
-      button = ElevatedButton(
-        onPressed: widget.onPressed,
-        onLongPress: widget.onPressed == null ? null : widget.onLongPress,
-        statesController: _statesController,
-        style: resolvedStyle,
-        child: content,
+      final captured = TInternalMaterialTheme.capture(context);
+      final originalBackgroundBuilder = resolvedStyle.backgroundBuilder;
+      final originalForegroundBuilder = resolvedStyle.foregroundBuilder;
+      final nativeStyle = resolvedStyle.copyWith(
+        mouseCursor: preferredMouseCursor,
+        enableFeedback: enableFeedback,
+        backgroundBuilder: originalBackgroundBuilder == null
+            ? null
+            : (_, states, child) => Builder(
+                builder: (inner) => TInternalMaterialTheme.restore(
+                  captured,
+                  inner,
+                  originalBackgroundBuilder(context, states, child),
+                  retainIconDefaults: true,
+                ),
+              ),
+        foregroundBuilder: originalForegroundBuilder == null
+            ? null
+            : (_, states, child) => Builder(
+                builder: (inner) => TInternalMaterialTheme.restore(
+                  captured,
+                  inner,
+                  originalForegroundBuilder(context, states, child),
+                  retainIconDefaults: true,
+                ),
+              ),
+      );
+      button = Theme(
+        data: TInternalMaterialTheme.resolve(context),
+        child: ElevatedButtonTheme(
+          data: const ElevatedButtonThemeData(),
+          child: ElevatedButton(
+            onPressed: widget.onPressed,
+            onLongPress: widget.onPressed == null ? null : widget.onLongPress,
+            statesController: _statesController,
+            style: nativeStyle,
+            child: Builder(
+              builder: (context) => TInternalMaterialTheme.restore(
+                captured,
+                context,
+                content ?? const SizedBox.shrink(),
+                retainIconDefaults: true,
+              ),
+            ),
+          ),
+        ),
       );
     }
 
     return button;
   }
+}
 
-  /// 根据 shape 获取渐变裁剪圆角值
-  double _borderRadiusForShape(TButtonShape shape) {
-    final tTheme = context.tTheme;
-    return switch (shape) {
-      TButtonShape.rectangle => tTheme.radiusDefault,
-      TButtonShape.round => tTheme.radiusRound, // coverage:ignore-line
-      TButtonShape.square => tTheme.radiusDefault,
-      TButtonShape.circle => 0, // coverage:ignore-line
-    };
+/// 保留按钮已解析的 IconTheme，
+/// 并将其颜色透传给图标插槽内的 TLoading。
+class _TButtonIconTheme extends StatelessWidget {
+  const _TButtonIconTheme({required this.child});
+
+  final Widget child;
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final loadingTheme = theme.extension<TLoadingThemeData>();
+    final iconTheme = IconTheme.of(context);
+    final scopedChild = TIconStyleScope(
+      color: iconTheme.color,
+      size: iconTheme.size,
+      child: child,
+    );
+    if (loadingTheme?.iconColor != null) {
+      return scopedChild;
+    }
+    final effectiveLoadingTheme = (loadingTheme ?? const TLoadingThemeData())
+        .merge(TLoadingThemeData(iconColor: iconTheme.color));
+    return Theme(
+      data: theme
+          .copyWith(iconTheme: iconTheme)
+          .mergeExtension(effectiveLoadingTheme),
+      child: scopedChild,
+    );
   }
 }
 

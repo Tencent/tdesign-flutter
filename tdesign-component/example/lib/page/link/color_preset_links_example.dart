@@ -1,0 +1,81 @@
+import 'package:tdesign_flutter/tdesign_flutter.dart';
+import '../../annotation/example_code.dart';
+import '../../base/example_widget.dart';
+
+@ExampleCode(group: 'link')
+class ColorPresetLinksExample extends StatelessWidget {
+  const ColorPresetLinksExample({super.key});
+  Widget _buildColorPresetLinks(BuildContext context) {
+    return Column(
+      children: [
+        _exampleRow(context, [
+          _link(
+            context,
+            colorPreset: TLinkColorPreset.primary,
+            suffixIcon: const Icon(TIcons.jump),
+          ),
+          _link(context, suffixIcon: const Icon(TIcons.jump)),
+          _link(
+            context,
+            colorPreset: TLinkColorPreset.danger,
+            suffixIcon: const Icon(TIcons.jump),
+          ),
+        ]),
+        const SizedBox(height: 16),
+        _exampleRow(context, [
+          _link(
+            context,
+            colorPreset: TLinkColorPreset.warning,
+            suffixIcon: const Icon(TIcons.jump),
+          ),
+          _link(
+            context,
+            colorPreset: TLinkColorPreset.success,
+            suffixIcon: const Icon(TIcons.jump),
+          ),
+        ]),
+      ],
+    );
+  }
+
+  Widget _exampleRow(BuildContext context, List<Widget> children) {
+    return Container(
+      height: 48,
+      color: context.tTheme.bgColorContainer,
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        children: children,
+      ),
+    );
+  }
+
+  TLink _link(
+    BuildContext context, {
+    String label = '跳转链接',
+    TLinkColorPreset? colorPreset,
+    TLinkSize size = TLinkSize.small,
+    bool? underline,
+    Widget? prefixIcon,
+    Widget? suffixIcon,
+    bool disabled = false,
+  }) {
+    return TLink(
+      child: Text(label),
+      colorPreset: colorPreset,
+      size: size,
+      underline: underline,
+      prefixIcon: prefixIcon,
+      suffixIcon: suffixIcon,
+      onPressed: disabled ? null : () => _onLinkPressed(context),
+    );
+  }
+
+  void _onLinkPressed(BuildContext context) {
+    TToast.showText('点击了链接', context: context);
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return _buildColorPresetLinks(context);
+  }
+}

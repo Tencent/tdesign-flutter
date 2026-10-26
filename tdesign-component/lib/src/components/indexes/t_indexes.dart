@@ -3,6 +3,7 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 
 import '../../theme/t_colors.dart';
+import '../../theme/t_internal_material.dart';
 import '../../theme/t_spacers.dart';
 import '../../theme/t_theme.dart';
 import '../../util/iterable_ext.dart';
@@ -15,13 +16,12 @@ export 'sticky_header/sticky_header_widget.dart';
 export 't_indexes_anchor.dart';
 export 't_indexes_list.dart';
 
-/// 索引
 class TIndexes extends StatefulWidget {
   const TIndexes({
     Key? key,
     this.indexList,
     this.initialIndex,
-    this.indexListMaxHeight,
+    this.useSafeArea = false,
     this.sticky = true,
     this.stickyOffset = 0,
     this.capsuleTheme = false,
@@ -32,25 +32,23 @@ class TIndexes extends StatefulWidget {
     required this.builderContent,
     this.builderAnchor,
     this.builderIndex,
-  }) : assert(
-         indexListMaxHeight == null ||
-             indexListMaxHeight > 0 && indexListMaxHeight <= 1,
-         'indexListMaxHeight must be greater than 0 and no greater than 1.',
-       ),
-       super(key: key);
+  }) : super(key: key);
 
-  /// 索引字符列表。不传默认 A-Z；默认值要求 [builderContent] 能处理 A-Z 全部索引，自定义数据建议显式传入。
+  /// 索引字符列表，字符必须唯一。不传默认 A-Z；默认值要求 builderContent 能处理 A-Z 全部索引，自定义数据建议显式传入。
   ///
   /// 列表更新后若不再包含当前活动项，组件回退到新列表首项、同步滚动位置并触发 [onChanged]。
   final List<String>? indexList;
 
-  /// 初始激活索引。为空时使用 [indexList] 的第一项
+  /// 初始激活索引，非空时必须属于 indexList；为空时使用 indexList 的第一项。
   ///
   /// 仅在组件首次创建时生效；后续活动索引由滚动位置派生。
   final String? initialIndex;
 
-  /// 索引列表最大高度（父容器高度的百分比，默认 0.8）
-  final double? indexListMaxHeight;
+  /// 是否避让系统安全区，默认 false。
+  ///
+  /// 仅在组件自身负责屏幕边缘布局时开启；若外层 Popup 或页面壳已经处理安全区，
+  /// 应保持关闭，避免重复避让。
+  final bool useSafeArea;
 
   /// 锚点是否吸顶
   final bool sticky;
@@ -64,7 +62,7 @@ class TIndexes extends StatefulWidget {
   /// 是否反向滚动
   final bool reverse;
 
-  /// 滚动控制器
+  /// 滚动控制器；外部控制器由调用方释放，未提供时组件管理内部控制器。
   final ScrollController? scrollController;
 
   /// 当前激活索引发生变更时触发（含滚动吸顶派生与用户侧栏选择）
@@ -203,30 +201,30 @@ class _TIndexesState extends State<TIndexes> {
   @override
   Widget build(BuildContext context) {
     final theme = _resolveTheme();
-    return Container(
-      color: context.tTheme.bgColorContainer,
-      child: Stack(
-        children: [
-          CustomScrollView(
-            controller: _scrollController,
-            reverse: widget.reverse,
-            slivers: _slivers(),
-          ),
-          TIndexesList(
-            indexList: _indexList,
-            activeIndex: _activeIndex,
-            onSelect: (newIndex, oldIndex) {
-              widget.onSelect?.call(newIndex);
-              _notifyChange(newIndex);
-              _scrollToTarget(newIndex, oldIndex);
-            },
-            indexListMaxHeight:
-                widget.indexListMaxHeight ?? theme.indexListMaxHeight ?? 0.8,
-            builderIndex: widget.builderIndex,
-          ),
-        ],
-      ),
+    Widget child = Stack(
+      children: [
+        TInternalScrollScope(child: CustomScrollView(
+          controller: _scrollController,
+          reverse: widget.reverse,
+          slivers: _slivers(),
+        )),
+        TIndexesList(
+          indexList: _indexList,
+          activeIndex: _activeIndex,
+          onSelect: (newIndex, oldIndex) {
+            widget.onSelect?.call(newIndex);
+            _notifyChange(newIndex);
+            _scrollToTarget(newIndex, oldIndex);
+          },
+          indexListMaxHeight: theme.indexListMaxHeight ?? 0.8,
+          builderIndex: widget.builderIndex,
+        ),
+      ],
     );
+    if (widget.useSafeArea) {
+      child = SafeArea(child: child);
+    }
+    return Container(color: context.tTheme.bgColorContainer, child: child);
   }
 
   List<Widget> _slivers() {
@@ -240,7 +238,7 @@ class _TIndexesState extends State<TIndexes> {
       return SliverStickyHeader.builder(
         sticky: sticky,
         pinnedOffset: isPinnedOffset
-            ? context.tTheme.spacer8 + stickyOffset
+            ? context.tTheme.spacer + stickyOffset
             : stickyOffset,
         builder: (context, state) {
           _anchorKeys[e] = context;
@@ -267,7 +265,7 @@ class _TIndexesState extends State<TIndexes> {
               _contentKeys[e] = context;
               return Padding(
                 padding: isPinnedOffset
-                    ? EdgeInsets.only(top: context.tTheme.spacer8)
+                    ? EdgeInsets.only(top: context.tTheme.spacer)
                     : EdgeInsets.zero,
                 child: widget.builderContent(context, e),
               );

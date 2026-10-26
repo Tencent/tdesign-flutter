@@ -2,9 +2,13 @@ import 'package:flutter/material.dart';
 
 import '../../theme/t_colors.dart';
 import '../../theme/t_fonts.dart';
+import '../../theme/t_internal_material.dart';
+import '../../theme/t_sizes.dart';
 import '../../theme/t_theme.dart';
 import '../popup/t_popup.dart';
-import '../text/t_text.dart';
+import '../text/t_text_resolve.dart';
+import '../text/t_text_style_scope.dart';
+import '../text/t_text_styled.dart';
 import 't_drawer_theme_data.dart';
 
 part 't_drawer_content.dart';
@@ -18,9 +22,6 @@ enum TDrawerPlacement {
   right,
 }
 
-/// TDesign 抽屉内容组件，可放入 [Scaffold.drawer] 或 [Scaffold.endDrawer]。
-///
-/// 需要通过浮层展示时，使用 [showTDrawer]。
 class TDrawer extends StatelessWidget {
   const TDrawer({
     super.key,
@@ -31,10 +32,8 @@ class TDrawer extends StatelessWidget {
     this.showLastDivider = true,
     this.title,
     this.onItemClick,
-    this.width,
     this.child,
-    this.backgroundColor,
-  }) : assert(width == null || width > 0);
+  });
 
   /// 是否显示菜单项分隔线，默认 true。
   final bool showDivider;
@@ -60,12 +59,6 @@ class TDrawer extends StatelessWidget {
   /// 点击抽屉里的列表项触发
   final TDrawerItemClickCallback? onItemClick;
 
-  /// 宽度；优先级高于 ThemeData，默认使用 280。
-  final double? width;
-
-  /// 组件背景颜色；优先级高于 ThemeData 和默认值。
-  final Color? backgroundColor;
-
   @override
   Widget build(BuildContext context) {
     return _TDrawerContent(
@@ -77,8 +70,6 @@ class TDrawer extends StatelessWidget {
       child: child,
       title: title,
       onItemClick: onItemClick,
-      width: width,
-      backgroundColor: backgroundColor,
     );
   }
 }
@@ -91,12 +82,16 @@ class TDrawer extends StatelessWidget {
 /// [showOverlay] 控制是否显示蒙层，默认 true。
 /// [closeOnOverlayClick] 控制点击蒙层时是否关闭抽屉，默认 true。
 /// [onOverlayClick] 在蒙层被点击时触发，不受是否自动关闭影响。
-/// [topInset] 设置抽屉相对屏幕顶部的可选偏移，默认 0。
+/// [topInset] 设置抽屉相对屏幕顶部的可选偏移，默认 0，必须大于或等于 0。
 /// [useSafeArea] 控制浮层是否避让系统安全区域，默认 true。
-/// [destroyOnClose] 控制关闭后是否立即销毁浮层路由，默认 false。
+/// [destroyOnClose] 沿用 1.0.0 的遮挡规则，默认 false：false 时保留被不透明路由遮挡的内容 State，true 时允许释放。
+/// 两种取值均在关闭完成后销毁内容；不提供关闭后重开复用。
 /// [onClose] 在抽屉浮层关闭后触发。
 ///
 /// 返回的 [TDrawerHandle] 可用于查询显示状态或主动关闭抽屉。
+///
+/// ## 返回值
+/// 已经发起打开的抽屉控制句柄，可用于查询状态与关闭抽屉。
 TDrawerHandle showTDrawer(
   BuildContext context, {
   required TDrawer drawer,
@@ -119,22 +114,22 @@ TDrawerHandle showTDrawer(
   final popupInset = placement == TDrawerPlacement.right
       ? TPopupRightInset(top: topInset ?? 0)
       : TPopupLeftInset(top: topInset ?? 0);
-  final handle = TPopup.show(
+  final handle = showDrawerPopupInternal(
     context,
     options: TPopupOptions(
       placement: popupPlacement,
-      width: drawer.width ?? theme.width ?? 280,
+      width: theme.width ?? 280,
       inset: popupInset,
       overlay: TPopupOverlayConfig(
         showOverlay: showOverlay,
         closeOnClick: closeOnOverlayClick,
         color: showOverlay ? null : Colors.transparent,
-        onClick: onOverlayClick,
+        onTap: onOverlayClick,
       ),
       destroyOnClose: destroyOnClose,
       useSafeArea: useSafeArea,
       onClosed: onClose,
-      child: Theme(data: Theme.of(context), child: drawer),
+      child: drawer,
     ),
   );
   return TDrawerHandle._(handle);

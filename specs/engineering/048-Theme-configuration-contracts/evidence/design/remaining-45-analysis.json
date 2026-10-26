@@ -1,0 +1,96 @@
+{
+  "scope": 45,
+  "miniprogramCommit": "a9f3ba680481d438b0be37e2e25cf4a62cf0acb3",
+  "groups": [
+    {
+      "reason": "组件固定默认，未引用拟定全局Token",
+      "count": 28,
+      "ids": [
+        "M005",
+        "M006",
+        "M020",
+        "M021",
+        "M033",
+        "M034",
+        "M035",
+        "M046",
+        "M049",
+        "M051",
+        "M056",
+        "M058",
+        "M059",
+        "M060",
+        "M061",
+        "M079",
+        "M088",
+        "M090",
+        "M091",
+        "M092",
+        "M093",
+        "M096",
+        "M097",
+        "M098",
+        "M100",
+        "M102",
+        "M104",
+        "M106"
+      ],
+      "why": "28处能读到固定几何/尺寸，多数另有组件CSS变量；默认数值与size刻度相同，不证明依赖关系。",
+      "examples": "Badge dot-size回退16rpx≈8dp，而非全局size4；Button图标、Toast图标、CountDown块尺寸同类。Loading纵向gap直接12rpx。",
+      "neededEvidence": "现有组件Theme/参数入口继续有效；要接到全局需该属性的设计绑定、规范引用或用户新的明确策略。不能为统一控制而擅自改变依赖关系。"
+    },
+    {
+      "reason": "固定默认还存在跨端数值差异",
+      "count": 3,
+      "ids": [
+        "M016",
+        "M050",
+        "M055"
+      ],
+      "why": "没有全局引用，同时小程序默认与Flutter不同。",
+      "examples": "BackTop图标22/20dp；DropdownMenu图标20/24dp；Refresh加载图标25/24dp（小程序/Flutter）。",
+      "neededEvidence": "保留Flutter默认。需要分别确认目标默认及全局来源；只确认数值仍不能推导全局Token。"
+    },
+    {
+      "reason": "属性、变体或绘制结构不能对应",
+      "count": 11,
+      "ids": [
+        "M038",
+        "M048",
+        "M062",
+        "M063",
+        "M067",
+        "M076",
+        "M077",
+        "M078",
+        "M111",
+        "M112",
+        "M113"
+      ],
+      "why": "能看到相似组件，无法把源码变量归给被审查的同一属性。",
+      "examples": "Checkbox tag外框圆角不是方形指示器角；SideBar行项目auto不是tag内框minHeight56；Search图标不是清除命中盒；Steps图标不是数字圆容器；Tree叶操作槽不是根项反向角。",
+      "neededEvidence": "需同一变体、同一属性的设计节点或可证明等价的布局/绘制边界；不能把已确认的相邻属性扩散给整个组件。"
+    },
+    {
+      "reason": "只确认字号，不能推导字重或行高",
+      "count": 2,
+      "ids": [
+        "M011",
+        "M095"
+      ],
+      "why": "字号、字重、行高是独立维度。",
+      "examples": "Avatar大号字号20来源可确定，但未证明w600归属同一Font；CountDown大号字号18不证明26行高，highlight另有24行盒。",
+      "neededEvidence": "保持现有字重/行高；需要完整文字样式或独立属性绑定，不整包迁移Font。"
+    },
+    {
+      "reason": "未找到对应效果引用",
+      "count": 1,
+      "ids": [
+        "M001"
+      ],
+      "why": "官方avatar及avatar-group源码未找到头像组投影的shadow引用链。",
+      "examples": "不能建立shadow1→头像组内置groupShadow的合成别名。",
+      "neededEvidence": "保留现有groupShadow配置；需要对应效果绑定或组件规范。源码没有引用不等于设计永远不允许阴影。"
+    }
+  ]
+}

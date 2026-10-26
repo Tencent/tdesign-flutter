@@ -1,23 +1,22 @@
+import 'dart:math' as math;
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:tdesign_flutter_icons/tdesign_flutter_icons.dart' show TIcons;
 
 import '../../theme/t_colors.dart';
 import '../../theme/t_fonts.dart';
+import '../../theme/t_internal_material.dart';
 import '../../theme/t_radius.dart';
+import '../../theme/t_sizes.dart';
 import '../../theme/t_theme.dart';
+import '../text/t_text_resolve.dart';
+import '../text/t_text_styled.dart';
 import 't_search_bar_theme_data.dart';
 
-const double _kSearchBarHeight = 40;
-const double _kIconSize = 24;
 const double _kIconGap = 5;
 const double _kActionGap = 15;
-const EdgeInsets _kContentPadding = EdgeInsets.symmetric(horizontal: 12);
 
-/// 基于 Material [TextField] 的搜索输入框。
-///
-/// [controller] 是主控制路径；未传时组件创建内部 controller，并使用
-/// [initialValue] 初始化一次。搜索结果由调用方在组件外组合。
 class TSearchBar extends StatefulWidget {
   const TSearchBar({
     super.key,
@@ -51,7 +50,8 @@ class TSearchBar extends StatefulWidget {
          'maxLength 与 maxCharacter 不能同时设置',
        );
 
-  /// 文本控制器。
+  /// 文本控制器；与 initialValue 互斥。外部控制器由调用方释放，
+  /// 未提供时由组件创建并释放内部控制器。
   final TextEditingController? controller;
 
   /// 内部控制器的初始文本，仅初始化一次。
@@ -81,10 +81,10 @@ class TSearchBar extends StatefulWidget {
   /// 右侧操作点击回调。组件不会隐式清空输入或释放焦点。
   final VoidCallback? onActionPressed;
 
-  /// 清除按钮点击回调。
+  /// 清除按钮点击回调；先清空 controller，再调用本回调，最后触发 onChanged('')。
   final VoidCallback? onClearPressed;
 
-  /// 是否在聚焦且存在文本时显示清除按钮。
+  /// 是否在存在文本、enabled 为 true 且非只读时显示清除按钮；无需聚焦。
   final bool clearable;
 
   /// 是否自动聚焦。
@@ -96,7 +96,7 @@ class TSearchBar extends StatefulWidget {
   /// 键盘动作。
   final TextInputAction inputAction;
 
-  /// 最大字符数；不显示 Material 计数器。
+  /// 最大字符数；不显示 Material 计数器，与 maxCharacter 互斥。
   final int? maxLength;
 
   /// 最大加权字符数，ASCII 字符计 1，非 ASCII 字符计 2。
@@ -105,13 +105,13 @@ class TSearchBar extends StatefulWidget {
   /// 输入格式化器。
   final List<TextInputFormatter>? inputFormatters;
 
-  /// 搜索框形态；优先于 [TSearchBarThemeData.variant]。
+  /// 搜索框形态；未设置时为 [TSearchBarVariant.square]。
   final TSearchBarVariant? variant;
 
   /// 文本对齐方式，默认左对齐。
   final TSearchBarAlignment? textAlignment;
 
-  /// 自定义焦点节点。
+  /// 焦点节点；外部节点由调用方释放，未提供时由组件管理内部节点。
   final FocusNode? focusNode;
 
   @override
@@ -166,13 +166,17 @@ class _TSearchBarState extends State<TSearchBar> {
   Widget build(BuildContext context) {
     final token = context.tTheme;
     final theme = Theme.of(context).extension<TSearchBarThemeData>();
-    final effectiveVariant =
-        widget.variant ?? theme?.variant ?? TSearchBarVariant.square;
+    final effectiveVariant = widget.variant ?? TSearchBarVariant.square;
     final effectiveAlignment = widget.textAlignment ?? TSearchBarAlignment.left;
-    final height = theme?.height ?? _kSearchBarHeight;
+    var height =
+        theme?.resolveHeight(context.tTheme.size12) ?? context.tTheme.size12;
     final inputBackgroundColor =
         theme?.inputBackgroundColor ?? token.bgColorSecondaryContainer;
-    final contentPadding = theme?.contentPadding ?? _kContentPadding;
+    final contentPadding =
+        theme?.resolveContentPadding(
+          EdgeInsets.symmetric(horizontal: token.size5),
+        ) ??
+        EdgeInsets.symmetric(horizontal: token.size5);
     final actionText = widget.actionText;
     final hasAction = actionText != null && actionText.isNotEmpty;
 
@@ -191,38 +195,82 @@ class _TSearchBarState extends State<TSearchBar> {
         .copyWith(
           color: widget.enabled
               ? theme?.textStyle?.color ?? token.textColorPrimary
-              : token.textDisabledColor,
+              : token.textColorDisabled,
         );
     final hintStyle = defaultHintStyle
         .merge(theme?.hintStyle)
         .copyWith(
           color: widget.enabled
               ? theme?.hintStyle?.color ?? token.textColorPlaceholder
-              : token.textDisabledColor,
+              : token.textColorDisabled,
         );
     final actionStyle = defaultTextStyle
-        .copyWith(color: token.brandNormalColor)
+        .copyWith(color: token.brandColor)
         .merge(theme?.actionTextStyle)
         .copyWith(
           color: widget.enabled
-              ? theme?.actionTextStyle?.color ?? token.brandNormalColor
-              : token.textDisabledColor,
+              ? theme?.actionTextStyle?.color ?? token.brandColor
+              : token.textColorDisabled,
         );
-    var searchIconTheme = IconThemeData(
-      size: _kIconSize,
-      color: token.textColorPlaceholder,
-    ).merge(theme?.searchIconTheme);
-    var clearIconTheme = IconThemeData(
-      size: _kIconSize,
-      color: token.textColorPlaceholder,
-    ).merge(theme?.clearIconTheme);
+    var searchIconTheme =
+        IconThemeData(
+              size: context.tTheme.size8,
+              color: token.textColorPlaceholder,
+            )
+            .merge(theme?.searchIconTheme)
+            .copyWith(
+              size:
+                  theme?.resolveSearchIconSize(context.tTheme.size8) ??
+                  context.tTheme.size8,
+            );
+    var clearIconTheme =
+        IconThemeData(
+              size: context.tTheme.size8,
+              color: token.textColorPlaceholder,
+            )
+            .merge(theme?.clearIconTheme)
+            .copyWith(
+              size:
+                  theme?.resolveClearIconSize(context.tTheme.size8) ??
+                  context.tTheme.size8,
+            );
     if (!widget.enabled) {
       searchIconTheme = searchIconTheme.copyWith(
-        color: token.textDisabledColor,
+        color: token.textColorDisabled,
       );
-      clearIconTheme = clearIconTheme.copyWith(color: token.textDisabledColor);
+      clearIconTheme = clearIconTheme.copyWith(color: token.textColorDisabled);
     }
 
+    if (theme?.hasHeightOverride != true) {
+      for (final style in [textStyle, hintStyle]) {
+        height = math.max(
+          height,
+          TTextStyled(
+                '国Ag',
+                maxLines: 1,
+                style: style,
+              ).naturalSize(context).height +
+              contentPadding.vertical,
+        );
+      }
+      if (hasAction) {
+        height = math.max(
+          height,
+          TTextStyled(
+            actionText,
+            style: actionStyle,
+          ).naturalSize(context).height,
+        );
+      }
+      height = math.max(
+        height,
+        math.max(
+              searchIconTheme.size ?? context.tTheme.size8,
+              clearIconTheme.size ?? context.tTheme.size8,
+            ) +
+            contentPadding.vertical,
+      );
+    }
     return SizedBox(
       height: height,
       child: Row(
@@ -242,60 +290,77 @@ class _TSearchBarState extends State<TSearchBar> {
                 padding: contentPadding,
                 child: Row(
                   children: [
-                    IconTheme(
+                    TInternalIconTheme(
                       data: searchIconTheme,
-                      child: const Icon(TIcons.search),
+                      child: const TInternalIcon(TIcons.search, size: 20),
                     ),
                     const SizedBox(width: _kIconGap),
                     Expanded(
-                      child: Material(
+                      child: TInternalMaterial(
                         type: MaterialType.transparency,
-                        child: TextField(
+                        child: TInternalInputHint(
                           controller: _controller,
-                          focusNode: _focusNode,
-                          autofocus: widget.autofocus,
-                          enabled: widget.enabled,
-                          readOnly: widget.readOnly,
-                          onChanged: widget.onChanged,
-                          onSubmitted: widget.onSubmitted,
-                          keyboardType: widget.inputType,
-                          textInputAction: widget.inputAction,
-                          inputFormatters: [
-                            ...?widget.inputFormatters,
-                            if (widget.maxCharacter != null)
-                              _SearchMaxCharacterFormatter(
-                                widget.maxCharacter!,
-                              ),
-                          ],
-                          maxLength: widget.maxLength,
-                          buildCounter:
-                              (
-                                _, {
-                                required currentLength,
-                                required isFocused,
-                                required maxLength,
-                              }) => null,
-                          cursorColor: token.brandNormalColor,
-                          cursorHeight: theme?.cursorHeight,
-                          textAlignVertical: TextAlignVertical.center,
+                          hintText: widget.hintText,
+                          hintStyle: hintStyle,
                           textAlign:
                               effectiveAlignment == TSearchBarAlignment.center
                               ? TextAlign.center
                               : TextAlign.left,
-                          style: textStyle,
-                          decoration: InputDecoration(
-                            hintText: widget.hintText,
-                            hintStyle: hintStyle,
-                            hintMaxLines: 1,
-                            border: InputBorder.none,
-                            enabledBorder: InputBorder.none,
-                            focusedBorder: InputBorder.none,
-                            disabledBorder: InputBorder.none,
-                            isCollapsed: true,
-                            contentPadding: EdgeInsets.zero,
+                          child: TInternalEditor(
+                            child: TextField(
+                              contextMenuBuilder:
+                                  TInternalMaterialTheme.editorMenu,
+                              controller: _controller,
+                              focusNode: _focusNode,
+                              autofocus: widget.autofocus,
+                              enabled: widget.enabled,
+                              readOnly: widget.readOnly,
+                              onChanged: widget.onChanged,
+                              onSubmitted: widget.onSubmitted,
+                              keyboardType: widget.inputType,
+                              textInputAction: widget.inputAction,
+                              inputFormatters: [
+                                ...?widget.inputFormatters,
+                                if (widget.maxCharacter != null)
+                                  _SearchMaxCharacterFormatter(
+                                    widget.maxCharacter!,
+                                  ),
+                              ],
+                              maxLength: widget.maxLength,
+                              buildCounter:
+                                  (
+                                    _, {
+                                    required currentLength,
+                                    required isFocused,
+                                    required maxLength,
+                                  }) => null,
+                              cursorColor: token.brandColor,
+                              cursorHeight: theme?.cursorHeight,
+                              textAlignVertical: TextAlignVertical.center,
+                              textAlign:
+                                  effectiveAlignment ==
+                                      TSearchBarAlignment.center
+                                  ? TextAlign.center
+                                  : TextAlign.left,
+                              style: TTextResolve.resolve(
+                                context: context,
+                                singleLine: true,
+                                style: textStyle,
+                              ),
+                              strutStyle: TTextResolve.singleLineStrut(
+                                context: context,
+                                resolvedStyle: TTextResolve.resolve(
+                                  context: context,
+                                  singleLine: true,
+                                  style: textStyle,
+                                ),
+                                configuredStyle: textStyle,
+                              ),
+                              decoration: null,
+                              maxLines: 1,
+                              cursorOpacityAnimates: false,
+                            ),
                           ),
-                          maxLines: 1,
-                          cursorOpacityAnimates: false,
                         ),
                       ),
                     ),
@@ -309,9 +374,11 @@ class _TSearchBarState extends State<TSearchBar> {
                           child: SizedBox(
                             width: 32,
                             height: height,
-                            child: IconTheme(
+                            child: TInternalIconTheme(
                               data: clearIconTheme,
-                              child: const Icon(TIcons.close_circle_filled),
+                              child: const TInternalIcon(
+                                TIcons.close_circle_filled,
+                              ),
                             ),
                           ),
                         ),
@@ -330,7 +397,9 @@ class _TSearchBarState extends State<TSearchBar> {
                 onTap: widget.enabled ? widget.onActionPressed : null,
                 child: SizedBox(
                   height: height,
-                  child: Center(child: Text(actionText, style: actionStyle)),
+                  child: Center(
+                    child: TTextStyled(actionText, style: actionStyle),
+                  ),
                 ),
               ),
             ),

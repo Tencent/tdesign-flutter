@@ -1,14 +1,28 @@
-import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:tdesign_flutter/src/components/divider/t_divider_painter.dart';
 import 'package:tdesign_flutter/tdesign_flutter.dart';
+
+import '../../helpers/text_slot_regression.dart';
 
 /// TDivider Widget 测试
 ///
 /// 覆盖 layout×child 组合、align 三档、dashed 横向/竖线忽略、
 /// Theme 各字段、resolve 优先级、0.2 迁移验证。
 void main() {
+  registerNativeParagraphContractTests(
+    'Divider label slot',
+    (child) => TDivider(child: child),
+    reset: false,
+  );
+
+  registerTextSlotParityTests(
+    'Divider label slot',
+    (child) => TDivider(child: child),
+  );
+
+  dividerTypographyOwnershipTests();
+
   /// 用 TTheme 包裹以提供基础 Token
   Widget wrapWithTheme(Widget child, {TDividerThemeData? dividerTheme}) {
     final themeExtensions = <ThemeExtension>[
@@ -57,7 +71,7 @@ void main() {
       );
       expect(find.byType(TDivider), findsOneWidget);
       expect(tester.getSize(find.byType(TDivider)).height, 14);
-      expect(tester.getSize(find.byType(TDivider)).width, 16.5);
+      expect(tester.getSize(find.byType(TDivider)).width, 32.5);
     });
 
     testWidgets('竖线 + child 时 child 不渲染', (tester) async {
@@ -210,7 +224,7 @@ void main() {
       expect(gapPadding.padding, const EdgeInsets.symmetric(horizontal: 12));
     });
 
-    testWidgets('显式 Material DividerTheme 参与颜色与间距解析', (tester) async {
+    testWidgets('Material DividerTheme 不覆盖 TDesign 分割线', (tester) async {
       await tester.pumpWidget(
         MaterialApp(
           theme: ThemeData(
@@ -230,8 +244,8 @@ void main() {
           matching: find.byType(ColoredBox),
         ),
       );
-      expect(coloredBox.color, Colors.orange);
-      expect(tester.getSize(find.byType(TDivider)).height, 24);
+      expect(coloredBox.color, TThemeData.defaultData().borderLevel1Color);
+      expect(tester.getSize(find.byType(TDivider)).height, isNot(24));
     });
 
     testWidgets('默认内容使用 bodySmall / placeholder Token', (tester) async {
@@ -436,4 +450,117 @@ void main() {
       expect(p1.shouldRepaint(p3), isTrue);
     });
   });
+}
+
+void dividerTypographyOwnershipTests() {
+  for (final m3 in [false, true]) {
+    testWidgets('divider defaults isolate ambient typography M3=$m3', (
+      tester,
+    ) async {
+      final widths = <double>[];
+      for (final hostile in [false, true]) {
+        await tester.pumpWidget(
+          MaterialApp(
+            theme: ThemeData(
+              useMaterial3: m3,
+              textTheme: TextTheme(
+                bodyMedium: TextStyle(
+                  fontSize: hostile ? 80 : 14,
+                  letterSpacing: hostile ? 18 : 0,
+                  wordSpacing: hostile ? 9 : 0,
+                  shadows: hostile
+                      ? const [Shadow(color: Colors.pink, blurRadius: 3)]
+                      : null,
+                ),
+              ),
+              extensions: [TThemeData.defaultData()],
+            ),
+            home: const Scaffold(body: TDivider(child: Text('Divider label'))),
+          ),
+        );
+        await tester.pumpAndSettle();
+        final style =
+            (tester
+                        .renderObject<RenderParagraph>(
+                          find.text('Divider label'),
+                        )
+                        .text
+                    as TextSpan)
+                .style!;
+        expect(style.fontSize, 12);
+        expect(style.letterSpacing, 0);
+        expect(style.wordSpacing, 0);
+        expect(style.shadows, anyOf(isNull, isEmpty));
+        widths.add(tester.getSize(find.text('Divider label')).width);
+      }
+      expect(widths.first, widths.last);
+    });
+    testWidgets(
+      'divider TD styles and explicit caller content survive M3=$m3',
+      (tester) async {
+        await tester.pumpWidget(
+          MaterialApp(
+            theme: ThemeData(
+              useMaterial3: m3,
+              textTheme: const TextTheme(
+                bodyMedium: TextStyle(fontSize: 31, color: Colors.green),
+              ),
+              extensions: [
+                TThemeData.defaultData(),
+                const TDividerThemeData(
+                  textStyle: TextStyle(
+                    fontSize: 18,
+                    color: Colors.blue,
+                    letterSpacing: 3,
+                    wordSpacing: 2,
+                    shadows: [Shadow(color: Colors.blue, blurRadius: 2)],
+                  ),
+                ),
+              ],
+            ),
+            home: Scaffold(
+              body: Column(
+                children: [
+                  const TDivider(child: Text('themed')),
+                  const TDivider(
+                    child: Text(
+                      'explicit',
+                      style: TextStyle(
+                        fontSize: 24,
+                        color: Colors.pink,
+                        letterSpacing: 5,
+                      ),
+                    ),
+                  ),
+                  TDivider(
+                    child: Builder(
+                      builder: (context) => Text(
+                        'custom',
+                        style: Theme.of(context).textTheme.bodyMedium,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        );
+        await tester.pumpAndSettle();
+        TextStyle style(String text) =>
+            (tester.renderObject<RenderParagraph>(find.text(text)).text
+                    as TextSpan)
+                .style!;
+        expect(style('themed').fontSize, 18);
+        expect(style('themed').color, Colors.blue);
+        expect(style('themed').letterSpacing, 3);
+        expect(style('themed').wordSpacing, 2);
+        expect(style('themed').shadows!.single.color, Colors.blue);
+        expect(style('explicit').fontSize, 24);
+        expect(style('explicit').color, Colors.pink);
+        expect(style('explicit').letterSpacing, 5);
+        expect(style('custom').fontSize, 31);
+        expect(style('custom').color, Colors.green);
+      },
+    );
+  }
 }

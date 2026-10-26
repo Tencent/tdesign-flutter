@@ -1,0 +1,165 @@
+{
+  "workingDirectory": "tdesign-component (separate identical source checkouts for the two SDKs)",
+  "sdkVersions": [
+    "3.32.0",
+    "3.47.7"
+  ],
+  "componentTests": [
+    "test/components/button/t_button_test.dart",
+    "test/components/button/t_button_theme_priority_test.dart",
+    "test/components/button/t_button_theme_test.dart",
+    "test/components/button/t_button_widget_test.dart",
+    "test/components/switch/t_switch_test.dart",
+    "test/components/switch/t_switch_typography_test.dart",
+    "test/components/switch/t_cupertino_switch_test.dart",
+    "test/components/input/t_input_test.dart",
+    "test/components/input/t_input_theme_test.dart",
+    "test/components/link/t_link_resolve_test.dart",
+    "test/components/link/t_link_test.dart",
+    "test/components/link/t_link_theme_test.dart",
+    "test/components/link/t_link_widget_test.dart",
+    "test/components/avatar/t_avatar_test.dart",
+    "test/components/empty/t_empty_test.dart",
+    "test/components/progress/t_progress_test.dart"
+  ],
+  "analyze": [
+    "flutter",
+    "analyze",
+    "--no-pub",
+    "--fatal-infos"
+  ],
+  "fullRegression": [
+    "flutter",
+    "test",
+    "--no-pub",
+    "--exclude-tags",
+    "demo",
+    "--reporter",
+    "expanded",
+    "--coverage",
+    "test/components/button/t_button_test.dart",
+    "test/components/button/t_button_theme_priority_test.dart",
+    "test/components/button/t_button_theme_test.dart",
+    "test/components/button/t_button_widget_test.dart",
+    "test/components/switch/t_switch_test.dart",
+    "test/components/switch/t_switch_typography_test.dart",
+    "test/components/switch/t_cupertino_switch_test.dart",
+    "test/components/input/t_input_test.dart",
+    "test/components/input/t_input_theme_test.dart",
+    "test/components/link/t_link_resolve_test.dart",
+    "test/components/link/t_link_test.dart",
+    "test/components/link/t_link_theme_test.dart",
+    "test/components/link/t_link_widget_test.dart",
+    "test/components/avatar/t_avatar_test.dart",
+    "test/components/empty/t_empty_test.dart",
+    "test/components/progress/t_progress_test.dart"
+  ],
+  "coverageCommands": [
+    [
+      "dart",
+      "run",
+      "tool/check_component_coverage.dart",
+      "button"
+    ],
+    [
+      "dart",
+      "run",
+      "tool/check_component_coverage.dart",
+      "switch"
+    ],
+    [
+      "dart",
+      "run",
+      "tool/check_component_coverage.dart",
+      "input"
+    ],
+    [
+      "dart",
+      "run",
+      "tool/check_component_coverage.dart",
+      "link"
+    ],
+    [
+      "dart",
+      "run",
+      "tool/check_component_coverage.dart",
+      "avatar"
+    ],
+    [
+      "dart",
+      "run",
+      "tool/check_component_coverage.dart",
+      "empty"
+    ],
+    [
+      "dart",
+      "run",
+      "tool/check_component_coverage.dart",
+      "progress"
+    ]
+  ],
+  "focusEnvironment": {
+    "TDESIGN_TOKEN_EVIDENCE": "1"
+  },
+  "focus": [
+    "flutter",
+    "test",
+    "--no-pub",
+    "--reporter",
+    "expanded",
+    "--plain-name",
+    "token consumption",
+    "test/components/button/t_button_test.dart",
+    "test/components/switch/t_switch_test.dart",
+    "test/components/input/t_input_test.dart",
+    "test/components/link/t_link_test.dart",
+    "test/components/avatar/t_avatar_test.dart",
+    "test/components/empty/t_empty_test.dart",
+    "test/components/progress/t_progress_test.dart"
+  ],
+  "sdkMetadata": [
+    "flutter",
+    "--version",
+    "--machine"
+  ],
+  "compileFrozenSource": [
+    "node",
+    "tool/audit_compiled_token_consumption.mjs",
+    "<frozen-source-root>"
+  ],
+  "summarize": [
+    "node",
+    "tool/verify_token_difference_resolutions.mjs",
+    "<log-directory>"
+  ],
+  "explanation": "This verifies dispositions and current runtime contracts; 21 implementation proposals, one platform issue, applicable visual acceptance and the other524 runtime rows are still pending.",
+  "focusExpectedCount": 47,
+  "fullRegressionExpectedCount": 440,
+  "migration": [
+    "dart",
+    "tool/run_migration_consumer.dart"
+  ],
+  "migrationExpectedCount": 21,
+  "snapshotFiles": [
+    "source-low-before.json",
+    "source-low-after.json",
+    "source-high-before.json",
+    "source-high-after.json"
+  ],
+  "snapshotFormat": "Each snapshot has files:[{file:<component-relative path>,sha256}], lockSha256. Include lib, assets, all16 manifest test files, test/support/token_consumption_evidence.dart, tool/component_test_manifest.dart, pubspec.yaml.",
+  "logs": "analyze-low/high.log, full-low/high.log, focus-low/high.log, coverage-low/high-<component>.log, migration-low/high.log (migration-high-retry.log takes precedence), sdk-low/high.json.",
+  "isolatedProposal": {
+    "patch": "proposed-visual-fixes.patch",
+    "appliedToMainWorkspace": false,
+    "focusSdk": "3.47.7",
+    "focusExpectedCount": 47,
+    "log": "proposed-focus-high.log",
+    "snapshots": [
+      "proposed-source-before.json",
+      "proposed-source-after.json"
+    ],
+    "sameDependencyLockAsHighSdk": true,
+    "fullRegressionRun": false,
+    "lowSdkRun": false
+  }
+}

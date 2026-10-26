@@ -4,6 +4,8 @@ import '../../theme/t_colors.dart';
 import '../../theme/t_fonts.dart';
 import '../../theme/t_spacers.dart';
 import '../../theme/t_theme.dart';
+import '../text/t_text_resolve.dart';
+import '../text/t_text_style_scope.dart';
 import 't_divider_painter.dart';
 import 't_divider_theme_data.dart';
 
@@ -28,33 +30,11 @@ enum TDividerAlign {
   right,
 }
 
-/// 分割线组件
-///
-/// T3 自绘层级，不包装 Material [Divider]。包含两种绘制模式：
-/// - 模式 A（纯线）：[child] 为空，横线可虚线、竖线强制实线
-/// - 模式 B（线 + 中间）：[layout] 为 horizontal 且 [child] 非空
-///
-/// 竖线（[TDividerLayout.vertical]）时强制忽略 [dashed]、[align]、[child]，
-/// 默认高度 14dp，左右外边距 8dp。
-///
-/// 示例：
-/// ```dart
-/// // 水平分割线
-/// TDivider()
-///
-/// // 带文字的水平分割线
-/// TDivider(child: Text('文字信息'))
-///
-/// // 虚线 + 文字靠左
-/// TDivider(dashed: true, align: TDividerAlign.left, child: Text('靠左'))
-///
-/// // 竖线
-/// TDivider(layout: TDividerLayout.vertical)
-/// ```
 class TDivider extends StatelessWidget {
   const TDivider({super.key, this.layout, this.align, this.dashed, this.child});
 
-  /// 横/竖分割线，默认 [TDividerLayout.horizontal]
+  /// 横/竖分割线，默认 [TDividerLayout.horizontal]。
+  /// 竖向强制实线并忽略 align、child，默认高度 14、左右外边距 16 逻辑像素。
   final TDividerLayout? layout;
 
   /// 中间内容在线条中的位置，默认 [TDividerAlign.center]
@@ -72,33 +52,21 @@ class TDivider extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     // ---- resolve 内联链 ----
-    // 优先级：构造器 L1/L2 > TDividerThemeData > Material DividerTheme (P2) > Token (P4)
+    // 优先级：构造器 > TDividerThemeData > TDesign Token。
     final theme = Theme.of(context).extension<TDividerThemeData>();
-    final materialTheme = Theme.of(context);
-    final dividerTheme = materialTheme.dividerTheme;
     final token = context.tTheme;
 
     final effectiveLayout = layout ?? TDividerLayout.horizontal;
 
     // L4 值按优先级 fallback
-    final effectiveColor =
-        theme?.color ??
-        materialTheme.tExplicitDividerColor ??
-        token.bgColorComponent;
-    final effectiveThickness =
-        theme?.thickness ?? dividerTheme.thickness ?? 0.5;
+    final effectiveColor = theme?.color ?? token.bgColorComponent;
+    final effectiveThickness = theme?.thickness ?? 0.5;
     final effectiveIndent = theme?.indent;
     final effectiveEndIndent = theme?.endIndent;
     final effectiveGapPadding =
-        theme?.gapPadding ?? EdgeInsets.symmetric(horizontal: token.spacer12);
+        theme?.gapPadding ?? EdgeInsets.symmetric(horizontal: token.spacer1);
     final effectiveMargin =
-        theme?.margin ??
-        _defaultMargin(
-          effectiveLayout,
-          dividerTheme.space,
-          effectiveThickness,
-          token.spacer8,
-        );
+        theme?.margin ?? _defaultMargin(effectiveLayout, token.spacer2);
     final contentFont = token.fontBodySmall;
     final defaultTextStyle = TextStyle(
       fontSize: contentFont?.size ?? 12,
@@ -207,13 +175,16 @@ class TDivider extends StatelessWidget {
             : double.infinity;
         final middleContent = ConstrainedBox(
           constraints: BoxConstraints(maxWidth: maxContentWidth),
-          child: DefaultTextStyle.merge(
-            style: effectiveTextStyle ?? const TextStyle(),
+          child: TTextStyleScope(
+            style: TTextResolve.resolve(
+              context: context,
+              style: effectiveTextStyle,
+            ),
             child: Padding(padding: gapPadding, child: child!),
           ),
         );
 
-        // 小程序端固定为 60rpx，在 375dp 设计基准下对应 30dp。
+        // 默认缩进为 30 逻辑像素。
         final shortLine = SizedBox(
           width: 30,
           height: thickness,
@@ -252,22 +223,9 @@ class TDivider extends StatelessWidget {
     );
   }
 
-  EdgeInsetsGeometry _defaultMargin(
-    TDividerLayout layout,
-    double? materialSpace,
-    double thickness,
-    double spacer8,
-  ) {
-    if (materialSpace != null) {
-      final side = ((materialSpace - thickness) / 2)
-          .clamp(0.0, double.infinity)
-          .toDouble();
-      return layout == TDividerLayout.horizontal
-          ? EdgeInsets.symmetric(vertical: side)
-          : EdgeInsets.symmetric(horizontal: side);
-    }
+  EdgeInsetsGeometry _defaultMargin(TDividerLayout layout, double spacer16) {
     return layout == TDividerLayout.horizontal
         ? const EdgeInsets.symmetric(vertical: 10)
-        : EdgeInsets.symmetric(horizontal: spacer8);
+        : EdgeInsets.symmetric(horizontal: spacer16);
   }
 }

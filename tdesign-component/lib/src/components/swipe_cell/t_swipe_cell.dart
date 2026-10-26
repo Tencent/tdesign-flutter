@@ -8,24 +8,49 @@ import 't_swipe_cell_inherited.dart';
 import 't_swipe_cell_panel.dart';
 
 /// 操作面板所在侧。
-enum TSwipeCellSide { start, end }
+enum TSwipeCellSide {
+  /// 沿当前文字方向的起始侧；LTR 为左侧，RTL 为右侧。
+  start,
+
+  /// 沿当前文字方向的结束侧；LTR 为右侧，RTL 为左侧。
+  end,
+}
 
 /// 滑动展开状态变化回调。
+/// [side] 发生变化的操作面板侧。
+/// [isOpen] 该侧面板是否展开。
+///
+/// ## 返回值
+/// 无返回值。
 typedef TSwipeCellChanged = void Function(TSwipeCellSide side, bool isOpen);
 
 /// [TSwipeCell] 的命令式控制器。
 ///
-/// 一个控制器同一时间只能绑定一个 [TSwipeCell]。通常无需使用控制器，用户拖动、
+/// 一个控制器同一时间只能绑定一个 [TSwipeCell]，重复绑定其他实例会抛出
+/// [FlutterError]。通常无需使用控制器，用户拖动、
 /// 点击操作项、点击单元格外部或滚动列表时，组件会自行管理展开状态。
 class TSwipeCellController {
   _TSwipeCellControllerBinding? _binding;
 
   /// 展开指定侧的操作面板。
-  Future<void> open(TSwipeCellSide side) async {
+  /// 动画结束、被后续命令打断或组件卸载取消时，Future 均会完成；不表示当前仍处于请求的目标状态。
+  /// 未绑定组件时立即完成且不执行操作。
+  ///
+  /// ## 返回值
+  /// 本次展开动画完成或取消时结束；未绑定时立即完成。完成后面板可能已被后续命令关闭。
+  Future<void> open(
+    /// 需要展开的操作面板侧；该侧没有面板时关闭当前面板。
+    TSwipeCellSide side,
+  ) async {
     await _binding?.open(side);
   }
 
   /// 关闭当前展开的操作面板。
+  /// 动画结束、被后续命令打断或组件卸载取消时，Future 均会完成；不表示当前仍处于请求的目标状态。
+  /// 未绑定组件时立即完成且不执行操作。
+  ///
+  /// ## 返回值
+  /// 本次关闭动画完成或取消时结束；未绑定时立即完成。完成后面板可能已被后续命令重新打开。
   Future<void> close() async {
     await _binding?.close();
   }
@@ -52,7 +77,6 @@ abstract interface class _TSwipeCellControllerBinding {
   Future<void> close();
 }
 
-/// 滑动单元格组件。
 class TSwipeCell extends StatefulWidget {
   const TSwipeCell({
     Key? key,
@@ -70,6 +94,7 @@ class TSwipeCell extends StatefulWidget {
   final Widget child;
 
   /// 是否允许用户拖动，默认为 true。
+  /// 仅控制用户拖动，不阻止控制器命令。
   final bool enabled;
 
   /// 起始侧操作面板。
@@ -79,9 +104,11 @@ class TSwipeCell extends StatefulWidget {
   final TSwipeCellPanel? end;
 
   /// 面板展开状态变化回调。
+  /// 在展开状态改变时通知，早于动画结束；切换侧时先通知旧侧关闭，再通知新侧打开。
   final TSwipeCellChanged? onOpenChanged;
 
   /// 命令式控制器。
+  /// 建议独立单元格分别使用 Controller；绑定规则见 [TSwipeCellController]。
   final TSwipeCellController? controller;
 
   /// 首次布局后默认展开的面板；为空时保持关闭。
@@ -107,6 +134,7 @@ class _TSwipeCellState extends State<TSwipeCell>
   final _endPanelKey = GlobalKey();
 
   late final AnimationController _offsetController;
+  TSwipeCellController? _boundController;
   ScrollPosition? _scrollPosition;
   ModalRoute<dynamic>? _route;
   TextDirection? _textDirection;
@@ -135,6 +163,7 @@ class _TSwipeCellState extends State<TSwipeCell>
     super.initState();
     _offsetController = AnimationController.unbounded(vsync: this);
     widget.controller?._attach(this);
+    _boundController = widget.controller;
     WidgetsBinding.instance.addPostFrameCallback((_) async {
       if (!mounted) {
         return;
@@ -164,9 +193,10 @@ class _TSwipeCellState extends State<TSwipeCell>
   @override
   void didUpdateWidget(covariant TSwipeCell oldWidget) {
     super.didUpdateWidget(oldWidget);
-    if (oldWidget.controller != widget.controller) {
-      oldWidget.controller?._detach(this);
+    if (!identical(_boundController, widget.controller)) {
       widget.controller?._attach(this);
+      _boundController?._detach(this);
+      _boundController = widget.controller;
     }
     if (oldWidget.closeOnScroll != widget.closeOnScroll) {
       _bindScrollable();
@@ -177,7 +207,7 @@ class _TSwipeCellState extends State<TSwipeCell>
   @override
   void dispose() {
     _unbindRoute();
-    widget.controller?._detach(this);
+    _boundController?._detach(this);
     _unbindScrollable();
     _unregisterTapOutsideListener();
     _offsetController.dispose();

@@ -1,5 +1,5 @@
-/// 弹出气泡预设配色。
-enum TPopoverColorScheme {
+/// 弹出气泡的内置配色预设；不切换全局明暗主题。
+enum TPopoverColorPreset {
   /// 默认深色配色。
   defaultTheme,
 

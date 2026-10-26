@@ -1,6 +1,5 @@
 import 'dart:io';
 
-import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:tdesign_flutter/tdesign_flutter.dart';
@@ -74,7 +73,7 @@ class _BadgeScene extends StatelessWidget {
                   child: Column(
                     children: [
                       _VariantRow(
-                        name: 'normal',
+                        name: 'circle',
                         badge: Row(
                           mainAxisSize: MainAxisSize.min,
                           children: [

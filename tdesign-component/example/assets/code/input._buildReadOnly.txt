@@ -1,4 +1,0 @@
-Widget _buildReadOnly(BuildContext context) => const TFormItem(
-    label: '标签文字',
-    child: TInput(borderless: true, initialValue: '只读模式', readOnly: true),
-  );

@@ -1,0 +1,1259 @@
+[
+  {
+    "name": "missing tokens preserve defaults",
+    "light": "",
+    "dark": "",
+    "extra": "",
+    "expected": {
+      "light": {
+        "ref": {},
+        "color": {},
+        "font": {},
+        "fontMetric": {},
+        "radius": {},
+        "shadow": {},
+        "insetShadow": {},
+        "margin": {}
+      },
+      "dark": {
+        "ref": {},
+        "color": {},
+        "font": {},
+        "fontMetric": {},
+        "radius": {},
+        "shadow": {},
+        "insetShadow": {},
+        "margin": {}
+      }
+    }
+  },
+  {
+    "name": "palette and semantic reference",
+    "light": "--td-brand-color-7:#123; --td-brand-color:var(--td-brand-color-7);",
+    "dark": "--td-brand-color-7:#123; --td-brand-color:var(--td-brand-color-7);",
+    "extra": "",
+    "expected": {
+      "light": {
+        "ref": {
+          "brandColor": "brandColor7"
+        },
+        "color": {
+          "brandColor7": "#112233"
+        },
+        "font": {},
+        "fontMetric": {},
+        "radius": {},
+        "shadow": {},
+        "insetShadow": {},
+        "margin": {}
+      },
+      "dark": {
+        "ref": {
+          "brandColor": "brandColor7"
+        },
+        "color": {
+          "brandColor7": "#112233"
+        },
+        "font": {},
+        "fontMetric": {},
+        "radius": {},
+        "shadow": {},
+        "insetShadow": {},
+        "margin": {}
+      }
+    }
+  },
+  {
+    "name": "direct semantic color",
+    "light": "--td-text-color-primary:#1234;",
+    "dark": "--td-text-color-primary:#1234;",
+    "extra": "",
+    "expected": {
+      "light": {
+        "ref": {
+          "textColorPrimary": "textColorPrimary"
+        },
+        "color": {
+          "textColorPrimary": "#44112233"
+        },
+        "font": {},
+        "fontMetric": {},
+        "radius": {},
+        "shadow": {},
+        "insetShadow": {},
+        "margin": {}
+      },
+      "dark": {
+        "ref": {
+          "textColorPrimary": "textColorPrimary"
+        },
+        "color": {
+          "textColorPrimary": "#44112233"
+        },
+        "font": {},
+        "fontMetric": {},
+        "radius": {},
+        "shadow": {},
+        "insetShadow": {},
+        "margin": {}
+      }
+    }
+  },
+  {
+    "name": "reference chain",
+    "light": "--td-a:var(--td-b); --td-b:#abc; --td-bg-color-page:var(--td-a);",
+    "dark": "--td-a:var(--td-b); --td-b:#abc; --td-bg-color-page:var(--td-a);",
+    "extra": "",
+    "expected": {
+      "light": {
+        "ref": {
+          "bgColorPage": "bgColorPage"
+        },
+        "color": {
+          "bgColorPage": "#AABBCC"
+        },
+        "font": {},
+        "fontMetric": {},
+        "radius": {},
+        "shadow": {},
+        "insetShadow": {},
+        "margin": {}
+      },
+      "dark": {
+        "ref": {
+          "bgColorPage": "bgColorPage"
+        },
+        "color": {
+          "bgColorPage": "#AABBCC"
+        },
+        "font": {},
+        "fontMetric": {},
+        "radius": {},
+        "shadow": {},
+        "insetShadow": {},
+        "margin": {}
+      }
+    }
+  },
+  {
+    "name": "nested fallback",
+    "light": "--td-brand-color:var(--td-missing,var(--td-other,rgba(1,2,3,.5)));",
+    "dark": "--td-brand-color:var(--td-missing,var(--td-other,rgba(1,2,3,.5)));",
+    "extra": "",
+    "expected": {
+      "light": {
+        "ref": {
+          "brandColor": "brandColor"
+        },
+        "color": {
+          "brandColor": "#80010203"
+        },
+        "font": {},
+        "fontMetric": {},
+        "radius": {},
+        "shadow": {},
+        "insetShadow": {},
+        "margin": {}
+      },
+      "dark": {
+        "ref": {
+          "brandColor": "brandColor"
+        },
+        "color": {
+          "brandColor": "#80010203"
+        },
+        "font": {},
+        "fontMetric": {},
+        "radius": {},
+        "shadow": {},
+        "insetShadow": {},
+        "margin": {}
+      }
+    }
+  },
+  {
+    "name": "cycle and missing reference",
+    "light": "--td-a:var(--td-b); --td-b:var(--td-a); --td-brand-color:var(--td-a); --td-text-color-primary:var(--td-font-gray-1);",
+    "dark": "--td-a:var(--td-b); --td-b:var(--td-a); --td-brand-color:var(--td-a); --td-text-color-primary:var(--td-font-gray-1);",
+    "extra": "",
+    "expected": {
+      "light": {
+        "ref": {},
+        "color": {},
+        "font": {},
+        "fontMetric": {},
+        "radius": {},
+        "shadow": {},
+        "insetShadow": {},
+        "margin": {}
+      },
+      "dark": {
+        "ref": {},
+        "color": {},
+        "font": {},
+        "fontMetric": {},
+        "radius": {},
+        "shadow": {},
+        "insetShadow": {},
+        "margin": {}
+      }
+    }
+  },
+  {
+    "name": "sparse font and derived level",
+    "light": "--td-font-size-title-large:22px;",
+    "dark": "--td-font-size-title-large:22px;",
+    "extra": "",
+    "expected": {
+      "light": {
+        "ref": {},
+        "color": {},
+        "font": {
+          "fontTitleExtraLarge": {
+            "size": 22
+          },
+          "fontTitleLarge": {
+            "size": 20
+          }
+        },
+        "fontMetric": {
+          "fontSizeTitleExtraLarge": 22,
+          "fontSizeTitleLarge": 20
+        },
+        "radius": {},
+        "shadow": {},
+        "insetShadow": {},
+        "margin": {}
+      },
+      "dark": {
+        "ref": {},
+        "color": {},
+        "font": {
+          "fontTitleExtraLarge": {
+            "size": 22
+          },
+          "fontTitleLarge": {
+            "size": 20
+          }
+        },
+        "fontMetric": {
+          "fontSizeTitleExtraLarge": 22,
+          "fontSizeTitleLarge": 20
+        },
+        "radius": {},
+        "shadow": {},
+        "insetShadow": {},
+        "margin": {}
+      }
+    }
+  },
+  {
+    "name": "line height and font metric",
+    "light": "--td-line-height-body-medium:30px;",
+    "dark": "--td-line-height-body-medium:30px;",
+    "extra": "",
+    "expected": {
+      "light": {
+        "ref": {},
+        "color": {},
+        "font": {
+          "fontBodyMedium": {
+            "lineHeight": 30
+          }
+        },
+        "fontMetric": {
+          "lineHeightBodyMedium": 30
+        },
+        "radius": {},
+        "shadow": {},
+        "insetShadow": {},
+        "margin": {}
+      },
+      "dark": {
+        "ref": {},
+        "color": {},
+        "font": {
+          "fontBodyMedium": {
+            "lineHeight": 30
+          }
+        },
+        "fontMetric": {
+          "lineHeightBodyMedium": 30
+        },
+        "radius": {},
+        "shadow": {},
+        "insetShadow": {},
+        "margin": {}
+      }
+    }
+  },
+  {
+    "name": "all twenty font levels",
+    "light": "--td-font-size-display-large:20px;--td-font-size-display-medium:20px;--td-font-size-headline-large:20px;--td-font-size-headline-medium:20px;--td-font-size-headline-small:20px;--td-font-size-title-large:20px;--td-font-size-title-medium:20px;--td-font-size-title-small:20px;--td-font-size-body-large:20px;--td-font-size-body-medium:20px;--td-font-size-body-small:20px;--td-font-size-mark-medium:20px;--td-font-size-mark-small:20px;--td-font-size-link-large:20px;--td-font-size-link-medium:20px;--td-font-size-link-small:20px;",
+    "dark": "--td-font-size-display-large:20px;--td-font-size-display-medium:20px;--td-font-size-headline-large:20px;--td-font-size-headline-medium:20px;--td-font-size-headline-small:20px;--td-font-size-title-large:20px;--td-font-size-title-medium:20px;--td-font-size-title-small:20px;--td-font-size-body-large:20px;--td-font-size-body-medium:20px;--td-font-size-body-small:20px;--td-font-size-mark-medium:20px;--td-font-size-mark-small:20px;--td-font-size-link-large:20px;--td-font-size-link-medium:20px;--td-font-size-link-small:20px;",
+    "extra": "",
+    "expected": {
+      "light": {
+        "ref": {},
+        "color": {},
+        "font": {
+          "fontDisplayLarge": {
+            "size": 20
+          },
+          "fontDisplayMedium": {
+            "size": 20
+          },
+          "fontHeadlineLarge": {
+            "size": 20
+          },
+          "fontHeadlineMedium": {
+            "size": 20
+          },
+          "fontHeadlineSmall": {
+            "size": 20
+          },
+          "fontTitleExtraLarge": {
+            "size": 20
+          },
+          "fontTitleLarge": {
+            "size": 18
+          },
+          "fontTitleMedium": {
+            "size": 20
+          },
+          "fontTitleSmall": {
+            "size": 20
+          },
+          "fontBodyLarge": {
+            "size": 20
+          },
+          "fontBodyMedium": {
+            "size": 20
+          },
+          "fontBodySmall": {
+            "size": 20
+          },
+          "fontBodyExtraSmall": {
+            "size": 18
+          },
+          "fontMarkLarge": {
+            "size": 22
+          },
+          "fontMarkMedium": {
+            "size": 20
+          },
+          "fontMarkSmall": {
+            "size": 20
+          },
+          "fontMarkExtraSmall": {
+            "size": 18
+          },
+          "fontLinkLarge": {
+            "size": 20
+          },
+          "fontLinkMedium": {
+            "size": 20
+          },
+          "fontLinkSmall": {
+            "size": 20
+          }
+        },
+        "fontMetric": {
+          "fontSizeDisplayLarge": 20,
+          "fontSizeDisplayMedium": 20,
+          "fontSizeHeadlineLarge": 20,
+          "fontSizeHeadlineMedium": 20,
+          "fontSizeHeadlineSmall": 20,
+          "fontSizeTitleExtraLarge": 20,
+          "fontSizeTitleLarge": 18,
+          "fontSizeTitleMedium": 20,
+          "fontSizeTitleSmall": 20,
+          "fontSizeBodyLarge": 20,
+          "fontSizeBodyMedium": 20,
+          "fontSizeBodySmall": 20,
+          "fontSizeBodyExtraSmall": 18,
+          "fontSizeMarkLarge": 22,
+          "fontSizeMarkMedium": 20,
+          "fontSizeMarkSmall": 20,
+          "fontSizeMarkExtraSmall": 18,
+          "fontSizeLinkLarge": 20,
+          "fontSizeLinkMedium": 20,
+          "fontSizeLinkSmall": 20
+        },
+        "radius": {},
+        "shadow": {},
+        "insetShadow": {},
+        "margin": {}
+      },
+      "dark": {
+        "ref": {},
+        "color": {},
+        "font": {
+          "fontDisplayLarge": {
+            "size": 20
+          },
+          "fontDisplayMedium": {
+            "size": 20
+          },
+          "fontHeadlineLarge": {
+            "size": 20
+          },
+          "fontHeadlineMedium": {
+            "size": 20
+          },
+          "fontHeadlineSmall": {
+            "size": 20
+          },
+          "fontTitleExtraLarge": {
+            "size": 20
+          },
+          "fontTitleLarge": {
+            "size": 18
+          },
+          "fontTitleMedium": {
+            "size": 20
+          },
+          "fontTitleSmall": {
+            "size": 20
+          },
+          "fontBodyLarge": {
+            "size": 20
+          },
+          "fontBodyMedium": {
+            "size": 20
+          },
+          "fontBodySmall": {
+            "size": 20
+          },
+          "fontBodyExtraSmall": {
+            "size": 18
+          },
+          "fontMarkLarge": {
+            "size": 22
+          },
+          "fontMarkMedium": {
+            "size": 20
+          },
+          "fontMarkSmall": {
+            "size": 20
+          },
+          "fontMarkExtraSmall": {
+            "size": 18
+          },
+          "fontLinkLarge": {
+            "size": 20
+          },
+          "fontLinkMedium": {
+            "size": 20
+          },
+          "fontLinkSmall": {
+            "size": 20
+          }
+        },
+        "fontMetric": {
+          "fontSizeDisplayLarge": 20,
+          "fontSizeDisplayMedium": 20,
+          "fontSizeHeadlineLarge": 20,
+          "fontSizeHeadlineMedium": 20,
+          "fontSizeHeadlineSmall": 20,
+          "fontSizeTitleExtraLarge": 20,
+          "fontSizeTitleLarge": 18,
+          "fontSizeTitleMedium": 20,
+          "fontSizeTitleSmall": 20,
+          "fontSizeBodyLarge": 20,
+          "fontSizeBodyMedium": 20,
+          "fontSizeBodySmall": 20,
+          "fontSizeBodyExtraSmall": 18,
+          "fontSizeMarkLarge": 22,
+          "fontSizeMarkMedium": 20,
+          "fontSizeMarkSmall": 20,
+          "fontSizeMarkExtraSmall": 18,
+          "fontSizeLinkLarge": 20,
+          "fontSizeLinkMedium": 20,
+          "fontSizeLinkSmall": 20
+        },
+        "radius": {},
+        "shadow": {},
+        "insetShadow": {},
+        "margin": {}
+      }
+    }
+  },
+  {
+    "name": "all radii",
+    "light": "--td-radius-small:0; --td-radius-default:2px; --td-radius-large:4px; --td-radius-extraLarge:8px; --td-radius-round:25px; --td-radius-circle:50%;",
+    "dark": "--td-radius-small:0; --td-radius-default:2px; --td-radius-large:4px; --td-radius-extraLarge:8px; --td-radius-round:25px; --td-radius-circle:50%;",
+    "extra": "",
+    "expected": {
+      "light": {
+        "ref": {},
+        "color": {},
+        "font": {},
+        "fontMetric": {},
+        "radius": {
+          "radiusSmall": 0,
+          "radiusDefault": 2,
+          "radiusLarge": 4,
+          "radiusExtraLarge": 8,
+          "radiusRound": 25,
+          "radiusCircle": 9999
+        },
+        "shadow": {},
+        "insetShadow": {},
+        "margin": {}
+      },
+      "dark": {
+        "ref": {},
+        "color": {},
+        "font": {},
+        "fontMetric": {},
+        "radius": {
+          "radiusSmall": 0,
+          "radiusDefault": 2,
+          "radiusLarge": 4,
+          "radiusExtraLarge": 8,
+          "radiusRound": 25,
+          "radiusCircle": 9999
+        },
+        "shadow": {},
+        "insetShadow": {},
+        "margin": {}
+      }
+    }
+  },
+  {
+    "name": "four outer shadows",
+    "light": "--td-shadow-1:0 2px 4px -1px rgba(0,0,0,.5), 1px 0 2px #123;--td-shadow-2:0 2px 4px -1px rgba(0,0,0,.5), 1px 0 2px #123;--td-shadow-3:0 2px 4px -1px rgba(0,0,0,.5), 1px 0 2px #123;--td-shadow-4:0 2px 4px -1px rgba(0,0,0,.5), 1px 0 2px #123;",
+    "dark": "--td-shadow-1:0 2px 4px -1px rgba(0,0,0,.5), 1px 0 2px #123;--td-shadow-2:0 2px 4px -1px rgba(0,0,0,.5), 1px 0 2px #123;--td-shadow-3:0 2px 4px -1px rgba(0,0,0,.5), 1px 0 2px #123;--td-shadow-4:0 2px 4px -1px rgba(0,0,0,.5), 1px 0 2px #123;",
+    "extra": "",
+    "expected": {
+      "light": {
+        "ref": {},
+        "color": {},
+        "font": {},
+        "fontMetric": {},
+        "radius": {},
+        "shadow": {
+          "shadow1": [
+            {
+              "color": "#80000000",
+              "blurRadius": 4,
+              "spreadRadius": -1,
+              "offset": {
+                "x": 0,
+                "y": 2
+              }
+            },
+            {
+              "color": "#112233",
+              "blurRadius": 2,
+              "spreadRadius": 0,
+              "offset": {
+                "x": 1,
+                "y": 0
+              }
+            }
+          ],
+          "shadow2": [
+            {
+              "color": "#80000000",
+              "blurRadius": 4,
+              "spreadRadius": -1,
+              "offset": {
+                "x": 0,
+                "y": 2
+              }
+            },
+            {
+              "color": "#112233",
+              "blurRadius": 2,
+              "spreadRadius": 0,
+              "offset": {
+                "x": 1,
+                "y": 0
+              }
+            }
+          ],
+          "shadow3": [
+            {
+              "color": "#80000000",
+              "blurRadius": 4,
+              "spreadRadius": -1,
+              "offset": {
+                "x": 0,
+                "y": 2
+              }
+            },
+            {
+              "color": "#112233",
+              "blurRadius": 2,
+              "spreadRadius": 0,
+              "offset": {
+                "x": 1,
+                "y": 0
+              }
+            }
+          ],
+          "shadow4": [
+            {
+              "color": "#80000000",
+              "blurRadius": 4,
+              "spreadRadius": -1,
+              "offset": {
+                "x": 0,
+                "y": 2
+              }
+            },
+            {
+              "color": "#112233",
+              "blurRadius": 2,
+              "spreadRadius": 0,
+              "offset": {
+                "x": 1,
+                "y": 0
+              }
+            }
+          ]
+        },
+        "insetShadow": {},
+        "margin": {}
+      },
+      "dark": {
+        "ref": {},
+        "color": {},
+        "font": {},
+        "fontMetric": {},
+        "radius": {},
+        "shadow": {
+          "shadow1": [
+            {
+              "color": "#80000000",
+              "blurRadius": 4,
+              "spreadRadius": -1,
+              "offset": {
+                "x": 0,
+                "y": 2
+              }
+            },
+            {
+              "color": "#112233",
+              "blurRadius": 2,
+              "spreadRadius": 0,
+              "offset": {
+                "x": 1,
+                "y": 0
+              }
+            }
+          ],
+          "shadow2": [
+            {
+              "color": "#80000000",
+              "blurRadius": 4,
+              "spreadRadius": -1,
+              "offset": {
+                "x": 0,
+                "y": 2
+              }
+            },
+            {
+              "color": "#112233",
+              "blurRadius": 2,
+              "spreadRadius": 0,
+              "offset": {
+                "x": 1,
+                "y": 0
+              }
+            }
+          ],
+          "shadow3": [
+            {
+              "color": "#80000000",
+              "blurRadius": 4,
+              "spreadRadius": -1,
+              "offset": {
+                "x": 0,
+                "y": 2
+              }
+            },
+            {
+              "color": "#112233",
+              "blurRadius": 2,
+              "spreadRadius": 0,
+              "offset": {
+                "x": 1,
+                "y": 0
+              }
+            }
+          ],
+          "shadow4": [
+            {
+              "color": "#80000000",
+              "blurRadius": 4,
+              "spreadRadius": -1,
+              "offset": {
+                "x": 0,
+                "y": 2
+              }
+            },
+            {
+              "color": "#112233",
+              "blurRadius": 2,
+              "spreadRadius": 0,
+              "offset": {
+                "x": 1,
+                "y": 0
+              }
+            }
+          ]
+        },
+        "insetShadow": {},
+        "margin": {}
+      }
+    }
+  },
+  {
+    "name": "four inset shadows",
+    "light": "--td-shadow-inset-top:inset 0 2px 0 0 #123;--td-shadow-inset-right:inset 0 2px 0 0 #123;--td-shadow-inset-bottom:inset 0 2px 0 0 #123;--td-shadow-inset-left:inset 0 2px 0 0 #123;",
+    "dark": "--td-shadow-inset-top:inset 0 2px 0 0 #123;--td-shadow-inset-right:inset 0 2px 0 0 #123;--td-shadow-inset-bottom:inset 0 2px 0 0 #123;--td-shadow-inset-left:inset 0 2px 0 0 #123;",
+    "extra": "",
+    "expected": {
+      "light": {
+        "ref": {},
+        "color": {},
+        "font": {},
+        "fontMetric": {},
+        "radius": {},
+        "shadow": {},
+        "insetShadow": {
+          "shadowInsetTop": {
+            "color": "#112233",
+            "width": 2
+          },
+          "shadowInsetRight": {
+            "color": "#112233",
+            "width": 2
+          },
+          "shadowInsetBottom": {
+            "color": "#112233",
+            "width": 2
+          },
+          "shadowInsetLeft": {
+            "color": "#112233",
+            "width": 2
+          }
+        },
+        "margin": {}
+      },
+      "dark": {
+        "ref": {},
+        "color": {},
+        "font": {},
+        "fontMetric": {},
+        "radius": {},
+        "shadow": {},
+        "insetShadow": {
+          "shadowInsetTop": {
+            "color": "#112233",
+            "width": 2
+          },
+          "shadowInsetRight": {
+            "color": "#112233",
+            "width": 2
+          },
+          "shadowInsetBottom": {
+            "color": "#112233",
+            "width": 2
+          },
+          "shadowInsetLeft": {
+            "color": "#112233",
+            "width": 2
+          }
+        },
+        "margin": {}
+      }
+    }
+  },
+  {
+    "name": "clear shadows",
+    "light": "--td-shadow-1:none; --td-shadow-inset-top:none;",
+    "dark": "--td-shadow-1:none; --td-shadow-inset-top:none;",
+    "extra": "",
+    "expected": {
+      "light": {
+        "ref": {},
+        "color": {},
+        "font": {},
+        "fontMetric": {},
+        "radius": {},
+        "shadow": {
+          "shadow1": []
+        },
+        "insetShadow": {
+          "shadowInsetTop": {
+            "color": "#00000000",
+            "width": 0
+          }
+        },
+        "margin": {}
+      },
+      "dark": {
+        "ref": {},
+        "color": {},
+        "font": {},
+        "fontMetric": {},
+        "radius": {},
+        "shadow": {
+          "shadow1": []
+        },
+        "insetShadow": {
+          "shadowInsetTop": {
+            "color": "#00000000",
+            "width": 0
+          }
+        },
+        "margin": {}
+      }
+    }
+  },
+  {
+    "name": "seven spacers",
+    "light": "--td-size-4:4px;--td-size-5:5px;--td-size-6:6px;--td-size-8:8px;--td-size-10:10px;--td-size-13:13px;--td-size-15:15px;",
+    "dark": "--td-size-4:4px;--td-size-5:5px;--td-size-6:6px;--td-size-8:8px;--td-size-10:10px;--td-size-13:13px;--td-size-15:15px;",
+    "extra": "",
+    "expected": {
+      "light": {
+        "ref": {},
+        "color": {},
+        "font": {},
+        "fontMetric": {},
+        "radius": {},
+        "shadow": {},
+        "insetShadow": {},
+        "margin": {
+          "spacer": 4,
+          "spacer1": 5,
+          "spacer2": 6,
+          "spacer3": 8,
+          "spacer4": 10,
+          "spacer5": 13,
+          "spacer6": 18.75
+        }
+      },
+      "dark": {
+        "ref": {},
+        "color": {},
+        "font": {},
+        "fontMetric": {},
+        "radius": {},
+        "shadow": {},
+        "insetShadow": {},
+        "margin": {
+          "spacer": 4,
+          "spacer1": 5,
+          "spacer2": 6,
+          "spacer3": 8,
+          "spacer4": 10,
+          "spacer5": 13,
+          "spacer6": 18.75
+        }
+      }
+    }
+  },
+  {
+    "name": "explicit spacer wins",
+    "light": "--td-size-15:80px; --td-spacer-6:7px;",
+    "dark": "--td-size-15:80px; --td-spacer-6:7px;",
+    "extra": "",
+    "expected": {
+      "light": {
+        "ref": {},
+        "color": {},
+        "font": {},
+        "fontMetric": {},
+        "radius": {},
+        "shadow": {},
+        "insetShadow": {},
+        "margin": {
+          "spacer6": 7
+        }
+      },
+      "dark": {
+        "ref": {},
+        "color": {},
+        "font": {},
+        "fontMetric": {},
+        "radius": {},
+        "shadow": {},
+        "insetShadow": {},
+        "margin": {
+          "spacer6": 7
+        }
+      }
+    }
+  },
+  {
+    "name": "invalid and unsupported values",
+    "light": "--td-font-size-body-medium:0px; --td-radius-small:3rem; --td-spacer:..px; --td-brand-color:hsl(0 0% 0%);",
+    "dark": "--td-font-size-body-medium:0px; --td-radius-small:3rem; --td-spacer:..px; --td-brand-color:hsl(0 0% 0%);",
+    "extra": "",
+    "expected": {
+      "light": {
+        "ref": {},
+        "color": {},
+        "font": {},
+        "fontMetric": {},
+        "radius": {},
+        "shadow": {},
+        "insetShadow": {},
+        "margin": {}
+      },
+      "dark": {
+        "ref": {},
+        "color": {},
+        "font": {},
+        "fontMetric": {},
+        "radius": {},
+        "shadow": {},
+        "insetShadow": {},
+        "margin": {}
+      }
+    }
+  },
+  {
+    "name": "invalid font and shadow numbers",
+    "light": "--td-font-size-body-large:bad; --td-line-height-link-large:3rem; --td-shadow-1:0 2px ..px #123;",
+    "dark": "--td-font-size-body-large:bad; --td-line-height-link-large:3rem; --td-shadow-1:0 2px ..px #123;",
+    "extra": "",
+    "expected": {
+      "light": {
+        "ref": {},
+        "color": {},
+        "font": {},
+        "fontMetric": {},
+        "radius": {},
+        "shadow": {},
+        "insetShadow": {},
+        "margin": {}
+      },
+      "dark": {
+        "ref": {},
+        "color": {},
+        "font": {},
+        "fontMetric": {},
+        "radius": {},
+        "shadow": {},
+        "insetShadow": {},
+        "margin": {}
+      }
+    }
+  },
+  {
+    "name": "comments, important and last declaration",
+    "light": "/* --td-radius-small:99px; */ --td-radius-small:1px; --td-radius-small:3px !important",
+    "dark": "/* --td-radius-small:99px; */ --td-radius-small:1px; --td-radius-small:3px !important",
+    "extra": "",
+    "expected": {
+      "light": {
+        "ref": {},
+        "color": {},
+        "font": {},
+        "fontMetric": {},
+        "radius": {
+          "radiusSmall": 3
+        },
+        "shadow": {},
+        "insetShadow": {},
+        "margin": {}
+      },
+      "dark": {
+        "ref": {},
+        "color": {},
+        "font": {},
+        "fontMetric": {},
+        "radius": {
+          "radiusSmall": 3
+        },
+        "shadow": {},
+        "insetShadow": {},
+        "margin": {}
+      }
+    }
+  },
+  {
+    "name": "real controller defaults",
+    "light": ":root,\n:root[theme-mode=\"light\"] {\n  --td-brand-color-1: #f2f3ff;\n  --td-brand-color-2: #d9e1ff;\n  --td-brand-color-3: #b5c7ff;\n  --td-brand-color-4: #8eabff;\n  --td-brand-color-5: #618dff;\n  --td-brand-color-6: #366ef4;\n  --td-brand-color-7: #0052d9;\n  --td-brand-color-8: #003cab;\n  --td-brand-color-9: #002a7c;\n  --td-brand-color-10: #001a57;\n  --td-warning-color-1: #fff1e9;\n  --td-warning-color-2: #ffd9c2;\n  --td-warning-color-3: #ffb98c;\n  --td-warning-color-4: #fa9550;\n  --td-warning-color-5: #e37318;\n  --td-warning-color-6: #be5a00;\n  --td-warning-color-7: #954500;\n  --td-warning-color-8: #713300;\n  --td-warning-color-9: #532300;\n  --td-warning-color-10: #3b1700;\n  --td-error-color-1: #fff0ed;\n  --td-error-color-2: #ffd8d2;\n  --td-error-color-3: #ffb9b0;\n  --td-error-color-4: #ff9285;\n  --td-error-color-5: #f6685d;\n  --td-error-color-6: #d54941;\n  --td-error-color-7: #ad352f;\n  --td-error-color-8: #881f1c;\n  --td-error-color-9: #68070a;\n  --td-error-color-10: #490002;\n  --td-success-color-1: #e3f9e9;\n  --td-success-color-2: #c6f3d7;\n  --td-success-color-3: #92dab2;\n  --td-success-color-4: #56c08d;\n  --td-success-color-5: #2ba471;\n  --td-success-color-6: #008858;\n  --td-success-color-7: #006c45;\n  --td-success-color-8: #005334;\n  --td-success-color-9: #003b23;\n  --td-success-color-10: #002515;\n  --td-gray-color-1: #f3f3f3;\n  --td-gray-color-2: #eee;\n  --td-gray-color-3: #e7e7e7;\n  --td-gray-color-4: #dcdcdc;\n  --td-gray-color-5: #c5c5c5;\n  --td-gray-color-6: #a6a6a6;\n  --td-gray-color-7: #8b8b8b;\n  --td-gray-color-8: #777;\n  --td-gray-color-9: #5e5e5e;\n  --td-gray-color-10: #4b4b4b;\n  --td-gray-color-11: #383838;\n  --td-gray-color-12: #2c2c2c;\n  --td-gray-color-13: #242424;\n  --td-gray-color-14: #181818;\n  --td-font-white-1: rgba(255, 255, 255, 1);\n  --td-font-white-2: rgba(255, 255, 255, .55);\n  --td-font-white-3: rgba(255, 255, 255, .35);\n  --td-font-white-4: rgba(255, 255, 255, .22);\n  --td-font-gray-1: rgba(0, 0, 0, .9);\n  --td-font-gray-2: rgba(0, 0, 0, .6);\n  --td-font-gray-3: rgba(0, 0, 0, .4);\n  --td-font-gray-4: rgba(0, 0, 0, .26);\n  --td-brand-color: var(--td-brand-color-7);\n  --td-warning-color: var(--td-warning-color-5);\n  --td-error-color: var(--td-error-color-6);\n  --td-success-color: var(--td-success-color-5);\n  --td-brand-color-focus: var(--td-brand-color-1);\n  --td-brand-color-active: var(--td-brand-color-8);\n  --td-brand-color-disabled: var(--td-brand-color-3);\n  --td-brand-color-light: var(--td-brand-color-1);\n  --td-brand-color-light-active: var(--td-brand-color-2);\n  --td-warning-color-active: var(--td-warning-color-6);\n  --td-warning-color-disabled: var(--td-warning-color-3);\n  --td-warning-color-focus: var(--td-warning-color-2);\n  --td-warning-color-light: var(--td-warning-color-1);\n  --td-warning-color-light-active: var(--td-warning-color-2);\n  --td-error-color-focus: var(--td-error-color-2);\n  --td-error-color-active: var(--td-error-color-7);\n  --td-error-color-disabled: var(--td-error-color-3);\n  --td-error-color-light: var(--td-error-color-1);\n  --td-error-color-light-active: var(--td-error-color-2);\n  --td-success-color-focus: var(--td-success-color-2);\n  --td-success-color-active: var(--td-success-color-6);\n  --td-success-color-disabled: var(--td-success-color-3);\n  --td-success-color-light: var(--td-success-color-1);\n  --td-success-color-light-active: var(--td-success-color-2);\n  --td-mask-active: rgba(0, 0, 0, .6);\n  --td-mask-disabled: rgba(255, 255, 255, .6);\n  --td-bg-color-page: var(--td-gray-color-1);\n  --td-bg-color-container: var(--td-font-white-1);\n  --td-bg-color-container-active: var(--td-gray-color-3);\n  --td-bg-color-secondarycontainer: var(--td-gray-color-1);\n  --td-bg-color-secondarycontainer-active: var(--td-gray-color-4);\n  --td-bg-color-component: var(--td-gray-color-3);\n  --td-bg-color-component-active: var(--td-gray-color-6);\n  --td-bg-color-component-disabled: var(--td-gray-color-2);\n  --td-bg-color-secondarycomponent: var(--td-gray-color-4);\n  --td-bg-color-secondarycomponent-active: var(--td-gray-color-6);\n  --td-bg-color-specialcomponent: #fff;\n  --td-text-color-primary: var(--td-font-gray-1);\n  --td-text-color-secondary: var(--td-font-gray-2);\n  --td-text-color-placeholder: var(--td-font-gray-3);\n  --td-text-color-disabled: var(--td-font-gray-4);\n  --td-text-color-anti: var(--td-font-white-1);\n  --td-text-color-brand: var(--td-brand-color);\n  --td-text-color-link: var(--td-brand-color);\n  --td-border-level-1-color: var(--td-gray-color-3);\n  --td-component-stroke: var(--td-gray-color-3);\n  --td-border-level-2-color: var(--td-gray-color-4);\n  --td-component-border: var(--td-gray-color-4);\n  --td-shadow-1: 0 1px 10px rgba(0, 0, 0, 5%), 0 4px 5px rgba(0, 0, 0, 8%), 0 2px 4px -1px rgba(0, 0, 0, 12%);\n  --td-shadow-2: 0 3px 14px 2px rgba(0, 0, 0, 5%), 0 8px 10px 1px rgba(0, 0, 0, 6%), 0 5px 5px -3px rgba(0, 0, 0, 10%);\n  --td-shadow-3: 0 6px 30px 5px rgba(0, 0, 0, 5%), 0 16px 24px 2px rgba(0, 0, 0, 4%), 0 8px 10px -5px rgba(0, 0, 0, 8%);\n  --td-shadow-4: 0 2px 8px 0 rgba(0, 0, 0, 6%);\n  --td-shadow-inset-top: inset 0 .5px 0 #dcdcdc;\n  --td-shadow-inset-right: inset .5px 0 0 #dcdcdc;\n  --td-shadow-inset-bottom: inset 0 -.5px 0 #dcdcdc;\n  --td-shadow-inset-left: inset -.5px 0 0 #dcdcdc;\n  --td-table-shadow-color: rgba(0, 0, 0, .08);\n  --td-scrollbar-color: rgba(0, 0, 0, .1);\n  --td-scrollbar-hover-color: rgba(0, 0, 0, .3);\n  --td-scroll-track-color: #fff;\n}",
+    "dark": ":root.dark,\n:root[theme-mode=\"dark\"] {\n  --td-brand-color-1: #1b2f51;\n  --td-brand-color-2: #173463;\n  --td-brand-color-3: #143975;\n  --td-brand-color-4: #103d88;\n  --td-brand-color-5: #0d429a;\n  --td-brand-color-6: #054bbe;\n  --td-brand-color-7: #2667d4;\n  --td-brand-color-8: #4582e6;\n  --td-brand-color-9: #699ef5;\n  --td-brand-color-10: #96bbf8;\n  --td-warning-color-1: #4f2a1d;\n  --td-warning-color-2: #582f21;\n  --td-warning-color-3: #733c23;\n  --td-warning-color-4: #a75d2b;\n  --td-warning-color-5: #cf6e2d;\n  --td-warning-color-6: #dc7633;\n  --td-warning-color-7: #e8935c;\n  --td-warning-color-8: #ecbf91;\n  --td-warning-color-9: #eed7bf;\n  --td-warning-color-10: #f3e9dc;\n  --td-error-color-1: #472324;\n  --td-error-color-2: #5e2a2d;\n  --td-error-color-3: #703439;\n  --td-error-color-4: #83383e;\n  --td-error-color-5: #a03f46;\n  --td-error-color-6: #c64751;\n  --td-error-color-7: #de6670;\n  --td-error-color-8: #ec888e;\n  --td-error-color-9: #edb1b6;\n  --td-error-color-10: #eeced0;\n  --td-success-color-1: #193a2a;\n  --td-success-color-2: #1a4230;\n  --td-success-color-3: #17533d;\n  --td-success-color-4: #0d7a55;\n  --td-success-color-5: #059465;\n  --td-success-color-6: #43af8a;\n  --td-success-color-7: #46bf96;\n  --td-success-color-8: #80d2b6;\n  --td-success-color-9: #b4e1d3;\n  --td-success-color-10: #deede8;\n  --td-gray-color-1: #f3f3f3;\n  --td-gray-color-2: #eee;\n  --td-gray-color-3: #e8e8e8;\n  --td-gray-color-4: #ddd;\n  --td-gray-color-5: #c6c6c6;\n  --td-gray-color-6: #a6a6a6;\n  --td-gray-color-7: #8b8b8b;\n  --td-gray-color-8: #777;\n  --td-gray-color-9: #5e5e5e;\n  --td-gray-color-10: #4b4b4b;\n  --td-gray-color-11: #383838;\n  --td-gray-color-12: #2c2c2c;\n  --td-gray-color-13: #242424;\n  --td-gray-color-14: #181818;\n  --td-font-white-1: rgba(255, 255, 255, .9);\n  --td-font-white-2: rgba(255, 255, 255, .55);\n  --td-font-white-3: rgba(255, 255, 255, .35);\n  --td-font-white-4: rgba(255, 255, 255, .22);\n  --td-font-gray-1: rgba(0, 0, 0, .9);\n  --td-font-gray-2: rgba(0, 0, 0, .6);\n  --td-font-gray-3: rgba(0, 0, 0, .4);\n  --td-font-gray-4: rgba(0, 0, 0, .26);\n  --td-brand-color: var(--td-brand-color-8);\n  --td-warning-color: var(--td-warning-color-5);\n  --td-error-color: var(--td-error-color-6);\n  --td-success-color: var(--td-success-color-5);\n  --td-brand-color-focus: var(--td-brand-color-1);\n  --td-brand-color-active: var(--td-brand-color-9);\n  --td-brand-color-disabled: var(--td-brand-color-3);\n  --td-brand-color-light: var(--td-brand-color-1);\n  --td-brand-color-light-active: var(--td-brand-color-2);\n  --td-warning-color-focus: var(--td-warning-color-2);\n  --td-warning-color-active: var(--td-warning-color-4);\n  --td-warning-color-disabled: var(--td-warning-color-3);\n  --td-warning-color-light: var(--td-warning-color-1);\n  --td-warning-color-light-active: var(--td-warning-color-2);\n  --td-error-color-focus: var(--td-error-color-2);\n  --td-error-color-active: var(--td-error-color-5);\n  --td-error-color-disabled: var(--td-error-color-3);\n  --td-error-color-light: var(--td-error-color-1);\n  --td-error-color-light-active: var(--td-error-color-2);\n  --td-success-color-focus: var(--td-success-color-2);\n  --td-success-color-active: var(--td-success-color-4);\n  --td-success-color-disabled: var(--td-success-color-3);\n  --td-success-color-light: var(--td-success-color-1);\n  --td-success-color-light-active: var(--td-success-color-2);\n  --td-mask-active: rgba(0, 0, 0, .4);\n  --td-mask-disabled: rgba(0, 0, 0, .6);\n  --td-bg-color-page: var(--td-gray-color-14);\n  --td-bg-color-container: var(--td-gray-color-13);\n  --td-bg-color-secondarycontainer: var(--td-gray-color-12);\n  --td-bg-color-component: var(--td-gray-color-11);\n  --td-bg-color-container-active: var(--td-gray-color-12);\n  --td-bg-color-secondarycontainer-active: var(--td-gray-color-11);\n  --td-bg-color-component-active: var(--td-gray-color-10);\n  --td-bg-color-component-disabled: var(--td-gray-color-12);\n  --td-bg-color-specialcomponent: transparent;\n  --td-text-color-primary: var(--td-font-white-1);\n  --td-text-color-secondary: var(--td-font-white-2);\n  --td-text-color-placeholder: var(--td-font-white-3);\n  --td-text-color-disabled: var(--td-font-white-4);\n  --td-text-color-anti: var(--td-font-white-1);\n  --td-text-color-brand: var(--td-brand-color-8);\n  --td-text-color-link: var(--td-brand-color-8);\n  --td-border-level-1-color: var(--td-gray-color-11);\n  --td-component-stroke: var(--td-gray-color-11);\n  --td-border-level-2-color: var(--td-gray-color-9);\n  --td-component-border: var(--td-gray-color-9);\n  --td-shadow-1: 0 4px 6px rgba(0, 0, 0, 6%), 0 1px 10px rgba(0, 0, 0, 8%), 0 2px 4px rgba(0, 0, 0, 12%);\n  --td-shadow-2: 0 8px 10px rgba(0, 0, 0, 12%), 0 3px 14px rgba(0, 0, 0, 10%), 0 5px 5px rgba(0, 0, 0, 16%);\n  --td-shadow-3: 0 16px 24px rgba(0, 0, 0, 14%), 0 6px 30px rgba(0, 0, 0, 12%), 0 8px 10px rgba(0, 0, 0, 20%);\n  --td-shadow-inset-top: inset 0 .5px 0 #5e5e5e;\n  --td-shadow-inset-right: inset .5px 0 0 #5e5e5e;\n  --td-shadow-inset-bottom: inset 0 -.5px 0 #5e5e5e;\n  --td-shadow-inset-left: inset -.5px 0 0 #5e5e5e;\n  --td-table-shadow-color: rgba(0, 0, 0, .55);\n  --td-scrollbar-color: rgba(255, 255, 255, .1);\n  --td-scroll-track-color: #333;\n}",
+    "extra": ":root {\n    --td-font-family: pingfang sc, microsoft yahei, arial regular;\n    --td-font-family-medium: pingfang sc, microsoft yahei, arial medium;\n    --td-font-size-link-small: 12px;\n    --td-font-size-link-medium: 14px;\n    --td-font-size-link-large: 16px;\n    --td-font-size-mark-extraSmall: 10px;\n    --td-font-size-mark-small: 12px;\n    --td-font-size-mark-medium: 14px;\n    --td-font-size-mark-large: 16px;\n    --td-font-size-body-extraSmall: 10px;\n    --td-font-size-body-small: 12px;\n    --td-font-size-body-medium: 14px;\n    --td-font-size-body-large: 16px;\n    --td-font-size-title-small: 14px;\n    --td-font-size-title-medium: 16px;\n    --td-font-size-title-large: 18px;\n    --td-font-size-title-extraLarge: 20px;\n    --td-font-size-headline-small: 24px;\n    --td-font-size-headline-medium: 28px;\n    --td-font-size-headline-large: 36px;\n    --td-font-size-display-medium: 48px;\n    --td-font-size-display-large: 64px;\n    --td-font-size: 10px;\n    --td-font-size-xs: var(--td-font-size-body-extraSmall);\n    --td-font-size-s: var(--td-font-size-body-small);\n    --td-font-size-base: var(--td-font-size-title-small);\n    --td-font-size-m: var(--td-font-size-title-medium);\n    --td-font-size-l: var(--td-font-size-title-large);\n    --td-font-size-xl: var(--td-font-size-title-extraLarge);\n    --td-font-size-xxl: var(--td-font-size-headline-large);\n    \n    --td-radius-small: 3px;\n    --td-radius-default: 6px;\n    --td-radius-large: 9px;\n    --td-radius-extraLarge: 12px;\n    --td-radius-round: 999px;\n    --td-radius-circle: 50%;\n}",
+    "baseline": {
+      "light": ":root,\n:root[theme-mode=\"light\"] {\n  --td-brand-color-1: #f2f3ff;\n  --td-brand-color-2: #d9e1ff;\n  --td-brand-color-3: #b5c7ff;\n  --td-brand-color-4: #8eabff;\n  --td-brand-color-5: #618dff;\n  --td-brand-color-6: #366ef4;\n  --td-brand-color-7: #0052d9;\n  --td-brand-color-8: #003cab;\n  --td-brand-color-9: #002a7c;\n  --td-brand-color-10: #001a57;\n  --td-warning-color-1: #fff1e9;\n  --td-warning-color-2: #ffd9c2;\n  --td-warning-color-3: #ffb98c;\n  --td-warning-color-4: #fa9550;\n  --td-warning-color-5: #e37318;\n  --td-warning-color-6: #be5a00;\n  --td-warning-color-7: #954500;\n  --td-warning-color-8: #713300;\n  --td-warning-color-9: #532300;\n  --td-warning-color-10: #3b1700;\n  --td-error-color-1: #fff0ed;\n  --td-error-color-2: #ffd8d2;\n  --td-error-color-3: #ffb9b0;\n  --td-error-color-4: #ff9285;\n  --td-error-color-5: #f6685d;\n  --td-error-color-6: #d54941;\n  --td-error-color-7: #ad352f;\n  --td-error-color-8: #881f1c;\n  --td-error-color-9: #68070a;\n  --td-error-color-10: #490002;\n  --td-success-color-1: #e3f9e9;\n  --td-success-color-2: #c6f3d7;\n  --td-success-color-3: #92dab2;\n  --td-success-color-4: #56c08d;\n  --td-success-color-5: #2ba471;\n  --td-success-color-6: #008858;\n  --td-success-color-7: #006c45;\n  --td-success-color-8: #005334;\n  --td-success-color-9: #003b23;\n  --td-success-color-10: #002515;\n  --td-gray-color-1: #f3f3f3;\n  --td-gray-color-2: #eee;\n  --td-gray-color-3: #e7e7e7;\n  --td-gray-color-4: #dcdcdc;\n  --td-gray-color-5: #c5c5c5;\n  --td-gray-color-6: #a6a6a6;\n  --td-gray-color-7: #8b8b8b;\n  --td-gray-color-8: #777;\n  --td-gray-color-9: #5e5e5e;\n  --td-gray-color-10: #4b4b4b;\n  --td-gray-color-11: #383838;\n  --td-gray-color-12: #2c2c2c;\n  --td-gray-color-13: #242424;\n  --td-gray-color-14: #181818;\n  --td-font-white-1: rgba(255, 255, 255, 1);\n  --td-font-white-2: rgba(255, 255, 255, .55);\n  --td-font-white-3: rgba(255, 255, 255, .35);\n  --td-font-white-4: rgba(255, 255, 255, .22);\n  --td-font-gray-1: rgba(0, 0, 0, .9);\n  --td-font-gray-2: rgba(0, 0, 0, .6);\n  --td-font-gray-3: rgba(0, 0, 0, .4);\n  --td-font-gray-4: rgba(0, 0, 0, .26);\n  --td-brand-color: var(--td-brand-color-7);\n  --td-warning-color: var(--td-warning-color-5);\n  --td-error-color: var(--td-error-color-6);\n  --td-success-color: var(--td-success-color-5);\n  --td-brand-color-focus: var(--td-brand-color-1);\n  --td-brand-color-active: var(--td-brand-color-8);\n  --td-brand-color-disabled: var(--td-brand-color-3);\n  --td-brand-color-light: var(--td-brand-color-1);\n  --td-brand-color-light-active: var(--td-brand-color-2);\n  --td-warning-color-active: var(--td-warning-color-6);\n  --td-warning-color-disabled: var(--td-warning-color-3);\n  --td-warning-color-focus: var(--td-warning-color-2);\n  --td-warning-color-light: var(--td-warning-color-1);\n  --td-warning-color-light-active: var(--td-warning-color-2);\n  --td-error-color-focus: var(--td-error-color-2);\n  --td-error-color-active: var(--td-error-color-7);\n  --td-error-color-disabled: var(--td-error-color-3);\n  --td-error-color-light: var(--td-error-color-1);\n  --td-error-color-light-active: var(--td-error-color-2);\n  --td-success-color-focus: var(--td-success-color-2);\n  --td-success-color-active: var(--td-success-color-6);\n  --td-success-color-disabled: var(--td-success-color-3);\n  --td-success-color-light: var(--td-success-color-1);\n  --td-success-color-light-active: var(--td-success-color-2);\n  --td-mask-active: rgba(0, 0, 0, .6);\n  --td-mask-disabled: rgba(255, 255, 255, .6);\n  --td-bg-color-page: var(--td-gray-color-1);\n  --td-bg-color-container: var(--td-font-white-1);\n  --td-bg-color-container-active: var(--td-gray-color-3);\n  --td-bg-color-secondarycontainer: var(--td-gray-color-1);\n  --td-bg-color-secondarycontainer-active: var(--td-gray-color-4);\n  --td-bg-color-component: var(--td-gray-color-3);\n  --td-bg-color-component-active: var(--td-gray-color-6);\n  --td-bg-color-component-disabled: var(--td-gray-color-2);\n  --td-bg-color-secondarycomponent: var(--td-gray-color-4);\n  --td-bg-color-secondarycomponent-active: var(--td-gray-color-6);\n  --td-bg-color-specialcomponent: #fff;\n  --td-text-color-primary: var(--td-font-gray-1);\n  --td-text-color-secondary: var(--td-font-gray-2);\n  --td-text-color-placeholder: var(--td-font-gray-3);\n  --td-text-color-disabled: var(--td-font-gray-4);\n  --td-text-color-anti: var(--td-font-white-1);\n  --td-text-color-brand: var(--td-brand-color);\n  --td-text-color-link: var(--td-brand-color);\n  --td-border-level-1-color: var(--td-gray-color-3);\n  --td-component-stroke: var(--td-gray-color-3);\n  --td-border-level-2-color: var(--td-gray-color-4);\n  --td-component-border: var(--td-gray-color-4);\n  --td-shadow-1: 0 1px 10px rgba(0, 0, 0, 5%), 0 4px 5px rgba(0, 0, 0, 8%), 0 2px 4px -1px rgba(0, 0, 0, 12%);\n  --td-shadow-2: 0 3px 14px 2px rgba(0, 0, 0, 5%), 0 8px 10px 1px rgba(0, 0, 0, 6%), 0 5px 5px -3px rgba(0, 0, 0, 10%);\n  --td-shadow-3: 0 6px 30px 5px rgba(0, 0, 0, 5%), 0 16px 24px 2px rgba(0, 0, 0, 4%), 0 8px 10px -5px rgba(0, 0, 0, 8%);\n  --td-shadow-4: 0 2px 8px 0 rgba(0, 0, 0, 6%);\n  --td-shadow-inset-top: inset 0 .5px 0 #dcdcdc;\n  --td-shadow-inset-right: inset .5px 0 0 #dcdcdc;\n  --td-shadow-inset-bottom: inset 0 -.5px 0 #dcdcdc;\n  --td-shadow-inset-left: inset -.5px 0 0 #dcdcdc;\n  --td-table-shadow-color: rgba(0, 0, 0, .08);\n  --td-scrollbar-color: rgba(0, 0, 0, .1);\n  --td-scrollbar-hover-color: rgba(0, 0, 0, .3);\n  --td-scroll-track-color: #fff;\n}",
+      "dark": ":root.dark,\n:root[theme-mode=\"dark\"] {\n  --td-brand-color-1: #1b2f51;\n  --td-brand-color-2: #173463;\n  --td-brand-color-3: #143975;\n  --td-brand-color-4: #103d88;\n  --td-brand-color-5: #0d429a;\n  --td-brand-color-6: #054bbe;\n  --td-brand-color-7: #2667d4;\n  --td-brand-color-8: #4582e6;\n  --td-brand-color-9: #699ef5;\n  --td-brand-color-10: #96bbf8;\n  --td-warning-color-1: #4f2a1d;\n  --td-warning-color-2: #582f21;\n  --td-warning-color-3: #733c23;\n  --td-warning-color-4: #a75d2b;\n  --td-warning-color-5: #cf6e2d;\n  --td-warning-color-6: #dc7633;\n  --td-warning-color-7: #e8935c;\n  --td-warning-color-8: #ecbf91;\n  --td-warning-color-9: #eed7bf;\n  --td-warning-color-10: #f3e9dc;\n  --td-error-color-1: #472324;\n  --td-error-color-2: #5e2a2d;\n  --td-error-color-3: #703439;\n  --td-error-color-4: #83383e;\n  --td-error-color-5: #a03f46;\n  --td-error-color-6: #c64751;\n  --td-error-color-7: #de6670;\n  --td-error-color-8: #ec888e;\n  --td-error-color-9: #edb1b6;\n  --td-error-color-10: #eeced0;\n  --td-success-color-1: #193a2a;\n  --td-success-color-2: #1a4230;\n  --td-success-color-3: #17533d;\n  --td-success-color-4: #0d7a55;\n  --td-success-color-5: #059465;\n  --td-success-color-6: #43af8a;\n  --td-success-color-7: #46bf96;\n  --td-success-color-8: #80d2b6;\n  --td-success-color-9: #b4e1d3;\n  --td-success-color-10: #deede8;\n  --td-gray-color-1: #f3f3f3;\n  --td-gray-color-2: #eee;\n  --td-gray-color-3: #e8e8e8;\n  --td-gray-color-4: #ddd;\n  --td-gray-color-5: #c6c6c6;\n  --td-gray-color-6: #a6a6a6;\n  --td-gray-color-7: #8b8b8b;\n  --td-gray-color-8: #777;\n  --td-gray-color-9: #5e5e5e;\n  --td-gray-color-10: #4b4b4b;\n  --td-gray-color-11: #383838;\n  --td-gray-color-12: #2c2c2c;\n  --td-gray-color-13: #242424;\n  --td-gray-color-14: #181818;\n  --td-font-white-1: rgba(255, 255, 255, .9);\n  --td-font-white-2: rgba(255, 255, 255, .55);\n  --td-font-white-3: rgba(255, 255, 255, .35);\n  --td-font-white-4: rgba(255, 255, 255, .22);\n  --td-font-gray-1: rgba(0, 0, 0, .9);\n  --td-font-gray-2: rgba(0, 0, 0, .6);\n  --td-font-gray-3: rgba(0, 0, 0, .4);\n  --td-font-gray-4: rgba(0, 0, 0, .26);\n  --td-brand-color: var(--td-brand-color-8);\n  --td-warning-color: var(--td-warning-color-5);\n  --td-error-color: var(--td-error-color-6);\n  --td-success-color: var(--td-success-color-5);\n  --td-brand-color-focus: var(--td-brand-color-1);\n  --td-brand-color-active: var(--td-brand-color-9);\n  --td-brand-color-disabled: var(--td-brand-color-3);\n  --td-brand-color-light: var(--td-brand-color-1);\n  --td-brand-color-light-active: var(--td-brand-color-2);\n  --td-warning-color-focus: var(--td-warning-color-2);\n  --td-warning-color-active: var(--td-warning-color-4);\n  --td-warning-color-disabled: var(--td-warning-color-3);\n  --td-warning-color-light: var(--td-warning-color-1);\n  --td-warning-color-light-active: var(--td-warning-color-2);\n  --td-error-color-focus: var(--td-error-color-2);\n  --td-error-color-active: var(--td-error-color-5);\n  --td-error-color-disabled: var(--td-error-color-3);\n  --td-error-color-light: var(--td-error-color-1);\n  --td-error-color-light-active: var(--td-error-color-2);\n  --td-success-color-focus: var(--td-success-color-2);\n  --td-success-color-active: var(--td-success-color-4);\n  --td-success-color-disabled: var(--td-success-color-3);\n  --td-success-color-light: var(--td-success-color-1);\n  --td-success-color-light-active: var(--td-success-color-2);\n  --td-mask-active: rgba(0, 0, 0, .4);\n  --td-mask-disabled: rgba(0, 0, 0, .6);\n  --td-bg-color-page: var(--td-gray-color-14);\n  --td-bg-color-container: var(--td-gray-color-13);\n  --td-bg-color-secondarycontainer: var(--td-gray-color-12);\n  --td-bg-color-component: var(--td-gray-color-11);\n  --td-bg-color-container-active: var(--td-gray-color-12);\n  --td-bg-color-secondarycontainer-active: var(--td-gray-color-11);\n  --td-bg-color-component-active: var(--td-gray-color-10);\n  --td-bg-color-component-disabled: var(--td-gray-color-12);\n  --td-bg-color-specialcomponent: transparent;\n  --td-text-color-primary: var(--td-font-white-1);\n  --td-text-color-secondary: var(--td-font-white-2);\n  --td-text-color-placeholder: var(--td-font-white-3);\n  --td-text-color-disabled: var(--td-font-white-4);\n  --td-text-color-anti: var(--td-font-white-1);\n  --td-text-color-brand: var(--td-brand-color-8);\n  --td-text-color-link: var(--td-brand-color-8);\n  --td-border-level-1-color: var(--td-gray-color-11);\n  --td-component-stroke: var(--td-gray-color-11);\n  --td-border-level-2-color: var(--td-gray-color-9);\n  --td-component-border: var(--td-gray-color-9);\n  --td-shadow-1: 0 4px 6px rgba(0, 0, 0, 6%), 0 1px 10px rgba(0, 0, 0, 8%), 0 2px 4px rgba(0, 0, 0, 12%);\n  --td-shadow-2: 0 8px 10px rgba(0, 0, 0, 12%), 0 3px 14px rgba(0, 0, 0, 10%), 0 5px 5px rgba(0, 0, 0, 16%);\n  --td-shadow-3: 0 16px 24px rgba(0, 0, 0, 14%), 0 6px 30px rgba(0, 0, 0, 12%), 0 8px 10px rgba(0, 0, 0, 20%);\n  --td-shadow-inset-top: inset 0 .5px 0 #5e5e5e;\n  --td-shadow-inset-right: inset .5px 0 0 #5e5e5e;\n  --td-shadow-inset-bottom: inset 0 -.5px 0 #5e5e5e;\n  --td-shadow-inset-left: inset -.5px 0 0 #5e5e5e;\n  --td-table-shadow-color: rgba(0, 0, 0, .55);\n  --td-scrollbar-color: rgba(255, 255, 255, .1);\n  --td-scroll-track-color: #333;\n}",
+      "extra": ":root {\n    --td-font-family: pingfang sc, microsoft yahei, arial regular;\n    --td-font-family-medium: pingfang sc, microsoft yahei, arial medium;\n    --td-font-size-link-small: 12px;\n    --td-font-size-link-medium: 14px;\n    --td-font-size-link-large: 16px;\n    --td-font-size-mark-extraSmall: 10px;\n    --td-font-size-mark-small: 12px;\n    --td-font-size-mark-medium: 14px;\n    --td-font-size-mark-large: 16px;\n    --td-font-size-body-extraSmall: 10px;\n    --td-font-size-body-small: 12px;\n    --td-font-size-body-medium: 14px;\n    --td-font-size-body-large: 16px;\n    --td-font-size-title-small: 14px;\n    --td-font-size-title-medium: 16px;\n    --td-font-size-title-large: 18px;\n    --td-font-size-title-extraLarge: 20px;\n    --td-font-size-headline-small: 24px;\n    --td-font-size-headline-medium: 28px;\n    --td-font-size-headline-large: 36px;\n    --td-font-size-display-medium: 48px;\n    --td-font-size-display-large: 64px;\n    --td-font-size: 10px;\n    --td-font-size-xs: var(--td-font-size-body-extraSmall);\n    --td-font-size-s: var(--td-font-size-body-small);\n    --td-font-size-base: var(--td-font-size-title-small);\n    --td-font-size-m: var(--td-font-size-title-medium);\n    --td-font-size-l: var(--td-font-size-title-large);\n    --td-font-size-xl: var(--td-font-size-title-extraLarge);\n    --td-font-size-xxl: var(--td-font-size-headline-large);\n    \n    --td-radius-small: 3px;\n    --td-radius-default: 6px;\n    --td-radius-large: 9px;\n    --td-radius-extraLarge: 12px;\n    --td-radius-round: 999px;\n    --td-radius-circle: 50%;\n}"
+    },
+    "expected": {
+      "light": {
+        "ref": {},
+        "color": {},
+        "font": {},
+        "fontMetric": {},
+        "radius": {},
+        "shadow": {},
+        "insetShadow": {},
+        "margin": {}
+      },
+      "dark": {
+        "ref": {},
+        "color": {},
+        "font": {},
+        "fontMetric": {},
+        "radius": {},
+        "shadow": {},
+        "insetShadow": {},
+        "margin": {}
+      }
+    }
+  },
+  {
+    "name": "real persisted controller override",
+    "light": ":root,\n:root[theme-mode=\"light\"] {\n  --td-brand-color-1: #f2f3ff;\n  --td-brand-color-2: #d9e1ff;\n  --td-brand-color-3: #b5c7ff;\n  --td-brand-color-4: #8eabff;\n  --td-brand-color-5: #618dff;\n  --td-brand-color-6: #366ef4;\n  --td-brand-color-7: #0052d9;\n  --td-brand-color-8: #003cab;\n  --td-brand-color-9: #002a7c;\n  --td-brand-color-10: #001a57;\n  --td-warning-color-1: #fff1e9;\n  --td-warning-color-2: #ffd9c2;\n  --td-warning-color-3: #ffb98c;\n  --td-warning-color-4: #fa9550;\n  --td-warning-color-5: #e37318;\n  --td-warning-color-6: #be5a00;\n  --td-warning-color-7: #954500;\n  --td-warning-color-8: #713300;\n  --td-warning-color-9: #532300;\n  --td-warning-color-10: #3b1700;\n  --td-error-color-1: #fff0ed;\n  --td-error-color-2: #ffd8d2;\n  --td-error-color-3: #ffb9b0;\n  --td-error-color-4: #ff9285;\n  --td-error-color-5: #f6685d;\n  --td-error-color-6: #d54941;\n  --td-error-color-7: #ad352f;\n  --td-error-color-8: #881f1c;\n  --td-error-color-9: #68070a;\n  --td-error-color-10: #490002;\n  --td-success-color-1: #e3f9e9;\n  --td-success-color-2: #c6f3d7;\n  --td-success-color-3: #92dab2;\n  --td-success-color-4: #56c08d;\n  --td-success-color-5: #2ba471;\n  --td-success-color-6: #008858;\n  --td-success-color-7: #006c45;\n  --td-success-color-8: #005334;\n  --td-success-color-9: #003b23;\n  --td-success-color-10: #002515;\n  --td-gray-color-1: #f3f3f3;\n  --td-gray-color-2: #eee;\n  --td-gray-color-3: #e7e7e7;\n  --td-gray-color-4: #dcdcdc;\n  --td-gray-color-5: #c5c5c5;\n  --td-gray-color-6: #a6a6a6;\n  --td-gray-color-7: #8b8b8b;\n  --td-gray-color-8: #777;\n  --td-gray-color-9: #5e5e5e;\n  --td-gray-color-10: #4b4b4b;\n  --td-gray-color-11: #383838;\n  --td-gray-color-12: #2c2c2c;\n  --td-gray-color-13: #242424;\n  --td-gray-color-14: #181818;\n  --td-font-white-1: rgba(255, 255, 255, 1);\n  --td-font-white-2: rgba(255, 255, 255, .55);\n  --td-font-white-3: rgba(255, 255, 255, .35);\n  --td-font-white-4: rgba(255, 255, 255, .22);\n  --td-font-gray-1: rgba(0, 0, 0, .9);\n  --td-font-gray-2: rgba(0, 0, 0, .6);\n  --td-font-gray-3: rgba(0, 0, 0, .4);\n  --td-font-gray-4: rgba(0, 0, 0, .26);\n  --td-brand-color: var(--td-brand-color-7);\n  --td-warning-color: var(--td-warning-color-5);\n  --td-error-color: var(--td-error-color-6);\n  --td-success-color: var(--td-success-color-5);\n  --td-brand-color-focus: var(--td-brand-color-1);\n  --td-brand-color-active: var(--td-brand-color-8);\n  --td-brand-color-disabled: var(--td-brand-color-3);\n  --td-brand-color-light: var(--td-brand-color-1);\n  --td-brand-color-light-active: var(--td-brand-color-2);\n  --td-warning-color-active: var(--td-warning-color-6);\n  --td-warning-color-disabled: var(--td-warning-color-3);\n  --td-warning-color-focus: var(--td-warning-color-2);\n  --td-warning-color-light: var(--td-warning-color-1);\n  --td-warning-color-light-active: var(--td-warning-color-2);\n  --td-error-color-focus: var(--td-error-color-2);\n  --td-error-color-active: var(--td-error-color-7);\n  --td-error-color-disabled: var(--td-error-color-3);\n  --td-error-color-light: var(--td-error-color-1);\n  --td-error-color-light-active: var(--td-error-color-2);\n  --td-success-color-focus: var(--td-success-color-2);\n  --td-success-color-active: var(--td-success-color-6);\n  --td-success-color-disabled: var(--td-success-color-3);\n  --td-success-color-light: var(--td-success-color-1);\n  --td-success-color-light-active: var(--td-success-color-2);\n  --td-mask-active: rgba(0, 0, 0, .6);\n  --td-mask-disabled: rgba(255, 255, 255, .6);\n  --td-bg-color-page: var(--td-gray-color-1);\n  --td-bg-color-container: var(--td-font-white-1);\n  --td-bg-color-container-active: var(--td-gray-color-3);\n  --td-bg-color-secondarycontainer: var(--td-gray-color-1);\n  --td-bg-color-secondarycontainer-active: var(--td-gray-color-4);\n  --td-bg-color-component: var(--td-gray-color-3);\n  --td-bg-color-component-active: var(--td-gray-color-6);\n  --td-bg-color-component-disabled: var(--td-gray-color-2);\n  --td-bg-color-secondarycomponent: var(--td-gray-color-4);\n  --td-bg-color-secondarycomponent-active: var(--td-gray-color-6);\n  --td-bg-color-specialcomponent: #fff;\n  --td-text-color-primary: var(--td-font-gray-1);\n  --td-text-color-secondary: var(--td-font-gray-2);\n  --td-text-color-placeholder: var(--td-font-gray-3);\n  --td-text-color-disabled: var(--td-font-gray-4);\n  --td-text-color-anti: var(--td-font-white-1);\n  --td-text-color-brand: var(--td-brand-color);\n  --td-text-color-link: var(--td-brand-color);\n  --td-border-level-1-color: var(--td-gray-color-3);\n  --td-component-stroke: var(--td-gray-color-3);\n  --td-border-level-2-color: var(--td-gray-color-4);\n  --td-component-border: var(--td-gray-color-4);\n  --td-shadow-1: 0 1px 10px rgba(0, 0, 0, 5%), 0 4px 5px rgba(0, 0, 0, 8%), 0 2px 4px -1px rgba(0, 0, 0, 12%);\n  --td-shadow-2: 0 3px 14px 2px rgba(0, 0, 0, 5%), 0 8px 10px 1px rgba(0, 0, 0, 6%), 0 5px 5px -3px rgba(0, 0, 0, 10%);\n  --td-shadow-3: 0 6px 30px 5px rgba(0, 0, 0, 5%), 0 16px 24px 2px rgba(0, 0, 0, 4%), 0 8px 10px -5px rgba(0, 0, 0, 8%);\n  --td-shadow-4: 0 2px 8px 0 rgba(0, 0, 0, 6%);\n  --td-shadow-inset-top: inset 0 .5px 0 #dcdcdc;\n  --td-shadow-inset-right: inset .5px 0 0 #dcdcdc;\n  --td-shadow-inset-bottom: inset 0 -.5px 0 #dcdcdc;\n  --td-shadow-inset-left: inset -.5px 0 0 #dcdcdc;\n  --td-table-shadow-color: rgba(0, 0, 0, .08);\n  --td-scrollbar-color: rgba(0, 0, 0, .1);\n  --td-scrollbar-hover-color: rgba(0, 0, 0, .3);\n  --td-scroll-track-color: #fff;\n}",
+    "dark": ":root.dark,\n:root[theme-mode=\"dark\"] {\n  --td-brand-color-1: #1b2f51;\n  --td-brand-color-2: #173463;\n  --td-brand-color-3: #143975;\n  --td-brand-color-4: #103d88;\n  --td-brand-color-5: #0d429a;\n  --td-brand-color-6: #054bbe;\n  --td-brand-color-7: #2667d4;\n  --td-brand-color-8: #4582e6;\n  --td-brand-color-9: #699ef5;\n  --td-brand-color-10: #96bbf8;\n  --td-warning-color-1: #4f2a1d;\n  --td-warning-color-2: #582f21;\n  --td-warning-color-3: #733c23;\n  --td-warning-color-4: #a75d2b;\n  --td-warning-color-5: #cf6e2d;\n  --td-warning-color-6: #dc7633;\n  --td-warning-color-7: #e8935c;\n  --td-warning-color-8: #ecbf91;\n  --td-warning-color-9: #eed7bf;\n  --td-warning-color-10: #f3e9dc;\n  --td-error-color-1: #472324;\n  --td-error-color-2: #5e2a2d;\n  --td-error-color-3: #703439;\n  --td-error-color-4: #83383e;\n  --td-error-color-5: #a03f46;\n  --td-error-color-6: #c64751;\n  --td-error-color-7: #de6670;\n  --td-error-color-8: #ec888e;\n  --td-error-color-9: #edb1b6;\n  --td-error-color-10: #eeced0;\n  --td-success-color-1: #193a2a;\n  --td-success-color-2: #1a4230;\n  --td-success-color-3: #17533d;\n  --td-success-color-4: #0d7a55;\n  --td-success-color-5: #059465;\n  --td-success-color-6: #43af8a;\n  --td-success-color-7: #46bf96;\n  --td-success-color-8: #80d2b6;\n  --td-success-color-9: #b4e1d3;\n  --td-success-color-10: #deede8;\n  --td-gray-color-1: #f3f3f3;\n  --td-gray-color-2: #eee;\n  --td-gray-color-3: #e8e8e8;\n  --td-gray-color-4: #ddd;\n  --td-gray-color-5: #c6c6c6;\n  --td-gray-color-6: #a6a6a6;\n  --td-gray-color-7: #8b8b8b;\n  --td-gray-color-8: #777;\n  --td-gray-color-9: #5e5e5e;\n  --td-gray-color-10: #4b4b4b;\n  --td-gray-color-11: #383838;\n  --td-gray-color-12: #2c2c2c;\n  --td-gray-color-13: #242424;\n  --td-gray-color-14: #181818;\n  --td-font-white-1: rgba(255, 255, 255, .9);\n  --td-font-white-2: rgba(255, 255, 255, .55);\n  --td-font-white-3: rgba(255, 255, 255, .35);\n  --td-font-white-4: rgba(255, 255, 255, .22);\n  --td-font-gray-1: rgba(0, 0, 0, .9);\n  --td-font-gray-2: rgba(0, 0, 0, .6);\n  --td-font-gray-3: rgba(0, 0, 0, .4);\n  --td-font-gray-4: rgba(0, 0, 0, .26);\n  --td-brand-color: var(--td-brand-color-8);\n  --td-warning-color: var(--td-warning-color-5);\n  --td-error-color: var(--td-error-color-6);\n  --td-success-color: var(--td-success-color-5);\n  --td-brand-color-focus: var(--td-brand-color-1);\n  --td-brand-color-active: var(--td-brand-color-9);\n  --td-brand-color-disabled: var(--td-brand-color-3);\n  --td-brand-color-light: var(--td-brand-color-1);\n  --td-brand-color-light-active: var(--td-brand-color-2);\n  --td-warning-color-focus: var(--td-warning-color-2);\n  --td-warning-color-active: var(--td-warning-color-4);\n  --td-warning-color-disabled: var(--td-warning-color-3);\n  --td-warning-color-light: var(--td-warning-color-1);\n  --td-warning-color-light-active: var(--td-warning-color-2);\n  --td-error-color-focus: var(--td-error-color-2);\n  --td-error-color-active: var(--td-error-color-5);\n  --td-error-color-disabled: var(--td-error-color-3);\n  --td-error-color-light: var(--td-error-color-1);\n  --td-error-color-light-active: var(--td-error-color-2);\n  --td-success-color-focus: var(--td-success-color-2);\n  --td-success-color-active: var(--td-success-color-4);\n  --td-success-color-disabled: var(--td-success-color-3);\n  --td-success-color-light: var(--td-success-color-1);\n  --td-success-color-light-active: var(--td-success-color-2);\n  --td-mask-active: rgba(0, 0, 0, .4);\n  --td-mask-disabled: rgba(0, 0, 0, .6);\n  --td-bg-color-page: var(--td-gray-color-14);\n  --td-bg-color-container: var(--td-gray-color-13);\n  --td-bg-color-secondarycontainer: var(--td-gray-color-12);\n  --td-bg-color-component: var(--td-gray-color-11);\n  --td-bg-color-container-active: var(--td-gray-color-12);\n  --td-bg-color-secondarycontainer-active: var(--td-gray-color-11);\n  --td-bg-color-component-active: var(--td-gray-color-10);\n  --td-bg-color-component-disabled: var(--td-gray-color-12);\n  --td-bg-color-specialcomponent: transparent;\n  --td-text-color-primary: var(--td-font-white-1);\n  --td-text-color-secondary: var(--td-font-white-2);\n  --td-text-color-placeholder: var(--td-font-white-3);\n  --td-text-color-disabled: var(--td-font-white-4);\n  --td-text-color-anti: var(--td-font-white-1);\n  --td-text-color-brand: var(--td-brand-color-8);\n  --td-text-color-link: var(--td-brand-color-8);\n  --td-border-level-1-color: var(--td-gray-color-11);\n  --td-component-stroke: var(--td-gray-color-11);\n  --td-border-level-2-color: var(--td-gray-color-9);\n  --td-component-border: var(--td-gray-color-9);\n  --td-shadow-1: 0 4px 6px rgba(0, 0, 0, 6%), 0 1px 10px rgba(0, 0, 0, 8%), 0 2px 4px rgba(0, 0, 0, 12%);\n  --td-shadow-2: 0 8px 10px rgba(0, 0, 0, 12%), 0 3px 14px rgba(0, 0, 0, 10%), 0 5px 5px rgba(0, 0, 0, 16%);\n  --td-shadow-3: 0 16px 24px rgba(0, 0, 0, 14%), 0 6px 30px rgba(0, 0, 0, 12%), 0 8px 10px rgba(0, 0, 0, 20%);\n  --td-shadow-inset-top: inset 0 .5px 0 #5e5e5e;\n  --td-shadow-inset-right: inset .5px 0 0 #5e5e5e;\n  --td-shadow-inset-bottom: inset 0 -.5px 0 #5e5e5e;\n  --td-shadow-inset-left: inset -.5px 0 0 #5e5e5e;\n  --td-table-shadow-color: rgba(0, 0, 0, .55);\n  --td-scrollbar-color: rgba(255, 255, 255, .1);\n  --td-scroll-track-color: #333;\n}",
+    "extra": ":root {\n    --td-font-family: pingfang sc, microsoft yahei, arial regular;\n    --td-font-family-medium: pingfang sc, microsoft yahei, arial medium;\n    --td-font-size-link-small: 12px;\n    --td-font-size-link-medium: 14px;\n    --td-font-size-link-large: 16px;\n    --td-font-size-mark-extraSmall: 10px;\n    --td-font-size-mark-small: 12px;\n    --td-font-size-mark-medium: 14px;\n    --td-font-size-mark-large: 16px;\n    --td-font-size-body-extraSmall: 10px;\n    --td-font-size-body-small: 12px;\n    --td-font-size-body-medium: 14px;\n    --td-font-size-body-large: 18px;\n    --td-font-size-title-small: 14px;\n    --td-font-size-title-medium: 16px;\n    --td-font-size-title-large: 18px;\n    --td-font-size-title-extraLarge: 20px;\n    --td-font-size-headline-small: 24px;\n    --td-font-size-headline-medium: 28px;\n    --td-font-size-headline-large: 36px;\n    --td-font-size-display-medium: 48px;\n    --td-font-size-display-large: 64px;\n    --td-font-size: 10px;\n    --td-font-size-xs: var(--td-font-size-body-extraSmall);\n    --td-font-size-s: var(--td-font-size-body-small);\n    --td-font-size-base: var(--td-font-size-title-small);\n    --td-font-size-m: var(--td-font-size-title-medium);\n    --td-font-size-l: var(--td-font-size-title-large);\n    --td-font-size-xl: var(--td-font-size-title-extraLarge);\n    --td-font-size-xxl: var(--td-font-size-headline-large);\n    \n    --td-radius-small: 3px;\n    --td-radius-default: 6px;\n    --td-radius-large: 9px;\n    --td-radius-extraLarge: 12px;\n    --td-radius-round: 999px;\n    --td-radius-circle: 50%;\n}",
+    "baseline": {
+      "light": ":root,\n:root[theme-mode=\"light\"] {\n  --td-brand-color-1: #f2f3ff;\n  --td-brand-color-2: #d9e1ff;\n  --td-brand-color-3: #b5c7ff;\n  --td-brand-color-4: #8eabff;\n  --td-brand-color-5: #618dff;\n  --td-brand-color-6: #366ef4;\n  --td-brand-color-7: #0052d9;\n  --td-brand-color-8: #003cab;\n  --td-brand-color-9: #002a7c;\n  --td-brand-color-10: #001a57;\n  --td-warning-color-1: #fff1e9;\n  --td-warning-color-2: #ffd9c2;\n  --td-warning-color-3: #ffb98c;\n  --td-warning-color-4: #fa9550;\n  --td-warning-color-5: #e37318;\n  --td-warning-color-6: #be5a00;\n  --td-warning-color-7: #954500;\n  --td-warning-color-8: #713300;\n  --td-warning-color-9: #532300;\n  --td-warning-color-10: #3b1700;\n  --td-error-color-1: #fff0ed;\n  --td-error-color-2: #ffd8d2;\n  --td-error-color-3: #ffb9b0;\n  --td-error-color-4: #ff9285;\n  --td-error-color-5: #f6685d;\n  --td-error-color-6: #d54941;\n  --td-error-color-7: #ad352f;\n  --td-error-color-8: #881f1c;\n  --td-error-color-9: #68070a;\n  --td-error-color-10: #490002;\n  --td-success-color-1: #e3f9e9;\n  --td-success-color-2: #c6f3d7;\n  --td-success-color-3: #92dab2;\n  --td-success-color-4: #56c08d;\n  --td-success-color-5: #2ba471;\n  --td-success-color-6: #008858;\n  --td-success-color-7: #006c45;\n  --td-success-color-8: #005334;\n  --td-success-color-9: #003b23;\n  --td-success-color-10: #002515;\n  --td-gray-color-1: #f3f3f3;\n  --td-gray-color-2: #eee;\n  --td-gray-color-3: #e7e7e7;\n  --td-gray-color-4: #dcdcdc;\n  --td-gray-color-5: #c5c5c5;\n  --td-gray-color-6: #a6a6a6;\n  --td-gray-color-7: #8b8b8b;\n  --td-gray-color-8: #777;\n  --td-gray-color-9: #5e5e5e;\n  --td-gray-color-10: #4b4b4b;\n  --td-gray-color-11: #383838;\n  --td-gray-color-12: #2c2c2c;\n  --td-gray-color-13: #242424;\n  --td-gray-color-14: #181818;\n  --td-font-white-1: rgba(255, 255, 255, 1);\n  --td-font-white-2: rgba(255, 255, 255, .55);\n  --td-font-white-3: rgba(255, 255, 255, .35);\n  --td-font-white-4: rgba(255, 255, 255, .22);\n  --td-font-gray-1: rgba(0, 0, 0, .9);\n  --td-font-gray-2: rgba(0, 0, 0, .6);\n  --td-font-gray-3: rgba(0, 0, 0, .4);\n  --td-font-gray-4: rgba(0, 0, 0, .26);\n  --td-brand-color: var(--td-brand-color-7);\n  --td-warning-color: var(--td-warning-color-5);\n  --td-error-color: var(--td-error-color-6);\n  --td-success-color: var(--td-success-color-5);\n  --td-brand-color-focus: var(--td-brand-color-1);\n  --td-brand-color-active: var(--td-brand-color-8);\n  --td-brand-color-disabled: var(--td-brand-color-3);\n  --td-brand-color-light: var(--td-brand-color-1);\n  --td-brand-color-light-active: var(--td-brand-color-2);\n  --td-warning-color-active: var(--td-warning-color-6);\n  --td-warning-color-disabled: var(--td-warning-color-3);\n  --td-warning-color-focus: var(--td-warning-color-2);\n  --td-warning-color-light: var(--td-warning-color-1);\n  --td-warning-color-light-active: var(--td-warning-color-2);\n  --td-error-color-focus: var(--td-error-color-2);\n  --td-error-color-active: var(--td-error-color-7);\n  --td-error-color-disabled: var(--td-error-color-3);\n  --td-error-color-light: var(--td-error-color-1);\n  --td-error-color-light-active: var(--td-error-color-2);\n  --td-success-color-focus: var(--td-success-color-2);\n  --td-success-color-active: var(--td-success-color-6);\n  --td-success-color-disabled: var(--td-success-color-3);\n  --td-success-color-light: var(--td-success-color-1);\n  --td-success-color-light-active: var(--td-success-color-2);\n  --td-mask-active: rgba(0, 0, 0, .6);\n  --td-mask-disabled: rgba(255, 255, 255, .6);\n  --td-bg-color-page: var(--td-gray-color-1);\n  --td-bg-color-container: var(--td-font-white-1);\n  --td-bg-color-container-active: var(--td-gray-color-3);\n  --td-bg-color-secondarycontainer: var(--td-gray-color-1);\n  --td-bg-color-secondarycontainer-active: var(--td-gray-color-4);\n  --td-bg-color-component: var(--td-gray-color-3);\n  --td-bg-color-component-active: var(--td-gray-color-6);\n  --td-bg-color-component-disabled: var(--td-gray-color-2);\n  --td-bg-color-secondarycomponent: var(--td-gray-color-4);\n  --td-bg-color-secondarycomponent-active: var(--td-gray-color-6);\n  --td-bg-color-specialcomponent: #fff;\n  --td-text-color-primary: var(--td-font-gray-1);\n  --td-text-color-secondary: var(--td-font-gray-2);\n  --td-text-color-placeholder: var(--td-font-gray-3);\n  --td-text-color-disabled: var(--td-font-gray-4);\n  --td-text-color-anti: var(--td-font-white-1);\n  --td-text-color-brand: var(--td-brand-color);\n  --td-text-color-link: var(--td-brand-color);\n  --td-border-level-1-color: var(--td-gray-color-3);\n  --td-component-stroke: var(--td-gray-color-3);\n  --td-border-level-2-color: var(--td-gray-color-4);\n  --td-component-border: var(--td-gray-color-4);\n  --td-shadow-1: 0 1px 10px rgba(0, 0, 0, 5%), 0 4px 5px rgba(0, 0, 0, 8%), 0 2px 4px -1px rgba(0, 0, 0, 12%);\n  --td-shadow-2: 0 3px 14px 2px rgba(0, 0, 0, 5%), 0 8px 10px 1px rgba(0, 0, 0, 6%), 0 5px 5px -3px rgba(0, 0, 0, 10%);\n  --td-shadow-3: 0 6px 30px 5px rgba(0, 0, 0, 5%), 0 16px 24px 2px rgba(0, 0, 0, 4%), 0 8px 10px -5px rgba(0, 0, 0, 8%);\n  --td-shadow-4: 0 2px 8px 0 rgba(0, 0, 0, 6%);\n  --td-shadow-inset-top: inset 0 .5px 0 #dcdcdc;\n  --td-shadow-inset-right: inset .5px 0 0 #dcdcdc;\n  --td-shadow-inset-bottom: inset 0 -.5px 0 #dcdcdc;\n  --td-shadow-inset-left: inset -.5px 0 0 #dcdcdc;\n  --td-table-shadow-color: rgba(0, 0, 0, .08);\n  --td-scrollbar-color: rgba(0, 0, 0, .1);\n  --td-scrollbar-hover-color: rgba(0, 0, 0, .3);\n  --td-scroll-track-color: #fff;\n}",
+      "dark": ":root.dark,\n:root[theme-mode=\"dark\"] {\n  --td-brand-color-1: #1b2f51;\n  --td-brand-color-2: #173463;\n  --td-brand-color-3: #143975;\n  --td-brand-color-4: #103d88;\n  --td-brand-color-5: #0d429a;\n  --td-brand-color-6: #054bbe;\n  --td-brand-color-7: #2667d4;\n  --td-brand-color-8: #4582e6;\n  --td-brand-color-9: #699ef5;\n  --td-brand-color-10: #96bbf8;\n  --td-warning-color-1: #4f2a1d;\n  --td-warning-color-2: #582f21;\n  --td-warning-color-3: #733c23;\n  --td-warning-color-4: #a75d2b;\n  --td-warning-color-5: #cf6e2d;\n  --td-warning-color-6: #dc7633;\n  --td-warning-color-7: #e8935c;\n  --td-warning-color-8: #ecbf91;\n  --td-warning-color-9: #eed7bf;\n  --td-warning-color-10: #f3e9dc;\n  --td-error-color-1: #472324;\n  --td-error-color-2: #5e2a2d;\n  --td-error-color-3: #703439;\n  --td-error-color-4: #83383e;\n  --td-error-color-5: #a03f46;\n  --td-error-color-6: #c64751;\n  --td-error-color-7: #de6670;\n  --td-error-color-8: #ec888e;\n  --td-error-color-9: #edb1b6;\n  --td-error-color-10: #eeced0;\n  --td-success-color-1: #193a2a;\n  --td-success-color-2: #1a4230;\n  --td-success-color-3: #17533d;\n  --td-success-color-4: #0d7a55;\n  --td-success-color-5: #059465;\n  --td-success-color-6: #43af8a;\n  --td-success-color-7: #46bf96;\n  --td-success-color-8: #80d2b6;\n  --td-success-color-9: #b4e1d3;\n  --td-success-color-10: #deede8;\n  --td-gray-color-1: #f3f3f3;\n  --td-gray-color-2: #eee;\n  --td-gray-color-3: #e8e8e8;\n  --td-gray-color-4: #ddd;\n  --td-gray-color-5: #c6c6c6;\n  --td-gray-color-6: #a6a6a6;\n  --td-gray-color-7: #8b8b8b;\n  --td-gray-color-8: #777;\n  --td-gray-color-9: #5e5e5e;\n  --td-gray-color-10: #4b4b4b;\n  --td-gray-color-11: #383838;\n  --td-gray-color-12: #2c2c2c;\n  --td-gray-color-13: #242424;\n  --td-gray-color-14: #181818;\n  --td-font-white-1: rgba(255, 255, 255, .9);\n  --td-font-white-2: rgba(255, 255, 255, .55);\n  --td-font-white-3: rgba(255, 255, 255, .35);\n  --td-font-white-4: rgba(255, 255, 255, .22);\n  --td-font-gray-1: rgba(0, 0, 0, .9);\n  --td-font-gray-2: rgba(0, 0, 0, .6);\n  --td-font-gray-3: rgba(0, 0, 0, .4);\n  --td-font-gray-4: rgba(0, 0, 0, .26);\n  --td-brand-color: var(--td-brand-color-8);\n  --td-warning-color: var(--td-warning-color-5);\n  --td-error-color: var(--td-error-color-6);\n  --td-success-color: var(--td-success-color-5);\n  --td-brand-color-focus: var(--td-brand-color-1);\n  --td-brand-color-active: var(--td-brand-color-9);\n  --td-brand-color-disabled: var(--td-brand-color-3);\n  --td-brand-color-light: var(--td-brand-color-1);\n  --td-brand-color-light-active: var(--td-brand-color-2);\n  --td-warning-color-focus: var(--td-warning-color-2);\n  --td-warning-color-active: var(--td-warning-color-4);\n  --td-warning-color-disabled: var(--td-warning-color-3);\n  --td-warning-color-light: var(--td-warning-color-1);\n  --td-warning-color-light-active: var(--td-warning-color-2);\n  --td-error-color-focus: var(--td-error-color-2);\n  --td-error-color-active: var(--td-error-color-5);\n  --td-error-color-disabled: var(--td-error-color-3);\n  --td-error-color-light: var(--td-error-color-1);\n  --td-error-color-light-active: var(--td-error-color-2);\n  --td-success-color-focus: var(--td-success-color-2);\n  --td-success-color-active: var(--td-success-color-4);\n  --td-success-color-disabled: var(--td-success-color-3);\n  --td-success-color-light: var(--td-success-color-1);\n  --td-success-color-light-active: var(--td-success-color-2);\n  --td-mask-active: rgba(0, 0, 0, .4);\n  --td-mask-disabled: rgba(0, 0, 0, .6);\n  --td-bg-color-page: var(--td-gray-color-14);\n  --td-bg-color-container: var(--td-gray-color-13);\n  --td-bg-color-secondarycontainer: var(--td-gray-color-12);\n  --td-bg-color-component: var(--td-gray-color-11);\n  --td-bg-color-container-active: var(--td-gray-color-12);\n  --td-bg-color-secondarycontainer-active: var(--td-gray-color-11);\n  --td-bg-color-component-active: var(--td-gray-color-10);\n  --td-bg-color-component-disabled: var(--td-gray-color-12);\n  --td-bg-color-specialcomponent: transparent;\n  --td-text-color-primary: var(--td-font-white-1);\n  --td-text-color-secondary: var(--td-font-white-2);\n  --td-text-color-placeholder: var(--td-font-white-3);\n  --td-text-color-disabled: var(--td-font-white-4);\n  --td-text-color-anti: var(--td-font-white-1);\n  --td-text-color-brand: var(--td-brand-color-8);\n  --td-text-color-link: var(--td-brand-color-8);\n  --td-border-level-1-color: var(--td-gray-color-11);\n  --td-component-stroke: var(--td-gray-color-11);\n  --td-border-level-2-color: var(--td-gray-color-9);\n  --td-component-border: var(--td-gray-color-9);\n  --td-shadow-1: 0 4px 6px rgba(0, 0, 0, 6%), 0 1px 10px rgba(0, 0, 0, 8%), 0 2px 4px rgba(0, 0, 0, 12%);\n  --td-shadow-2: 0 8px 10px rgba(0, 0, 0, 12%), 0 3px 14px rgba(0, 0, 0, 10%), 0 5px 5px rgba(0, 0, 0, 16%);\n  --td-shadow-3: 0 16px 24px rgba(0, 0, 0, 14%), 0 6px 30px rgba(0, 0, 0, 12%), 0 8px 10px rgba(0, 0, 0, 20%);\n  --td-shadow-inset-top: inset 0 .5px 0 #5e5e5e;\n  --td-shadow-inset-right: inset .5px 0 0 #5e5e5e;\n  --td-shadow-inset-bottom: inset 0 -.5px 0 #5e5e5e;\n  --td-shadow-inset-left: inset -.5px 0 0 #5e5e5e;\n  --td-table-shadow-color: rgba(0, 0, 0, .55);\n  --td-scrollbar-color: rgba(255, 255, 255, .1);\n  --td-scroll-track-color: #333;\n}",
+      "extra": ":root {\n    --td-font-family: pingfang sc, microsoft yahei, arial regular;\n    --td-font-family-medium: pingfang sc, microsoft yahei, arial medium;\n    --td-font-size-link-small: 12px;\n    --td-font-size-link-medium: 14px;\n    --td-font-size-link-large: 16px;\n    --td-font-size-mark-extraSmall: 10px;\n    --td-font-size-mark-small: 12px;\n    --td-font-size-mark-medium: 14px;\n    --td-font-size-mark-large: 16px;\n    --td-font-size-body-extraSmall: 10px;\n    --td-font-size-body-small: 12px;\n    --td-font-size-body-medium: 14px;\n    --td-font-size-body-large: 16px;\n    --td-font-size-title-small: 14px;\n    --td-font-size-title-medium: 16px;\n    --td-font-size-title-large: 18px;\n    --td-font-size-title-extraLarge: 20px;\n    --td-font-size-headline-small: 24px;\n    --td-font-size-headline-medium: 28px;\n    --td-font-size-headline-large: 36px;\n    --td-font-size-display-medium: 48px;\n    --td-font-size-display-large: 64px;\n    --td-font-size: 10px;\n    --td-font-size-xs: var(--td-font-size-body-extraSmall);\n    --td-font-size-s: var(--td-font-size-body-small);\n    --td-font-size-base: var(--td-font-size-title-small);\n    --td-font-size-m: var(--td-font-size-title-medium);\n    --td-font-size-l: var(--td-font-size-title-large);\n    --td-font-size-xl: var(--td-font-size-title-extraLarge);\n    --td-font-size-xxl: var(--td-font-size-headline-large);\n    \n    --td-radius-small: 3px;\n    --td-radius-default: 6px;\n    --td-radius-large: 9px;\n    --td-radius-extraLarge: 12px;\n    --td-radius-round: 999px;\n    --td-radius-circle: 50%;\n}"
+    },
+    "expected": {
+      "light": {
+        "ref": {},
+        "color": {},
+        "font": {
+          "fontBodyLarge": {
+            "size": 18
+          }
+        },
+        "fontMetric": {
+          "fontSizeBodyLarge": 18
+        },
+        "radius": {},
+        "shadow": {},
+        "insetShadow": {},
+        "margin": {}
+      },
+      "dark": {
+        "ref": {},
+        "color": {},
+        "font": {
+          "fontBodyLarge": {
+            "size": 18
+          }
+        },
+        "fontMetric": {
+          "fontSizeBodyLarge": 18
+        },
+        "radius": {},
+        "shadow": {},
+        "insetShadow": {},
+        "margin": {}
+      }
+    }
+  },
+  {
+    "name": "mode separation and shared precedence",
+    "light": "--td-brand-color-7:#123; --td-radius-small:1px",
+    "dark": "--td-brand-color-7:#abc",
+    "extra": "--td-radius-small:4px",
+    "expected": {
+      "light": {
+        "ref": {},
+        "color": {
+          "brandColor7": "#112233"
+        },
+        "font": {},
+        "fontMetric": {},
+        "radius": {
+          "radiusSmall": 4
+        },
+        "shadow": {},
+        "insetShadow": {},
+        "margin": {}
+      },
+      "dark": {
+        "ref": {},
+        "color": {
+          "brandColor7": "#AABBCC"
+        },
+        "font": {},
+        "fontMetric": {},
+        "radius": {
+          "radiusSmall": 4
+        },
+        "shadow": {},
+        "insetShadow": {},
+        "margin": {}
+      }
+    }
+  },
+  {
+    "name": "sparse fractional font preserves missing height",
+    "light": "--td-font-size-body-medium:15.5px;",
+    "dark": "--td-font-size-body-medium:15.5px;",
+    "extra": "",
+    "expected": {
+      "light": {
+        "ref": {},
+        "color": {},
+        "font": {
+          "fontBodyMedium": {
+            "size": 15.5
+          }
+        },
+        "fontMetric": {
+          "fontSizeBodyMedium": 15.5
+        },
+        "radius": {},
+        "shadow": {},
+        "insetShadow": {},
+        "margin": {}
+      },
+      "dark": {
+        "ref": {},
+        "color": {},
+        "font": {
+          "fontBodyMedium": {
+            "size": 15.5
+          }
+        },
+        "fontMetric": {
+          "fontSizeBodyMedium": 15.5
+        },
+        "radius": {},
+        "shadow": {},
+        "insetShadow": {},
+        "margin": {}
+      }
+    }
+  },
+  {
+    "name": "baseline size change preserves receiver height",
+    "light": "--td-font-size-body-medium:18px; --td-line-height-body-medium:99px;",
+    "dark": "--td-font-size-body-medium:18px; --td-line-height-body-medium:99px;",
+    "extra": "",
+    "expected": {
+      "light": {
+        "ref": {},
+        "color": {},
+        "font": {
+          "fontBodyMedium": {
+            "size": 18
+          }
+        },
+        "fontMetric": {
+          "fontSizeBodyMedium": 18
+        },
+        "radius": {},
+        "shadow": {},
+        "insetShadow": {},
+        "margin": {}
+      },
+      "dark": {
+        "ref": {},
+        "color": {},
+        "font": {
+          "fontBodyMedium": {
+            "size": 18
+          }
+        },
+        "fontMetric": {
+          "fontSizeBodyMedium": 18
+        },
+        "radius": {},
+        "shadow": {},
+        "insetShadow": {},
+        "margin": {}
+      }
+    },
+    "baseline": {
+      "light": "--td-font-size-body-medium:14px; --td-line-height-body-medium:99px;",
+      "dark": "--td-font-size-body-medium:14px; --td-line-height-body-medium:99px;",
+      "extra": ""
+    }
+  },
+  {
+    "name": "baseline height change preserves receiver size",
+    "light": "--td-font-size-body-medium:99px; --td-line-height-body-medium:23.25px;",
+    "dark": "--td-font-size-body-medium:99px; --td-line-height-body-medium:23.25px;",
+    "extra": "",
+    "expected": {
+      "light": {
+        "ref": {},
+        "color": {},
+        "font": {
+          "fontBodyMedium": {
+            "lineHeight": 23.25
+          }
+        },
+        "fontMetric": {
+          "lineHeightBodyMedium": 23.25
+        },
+        "radius": {},
+        "shadow": {},
+        "insetShadow": {},
+        "margin": {}
+      },
+      "dark": {
+        "ref": {},
+        "color": {},
+        "font": {
+          "fontBodyMedium": {
+            "lineHeight": 23.25
+          }
+        },
+        "fontMetric": {
+          "lineHeightBodyMedium": 23.25
+        },
+        "radius": {},
+        "shadow": {},
+        "insetShadow": {},
+        "margin": {}
+      }
+    },
+    "baseline": {
+      "light": "--td-font-size-body-medium:99px; --td-line-height-body-medium:22px;",
+      "dark": "--td-font-size-body-medium:99px; --td-line-height-body-medium:22px;",
+      "extra": ""
+    }
+  },
+  {
+    "name": "removed font dimension emits no default override",
+    "light": "",
+    "dark": "",
+    "extra": "",
+    "expected": {
+      "light": {
+        "ref": {},
+        "color": {},
+        "font": {},
+        "fontMetric": {},
+        "radius": {},
+        "shadow": {},
+        "insetShadow": {},
+        "margin": {}
+      },
+      "dark": {
+        "ref": {},
+        "color": {},
+        "font": {},
+        "fontMetric": {},
+        "radius": {},
+        "shadow": {},
+        "insetShadow": {},
+        "margin": {}
+      }
+    },
+    "baseline": {
+      "light": "--td-font-size-body-medium:14px;",
+      "dark": "--td-font-size-body-medium:14px;",
+      "extra": ""
+    }
+  }
+]

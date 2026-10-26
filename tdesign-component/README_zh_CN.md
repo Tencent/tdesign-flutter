@@ -1,3 +1,5 @@
+<!-- Generated from README_zh_CN.md; do not edit this copy. -->
+
 <p align="center">
   <a href="https://tdesign.tencent.com/" target="_blank">
     <img alt="TDesign Logo" width="200" src="https://tdesign.gtimg.com/site/TDesign.png" />
@@ -35,7 +37,7 @@
 
 **Android**：扫描二维码下载预览应用
 
-<img width="200" src="https://tdesign.tencent.com/flutter/assets/qrcode/t_apk_qrcode_0_2_7.png" />
+<img width="200" src="https://raw.githubusercontent.com/Tencent/tdesign-flutter/develop/tdesign-site/site/public/assets/qrcode/t_apk_qrcode.png" />
 
 下载链接：[tdesign-flutter-example.apk](https://tdesign.gtimg.com/flutter/tdesign_flutter_example.apk)
 
@@ -43,191 +45,40 @@
 
 [https://github.com/Tencent/tdesign-flutter/tree/main/tdesign-component](https://github.com/Tencent/tdesign-flutter/tree/main/tdesign-component)
 
-## 🔨 安装
+## 🚀 快速开始
 
-### SDK 版本要求
+从 0.2.7 升级时，请先阅读 [1.0 迁移指南](./MIGRATION.md)。1.0 包含不兼容的接口与默认行为变化，不能只替换组件前缀。
 
-```yaml
-dart: ">=3.8.0 <4.0.0"
-flutter: ">=3.32.0"
-```
+要求 Flutter ≥ 3.32.0、Dart ≥ 3.8.0。
 
-### 添加依赖
+在 `pubspec.yaml` 中添加 `tdesign_flutter: ^1.0.0`，运行 `flutter pub get`。完整接入步骤见[快速开始](https://tdesign.tencent.com/flutter/getting-started)。
 
-在 `pubspec.yaml` 中添加以下内容：
-
-```yaml
-dependencies:
-  tdesign_flutter: 1.0.0-alpha.1
-```
-
-### 引入
+### 最小导入
 
 ```dart
 import 'package:tdesign_flutter/tdesign_flutter.dart';
 ```
 
-## 📖 使用方法
+TD 入口导出 Flutter Material 组件，可通过同一个入口使用 `MaterialApp`、`Scaffold`、`Text` 和 TDesign 组件。
 
-### 主题配置
+### 最小使用
 
-可通过 JSON 文件配置主题样式（颜色、字体尺寸、字体样式、圆角、阴影）。通过 `TTheme.of(context)` 或 `TTheme.defaultData()` 获取主题数据。
-
-> **建议**：组件都使用 `TTheme.of(context)`。不需要跟随局部主题的组件，才可以使用 `TTheme.defaultData()`。
+将按钮放入已有页面的 Widget 树中：
 
 ```dart
-// 颜色
-TTheme.of(context).brandNormalColor
-
-// 字体
-TTheme.defaultData().fontBodyLarge
+const TButton(child: Text('按钮'))
 ```
 
-### 图标
+无需额外初始化或主题配置。不传 `onPressed` 时，按钮处于禁用状态。
 
-TDesign 图标为 TTF 格式，不跟随主题：
+## 📚 文档
 
-```dart
-Icon(TIcons.activity)
-```
-
-## 🎨 自定义主题
-
-TDesign Flutter 提供两种灵活的主题定制方式：
-
-### 方式一：JSON 配置
-
-直接使用 JSON 格式定义主题属性：
-
-```dart
-String themeConfig = '''
-{
-  "myTheme": {
-    "color": {
-      "brandNormalColor": "#D7B386"
-    },
-    "font": {
-      "fontBodyMedium": {
-        "size": 40,
-        "lineHeight": 55
-      }
-    }
-  }
-}
-''';
-
-MaterialApp(
-  theme: ThemeData(
-    extensions: [TThemeData.fromJson('myTheme', themeConfig)!],
-  ),
-  // ...
-)
-```
-
-> 所有可用的主题键值请参考 [t_default_theme.dart](https://github.com/Tencent/tdesign-flutter/blob/develop/tdesign-component/lib/src/theme/t_default_theme.dart)
-
-### 方式二：主题生成器（推荐）
-
-如果你不想自定义太多颜色，但是想要拥有好看的自定义主题，"主题生成器"是个不错的选择。
-
-> **注意**：[v0.2.6](https://tdesign.tencent.com/flutter/changelog) 版本开始，主题生成器已支持"深色模式"，具体可参考[深色模式](https://tdesign.tencent.com/flutter/dark-mode)。
-
-<video controls width="100%">
-  <source src="https://tdesign.gtimg.com/site/theme/demo-cn.mp4" type="video/mp4" />
-</video>
-
-1. **生成**：进入 [TDesign 主题生成器](https://tdesign.tencent.com/vue/custom-theme)，点击下方的主题生成器，在右边生成器里选择想要的颜色，点击下载。
-
-2. **转换**：此时你得到一个 `theme.css` 文件，将该文件放到 `tdesign-component/example/shell/theme/` 文件夹下，修改该文件夹下的 `css2JsonTheme.dart` 为你自己的文件名、主题名和输出路径，即可得到一个 `theme.json` 文件。
-
-![img.png](https://tdesign.tencent.com/flutter/assets/dart_modify.png)
-
-3. **应用**：将主题 JSON 加载进 `TTheme`，美观的自定义主题就设置完成了。
-
-```dart
-// 开启多套主题功能
-TTheme.needMultiTheme();
-
-var jsonString = await rootBundle.loadString('assets/theme.json');
-var _themeData = TThemeData.fromJson('green', jsonString);
-// ...
-MaterialApp(
-  title: 'TDesign Flutter Example',
-  theme: ThemeData(
-    extensions: [_themeData]
-  ),
-  home: MyHomePage(title: 'TDesign Flutter 组件库'),
-);
-```
-
-### 深色模式
-
-通过"主题生成器"生成的主题配置文件，默认支持暗色模式相关色值。
-
-```dart
-// 开启多套主题功能
-TTheme.needMultiTheme();
-// ...
-// MaterialApp 中设置三个属性如下，如果有自定义主题属性，可以通过 copyWith() 方法修改。
-// 注：主题切换需要业务自己实现，比如使用 Provider，具体可参考 tdesign-flutter/tdesign-component/example/lib/component_test/dark_test.dart
-MaterialApp(
-  theme: _themeData.systemThemeDataLight,
-  darkTheme: _themeData.systemThemeDataDark,
-  themeMode: themeModeProvider.themeMode,
-  // ...
-)
-```
-
-## 🌍 国际化
-
-TDesign Flutter 组件库内部不内置国际化语言，但支持与 Flutter 的国际化能力搭配使用。可以继承 `TResourceDelegate` 类，该类抽离了组件内部所有文字资源，重写获取文字的方法进行国际化处理，并通过 `TTheme.setResourceBuilder` 注入。
-
-### 快速配置
-
-1. **重写 `TResourceDelegate` 类：**
-
-```dart
-/// 国际化资源代理
-class IntlResourceDelegate extends TResourceDelegate {
-  IntlResourceDelegate(this.context);
-
-  BuildContext context;
-
-  /// 国际化需要每次更新 context
-  updateContext(BuildContext context) {
-    this.context = context;
-  }
-
-  @override
-  String get cancel => AppLocalizations.of(context)!.cancel;
-
-  @override
-  String get confirm => AppLocalizations.of(context)!.confirm;
-}
-```
-
-2. **注入 `TResourceDelegate` 类：**
-
-```dart
-var delegate = IntlResourceDelegate(context);
-return MaterialApp(
-  home: Builder(
-    builder: (context) {
-      // 设置文案代理，国际化需要在 MaterialApp 初始化完成之后才生效，而且需要每次更新 context
-      TTheme.setResourceBuilder((context) => delegate..updateContext(context), needAlwaysBuild: true);
-      return MyHomePage(
-        title: AppLocalizations.of(context)?.components ?? '',
-      );
-    },
-  ),
-  // 设置国际化处理
-  locale: locale,
-  supportedLocales: AppLocalizations.supportedLocales,
-  localizationsDelegates: AppLocalizations.localizationsDelegates,
-);
-```
-
-3. Flutter 国际化配置方法，请参阅官方文档：[Flutter 应用里的国际化](https://docs.flutter.cn/ui/accessibility-and-internationalization/internationalization)
+- [快速开始](https://tdesign.tencent.com/flutter/getting-started)
+- [自定义主题](https://tdesign.tencent.com/flutter/custom-theme)
+- [深色模式](https://tdesign.tencent.com/flutter/custom-theme#明暗模式)
+- [国际化](https://tdesign.tencent.com/flutter/internationalization)
+- [常见问题](https://tdesign.tencent.com/flutter/faq)
+- [在线组件文档](https://tdesign.tencent.com/flutter/overview)
 
 ## 🔗 更多示例
 
@@ -248,7 +99,7 @@ TDesign 还提供其他平台和框架的组件库：
 
 ## 🤝 参与贡献
 
-欢迎贡献代码！请在提交 [Pull Request](https://github.com/Tencent/tdesign-flutter/pulls) 前阅读[贡献指南](CONTRIBUTING.md)。
+欢迎贡献代码！请在提交 [Pull Request](https://github.com/Tencent/tdesign-flutter/pulls) 前阅读[贡献指南](https://github.com/Tencent/tdesign-flutter/blob/develop/CONTRIBUTING.md)。
 
 <a href="https://github.com/Tencent/tdesign-flutter/graphs/contributors">
   <img src="https://contrib.rocks/image?repo=Tencent/tdesign-flutter" />
@@ -270,4 +121,4 @@ TDesign Flutter 依赖以下组件库，感谢作者的开源贡献：
 
 ## 📄 开源协议
 
-TDesign Flutter 遵循 [MIT 协议](LICENSE)。
+TDesign Flutter 遵循 [MIT 协议](https://github.com/Tencent/tdesign-flutter/blob/develop/LICENSE)。

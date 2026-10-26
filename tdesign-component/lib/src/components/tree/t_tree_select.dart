@@ -1,11 +1,15 @@
+import 'dart:math' as math;
+
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:tdesign_flutter_icons/tdesign_flutter_icons.dart' show TIcons;
 
 import '../../theme/t_colors.dart';
 import '../../theme/t_fonts.dart';
+import '../../theme/t_internal_material.dart';
+import '../../theme/t_sizes.dart';
 import '../../theme/t_theme.dart';
-import '../text/t_text.dart';
+import '../text/t_text_styled.dart';
 import 't_tree_select_theme_data.dart';
 
 const _kTreeSelectHeight = 336.0;
@@ -13,22 +17,14 @@ const _kRootColumnWidth = 103.0;
 const _kIntermediateColumnWidth = 103.0;
 const _kLeafColumnMinWidth = 169.0;
 const _kItemHeight = 56.0;
-const _kOutwardCornerRadius = 9.0;
 
 /// 不可变的树形选择选项。
 @immutable
 class TTreeSelectOption {
   const TTreeSelectOption({
-    /// 展示文案。
     required this.label,
-
-    /// 业务值；同一层级的选项必须保持唯一。
     required this.value,
-
-    /// 子选项。
     this.children = const [],
-
-    /// 是否禁用。
     this.disabled = false,
   });
 
@@ -47,27 +43,12 @@ class TTreeSelectOption {
   final bool disabled;
 }
 
-/// 严格受控的树形选择器。
-///
-/// [value] 中每一项都是从根到叶子的完整路径。单选模式最多保留一条路径，
-/// 多选模式可同时保留多条路径。
 class TTreeSelect extends StatefulWidget {
   const TTreeSelect({
     super.key,
-
-    /// 根选项。
     required this.options,
-
-    /// 受控选中路径；每一项应为从根到叶子的完整 [TTreeSelectOption.value] 路径。
-    /// 单选模式最多传入一条，多选模式可传入多条且不得重复。
     required this.value,
-
-    /// 选中路径变化回调；为 null 时禁用。
     this.onChanged,
-
-    /// 是否允许选择多个叶子节点。
-    ///
-    /// 为 false 时，[value] 最多包含一条路径。
     this.multiple = false,
   });
 
@@ -101,8 +82,8 @@ class _TTreeSelectState extends State<TTreeSelect> {
 
   List<Object?> get _effectiveActivePath =>
       _activePath.isEmpty && widget.value.isEmpty
-          ? _defaultActivePath()
-          : _activePath;
+      ? _defaultActivePath()
+      : _activePath;
 
   @override
   void initState() {
@@ -115,7 +96,8 @@ class _TTreeSelectState extends State<TTreeSelect> {
     super.didUpdateWidget(oldWidget);
     final valueChanged = !_pathsEqual(oldWidget.value, widget.value);
     if (valueChanged) {
-      final reflectsLocalSelection = _lastEmittedValue != null &&
+      final reflectsLocalSelection =
+          _lastEmittedValue != null &&
           _pathsEqual(_lastEmittedValue!, widget.value);
       _lastEmittedValue = null;
       if (!reflectsLocalSelection) {
@@ -215,20 +197,22 @@ class _TTreeSelectState extends State<TTreeSelect> {
         return Container(
           height: theme?.height ?? _kTreeSelectHeight,
           color: theme?.backgroundColor ?? context.tTheme.bgColorContainer,
-          child: SingleChildScrollView(
-            scrollDirection: Axis.horizontal,
-            child: Row(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
-                for (var level = 0; level < columns.length; level++)
-                  _buildColumn(
-                    context,
-                    columns[level],
-                    level,
-                    widths[level],
-                    theme,
-                  ),
-              ],
+          child: TInternalScrollScope(
+            child: SingleChildScrollView(
+              scrollDirection: Axis.horizontal,
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  for (var level = 0; level < columns.length; level++)
+                    _buildColumn(
+                      context,
+                      columns[level],
+                      level,
+                      widths[level],
+                      theme,
+                    ),
+                ],
+              ),
             ),
           ),
         );
@@ -326,53 +310,48 @@ class _TTreeSelectState extends State<TTreeSelect> {
     return Container(
       width: width,
       color: backgroundColor,
-      child: ListView.builder(
-        padding: EdgeInsets.zero,
-        itemCount: options.length,
-        itemBuilder: (context, index) {
-          final option = options[index];
-          final path = <Object?>[
-            ...activePath.take(level),
-            option.value,
-          ];
-          final isBranch = option.children.isNotEmpty;
-          final selected = isBranch
-              ? level < activePath.length && activePath[level] == option.value
-              : widget.value.any((value) => listEquals(value, path));
-          final previousSelected = level == 0 &&
-              index > 0 &&
-              _isColumnOptionSelected(
-                options[index - 1],
-                [
-                  ...activePath.take(level),
-                  options[index - 1].value,
-                ],
-                level,
-                activePath,
-              );
-          final nextSelected = level == 0 &&
-              index < options.length - 1 &&
-              _isColumnOptionSelected(
-                options[index + 1],
-                [
-                  ...activePath.take(level),
-                  options[index + 1].value,
-                ],
-                level,
-                activePath,
-              );
-          return _buildOption(
-            context,
-            option: option,
-            path: path,
-            level: level,
-            selected: selected,
-            isBranch: isBranch,
-            previousSelected: previousSelected,
-            nextSelected: nextSelected,
-            theme: theme,
-          );
-        },
+      child: TInternalScrollScope(
+        child: ListView.builder(
+          padding: EdgeInsets.zero,
+          itemCount: options.length,
+          itemBuilder: (context, index) {
+            final option = options[index];
+            final path = <Object?>[...activePath.take(level), option.value];
+            final isBranch = option.children.isNotEmpty;
+            final selected = isBranch
+                ? level < activePath.length && activePath[level] == option.value
+                : widget.value.any((value) => listEquals(value, path));
+            final previousSelected =
+                level == 0 &&
+                index > 0 &&
+                _isColumnOptionSelected(
+                  options[index - 1],
+                  [...activePath.take(level), options[index - 1].value],
+                  level,
+                  activePath,
+                );
+            final nextSelected =
+                level == 0 &&
+                index < options.length - 1 &&
+                _isColumnOptionSelected(
+                  options[index + 1],
+                  [...activePath.take(level), options[index + 1].value],
+                  level,
+                  activePath,
+                );
+            return _buildOption(
+              context,
+              option: option,
+              path: path,
+              level: level,
+              selected: selected,
+              isBranch: isBranch,
+              previousSelected: previousSelected,
+              nextSelected: nextSelected,
+              theme: theme,
+            );
+          },
+        ),
       ),
     );
   }
@@ -401,30 +380,37 @@ class _TTreeSelectState extends State<TTreeSelect> {
     required TTreeSelectThemeData? theme,
   }) {
     final isRoot = level == 0;
-    final itemHeight = theme?.itemHeight ?? _kItemHeight;
+    var itemHeight = theme?.itemHeight ?? _kItemHeight;
     final selectedBackgroundColor =
         theme?.selectedBackgroundColor ?? context.tTheme.bgColorContainer;
-    final indicatorColor =
-        theme?.indicatorColor ?? context.tTheme.brandNormalColor;
+    final indicatorColor = theme?.indicatorColor ?? context.tTheme.brandColor;
     final defaultStyle = TextStyle(
       color: context.tTheme.textColorPrimary,
       fontSize: context.tTheme.fontBodyLarge?.size ?? 16,
       fontWeight: FontWeight.w400,
     );
     final selectedStyle = defaultStyle.copyWith(
-      color: context.tTheme.brandNormalColor,
+      color: context.tTheme.brandColor,
       fontWeight: FontWeight.w600,
     );
     final effectiveTextStyle = option.disabled
         ? theme?.disabledTextStyle ??
-            defaultStyle.copyWith(
-              color: context.tTheme.textDisabledColor,
-            )
+              defaultStyle.copyWith(color: context.tTheme.textColorDisabled)
         : selected && theme?.selectedTextStyle != null
-            ? theme!.selectedTextStyle!
-            : selected && (isRoot || isBranch)
-                ? selectedStyle
-                : theme?.textStyle ?? defaultStyle;
+        ? theme!.selectedTextStyle!
+        : selected && (isRoot || isBranch)
+        ? selectedStyle
+        : theme?.textStyle ?? defaultStyle;
+    if (theme?.itemHeight == null) {
+      itemHeight = math.max(
+        itemHeight,
+        TTextStyled(
+          option.label,
+          maxLines: 1,
+          style: effectiveTextStyle,
+        ).naturalSize(context).height,
+      );
+    }
     final showIndicator = selected && !isBranch;
     return Semantics(
       selected: selected,
@@ -446,8 +432,8 @@ class _TTreeSelectState extends State<TTreeSelect> {
           onTap: option.disabled
               ? null
               : () => isBranch
-                  ? _openBranch(path)
-                  : _toggleLeaf(List.unmodifiable(path)),
+                    ? _openBranch(path)
+                    : _toggleLeaf(List.unmodifiable(path)),
         ),
       ),
     );
@@ -469,11 +455,7 @@ class _TTreeSelectState extends State<TTreeSelect> {
     if (next.length == widget.value.length) {
       next.add(path);
     }
-    _emitSelection(
-      List.unmodifiable(
-        next.map(List<Object?>.unmodifiable),
-      ),
-    );
+    _emitSelection(List.unmodifiable(next.map(List<Object?>.unmodifiable)));
   }
 
   void _emitSelection(List<List<Object?>> value) {
@@ -534,18 +516,24 @@ class _TreeOptionTile extends StatelessWidget {
         clipBehavior: Clip.none,
         children: [
           if (selected && root)
-            Positioned.fill(
-              child: ColoredBox(color: selectedBackgroundColor),
+            Positioned.fill(child: ColoredBox(color: selectedBackgroundColor)),
+          if (selected && root)
+            PositionedDirectional(
+              start: 0,
+              top: (height - 16) / 2,
+              child: SizedBox(
+                key: const ValueKey('tree-select-root-indicator'),
+                width: 3,
+                height: 16,
+                child: ColoredBox(color: indicatorColor),
+              ),
             ),
           if (!selected && previousSelected)
             Positioned(
               top: 0,
               right: 0,
               child: CustomPaint(
-                size: const Size(
-                  _kOutwardCornerRadius,
-                  _kOutwardCornerRadius,
-                ),
+                size: const Size(9, 9),
                 painter: _OutwardCornerPainter(
                   color: selectedBackgroundColor,
                   corner: _Corner.topRight,
@@ -557,10 +545,7 @@ class _TreeOptionTile extends StatelessWidget {
               right: 0,
               bottom: 0,
               child: CustomPaint(
-                size: const Size(
-                  _kOutwardCornerRadius,
-                  _kOutwardCornerRadius,
-                ),
+                size: const Size(9, 9),
                 painter: _OutwardCornerPainter(
                   color: selectedBackgroundColor,
                   corner: _Corner.bottomRight,
@@ -573,8 +558,11 @@ class _TreeOptionTile extends StatelessWidget {
               children: [
                 Expanded(
                   child: Padding(
-                    padding: const EdgeInsets.only(left: 16, right: 12),
-                    child: TText(
+                    padding: EdgeInsets.only(
+                      left: context.tTheme.size6,
+                      right: 12,
+                    ),
+                    child: TTextStyled(
                       label,
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
@@ -586,7 +574,7 @@ class _TreeOptionTile extends StatelessWidget {
                   SizedBox(
                     width: 56,
                     height: height,
-                    child: Icon(
+                    child: TInternalIcon(
                       TIcons.check,
                       size: 24,
                       color: indicatorColor,
@@ -602,16 +590,10 @@ class _TreeOptionTile extends StatelessWidget {
   }
 }
 
-enum _Corner {
-  topRight,
-  bottomRight,
-}
+enum _Corner { topRight, bottomRight }
 
 class _OutwardCornerPainter extends CustomPainter {
-  const _OutwardCornerPainter({
-    required this.color,
-    required this.corner,
-  });
+  const _OutwardCornerPainter({required this.color, required this.corner});
 
   final Color color;
   final _Corner corner;

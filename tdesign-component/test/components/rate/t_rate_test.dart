@@ -1,5 +1,4 @@
 import 'package:flutter/gestures.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter/semantics.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:tdesign_flutter/tdesign_flutter.dart';
@@ -718,54 +717,95 @@ void main() {
       );
     });
 
-    testWidgets(
-      'default colors follow explicit Material text and TDesign rate tokens',
-      (tester) async {
-        final token =
-            TThemeData.defaultData().copyWith(
-                  colorMap: {
-                    'warningColor5': Colors.red,
-                    'bgColorComponent': Colors.blue,
-                    'textColorPrimary': Colors.green,
-                  },
-                  marginMap: {'spacer24': 30},
-                )
-                as TThemeData;
-        final colorScheme = ColorScheme.fromSeed(
-          seedColor: Colors.teal,
-        ).copyWith(onSurface: Colors.purple);
-        await tester.pumpWidget(
-          wrap(
-            const TRate(
-              value: 2,
-              texts: ['bad', 'ok', 'good', 'great', 'best'],
-              onChanged: _noop,
-            ),
-            token: token,
-            colorScheme: colorScheme,
+    testWidgets('default colors follow TDesign rate and text tokens', (
+      tester,
+    ) async {
+      final token = TThemeData.defaultData().copyWith(
+        colorMap: {
+          'warningColor5': Colors.red,
+          'bgColorComponent': Colors.blue,
+          'textColorPrimary': Colors.green,
+        },
+        spacerMap: {'spacer3': 30},
+      );
+      final colorScheme = ColorScheme.fromSeed(
+        seedColor: Colors.teal,
+      ).copyWith(onSurface: Colors.purple);
+      await tester.pumpWidget(
+        wrap(
+          const TRate(
+            value: 2,
+            texts: ['bad', 'ok', 'good', 'great', 'best'],
+            onChanged: _noop,
           ),
-        );
+          token: token,
+          colorScheme: colorScheme,
+        ),
+      );
 
-        expect(
-          tester.widget<Text>(find.text('ok')).style?.color,
-          Colors.purple,
-        );
-        final icons = tester.widgetList<Icon>(find.byIcon(TIcons.star_filled));
-        expect(icons.any((icon) => icon.color == Colors.red), isTrue);
-        expect(icons.any((icon) => icon.color == Colors.blue), isTrue);
-        expect(icons.any((icon) => icon.color == colorScheme.primary), isFalse);
-        expect(icons.every((icon) => icon.size == 30), isTrue);
-      },
-    );
+      expect(tester.widget<Text>(find.text('ok')).style?.color, Colors.green);
+      final icons = tester.widgetList<Icon>(find.byIcon(TIcons.star_filled));
+      expect(icons.any((icon) => icon.color == Colors.red), isTrue);
+      expect(icons.any((icon) => icon.color == Colors.blue), isTrue);
+      expect(icons.any((icon) => icon.color == colorScheme.primary), isFalse);
+      expect(icons.every((icon) => icon.size == 30), isTrue);
+    });
+
+    testWidgets('enabled unrated text follows the disabled text token', (
+      tester,
+    ) async {
+      final token = TThemeData.defaultData();
+
+      await tester.pumpWidget(
+        wrap(
+          const TRate(
+            value: 0,
+            texts: ['bad', 'ok', 'good', 'great', 'best'],
+            onChanged: _noop,
+          ),
+          token: token,
+        ),
+      );
+
+      expect(token.textColorDisabled, const Color(0x42000000));
+      expect(
+        tester.widget<Text>(find.text('未评分')).style?.color,
+        token.textColorDisabled,
+      );
+    });
+
+    testWidgets('enabled unrated text ignores Material onSurface', (
+      tester,
+    ) async {
+      final token = TThemeData.defaultData();
+      final colorScheme = ColorScheme.fromSeed(
+        seedColor: Colors.teal,
+      ).copyWith(onSurface: Colors.purple);
+
+      await tester.pumpWidget(
+        wrap(
+          const TRate(
+            value: 0,
+            texts: ['bad', 'ok', 'good', 'great', 'best'],
+            onChanged: _noop,
+          ),
+          token: token,
+          colorScheme: colorScheme,
+        ),
+      );
+
+      expect(
+        tester.widget<Text>(find.text('未评分')).style?.color,
+        token.textColorDisabled,
+      );
+    });
 
     testWidgets('disabled text color follows the TDesign token', (
       tester,
     ) async {
-      final token =
-          TThemeData.defaultData().copyWith(
-                colorMap: {'textDisabledColor': Colors.orange},
-              )
-              as TThemeData;
+      final token = TThemeData.defaultData().copyWith(
+        colorMap: {'textColorDisabled': Colors.orange},
+      );
 
       await tester.pumpWidget(
         wrap(
@@ -777,7 +817,7 @@ void main() {
       expect(tester.widget<Text>(find.text('ok')).style?.color, Colors.orange);
     });
 
-    testWidgets('disabled text color applies Material onSurface opacity', (
+    testWidgets('disabled text color ignores Material onSurface', (
       tester,
     ) async {
       final colorScheme = ColorScheme.fromSeed(
@@ -793,7 +833,7 @@ void main() {
 
       expect(
         tester.widget<Text>(find.text('ok')).style?.color,
-        Colors.purple.withValues(alpha: 0.38),
+        TThemeData.defaultData().textColorDisabled,
       );
     });
 

@@ -1,8 +1,91 @@
-import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:tdesign_flutter/tdesign_flutter.dart';
 
+import '../../helpers/text_slot_regression.dart';
+
 void main() {
+  registerNativeParagraphContractTests(
+    'Drawer custom menu',
+    (child) => SizedBox(
+      height: 400,
+      child: TDrawer(items: [TDrawerItem(content: child)]),
+    ),
+    reset: false,
+  );
+  for (final wrapper in ['direct', 'Row', 'Padding', 'Builder']) {
+    registerTextSlotParityTests('Drawer menu content $wrapper', (child) {
+      final content = switch (wrapper) {
+        'Row' => Row(mainAxisSize: MainAxisSize.min, children: [child]),
+        'Padding' => Padding(padding: const EdgeInsets.all(3), child: child),
+        'Builder' => Builder(builder: (_) => child),
+        _ => child,
+      };
+      return SizedBox(
+        height: 400,
+        child: TDrawer(items: [TDrawerItem(content: content)]),
+      );
+    });
+  }
+
+  testWidgets(
+    'Drawer menu content uses component defaults without forcing a single line',
+    (tester) async {
+      await tester.pumpWidget(
+        MaterialApp(
+          theme: TThemeBuilder.light(TThemeData.defaultData()).mergeExtension(
+            const TDrawerThemeData(
+              itemTextStyle: TextStyle(fontSize: 19, color: Colors.purple),
+            ),
+          ),
+          home: const Scaffold(
+            body: SizedBox(
+              height: 400,
+              child: TDrawer(
+                items: [
+                  TDrawerItem(
+                    content: TText(
+                      'custom\nsecond',
+                      maxLines: 2,
+                      overflow: TextOverflow.fade,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ),
+      );
+      final rich = tester.widget<RichText>(
+        find.descendant(
+          of: find.text('custom\nsecond'),
+          matching: find.byType(RichText),
+        ),
+      );
+      expect(rich.text.style!.fontSize, 19);
+      expect(rich.text.style!.color, Colors.purple);
+      expect(rich.maxLines, 2);
+      expect(rich.overflow, TextOverflow.fade);
+      expect(tester.takeException(), isNull);
+    },
+  );
+
+  registerNativeParagraphContractTests(
+    'Drawer title slot',
+    (child) => SizedBox(
+      height: 400,
+      child: TDrawer(title: child, items: const []),
+    ),
+    reset: true,
+  );
+
+  registerTextSlotParityTests(
+    'Drawer title slot',
+    (child) => SizedBox(
+      height: 400,
+      child: TDrawer(title: child, items: const []),
+    ),
+  );
+
   ThemeData fullTheme({TDrawerThemeData? drawerTheme}) {
     var theme = TThemeBuilder.light(TThemeData.defaultData());
     if (drawerTheme != null) {
@@ -245,8 +328,8 @@ void main() {
 
   group('TDrawer', () {
     test('拒绝非正数宽度', () {
-      expect(() => TDrawer(width: 0), throwsAssertionError);
-      expect(() => TDrawer(width: -1), throwsAssertionError);
+      expect(() => TDrawerThemeData(width: 0), throwsAssertionError);
+      expect(() => TDrawerThemeData(width: -1), throwsAssertionError);
     });
 
     testWidgets('使用 child 渲染自定义内容', (tester) async {
@@ -296,7 +379,10 @@ void main() {
       await tester.pumpAndSettle();
       expect(find.text('菜单1'), findsOneWidget);
       expect(find.text('菜单2'), findsOneWidget);
-      expect(find.byType(TText), findsNWidgets(2));
+      expect(
+        find.byWidgetPredicate((widget) => widget is TText),
+        findsNWidgets(2),
+      );
       expect(find.byType(TCell), findsNothing);
       expect(find.byType(TCellGroup), findsNothing);
 
@@ -309,7 +395,8 @@ void main() {
       const longTitle = '这是一个非常非常长的抽屉菜单标题用于验证不溢出';
       await tester.pumpWidget(
         wrapWithTheme(
-          const TDrawer(width: 120, items: [TDrawerItem(title: longTitle)]),
+          const TDrawer(items: [TDrawerItem(title: longTitle)]),
+          drawerTheme: const TDrawerThemeData(width: 120),
         ),
       );
       await tester.pumpAndSettle();
@@ -319,7 +406,7 @@ void main() {
       expect(title.overflow, TextOverflow.ellipsis);
     });
 
-    testWidgets('菜单正文继承全局 TextTheme，并由 Drawer Theme 覆盖', (tester) async {
+    testWidgets('菜单正文使用 TDesign Token，并由 Drawer Theme 覆盖', (tester) async {
       const globalStyle = TextStyle(
         color: Colors.red,
         fontWeight: FontWeight.w500,
@@ -339,8 +426,11 @@ void main() {
       await tester.pumpAndSettle();
 
       var title = tester.widget<Text>(find.text('菜单1'));
-      expect(title.style?.color, globalStyle.color);
-      expect(title.style?.fontWeight, globalStyle.fontWeight);
+      expect(title.style?.color, TThemeData.defaultData().textColorPrimary);
+      expect(
+        title.style?.fontWeight,
+        TThemeData.defaultData().fontBodyLarge?.fontWeight,
+      );
 
       const drawerStyle = TextStyle(
         color: Colors.blue,
@@ -572,7 +662,10 @@ void main() {
 
     testWidgets('自定义宽度', (tester) async {
       await tester.pumpWidget(
-        wrapWithTheme(const TDrawer(width: 300, child: SizedBox.expand())),
+        wrapWithTheme(
+          const TDrawer(child: SizedBox.expand()),
+          drawerTheme: const TDrawerThemeData(width: 300),
+        ),
       );
       final container = tester.widget<Container>(
         find
@@ -585,13 +678,11 @@ void main() {
       expect(container.constraints?.maxWidth, 300);
     });
 
-    testWidgets('构造器背景色覆盖默认主题背景色', (tester) async {
+    testWidgets('Theme 背景色覆盖默认背景色', (tester) async {
       await tester.pumpWidget(
         wrapWithTheme(
-          const TDrawer(
-            backgroundColor: Colors.yellow,
-            child: SizedBox.expand(),
-          ),
+          const TDrawer(child: SizedBox.expand()),
+          drawerTheme: const TDrawerThemeData(backgroundColor: Colors.yellow),
         ),
       );
 
@@ -599,13 +690,11 @@ void main() {
       expect(container.color, Colors.yellow);
     });
 
-    testWidgets('构造器背景色作为菜单项默认背景色', (tester) async {
+    testWidgets('Theme 背景色作为菜单项默认背景色', (tester) async {
       await tester.pumpWidget(
         wrapWithTheme(
-          const TDrawer(
-            backgroundColor: Colors.yellow,
-            items: [TDrawerItem(title: '菜单1')],
-          ),
+          const TDrawer(items: [TDrawerItem(title: '菜单1')]),
+          drawerTheme: const TDrawerThemeData(backgroundColor: Colors.yellow),
         ),
       );
 
@@ -713,7 +802,7 @@ void main() {
       expect(find.text('菜单1'), findsNothing);
     });
 
-    testWidgets('内容参数与 Theme 优先级由 TDrawer 持有', (tester) async {
+    testWidgets('抽屉浮层使用组件 Theme 的宽度和背景色', (tester) async {
       await tester.pumpWidget(
         MaterialApp(
           theme: fullTheme(
@@ -729,11 +818,7 @@ void main() {
                 onPressed: () {
                   showTDrawer(
                     context,
-                    drawer: const TDrawer(
-                      width: 250,
-                      backgroundColor: Colors.green,
-                      items: [TDrawerItem(title: '菜单1')],
-                    ),
+                    drawer: const TDrawer(items: [TDrawerItem(title: '菜单1')]),
                   );
                 },
               ),
@@ -744,8 +829,8 @@ void main() {
 
       await tester.tap(find.text('打开'));
       await tester.pumpAndSettle();
-      final container = drawerContainer(tester, color: Colors.green);
-      expect(container.constraints?.maxWidth, 250);
+      final container = drawerContainer(tester, color: Colors.yellow);
+      expect(container.constraints?.maxWidth, 320);
     });
 
     testWidgets('默认避让系统安全区', (tester) async {

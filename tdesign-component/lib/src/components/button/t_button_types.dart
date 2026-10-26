@@ -28,8 +28,8 @@ enum TButtonVariant {
   ghost,
 }
 
-/// 按钮配色方案
-enum TButtonColorScheme {
+/// 按钮内置配色预设，不是 Material ColorScheme。
+enum TButtonColorPreset {
   /// 默认配色
   defaultTheme,
 
@@ -39,7 +39,7 @@ enum TButtonColorScheme {
   /// 危险操作配色
   danger,
 
-  /// 浅色配色
+  /// 浅色品牌配色；不改变填充/描边等 [TButtonVariant] 绘制方式。
   light,
 }
 

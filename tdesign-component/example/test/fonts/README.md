@@ -1,8 +1,23 @@
 # 页面 Golden 测试字体
 
-`TDesignGoldenCJK-Regular.otf` 是仅供测试使用的中文字体子集，避免 Linux
-Golden 因宿主机缺少 CJK fallback 而把中文渲染成缺字符号。它不会打包进 Example
-或组件产物。
+`TDesignGoldenCJK-Regular.otf` 是仅供测试使用的中文字体子集，覆盖当前组件库、
+公开 Example 页面和 Demo 测试源码中的全部中文字符，避免 Linux Golden 因宿主机
+缺少 CJK fallback 而把中文渲染成缺字符号。字符清单见
+`component_demo_glyphs.txt`；上游为 Noto Sans SC 2.004，子集工具为
+HarfBuzz 11.4.5，子集 SHA-256 为
+`980d66bc50a52c95fc5f32ab29faf3aa8f06081093aad3348d8cf5dc12b645a0`。
+它不会打包进 Example 或组件产物。
+
+共享 Demo Golden 工具统一加载 Roboto、Material Icons、Cupertino Icons、
+`tdesign_flutter_icons` 和组件包内的 TCloudNumber 字体；不能依赖某个测试文件按需
+加载，否则相同组件在不同 Golden 中可能出现空图标或错误数字字形。
+
+`FormGoldenCJK-Regular.otf` 仅补充 Form 默认值中新增且既有子集未覆盖的
+字形，字符清单见 `form_demo_glyphs.txt`。它使用 Android 16 系统的开源
+`NotoSansCJK-Regular.ttc` SC 字体面（index 2）生成，并作为 Form Demo
+最后的独立 fallback，不改变其他页面既有基线。子集工具为
+HarfBuzz 11.4.5，子集 SHA-256 为
+`31036643ddabc5f4621d22fe743b454cef77c785a0d386f4f9a97bf125ad55ea`。
 
 `TDesignFeedbackGoldenCJK-Regular.otf` 是 ActionSheet、Dialog、DropdownMenu、
 NoticeBar 新增整页 Golden 的独立字体子集，字符清单见
@@ -15,6 +30,12 @@ NoticeBar 新增整页 Golden 的独立字体子集，字符清单见
 `TDesignAlignmentCJK-Regular.otf` 是 Loading、Message、Popover、Popup 对齐测试
 新增文案的补充 fallback。它排在原字体之后，避免扩充原字体改变 Button、Checkbox、
 Upload 等既有 Golden 的字形选择与像素基线。
+
+`DemoReviewGoldenCJK-Regular.otf` 仅补充 Footer 和 Tag 整页 Golden 的
+“圆、弧、底、脚”字，字符清单见 `demo_review_glyphs.txt`。它作为这两个 Demo 的
+最后独立 fallback，不改变其他页面的既有像素基线。它使用本文记录的
+Noto Sans SC 2.004 与 HarfBuzz 11.4.5 生成，子集 SHA-256 为
+`09ceb5b1f9ac5e5451b6cd0e6b46945aee4e035c0eab17554c4772713e8a6ed0`。
 
 `TreeSelectGoldenCJK-Regular.otf` 仅补充 TreeSelect 整页 Golden 新增且既有子集
 未覆盖的字形，字符清单见 `tree_select_demo_glyphs.txt`，不会改变既有组件基线。
@@ -49,7 +70,7 @@ SHA-256 为 `59c5bebba9bf720005fb977a94b9c150b0b8e8c2698c1dca3a66d9f0d7cd9722`�
 `PickerGoldenCJK-Regular.otf` 仅补充 Picker 整页 Golden 新增且既有子集未覆盖的
 字形，字符清单见 `picker_demo_glyphs.txt`。独立加载可避免扩充共享字体改变既有组件的
 像素基线，子集 SHA-256 为
-`83d2e4d3b8ae6282eeab5d8930466e082b29a3a88ac32f19da543ad1b547a107`。
+`54321709d3095fd55996e301d0958f3f6fd8c71928cc38da403f3fdc1b4b30d7`。
 
 `RadioGoldenCJK-Regular.otf` 使用同一上游与子集参数，字符清单见
 `radio_glyphs.txt`，仅用于 Radio 整页 Golden。子集 SHA-256 为
@@ -83,6 +104,12 @@ SHA-256 为 `59c5bebba9bf720005fb977a94b9c150b0b8e8c2698c1dca3a66d9f0d7cd9722`�
 或既有共享字体的像素基线，子集 SHA-256 为
 `f7a30185d3942c4cb698afb1e74002cc16eaddfcf70ae1ec0774f16e61f9392f`。
 
+`BadgeGoldenCJK-Regular.otf` 仅补充 Badge 整页 Golden 所需字形，字符清单见
+`badge_demo_glyphs.txt`。它作为 Badge Demo 最后的专用 fallback，不改变其他页面
+或既有共享字体的像素基线；上游使用本文记录的 Noto Sans SC 2.004，子集工具为
+HarfBuzz 11.4.5，子集 SHA-256 为
+`0c7933246c76faff195e871bde8f83fb04e488d867efde542fa111bbaff7d88e`。
+
 `TabBarGoldenCJK-Regular.otf` 仅用于 TabBar 整页明暗 Golden，字符清单见
 `tab_bar_demo_glyphs.txt`。它在 Android 真机热重启、逐项操作及 Figma 人工核对
 完成后才生成，不改变其他页面的字体回退和既有快照。
@@ -93,6 +120,12 @@ SHA-256 为 `59c5bebba9bf720005fb977a94b9c150b0b8e8c2698c1dca3a66d9f0d7cd9722`�
 - 子集 SHA-256：`77e2e93df0b403af5ddd7411b6472ada58a93fcade6b87a34c26fe422f698c70`
 - 许可证：SIL Open Font License 1.1，见 `OFL.txt`
 
+`TabsGoldenCJK-Regular.otf` 仅用于 Tabs 整页明暗及内容区交互 Golden，字符清单见
+`tabs_demo_glyphs.txt`。它使用 Android 16 系统开源 `NotoSansCJK-Regular.ttc`
+的 SC 字体面（index 2）生成，并作为 Tabs Demo 的独立 fallback，不改变其他页面
+既有基线；子集工具为 HarfBuzz 11.4.5，子集 SHA-256 为
+`883cb872c26093d5a7f5b9b491d8037657395b4c974f1942d97f9d341c9f71ee`。
+
 `SideBarGoldenCJK-Regular.otf` 仅补充 SideBar 整页 Golden 的公开标题、说明与
 入口文案，字符清单见 `sidebar_demo_glyphs.txt`。它作为独立 fallback 加载，避免
 扩充共享字体后改变其他组件既有基线；上游与本文其余子集相同，子集工具为
@@ -101,12 +134,12 @@ HarfBuzz 11.4.5，子集 SHA-256 为
 `CascaderGoldenCJK-Regular.otf` 仅补充 Cascader 整页 Golden 新增且既有子集
 未覆盖的字形，字符清单见 `cascader_demo_glyphs.txt`。独立加载可避免扩充共享
 字体改变既有组件的像素基线，子集 SHA-256 为
-`8bdb3ff2e9b33a303bce6b1d6d00ab951f7a27cb34b9626fd60805cff1ca8efa`。
+`8bbb7b7109383e63954943d26ba653540b8037147b5258a19482589b0dd01ee6`。
 
 `IndexesGoldenCJK-Regular.otf` 仅补充 Indexes 城市列表和公开 Demo 文案，字符清单见
 `indexes_demo_glyphs.txt`。它使用相同上游与子集参数，并设置独立 family，避免改变
 其他组件现有 Golden 的字体回退结果。子集 SHA-256 为
-`79e8744ec10861ff4a4685ea5915b779c400e3c8c42c8c91c00d815ab9d00d5c`。
+`cedb91f9c93622514e0a86c6f2eab924310755de88e2dcbdc88a5dd211f973c1`。
 
 `NavBarGoldenCJK-Regular.otf` 仅补充 Navbar 整页 Golden 的全部可见中文，
 字符清单见 `navbar_demo_glyphs.txt`。独立加载可避免扩大共享字体并改变其他组件
@@ -119,6 +152,11 @@ HarfBuzz 11.4.5，子集 SHA-256 为
 子集 SHA-256 为
 `ba8c31342f34f0d1ca0ceb62e3f50c7de2169e6330f7c2b398993a9a0eff2ba5`。
 
+`RateGoldenCJK-Regular.otf` 仅补充 Rate 竖向描述“服务很棒”所需字形，字符清单见
+`rate_demo_glyphs.txt`。它作为 Rate Demo 最后的专用 fallback，不改变其他页面或
+既有共享字体的像素基线；使用 HarfBuzz 11.4.5 生成，子集 SHA-256 为
+`ba2f7a0b21ed4df2a6b24f8c44bec1d6b183ed28fce76131f89cf8ed93d54e91`。
+
 - 上游：Noto Sans SC 2.004 `NotoSansSC-Regular.otf`
 - 来源：`https://github.com/notofonts/noto-cjk/raw/Sans2.004/Sans/SubsetOTF/SC/NotoSansSC-Regular.otf`
 - 上游 SHA-256：`faa6c9df652116dde789d351359f3d7e5d2285a2b2a1f04a2d7244df706d5ea9`
@@ -129,8 +167,10 @@ HarfBuzz 11.4.5，子集 SHA-256 为
 原字体经过子集化后按各测试字体用途设置独立 family/full/PostScript name
 （例如 feedback 子集使用 `TDesign Feedback Golden CJK`），不继续使用上游保留字体名。
 
-更新 Button、Divider、Fab、Icon、Link、Text、Form、Input、Rate、Search、Switch、
-Textarea、Upload、PullDownRefresh、Toast 或 SwipeCell Demo 页面文案后，更新原字符清单；
+更新组件、公开 Example 或 Demo 测试中的中文/全角文案后，统一重新生成
+`component_demo_glyphs.txt` 和共享字体。调度器自测会扫描 `lib`、`example/lib`
+及 `example/test`，并直接解析字体 `cmap`，同时检查源码、字符清单和真实字形三者
+完整。各专用字符清单仅在对应专用 fallback 仍需新增字形时同步更新。
 Skeleton 默认占位色等共享视觉契约变化时，同时复验并按需更新使用 Skeleton 的
 PullDownRefresh Demo 明暗基线。
 更新 Loading、Message、Popover 或 Popup 页面文案时，更新补充字符清单；更新
@@ -151,7 +191,22 @@ ActionSheet、Dialog、DropdownMenu 或 NoticeBar 页面文案时，更新 feedb
 更新 Progress 页面文案时，更新 Progress 字符清单。
 更新 Swiper 页面文案时，更新 Swiper 字符清单。
 更新 Avatar 页面文案时，更新 Avatar 字符清单。
+更新 Badge 页面文案时，更新 Badge 字符清单。
 更新 Navbar 页面文案时，更新 Navbar 字符清单。
 更新 Image 页面文案时，更新 Image 字符清单。
+更新 Rate 页面文案时，更新 Rate 字符清单。
+更新 Table 页面文案时，更新 Table 字符清单。
 随后在固定 Linux + Flutter 3.32 环境更新对应组件的权威 Golden；不得使用系统字体
 生成基线。
+
+2026-10-09 补齐源码字符“批”“逆”。沿用上述 Noto Sans SC 2.004 与 HarfBuzz，既有 cmap 字符的轮廓、横向度量和全局字体度量逐项一致。
+
+## 公开页面与内部调试区块
+
+公开 Demo 的功能与视觉测试分别通过组件包下的 `dart run tool/run_example_regression.dart`、`dart run tool/run_visual_regression.dart` 执行。两者自动传入 `--dart-define=TDESIGN_DEMO_TEST_MODULES=false`，让组件数量、代码入口、布局和截图只包含公开示例；功能调度器随后单独运行 `internal-demo` 标签，验证不传开关时 Debug 默认展示的契约。
+
+单独运行页面 Golden 时也要传入上述编译参数；不能通过修改页面默认值来隐藏调试区块。像素测试与基线生成仍仅使用 Linux + Flutter 3.32.0，保持精确比较。首次新增基线应先检查 Linux 实际图，再安装并不带更新参数重跑。
+
+自定义主题指南内部有独立的 `MaterialApp`，仅适配外层主题无法固定其原生文字字体。截图通过指南的 `themeAdapter` 注入原生文字字体与回退栈，保留原始 Token、主题名称和浅深关联；不要通过替换整个 Token 主题来修正测试字体。
+
+Theme guide Golden tests also register the SDK Roboto font under the monospace alias so explicit numeric Text styles do not resolve to the test runner Ahem font. This is test-only and does not change the application font.

@@ -5,22 +5,22 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 import '../../theme/basic.dart';
+import '../../theme/t_colors.dart';
+import '../../theme/t_theme.dart';
 import 't_text_resolve.dart';
 import 't_text_theme_data.dart';
 
-/// Flutter [Text] 的 TDesign Token 薄封装。
-///
-/// 文字布局、字体 fallback、无障碍缩放和语义均由 Flutter 原生 Text 负责。
-/// 固定容器居中与图文 baseline 应由父布局表达。
 class TText extends StatelessWidget {
+  /// TDesign 文字：普通位置用正文默认值，组件文字槽用组件默认值，显式样式优先。
+  ///
+  /// 未指定字段从最近的 TTextThemeData 获取，仍未配置时回退 TD 正文 Token。
+  /// Button.child、NavBar.title 等已适配文字槽提供各自的默认字体与颜色；
+  /// 实例 [style]、[font] 继续优先，内容内部更近的 TD 文字主题也可局部定制。
+  /// 外层 DefaultTextStyle.style 或 Material TextTheme 不自动控制字体和颜色；
+  /// MediaQuery 缩放、方向及已有段落环境行为保持。
   const TText(
     String this.data, {
     this.font,
-    this.fontWeight,
-    this.fontFamily,
-    this.textColor,
-    this.isTextThrough,
-    this.lineThroughColor,
     this.style,
     this.strutStyle,
     this.textAlign,
@@ -38,15 +38,10 @@ class TText extends StatelessWidget {
     super.key,
   }) : textSpan = null;
 
-  /// 创建 TDesign 富文本。
+  /// 创建 TDesign 富文本，默认样式与 [TText] 构造方法遵循相同规则。
   const TText.rich(
     InlineSpan this.textSpan, {
     this.font,
-    this.fontWeight,
-    this.fontFamily,
-    this.textColor,
-    this.isTextThrough,
-    this.lineThroughColor,
     this.style,
     this.strutStyle,
     this.textAlign,
@@ -64,25 +59,12 @@ class TText extends StatelessWidget {
     super.key,
   }) : data = null;
 
-  /// TDesign 字体 Token，包含字号、行高和字重。
+  /// TDesign 字体 Token 预设，包含字号、行高和字重；[style] 的显式字段优先。
   final Font? font;
 
-  /// 字体粗细。
-  final FontWeight? fontWeight;
-
-  /// 字体族及可选资源 package。
-  final FontFamily? fontFamily;
-
-  /// 文字颜色。
-  final Color? textColor;
-
-  /// 是否显示删除线。为 null 时继承 Theme 或父级样式。
-  final bool? isTextThrough;
-
-  /// 删除线颜色。
-  final Color? lineThroughColor;
-
-  /// Flutter 原生文字样式，具有最高优先级。
+  /// 当前实例的文字样式；通常仅覆盖显式字段，优先于 [font] 和最近 TD 文字默认值。
+  /// 未指定字段继续使用所在位置的默认；空样式不会切换继承规则。
+  /// 显式 TextStyle(inherit: false) 沿用 Flutter 的整体替换语义。
   final TextStyle? style;
 
   /// 文本内容。
@@ -127,29 +109,32 @@ class TText extends StatelessWidget {
   /// 透传至 [Text.textHeightBehavior]。
   final ui.TextHeightBehavior? textHeightBehavior;
 
-  /// 透传至 [Text.selectionColor]。
+  /// 选择高亮颜色；未指定时使用 TD brandColor 的 40% alpha，不继承 Material 选择主题。
   final Color? selectionColor;
 
   @override
   Widget build(BuildContext context) => _rawText(context);
 
   /// 获取与当前 TText 配置等价的 Flutter 原生 [Text]。
-  Text getRawText({required BuildContext context}) {
+  ///
+  /// ## 返回值
+  /// 保留当前文本配置和 key 的原生 Text。
+  Text getRawText({
+    /// 当前构建上下文，用于读取祖先配置。
+    required BuildContext context,
+  }) {
     return _rawText(context, includeKey: true);
   }
 
   /// 获取最终 Flutter [TextStyle]。
-  TextStyle getTextStyle(BuildContext context) {
-    return TTextResolve.resolve(
-      context: context,
-      style: style,
-      font: font,
-      fontWeight: fontWeight,
-      fontFamily: fontFamily,
-      textColor: textColor,
-      isTextThrough: isTextThrough,
-      lineThroughColor: lineThroughColor,
-    );
+  ///
+  /// ## 返回值
+  /// 结合当前组件配置与上下文主题解析出的最终 TextStyle。
+  TextStyle getTextStyle(
+    /// 当前构建上下文，用于读取祖先配置。
+    BuildContext context,
+  ) {
+    return TTextResolve.resolve(context: context, font: font, style: style);
   }
 
   Text _rawText(BuildContext context, {bool includeKey = false}) {
@@ -177,7 +162,8 @@ class TText extends StatelessWidget {
         semanticsIdentifier: semanticsIdentifier,
         textWidthBasis: effectiveTextWidthBasis,
         textHeightBehavior: effectiveTextHeightBehavior,
-        selectionColor: selectionColor,
+        selectionColor:
+            selectionColor ?? context.tTheme.brandColor.withValues(alpha: 0.4),
       );
     }
     return Text(
@@ -196,41 +182,24 @@ class TText extends StatelessWidget {
       semanticsIdentifier: semanticsIdentifier,
       textWidthBasis: effectiveTextWidthBasis,
       textHeightBehavior: effectiveTextHeightBehavior,
-      selectionColor: selectionColor,
+      selectionColor:
+          selectionColor ?? context.tTheme.brandColor.withValues(alpha: 0.4),
     );
   }
 }
 
-/// 支持 TDesign 字体便利参数的 Flutter [TextSpan]。
+/// 使用原生 [TextStyle] 配置局部样式的 Flutter [TextSpan]。
 ///
 /// 未显式配置的字段保持为空，并继承父 Span 样式。
 class TTextSpan extends TextSpan {
-  TTextSpan({
-    /// TDesign 字体 Token，包含字号、行高和字重。
-    Font? font,
-
-    /// 字体粗细。
-    FontWeight? fontWeight,
-
-    /// 字体族及可选资源 package。
-    FontFamily? fontFamily,
-
-    /// 文字颜色。
-    Color? textColor,
-
-    /// 是否显示删除线。为 null 时继承父 Span。
-    bool? isTextThrough,
-
-    /// 删除线颜色。
-    Color? lineThroughColor,
-
+  const TTextSpan({
     /// 透传至 [TextSpan.text]。
     String? text,
 
     /// 透传至 [TextSpan.children]。
     List<InlineSpan>? children,
 
-    /// Flutter 原生文字样式，具有最高优先级。
+    /// Span 的唯一文字样式入口；未设置的字段继承父 Span。
     TextStyle? style,
 
     /// 透传至 [TextSpan.recognizer]。
@@ -259,15 +228,7 @@ class TTextSpan extends TextSpan {
   }) : super(
          text: text,
          children: children,
-         style: TTextResolve.resolveSpan(
-           style: style,
-           font: font,
-           fontWeight: fontWeight,
-           fontFamily: fontFamily,
-           textColor: textColor,
-           isTextThrough: isTextThrough,
-           lineThroughColor: lineThroughColor,
-         ),
+         style: style,
          recognizer: recognizer,
          mouseCursor: mouseCursor,
          onEnter: onEnter,

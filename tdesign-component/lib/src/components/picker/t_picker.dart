@@ -3,33 +3,20 @@ import 'package:flutter/material.dart';
 
 import '../../util/context_extension.dart';
 import 'multi_wheel_layout.dart';
+import 'picker_defaults.dart';
 import 't_picker_theme_data.dart';
 import 't_picker_types.dart';
 import 'wheel_column.dart';
 
 const double _disabledOpacity = 0.5;
 
-/// 严格受控的滚轮选择器。
-///
-/// 独立多列使用 [TPickerColumns]，层级联动使用 [TPickerLinked]。弹层和确认
-/// 操作由调用方组合，组件本身只负责滚轮选择。
 class TPicker extends StatefulWidget {
   const TPicker({
     super.key,
-
-    /// 数据源。
     required this.items,
-
-    /// 各列受控值。
     required this.value,
-
-    /// 值变化回调；为 null 时禁用。
     this.onChanged,
-
-    /// 某列滚动结束回调。
     this.onColumnScrollEnd,
-
-    /// 自定义选项构建器。
     this.itemBuilder,
   });
 
@@ -49,6 +36,10 @@ class TPicker extends StatefulWidget {
   final void Function(int columnIndex, TPickerValue value)? onColumnScrollEnd;
 
   /// 自定义选项构建器。
+  ///
+  /// 内容子树默认使用当前选中、未选中或禁用选项的文字样式，布局包装不影响继承。
+  /// 显式文字样式和内容内部更近的局部文字主题优先。
+  /// 不强制行数或省略；内容须适配滚轮项高度，自定义高度职责保持不变。
   final TPickerItemBuilder? itemBuilder;
 
   @override
@@ -67,11 +58,7 @@ class _TPickerState extends State<TPicker> {
   TPickerThemeData? get _theme =>
       Theme.of(context).extension<TPickerThemeData>();
 
-  double get _height => _theme?.height ?? 200;
-
-  int get _itemCount => _theme?.itemCount ?? 5;
-
-  double get _itemHeight => _height / _itemCount;
+  int get _itemCount => _theme?.itemCount ?? defaultPickerItemCount;
 
   @override
   void initState() {
@@ -192,6 +179,11 @@ class _TPickerState extends State<TPicker> {
 
   @override
   Widget build(BuildContext context) {
+    final height = resolvePickerHeight(
+      context,
+      customContent: widget.itemBuilder != null,
+    );
+    final itemHeight = height / _itemCount;
     return Semantics(
       container: true,
       explicitChildNodes: true,
@@ -202,11 +194,11 @@ class _TPickerState extends State<TPicker> {
         child: AbsorbPointer(
           absorbing: !_enabled,
           child: MultiWheelLayout(
-            height: _height,
-            itemHeight: _itemHeight,
+            height: height,
+            itemHeight: itemHeight,
             columns: [
               for (var index = 0; index < _columns.length; index++)
-                _buildColumn(context, index),
+                _buildColumn(context, index, itemHeight),
             ],
           ),
         ),
@@ -214,7 +206,11 @@ class _TPickerState extends State<TPicker> {
     );
   }
 
-  Widget _buildColumn(BuildContext context, int columnIndex) {
+  Widget _buildColumn(
+    BuildContext context,
+    int columnIndex,
+    double itemHeight,
+  ) {
     final options = _columns[columnIndex];
     if (options.isEmpty) {
       return const SizedBox.shrink();
@@ -227,7 +223,7 @@ class _TPickerState extends State<TPicker> {
           colIndex: columnIndex,
           options: options,
           controller: _controllers[columnIndex],
-          itemHeight: _itemHeight,
+          itemHeight: itemHeight,
           disabled: !_enabled,
           itemBuilder: widget.itemBuilder,
           onItemSelected: _onItemSelected,

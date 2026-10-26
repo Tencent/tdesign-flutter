@@ -1,3 +1,5 @@
+// Re-export Material so applications can use a single TDesign import.
+export 'package:flutter/material.dart';
 export 'package:tdesign_flutter_icons/tdesign_flutter_icons.dart' show TIcons;
 
 export 'src/components/action_sheet/t_action_sheet.dart';
@@ -8,14 +10,14 @@ export 'src/components/avatar/t_avatar_theme_data.dart' show TAvatarThemeData;
 export 'src/components/avatar/t_avatar_types.dart';
 export 'src/components/backtop/t_backtop.dart';
 export 'src/components/backtop/t_backtop_theme_data.dart'
-    show TBackTopColorScheme, TBackTopShape, TBackTopThemeData;
+    show TBackTopColorPreset, TBackTopShape, TBackTopThemeData;
 export 'src/components/badge/t_badge.dart';
 export 'src/components/badge/t_badge_theme_data.dart' show TBadgeThemeData;
 export 'src/components/button/t_button.dart';
 export 'src/components/button/t_button_theme_data.dart' show TButtonThemeData;
 export 'src/components/button/t_button_types.dart'
     show
-        TButtonColorScheme,
+        TButtonColorPreset,
         TButtonIconPosition,
         TButtonShape,
         TButtonSize,
@@ -66,8 +68,7 @@ export 'src/components/form/t_form_theme_data.dart'
         TFormLayout,
         TFormRequiredMarkPosition,
         TFormThemeData;
-export 'src/components/icon/t_icon.dart';
-export 'src/components/icon/t_icon_theme_data.dart' show TIconThemeData;
+export 'src/components/icon/t_icon.dart' show TIcon;
 export 'src/components/image/t_image.dart';
 export 'src/components/image/t_image_theme_data.dart' show TImageThemeData;
 export 'src/components/image_viewer/t_image_viewer.dart';
@@ -81,7 +82,7 @@ export 'src/components/input/t_input_theme_data.dart' show TInputThemeData;
 export 'src/components/input/t_input_types.dart';
 export 'src/components/link/t_link.dart';
 export 'src/components/link/t_link_theme_data.dart' show TLinkThemeData;
-export 'src/components/link/t_link_types.dart' show TLinkColorScheme, TLinkSize;
+export 'src/components/link/t_link_types.dart' show TLinkColorPreset, TLinkSize;
 export 'src/components/loading/t_loading.dart';
 export 'src/components/loading/t_loading_controller.dart';
 export 'src/components/loading/t_loading_theme_data.dart'
@@ -99,13 +100,14 @@ export 'src/components/notice_bar/t_notice_bar_theme_data.dart'
 export 'src/components/notice_bar/t_notice_bar_types.dart'
     show TNoticeBarStatus;
 export 'src/components/picker/t_picker.dart';
+export 'src/components/picker/t_picker_popup.dart';
 export 'src/components/picker/t_picker_theme_data.dart' show TPickerThemeData;
 export 'src/components/picker/t_picker_types.dart';
 export 'src/components/popover/t_popover.dart';
 export 'src/components/popover/t_popover_theme_data.dart'
     show TPopoverThemeData;
 export 'src/components/popover/t_popover_types.dart'
-    show TPopoverColorScheme, TPopoverPlacement;
+    show TPopoverColorPreset, TPopoverPlacement;
 export 'src/components/popup/t_popup.dart'
     show
         TPopup,
@@ -172,7 +174,8 @@ export 'src/components/table/t_table_col.dart';
 export 'src/components/table/t_table_theme_data.dart' show TTableThemeData;
 export 'src/components/table/t_table_types.dart';
 export 'src/components/tabs/t_tab.dart';
-export 'src/components/tabs/t_tab_bar.dart' show TTabsBar, TTabsBarIndicator;
+export 'src/components/tabs/t_tab_bar.dart'
+    show TTabsBar, TTabsBarIndicator, TTabsBarSize;
 export 'src/components/tabs/t_tab_bar_theme_data.dart'
     show TTabsBarThemeData, TTabsBarVariant;
 export 'src/components/tabs/t_tab_bar_view.dart';
@@ -180,14 +183,12 @@ export 'src/components/tag/t_select_tag.dart';
 export 'src/components/tag/t_tag.dart';
 export 'src/components/tag/t_tag_theme_data.dart' show TTagThemeData;
 export 'src/components/tag/t_tag_types.dart'
-    show TTagColorScheme, TTagShape, TTagSize, TTagVariant;
+    show TTagColorPreset, TTagShape, TTagSize, TTagVariant;
 export 'src/components/text/t_font_loader.dart';
 export 'src/components/text/t_text.dart';
 export 'src/components/text/t_text_theme_data.dart' show TTextThemeData;
 export 'src/components/textarea/t_textarea.dart';
 export 'src/components/time_counter/t_time_counter.dart';
-export 'src/components/time_counter/t_time_counter_controller.dart'
-    show TTimeCounterController;
 export 'src/components/time_counter/t_time_counter_theme_data.dart'
     show TTimeCounterThemeData;
 export 'src/components/time_counter/t_time_counter_types.dart'
@@ -207,6 +208,7 @@ export 'src/theme/t_font_family.dart';
 export 'src/theme/t_fonts.dart';
 export 'src/theme/t_radius.dart';
 export 'src/theme/t_shadows.dart';
+export 'src/theme/t_sizes.dart';
 export 'src/theme/t_spacers.dart';
 export 'src/theme/t_theme.dart';
 export 'src/util/platform_util.dart';

@@ -1,9 +1,11 @@
-import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:tdesign_flutter/tdesign_flutter.dart';
 
+import '../../support/token_consumption_evidence.dart';
+
 void main() {
+  inputTokenConsumptionTests();
   Widget wrap(Widget child, {TInputThemeData? inputTheme}) {
     var theme = TThemeBuilder.light(TThemeData.defaultData());
     if (inputTheme != null) {
@@ -17,6 +19,112 @@ void main() {
 
   TextField field(WidgetTester tester) =>
       tester.widget<TextField>(find.byType(TextField));
+
+  Text hint(WidgetTester tester) => tester.widget<Text>(
+    find
+        .text(
+          tester.widget<TInput>(find.byType(TInput).first).hintText!,
+          skipOffstage: false,
+        )
+        .last,
+  );
+
+  group('TInput Material 密度隔离', () {
+    for (final density in [
+      const VisualDensity(horizontal: -4, vertical: -4),
+      VisualDensity.standard,
+      const VisualDensity(horizontal: 4, vertical: 4),
+    ]) {
+      testWidgets('内置编辑器和操作图标忽略密度 ${density.vertical}', (tester) async {
+        final theme = TThemeBuilder.light(TThemeData.defaultData()).copyWith(
+          visualDensity: density,
+          iconButtonTheme: IconButtonThemeData(
+            style: ButtonStyle(visualDensity: density),
+          ),
+        );
+        String? changed;
+        VisualDensity? prefixDensity;
+        VisualDensity? suffixDensity;
+        await tester.pumpWidget(
+          MaterialApp(
+            theme: theme,
+            home: Scaffold(
+              body: SingleChildScrollView(
+                child: Column(
+                  children: [
+                    TInput(
+                      key: const ValueKey('clear-input'),
+                      initialValue: 'Test',
+                      clearButtonMode: TInputClearButtonMode.always,
+                      onChanged: (value) => changed = value,
+                    ),
+                    const TInput(
+                      key: ValueKey('password-input'),
+                      initialValue: 'Test',
+                      obscureText: true,
+                      showPasswordToggle: true,
+                    ),
+                    TInput(
+                      initialValue: 'Test',
+                      prefix: Builder(
+                        builder: (context) {
+                          prefixDensity = Theme.of(context).visualDensity;
+                          return const Text('prefix');
+                        },
+                      ),
+                      suffix: Builder(
+                        builder: (context) {
+                          suffixDensity = Theme.of(context).visualDensity;
+                          return const Text('suffix');
+                        },
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ),
+        );
+        await tester.pumpAndSettle();
+        for (final key in ['clear-input', 'password-input']) {
+          expect(tester.getSize(find.byKey(ValueKey(key))).height, 56);
+          final editor = find.descendant(
+            of: find.byKey(ValueKey(key)),
+            matching: find.byType(TextField),
+          );
+          expect(tester.getSize(editor).height, 24);
+          expect(
+            Theme.of(tester.element(editor)).visualDensity,
+            VisualDensity.standard,
+          );
+        }
+        expect(
+          tester.getSize(find.byIcon(TIcons.close_circle_filled)),
+          const Size.square(20),
+        );
+        expect(
+          tester.getSize(find.byIcon(TIcons.browse_off)),
+          const Size.square(24),
+        );
+        expect(prefixDensity, density);
+        expect(suffixDensity, density);
+        await tester.tap(find.byTooltip('清除'));
+        await tester.pumpAndSettle();
+        expect(changed, '');
+        final passwordEditor = find.descendant(
+          of: find.byKey(const ValueKey('password-input')),
+          matching: find.byType(TextField),
+        );
+        expect(tester.widget<TextField>(passwordEditor).obscureText, isTrue);
+        await tester.tap(find.byTooltip('显示密码'));
+        await tester.pumpAndSettle();
+        expect(tester.widget<TextField>(passwordEditor).obscureText, isFalse);
+        await tester.enterText(passwordEditor, 'Next');
+        expect(find.text('Next'), findsOneWidget);
+        expect(tester.takeException(), isNull);
+      });
+    }
+  });
 
   group('TInput v1 control', () {
     testWidgets('multiline 较小 maxLines 会收敛默认 minLines', (tester) async {
@@ -127,9 +235,9 @@ void main() {
       );
 
       final textField = field(tester);
-      expect(textField.decoration?.hintText, 'property hint');
-      expect(textField.decoration?.filled, isFalse);
-      expect(textField.decoration?.fillColor, Colors.transparent);
+      expect(find.text('property hint'), findsOneWidget);
+      expect(find.byType(InputDecorator), findsNothing);
+
       expect(textField.maxLength, isNull);
       expect(
         textField.inputFormatters,
@@ -161,15 +269,10 @@ void main() {
         ),
       );
 
-      final decoration = field(tester).decoration;
-      expect(decoration?.filled, isFalse);
-      expect(decoration?.fillColor, Colors.transparent);
-      expect(decoration?.isCollapsed, isTrue);
-      expect(decoration?.contentPadding, EdgeInsets.zero);
-      expect(decoration?.hintMaxLines, 1);
+      expect(find.byType(InputDecorator), findsNothing);
     });
 
-    testWidgets('native hint color applies without leaking decoration layout', (
+    testWidgets('native hint style does not override TDesign hint token', (
       tester,
     ) async {
       final theme = TThemeBuilder.light(TThemeData.defaultData()).copyWith(
@@ -188,11 +291,11 @@ void main() {
         ),
       );
 
-      final decoration = field(tester).decoration;
-      expect(decoration?.hintStyle?.color, Colors.purple);
-      expect(decoration?.filled, isFalse);
-      expect(decoration?.fillColor, Colors.transparent);
-      expect(decoration?.contentPadding, EdgeInsets.zero);
+      expect(find.byType(InputDecorator), findsNothing);
+      expect(
+        hint(tester).style?.color,
+        TThemeData.defaultData().textColorPlaceholder,
+      );
     });
 
     testWidgets('文本和提示词遵循 TDesign 颜色契约', (tester) async {
@@ -200,33 +303,29 @@ void main() {
       await tester.pumpWidget(wrap(const TInput(hintText: 'hint')));
 
       expect(field(tester).style?.color, token.textColorPrimary);
-      expect(
-        field(tester).decoration?.hintStyle?.color,
-        token.textColorPlaceholder,
-      );
+      expect(hint(tester).style?.color, token.textColorPlaceholder);
 
       await tester.pumpWidget(
         wrap(const TInput(hintText: 'hint', enabled: false)),
       );
-      expect(field(tester).style?.color, token.textDisabledColor);
+      expect(field(tester).style?.color, token.textColorDisabled);
       expect(
         tester.widget<EditableText>(find.byType(EditableText)).style.color,
-        token.textDisabledColor,
+        token.textColorDisabled,
       );
 
       await tester.pumpWidget(
         wrap(
-          const TInput(initialValue: 'disabled', enabled: false),
-          inputTheme: const TInputThemeData(
-            textStyle: TextStyle(color: Colors.black),
+          const TInput(
+            initialValue: 'disabled',
+            hintText: 'hint',
+            enabled: false,
+            style: TextStyle(color: Colors.black),
           ),
         ),
       );
-      expect(field(tester).style?.color, token.textDisabledColor);
-      expect(
-        field(tester).decoration?.hintStyle?.color,
-        token.textDisabledColor,
-      );
+      expect(field(tester).style?.color, token.textColorDisabled);
+      expect(hint(tester).style?.color, token.textColorDisabled);
 
       for (final status in const [
         TInputStatus.success,
@@ -245,69 +344,87 @@ void main() {
       expect(field(tester).style?.color, token.textColorPrimary);
     });
 
-    testWidgets('explicit Flutter typography precedes token defaults', (
-      tester,
-    ) async {
-      await tester.pumpWidget(
-        MaterialApp(
-          theme: ThemeData(
-            textTheme: const TextTheme(
-              bodyLarge: TextStyle(
-                color: Colors.black,
-                fontSize: 19,
-                height: 1.5,
+    testWidgets(
+      'explicit Flutter typography does not override token defaults',
+      (tester) async {
+        await tester.pumpWidget(
+          MaterialApp(
+            theme: ThemeData(
+              textTheme: const TextTheme(
+                bodyLarge: TextStyle(
+                  color: Colors.black,
+                  fontSize: 19,
+                  height: 1.5,
+                ),
               ),
+              extensions: [TThemeData.defaultData()],
             ),
-            extensions: [TThemeData.defaultData()],
+            home: const Scaffold(body: TInput(hintText: 'hint')),
           ),
-          home: const Scaffold(body: TInput(hintText: 'hint')),
-        ),
-      );
+        );
 
-      expect(field(tester).style?.fontSize, 19);
-      expect(field(tester).style?.height, 1.5);
-      expect(field(tester).decoration?.hintStyle?.fontSize, 19);
-      expect(field(tester).decoration?.hintStyle?.height, 1.5);
-      expect(
-        field(tester).decoration?.hintStyle?.color,
-        TThemeData.defaultData().textColorPlaceholder,
-      );
-    });
+        expect(
+          field(tester).style?.fontSize,
+          TThemeData.defaultData().fontBodyLarge?.size,
+        );
+        expect(
+          field(tester).style?.height,
+          TThemeData.defaultData().fontBodyLarge?.height,
+        );
+        expect(
+          hint(tester).style?.fontSize,
+          TThemeData.defaultData().fontBodyLarge?.size,
+        );
+        expect(
+          hint(tester).style?.height,
+          TThemeData.defaultData().fontBodyLarge?.height,
+        );
+        expect(
+          hint(tester).style?.color,
+          TThemeData.defaultData().textColorPlaceholder,
+        );
+      },
+    );
 
-    testWidgets('partial component styles preserve token typography', (
+    testWidgets(
+      'instance text style and component hint style preserve token typography',
+      (tester) async {
+        final token = TThemeData.defaultData();
+        await tester.pumpWidget(
+          wrap(
+            const TInput(
+              hintText: 'hint',
+              initialValue: 'value',
+              style: TextStyle(color: Colors.white),
+            ),
+            inputTheme: const TInputThemeData(
+              hintStyle: TextStyle(color: Colors.grey),
+            ),
+          ),
+        );
+
+        final inputStyle = field(tester).style;
+        final hintStyle = hint(tester).style;
+        expect(inputStyle?.color, Colors.white);
+        expect(inputStyle?.fontSize, token.fontBodyLarge?.size);
+        expect(inputStyle?.height, token.fontBodyLarge?.height);
+        expect(inputStyle?.fontWeight, token.fontBodyLarge?.fontWeight);
+        expect(hintStyle?.color, Colors.grey);
+        expect(hintStyle?.fontSize, token.fontBodyLarge?.size);
+        expect(hintStyle?.height, token.fontBodyLarge?.height);
+        expect(hintStyle?.fontWeight, token.fontBodyLarge?.fontWeight);
+      },
+    );
+
+    testWidgets('instance text color applies across semantic statuses', (
       tester,
     ) async {
-      final token = TThemeData.defaultData();
       await tester.pumpWidget(
         wrap(
-          const TInput(hintText: 'hint', initialValue: 'value'),
-          inputTheme: const TInputThemeData(
-            textStyle: TextStyle(color: Colors.white),
-            hintStyle: TextStyle(color: Colors.grey),
-          ),
-        ),
-      );
-
-      final inputStyle = field(tester).style;
-      final hintStyle = field(tester).decoration?.hintStyle;
-      expect(inputStyle?.color, Colors.white);
-      expect(inputStyle?.fontSize, token.fontBodyLarge?.size);
-      expect(inputStyle?.height, token.fontBodyLarge?.height);
-      expect(inputStyle?.fontWeight, token.fontBodyLarge?.fontWeight);
-      expect(hintStyle?.color, Colors.grey);
-      expect(hintStyle?.fontSize, token.fontBodyLarge?.size);
-      expect(hintStyle?.height, token.fontBodyLarge?.height);
-      expect(hintStyle?.fontWeight, token.fontBodyLarge?.fontWeight);
-    });
-
-    testWidgets('component text color applies across semantic statuses', (
-      tester,
-    ) async {
-      await tester.pumpWidget(
-        wrap(
-          const TInput(initialValue: 'error', status: TInputStatus.error),
-          inputTheme: const TInputThemeData(
-            textStyle: TextStyle(color: Colors.white),
+          const TInput(
+            initialValue: 'error',
+            status: TInputStatus.error,
+            style: TextStyle(color: Colors.white),
           ),
         ),
       );
@@ -319,9 +436,6 @@ void main() {
             initialValue: 'explicit error',
             status: TInputStatus.error,
             style: TextStyle(color: Colors.purple),
-          ),
-          inputTheme: const TInputThemeData(
-            textStyle: TextStyle(color: Colors.white),
           ),
         ),
       );
@@ -379,7 +493,7 @@ void main() {
           ),
         );
 
-        expect(field(tester).style?.color, token.textDisabledColor);
+        expect(field(tester).style?.color, token.textColorDisabled);
       },
     );
 
@@ -457,17 +571,30 @@ void main() {
       expect(find.text('7/10'), findsNothing);
     });
 
-    testWidgets('prefix and suffix icons use the 24dp input icon size', (
+    testWidgets('prefix and suffix use their intended token spacing', (
       tester,
     ) async {
+      final token = TThemeData.defaultData().copyWith(
+        name: 'input-slot-spacing',
+        spacerMap: {'spacer': 10, 'spacer2': 20},
+      );
       await tester.pumpWidget(
-        wrap(
-          const TInput(prefix: Icon(Icons.search), suffix: Icon(Icons.info)),
+        MaterialApp(
+          theme: TThemeBuilder.light(token),
+          home: const Scaffold(
+            body: TInput(prefix: Icon(Icons.search), suffix: Icon(Icons.info)),
+          ),
         ),
       );
 
       expect(tester.getSize(find.byIcon(Icons.search)), const Size(24, 24));
       expect(tester.getSize(find.byIcon(Icons.info)), const Size(24, 24));
+      final prefixRight = tester.getTopRight(find.byIcon(Icons.search)).dx;
+      final editorLeft = tester.getTopLeft(find.byType(EditableText)).dx;
+      final editorRight = tester.getTopRight(find.byType(EditableText)).dx;
+      final suffixLeft = tester.getTopLeft(find.byIcon(Icons.info)).dx;
+      expect(editorLeft - prefixRight, token.spacer2);
+      expect(suffixLeft - editorRight, token.spacer);
       final inputShell = find
           .descendant(
             of: find.byType(TInput),
@@ -487,7 +614,7 @@ void main() {
             )
             .data
             .color,
-        TThemeData.defaultData().textColorPrimary,
+        token.textColorPrimary,
       );
       expect(
         tester
@@ -501,12 +628,45 @@ void main() {
             )
             .data
             .color,
-        TThemeData.defaultData().textColorPlaceholder,
+        token.textColorPlaceholder,
       );
     });
   });
 
   group('TInput clear button', () {
+    testWidgets(
+      'single-line actions stay centered and multiline actions align top',
+      (tester) async {
+        await tester.pumpWidget(
+          wrap(
+            const TInput(
+              initialValue: 'content',
+              clearButtonMode: TInputClearButtonMode.always,
+            ),
+          ),
+        );
+
+        final singleEditor = tester.getRect(find.byType(EditableText));
+        final singleClear = tester.getRect(find.byType(IconButton));
+        expect(singleClear.center.dy, closeTo(singleEditor.center.dy, 0.01));
+
+        await tester.pumpWidget(
+          wrap(
+            const TInput(
+              initialValue: 'line one\nline two',
+              maxLines: 2,
+              clearButtonMode: TInputClearButtonMode.always,
+            ),
+          ),
+        );
+        await tester.pumpAndSettle();
+
+        final multilineEditor = tester.getRect(find.byType(EditableText));
+        final multilineClear = tester.getRect(find.byType(IconButton));
+        expect(multilineClear.top, closeTo(multilineEditor.top, 0.01));
+      },
+    );
+
     testWidgets('clears current controller and notifies onChanged', (
       tester,
     ) async {
@@ -522,6 +682,7 @@ void main() {
         ),
       );
 
+      expect(tester.getSize(find.byType(IconButton)), const Size(32, 20));
       await tester.tap(find.byIcon(TIcons.close_circle_filled));
       await tester.pump();
       expect(controller.text, isEmpty);
@@ -543,32 +704,29 @@ void main() {
       expect(find.byIcon(Icons.info), findsOneWidget);
     });
 
-    testWidgets('theme can hide or resize clear button', (tester) async {
-      await tester.pumpWidget(
-        wrap(
-          const TInput(initialValue: 'content'),
-          inputTheme: const TInputThemeData(
-            clearButtonMode: TInputClearButtonMode.never,
-          ),
-        ),
-      );
-      expect(find.byIcon(TIcons.close_circle_filled), findsNothing);
+    testWidgets(
+      'instance controls visibility; Theme controls clear icon size',
+      (tester) async {
+        await tester.pumpWidget(wrap(const TInput(initialValue: 'content')));
+        expect(find.byIcon(TIcons.close_circle_filled), findsNothing);
 
-      await tester.pumpWidget(
-        wrap(
-          const TInput(
-            initialValue: 'content',
-            clearButtonMode: TInputClearButtonMode.always,
+        await tester.pumpWidget(
+          wrap(
+            const TInput(
+              initialValue: 'content',
+              clearButtonMode: TInputClearButtonMode.always,
+            ),
+            inputTheme: const TInputThemeData(clearIconSize: 28),
           ),
-          inputTheme: const TInputThemeData(clearIconSize: 28),
-        ),
-      );
-      await tester.pumpAndSettle();
-      expect(tester.widget<IconButton>(find.byType(IconButton)).iconSize, 28);
-    });
+        );
+        await tester.pumpAndSettle();
+        expect(tester.widget<IconButton>(find.byType(IconButton)).iconSize, 28);
+        expect(tester.getSize(find.byType(IconButton)), const Size(32, 28));
+      },
+    );
 
     testWidgets(
-      'status keeps the default clear color and theme can override it',
+      'error status colors the clear icon and theme can override it',
       (tester) async {
         final token = TThemeData.defaultData();
         for (final status in TInputStatus.values) {
@@ -583,7 +741,9 @@ void main() {
           );
           expect(
             tester.widget<Icon>(find.byIcon(TIcons.close_circle_filled)).color,
-            token.textColorPlaceholder,
+            status == TInputStatus.error
+                ? token.errorColor
+                : token.textColorPlaceholder,
           );
         }
 
@@ -594,13 +754,13 @@ void main() {
               status: TInputStatus.error,
               clearButtonMode: TInputClearButtonMode.always,
             ),
-            inputTheme: TInputThemeData(clearIconColor: token.errorNormalColor),
+            inputTheme: const TInputThemeData(clearIconColor: Colors.purple),
           ),
         );
         await tester.pumpAndSettle();
         expect(
           tester.widget<Icon>(find.byIcon(TIcons.close_circle_filled)).color,
-          token.errorNormalColor,
+          Colors.purple,
         );
       },
     );
@@ -675,7 +835,7 @@ void main() {
       expect(currentBorder().bottom.color, Colors.purple);
     });
 
-    testWidgets('standalone field error uses Material error style', (
+    testWidgets('standalone field error uses TDesign error token', (
       tester,
     ) async {
       final controller = TFormController();
@@ -708,8 +868,11 @@ void main() {
       expect(controller.validate(), isFalse);
       await tester.pump();
       final error = tester.widget<Text>(find.text('required'));
-      expect(error.style?.color, Colors.purple);
-      expect(error.style?.fontWeight, FontWeight.bold);
+      expect(error.style?.color, TThemeData.defaultData().errorColor);
+      expect(
+        error.style?.fontWeight,
+        TThemeData.defaultData().fontBodySmall?.fontWeight,
+      );
       expect(
         error.style?.fontSize,
         TThemeData.defaultData().fontBodySmall?.size,
@@ -733,7 +896,7 @@ void main() {
                 (shell.decoration as BoxDecoration).border != null,
           );
       final border = (borderedShell.decoration as BoxDecoration).border!;
-      expect((border as Border).bottom.color, token.errorNormalColor);
+      expect((border as Border).bottom.color, token.errorColor);
 
       await tester.pumpWidget(
         wrap(
@@ -754,7 +917,8 @@ void main() {
         ),
         isTrue,
       );
-      expect(field(tester).decoration?.border, InputBorder.none);
+
+      expect(find.byType(InputDecorator), findsNothing);
     });
 
     testWidgets('rounded single-line input uses a complete outer border', (
@@ -850,4 +1014,163 @@ void main() {
       expect(committed.selection, const TextSelection.collapsed(offset: 1));
     });
   });
+}
+
+void inputTokenConsumptionTests() {
+  for (final brightness in Brightness.values) {
+    for (final custom in [false, true]) {
+      testWidgets('token consumption input ${brightness.name} custom=$custom', (
+        tester,
+      ) async {
+        final token = evidenceTokens(brightness, custom: custom);
+        for (final enabled in [true, false]) {
+          await tester.pumpWidget(
+            evidenceHost(
+              TInput(
+                key: ValueKey(enabled),
+                hintText: 'token hint',
+                enabled: enabled,
+                prefix: const Icon(Icons.add),
+                suffix: const Icon(Icons.close),
+              ),
+              brightness: brightness,
+              token: token,
+            ),
+          );
+          await tester.pumpAndSettle();
+          final editor = tester.widget<EditableText>(find.byType(EditableText));
+          final hint = tester.widget<Text>(find.text('token hint'));
+          final scenario = '${brightness.name}/custom=$custom/enabled=$enabled';
+          tokenObservation(
+            enabled ? 'inputDefaultTextColor' : 'inputDisabledTextColor',
+            scenario: scenario,
+            actual: editor.style.color,
+            expected: enabled
+                ? token.textColorPrimary
+                : token.textColorDisabled,
+          );
+          tokenObservation(
+            enabled ? 'inputPlaceholderTextColor' : 'inputDisabledTextColor',
+            scenario: scenario,
+            actual: hint.style?.color,
+            expected: enabled
+                ? token.textColorPlaceholder
+                : token.textColorDisabled,
+          );
+          if (enabled) {
+            tokenObservation(
+              'inputPlaceholderTextFont',
+              scenario: scenario,
+              actual:
+                  '${hint.style?.fontSize}/${hint.style!.height! * hint.style!.fontSize!}',
+              expected: custom ? '20.0/28.0' : '16.0/24.0',
+            );
+            tokenObservation(
+              'inputPrefixIconColor',
+              scenario: scenario,
+              actual: IconTheme.of(
+                tester.element(find.byIcon(Icons.add)),
+              ).color,
+              expected: token.textColorPrimary,
+            );
+            tokenObservation(
+              'inputSuffixIconColor',
+              scenario: scenario,
+              actual: IconTheme.of(
+                tester.element(find.byIcon(Icons.close)),
+              ).color,
+              expected: token.textColorPlaceholder,
+            );
+            final shell = tester
+                .widgetList<DecoratedBox>(
+                  find.descendant(
+                    of: find.byType(TInput),
+                    matching: find.byType(DecoratedBox),
+                  ),
+                )
+                .map((box) => box.decoration)
+                .whereType<BoxDecoration>()
+                .first;
+            tokenObservation(
+              'inputBgColor',
+              scenario: scenario,
+              actual: shell.color,
+              expected: token.bgColorContainer,
+            );
+            tokenObservation(
+              'inputBorderColor',
+              scenario: scenario,
+              actual: (shell.border! as Border).bottom.color,
+              expected: token.componentStroke,
+              enforce: false,
+            );
+            final outer = tester
+                .widgetList<DecoratedBox>(
+                  find.descendant(
+                    of: find.byType(TInput),
+                    matching: find.byType(DecoratedBox),
+                  ),
+                )
+                .first;
+            final padding = outer.child! as Padding;
+            tokenObservation(
+              'inputVerticalPadding',
+              scenario: scenario,
+              actual: padding.padding.resolve(TextDirection.ltr).top,
+              expected: token.spacer2,
+              enforce: !custom,
+            );
+            tokenObservation(
+              'inputVerticalPadding',
+              scenario: 'contract/$scenario/standalone-padding',
+              actual: padding.padding.resolve(TextDirection.ltr).top,
+              expected: 16.0,
+            );
+          }
+        }
+        await tester.pumpWidget(
+          evidenceHost(
+            const TInput(
+              hintText: 'overridden',
+              initialValue: 'explicit',
+              style: TextStyle(color: Colors.lime),
+            ),
+            brightness: brightness,
+            token: token,
+            extensions: const [
+              TInputThemeData(
+                backgroundColor: Colors.cyan,
+                hintStyle: TextStyle(color: Colors.purple),
+                borderColor: Colors.orange,
+              ),
+            ],
+          ),
+        );
+        await tester.pumpAndSettle();
+        expect(
+          tester.widget<EditableText>(find.byType(EditableText)).style.color,
+          Colors.lime,
+        );
+        expect(
+          tester
+              .widget<Text>(find.text('overridden', skipOffstage: false))
+              .style
+              ?.color,
+          Colors.purple,
+        );
+        final shell = tester
+            .widgetList<DecoratedBox>(
+              find.descendant(
+                of: find.byType(TInput),
+                matching: find.byType(DecoratedBox),
+              ),
+            )
+            .map((box) => box.decoration)
+            .whereType<BoxDecoration>()
+            .first;
+        expect(shell.color, Colors.cyan);
+        expect((shell.border! as Border).bottom.color, Colors.orange);
+      });
+    }
+  }
 }

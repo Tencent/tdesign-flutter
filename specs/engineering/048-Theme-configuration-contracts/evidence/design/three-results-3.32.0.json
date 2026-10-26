@@ -1,0 +1,164 @@
+{
+  "tabs/light": {
+    "color": {
+      "changed": true,
+      "roots": 63
+    },
+    "font": {
+      "changed": true,
+      "roots": 63
+    },
+    "radius": {
+      "changed": false,
+      "roots": 63
+    },
+    "shadow": {
+      "changed": false,
+      "roots": 63
+    },
+    "size": {
+      "changed": true,
+      "roots": 63
+    },
+    "all": {
+      "changed": true,
+      "roots": 63
+    },
+    "errors": []
+  },
+  "tabs/dark": {
+    "color": {
+      "changed": true,
+      "roots": 63
+    },
+    "font": {
+      "changed": true,
+      "roots": 63
+    },
+    "radius": {
+      "changed": false,
+      "roots": 63
+    },
+    "shadow": {
+      "changed": false,
+      "roots": 63
+    },
+    "size": {
+      "changed": true,
+      "roots": 63
+    },
+    "all": {
+      "changed": true,
+      "roots": 63
+    },
+    "errors": []
+  },
+  "cell/light": {
+    "color": {
+      "changed": true,
+      "roots": 19
+    },
+    "font": {
+      "changed": true,
+      "roots": 19
+    },
+    "radius": {
+      "changed": true,
+      "roots": 19
+    },
+    "shadow": {
+      "changed": false,
+      "roots": 19
+    },
+    "size": {
+      "changed": true,
+      "roots": 19
+    },
+    "all": {
+      "changed": true,
+      "roots": 19
+    },
+    "errors": []
+  },
+  "cell/dark": {
+    "color": {
+      "changed": true,
+      "roots": 19
+    },
+    "font": {
+      "changed": true,
+      "roots": 19
+    },
+    "radius": {
+      "changed": true,
+      "roots": 19
+    },
+    "shadow": {
+      "changed": false,
+      "roots": 19
+    },
+    "size": {
+      "changed": true,
+      "roots": 19
+    },
+    "all": {
+      "changed": true,
+      "roots": 19
+    },
+    "errors": []
+  },
+  "table/light": {
+    "color": {
+      "changed": true,
+      "roots": 9
+    },
+    "font": {
+      "changed": true,
+      "roots": 9
+    },
+    "radius": {
+      "changed": false,
+      "roots": 9
+    },
+    "shadow": {
+      "changed": false,
+      "roots": 9
+    },
+    "size": {
+      "changed": true,
+      "roots": 9
+    },
+    "all": {
+      "changed": true,
+      "roots": 9
+    },
+    "errors": []
+  },
+  "table/dark": {
+    "color": {
+      "changed": true,
+      "roots": 9
+    },
+    "font": {
+      "changed": true,
+      "roots": 9
+    },
+    "radius": {
+      "changed": false,
+      "roots": 9
+    },
+    "shadow": {
+      "changed": false,
+      "roots": 9
+    },
+    "size": {
+      "changed": true,
+      "roots": 9
+    },
+    "all": {
+      "changed": true,
+      "roots": 9
+    },
+    "errors": []
+  }
+}

@@ -1,11 +1,10 @@
 import 'dart:ui' as ui;
 
-import 'package:flutter/material.dart'
-    hide TabPageSelector, TabPageSelectorIndicator;
 import 'package:flutter/rendering.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:tdesign_flutter/src/components/tabs/t_horizontal_tab_bar.dart';
-import 'package:tdesign_flutter/tdesign_flutter.dart';
+import 'package:tdesign_flutter/tdesign_flutter.dart'
+    hide TabPageSelector, TabPageSelectorIndicator;
 
 /// THorizontalTabBar / THorizontalTabBarView / TabPageSelector 测试。
 
@@ -86,6 +85,34 @@ void main() {
   });
 
   group('THorizontalTabBar 默认/裸渲染', () {
+    testWidgets('TIcon 接收标签栏内部选中和禁用颜色，不继承外层 IconTheme', (tester) async {
+      final controller = TabController(length: 2, vsync: const TestVSync());
+      addTearDown(controller.dispose);
+      await tester.pumpWidget(
+        wrapBar(
+          IconTheme(
+            data: const IconThemeData(color: Colors.green, size: 33),
+            child: THorizontalTabBar(
+              controller: controller,
+              labelColor: Colors.red,
+              unselectedLabelColor: Colors.blue,
+              tabs: const [
+                TTab(icon: TIcon(TIcons.home)),
+                TTab(icon: TIcon(TIcons.search), enabled: false),
+              ],
+            ),
+          ),
+        ),
+      );
+      await tester.pumpAndSettle();
+      final selected = tester.widget<Icon>(find.byIcon(TIcons.home));
+      final disabled = tester.widget<Icon>(find.byIcon(TIcons.search));
+      expect(selected.color, const Color(0xFFF44336));
+      expect(selected.size, 18);
+      expect(disabled.color, TThemeData.defaultData().textColorDisabled);
+      expect(disabled.size, 18);
+    });
+
     testWidgets('裸渲染（labelStyle/labelColor 为 null 走默认分支）', (tester) async {
       final c = TabController(length: 3, vsync: const TestVSync());
       addTearDown(c.dispose);

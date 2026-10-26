@@ -1,7 +1,6 @@
 import 'dart:async';
 import 'dart:io';
 
-import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:tdesign_flutter/tdesign_flutter.dart';
@@ -39,9 +38,6 @@ void main() {
           )
           .mergeExtension(
             const TPopupThemeData(edgeHeight: 260, drawerWidth: 280),
-          )
-          .mergeExtension(
-            const TTextThemeData(textStyle: TextStyle(fontFamily: 'Roboto')),
           );
       await tester.pumpWidget(
         MaterialApp(

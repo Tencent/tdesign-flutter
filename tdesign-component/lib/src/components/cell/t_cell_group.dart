@@ -2,16 +2,22 @@ import 'package:flutter/material.dart';
 
 import '../../theme/t_colors.dart';
 import '../../theme/t_fonts.dart';
+import '../../theme/t_internal_material.dart';
+import '../../theme/t_radius.dart';
 import '../../theme/t_theme.dart';
+import '../text/t_text_style_scope.dart';
 import 't_cell.dart';
 import 't_cell_theme_data.dart';
 
 /// 单元格包装构建器。
-typedef TCellGroupBuilder = Widget Function(
-  BuildContext context,
-  TCell cell,
-  int index,
-);
+/// [context] 单元格组的构建上下文。
+/// [cell] 当前待包装的单元格。
+/// [index] 单元格在组内的索引，从 0 开始。
+///
+/// ## 返回值
+/// 包装后的单元格内容。
+typedef TCellGroupBuilder =
+    Widget Function(BuildContext context, TCell cell, int index);
 
 /// 单元格组。
 class TCellGroup extends StatelessWidget {
@@ -30,20 +36,22 @@ class TCellGroup extends StatelessWidget {
   /// 组标题。
   final Widget? title;
 
-  /// 组视觉形态；未设置时读取 Theme。
+  /// 组视觉形态；未设置时为 [TCellGroupVariant.standard]。
   final TCellGroupVariant? variant;
 
   /// 自定义单元格外层构建器。
   final TCellGroupBuilder? builder;
 
   /// 是否使用可滚动列表。
+  ///
+  /// 父级提供确定高度时，列表撑满剩余空间并可滚动；父级高度为无界时
+  /// （如放在 [SingleChildScrollView] 或 [Column] 中）按内容高度展示，不再滚动。
   final bool scrollable;
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context).extension<TCellThemeData>();
-    final resolvedVariant =
-        variant ?? theme?.groupVariant ?? TCellGroupVariant.standard;
+    final resolvedVariant = variant ?? TCellGroupVariant.standard;
     final children = [
       for (var index = 0; index < cells.length; index++)
         _withDivider(
@@ -53,53 +61,76 @@ class TCellGroup extends StatelessWidget {
           index,
         ),
     ];
-    final list = scrollable
-        ? ListView(children: children)
-        : Column(mainAxisSize: MainAxisSize.min, children: children);
-    final content = Container(
-      padding: resolvedVariant == TCellGroupVariant.card
-          ? theme?.cardPadding ?? const EdgeInsets.symmetric(horizontal: 16)
-          : null,
-      decoration: BoxDecoration(
-        border: theme?.groupBordered ?? false
-            ? Border.all(
-                color: theme?.groupBorderColor ??
-                    context.tTheme.componentStrokeColor,
-              )
+    Widget buildGroup({required bool canExpand}) {
+      final list = scrollable
+          ? TInternalScrollScope(
+              child: ListView(
+                shrinkWrap: !canExpand,
+                physics: canExpand
+                    ? null
+                    : const NeverScrollableScrollPhysics(),
+                children: children,
+              ),
+            )
+          : Column(mainAxisSize: MainAxisSize.min, children: children);
+      final content = Container(
+        padding: resolvedVariant == TCellGroupVariant.card
+            ? theme?.cardPadding ?? const EdgeInsets.symmetric(horizontal: 16)
             : null,
-        borderRadius: resolvedVariant == TCellGroupVariant.card
-            ? theme?.cardBorderRadius ?? BorderRadius.circular(8)
-            : null,
-      ),
-      clipBehavior: resolvedVariant == TCellGroupVariant.card
-          ? Clip.antiAlias
-          : Clip.none,
-      child: list,
-    );
-    return Column(
-      mainAxisSize: scrollable ? MainAxisSize.max : MainAxisSize.min,
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        if (title != null)
-          Padding(
-            padding: theme?.titlePadding ?? const EdgeInsets.all(16),
-            child: DefaultTextStyle.merge(
-              maxLines: 1,
-              overflow: TextOverflow.ellipsis,
-              softWrap: false,
-              style: theme?.groupTitleStyle ??
-                  TextStyle(
-                    color: context.tTheme.textColorPrimary,
-                    fontSize: context.tTheme.fontBodyMedium?.size ?? 14,
-                    height: context.tTheme.fontBodyMedium?.height,
-                    fontWeight: context.tTheme.fontBodyMedium?.fontWeight ??
-                        FontWeight.w400,
-                  ),
-              child: title!,
+        decoration: BoxDecoration(
+          border: theme?.groupBordered ?? false
+              ? Border.all(
+                  color:
+                      theme?.groupBorderColor ?? context.tTheme.componentStroke,
+                )
+              : null,
+          borderRadius: resolvedVariant == TCellGroupVariant.card
+              ? theme?.resolveCardBorderRadius(
+                      BorderRadius.circular(context.tTheme.radiusLarge),
+                    ) ??
+                    BorderRadius.circular(context.tTheme.radiusLarge)
+              : null,
+        ),
+        clipBehavior: resolvedVariant == TCellGroupVariant.card
+            ? Clip.antiAlias
+            : Clip.none,
+        child: list,
+      );
+      return Column(
+        mainAxisSize: canExpand ? MainAxisSize.max : MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          if (title != null)
+            Padding(
+              padding: theme?.titlePadding ?? const EdgeInsets.all(16),
+              child: TTextStyleScope(
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+                softWrap: false,
+                style: TextStyle(
+                  color: context.tTheme.textColorPrimary,
+                  fontSize: context.tTheme.fontBodyMedium?.size ?? 14,
+                  height: context.tTheme.fontBodyMedium?.height,
+                  fontWeight:
+                      context.tTheme.fontBodyMedium?.fontWeight ??
+                      FontWeight.w400,
+                ).merge(theme?.groupTitleStyle),
+                child: title!,
+              ),
             ),
-          ),
-        if (scrollable) Expanded(child: content) else content,
-      ],
+          if (canExpand) Expanded(child: content) else content,
+        ],
+      );
+    }
+
+    if (!scrollable) {
+      return buildGroup(canExpand: false);
+    }
+    // Only scrollable groups depend on the parent's available height.
+    // Keep intrinsic sizing available for non-scrollable groups.
+    return LayoutBuilder(
+      builder: (context, constraints) =>
+          buildGroup(canExpand: constraints.hasBoundedHeight),
     );
   }
 
@@ -117,11 +148,11 @@ class TCellGroup extends StatelessWidget {
       mainAxisSize: MainAxisSize.min,
       children: [
         child,
-        Divider(
+        TInternalDivider(
           height: 0.5,
           thickness: 0.5,
           indent: 16,
-          color: theme?.borderColor ?? context.tTheme.componentStrokeColor,
+          color: theme?.borderColor ?? context.tTheme.componentStroke,
         ),
       ],
     );

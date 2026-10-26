@@ -2,10 +2,13 @@ import 'package:flutter/material.dart';
 
 import '../../theme/t_colors.dart';
 import '../../theme/t_fonts.dart';
+import '../../theme/t_internal_material.dart';
 import '../../theme/t_radius.dart';
+import '../../theme/t_sizes.dart';
 import '../../theme/t_theme.dart';
 import '../badge/t_badge.dart';
-import '../text/t_text.dart';
+import '../badge/t_badge_internal.dart';
+import '../text/t_text_styled.dart';
 import 't_sidebar_theme_data.dart';
 
 /// 侧边栏单项的内部渲染组件。
@@ -23,17 +26,15 @@ class TWrapSideBarItem extends StatelessWidget {
     this.selectedTextStyle,
     this.value = -1,
     this.selected = false,
-    this.selectedColor,
     this.topAdjacent = false,
     this.bottomAdjacent = false,
     this.onTap,
     this.selectedBgColor,
     this.unSelectedBgColor,
-    this.unSelectedColor,
     required this.variant,
   }) : super(key: key);
 
-  final TBadge? badge;
+  final TBadgeConfig? badge;
   final bool disabled;
   final IconData? icon;
   final String label;
@@ -42,9 +43,7 @@ class TWrapSideBarItem extends StatelessWidget {
   final TextStyle? selectedTextStyle;
   final int value;
   final bool selected;
-  final Color? selectedColor;
   final Color? selectedBgColor;
-  final Color? unSelectedColor;
   final Color? unSelectedBgColor;
   final bool topAdjacent;
   final bool bottomAdjacent;
@@ -93,7 +92,7 @@ class TWrapSideBarItem extends StatelessWidget {
             renderPreLine(context),
             Expanded(
               child: Padding(
-                padding: contentPadding ?? const EdgeInsets.all(16),
+                padding: contentPadding ?? EdgeInsets.all(context.tTheme.size6),
                 child: renderMainContent(context),
               ),
             ),
@@ -110,15 +109,16 @@ class TWrapSideBarItem extends StatelessWidget {
         decoration: BoxDecoration(
           color: unSelectedBgColor ?? context.tTheme.bgColorSecondaryContainer,
         ),
-        padding: const EdgeInsets.all(8),
+        padding: EdgeInsets.all(context.tTheme.size4),
         child: Container(
           decoration: BoxDecoration(
             color: selected && !disabled
                 ? selectedBgColor ?? context.tTheme.bgColorContainer
                 : null,
-            borderRadius: BorderRadius.circular(9),
+            // The supplied design's 6px radius-medium uses Flutter's default tier.
+            borderRadius: BorderRadius.circular(context.tTheme.radiusDefault),
           ),
-          padding: contentPadding ?? const EdgeInsets.all(8),
+          padding: contentPadding ?? EdgeInsets.all(context.tTheme.size4),
           child: renderMainContent(context),
         ),
       ),
@@ -126,22 +126,22 @@ class TWrapSideBarItem extends StatelessWidget {
   }
 
   Widget renderMainContent(BuildContext context) {
-    final content = Row(
+    final label = renderLabel(context);
+    return Row(
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
         renderIcon(context),
-        Expanded(child: renderLabel(context)),
-      ],
-    );
-    if (badge == null) {
-      return content;
-    }
-
-    return Stack(
-      clipBehavior: Clip.none,
-      children: [
-        Padding(padding: const EdgeInsets.only(right: 12), child: content),
-        Positioned(top: -8, right: -4, child: badge!),
+        Expanded(
+          child: badge == null
+              ? label
+              : Padding(
+                  padding: const EdgeInsetsDirectional.only(end: 12),
+                  child: Align(
+                    alignment: AlignmentDirectional.centerStart,
+                    child: TBadgeFromConfig(config: badge!, child: label),
+                  ),
+                ),
+        ),
       ],
     );
   }
@@ -157,10 +157,7 @@ class TWrapSideBarItem extends StatelessWidget {
             width: preLineWidth,
             height: 14,
             decoration: BoxDecoration(
-              color:
-                  selectedTextStyle?.color ??
-                  selectedColor ??
-                  context.tTheme.brandNormalColor,
+              color: _foregroundColor(context),
               borderRadius: BorderRadius.circular(4),
             ),
           ),
@@ -170,42 +167,37 @@ class TWrapSideBarItem extends StatelessWidget {
   }
 
   Widget renderIcon(BuildContext context) {
-    final iconColor = () {
-      if (disabled) {
-        return context.tTheme.textDisabledColor;
-      }
-      if (!selected) {
-        return unSelectedColor ?? context.tTheme.textColorPrimary;
-      }
-      if (selectedTextStyle?.color != null) {
-        return selectedTextStyle!.color!;
-      }
-      return selectedColor ?? context.tTheme.brandNormalColor;
-    }();
-
     return Visibility(
       visible: icon != null,
       child: Padding(
         padding: const EdgeInsets.only(right: 2),
-        child: Icon(icon, size: 20, color: iconColor),
+        child: TInternalIcon(icon, size: 20, color: _foregroundColor(context)),
       ),
     );
   }
 
+  Color _foregroundColor(BuildContext context) {
+    if (disabled) {
+      return context.tTheme.textColorDisabled;
+    }
+    if (selected) {
+      return selectedTextStyle?.color ?? context.tTheme.brandColor;
+    }
+    return textStyle?.color ?? context.tTheme.textColorPrimary;
+  }
+
   Widget renderLabel(BuildContext context) {
     final effectiveStyle = selected
-        ? selectedTextStyle ?? textStyle
+        ? textStyle?.merge(selectedTextStyle) ?? selectedTextStyle
         : textStyle;
-    return TText(
+    return TTextStyled(
       label,
       font: context.tTheme.fontBodyLarge,
-      style: effectiveStyle,
+      // 状态前景色与图标、指示线保持一致；未选中样式只为选中态提供排版回退。
+      style: (effectiveStyle ?? const TextStyle()).copyWith(
+        color: _foregroundColor(context),
+      ),
       fontWeight: selected && !disabled ? FontWeight.w600 : FontWeight.w400,
-      textColor: disabled
-          ? context.tTheme.textDisabledColor
-          : selected
-          ? selectedColor ?? context.tTheme.brandNormalColor
-          : unSelectedColor ?? context.tTheme.textColorPrimary,
       maxLines: 1,
       overflow: TextOverflow.ellipsis,
     );

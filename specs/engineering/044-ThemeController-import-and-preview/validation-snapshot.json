@@ -1,0 +1,61 @@
+{
+  "base": "d0de29e8b902c910c86dca05b46fc8604790d591",
+  "branch": "fix/1173-generator-theme-import",
+  "fingerprints": {
+    "packages/css2token/lib/css2token.dart": "ef3d6b8d1a92c9e6a8224e2c1dc59cbfd55a529242fb1ebc248e095dfcaf1217",
+    "packages/css2token/lib/src/generator_export.dart": "12a5e8d45dfcfffb3c9cb1dd62676248ab2ea4a3f669b46fb14020ae5adce467",
+    "packages/css2token/test/generator_export_test.dart": "fe67001b63491fca58789a09346f2f05e2dd1e29089fb39101ec6984e67ebaaa",
+    "tdesign-component/lib/src/theme/basic.dart": "99abc1fffeb9cf0156e6afde65356c7f9eceb10190994058f13ce2a2206ecad5",
+    "tdesign-component/test/theme/font_json_test.dart": "3432b7156e86208969bb74873e300d75e4f661ae6af8aec707bd77cf1794dbf4",
+    "tdesign-component/tool/component_test_manifest.dart": "ab4d6e69f07ad92fffb56c9c60b031f3f20018c0eba061e5f470c2cc5ef50ad2",
+    "tdesign-component/example/tool/convert_theme.dart": "07644e434c922e76b02028bccc618bd9464660ad6215dcbec18e7149912bdf37",
+    "tdesign-component/example/test/tool/generator_theme_test.dart": "12e720e11b8e6761d594a3c97d3bd40bc078694341a471e1b39f0de2eec21ded"
+  },
+  "initialValidation": {
+    "flutter3.32.0": {
+      "themeAndToolTests": 230,
+      "exampleTests": 18,
+      "css2tokenTests": 38,
+      "themeCoverage": "867/894 = 96.98%",
+      "strictAnalyze": "component/example/css2token passed"
+    },
+    "flutter3.47.7": {
+      "themeAndToolTests": 230,
+      "exampleTests": 18,
+      "css2tokenTests": 38,
+      "themeCoverage": "864/894 = 96.64%",
+      "strictAnalyze": "component/example/css2token passed"
+    },
+    "changedFontFileCoverage": "26/26 = 100%",
+    "cli": "dart run tool/convert_theme.dart /tmp/pr1173-theme.css /tmp/pr1173-theme.json --name ocean passed",
+    "golden": "not run: no existing default visual changes; no baseline updates",
+    "remoteCI": "not run; user requested no push"
+  },
+  "validation": {
+    "flutter3.32.0": {
+      "themeAndToolTests": 233,
+      "exampleTests": 20,
+      "css2tokenTests": 40,
+      "themeCoverage": "873/900 = 97.00%",
+      "strictAnalyze": "component/example/css2token passed"
+    },
+    "flutter3.47.7": {
+      "themeAndToolTests": 233,
+      "exampleTests": 20,
+      "css2tokenTests": 40,
+      "themeCoverage": "870/900 = 96.67%",
+      "strictAnalyze": "component/example/css2token passed"
+    },
+    "changedFontFileCoverage": "32/32 = 100%",
+    "cli": "dart run tool/convert_theme.dart /tmp/pr1173-theme.css /tmp/pr1173-theme-reviewed.json --name ocean passed",
+    "golden": "not run; no default visual change and no baseline updates",
+    "remoteCI": "See the PR Checks for the published head; local results do not replace remote CI."
+  },
+  "reviewFixes": [
+    "Preserve integer/decimal zero lineHeight compatibility",
+    "Reject nonfinite derived font height ratio in public parser and offline converter",
+    "Require paired selector quotes; accept valid attribute whitespace",
+    "Add long fractional CSS/JSON precision, zero lineHeight, malformed selector and converter output protection regressions"
+  ],
+  "validationScope": "local pre-publication checkpoint; remote CI belongs to the PR head"
+}

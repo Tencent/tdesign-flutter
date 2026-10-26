@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:math' as math;
 
 import 'package:easy_refresh/easy_refresh.dart';
 import 'package:flutter/material.dart';
@@ -9,32 +10,16 @@ import '../../theme/t_theme.dart';
 import '../../util/context_extension.dart';
 import '../loading/t_loading.dart';
 import '../loading/t_loading_theme_data.dart';
-import '../text/t_text.dart';
+import '../text/t_text_styled.dart';
 import 't_pull_down_refresh_controller.dart';
 import 't_pull_down_refresh_texts.dart';
 
-/// TDesign 下拉刷新组件。
-///
-/// 以**最小、Flutter 惯用**的 API 封装 [EasyRefresh]，对齐官方
-/// （小程序 / mobile-vue）PullDownRefresh 的行为表现：
-/// 下拉 → 松手 → 刷新 → 完成四态，支持触底加载、超时、
-/// 四态文案自定义与受控刷新。
-///
-/// 典型用法：
-/// ```dart
-/// TPullDownRefresh(
-///   onRefresh: () async {
-///     await _fetchData();
-///   },
-///   child: ListView.builder(...),
-/// )
-/// ```
 class TPullDownRefresh extends StatefulWidget {
   /// 必填：滚动内容（对应官方默认 slot）。
   ///
-  /// 必须为**有界、可滚动**的内容（如 `ListView` / `GridView` / `CustomScrollView`）。
-  /// 若内容自身不可滚动，请用 `SizedBox` 等为其指定固定高度，否则下拉 / 触底
-  /// 手势无法生效。
+  /// 必须为**有界且可滚动**的内容（如 `ListView` / `GridView` / `CustomScrollView`）。
+  /// `SizedBox` 等只能提供尺寸约束，不能把静态内容变成可滚动内容；若内容自身不可滚动，
+  /// 下拉 / 触底手势仍无法生效，应将内容放入可滚动容器。
   final Widget child;
 
   /// 下拉触发刷新回调（对应官方 `refresh` 事件）。
@@ -58,16 +43,17 @@ class TPullDownRefresh extends StatefulWidget {
   /// （不吞掉）。若需在失败时做业务处理，请在回调内部自行 try/catch。
   final FutureOr<void> Function()? onLoadMore;
 
-  /// 距离底部多少逻辑像素时触发加载（默认 50，对齐官方 `lowerThreshold`）。
+  /// 距离底部多少逻辑像素时触发加载，默认 50，必须大于 0。
   final double lowerThreshold;
 
   /// 外部主动刷新控制器。
+  /// 建议独立刷新组件分别使用 Controller；绑定规则见 [TPullDownRefreshController]。
   ///
   /// 通过 [TPullDownRefreshController.refresh] 从页面外部触发刷新。刷新完成时机
   /// 由 [onRefresh] 返回的 Future、异常或 [refreshTimeout] 共同决定；超时后
   /// 控制器 Future 也会完成，迟到的原始 Future 不会再次改变刷新状态。
-  /// 底层 [EasyRefreshController] 由 State 创建并释放；外部控制器仅持有引用，
-  /// 无需也不能重复 dispose（详见 [TPullDownRefreshController] 文档）。
+  /// 刷新资源由组件管理；外部控制器无需也不提供 dispose
+  /// （详见 [TPullDownRefreshController] 文档）。
   final TPullDownRefreshController? controller;
 
   /// 四态提示语；为空时回退 l10n（默认中文与官方 `loadingTexts` 一致）。
@@ -83,10 +69,12 @@ class TPullDownRefresh extends StatefulWidget {
   /// 必须为非负时长。
   final Duration? refreshTimeout;
 
-  /// Header 容器高度 = 触发阈值（默认 50，对齐官方 `loadingBarHeight`）。
+  /// Header 容器高度与触发阈值；默认至少 50，随内置文字增长。
+  /// 显式值固定，必须大于 0。
   final double loadingBarHeight;
 
-  /// 最大下拉高度（默认 80，对齐官方 `maxBarHeight`）。
+  /// 最大下拉高度；默认至少 80，并覆盖默认增长后的 Header。
+  /// 显式值固定，不得小于 loadingBarHeight；其值也限制默认 Header 的增长。
   final double maxBarHeight;
 
   /// 刷新完成提示的展示时长（默认 500ms，对齐官方 `successDuration`）。
@@ -111,13 +99,20 @@ class TPullDownRefresh extends StatefulWidget {
     this.controller,
     this.texts,
     this.refreshTimeout = const Duration(milliseconds: 3000),
-    this.loadingBarHeight = 50,
-    this.maxBarHeight = 80,
+    double? loadingBarHeight,
+    double? maxBarHeight,
     this.successDuration = const Duration(milliseconds: 500),
     this.onStateChanged,
-  }) : assert(lowerThreshold > 0),
-       assert(loadingBarHeight > 0),
-       assert(maxBarHeight >= loadingBarHeight);
+  }) : loadingBarHeight = loadingBarHeight ?? 50,
+       maxBarHeight = maxBarHeight ?? 80,
+       _adaptiveLoadingHeight = loadingBarHeight == null,
+       _adaptiveMaxHeight = maxBarHeight == null,
+       assert(lowerThreshold > 0),
+       assert((loadingBarHeight ?? 50) > 0),
+       assert((maxBarHeight ?? 80) >= (loadingBarHeight ?? 50));
+
+  final bool _adaptiveLoadingHeight;
+  final bool _adaptiveMaxHeight;
 
   @override
   State<TPullDownRefresh> createState() => _TPullDownRefreshState();
@@ -133,6 +128,23 @@ class _TPullDownRefreshState extends State<TPullDownRefresh> {
   Completer<void>? _activeRefresh;
   Completer<void>? _pendingExternalRefresh;
 
+  static final _controllerOwners = Expando<Object>();
+
+  void _bindController() {
+    final controller = widget.controller;
+    if (controller != null) {
+      controller.bind(_requestRefresh);
+      _controllerOwners[controller] = this;
+    }
+  }
+
+  void _unbindController(TPullDownRefreshController? controller) {
+    if (controller != null && identical(_controllerOwners[controller], this)) {
+      controller.unbind();
+      _controllerOwners[controller] = null;
+    }
+  }
+
   bool get _refreshEnabled => widget.onRefresh != null;
 
   bool get _loadMoreEnabled => widget.onLoadMore != null;
@@ -143,15 +155,15 @@ class _TPullDownRefreshState extends State<TPullDownRefresh> {
     assert(widget.refreshTimeout == null || !widget.refreshTimeout!.isNegative);
     super.initState();
     _easyController = EasyRefreshController(controlFinishRefresh: true);
-    widget.controller?.bind(_requestRefresh);
+    _bindController();
   }
 
   @override
   void didUpdateWidget(TPullDownRefresh oldWidget) {
     super.didUpdateWidget(oldWidget);
     if (oldWidget.controller != widget.controller) {
-      oldWidget.controller?.unbind();
-      widget.controller?.bind(_requestRefresh);
+      _unbindController(oldWidget.controller);
+      _bindController();
     }
   }
 
@@ -159,14 +171,14 @@ class _TPullDownRefreshState extends State<TPullDownRefresh> {
   void dispose() {
     _timeoutTimer?.cancel();
     _completeRefreshWaiters();
-    widget.controller?.unbind();
+    _unbindController(widget.controller);
     _easyController?.dispose();
     super.dispose();
   }
 
   /// 上报状态变化：去重 + 异步调度，避免 build 期同步回调与重复上报。
   void _handleStateChanged(TPullDownRefreshState state) {
-    // 小程序超时是一次性事件，随后直接收起；不能在迟到的 Future 完成时
+    // 刷新超时是一次性事件，随后直接收起；不能在迟到的 Future 完成时
     // 再次把 timeout 刷新报告成 done。
     if (state == TPullDownRefreshState.done && _timeoutTerminal) {
       return;
@@ -393,22 +405,65 @@ class _TPullDownRefreshState extends State<TPullDownRefresh> {
     final footer = _loadMoreEnabled
         ? _TPullDownRefreshFooter(triggerOffset: widget.lowerThreshold)
         : null;
-    return EasyRefresh(
-      controller: _easyController,
-      header: _refreshEnabled
-          ? _TPullDownRefreshHeader(
-              extent: widget.loadingBarHeight,
-              triggerDistance: widget.loadingBarHeight,
-              maxOverOffset: widget.maxBarHeight,
-              successDuration: widget.successDuration,
-              texts: _effectiveTexts(context),
-              onStateChanged: _handleStateChanged,
-            )
-          : null,
-      footer: footer,
-      onRefresh: _refreshEnabled ? _handleRefresh : null,
-      onLoad: _loadMoreEnabled ? _handleLoadMore : null,
-      child: widget.child,
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        final texts = _effectiveTexts(context);
+        var headerHeight = widget.loadingBarHeight;
+        if (widget._adaptiveLoadingHeight) {
+          final width = constraints.hasBoundedWidth
+              ? constraints.maxWidth
+              : MediaQuery.sizeOf(context).width;
+          for (final text in [
+            texts.pullToRefresh,
+            texts.releaseToRefresh,
+            texts.refreshing,
+            texts.refreshComplete,
+          ]) {
+            headerHeight = math.max(
+              headerHeight,
+              TTextStyled(
+                    text,
+                    centerLeading: true,
+                    font: context.tTheme.fontBodyMedium,
+                    style: text == texts.refreshing
+                        ? const TextStyle(fontWeight: FontWeight.w400)
+                        : null,
+                  )
+                  .naturalSize(
+                    context,
+                    maxWidth: math.max(
+                      0,
+                      width - (text == texts.refreshing ? 32 : 0),
+                    ),
+                  )
+                  .height,
+            );
+          }
+          if (!widget._adaptiveMaxHeight) {
+            headerHeight = math.min(headerHeight, widget.maxBarHeight);
+          }
+        }
+        final maxHeight = widget._adaptiveMaxHeight
+            ? math.max(widget.maxBarHeight, headerHeight)
+            : widget.maxBarHeight;
+        return EasyRefresh(
+          controller: _easyController,
+          header: _refreshEnabled
+              ? _TPullDownRefreshHeader(
+                  extent: headerHeight,
+                  triggerDistance: headerHeight,
+                  maxOverOffset: maxHeight,
+                  successDuration: widget.successDuration,
+                  texts: texts,
+                  onStateChanged: _handleStateChanged,
+                )
+              : null,
+          footer: footer,
+          onRefresh: _refreshEnabled ? _handleRefresh : null,
+          onLoad: _loadMoreEnabled ? _handleLoadMore : null,
+          child: widget.child,
+        );
+      },
     );
   }
 }
@@ -432,7 +487,7 @@ class _TPullDownRefreshHeader extends Header {
        assert(maxOverOffset >= triggerDistance),
        super(
          triggerOffset: triggerDistance,
-         // 与小程序 Demo 一致：下拉时让 ScrollView 产生真实 overscroll，
+         // 下拉时让 ScrollView 产生真实 overscroll，
          // 刷新头和页面内容一起向下移动。clamping=true 会把内容固定在原位，
          // 只在其上方绘制刷新头，不符合 PullDownRefresh 的交互表现。
          clamping: false,
@@ -453,6 +508,16 @@ class _TPullDownRefreshHeader extends Header {
     final inheritedLoadingTheme = Theme.of(
       context,
     ).extension<TLoadingThemeData>();
+    final refreshLoadingTheme =
+        (inheritedLoadingTheme ?? const TLoadingThemeData()).copyWith(
+          axis: Axis.horizontal,
+          // Loading 独立使用时以主文字色作为默认值；嵌入下拉刷新后，文案属于
+          // 短暂的过程提示，应使用禁用文字色。这里只补齐调用方未显式配置的
+          // 字段，避免把 Refresh 的上下文默认值扩散到独立 Loading 或其他组件。
+          textColor:
+              inheritedLoadingTheme?.textColor ??
+              context.tTheme.textColorDisabled,
+        );
     String text;
     if (showLoading) {
       text = texts.refreshing;
@@ -470,21 +535,19 @@ class _TPullDownRefreshHeader extends Header {
       height: state.offset,
       child: Container(
         alignment: Alignment.center,
+        key: const ValueKey('t-pull-down-refresh-header'),
         height: _extent,
         color: context.tTheme.bgColorContainer,
         child: showLoading
             ? Theme(
-                data: Theme.of(context).mergeExtension(
-                  (inheritedLoadingTheme ?? const TLoadingThemeData()).copyWith(
-                    axis: Axis.horizontal,
-                  ),
-                ),
-                child: TLoading(size: 24, text: text),
+                data: Theme.of(context).mergeExtension(refreshLoadingTheme),
+                child: TLoading(size: 25, text: text),
               )
-            : TText(
+            : TTextStyled(
                 text,
+                centerLeading: true,
                 font: context.tTheme.fontBodyMedium,
-                textColor: context.tTheme.textColorPlaceholder,
+                style: TextStyle(color: context.tTheme.textColorPlaceholder),
               ),
       ),
     );
@@ -512,8 +575,7 @@ class _TPullDownRefreshHeader extends Header {
 
 /// 触底加载检测 Footer（内部实现）。
 ///
-/// 小程序 `scrolltolower` 只提供事件，不定义可见 Footer，因此这里不绘制
-/// loading/no-more 文案，避免引入跨端不存在的视觉表现。
+/// 触底加载只提供事件，不绘制 loading/no-more 文案。
 class _TPullDownRefreshFooter extends Footer {
   _TPullDownRefreshFooter({required double triggerOffset})
     : super(

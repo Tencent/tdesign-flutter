@@ -1,4 +1,3 @@
-import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:tdesign_flutter/tdesign_flutter.dart';
 
@@ -117,8 +116,6 @@ void main() {
     expect(a.lerp(b, 0), same(a));
     expect(a.lerp(b, 1), same(b));
     final unset = a.lerp(a, 0.5);
-    expect(unset.size, isNull);
-    expect(unset.variant, isNull);
     expect(unset.inputWidth, isNull);
     expect(unset.controlSize, isNull);
     expect(unset.iconSize, isNull);
@@ -133,42 +130,35 @@ void main() {
     expect(unset.textStyle, isNull);
   });
 
-  for (final entry in [
-    (TStepperSize.small, 20.0, 34.0, 12.0),
-    (TStepperSize.medium, 24.0, 38.0, 16.0),
-    (TStepperSize.large, 26.0, 45.0, 20.0),
-  ]) {
-    test('nullable geometry uses ${entry.$1} defaults in both directions', () {
-      final a = TStepperThemeData(size: entry.$1);
-      final b = TStepperThemeData(
-        size: entry.$1,
-        controlSize: 40,
-        inputWidth: 80,
-        iconSize: 24,
-        spacing: 8,
-        borderWidth: 3,
-      );
-      for (final t in [0.25, 0.5, 0.75]) {
-        final forward = a.lerp(b, t);
-        final reverse = b.lerp(a, 1 - t);
-        expect(forward.controlSize, entry.$2 + (40 - entry.$2) * t);
-        expect(reverse.controlSize, forward.controlSize);
-        expect(forward.inputWidth, entry.$3 + (80 - entry.$3) * t);
-        expect(reverse.inputWidth, forward.inputWidth);
-        expect(forward.iconSize, entry.$4 + (24 - entry.$4) * t);
-        expect(reverse.iconSize, forward.iconSize);
-        expect(forward.spacing, 4 + 4 * t);
-        expect(reverse.spacing, forward.spacing);
-        expect(forward.borderWidth, 1 + 2 * t);
-        expect(reverse.borderWidth, forward.borderWidth);
-      }
-    });
-  }
+  test('nullable geometry uses medium defaults in both directions', () {
+    const a = TStepperThemeData();
+    const b = TStepperThemeData(
+      controlSize: 40,
+      inputWidth: 80,
+      iconSize: 24,
+      spacing: 8,
+      borderWidth: 3,
+    );
+    for (final t in [0.25, 0.5, 0.75]) {
+      final forward = a.lerp(b, t);
+      final reverse = b.lerp(a, 1 - t);
+      expect(forward.controlSize, 24 + (40 - 24) * t);
+      expect(reverse.controlSize, forward.controlSize);
+      expect(forward.inputWidth, 38 + (80 - 38) * t);
+      expect(reverse.inputWidth, forward.inputWidth);
+      expect(forward.iconSize, 16 + (24 - 16) * t);
+      expect(reverse.iconSize, forward.iconSize);
+      expect(forward.spacing, 4 + 4 * t);
+      expect(reverse.spacing, forward.spacing);
+      expect(forward.borderWidth, 1 + 2 * t);
+      expect(reverse.borderWidth, forward.borderWidth);
+    }
+  });
 
   testWidgets(
     'rendered interpolation uses the instance size and can be copied',
     (tester) async {
-      const a = TStepperThemeData(size: TStepperSize.large);
+      const a = TStepperThemeData();
       const b = TStepperThemeData(
         controlSize: 40,
         inputWidth: 80,
@@ -195,14 +185,14 @@ void main() {
   testWidgets('nullable visual styles interpolate from effective tokens', (
     tester,
   ) async {
-    final token = TThemeData.defaultData().copyWithTThemeData(
-      'stepper-lerp',
+    final token = TThemeData.defaultData().copyWith(
+      name: 'stepper-lerp',
       colorMap: {
         'textColorPrimary': Colors.red,
-        'textDisabledColor': Colors.green,
+        'textColorDisabled': Colors.green,
         'bgColorSecondaryContainer': Colors.yellow,
         'bgColorComponentDisabled': Colors.orange,
-        'componentBorderColor': Colors.blue,
+        'componentBorder': Colors.blue,
       },
     );
     const a = TStepperThemeData();
@@ -213,7 +203,7 @@ void main() {
       disabledBackgroundColor: Colors.black,
       borderColor: Colors.black,
       borderRadius: BorderRadius.all(Radius.circular(10)),
-      textStyle: TextStyle(fontSize: 20, height: 1.5),
+      textStyle: TextStyle(fontSize: 16, height: 1.5),
     );
     for (final reverse in [false, true]) {
       final theme = reverse ? b.lerp(a, 0.5) : a.lerp(b, 0.5);
@@ -233,8 +223,8 @@ void main() {
           input(tester).style.color,
           Color.lerp(disabled ? Colors.green : Colors.red, Colors.black, 0.5),
         );
-        expect(input(tester).style.fontSize, 16);
-        expect(input(tester).style.height, 1.25);
+        expect(input(tester).style.fontSize, 14);
+        expect(input(tester).style.height, closeTo(19 / 12, 0.000001));
         expect(
           inputDecoration(tester).color,
           Color.lerp(
@@ -266,46 +256,62 @@ void main() {
     }
   });
 
-  testWidgets('inherited text and icon defaults survive nested interpolation', (
-    tester,
-  ) async {
-    const a = TStepperThemeData();
-    const b = TStepperThemeData(controlSize: 40, foregroundColor: Colors.black);
-    final theme = a
-        .lerp(b, 0.5)
-        .lerp(
-          const TStepperThemeData(
-            controlSize: 48,
-            foregroundColor: Colors.white,
+  testWidgets(
+    'TDesign text and icon defaults survive interpolation without Material input',
+    (tester) async {
+      const a = TStepperThemeData();
+      const b = TStepperThemeData(
+        controlSize: 40,
+        foregroundColor: Colors.black,
+      );
+      final theme = a
+          .lerp(b, 0.5)
+          .lerp(
+            const TStepperThemeData(
+              controlSize: 48,
+              foregroundColor: Colors.white,
+            ),
+            0.5,
+          );
+      await tester.pumpWidget(
+        host(
+          DefaultTextStyle(
+            style: const TextStyle(color: Colors.red),
+            child: IconTheme(
+              data: const IconThemeData(color: Colors.green),
+              child: TStepper(value: 3, onChanged: (_) {}),
+            ),
           ),
-          0.5,
-        );
-    await tester.pumpWidget(
-      host(
-        DefaultTextStyle(
-          style: const TextStyle(color: Colors.red),
-          child: IconTheme(
-            data: const IconThemeData(color: Colors.green),
-            child: TStepper(value: 3, onChanged: (_) {}),
-          ),
+          theme: theme,
         ),
-        theme: theme,
-      ),
-    );
-    expect(size(tester).height, 40);
-    expect(
-      input(tester).style.color,
-      Color.lerp(Color.lerp(Colors.red, Colors.black, 0.5), Colors.white, 0.5),
-    );
-    expect(
-      tester.widget<Icon>(find.byIcon(TIcons.plus)).color,
-      Color.lerp(
-        Color.lerp(Colors.green, Colors.black, 0.5),
-        Colors.white,
-        0.5,
-      ),
-    );
-  });
+      );
+      expect(size(tester).height, 40);
+      expect(
+        input(tester).style.color,
+        Color.lerp(
+          Color.lerp(
+            TThemeData.defaultData().textColorPrimary,
+            Colors.black,
+            0.5,
+          ),
+          Colors.white,
+          0.5,
+        ),
+      );
+      expect(
+        tester.widget<Icon>(find.byIcon(TIcons.plus)).color,
+        Color.lerp(
+          Color.lerp(
+            TThemeData.defaultData().textColorPrimary,
+            Colors.black,
+            0.5,
+          ),
+          Colors.white,
+          0.5,
+        ),
+      );
+    },
+  );
 
   testWidgets('AnimatedTheme renders valid endpoint and midpoint geometry', (
     tester,

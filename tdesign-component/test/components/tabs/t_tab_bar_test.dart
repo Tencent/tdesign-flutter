@@ -1,6 +1,5 @@
 import 'dart:ui' as ui;
 
-import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:tdesign_flutter/src/components/tabs/t_horizontal_tab_bar.dart';
@@ -77,9 +76,25 @@ void main() {
   });
 
   group('TTabsBar', () {
-    testWidgets('default labels inherit ThemeData bodyMedium font family', (
-      tester,
-    ) async {
+    testWidgets('small and large sizes use typography tokens', (tester) async {
+      final token = TThemeData.defaultData();
+      for (final size in TTabsBarSize.values) {
+        await tester.pumpWidget(
+          wrapWithTheme(TTabsBar(tabs: tabs(), size: size)),
+        );
+        final tabBar = tester.widget<THorizontalTabBar>(
+          find.byType(THorizontalTabBar),
+        );
+        final font = size == TTabsBarSize.large
+            ? token.fontBodyLarge
+            : token.fontBodyMedium;
+        expect(tabBar.labelStyle?.fontSize, font?.size);
+        expect(tabBar.labelStyle?.height, font?.height);
+        expect(tabBar.unselectedLabelStyle?.fontSize, font?.size);
+      }
+    });
+
+    testWidgets('default labels use TDesign font family', (tester) async {
       await tester.pumpWidget(
         MaterialApp(
           theme: ThemeData(
@@ -100,8 +115,8 @@ void main() {
       final tabBar = tester.widget<THorizontalTabBar>(
         find.byType(THorizontalTabBar),
       );
-      expect(tabBar.labelStyle?.fontFamily, 'TestFont');
-      expect(tabBar.unselectedLabelStyle?.fontFamily, 'TestFont');
+      expect(tabBar.labelStyle?.fontFamily, 'Roboto');
+      expect(tabBar.unselectedLabelStyle?.fontFamily, 'Roboto');
     });
 
     testWidgets('Material visual themes do not override TDesign defaults', (
@@ -156,9 +171,9 @@ void main() {
       );
       expect(tabBar.indicator, isA<TTabsBarIndicator>());
       expect(tabBar.indicatorSize, TabBarIndicatorSize.tab);
-      expect(tabBar.labelColor, token.brandNormalColor);
+      expect(tabBar.labelColor, token.brandColor);
       expect(tabBar.unselectedLabelColor, token.textColorPrimary);
-      expect(tabBar.labelStyle?.fontFamily, 'TestFont');
+      expect(tabBar.labelStyle?.fontFamily, 'Roboto');
       expect(tabBar.labelStyle?.fontSize, token.fontBodyMedium?.size);
       expect(tabBar.labelStyle?.height, token.fontBodyMedium?.height);
       expect(tabBar.labelPadding, const EdgeInsets.all(8));
@@ -170,10 +185,10 @@ void main() {
       final disabledParagraph = tester.renderObject<RenderParagraph>(
         find.text('禁用'),
       );
-      expect(disabledParagraph.text.style?.color, token.textDisabledColor);
+      expect(disabledParagraph.text.style?.color, token.textColorDisabled);
       final iconTheme = IconTheme.of(tester.element(find.byIcon(Icons.block)));
       expect(iconTheme.size, 18);
-      expect(iconTheme.color, token.textDisabledColor);
+      expect(iconTheme.color, token.textColorDisabled);
       expect(iconTheme.opacity, 1);
 
       final container = tester.widget<Container>(
@@ -182,7 +197,7 @@ void main() {
         ),
       );
       final decoration = container.decoration! as BoxDecoration;
-      expect(decoration.border?.bottom.color, token.componentStrokeColor);
+      expect(decoration.border?.bottom.color, token.componentStroke);
     });
 
     testWidgets('renders all supported variants', (tester) async {
@@ -204,7 +219,7 @@ void main() {
       expect(tabBar.indicator, isA<TTabsBarIndicator>());
       expect(
         (tabBar.indicator! as TTabsBarIndicator).indicatorColor,
-        TThemeData.defaultData().brandNormalColor,
+        TThemeData.defaultData().brandColor,
       );
 
       await tester.pumpWidget(
@@ -263,11 +278,10 @@ void main() {
       );
 
       final tagContainers = find.byWidgetPredicate((widget) {
-        if (widget is! Container || widget.decoration is! BoxDecoration) {
+        if (widget is! Container || widget.decoration is! ShapeDecoration) {
           return false;
         }
-        return (widget.decoration! as BoxDecoration).borderRadius ==
-            BorderRadius.circular(16);
+        return (widget.decoration! as ShapeDecoration).shape is StadiumBorder;
       });
       expect(tagContainers, findsNWidgets(3));
 
@@ -277,18 +291,18 @@ void main() {
       );
       expect(tabBar.labelPadding, const EdgeInsets.all(4));
       expect(
-        containers.map((item) => (item.decoration! as BoxDecoration).color),
+        containers.map((item) => (item.decoration! as ShapeDecoration).color),
         [selectedColor, backgroundColor, backgroundColor],
       );
       for (final container in containers) {
         final size = tester.getSize(find.byWidget(container));
         expect(size.height, 32);
         expect(size.width, greaterThan(80));
-        expect(container.padding, const EdgeInsets.symmetric(horizontal: 8));
+        expect(container.padding, const EdgeInsets.symmetric(horizontal: 16));
       }
     });
 
-    testWidgets('uses the visual theme and lets decoration override it', (
+    testWidgets('uses the component theme as the only background entry', (
       tester,
     ) async {
       const theme = TTabsBarThemeData(
@@ -312,13 +326,11 @@ void main() {
 
       await tester.pumpWidget(
         wrapWithTheme(
-          TTabsBar(
-            tabs: tabs(),
-            decoration: const BoxDecoration(color: Colors.red),
-          ),
-          tabsBarTheme: theme,
+          TTabsBar(tabs: tabs()),
+          tabsBarTheme: theme.copyWith(backgroundColor: Colors.red),
         ),
       );
+      await tester.pumpAndSettle();
       final overriddenContainer = tester.widget<Container>(
         find.byWidgetPredicate(
           (widget) => widget is Container && widget.child is THorizontalTabBar,
@@ -339,8 +351,10 @@ void main() {
           TTabsBar(
             tabs: tabs(),
             isScrollable: true,
-            indicator: const TTabsBarIndicator(indicatorColor: Colors.red),
             onTap: (index) => tapped = index,
+          ),
+          tabsBarTheme: const TTabsBarThemeData(
+            indicator: TTabsBarIndicator(indicatorColor: Colors.red),
           ),
         ),
       );

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../../util/context_extension.dart';
+import '../picker/picker_defaults.dart';
 import '../picker/t_picker_theme_data.dart';
 import 't_date_time_picker_column.dart';
 import 't_date_time_picker_enums.dart';
@@ -13,10 +14,6 @@ export 't_date_time_picker_enums.dart';
 export 't_date_time_picker_internal.dart' show DateTimePickerRenderLabel;
 export 't_date_time_picker_model.dart';
 
-/// 日期/时间滚轮选择器。
-///
-/// 纯滚轮组件，不包含工具栏、确认按钮或弹窗。
-/// [value] 与 [onChanged] 构成严格受控状态；[onChanged] 为 null 时禁用。
 class TDateTimePicker extends StatefulWidget {
   TDateTimePicker({
     super.key,
@@ -47,6 +44,7 @@ class TDateTimePicker extends StatefulWidget {
   ///
   /// - **回调参数**：`column` 为 [DateTimeColumn]，`value` 为列数值
   /// - **回退**：返回 null 时使用内置默认文案（含国际化单位后缀）
+  /// - **更新**：回调变化会刷新文案，保留当前滚动状态；可直接在 build 中传入匿名回调。
   final DateTimePickerRenderLabel? renderLabel;
 
   /// 可选范围下限。未指定时，年列最小值为初始选中年份减 10。
@@ -57,6 +55,7 @@ class TDateTimePicker extends StatefulWidget {
   final TDateTimePickerValue? start;
 
   /// 可选范围上限。未指定时，年列最大值为初始选中年份加 10。
+  /// start 不应晚于 end；debug 模式会断言，release 模式遇到逆序范围时忽略 end。
   ///
   /// - **类型**：[TDateTimePickerValue]，仅传当前 mode 涉及的字段即可
   /// - **语义**：超出范围的候选项会被裁剪；变更会触发列重建
@@ -65,7 +64,7 @@ class TDateTimePicker extends StatefulWidget {
 
   /// 各列选项步进
   ///
-  /// - **类型**：[DateTimePickerSteps]；未配置的列步进为 1
+  /// - **类型**：[DateTimePickerSteps]；未配置或小于等于 1 的列步进按 1 处理
   /// - **变更语义**：变更会触发列重建，保留当前选中时刻（在合法范围内 clamp）
   final DateTimePickerSteps? steps;
 
@@ -145,22 +144,15 @@ class _TDateTimePickerState extends State<TDateTimePicker> {
     final rangeChanged =
         oldWidget.start != widget.start || oldWidget.end != widget.end;
     final stepsChanged = oldWidget.steps != widget.steps;
-    final showWeekChanged = oldWidget.showWeek != widget.showWeek;
-    final renderLabelChanged = oldWidget.renderLabel != widget.renderLabel;
 
     // 接受与拒绝都比较归一化后的完整日期，保留隐藏计算年的语义：
     // 同年接受滚轮结果不重建，仅计算年变化也能同步更新。
     final controlledValueDiverged =
         _createSnapshot().current != _snapshot.current;
-    final configurationChanged =
-        modeChanged ||
-        rangeChanged ||
-        stepsChanged ||
-        showWeekChanged ||
-        renderLabelChanged;
+    final configurationChanged = modeChanged || rangeChanged || stepsChanged;
     if (!controlledValueDiverged && !configurationChanged) {
       // 父级接受滚轮刚发出的受控值时，内部 snapshot 已经是最新状态。
-      // 保留当前 wheel 与 controller，避免每变一格都销毁并中断惯性滚动。
+      // 文案更新由 Wheel 刷新选项，保留控制器与正在进行的拖动/惯性。
       return;
     }
     if (modeChanged || controlledValueDiverged) {
@@ -235,13 +227,10 @@ class _TDateTimePickerState extends State<TDateTimePicker> {
           Object.hashAll(widget.mode.columns),
           widget.start,
           widget.end,
-          widget.showWeek,
-          widget.renderLabel,
           widget.steps,
-          labels,
-          Localizations.localeOf(context),
         ),
       ),
+      locale: Localizations.localeOf(context),
       snapshot: _snapshot,
       labels: labels,
       start: start,
@@ -249,8 +238,8 @@ class _TDateTimePickerState extends State<TDateTimePicker> {
       showWeek: widget.showWeek,
       steps: widget.steps,
       renderLabel: widget.renderLabel,
-      height: pickerTheme?.height ?? 200,
-      itemCount: pickerTheme?.itemCount ?? 5,
+      height: resolvePickerHeight(context),
+      itemCount: pickerTheme?.itemCount ?? defaultPickerItemCount,
       onChanged: _handleWheelChanged,
       onScrollEnd: _handleScrollEnd,
     );

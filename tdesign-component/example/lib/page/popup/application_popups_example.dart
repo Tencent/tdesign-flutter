@@ -1,0 +1,90 @@
+import 'package:tdesign_flutter/tdesign_flutter.dart';
+import '../../annotation/example_code.dart';
+import '../../base/example_widget.dart';
+
+@ExampleCode(group: 'popup')
+class ApplicationPopupsExample extends StatelessWidget {
+  const ApplicationPopupsExample({super.key});
+
+  Widget _buildApplicationPopups(BuildContext context) {
+    Widget popupButton(String label, String key, VoidCallback onPressed) {
+      return SizedBox(
+        width: double.infinity,
+        child: TButton(
+          key: ValueKey(key),
+          onPressed: onPressed,
+          size: TButtonSize.large,
+          variant: TButtonVariant.outline,
+          colorPreset: TButtonColorPreset.primary,
+          child: TText(label),
+        ),
+      );
+    }
+
+    final theme = context.tTheme;
+    return Column(
+      children: [
+        popupButton('底部弹出层-带标题及操作', 'popup-with-title-trigger', () {
+          TPopup.show(
+            context,
+            options: TPopupOptions.bottom(
+              height: 240,
+              headerBuilder: (_, close) => TPopupHeader(
+                cancelButton: TToolbarPressable(
+                  onTap: close,
+                  child: TText(
+                    '取消',
+                    font: theme.fontBodyLarge,
+                    style: TextStyle(color: theme.textColorSecondary),
+                  ),
+                ),
+                title: const TText('标题文字'),
+                confirmButton: TToolbarPressable(
+                  onTap: close,
+                  child: TText(
+                    '确定',
+                    font: theme.fontTitleMedium,
+                    style: TextStyle(
+                      color: theme.brandColor,
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
+                ),
+              ),
+              child: const SizedBox(key: ValueKey('popup-with-title-content')),
+            ),
+          );
+        }),
+        const SizedBox(height: 16),
+        popupButton('居中弹出层-带自定义关闭按钮', 'popup-custom-close-trigger', () {
+          TPopup.show(
+            context,
+            options: TPopupOptions.center(
+              width: 240,
+              height: 240,
+              closeBuilder: (_, close) => IconButton(
+                tooltip: '关闭',
+                icon: Icon(
+                  TIcons.close_circle,
+                  color: theme.fontWhite1,
+                  size: 32,
+                ),
+                onPressed: close,
+              ),
+              child: const SizedBox(
+                key: ValueKey('popup-custom-close-content'),
+                width: 240,
+                height: 240,
+              ),
+            ),
+          );
+        }),
+      ],
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return _buildApplicationPopups(context);
+  }
+}

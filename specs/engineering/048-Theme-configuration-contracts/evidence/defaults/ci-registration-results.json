@@ -1,0 +1,93 @@
+{
+  "runtimeUnchangedFrom": "56c460a8524b39e5625af6032d8b9fde0c3c71ff",
+  "testCasesMoved": 3,
+  "originalCaseSetRetained": 17,
+  "movedBodiesMatchIgnoringFormatting": true,
+  "sdks": {
+    "3.32.0": {
+      "groups": {
+        "cell": {
+          "coverage": "223/226 = 98.67%",
+          "testCount": 31
+        },
+        "backtop": {
+          "coverage": "254/258 = 98.45%",
+          "testCount": 51
+        },
+        "drawer": {
+          "coverage": "276/288 = 95.83%",
+          "testCount": 43
+        },
+        "tab_bar": {
+          "coverage": "569/577 = 98.61%",
+          "testCount": 45
+        },
+        "table": {
+          "coverage": "453/455 = 99.56%",
+          "testCount": 51
+        },
+        "search": {
+          "coverage": "272/285 = 95.44%",
+          "testCount": 10
+        },
+        "theme": {
+          "coverage": "841/868 = 96.89%",
+          "testCount": 183
+        },
+        "toast": {
+          "coverage": "266/279 = 95.34%",
+          "testCount": 76
+        }
+      },
+      "analyze": "No issues found"
+    },
+    "3.47.7": {
+      "groups": {
+        "cell": {
+          "coverage": "223/226 = 98.67%",
+          "testCount": 31
+        },
+        "backtop": {
+          "coverage": "254/258 = 98.45%",
+          "testCount": 51
+        },
+        "drawer": {
+          "coverage": "275/288 = 95.49%",
+          "testCount": 43
+        },
+        "tab_bar": {
+          "coverage": "570/577 = 98.79%",
+          "testCount": 45
+        },
+        "table": {
+          "coverage": "453/455 = 99.56%",
+          "testCount": 51
+        },
+        "search": {
+          "coverage": "272/285 = 95.44%",
+          "testCount": 10
+        },
+        "theme": {
+          "coverage": "838/868 = 96.54%",
+          "testCount": 183
+        },
+        "toast": {
+          "coverage": "266/279 = 95.34%",
+          "testCount": 76
+        }
+      },
+      "analyze": "No issues found"
+    }
+  },
+  "commands": [
+    "flutter test <each actual manifest componentTests> --no-pub --exclude-tags demo --coverage --reporter expanded",
+    "dart tool/check_component_coverage.dart <group> --lcov <group>.lcov",
+    "flutter analyze --fatal-infos"
+  ],
+  "goldens": "No runtime/resource/comparator/visual-test changes; existing 25-suite same-runtime result reusable, new full CI still required.",
+  "testRegistrationSha256": {
+    "tdesign-component/test/theme/token_default_transition_test.dart": "ce7052f1dfa9492165ed2aba9ec4a16faa5a40fd10561cd8e3d1c60359a7ebe7",
+    "tdesign-component/test/components/drawer/t_drawer_token_transition_test.dart": "1af6d7c7d27848858d1b567c04b3b273debb1ab00dca8ce3c63622149a43c754",
+    "tdesign-component/tool/component_test_manifest.dart": "08124b4ceece9d2adf8c484e50695f0955dd64295747bc1b6161a2418b5e22af"
+  }
+}

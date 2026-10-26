@@ -1,12 +1,151 @@
-import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:tdesign_flutter/tdesign_flutter.dart';
+
+import '../../helpers/text_slot_regression.dart';
 
 /// TCollapse Widget 测试。
 ///
 /// 覆盖统一 value/onChanged 状态、multiple/accordion、组级与单项禁用、
 /// Header 扩展点、Theme、布局和契约断言。
 void main() {
+  registerNativeParagraphContractTests(
+    'Collapse header slot',
+    (child) => TCollapse<int>(
+      value: const [1],
+      onChanged: (_) {},
+      children: [
+        TCollapsePanel(
+          value: 1,
+          headerBuilder: (_, __) => child,
+          body: const Text('body'),
+        ),
+      ],
+    ),
+    theme: (theme) => theme.mergeExtension(
+      const TCollapseThemeData(
+        headerTextStyle: TextStyle(fontSize: 20, color: Colors.purple),
+      ),
+    ),
+    reset: true,
+  );
+  registerNativeParagraphContractTests(
+    'Collapse body slot',
+    (child) => TCollapse<int>(
+      value: const [1],
+      onChanged: (_) {},
+      children: [
+        TCollapsePanel(
+          value: 1,
+          headerBuilder: (_, __) => const Text('header'),
+          body: child,
+        ),
+      ],
+    ),
+    theme: (theme) => theme.mergeExtension(
+      const TCollapseThemeData(
+        contentTextStyle: TextStyle(fontSize: 18, color: Colors.teal),
+      ),
+    ),
+    reset: true,
+  );
+  registerNativeParagraphContractTests(
+    'Collapse trailing slot',
+    (child) => TCollapse<int>(
+      value: const [1],
+      onChanged: (_) {},
+      children: [
+        TCollapsePanel(
+          value: 1,
+          headerBuilder: (_, __) => const Text('header'),
+          trailingBuilder: (_, __) => child,
+          body: const Text('body'),
+        ),
+      ],
+    ),
+    reset: true,
+  );
+  registerNativeParagraphContractTests(
+    'Collapse disabled header slot',
+    (child) => TCollapse<int>(
+      value: const [1],
+      children: [
+        TCollapsePanel(
+          value: 1,
+          headerBuilder: (_, __) => child,
+          body: const Text('body'),
+        ),
+      ],
+    ),
+    reset: true,
+  );
+
+  registerTextSlotParityTests(
+    'Collapse header slot',
+    (child) => TCollapse<int>(
+      value: const [1],
+      onChanged: (_) {},
+      children: [
+        TCollapsePanel(
+          value: 1,
+          headerBuilder: (_, __) => child,
+          body: const Text('body'),
+        ),
+      ],
+    ),
+    theme: (theme) => theme.mergeExtension(
+      const TCollapseThemeData(
+        headerTextStyle: TextStyle(fontSize: 20, color: Colors.purple),
+      ),
+    ),
+  );
+  registerTextSlotParityTests(
+    'Collapse body slot',
+    (child) => TCollapse<int>(
+      value: const [1],
+      onChanged: (_) {},
+      children: [
+        TCollapsePanel(
+          value: 1,
+          headerBuilder: (_, __) => const Text('header'),
+          body: child,
+        ),
+      ],
+    ),
+    theme: (theme) => theme.mergeExtension(
+      const TCollapseThemeData(
+        contentTextStyle: TextStyle(fontSize: 18, color: Colors.teal),
+      ),
+    ),
+  );
+  registerTextSlotParityTests(
+    'Collapse trailing slot',
+    (child) => TCollapse<int>(
+      value: const [1],
+      onChanged: (_) {},
+      children: [
+        TCollapsePanel(
+          value: 1,
+          headerBuilder: (_, __) => const Text('header'),
+          trailingBuilder: (_, __) => child,
+          body: const Text('body'),
+        ),
+      ],
+    ),
+  );
+  registerTextSlotParityTests(
+    'Collapse disabled header slot',
+    (child) => TCollapse<int>(
+      value: const [1],
+      children: [
+        TCollapsePanel(
+          value: 1,
+          headerBuilder: (_, __) => child,
+          body: const Text('body'),
+        ),
+      ],
+    ),
+  );
+
   Widget wrapWithTheme(Widget child, {TCollapseThemeData? collapseTheme}) {
     return MaterialApp(
       theme: ThemeData(
@@ -411,21 +550,18 @@ void main() {
       );
 
       expect(
-        IconTheme.of(tester.element(find.byIcon(Icons.expand_more))).color,
+        tester.widget<Icon>(find.byIcon(Icons.expand_more)).color,
         token.textColorPlaceholder,
       );
     });
 
-    testWidgets('Theme 和实例 variant 按优先级解析', (tester) async {
+    testWidgets('实例 variant 独立选择 block 形态', (tester) async {
       await tester.pumpWidget(
         wrapWithTheme(
           TCollapse<String>(
             value: const [],
             variant: TCollapseVariant.block,
             children: [buildPanel(value: 'a', title: '标题', bodyText: '内容')],
-          ),
-          collapseTheme: const TCollapseThemeData(
-            variant: TCollapseVariant.card,
           ),
         ),
       );
@@ -442,9 +578,8 @@ void main() {
       );
     });
 
-    testWidgets('Theme card、样式、间距和圆角生效', (tester) async {
+    testWidgets('实例 card 配合 Theme 样式、间距和圆角生效', (tester) async {
       const theme = TCollapseThemeData(
-        variant: TCollapseVariant.card,
         headerTextStyle: TextStyle(color: Colors.red),
         contentTextStyle: TextStyle(color: Colors.blue),
         iconColor: Colors.purple,
@@ -457,6 +592,7 @@ void main() {
         wrapWithTheme(
           TCollapse<String>(
             value: const ['a'],
+            variant: TCollapseVariant.card,
             onChanged: (_) {},
             children: [
               TCollapsePanel<String>(
@@ -479,7 +615,7 @@ void main() {
         Colors.blue,
       );
       expect(
-        IconTheme.of(tester.element(find.byIcon(Icons.expand_less))).color,
+        tester.widget<Icon>(find.byIcon(Icons.expand_less)).color,
         Colors.purple,
       );
       expect(
@@ -500,19 +636,12 @@ void main() {
     });
 
     test('TCollapseThemeData copyWith 和 lerp', () {
-      const base = TCollapseThemeData(
-        variant: TCollapseVariant.card,
-        elevation: 2,
-      );
+      const base = TCollapseThemeData(elevation: 2);
       final merged = base.copyWith(backgroundColor: Colors.red);
-      expect(merged.variant, TCollapseVariant.card);
       expect(merged.elevation, 2);
       expect(merged.backgroundColor, Colors.red);
 
-      const other = TCollapseThemeData(
-        variant: TCollapseVariant.block,
-        elevation: 4,
-      );
+      const other = TCollapseThemeData(elevation: 4);
       expect(base.lerp(other, 0.5).elevation, 4);
       expect(base.lerp(null, 0.5), same(base));
     });
@@ -554,11 +683,11 @@ void main() {
       expect(semanticsWidget.properties.onTap, isNull);
       expect(
         DefaultTextStyle.of(tester.element(find.text('组级禁用'))).style.color,
-        TThemeData.defaultData().textDisabledColor,
+        TThemeData.defaultData().textColorDisabled,
       );
       expect(
         DefaultTextStyle.of(tester.element(find.text('操作'))).style.color,
-        TThemeData.defaultData().textDisabledColor,
+        TThemeData.defaultData().textColorDisabled,
       );
       semantics.dispose();
     });
@@ -682,15 +811,15 @@ void main() {
       expect(find.text('B:0'), findsOneWidget);
     });
 
-    testWidgets('空列表、动画时长和 elevation 可渲染', (tester) async {
+    testWidgets('空列表、实例动画时长和 Theme elevation 可渲染', (tester) async {
       await tester.pumpWidget(
         wrapWithTheme(
           const TCollapse<String>(
             value: [],
             animationDuration: Duration(milliseconds: 100),
-            elevation: 4,
             children: [],
           ),
+          collapseTheme: const TCollapseThemeData(elevation: 4),
         ),
       );
 

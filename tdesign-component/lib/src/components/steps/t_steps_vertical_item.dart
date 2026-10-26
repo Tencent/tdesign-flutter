@@ -1,11 +1,15 @@
+import 'dart:math' as math;
+
 import 'package:flutter/material.dart';
 import 'package:tdesign_flutter_icons/tdesign_flutter_icons.dart' show TIcons;
 
 import '../../theme/t_colors.dart';
 import '../../theme/t_fonts.dart';
+import '../../theme/t_internal_material.dart';
 import '../../theme/t_theme.dart';
-import '../text/t_text.dart';
 import '../text/t_text_resolve.dart';
+import '../text/t_text_style_scope.dart';
+import '../text/t_text_styled.dart';
 import 't_steps.dart';
 import 't_steps_mode.dart';
 
@@ -52,19 +56,19 @@ class TStepsVerticalItem extends StatelessWidget {
     final theme = context.tTheme;
 
     /// 步骤条数字背景色
-    var stepsNumberBgColor = theme.brandNormalColor;
+    var stepsNumberBgColor = theme.brandColor;
 
     /// 步骤条数字颜色
     var stepsNumberTextColor = theme.textColorAnti;
 
     /// 步骤条标题颜色
-    var stepsTitleColor = theme.brandNormalColor;
+    var stepsTitleColor = theme.brandColor;
 
     /// 步骤条 icon 颜色
-    var stepsIconColor = theme.brandNormalColor;
+    var stepsIconColor = theme.brandColor;
 
     /// 简略步骤条 icon 颜色
-    var simpleStepsIconColor = theme.brandNormalColor;
+    var simpleStepsIconColor = theme.brandColor;
 
     /// 是否要设置步骤图标 widget 的 Decoration
     var shouldSetIconWidgetDecoration = true;
@@ -73,13 +77,13 @@ class TStepsVerticalItem extends StatelessWidget {
 
     /// 已完成步骤条
     if (activeIndex > index) {
-      stepsNumberBgColor = theme.brandLightColor;
-      stepsNumberTextColor = theme.brandNormalColor;
+      stepsNumberBgColor = theme.brandColorLight;
+      stepsNumberTextColor = theme.brandColor;
       stepsTitleColor = theme.textColorPrimary;
 
-      completeIconWidget = Icon(
+      completeIconWidget = TInternalIcon(
         TIcons.check,
-        color: theme.brandNormalColor,
+        color: theme.brandColor,
         size: 16,
       );
     } else if (activeIndex < index) {
@@ -88,14 +92,17 @@ class TStepsVerticalItem extends StatelessWidget {
       stepsNumberTextColor = theme.textColorPlaceholder;
       stepsTitleColor = theme.textColorPlaceholder;
       stepsIconColor = theme.textColorPlaceholder;
-      simpleStepsIconColor = theme.componentBorderColor;
+      simpleStepsIconColor = theme.componentBorder;
     }
 
     /// 步骤条icon图标组件，默认为索引文字
-    Widget? stepsIconWidget = Text(
+    final number = TTextStyled(
       (index + 1).toString(),
+      maxLines: 1,
+      selectionColor: context.tTheme.brandColor.withValues(alpha: 0.4),
       style: TTextResolve.resolve(
         context: context,
+        singleLine: true,
         defaults: TextStyle(
           color: stepsNumberTextColor,
           fontWeight: FontWeight.w400,
@@ -104,6 +111,8 @@ class TStepsVerticalItem extends StatelessWidget {
       ),
     );
 
+    Widget? stepsIconWidget = number;
+
     /// 已完成的用 icon 图标显示
     if (completeIconWidget != null) {
       stepsIconWidget = completeIconWidget;
@@ -111,7 +120,11 @@ class TStepsVerticalItem extends StatelessWidget {
 
     /// 传递了成功的 icon 图标, 已完成的 step 都需要显示
     if (data.icon != null) {
-      stepsIconWidget = Icon(data.icon, color: stepsIconColor, size: 22);
+      stepsIconWidget = TInternalIcon(
+        data.icon,
+        color: stepsIconColor,
+        size: 22,
+      );
 
       /// 传了图标则不用设置背景色
       shouldSetIconWidgetDecoration = false;
@@ -120,16 +133,16 @@ class TStepsVerticalItem extends StatelessWidget {
     /// 错误状态
     /// 激活索引是当前索引，只有当前激活索引才需要显示
     if (status == TStepsStatus.error && activeIndex == index) {
-      stepsNumberBgColor = theme.errorLightColor;
-      stepsTitleColor = theme.errorNormalColor;
+      stepsNumberBgColor = theme.errorColorLight;
+      stepsTitleColor = theme.errorColor;
 
       if (indicator != TStepsIndicator.standard) {
-        simpleStepsIconColor = theme.errorNormalColor;
+        simpleStepsIconColor = theme.errorColor;
       } else {
         shouldSetIconWidgetDecoration = data.errorIcon == null;
-        stepsIconWidget = Icon(
+        stepsIconWidget = TInternalIcon(
           data.errorIcon ?? TIcons.close,
-          color: theme.errorNormalColor,
+          color: theme.errorColor,
           size: shouldSetIconWidgetDecoration ? 16 : 22,
         );
       }
@@ -141,7 +154,16 @@ class TStepsVerticalItem extends StatelessWidget {
         : null;
 
     /// icon组件容器大小
-    double iconContainerSize = 22;
+    // 序号槽按真实文字增长；图标仍保留各自显式尺寸。
+    final numberSize = TTextStyled(
+      stepsCount.toString(),
+      maxLines: 1,
+      style: number.style,
+    ).naturalSize(context);
+    double iconContainerSize = math.max(
+      22,
+      math.max(numberSize.width, numberSize.height),
+    );
 
     /// icon组件容器margin
     double iconMarginBottom = 8;
@@ -150,7 +172,7 @@ class TStepsVerticalItem extends StatelessWidget {
     if (indicator != TStepsIndicator.standard) {
       /// display 纯展示
       if (mode == TStepsMode.display) {
-        simpleStepsIconColor = theme.brandNormalColor;
+        simpleStepsIconColor = theme.brandColor;
         stepsTitleColor = theme.textColorPrimary;
       }
       iconContainerSize = 8;
@@ -177,6 +199,17 @@ class TStepsVerticalItem extends StatelessWidget {
       iconWidgetDecoration = simpleDecoration;
     }
 
+    final titleStyle = TTextResolve.resolve(
+      context: context,
+      defaults: TextStyle(
+        fontWeight: (activeIndex == index && mode != TStepsMode.display)
+            ? FontWeight.w600
+            : FontWeight.w400,
+        color: stepsTitleColor,
+        fontSize: theme.fontBodyMedium?.size ?? 14,
+        height: 1.2,
+      ),
+    );
     final content = Container(
       margin: const EdgeInsets.only(bottom: 8),
       child: IntrinsicHeight(
@@ -187,7 +220,9 @@ class TStepsVerticalItem extends StatelessWidget {
             // 左侧图标、线条
             Container(
               margin: const EdgeInsets.only(right: 8),
-              width: 22,
+              width: indicator == TStepsIndicator.standard
+                  ? iconContainerSize
+                  : 22,
               child: ConstrainedBox(
                 constraints: const BoxConstraints(minHeight: 62),
                 child: Column(
@@ -195,7 +230,9 @@ class TStepsVerticalItem extends StatelessWidget {
                   children: [
                     Container(
                       width: iconContainerSize,
-                      height: 22,
+                      height: indicator == TStepsIndicator.standard
+                          ? iconContainerSize
+                          : 22,
                       alignment: Alignment.center,
                       margin: EdgeInsets.only(bottom: iconMarginBottom),
                       decoration: iconWidgetDecoration,
@@ -222,33 +259,22 @@ class TStepsVerticalItem extends StatelessWidget {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Expanded(
-                            child:
-                                data.customTitle ??
-                                (data.title != null && data.title!.isNotEmpty
-                                    ? TText(
-                                        data.title!,
-                                        style: TTextResolve.resolve(
-                                          context: context,
-                                          defaults: TextStyle(
-                                            fontWeight:
-                                                (activeIndex == index &&
-                                                    mode != TStepsMode.display)
-                                                ? FontWeight.w600
-                                                : FontWeight.w400,
-                                            color: stepsTitleColor,
-                                            fontSize:
-                                                theme.fontBodyMedium?.size ??
-                                                14,
-                                            height: 1.2,
-                                          ),
-                                        ),
-                                        softWrap: true,
-                                        overflow: TextOverflow.visible,
-                                      )
-                                    : const SizedBox.shrink()),
+                            child: data.customTitle != null
+                                ? TTextStyleScope(
+                                    style: titleStyle,
+                                    child: data.customTitle!,
+                                  )
+                                : (data.title != null && data.title!.isNotEmpty
+                                      ? TTextStyled(
+                                          data.title!,
+                                          style: titleStyle,
+                                          softWrap: true,
+                                          overflow: TextOverflow.visible,
+                                        )
+                                      : const SizedBox.shrink()),
                           ),
                           if (mode == TStepsMode.selectable)
-                            Icon(
+                            TInternalIcon(
                               TIcons.chevron_right,
                               color: theme.textColorPrimary,
                               size: 16,
@@ -282,32 +308,30 @@ class TStepsVerticalItem extends StatelessWidget {
           width: 1,
           height: double.infinity,
           color: (activeIndex > index || mode == TStepsMode.display)
-              ? context.tTheme.brandNormalColor
-              : context.tTheme.componentBorderColor,
+              ? context.tTheme.brandColor
+              : context.tTheme.componentBorder,
         ),
       ),
     );
   }
 
   Widget _buildContentWidget(BuildContext context) {
+    final contentStyle = TTextResolve.resolve(
+      context: context,
+      defaults: TextStyle(
+        fontWeight: FontWeight.w400,
+        color: context.tTheme.textColorPlaceholder,
+        fontSize: context.tTheme.fontBodySmall?.size ?? 12,
+      ),
+    );
     return Column(
       mainAxisAlignment: MainAxisAlignment.start,
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         if (data.customContent != null)
-          data.customContent!
+          TTextStyleScope(style: contentStyle, child: data.customContent!)
         else if (data.content != null && data.content!.isNotEmpty)
-          TText(
-            data.content!,
-            style: TTextResolve.resolve(
-              context: context,
-              defaults: TextStyle(
-                fontWeight: FontWeight.w400,
-                color: context.tTheme.textColorPlaceholder,
-                fontSize: context.tTheme.fontBodySmall?.size ?? 12,
-              ),
-            ),
-          ),
+          TTextStyled(data.content!, style: contentStyle),
       ],
     );
   }

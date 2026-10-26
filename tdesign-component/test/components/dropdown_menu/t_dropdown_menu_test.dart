@@ -1,6 +1,5 @@
 import 'dart:async';
 
-import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:tdesign_flutter/tdesign_flutter.dart';
@@ -36,6 +35,114 @@ void main() {
         height: panelHeight,
         child: Center(child: Text(panelLabel ?? '$label panel')),
       ),
+    );
+  }
+
+  for (final replace in [false, true]) {
+    testWidgets('stale dropdown owner does not unbind latest owner: $replace', (
+      tester,
+    ) async {
+      final controller = TDropdownMenuController();
+      final replacement = TDropdownMenuController();
+      Widget host(bool updated) => wrap(
+        Column(
+          children: [
+            if (!updated || replace)
+              TDropdownMenu(
+                key: const ValueKey('old'),
+                controller: updated ? replacement : controller,
+                items: [item('old')],
+              ),
+            TDropdownMenu(
+              key: const ValueKey('latest'),
+              controller: controller,
+              items: [item('latest')],
+            ),
+          ],
+        ),
+      );
+      await tester.pumpWidget(host(false));
+      expect(tester.takeException(), isNull);
+      await tester.pumpWidget(host(true));
+      final opening = controller.open(0);
+      await tester.pumpAndSettle();
+      await opening;
+      expect(find.text('latest panel'), findsOneWidget);
+      expect(find.text('old panel'), findsNothing);
+      final closing = controller.close();
+      await tester.pumpAndSettle();
+      await closing;
+      await tester.pumpWidget(const SizedBox());
+      await controller.open(0);
+      expect(controller.isOpen, isFalse);
+      controller.dispose();
+      replacement.dispose();
+    });
+  }
+
+  for (final replace in [false, true]) {
+    testWidgets(
+      'open latest dropdown survives stale owner ${replace ? 'replacement' : 'unmount'}',
+      (tester) async {
+        final controller = TDropdownMenuController();
+        final replacement = TDropdownMenuController();
+        final oldItems = [item('old')];
+        final latestItems = [item('latest')];
+        var opened = 0;
+        var closed = 0;
+        Widget host(bool updated) => wrap(
+          Column(
+            children: [
+              if (!updated || replace)
+                TDropdownMenu(
+                  key: const ValueKey('old'),
+                  controller: updated ? replacement : controller,
+                  items: oldItems,
+                ),
+              TDropdownMenu(
+                key: const ValueKey('latest'),
+                controller: controller,
+                items: latestItems,
+                onOpened: (_) => opened++,
+                onClosed: (_, __) => closed++,
+              ),
+            ],
+          ),
+        );
+        await tester.pumpWidget(host(false));
+        final opening = controller.open(0);
+        await tester.pumpAndSettle();
+        await opening;
+        expect(controller.openIndex, 0);
+        expect(find.text('latest panel'), findsOneWidget);
+        expect(opened, 1);
+        await tester.pumpWidget(host(true));
+        await tester.pumpAndSettle();
+        expect(controller.openIndex, 0);
+        expect(find.text('latest panel'), findsOneWidget);
+        expect(find.text('old panel'), findsNothing);
+        expect(replacement.isOpen, isFalse);
+        expect(opened, 1);
+        expect(closed, 0);
+        final closing = controller.close();
+        await tester.pumpAndSettle();
+        await closing;
+        expect(controller.isOpen, isFalse);
+        expect(find.text('latest panel'), findsNothing);
+        expect(closed, 1);
+        final reopening = controller.open(0);
+        await tester.pumpAndSettle();
+        await reopening;
+        expect(controller.openIndex, 0);
+        expect(find.text('latest panel'), findsOneWidget);
+        expect(opened, 2);
+        await tester.pumpWidget(const SizedBox());
+        await controller.open(0);
+        expect(controller.isOpen, isFalse);
+        expect(tester.takeException(), isNull);
+        controller.dispose();
+        replacement.dispose();
+      },
     );
   }
 
@@ -105,13 +212,11 @@ void main() {
         optionBorderRadius: BorderRadius.all(Radius.circular(4)),
         actionAreaPadding: EdgeInsets.all(16),
         actionGap: 16,
-        animationDuration: Duration(milliseconds: 200),
       );
       const override = TDropdownThemeData(
         barHeight: 60,
         iconSize: 24,
         optionColor: Colors.yellow,
-        animationDuration: Duration(milliseconds: 300),
       );
 
       expect(identical(base.merge(null), base), isTrue);
@@ -119,7 +224,6 @@ void main() {
       expect(merged.barHeight, 60);
       expect(merged.barBackgroundColor, Colors.white);
       expect(merged.optionColor, Colors.yellow);
-      expect(merged.animationDuration, const Duration(milliseconds: 300));
 
       final copied = base.copyWith(
         barHeight: 48,
@@ -137,7 +241,6 @@ void main() {
       expect(lerped.barHeight, 50);
       expect(lerped.iconSize, 22);
       expect(lerped.optionColor, Color.lerp(Colors.white, Colors.yellow, 0.5));
-      expect(lerped.animationDuration, const Duration(milliseconds: 300));
     });
   });
 
@@ -148,74 +251,56 @@ void main() {
       const Duration(milliseconds: 200),
       const Duration(milliseconds: 350),
     ]) {
-      for (final themeDuration in <Duration?>[
-        null,
-        const Duration(milliseconds: 800),
-      ]) {
-        testWidgets(
-          'duration priority instance=$instance theme=$themeDuration',
-          (tester) async {
-            var opened = false;
-            await tester.pumpWidget(
-              wrap(
-                TDropdownMenu(
-                  animationDuration: instance,
-                  placement: TDropdownMenuPlacement.below,
-                  onOpened: (_) => opened = true,
-                  items: [item('duration')],
-                ),
-                dropdownTheme: TDropdownThemeData(
-                  animationDuration: themeDuration,
-                ),
-              ),
-            );
-            final expected =
-                instance ?? themeDuration ?? const Duration(milliseconds: 200);
-            expect(
-              tester
-                  .widget<AnimatedRotation>(find.byType(AnimatedRotation))
-                  .duration,
-              expected,
-            );
-            await tester.tap(find.text('duration'));
-            await tester.pump();
-            await tester.pump();
-            await tester.pump(expected);
-            await tester.pumpAndSettle();
-            expect(opened, isTrue);
-          },
-        );
-      }
-    }
-
-    testWidgets(
-      'system reduced motion overrides instance and theme durations',
-      (tester) async {
+      testWidgets('duration follows instance value=$instance', (tester) async {
+        var opened = false;
         await tester.pumpWidget(
           wrap(
-            MediaQuery(
-              data: const MediaQueryData(disableAnimations: true),
-              child: TDropdownMenu(
-                animationDuration: const Duration(milliseconds: 200),
-                items: [item('reduced')],
-              ),
-            ),
-            dropdownTheme: const TDropdownThemeData(
-              animationDuration: Duration(milliseconds: 800),
+            TDropdownMenu(
+              animationDuration: instance,
+              placement: TDropdownMenuPlacement.below,
+              onOpened: (_) => opened = true,
+              items: [item('duration')],
             ),
           ),
         );
+        final expected = instance ?? const Duration(milliseconds: 200);
         expect(
           tester
               .widget<AnimatedRotation>(find.byType(AnimatedRotation))
               .duration,
-          Duration.zero,
+          expected,
         );
-        await tester.tap(find.text('reduced'));
+        await tester.tap(find.text('duration'));
+        await tester.pump();
+        await tester.pump();
+        await tester.pump(expected);
         await tester.pumpAndSettle();
-        expect(find.text('reduced panel'), findsOneWidget);
-      },
-    );
+        expect(opened, isTrue);
+      });
+    }
+
+    testWidgets('system reduced motion overrides instance duration', (
+      tester,
+    ) async {
+      await tester.pumpWidget(
+        wrap(
+          MediaQuery(
+            data: const MediaQueryData(disableAnimations: true),
+            child: TDropdownMenu(
+              animationDuration: const Duration(milliseconds: 200),
+              items: [item('reduced')],
+            ),
+          ),
+        ),
+      );
+      expect(
+        tester.widget<AnimatedRotation>(find.byType(AnimatedRotation)).duration,
+        Duration.zero,
+      );
+      await tester.tap(find.text('reduced'));
+      await tester.pumpAndSettle();
+      expect(find.text('reduced panel'), findsOneWidget);
+    });
 
     for (final color in <Color?>[
       null,
@@ -257,7 +342,7 @@ void main() {
       });
     }
 
-    testWidgets('default trigger follows the Figma token contract', (
+    testWidgets('default trigger follows the approved MiniProgram dimensions', (
       tester,
     ) async {
       await tester.pumpWidget(
@@ -272,7 +357,7 @@ void main() {
         matching: find.byIcon(TIcons.caret_down_small),
       );
       expect(tester.getSize(find.byType(TDropdownMenu)).height, 48);
-      expect(tester.widget<Icon>(icon).size, 24);
+      expect(tester.widget<Icon>(icon).size, 20);
       expect(tester.getTopLeft(icon).dx - tester.getTopRight(text).dx, 4);
 
       await tester.tap(text);
@@ -367,7 +452,7 @@ void main() {
       expect(find.text('主题 panel'), findsOneWidget);
     });
 
-    testWidgets('local DefaultTextStyle and IconTheme precede token fallback', (
+    testWidgets('Token ignores external DefaultTextStyle and IconTheme', (
       tester,
     ) async {
       await tester.pumpWidget(
@@ -384,14 +469,17 @@ void main() {
           ),
         ),
       );
-      expect(tester.widget<Text>(find.text('继承主题')).style?.color, Colors.brown);
+      expect(
+        tester.widget<Text>(find.text('继承主题')).style?.color,
+        TThemeData.defaultData().textColorPrimary,
+      );
       final icon = tester.widget<Icon>(
         find.descendant(
           of: find.byType(TDropdownMenu),
           matching: find.byType(Icon),
         ),
       );
-      expect(icon.color, Colors.teal);
+      expect(icon.color, isNot(Colors.teal));
     });
 
     testWidgets('empty menu is safe', (tester) async {

@@ -1,8 +1,33 @@
-import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:tdesign_flutter/tdesign_flutter.dart';
 
 void main() {
+  testWidgets('failed controller replacement keeps actual form binding', (
+    tester,
+  ) async {
+    final first = TFormController();
+    final second = TFormController();
+    TForm form(String key, TFormController controller) => TForm(
+      key: ValueKey(key),
+      controller: controller,
+      child: const SizedBox(),
+    );
+    await tester.pumpWidget(
+      Directionality(
+        textDirection: TextDirection.ltr,
+        child: Column(children: [form('first', first), form('second', second)]),
+      ),
+    );
+    final element = tester.element(find.byKey(const ValueKey('second')));
+    expect(() => element.update(form('second', first)), throwsAssertionError);
+    expect(first.validate(), isTrue);
+    expect(second.validate(), isTrue);
+    await tester.pumpWidget(const SizedBox());
+    expect(first.validate(), isFalse);
+    expect(second.validate(), isFalse);
+  });
+
   Widget wrap(Widget child, {TFormThemeData? formTheme}) {
     return MaterialApp(
       theme: ThemeData(
@@ -16,6 +41,50 @@ void main() {
   }
 
   group('TForm and TFormField', () {
+    testWidgets('form root background follows the Token and component Theme', (
+      tester,
+    ) async {
+      const form = TForm(child: SizedBox(height: 80));
+
+      await tester.pumpWidget(wrap(form));
+      final rootBackground = find.descendant(
+        of: find.byType(TForm),
+        matching: find.byType(ColoredBox),
+      );
+      expect(
+        tester.widget<ColoredBox>(rootBackground).color,
+        TThemeData.defaultData().bgColorContainer,
+      );
+
+      await tester.pumpWidget(
+        wrap(
+          form,
+          formTheme: const TFormThemeData(backgroundColor: Colors.yellow),
+        ),
+      );
+      await tester.pumpAndSettle();
+      expect(tester.widget<ColoredBox>(rootBackground).color, Colors.yellow);
+    });
+
+    testWidgets('form root background follows the dark Token', (tester) async {
+      final token = TThemeData.defaultData();
+      await tester.pumpWidget(
+        MaterialApp(
+          theme: TThemeBuilder.dark(token),
+          home: const Scaffold(body: TForm(child: SizedBox(height: 80))),
+        ),
+      );
+
+      final rootBackground = find.descendant(
+        of: find.byType(TForm),
+        matching: find.byType(ColoredBox),
+      );
+      expect(
+        tester.widget<ColoredBox>(rootBackground).color,
+        tester.element(rootBackground).tTheme.bgColorContainer,
+      );
+    });
+
     testWidgets('valid submit returns registered controlled values', (
       tester,
     ) async {
@@ -92,6 +161,119 @@ void main() {
       await tester.pump();
       expect(find.text('next'), findsOneWidget);
       expect(controller.submit(), isTrue);
+    });
+
+    testWidgets('form onChanged observes the current controlled value', (
+      tester,
+    ) async {
+      final controller = TFormController();
+      var value = 'before';
+      Map<String, Object?>? valuesDuringChange;
+      await tester.pumpWidget(
+        wrap(
+          StatefulBuilder(
+            builder: (context, setState) => TForm(
+              controller: controller,
+              onChanged: () => valuesDuringChange = controller.values,
+              child: TFormField<String>(
+                name: 'name',
+                value: value,
+                onChanged: (next) => setState(() => value = next),
+                builder: (context, current, onChanged, errorText) => TextButton(
+                  onPressed: () => onChanged!('after'),
+                  child: Text(current),
+                ),
+              ),
+            ),
+          ),
+        ),
+      );
+
+      await tester.tap(find.text('before'));
+
+      expect(valuesDuringChange, {'name': 'after'});
+      expect(controller.values, {'name': 'after'});
+    });
+
+    testWidgets('field onChanged validates and submits the current value', (
+      tester,
+    ) async {
+      final controller = TFormController();
+      var value = '';
+      Map<String, Object?>? valuesDuringChange;
+      Map<String, Object?>? submitted;
+      bool? validityDuringChange;
+      await tester.pumpWidget(
+        wrap(
+          StatefulBuilder(
+            builder: (context, setState) => TForm(
+              controller: controller,
+              onSubmit: (values) => submitted = values,
+              child: TFormField<String>(
+                name: 'name',
+                value: value,
+                onChanged: (next) {
+                  valuesDuringChange = controller.values;
+                  validityDuringChange = controller.submit();
+                  setState(() => value = next);
+                },
+                validator: (current) => current == 'after' ? null : 'required',
+                builder: (context, current, onChanged, errorText) => TextButton(
+                  onPressed: () => onChanged!('after'),
+                  child: Text(current.isEmpty ? 'change' : current),
+                ),
+              ),
+            ),
+          ),
+        ),
+      );
+
+      await tester.tap(find.text('change'));
+
+      expect(valuesDuringChange, {'name': 'after'});
+      expect(validityDuringChange, isTrue);
+      expect(submitted, {'name': 'after'});
+      expect(controller.values, {'name': 'after'});
+    });
+
+    testWidgets('external controlled updates do not report user interaction', (
+      tester,
+    ) async {
+      final controller = TFormController();
+      var value = 'valid';
+      var changeCount = 0;
+      late StateSetter update;
+      await tester.pumpWidget(
+        wrap(
+          StatefulBuilder(
+            builder: (context, setState) {
+              update = setState;
+              return TForm(
+                controller: controller,
+                autovalidateMode: AutovalidateMode.onUserInteraction,
+                onChanged: () => changeCount += 1,
+                child: TFormField<String>(
+                  name: 'name',
+                  value: value,
+                  onChanged: (_) {},
+                  validator: (current) => current!.isEmpty ? 'required' : null,
+                  builder: (context, current, onChanged, errorText) =>
+                      Text(errorText ?? current),
+                ),
+              );
+            },
+          ),
+        ),
+      );
+
+      value = '';
+      update(() {});
+      await tester.pump();
+      await tester.pump();
+
+      expect(controller.values, {'name': ''});
+      expect(changeCount, 0);
+      expect(find.text('required'), findsNothing);
     });
 
     testWidgets('disabled field exposes no change callback', (tester) async {
@@ -524,7 +706,7 @@ void main() {
                           builder: (context, value, onChanged, errorText) =>
                               item(
                                 'Radio',
-                                TRadioGroup<String>(
+                                TRadioGroup<String>.options(
                                   value: value,
                                   options: const [
                                     TRadioOption(
@@ -874,10 +1056,16 @@ void main() {
       tester,
     ) async {
       final controller = TFormController();
+      var changeCount = 0;
+      Map<String, Object?>? valuesDuringChange;
       await tester.pumpWidget(
         wrap(
           TForm(
             controller: controller,
+            onChanged: () {
+              changeCount += 1;
+              valuesDuringChange = controller.values;
+            },
             child: TFormField<String>(
               name: 'name',
               value: 'accepted',
@@ -894,6 +1082,9 @@ void main() {
 
       await tester.tap(find.text('change'));
       await tester.pump();
+      await tester.pump();
+      expect(changeCount, 1);
+      expect(valuesDuringChange, {'name': 'rejected'});
       expect(controller.values, {'name': 'accepted'});
       expect(controller.submit(), isTrue);
     });
@@ -1158,7 +1349,7 @@ void main() {
       expect(controller.submit(), isFalse);
       await tester.pump();
       final input = tester.widget<TextField>(find.byType(TextField));
-      expect(input.decoration!.errorText, isNull);
+      expect(input.decoration, isNull);
       expect(find.text('required'), findsOneWidget);
     });
 
@@ -1186,7 +1377,7 @@ void main() {
       expect(controller.submit(), isFalse);
       await tester.pump();
       final input = tester.widget<TextField>(find.byType(TextField));
-      expect(input.decoration!.errorText, isNull);
+      expect(input.decoration, isNull);
       expect(find.text('required'), findsOneWidget);
     });
 
@@ -1260,6 +1451,27 @@ void main() {
 
       await tester.pumpWidget(const SizedBox());
       expect(second.validate(), isFalse);
+    });
+
+    testWidgets('controller rejects multiple simultaneous forms', (
+      tester,
+    ) async {
+      final controller = TFormController();
+      await tester.pumpWidget(
+        Directionality(
+          textDirection: TextDirection.ltr,
+          child: Column(
+            children: [
+              TForm(controller: controller, child: const SizedBox()),
+              TForm(controller: controller, child: const SizedBox()),
+            ],
+          ),
+        ),
+      );
+
+      expect(tester.takeException(), isAssertionError);
+      await tester.pumpWidget(const SizedBox());
+      expect(tester.takeException(), isNull);
     });
 
     testWidgets('works as a standalone FormField without TForm scope', (
@@ -1429,9 +1641,74 @@ void main() {
       expect(changeCount, 0);
       expect(find.text('required'), findsNothing);
     });
+
+    testWidgets('clearing validation preserves the field subtree and focus', (
+      tester,
+    ) async {
+      final controller = TFormController();
+      await tester.pumpWidget(
+        wrap(
+          TForm(
+            controller: controller,
+            child: TFormField<String>(
+              name: 'name',
+              value: '',
+              onChanged: (_) {},
+              validator: (_) => 'required',
+              builder: (context, value, onChanged, errorText) =>
+                  TInput(hintText: 'input', onChanged: onChanged),
+            ),
+          ),
+        ),
+      );
+      final inputState = tester.state(find.byType(TInput));
+      await tester.tap(find.byType(EditableText));
+      await tester.pump();
+      expect(
+        tester
+            .widget<EditableText>(find.byType(EditableText))
+            .focusNode
+            .hasFocus,
+        isTrue,
+      );
+      expect(controller.validate(), isFalse);
+
+      controller.clearValidate();
+      await tester.pump();
+
+      expect(tester.state(find.byType(TInput)), same(inputState));
+      expect(
+        tester
+            .widget<EditableText>(find.byType(EditableText))
+            .focusNode
+            .hasFocus,
+        isTrue,
+      );
+    });
   });
 
   group('TFormItem layout', () {
+    testWidgets('horizontal label keeps the design gap before content', (
+      tester,
+    ) async {
+      await tester.pumpWidget(
+        wrap(
+          const TFormItem(label: 'Name', child: Text('Field')),
+          formTheme: const TFormThemeData(labelWidth: 80),
+        ),
+      );
+
+      expect(tester.getTopLeft(find.text('Field')).dx, 112);
+    });
+
+    testWidgets('horizontal item without label does not add a label gap', (
+      tester,
+    ) async {
+      await tester.pumpWidget(wrap(const TFormItem(child: Text('Field'))));
+
+      expect(tester.getTopLeft(find.text('Field')).dx, 16);
+    });
+
     testWidgets('horizontal layout renders label, mark, child and help', (
       tester,
     ) async {
@@ -1474,13 +1751,13 @@ void main() {
         wrap(
           const TFormItem(
             label: 'Name',
-            labelWidth: 120,
             help: 'Help',
             errorText: 'Error',
             child: Text('Field'),
           ),
           formTheme: const TFormThemeData(
             layout: TFormLayout.vertical,
+            labelWidth: 120,
             backgroundColor: Colors.yellow,
             itemPadding: EdgeInsets.all(12),
             itemSpacing: 6,
@@ -1497,6 +1774,9 @@ void main() {
       expect(resolvedErrorStyle?.color, errorStyle.color);
       expect(resolvedErrorStyle?.fontSize, token.fontBodySmall?.size);
       expect(resolvedErrorStyle?.height, token.fontBodySmall?.height);
+      final labelStyle = tester.widget<Text>(find.text('Name')).style;
+      expect(labelStyle?.fontSize, token.fontBodyMedium?.size);
+      expect(labelStyle?.height, token.fontBodyMedium?.height);
       final container = tester.widget<Container>(find.byType(Container).first);
       expect(container.color, Colors.yellow);
       expect(find.byType(Column), findsWidgets);
@@ -1542,7 +1822,7 @@ void main() {
         expect(helpStyle?.fontSize, token.fontBodySmall?.size);
         expect(helpStyle?.height, token.fontBodySmall?.height);
         expect(helpStyle?.fontStyle, FontStyle.italic);
-        expect(errorStyle?.color, token.errorNormalColor);
+        expect(errorStyle?.color, token.errorColor);
         expect(errorStyle?.fontSize, token.fontBodySmall?.size);
         expect(errorStyle?.height, token.fontBodySmall?.height);
         expect(errorStyle?.fontWeight, FontWeight.bold);
@@ -1577,8 +1857,81 @@ void main() {
       );
       expect(
         tester.widget<Text>(find.text('Error')).style?.color,
-        token.errorNormalColor,
+        token.errorColor,
       );
+    });
+
+    testWidgets('Material label typography does not override token defaults', (
+      tester,
+    ) async {
+      const materialLabel = TextStyle(
+        color: Colors.deepPurple,
+        fontSize: 19,
+        fontWeight: FontWeight.w600,
+      );
+      await tester.pumpWidget(
+        MaterialApp(
+          theme: TThemeBuilder.light(
+            TThemeData.defaultData(),
+          ).copyWith(textTheme: const TextTheme(bodyMedium: materialLabel)),
+          home: const Scaffold(
+            body: TFormItem(label: 'Material label', child: Text('Field')),
+          ),
+        ),
+      );
+
+      final style = tester.widget<Text>(find.text('Material label')).style;
+      expect(style?.color, TThemeData.defaultData().textColorPrimary);
+      expect(style?.fontSize, TThemeData.defaultData().fontBodyLarge?.size);
+      expect(
+        style?.fontWeight,
+        TThemeData.defaultData().fontBodyLarge?.fontWeight,
+      );
+    });
+
+    testWidgets('font fallback does not override default label geometry', (
+      tester,
+    ) async {
+      final token = TThemeData.defaultData();
+      final theme = TThemeBuilder.light(token);
+      await tester.pumpWidget(
+        MaterialApp(
+          theme: theme.copyWith(
+            textTheme: theme.textTheme.apply(
+              fontFamilyFallback: ['TDesign Test Fallback'],
+            ),
+          ),
+          home: const Scaffold(
+            body: TFormItem(label: 'Default label', child: Text('Field')),
+          ),
+        ),
+      );
+
+      final style = tester.widget<Text>(find.text('Default label')).style;
+      expect(style?.fontSize, token.fontBodyLarge?.size);
+      expect(style?.height, token.fontBodyLarge?.height);
+      expect(style?.fontWeight, token.fontBodyLarge?.fontWeight);
+      expect(
+        style?.fontFamilyFallback,
+        token.fontFamily?.flutterFontFamilyFallback,
+      );
+    });
+
+    testWidgets('required mark theme merges with the semantic error color', (
+      tester,
+    ) async {
+      await tester.pumpWidget(
+        wrap(
+          const TFormItem(label: 'Name', required: true, child: Text('Field')),
+          formTheme: const TFormThemeData(
+            requiredMarkStyle: TextStyle(fontWeight: FontWeight.bold),
+          ),
+        ),
+      );
+
+      final style = tester.widget<Text>(find.text('*')).style;
+      expect(style?.color, TThemeData.defaultData().errorColor);
+      expect(style?.fontWeight, FontWeight.bold);
     });
 
     testWidgets('long labels and message rows align to the top', (
@@ -1704,17 +2057,17 @@ void main() {
       final fieldRect = tester.getRect(find.byKey(fieldKey));
       final extraRect = tester.getRect(find.byKey(extraKey));
       expect(extraRect.left, fieldRect.right);
-      expect(extraRect.center.dy, closeTo(fieldRect.center.dy - 16, 0.01));
+      expect(extraRect.center.dy, closeTo(fieldRect.center.dy - 15, 0.01));
       expect(extraRect.right, 384);
     });
 
-    testWidgets('horizontal vertical alignment supports theme and override', (
+    testWidgets('horizontal vertical alignment is selected per item', (
       tester,
     ) async {
       const fieldKey = Key('aligned-field');
       const extraKey = Key('aligned-extra');
 
-      Future<void> pump({TFormItemVerticalAlignment? alignment}) =>
+      Future<void> pump(TFormItemVerticalAlignment alignment) =>
           tester.pumpWidget(
             wrap(
               TFormItem(
@@ -1729,13 +2082,10 @@ void main() {
                   child: const Text('Action'),
                 ),
               ),
-              formTheme: const TFormThemeData(
-                verticalAlignment: TFormItemVerticalAlignment.center,
-              ),
             ),
           );
 
-      await pump();
+      await pump(TFormItemVerticalAlignment.center);
       var fieldRect = tester.getRect(find.byKey(fieldKey));
       var extraRect = tester.getRect(find.byKey(extraKey));
       var helpRect = tester.getRect(find.text('Help'));
@@ -1745,7 +2095,7 @@ void main() {
         closeTo((fieldRect.top + helpRect.bottom) / 2, 0.01),
       );
 
-      await pump(alignment: TFormItemVerticalAlignment.start);
+      await pump(TFormItemVerticalAlignment.start);
       fieldRect = tester.getRect(find.byKey(fieldKey));
       extraRect = tester.getRect(find.byKey(extraKey));
       expect(extraRect.top, closeTo(fieldRect.top, 0.01));
@@ -1763,9 +2113,6 @@ void main() {
             contentAlignment: TFormItemContentAlignment.end,
             child: SizedBox(key: fieldKey, width: 40, height: 24),
           ),
-          formTheme: const TFormThemeData(
-            contentAlignment: TFormItemContentAlignment.start,
-          ),
         ),
       );
 
@@ -1780,14 +2127,67 @@ void main() {
           const TFormItem(
             label: 'Label',
             help: 'Help',
-            child: SizedBox(key: fieldKey, width: 40, height: 24),
-          ),
-          formTheme: const TFormThemeData(
             contentAlignment: TFormItemContentAlignment.end,
+            child: SizedBox(key: fieldKey, width: 40, height: 24),
           ),
         ),
       );
       expect(tester.getRect(find.byKey(fieldKey)).right, 384);
+    });
+
+    testWidgets('physical and directional label alignments differ in RTL', (
+      tester,
+    ) async {
+      const leftKey = Key('left-label-item');
+      const rightKey = Key('right-label-item');
+      const startKey = Key('start-label-item');
+      await tester.pumpWidget(
+        wrap(
+          Directionality(
+            textDirection: TextDirection.rtl,
+            child: Builder(
+              builder: (context) => Column(
+                children: [
+                  for (final (itemKey, alignment) in [
+                    (leftKey, TextAlign.left),
+                    (rightKey, TextAlign.right),
+                    (startKey, TextAlign.start),
+                  ])
+                    Theme(
+                      data: Theme.of(
+                        context,
+                      ).mergeExtension(TFormThemeData(labelAlign: alignment)),
+                      child: TFormItem(
+                        key: itemKey,
+                        label: '标签',
+                        child: const SizedBox(),
+                      ),
+                    ),
+                ],
+              ),
+            ),
+          ),
+        ),
+      );
+
+      Rect labelRect(Key itemKey) {
+        final paragraph = tester.renderObject<RenderParagraph>(
+          find.descendant(of: find.byKey(itemKey), matching: find.text('标签')),
+        );
+        final glyphs = paragraph
+            .getBoxesForSelection(
+              const TextSelection(baseOffset: 0, extentOffset: 2),
+            )
+            .map((box) => box.toRect())
+            .reduce((bounds, box) => bounds.expandToInclude(box));
+        return glyphs.shift(paragraph.localToGlobal(Offset.zero));
+      }
+
+      final left = labelRect(leftKey);
+      final right = labelRect(rightKey);
+      final start = labelRect(startKey);
+      expect(left.left, lessThan(right.left));
+      expect(start.left, closeTo(right.left, 0.01));
     });
 
     testWidgets('label and messages are optional', (tester) async {
@@ -1814,8 +2214,6 @@ void main() {
       labelGap: 6,
       leadingGap: 8,
       messageGap: 2,
-      verticalAlignment: TFormItemVerticalAlignment.start,
-      contentAlignment: TFormItemContentAlignment.start,
     );
     const other = TFormThemeData(
       showColon: false,
@@ -1833,8 +2231,6 @@ void main() {
       labelGap: 10,
       leadingGap: 12,
       messageGap: 6,
-      verticalAlignment: TFormItemVerticalAlignment.center,
-      contentAlignment: TFormItemContentAlignment.end,
     );
 
     expect(base.copyWith().labelWidth, 80);
@@ -1856,8 +2252,6 @@ void main() {
             labelGap: 8,
             leadingGap: 10,
             messageGap: 4,
-            verticalAlignment: TFormItemVerticalAlignment.center,
-            contentAlignment: TFormItemContentAlignment.end,
           )
           .layout,
       TFormLayout.vertical,
@@ -1876,13 +2270,47 @@ void main() {
     expect(base.lerp(other, 0.5).labelWidth, 100);
     expect(base.lerp(other, 0.5).itemSpacing, 6);
     expect(base.lerp(other, 0.5).leadingGap, 10);
-    expect(
-      base.lerp(other, 0.75).verticalAlignment,
-      TFormItemVerticalAlignment.center,
+
+    const defaults = TFormThemeData();
+    const customized = TFormThemeData(
+      labelWidth: 120,
+      itemPadding: EdgeInsets.all(24),
+      itemSpacing: 8,
+      labelGap: 16,
+      backgroundColor: Colors.black,
     );
-    expect(
-      base.lerp(other, 0.75).contentAlignment,
-      TFormItemContentAlignment.end,
+    final fromDefaults = defaults.lerp(customized, 0.25);
+    expect(fromDefaults.labelWidth, 90);
+    expect(fromDefaults.itemPadding, const EdgeInsets.all(18));
+    expect(fromDefaults.itemSpacing, 2);
+    expect(fromDefaults.labelGap, 10);
+    expect(fromDefaults.backgroundColor, isNull);
+    expect(defaults.lerp(defaults, 0.5).labelWidth, isNull);
+  });
+
+  testWidgets('default horizontal item height does not depend on extra', (
+    tester,
+  ) async {
+    const plainKey = Key('plain-form-item');
+    const extraKey = Key('extra-form-item');
+    await tester.pumpWidget(
+      wrap(
+        const Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            TFormItem(key: plainKey, label: '标签', child: SizedBox(height: 24)),
+            TFormItem(
+              key: extraKey,
+              label: '标签',
+              extra: SizedBox(width: 24, height: 28),
+              child: SizedBox(height: 24),
+            ),
+          ],
+        ),
+      ),
     );
+
+    expect(tester.getSize(find.byKey(plainKey)).height, 56);
+    expect(tester.getSize(find.byKey(extraKey)).height, 56);
   });
 }

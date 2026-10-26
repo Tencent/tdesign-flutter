@@ -6,15 +6,17 @@ import 'package:flutter/material.dart';
 
 import '../../theme/t_colors.dart';
 import '../../theme/t_fonts.dart';
+import '../../theme/t_internal_material.dart';
 import '../../theme/t_radius.dart';
 import '../../theme/t_spacers.dart';
 import '../../theme/t_theme.dart';
+import '../text/t_text_resolve.dart';
+import '../text/t_text_style_scope.dart';
 import 't_collapse_panel.dart';
 import 't_collapse_theme_data.dart';
 import 't_collapse_types.dart';
 import 't_inset_divider.dart';
 
-/// 折叠面板列表组件，需配合 [TCollapsePanel] 使用
 class TCollapse<T extends Object> extends StatefulWidget {
   const TCollapse({
     required this.children,
@@ -22,7 +24,6 @@ class TCollapse<T extends Object> extends StatefulWidget {
     this.mode = TCollapseMode.multiple,
     this.variant,
     this.animationDuration,
-    this.elevation,
     this.onChanged,
     Key? key,
   }) : super(key: key);
@@ -33,14 +34,11 @@ class TCollapse<T extends Object> extends StatefulWidget {
   /// 折叠面板模式
   final TCollapseMode mode;
 
-  /// 折叠面板视觉形态。未设置时从 [TCollapseThemeData.variant] 读取。
+  /// 折叠面板视觉形态；未设置时为 [TCollapseVariant.block]。
   final TCollapseVariant? variant;
 
-  /// 折叠面板列表的动画时长
+  /// 折叠面板展开和收起的动画时长；未设置时使用 Flutter 主题动画默认值。
   final Duration? animationDuration;
-
-  /// 折叠面板列表的阴影
-  final double? elevation;
 
   /// 当前展开面板的值列表，是所有模式唯一的展开状态源。
   ///
@@ -66,9 +64,7 @@ class _TCollapseState<T extends Object> extends State<TCollapse<T>> {
   bool get _isAccordion => widget.mode == TCollapseMode.accordion;
 
   bool _isCardStyle(BuildContext context) {
-    final theme = _theme(context);
-    return (widget.variant ?? theme?.variant ?? TCollapseVariant.block) ==
-        TCollapseVariant.card;
+    return (widget.variant ?? TCollapseVariant.block) == TCollapseVariant.card;
   }
 
   @override
@@ -87,10 +83,8 @@ class _TCollapseState<T extends Object> extends State<TCollapse<T>> {
   Widget build(BuildContext context) {
     final theme = _theme(context);
     final animationDuration =
-        widget.animationDuration ??
-        theme?.animationDuration ??
-        kThemeAnimationDuration;
-    final elevation = widget.elevation ?? theme?.elevation ?? 0;
+        widget.animationDuration ?? kThemeAnimationDuration;
+    final elevation = theme?.elevation ?? 0;
     final panels = <Widget>[];
 
     for (var index = 0; index < widget.children.length; index += 1) {
@@ -128,7 +122,7 @@ class _TCollapseState<T extends Object> extends State<TCollapse<T>> {
       );
 
       panels.add(
-        Material(
+        TInternalMaterial(
           key: panelKey,
           color: bgColor,
           child: Column(
@@ -148,7 +142,7 @@ class _TCollapseState<T extends Object> extends State<TCollapse<T>> {
     final cardBorderRadius =
         theme?.cardBorderRadius ??
         BorderRadius.circular(context.tTheme.radiusLarge);
-    Widget collapse = Material(
+    Widget collapse = TInternalMaterial(
       elevation: elevation,
       color: theme?.backgroundColor ?? context.tTheme.bgColorContainer,
       borderRadius: _isCardStyle(context) ? cardBorderRadius : null,
@@ -160,7 +154,7 @@ class _TCollapseState<T extends Object> extends State<TCollapse<T>> {
       collapse = Padding(
         padding:
             theme?.cardMargin ??
-            EdgeInsets.symmetric(horizontal: context.tTheme.spacer16),
+            EdgeInsets.symmetric(horizontal: context.tTheme.spacer2),
         child: collapse,
       );
     }
@@ -238,7 +232,7 @@ class _TCollapseState<T extends Object> extends State<TCollapse<T>> {
         enabled: isInteractive,
         expanded: isExpanded,
         onTap: hasExplicitSemanticsLabel ? onTap : null,
-        child: InkWell(
+        child: TInternalInkWell(
           borderRadius: borderRadius,
           excludeFromSemantics: hasExplicitSemanticsLabel,
           onTap: onTap,
@@ -273,11 +267,15 @@ class _TCollapseState<T extends Object> extends State<TCollapse<T>> {
     Duration animationDuration,
     TCollapseThemeData? theme,
   ) {
-    Widget content = DefaultTextStyle(
-      style: _contentTextStyle(context, theme),
+    var content = _textSlot(
+      context,
+      style: TTextResolve.resolve(
+        context: context,
+        style: _contentTextStyle(context, theme),
+      ),
       child: Padding(
         padding:
-            theme?.contentPadding ?? EdgeInsets.all(context.tTheme.spacer16),
+            theme?.contentPadding ?? EdgeInsets.all(context.tTheme.spacer2),
         child: child.body,
       ),
     );
@@ -315,17 +313,18 @@ class _TCollapseState<T extends Object> extends State<TCollapse<T>> {
         ? _disabledHeaderTextStyle(context, theme)
         : _headerTextStyle(context, theme);
     final iconColor = isDisabled
-        ? theme?.disabledIconColor ?? context.tTheme.textDisabledColor
+        ? theme?.disabledIconColor ?? context.tTheme.textColorDisabled
         : theme?.iconColor ?? context.tTheme.textColorPlaceholder;
-    return ListTile(
+    return TInternalListTile(
       leading: child.leadingBuilder == null
           ? null
-          : IconTheme(
+          : TInternalIconTheme(
               data: IconThemeData(color: iconColor),
               child: child.leadingBuilder!(context, isExpanded),
             ),
-      title: DefaultTextStyle(
-        style: style,
+      title: _textSlot(
+        context,
+        style: TTextResolve.resolve(context: context, style: style),
         child: child.headerBuilder(context, isExpanded),
       ),
     );
@@ -343,11 +342,15 @@ class _TCollapseState<T extends Object> extends State<TCollapse<T>> {
     }
     final theme = _theme(context);
     final color = isDisabled
-        ? theme?.disabledIconColor ?? context.tTheme.textDisabledColor
+        ? theme?.disabledIconColor ?? context.tTheme.textColorDisabled
         : theme?.iconColor ?? context.tTheme.textColorPlaceholder;
-    return DefaultTextStyle(
-      style: _contentTextStyle(context, theme).copyWith(color: color),
-      child: IconTheme(
+    return _textSlot(
+      context,
+      style: TTextResolve.resolve(
+        context: context,
+        style: _contentTextStyle(context, theme).copyWith(color: color),
+      ),
+      child: TInternalIconTheme(
         data: IconThemeData(color: color),
         child: builder(context, isExpanded),
       ),
@@ -366,21 +369,21 @@ class _TCollapseState<T extends Object> extends State<TCollapse<T>> {
       if (!hasTrailing) {
         return null;
       }
-      return SizedBox(width: context.tTheme.spacer16);
+      return SizedBox(width: context.tTheme.spacer2);
     }
     final theme = _theme(context);
     final iconColor = isDisabled
-        ? theme?.disabledIconColor ?? context.tTheme.textDisabledColor
+        ? theme?.disabledIconColor ?? context.tTheme.textColorDisabled
         : theme?.iconColor ?? context.tTheme.textColorPlaceholder;
     return Padding(
       padding: hasTrailing
           ? EdgeInsetsDirectional.only(
-              end: context.tTheme.spacer16,
-              top: context.tTheme.spacer16,
-              bottom: context.tTheme.spacer16,
+              end: context.tTheme.spacer2,
+              top: context.tTheme.spacer2,
+              bottom: context.tTheme.spacer2,
             )
-          : EdgeInsets.all(context.tTheme.spacer16),
-      child: IconTheme(
+          : EdgeInsets.all(context.tTheme.spacer2),
+      child: TInternalIconTheme(
         data: IconThemeData(color: iconColor, size: 24),
         child: builder(context, isExpanded),
       ),
@@ -395,10 +398,9 @@ class _TCollapseState<T extends Object> extends State<TCollapse<T>> {
       height: font?.height ?? 1.5,
       fontWeight: font?.fontWeight ?? FontWeight.w400,
     );
-    final materialStyle =
-        ListTileTheme.of(context).titleTextStyle ??
-        Theme.of(context).tExplicitTextTheme?.titleMedium;
-    return tokenStyle.merge(materialStyle).merge(theme?.headerTextStyle);
+    return tokenStyle
+        .copyWith(fontWeight: FontWeight.w400)
+        .merge(theme?.headerTextStyle);
   }
 
   TextStyle _disabledHeaderTextStyle(
@@ -406,7 +408,7 @@ class _TCollapseState<T extends Object> extends State<TCollapse<T>> {
     TCollapseThemeData? theme,
   ) {
     return _headerTextStyle(context, theme)
-        .copyWith(color: context.tTheme.textDisabledColor)
+        .copyWith(color: context.tTheme.textColorDisabled)
         .merge(theme?.disabledHeaderTextStyle);
   }
 
@@ -418,16 +420,11 @@ class _TCollapseState<T extends Object> extends State<TCollapse<T>> {
       height: font?.height ?? 1.5,
       fontWeight: font?.fontWeight ?? FontWeight.w400,
     );
-    return tokenStyle
-        .merge(Theme.of(context).tExplicitTextTheme?.bodyMedium)
-        .merge(context.tExplicitDefaultTextStyle)
-        .merge(theme?.contentTextStyle);
+    return tokenStyle.merge(theme?.contentTextStyle);
   }
 
   Color _dividerColor(BuildContext context, TCollapseThemeData? theme) {
-    return theme?.dividerColor ??
-        DividerTheme.of(context).color ??
-        context.tTheme.componentStrokeColor;
+    return theme?.dividerColor ?? context.tTheme.componentStroke;
   }
 
   void _debugAssertValidContract() {
@@ -449,6 +446,18 @@ class _TCollapseState<T extends Object> extends State<TCollapse<T>> {
     assert(
       !_isAccordion || widget.value.length <= 1,
       'TCollapseMode.accordion allows at most one expanded value.',
+    );
+  }
+
+  Widget _textSlot(
+    BuildContext context, {
+    required TextStyle style,
+    required Widget child,
+  }) {
+    return TTextStyleScope(
+      style: style,
+      // Native text keeps the component's existing paragraph reset boundary.
+      child: DefaultTextStyle(style: style, child: child),
     );
   }
 }

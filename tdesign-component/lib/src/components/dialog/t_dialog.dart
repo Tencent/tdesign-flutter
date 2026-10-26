@@ -3,15 +3,19 @@ import 'dart:math' as math;
 import 'package:flutter/material.dart';
 import 'package:tdesign_flutter_icons/tdesign_flutter_icons.dart';
 
-import '../../theme/basic.dart';
 import '../../theme/t_colors.dart';
+import '../../theme/t_font_family.dart';
 import '../../theme/t_fonts.dart';
+import '../../theme/t_internal_material.dart';
+import '../../theme/t_overlay_themes.dart';
 import '../../theme/t_radius.dart';
 import '../../theme/t_spacers.dart';
 import '../../theme/t_theme.dart';
 import '../../util/context_extension.dart';
 import '../button/t_button.dart';
 import '../button/t_button_types.dart';
+import '../text/t_text_resolve.dart';
+import '../text/t_text_style_scope.dart';
 import 't_dialog_theme_data.dart';
 
 export 't_confirm_dialog.dart';
@@ -29,6 +33,25 @@ enum TDialogActionRole {
 }
 
 /// Dialog 操作项。
+///
+/// [role] 表达操作语义，并决定未显式覆盖时的默认配色；[variant] 表达按钮的
+/// 视觉形态。普通、主要和危险操作默认分别渲染为浅色、品牌色和危险色填充按钮。
+/// [colorPreset] 和 [style] 用于确有需要时覆盖单个操作的默认样式。
+///
+/// 一到两个操作全部显式使用 [TButtonVariant.text] 时，[TDialog] 会使用带分隔线的
+/// 贴边文字按钮 Footer；只改变某一个操作的变体不会切换整个 Footer 布局。
+///
+/// ```dart
+/// const TDialog(
+///   actions: [
+///     TDialogAction(child: Text('取消')),
+///     TDialogAction(
+///       child: Text('确定'),
+///       role: TDialogActionRole.primary,
+///     ),
+///   ],
+/// );
+/// ```
 class TDialogAction {
   const TDialogAction({
     required this.child,
@@ -38,7 +61,7 @@ class TDialogAction {
     this.closeOnPressed = true,
     this.disabled = false,
     this.variant,
-    this.colorScheme,
+    this.colorPreset,
     this.style,
   });
 
@@ -53,8 +76,10 @@ class TDialogAction {
 
   /// 操作语义角色，默认为 [TDialogActionRole.normal]。
   ///
-  /// 未指定变体时使用填充按钮：普通操作采用浅色配色，主要操作采用品牌配色，
-  /// 危险操作采用危险配色。显式变体、配色和样式优先于角色默认值。
+  /// 未指定 [variant] 时使用填充按钮：普通操作采用 [TButtonColorPreset.light]，
+  /// 主要操作采用 [TButtonColorPreset.primary]，危险操作采用
+  /// [TButtonColorPreset.danger]。显式设置的 [variant]、[colorPreset] 和 [style]
+  /// 优先于角色提供的默认值。
   final TDialogActionRole role;
 
   /// 点击后是否自动关闭。
@@ -64,23 +89,23 @@ class TDialogAction {
   final bool disabled;
 
   /// 显式按钮变体；未指定时使用 [TButtonVariant.fill]。
+  ///
+  /// 当 [TDialog.actions] 中有一到两个操作，且所有操作都显式使用
+  /// [TButtonVariant.text] 时，Dialog 自动切换为带分隔线的贴边文字按钮 Footer。
+  /// 混合使用不同变体时仍采用普通操作区布局，每个按钮保留各自的变体。
   final TButtonVariant? variant;
 
   /// 显式按钮配色；未指定时由角色和最终变体解析。
   ///
-  /// 普通操作的填充变体使用 [TButtonColorScheme.light]，其他变体使用
-  /// [TButtonColorScheme.defaultTheme]；主要和危险操作分别使用
-  /// [TButtonColorScheme.primary]、[TButtonColorScheme.danger]。
-  final TButtonColorScheme? colorScheme;
+  /// 普通操作的填充变体使用 [TButtonColorPreset.light]，其他变体使用
+  /// [TButtonColorPreset.defaultTheme]；主要和危险操作分别使用
+  /// [TButtonColorPreset.primary]、[TButtonColorPreset.danger]。
+  final TButtonColorPreset? colorPreset;
 
-  /// 显式按钮样式。
+  /// 显式按钮样式；用于覆盖单个操作，未设置时使用 Dialog Theme 和角色默认样式。
   final ButtonStyle? style;
 }
 
-/// 通用居中模态对话框。
-///
-/// 组件负责面板内容和操作区；使用 [show] 时，通过 Flutter 模态路由处理
-/// 蒙层、动画和安全区。
 class TDialog extends StatelessWidget {
   const TDialog({
     super.key,
@@ -91,14 +116,11 @@ class TDialog extends StatelessWidget {
     this.showCloseButton = false,
     this.closeButtonResult,
     this.semanticLabel,
-    this.backgroundColor,
-    this.shape,
-    this.elevation,
-    this.width,
-    this.maxHeight,
-    this.contentPadding,
 
     /// 操作区内边距。未设置时使用主题 token 默认值。
+    ///
+    /// 一到两个操作全部显式使用 [TButtonVariant.text] 时，默认仅保留 32dp
+    /// 顶部间距，使文字按钮 Footer 横向贴边；显式设置后使用传入的内边距。
     EdgeInsetsGeometry? actionsPadding,
 
     /// 操作之间的间距。未设置时使用主题 token 默认值。
@@ -110,19 +132,25 @@ class TDialog extends StatelessWidget {
          'actions and actionsWidget cannot be used together.',
        );
 
-  /// 标题槽位。
+  /// 标题槽位；[title] 与 [content] 至少提供一个。
   final Widget? title;
 
-  /// 内容槽位。
+  /// 内容槽位；[title] 与 [content] 至少提供一个。
   final Widget? content;
 
-  /// 操作列表；1～2 个横向排列，更多操作纵向排列。
+  /// 操作列表；一到两个操作横向排列，更多操作纵向排列。
+  ///
+  /// 一到两个操作全部显式使用 [TButtonVariant.text] 时，操作区使用带分隔线的
+  /// 贴边文字按钮 Footer，最小高度为 56，文字换行或缩放时随内容增高；
+  /// 其他情况使用带内边距的普通操作区。
   ///
   /// 纵向排列时，[TDialogAction.role] 为 [TDialogActionRole.primary] 或
   /// [TDialogActionRole.destructive] 的强调操作优先展示，同类操作保持声明顺序。
   final List<TDialogAction> actions;
 
   /// 完全自定义操作区。
+  ///
+  /// 使用后 [actions] 必须为空；仅在标准操作列表无法表达布局时使用。
   final Widget? actionsWidget;
 
   /// 是否显示右上角关闭按钮。
@@ -137,24 +165,6 @@ class TDialog extends StatelessWidget {
 
   /// 无障碍语义标签。
   final String? semanticLabel;
-
-  /// 面板背景色。
-  final Color? backgroundColor;
-
-  /// 面板形状。
-  final ShapeBorder? shape;
-
-  /// 面板阴影高度。
-  final double? elevation;
-
-  /// 面板宽度。
-  final double? width;
-
-  /// 面板最大高度。
-  final double? maxHeight;
-
-  /// 标题和内容区域内边距。
-  final EdgeInsetsGeometry? contentPadding;
 
   /// 操作区内边距；未设置（`null`）时使用当前主题 token。
   ///
@@ -172,21 +182,34 @@ class TDialog extends StatelessWidget {
   /// 操作按钮与内置关闭按钮分别返回各自配置的结果。
   /// 蒙层与内置关闭按钮通过 Navigator.maybePop 关闭，遵守 PopScope。
   /// 系统返回及未携带结果的 Navigator.pop 仍返回 null，不使用 [barrierResult]。
+  ///
+  /// ## 返回值
+  /// 路由被弹出时完成并提供关闭结果；未携带结果时为 null，不等待关闭动画结束。
   static Future<T?> show<T>(
+    /// 当前构建上下文，用于读取祖先配置。
     BuildContext context, {
+
+    /// 要放入模态路由的弹窗内容。
     required Widget dialog,
     bool barrierDismissible = false,
+
+    /// 开启蒙层关闭后，由蒙层成功关闭路由时返回的结果；默认 null。
     T? barrierResult,
+
+    /// 蒙层颜色；为空时使用 Colors.black54。
     Color? barrierColor,
+
+    /// 是否将弹窗推入根 Navigator，默认 true。
     bool useRootNavigator = true,
+
+    /// 是否使用 SafeArea 避让系统区域，默认 true。
     bool useSafeArea = true,
   }) {
     final navigator = Navigator.of(context, rootNavigator: useRootNavigator);
-    final capturedThemes = InheritedTheme.capture(
+    final capturedThemes = TOverlayThemes.capture(
       from: context,
       to: navigator.context,
     );
-    final materialBarrierColor = Theme.of(context).dialogTheme.barrierColor;
     return navigator.push<T>(
       _DialogRoute<T>(
         barrierDismissible: barrierDismissible,
@@ -194,12 +217,12 @@ class TDialog extends StatelessWidget {
         barrierLabel: MaterialLocalizations.of(
           context,
         ).modalBarrierDismissLabel,
-        barrierColor: barrierColor ?? materialBarrierColor ?? Colors.black54,
+        barrierColor: barrierColor ?? Colors.black54,
         transitionDuration: const Duration(milliseconds: 240),
         pageBuilder: (routeContext, animation, secondaryAnimation) {
           final centered = Center(child: dialog);
           final content = useSafeArea ? SafeArea(child: centered) : centered;
-          return capturedThemes.wrap(content);
+          return capturedThemes.wrap(routeContext, content);
         },
         transitionBuilder:
             (routeContext, animation, secondaryAnimation, child) {
@@ -217,45 +240,36 @@ class TDialog extends StatelessWidget {
     assert(title != null || content != null);
     final theme = Theme.of(context);
     final extension = theme.extension<TDialogThemeData>();
-    final material = theme.dialogTheme;
     final token = context.tTheme;
     final effectiveBackground =
-        backgroundColor ??
-        extension?.backgroundColor ??
-        material.backgroundColor ??
-        token.bgColorContainer;
+        extension?.backgroundColor ?? token.bgColorContainer;
     final effectiveShape =
-        shape ??
         extension?.shape ??
-        material.shape ??
         RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(token.radiusExtraLarge),
         );
-    final effectiveElevation =
-        elevation ?? extension?.elevation ?? material.elevation ?? 0;
-    final effectiveWidth = width ?? extension?.width ?? 311;
+    final effectiveElevation = extension?.elevation ?? 0;
+    final effectiveWidth = extension?.width ?? 311;
     final viewportHeight = MediaQuery.sizeOf(context).height;
     final effectiveMaxHeight = math.max(
       0.0,
       math.min(
-        maxHeight ?? extension?.maxHeight ?? viewportHeight * 0.8,
-        viewportHeight - token.spacer32,
+        extension?.maxHeight ?? viewportHeight * 0.8,
+        viewportHeight - token.spacer4,
       ),
     );
     final dialogWidth = math.max(
       0.0,
       math.min(
         effectiveWidth,
-        MediaQuery.sizeOf(context).width - token.spacer32,
+        MediaQuery.sizeOf(context).width - token.spacer4,
       ),
     );
     final effectiveContentPadding =
-        contentPadding ??
         extension?.contentPadding ??
-        EdgeInsets.fromLTRB(token.spacer24, token.spacer24, token.spacer24, 0);
+        EdgeInsets.fromLTRB(token.spacer3, token.spacer3, token.spacer3, 0);
     final resolvedTitleStyle =
         extension?.titleTextStyle ??
-        material.titleTextStyle ??
         TextStyle(
           color: token.textColorPrimary,
           fontSize: token.fontTitleLarge?.size ?? 18,
@@ -264,27 +278,26 @@ class TDialog extends StatelessWidget {
         );
     final resolvedContentStyle =
         extension?.contentTextStyle ??
-        material.contentTextStyle ??
         TextStyle(
           color: token.textColorSecondary,
           fontSize: token.fontBodyLarge?.size ?? 16,
           height: token.fontBodyLarge?.height ?? 24 / 16,
           fontWeight: token.fontBodyLarge?.fontWeight ?? FontWeight.w400,
         );
-    final inheritedTextStyle = theme.textTheme.bodyMedium;
+    final tokenFontFamily = token.fontFamily;
     final titleStyle = resolvedTitleStyle.copyWith(
       fontFamily:
-          resolvedTitleStyle.fontFamily ?? inheritedTextStyle?.fontFamily,
+          resolvedTitleStyle.fontFamily ?? tokenFontFamily?.flutterFontFamily,
       fontFamilyFallback:
           resolvedTitleStyle.fontFamilyFallback ??
-          inheritedTextStyle?.fontFamilyFallback,
+          tokenFontFamily?.flutterFontFamilyFallback,
     );
     final contentStyle = resolvedContentStyle.copyWith(
       fontFamily:
-          resolvedContentStyle.fontFamily ?? inheritedTextStyle?.fontFamily,
+          resolvedContentStyle.fontFamily ?? tokenFontFamily?.flutterFontFamily,
       fontFamilyFallback:
           resolvedContentStyle.fontFamilyFallback ??
-          inheritedTextStyle?.fontFamilyFallback,
+          tokenFontFamily?.flutterFontFamilyFallback,
     );
     final useTextActionLayout =
         actions.length <= 2 &&
@@ -293,16 +306,17 @@ class TDialog extends StatelessWidget {
     final effectiveActionsPadding =
         actionsPadding ??
         (useTextActionLayout
-            ? EdgeInsets.only(top: token.spacer32)
-            : EdgeInsets.all(token.spacer24));
-    final effectiveActionSpacing = actionSpacing ?? token.spacer12;
+            ? EdgeInsets.only(top: token.spacer4)
+            : EdgeInsets.all(token.spacer3));
+    final effectiveActionSpacing = actionSpacing ?? token.spacer1;
+    final closeButtonExtent = 24 + token.spacer + token.spacer2;
 
     return Semantics(
       namesRoute: true,
       scopesRoute: true,
       label: semanticLabel,
       explicitChildNodes: true,
-      child: Material(
+      child: TInternalMaterial(
         color: effectiveBackground,
         shape: effectiveShape,
         elevation: effectiveElevation,
@@ -319,28 +333,14 @@ class TDialog extends StatelessWidget {
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   Flexible(
-                    child: SingleChildScrollView(
+                    child: _DialogScrollableContent(
                       padding: effectiveContentPadding,
-                      child: Column(
-                        mainAxisSize: MainAxisSize.min,
-                        crossAxisAlignment: CrossAxisAlignment.stretch,
-                        children: [
-                          if (title != null)
-                            DefaultTextStyle(
-                              style: titleStyle,
-                              textAlign: TextAlign.center,
-                              child: title!,
-                            ),
-                          if (title != null && content != null)
-                            SizedBox(height: token.spacer8),
-                          if (content != null)
-                            DefaultTextStyle(
-                              style: contentStyle,
-                              textAlign: TextAlign.center,
-                              child: content!,
-                            ),
-                        ],
-                      ),
+                      scrollbarColor: token.grayColor4.withValues(alpha: 0.5),
+                      title: title,
+                      titleStyle: titleStyle,
+                      content: content,
+                      contentStyle: contentStyle,
+                      titleContentSpacing: token.spacer,
                     ),
                   ),
                   if (actionsWidget != null)
@@ -352,24 +352,173 @@ class TDialog extends StatelessWidget {
                         actions: actions,
                         spacing: effectiveActionSpacing,
                         textLayout: useTextActionLayout,
-                        defaultStyle: extension?.actionButtonStyle,
                       ),
                     ),
                 ],
               ),
               if (showCloseButton)
                 PositionedDirectional(
-                  top: token.spacer8,
-                  end: token.spacer8,
-                  child: IconButton(
+                  top: 0,
+                  end: 0,
+                  child: TInternalIconButton(
                     tooltip: context.resource.close,
-                    icon: Icon(TIcons.close, color: token.textColorPlaceholder),
+                    padding: EdgeInsetsDirectional.fromSTEB(
+                      token.spacer2,
+                      token.spacer,
+                      token.spacer,
+                      token.spacer2,
+                    ),
+                    constraints: BoxConstraints.tightFor(
+                      width: closeButtonExtent,
+                      height: closeButtonExtent,
+                    ),
+                    style: ButtonStyle(
+                      fixedSize: WidgetStatePropertyAll(
+                        Size.square(closeButtonExtent),
+                      ),
+                      minimumSize: WidgetStatePropertyAll(
+                        Size.square(closeButtonExtent),
+                      ),
+                      maximumSize: WidgetStatePropertyAll(
+                        Size.square(closeButtonExtent),
+                      ),
+                      tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                    ),
+                    icon: TInternalIcon(
+                      TIcons.close,
+                      color: token.textColorPlaceholder,
+                    ),
                     onPressed: () =>
                         Navigator.maybePop(context, closeButtonResult),
                   ),
                 ),
             ],
           ),
+        ),
+      ),
+    );
+  }
+}
+
+class _DialogScrollableContent extends StatefulWidget {
+  const _DialogScrollableContent({
+    required this.padding,
+    required this.scrollbarColor,
+    required this.title,
+    required this.titleStyle,
+    required this.content,
+    required this.contentStyle,
+    required this.titleContentSpacing,
+  });
+
+  final EdgeInsetsGeometry padding;
+  final Color scrollbarColor;
+  final Widget? title;
+  final TextStyle titleStyle;
+  final Widget? content;
+  final TextStyle contentStyle;
+  final double titleContentSpacing;
+
+  @override
+  State<_DialogScrollableContent> createState() =>
+      _DialogScrollableContentState();
+}
+
+class _DialogScrollableContentState extends State<_DialogScrollableContent> {
+  final ScrollController _scrollController = ScrollController();
+
+  @override
+  void dispose() {
+    _scrollController.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final padding = widget.padding.resolve(Directionality.of(context));
+    if (widget.title != null && widget.content != null) {
+      return Column(
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          Padding(
+            padding: EdgeInsets.fromLTRB(
+              padding.left,
+              padding.top,
+              padding.right,
+              0,
+            ),
+            child: _textSlot(
+              context,
+              style: widget.titleStyle,
+              child: widget.title!,
+            ),
+          ),
+          SizedBox(height: widget.titleContentSpacing),
+          Flexible(
+            child: _buildScrollView(
+              padding: EdgeInsets.fromLTRB(
+                padding.left,
+                0,
+                padding.right,
+                padding.bottom,
+              ),
+              child: _textSlot(
+                context,
+                style: widget.contentStyle,
+                child: widget.content!,
+              ),
+            ),
+          ),
+        ],
+      );
+    }
+    return _buildScrollView(
+      padding: padding,
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          if (widget.title != null)
+            _textSlot(context, style: widget.titleStyle, child: widget.title!),
+          if (widget.content != null)
+            _textSlot(
+              context,
+              style: widget.contentStyle,
+              child: widget.content!,
+            ),
+        ],
+      ),
+    );
+  }
+
+  // Both TD and native text consume the slot style; explicit child styles win.
+  Widget _textSlot(
+    BuildContext context, {
+    required TextStyle style,
+    required Widget child,
+  }) => DefaultTextStyle(
+    style: TTextResolve.resolve(context: context, style: style),
+    textAlign: TextAlign.center,
+    child: TTextStyleScope(style: style, child: child),
+  );
+
+  Widget _buildScrollView({
+    required EdgeInsetsGeometry padding,
+    required Widget child,
+  }) {
+    return RawScrollbar(
+      controller: _scrollController,
+      thumbVisibility: true,
+      thickness: 4,
+      radius: const Radius.circular(2),
+      crossAxisMargin: 16,
+      thumbColor: widget.scrollbarColor,
+      child: TInternalScrollScope(
+        child: SingleChildScrollView(
+          controller: _scrollController,
+          padding: padding,
+          child: child,
         ),
       ),
     );
@@ -427,13 +576,11 @@ class _DialogActions extends StatelessWidget {
     required this.actions,
     required this.spacing,
     required this.textLayout,
-    this.defaultStyle,
   });
 
   final List<TDialogAction> actions;
   final double spacing;
   final bool textLayout;
-  final ButtonStyle? defaultStyle;
 
   @override
   Widget build(BuildContext context) {
@@ -452,11 +599,11 @@ class _DialogActions extends StatelessWidget {
         : actions;
     final buttons = orderedActions
         .map((action) {
-          final (variant, colorScheme) = _resolveStyle(action);
+          final (variant, colorPreset) = _resolveStyle(action);
           return TButton(
             variant: action.variant ?? variant,
-            colorScheme: action.colorScheme ?? colorScheme,
-            style: action.style ?? defaultStyle,
+            colorPreset: action.colorPreset ?? colorPreset,
+            style: action.style,
             onPressed: action.disabled
                 ? null
                 : () {
@@ -475,27 +622,37 @@ class _DialogActions extends StatelessWidget {
 
     if (textLayout && buttons.length <= 2) {
       final divider = BorderSide(
-        color: context.tTheme.componentBorderColor,
+        color: context.tTheme.componentBorder,
         width: 0.5,
       );
       return DecoratedBox(
         decoration: BoxDecoration(border: Border(top: divider)),
-        child: SizedBox(
-          height: 56,
-          child: Row(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              for (var index = 0; index < buttons.length; index++) ...[
-                if (index > 0)
-                  VerticalDivider(
-                    width: 0.5,
-                    thickness: 0.5,
-                    color: divider.color,
+        // Measure each button at its column width, then stretch to the tallest.
+        // Flex columns also allow custom LayoutBuilder content without intrinsic queries.
+        child: Table(
+          defaultVerticalAlignment: TableCellVerticalAlignment.intrinsicHeight,
+          columnWidths: const {1: FixedColumnWidth(0.5)},
+          children: [
+            TableRow(
+              children: [
+                for (var index = 0; index < buttons.length; index++) ...[
+                  if (index > 0)
+                    TableCell(
+                      verticalAlignment: TableCellVerticalAlignment.fill,
+                      child: TInternalVerticalDivider(
+                        width: 0.5,
+                        thickness: 0.5,
+                        color: divider.color,
+                      ),
+                    ),
+                  ConstrainedBox(
+                    constraints: const BoxConstraints(minHeight: 56),
+                    child: buttons[index],
                   ),
-                Expanded(child: buttons[index]),
+                ],
               ],
-            ],
-          ),
+            ),
+          ],
         ),
       );
     }
@@ -520,21 +677,21 @@ class _DialogActions extends StatelessWidget {
     );
   }
 
-  (TButtonVariant, TButtonColorScheme) _resolveStyle(TDialogAction action) {
+  (TButtonVariant, TButtonColorPreset) _resolveStyle(TDialogAction action) {
     return switch (action.role) {
       TDialogActionRole.normal => (
         TButtonVariant.fill,
         action.variant == null || action.variant == TButtonVariant.fill
-            ? TButtonColorScheme.light
-            : TButtonColorScheme.defaultTheme,
+            ? TButtonColorPreset.light
+            : TButtonColorPreset.defaultTheme,
       ),
       TDialogActionRole.primary => (
         TButtonVariant.fill,
-        TButtonColorScheme.primary,
+        TButtonColorPreset.primary,
       ),
       TDialogActionRole.destructive => (
         TButtonVariant.fill,
-        TButtonColorScheme.danger,
+        TButtonColorPreset.danger,
       ),
     };
   }

@@ -28,6 +28,8 @@ environment:
 # the latest version available on pub.dev. To see which dependencies have newer
 # versions available, run `flutter pub outdated`.
 dependencies:
+  css2token:
+    path: ../../packages/css2token
   flutter:
     sdk: flutter
   flutter_localizations:
@@ -122,4 +124,5 @@ flutter:
     - assets/version
     - assets/img/
     - assets/theme.json
+    - assets/custom_theme.json
     - assets/publish_time

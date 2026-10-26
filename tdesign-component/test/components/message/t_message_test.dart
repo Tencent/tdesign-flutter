@@ -1,8 +1,38 @@
-import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:tdesign_flutter/tdesign_flutter.dart';
 
 void main() {
+  testWidgets('Message releases an unpainted session with its Overlay', (
+    tester,
+  ) async {
+    late BuildContext messageContext;
+    var dismissed = 0;
+    await tester.pumpWidget(
+      MaterialApp(
+        home: Builder(
+          builder: (context) {
+            messageContext = context;
+            return const SizedBox();
+          },
+        ),
+      ),
+    );
+    final handle = TMessage.show(
+      context: messageContext,
+      content: 'pending',
+      duration: null,
+      onDismissed: () => dismissed++,
+    );
+    expect(handle.isShowing, isTrue);
+    await tester.pumpWidget(const SizedBox());
+    expect(handle.isShowing, isFalse);
+    expect(dismissed, 1);
+    handle.dismiss();
+    expect(handle.isShowing, isFalse);
+    expect(dismissed, 1);
+  });
+
+  _marqueeTypographyRegression();
   Widget wrap(
     Widget child, {
     TMessageThemeData? messageTheme,
@@ -67,7 +97,7 @@ void main() {
             duration: null,
             action: TLink(
               child: const Text('详情'),
-              colorScheme: TLinkColorScheme.danger,
+              colorPreset: TLinkColorPreset.danger,
               onPressed: () => pressed = true,
             ),
           ),
@@ -119,14 +149,14 @@ void main() {
       final box = tester.widget<SizedBox>(
         find.byWidgetPredicate(
           (widget) =>
-              widget is SizedBox && widget.height == 48 && widget.width == 320,
+              widget is SizedBox && widget.height == 48 && widget.width == 288,
         ),
       );
-      expect(box.width, 320);
+      expect(box.width, 288);
       final positioned = tester.widget<AnimatedPositioned>(
         find.byType(AnimatedPositioned),
       );
-      expect(positioned.left, 0);
+      expect(positioned.left, 16);
     });
 
     testWidgets('关闭按钮完成关闭生命周期', (tester) async {
@@ -217,8 +247,8 @@ void main() {
       final positioned = tester.widget<AnimatedPositioned>(
         find.byType(AnimatedPositioned),
       );
-      // 默认全宽消息会把 Theme 期望坐标收口到安全可视区域。
-      expect(positioned.left, 0);
+      // 默认消息保留 16px 外间距，Theme 期望坐标收口到安全可视区域。
+      expect(positioned.left, 16);
       expect(positioned.top, 40);
     });
 
@@ -267,15 +297,15 @@ void main() {
       final messageBox = tester.widget<SizedBox>(
         find.byWidgetPredicate(
           (widget) =>
-              widget is SizedBox && widget.height == 48 && widget.width == 321,
+              widget is SizedBox && widget.height == 48 && widget.width == 289,
         ),
       );
-      expect(messageBox.width, 321);
-      expect(positioned.left, 24);
+      expect(messageBox.width, 289);
+      expect(positioned.left, 40);
       expect(positioned.top, 132);
     });
 
-    testWidgets('useSafeArea=false 保留绝对 offset 与原始宽度', (tester) async {
+    testWidgets('useSafeArea=false 保留绝对 offset 并应用默认水平宽度', (tester) async {
       await tester.pumpWidget(
         wrap(
           const TMessage(
@@ -298,7 +328,7 @@ void main() {
       expect(
         find.byWidgetPredicate(
           (widget) =>
-              widget is SizedBox && widget.height == 48 && widget.width == 375,
+              widget is SizedBox && widget.height == 48 && widget.width == 343,
         ),
         findsOneWidget,
       );
@@ -430,9 +460,9 @@ void main() {
       await tester.pump();
 
       final clipWidth = tester.getSize(find.byType(ClipRect)).width;
-      // 375 - 水平内边距 32 - 图标与间距 30 - action 间距与宽度 40
-      // - 关闭按钮间距与宽度 30 = 243。
-      expect(clipWidth, 243);
+      // 375 - 外间距 32 - 水平内边距 32 - 图标与间距 30
+      // - action 间距与宽度 40 - 关闭按钮间距与宽度 30 = 211。
+      expect(clipWidth, 211);
       expect(tester.takeException(), isNull);
       await tester.pumpWidget(wrap(const SizedBox.shrink()));
     });
@@ -915,4 +945,75 @@ void main() {
       expect(find.text('组件调用'), findsNothing);
     });
   });
+}
+
+void _marqueeTypographyRegression() {
+  for (final m3 in [false, true]) {
+    for (final scale in [1.0, 1.5]) {
+      for (final direction in TextDirection.values) {
+        for (final bold in [false, true]) {
+          testWidgets(
+            'marquee resolves TD typography m3=$m3 scale=$scale $direction bold=$bold',
+            (tester) async {
+              const content = 'WWWWWWWWWWWWWWWWWWWW';
+              await tester.pumpWidget(
+                MaterialApp(
+                  theme: ThemeData(
+                    useMaterial3: m3,
+                    extensions: [
+                      TThemeData.defaultData(),
+                      const TTextThemeData(
+                        textStyle: TextStyle(letterSpacing: 8),
+                      ),
+                    ],
+                  ),
+                  home: MediaQuery(
+                    data: MediaQueryData(
+                      textScaler: TextScaler.linear(scale),
+                      boldText: bold,
+                    ),
+                    child: Directionality(
+                      textDirection: direction,
+                      child: const Scaffold(
+                        body: Stack(
+                          children: [
+                            TMessage(
+                              content: content,
+                              showIcon: false,
+                              duration: null,
+                              marquee: TMessageMarquee(
+                                duration: Duration(milliseconds: 200),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              );
+              await tester.pump();
+              await tester.pump(const Duration(milliseconds: 220));
+              final width = tester.getSize(find.text(content)).width;
+              final transform = tester.widget<Transform>(
+                find
+                    .byWidgetPredicate(
+                      (widget) =>
+                          widget is Transform &&
+                          widget.transform.storage[12] < 0,
+                    )
+                    .first,
+              );
+              expect(width + transform.transform.storage[12], closeTo(0, 0.01));
+              expect(
+                tester.widget<Text>(find.text(content)).style!.letterSpacing,
+                8,
+              );
+              await tester.pumpWidget(const SizedBox());
+            },
+          );
+        }
+      }
+    }
+  }
 }

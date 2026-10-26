@@ -1,4 +1,3 @@
-import 'package:flutter/material.dart';
 import 'package:tdesign_flutter/tdesign_flutter.dart';
 
 void main() => runApp(const ConfirmDialogTestApp());

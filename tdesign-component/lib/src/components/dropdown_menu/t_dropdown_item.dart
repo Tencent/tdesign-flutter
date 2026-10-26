@@ -5,14 +5,18 @@ import 'package:tdesign_flutter_icons/tdesign_flutter_icons.dart';
 
 import '../../theme/t_colors.dart';
 import '../../theme/t_fonts.dart';
+import '../../theme/t_internal_material.dart';
 import '../../theme/t_radius.dart';
 import '../../theme/t_spacers.dart';
 import '../../theme/t_theme.dart';
 import '../../util/context_extension.dart';
 import '../button/t_button.dart';
 import '../button/t_button_types.dart';
+import '../text/t_text_styled.dart';
 import 't_dropdown_menu.dart';
 import 't_dropdown_theme_data.dart';
+
+const double _defaultBodyMaxHeight = 280;
 
 /// 下拉筛选面板中的不可变选项。
 class TDropdownMenuOption<T> {
@@ -23,9 +27,16 @@ class TDropdownMenuOption<T> {
     this.group,
   });
 
+  /// 选项对应的业务值，用于选中判断和提交回调。
   final T value;
+
+  /// 选项显示文案。
   final String label;
+
+  /// 是否禁用该选项，默认 false；禁用选项不能通过点击提交。
   final bool disabled;
+
+  /// 多选面板中的分组标题；为空时归入无标题分组。
   final String? group;
 }
 
@@ -40,10 +51,19 @@ class TDropdownSingleSelectPanel<T> extends StatelessWidget {
     this.maxHeight,
   });
 
+  /// 当前面板的局部控制器；选择后用它关闭面板。
   final TDropdownMenuPanelController controller;
+
+  /// 按显示顺序排列的选项。
   final List<TDropdownMenuOption<T>> options;
+
+  /// 受控选中值；为空时不主动指定选中项。
   final T? value;
+
+  /// 点击启用选项时提交其业务值，然后请求关闭面板；由使用方更新 [value]。
   final ValueChanged<T> onChanged;
+
+  /// 滚动主体的最大高度；默认 280dp。
   final double? maxHeight;
 
   @override
@@ -53,33 +73,35 @@ class TDropdownSingleSelectPanel<T> extends StatelessWidget {
         const TDropdownThemeData();
     return ConstrainedBox(
       constraints: BoxConstraints(
-        maxHeight: maxHeight ?? MediaQuery.sizeOf(context).height,
+        maxHeight: maxHeight ?? _defaultBodyMaxHeight,
       ),
-      child: ListView.builder(
-        padding: EdgeInsets.zero,
-        shrinkWrap: true,
-        itemCount: options.length,
-        itemBuilder: (context, index) {
-          final option = options[index];
-          final selected = option.value == value;
-          return _DropdownOptionRow(
-            label: option.label,
-            selected: selected,
-            disabled: option.disabled,
-            height: theme.optionHeight ?? 56,
-            padding:
-                theme.optionPadding ??
-                EdgeInsets.symmetric(horizontal: context.tTheme.spacer16),
-            onTap: option.disabled
-                ? null
-                : () {
-                    onChanged(option.value);
-                    unawaited(
-                      controller.close(TDropdownMenuCloseReason.selection),
-                    );
-                  },
-          );
-        },
+      child: TInternalScrollScope(
+        child: ListView.builder(
+          padding: EdgeInsets.zero,
+          shrinkWrap: true,
+          itemCount: options.length,
+          itemBuilder: (context, index) {
+            final option = options[index];
+            final selected = option.value == value;
+            return _DropdownOptionRow(
+              label: option.label,
+              selected: selected,
+              disabled: option.disabled,
+              height: theme.optionHeight,
+              padding:
+                  theme.optionPadding ??
+                  EdgeInsets.symmetric(horizontal: context.tTheme.spacer2),
+              onTap: option.disabled
+                  ? null
+                  : () {
+                      onChanged(option.value);
+                      unawaited(
+                        controller.close(TDropdownMenuCloseReason.selection),
+                      );
+                    },
+            );
+          },
+        ),
       ),
     );
   }
@@ -102,11 +124,22 @@ class TDropdownMultiSelectPanel<T> extends StatefulWidget {
     this.maxHeight,
   }) : assert(columns >= 1 && columns <= 3);
 
+  /// 当前面板的局部控制器，用于确认或取消时关闭面板。
   final TDropdownMenuPanelController controller;
+
+  /// 可选择的选项；[TDropdownMenuOption.group] 决定显示分组。
   final List<TDropdownMenuOption<T>> options;
+
+  /// 已提交的受控值集合；打开时初始化草稿，未确认关闭不会提交草稿。
   final Set<T> values;
+
+  /// 点击确认时提交草稿集合，再请求关闭面板；由使用方更新 [values]。
   final ValueChanged<Set<T>> onConfirm;
+
+  /// 每行选项列数，默认 1；支持 1 至 3 列。
   final int columns;
+
+  /// 面板最大高度；默认滚动主体最多 280dp，底部操作区另计。
   final double? maxHeight;
 
   @override
@@ -156,45 +189,52 @@ class _TDropdownMultiSelectPanelState<T>
         children: [
           Flexible(
             fit: FlexFit.loose,
-            child: SingleChildScrollView(
-              child: Padding(
-                padding: EdgeInsets.fromLTRB(
-                  context.tTheme.spacer16,
-                  context.tTheme.spacer12,
-                  context.tTheme.spacer16,
-                  context.tTheme.spacer16,
-                ),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    for (final entry in groups.entries) ...[
-                      if (entry.key != null)
-                        Padding(
-                          padding: EdgeInsets.only(
-                            bottom: context.tTheme.spacer12,
-                          ),
-                          child: Text(
-                            entry.key!,
-                            style:
-                                theme.optionTextStyle ??
-                                TextStyle(
-                                  color: context.tTheme.textColorPrimary,
-                                  fontSize: context.tTheme.fontBodyMedium?.size,
-                                  height: context.tTheme.fontBodyMedium?.height,
-                                  fontWeight:
-                                      context.tTheme.fontBodyMedium?.fontWeight,
-                                ).merge(
-                                  Theme.of(
-                                    context,
-                                  ).tExplicitTextTheme?.bodyMedium,
-                                ),
-                          ),
-                        ),
-                      ..._buildRows(context, entry.value, theme),
-                      if (entry.key != groups.keys.last)
-                        SizedBox(height: context.tTheme.spacer16),
-                    ],
-                  ],
+            child: ConstrainedBox(
+              constraints: BoxConstraints(
+                maxHeight: widget.maxHeight ?? _defaultBodyMaxHeight,
+              ),
+              child: TInternalScrollScope(
+                child: SingleChildScrollView(
+                  child: Padding(
+                    padding: EdgeInsets.fromLTRB(
+                      context.tTheme.spacer2,
+                      context.tTheme.spacer1,
+                      context.tTheme.spacer2,
+                      context.tTheme.spacer2,
+                    ),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        for (final entry in groups.entries) ...[
+                          if (entry.key != null)
+                            Padding(
+                              padding: EdgeInsets.only(
+                                bottom: context.tTheme.spacer1,
+                              ),
+                              child: TTextStyled(
+                                entry.key!,
+                                style:
+                                    theme.optionTextStyle ??
+                                    TextStyle(
+                                      color: context.tTheme.textColorPrimary,
+                                      fontSize:
+                                          context.tTheme.fontBodyMedium?.size,
+                                      height:
+                                          context.tTheme.fontBodyMedium?.height,
+                                      fontWeight: context
+                                          .tTheme
+                                          .fontBodyMedium
+                                          ?.fontWeight,
+                                    ),
+                              ),
+                            ),
+                          ..._buildRows(context, entry.value, theme),
+                          if (entry.key != groups.keys.last)
+                            SizedBox(height: context.tTheme.spacer2),
+                        ],
+                      ],
+                    ),
+                  ),
                 ),
               ),
             ),
@@ -219,12 +259,12 @@ class _TDropdownMultiSelectPanelState<T>
           padding: EdgeInsets.only(
             bottom: start + columns >= options.length
                 ? 0
-                : context.tTheme.spacer12,
+                : context.tTheme.spacer1,
           ),
           child: Row(
             children: List<Widget>.generate(columns * 2 - 1, (slot) {
               if (slot.isOdd) {
-                return SizedBox(width: context.tTheme.spacer12);
+                return SizedBox(width: context.tTheme.spacer1);
               }
               final column = slot ~/ 2;
               if (column >= rowOptions.length) {
@@ -250,22 +290,14 @@ class _TDropdownMultiSelectPanelState<T>
   }
 
   Widget _buildOperations(BuildContext context, TDropdownThemeData theme) {
-    final material = Theme.of(context);
-    final colorScheme = material.tExplicitColorScheme;
     return Container(
       padding:
-          theme.actionAreaPadding ?? EdgeInsets.all(context.tTheme.spacer16),
+          theme.actionAreaPadding ?? EdgeInsets.all(context.tTheme.spacer2),
       decoration: BoxDecoration(
-        color:
-            theme.panelBackgroundColor ??
-            colorScheme?.surface ??
-            context.tTheme.bgColorContainer,
+        color: theme.panelBackgroundColor ?? context.tTheme.bgColorContainer,
         border: Border(
           top: BorderSide(
-            color:
-                theme.dividerColor ??
-                material.tExplicitDividerColor ??
-                context.tTheme.componentStrokeColor,
+            color: theme.dividerColor ?? context.tTheme.componentStroke,
             width: 0.5,
           ),
         ),
@@ -274,22 +306,32 @@ class _TDropdownMultiSelectPanelState<T>
         children: [
           Expanded(
             child: TButton(
-              colorScheme: TButtonColorScheme.light,
+              colorPreset: TButtonColorPreset.light,
               onPressed: () => setState(_draft.clear),
-              child: Text(context.resource.reset),
+              child: Text(
+                context.resource.reset,
+                selectionColor: context.tTheme.brandColor.withValues(
+                  alpha: 0.4,
+                ),
+              ),
             ),
           ),
-          SizedBox(width: theme.actionGap ?? context.tTheme.spacer16),
+          SizedBox(width: theme.actionGap ?? context.tTheme.spacer2),
           Expanded(
             child: TButton(
-              colorScheme: TButtonColorScheme.primary,
+              colorPreset: TButtonColorPreset.primary,
               onPressed: () {
                 widget.onConfirm(Set<T>.unmodifiable(_draft));
                 unawaited(
                   widget.controller.close(TDropdownMenuCloseReason.confirm),
                 );
               },
-              child: Text(context.resource.confirm),
+              child: Text(
+                context.resource.confirm,
+                selectionColor: context.tTheme.brandColor.withValues(
+                  alpha: 0.4,
+                ),
+              ),
             ),
           ),
         ],
@@ -332,21 +374,18 @@ class _DropdownOptionRow extends StatelessWidget {
   final String label;
   final bool selected;
   final bool disabled;
-  final double height;
+  final double? height;
   final EdgeInsetsGeometry padding;
   final VoidCallback? onTap;
 
   @override
   Widget build(BuildContext context) {
-    final material = Theme.of(context);
-    final colorScheme = material.tExplicitColorScheme;
     final theme =
         Theme.of(context).extension<TDropdownThemeData>() ??
         const TDropdownThemeData();
     final tokenFont = context.tTheme.fontBodyLarge;
     final base =
         theme.optionTextStyle ??
-        material.tExplicitTextTheme?.bodyLarge ??
         TextStyle(
           color: context.tTheme.textColorPrimary,
           fontSize: tokenFont?.size,
@@ -355,16 +394,9 @@ class _DropdownOptionRow extends StatelessWidget {
         );
     final style = disabled
         ? theme.disabledOptionTextStyle ??
-              base.copyWith(
-                color:
-                    material.tExplicitDisabledColor ??
-                    context.tTheme.textDisabledColor,
-              )
+              base.copyWith(color: context.tTheme.textColorDisabled)
         : selected
-        ? theme.selectedOptionTextStyle ??
-              base.copyWith(
-                color: colorScheme?.primary ?? context.tTheme.brandNormalColor,
-              )
+        ? theme.selectedOptionTextStyle ?? base
         : base;
     return Semantics(
       selected: selected,
@@ -374,24 +406,24 @@ class _DropdownOptionRow extends StatelessWidget {
         decoration: BoxDecoration(
           border: Border(
             bottom: BorderSide(
-              color:
-                  theme.dividerColor ??
-                  material.tExplicitDividerColor ??
-                  context.tTheme.componentStrokeColor,
+              color: theme.dividerColor ?? context.tTheme.componentStroke,
               width: 0.5,
             ),
           ),
         ),
-        child: InkWell(
+        child: TInternalInkWell(
           onTap: onTap,
-          child: SizedBox(
+          child: Container(
             height: height,
+            constraints: height == null
+                ? const BoxConstraints(minHeight: 56)
+                : null,
             child: Padding(
               padding: padding,
               child: Row(
                 children: [
                   Expanded(
-                    child: Text(
+                    child: TTextStyled(
                       label,
                       style: style,
                       maxLines: 1,
@@ -399,12 +431,10 @@ class _DropdownOptionRow extends StatelessWidget {
                     ),
                   ),
                   if (selected)
-                    Icon(
+                    TInternalIcon(
                       TIcons.check,
                       size: 24,
-                      color:
-                          colorScheme?.primary ??
-                          context.tTheme.brandNormalColor,
+                      color: context.tTheme.brandColor,
                     ),
                 ],
               ),
@@ -433,24 +463,14 @@ class _DropdownOptionChip extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final material = Theme.of(context);
-    final colorScheme = material.tExplicitColorScheme;
     final backgroundColor = disabled
-        ? theme.disabledOptionColor ??
-              (material.tExplicitDisabledColor ??
-                      context.tTheme.textDisabledColor)
-                  .withValues(alpha: 0.12)
+        ? theme.disabledOptionColor ?? context.tTheme.bgColorComponentDisabled
         : selected
-        ? theme.selectedOptionColor ??
-              colorScheme?.primaryContainer ??
-              context.tTheme.brandLightColor
-        : theme.optionColor ??
-              colorScheme?.surfaceContainerHighest ??
-              context.tTheme.bgColorSecondaryContainer;
+        ? theme.selectedOptionColor ?? context.tTheme.brandColorLight
+        : theme.optionColor ?? context.tTheme.bgColorSecondaryContainer;
     final tokenFont = context.tTheme.fontBodyMedium;
     final base =
         theme.optionTextStyle ??
-        material.tExplicitTextTheme?.bodyMedium ??
         TextStyle(
           color: context.tTheme.textColorPrimary,
           fontSize: tokenFont?.size,
@@ -459,31 +479,22 @@ class _DropdownOptionChip extends StatelessWidget {
         );
     final style = disabled
         ? theme.disabledOptionTextStyle ??
-              base.copyWith(
-                color:
-                    material.tExplicitDisabledColor ??
-                    context.tTheme.textDisabledColor,
-              )
+              base.copyWith(color: context.tTheme.textColorDisabled)
         : selected
         ? theme.selectedOptionTextStyle ??
-              base.copyWith(
-                color:
-                    colorScheme?.onPrimaryContainer ??
-                    context.tTheme.brandNormalColor,
-              )
+              base.copyWith(color: context.tTheme.brandColor)
         : base;
     return Semantics(
       selected: selected,
       enabled: !disabled,
       button: true,
-      child: InkWell(
+      child: TInternalInkWell(
         onTap: onTap,
         borderRadius:
             theme.optionBorderRadius ??
             BorderRadius.circular(context.tTheme.radiusDefault),
         child: Container(
-          height: 40,
-          alignment: Alignment.center,
+          constraints: const BoxConstraints(minHeight: 40),
           decoration: BoxDecoration(
             color: backgroundColor,
             borderRadius:
@@ -492,12 +503,16 @@ class _DropdownOptionChip extends StatelessWidget {
           ),
           padding:
               theme.optionPadding ??
-              EdgeInsets.symmetric(horizontal: context.tTheme.spacer16),
-          child: Text(
-            label,
-            style: style,
-            maxLines: 1,
-            overflow: TextOverflow.ellipsis,
+              EdgeInsets.symmetric(horizontal: context.tTheme.spacer2),
+          child: Align(
+            alignment: Alignment.center,
+            heightFactor: 1,
+            child: TTextStyled(
+              label,
+              style: style,
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+            ),
           ),
         ),
       ),

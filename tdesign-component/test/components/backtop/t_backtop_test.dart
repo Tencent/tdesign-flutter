@@ -1,4 +1,3 @@
-import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:tdesign_flutter/tdesign_flutter.dart';
 
@@ -7,6 +6,123 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 /// 覆盖：默认渲染、shape 形态、showText、visibilityOffset 显隐、onPressed 回调/禁用、
 /// 回顶动画防抖、ThemeData 子树注入、品牌主题、tooltip。
 void main() {
+  for (final replace in [false, true]) {
+    testWidgets(
+      'legacy callback changes binding after success: replace=$replace',
+      (tester) async {
+        final controller = ScrollController(initialScrollOffset: 500);
+        addTearDown(controller.dispose);
+        ScrollPosition? original;
+        ScrollPositionWithSingleContext? replacement;
+        final events = <String>[];
+        await tester.pumpWidget(
+          MaterialApp(
+            home: Scaffold(
+              body: Stack(
+                children: [
+                  ListView(
+                    controller: controller,
+                    children: const [SizedBox(height: 4000)],
+                  ),
+                  Positioned(
+                    right: 10,
+                    bottom: 10,
+                    child: TBackTop(
+                      controller: controller,
+                      visibilityOffset: 0,
+                      onPressed: () {
+                        events.add('pressed');
+                        original = controller.position;
+                        expect(original!.pixels, original!.minScrollExtent);
+                        controller.detach(original!);
+                        if (replace) {
+                          replacement = ScrollPositionWithSingleContext(
+                            physics: const ClampingScrollPhysics(),
+                            context: original!.context,
+                            initialPixels: 0,
+                          );
+                          replacement!.applyViewportDimension(
+                            original!.viewportDimension,
+                          );
+                          replacement!.applyContentDimensions(
+                            original!.minScrollExtent,
+                            original!.maxScrollExtent,
+                          );
+                          controller.attach(replacement!);
+                        }
+                      },
+                      onCompleted: () => events.add('completed'),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        );
+        try {
+          await tester.pump();
+          await tester.tap(find.byType(TBackTop));
+          expect(events, isEmpty);
+          await tester.pumpAndSettle();
+          if (replace) {
+            expect(controller.offset, 0);
+            expect(controller.position, same(replacement));
+          } else {
+            expect(controller.hasClients, isFalse);
+          }
+          expect(events, ['pressed']);
+          expect(tester.takeException(), isNull);
+        } finally {
+          if (replacement != null) {
+            controller.detach(replacement!);
+            replacement!.dispose();
+          }
+          if (original != null) {
+            controller.attach(original!);
+          }
+          await tester.pumpWidget(const SizedBox());
+        }
+      },
+    );
+  }
+
+  testWidgets('默认图标22，独立于无匹配全局size，组件覆盖优先', (tester) async {
+    Future<void> pump(TThemeData token, [TBackTopThemeData? component]) =>
+        tester.pumpWidget(
+          MaterialApp(
+            themeAnimationDuration: Duration.zero,
+            theme: TThemeBuilder.light(
+              token,
+            ).copyWith(extensions: [token, if (component != null) component]),
+            home: const Scaffold(body: TBackTop()),
+          ),
+        );
+    final token = TThemeData.defaultData();
+    await pump(token);
+    expect(tester.widget<Icon>(find.byIcon(TIcons.backtop)).size, 22);
+    final other = token.copyWith(
+      sizeMap: {...token.sizeMap, 'size7': 25, 'size8': 30},
+    );
+    await pump(other);
+    expect(tester.widget<Icon>(find.byIcon(TIcons.backtop)).size, 22);
+    await pump(other, const TBackTopThemeData(iconSize: 17));
+    expect(tester.widget<Icon>(find.byIcon(TIcons.backtop)).size, 17);
+    expect(
+      const TBackTopThemeData()
+          .lerp(const TBackTopThemeData(iconSize: 30), .5)
+          .iconSize,
+      26,
+    );
+  });
+
+  RoundedRectangleBorder circleBorder(
+    TThemeData token, {
+    BorderSide side = BorderSide.none,
+  }) => RoundedRectangleBorder(
+    borderRadius: BorderRadius.circular(token.radiusCircle),
+    side: side,
+  );
+
   /// 用 TTheme 包裹以提供基础 Token
   Widget wrapWithTheme(Widget child, {TBackTopThemeData? backTopTheme}) {
     final themeExtensions = <ThemeExtension>[
@@ -41,6 +157,383 @@ void main() {
     );
   }
 
+  group('1.0.1 completion compatibility', () {
+    testWidgets('legacy callback without controller stays immediate', (
+      tester,
+    ) async {
+      final events = <String>[];
+      await tester.pumpWidget(
+        wrapWithTheme(
+          TBackTop(
+            onPressed: () => events.add('pressed'),
+            onCompleted: () => events.add('completed'),
+          ),
+        ),
+      );
+      await tester.tap(find.byType(TBackTop));
+      expect(events, ['pressed']);
+    });
+
+    testWidgets('completion alone does not enable the button', (tester) async {
+      var completed = 0;
+      await tester.pumpWidget(
+        wrapWithTheme(TBackTop(onCompleted: () => completed++)),
+      );
+      expect(
+        tester
+            .widget<GestureDetector>(
+              find.descendant(
+                of: find.byType(TBackTop),
+                matching: find.byType(GestureDetector),
+              ),
+            )
+            .onTap,
+        isNull,
+      );
+      await tester.tap(find.byType(TBackTop));
+      expect(completed, 0);
+    });
+
+    for (final scenario in [
+      'success',
+      'interrupted',
+      'replaced',
+      'detached',
+      'disposed',
+      'already top',
+    ]) {
+      testWidgets('completion guards: $scenario', (tester) async {
+        final controller = ScrollController(initialScrollOffset: 500);
+        final other = ScrollController();
+        addTearDown(controller.dispose);
+        addTearDown(other.dispose);
+        final events = <String>[];
+        var current = controller;
+        var showBackTop = true;
+        var showList = true;
+        late StateSetter rebuild;
+        await tester.pumpWidget(
+          MaterialApp(
+            home: StatefulBuilder(
+              builder: (context, setState) {
+                rebuild = setState;
+                return Scaffold(
+                  body: Stack(
+                    children: [
+                      if (showList)
+                        ListView(
+                          controller: current,
+                          children: const [SizedBox(height: 4000)],
+                        ),
+                      if (showBackTop)
+                        Positioned(
+                          right: 16,
+                          bottom: 32,
+                          child: TBackTop(
+                            controller: current,
+                            visibilityOffset: 0,
+                            onPressed: () {
+                              events.add('pressed');
+                            },
+                            onCompleted: () => events.add('completed'),
+                          ),
+                        ),
+                    ],
+                  ),
+                );
+              },
+            ),
+          ),
+        );
+        await tester.pump();
+        if (scenario == 'already top') {
+          controller.jumpTo(0);
+          await tester.pump();
+        }
+        await tester.tap(find.byType(TBackTop));
+        expect(
+          events,
+          scenario == 'already top' ? ['pressed', 'completed'] : isEmpty,
+        );
+        await tester.pump();
+        await tester.pump(const Duration(milliseconds: 100));
+        // Repeated activation is ignored while the operation is in progress.
+        if (scenario != 'already top') {
+          await tester.tap(find.byType(TBackTop));
+        }
+        if (scenario == 'interrupted') {
+          controller.jumpTo(300);
+        } else if (scenario == 'replaced') {
+          rebuild(() => current = other);
+          await tester.pump();
+        } else if (scenario == 'detached') {
+          rebuild(() => showList = false);
+          await tester.pump();
+        } else if (scenario == 'disposed') {
+          rebuild(() => showBackTop = false);
+          await tester.pump();
+        }
+        await tester.pumpAndSettle();
+        expect(
+          events,
+          scenario == 'disposed'
+              ? isEmpty
+              : scenario == 'success' || scenario == 'already top'
+              ? ['pressed', 'completed']
+              : ['pressed'],
+        );
+        expect(tester.takeException(), isNull);
+        await tester.pumpWidget(const SizedBox.shrink());
+      });
+    }
+  });
+
+  for (final interrupted in [false, true]) {
+    testWidgets(
+      'success is determined before legacy callback effects: interrupted=$interrupted',
+      (tester) async {
+        final controller = ScrollController(initialScrollOffset: 500);
+        addTearDown(controller.dispose);
+        var pressed = 0;
+        var completed = 0;
+        await tester.pumpWidget(
+          MaterialApp(
+            home: Scaffold(
+              body: Stack(
+                children: [
+                  ListView(
+                    controller: controller,
+                    children: const [SizedBox(height: 4000)],
+                  ),
+                  Positioned(
+                    right: 10,
+                    bottom: 10,
+                    child: TBackTop(
+                      controller: controller,
+                      visibilityOffset: 0,
+                      onPressed: () {
+                        pressed++;
+                        controller.jumpTo(interrupted ? 0 : 200);
+                      },
+                      onCompleted: () => completed++,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        );
+        await tester.pump();
+        await tester.tap(find.byType(TBackTop));
+        expect(pressed, 0);
+        await tester.pump();
+        await tester.pump(const Duration(milliseconds: 100));
+        if (interrupted) {
+          controller.jumpTo(300);
+        }
+        await tester.pumpAndSettle();
+        expect(pressed, 1);
+        expect(completed, interrupted ? 0 : 1);
+        await tester.pumpWidget(const SizedBox());
+      },
+    );
+  }
+
+  testWidgets(
+    'cross-frame restore of the original position permits completion',
+    (tester) async {
+      final first = ScrollController(initialScrollOffset: 500);
+      final second = ScrollController();
+      addTearDown(first.dispose);
+      addTearDown(second.dispose);
+      var listController = first;
+      var completed = 0;
+      late StateSetter update;
+      await tester.pumpWidget(
+        MaterialApp(
+          home: StatefulBuilder(
+            builder: (context, setState) {
+              update = setState;
+              return Scaffold(
+                body: Stack(
+                  children: [
+                    ListView(
+                      controller: listController,
+                      children: const [SizedBox(height: 4000)],
+                    ),
+                    Positioned(
+                      right: 10,
+                      bottom: 10,
+                      child: TBackTop(
+                        controller: first,
+                        visibilityOffset: 0,
+                        onCompleted: () => completed++,
+                      ),
+                    ),
+                  ],
+                ),
+              );
+            },
+          ),
+        ),
+      );
+      await tester.pump();
+      final originalPosition = first.position;
+      await tester.tap(find.byType(TBackTop));
+      await tester.pump();
+      await tester.pump(const Duration(milliseconds: 100));
+      update(() => listController = second);
+      await tester.pump();
+      expect(first.hasClients, isFalse);
+      expect(second.position, same(originalPosition));
+      await tester.pump(const Duration(milliseconds: 100));
+      update(() => listController = first);
+      await tester.pump();
+      expect(first.position, same(originalPosition));
+      await tester.pumpAndSettle();
+      expect(first.offset, 0);
+      expect(completed, 1);
+      await tester.pumpWidget(const SizedBox());
+    },
+  );
+
+  testWidgets('same-frame detach and reattach permits one ordered completion', (
+    tester,
+  ) async {
+    final controller = ScrollController(initialScrollOffset: 500);
+    addTearDown(controller.dispose);
+    final events = <String>[];
+    await tester.pumpWidget(
+      MaterialApp(
+        home: Scaffold(
+          body: Stack(
+            children: [
+              ListView(
+                controller: controller,
+                children: const [SizedBox(height: 4000)],
+              ),
+              Positioned(
+                right: 10,
+                bottom: 10,
+                child: TBackTop(
+                  controller: controller,
+                  visibilityOffset: 0,
+                  onPressed: () => events.add('pressed'),
+                  onCompleted: () => events.add('completed'),
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+    await tester.pump();
+    await tester.tap(find.byType(TBackTop));
+    expect(events, isEmpty);
+    await tester.pump();
+    await tester.pump(const Duration(milliseconds: 100));
+    final position = controller.position;
+    controller.detach(position);
+    expect(controller.hasClients, isFalse);
+    controller.attach(position);
+    expect(controller.position, same(position));
+    expect(events, isEmpty);
+    await tester.pumpAndSettle();
+    expect(controller.offset, 0);
+    expect(events, ['pressed', 'completed']);
+    await tester.pumpWidget(const SizedBox());
+  });
+
+  for (final scenario in [
+    'BackTop controller restored',
+    'unbound at completion',
+    'position replaced',
+  ]) {
+    testWidgets('completion-time identity: $scenario', (tester) async {
+      final first = ScrollController();
+      final second = ScrollController();
+      addTearDown(first.dispose);
+      addTearDown(second.dispose);
+      var listController = first;
+      var backtopController = first;
+      var listVersion = 0;
+      final events = <String>[];
+      late StateSetter update;
+      await tester.pumpWidget(
+        MaterialApp(
+          home: StatefulBuilder(
+            builder: (context, setState) {
+              update = setState;
+              return Scaffold(
+                body: Stack(
+                  children: [
+                    ListView(
+                      key: ValueKey(listVersion),
+                      controller: listController,
+                      children: const [SizedBox(height: 4000)],
+                    ),
+                    Positioned(
+                      right: 10,
+                      bottom: 10,
+                      child: TBackTop(
+                        controller: backtopController,
+                        visibilityOffset: 0,
+                        onPressed: () => events.add('pressed'),
+                        onCompleted: () => events.add('completed'),
+                      ),
+                    ),
+                  ],
+                ),
+              );
+            },
+          ),
+        ),
+      );
+      await tester.pump();
+      first.jumpTo(500);
+      await tester.pump();
+      final original = first.position;
+      await tester.tap(find.byType(TBackTop));
+      expect(events, isEmpty);
+      await tester.pump();
+      await tester.pump(const Duration(milliseconds: 100));
+      if (scenario == 'BackTop controller restored') {
+        update(() => backtopController = second);
+        await tester.pump();
+        await tester.pump(const Duration(milliseconds: 100));
+        update(() => backtopController = first);
+        await tester.pump();
+        expect(first.position, same(original));
+        expect(events, isEmpty);
+      } else if (scenario == 'unbound at completion') {
+        update(() => listController = second);
+        await tester.pump();
+        expect(first.hasClients, isFalse);
+        expect(second.position, same(original));
+        expect(events, isEmpty);
+      } else {
+        update(() => listVersion++);
+        await tester.pump();
+        expect(first.position, isNot(same(original)));
+        expect(first.positions.contains(original), isFalse);
+        expect(first.offset, 0);
+      }
+      await tester.pumpAndSettle();
+      expect(
+        events,
+        scenario == 'BackTop controller restored'
+            ? ['pressed', 'completed']
+            : ['pressed'],
+      );
+      if (scenario == 'unbound at completion') {
+        expect(second.offset, 0);
+        expect(first.hasClients, isFalse);
+      }
+      expect(tester.takeException(), isNull);
+      await tester.pumpWidget(const SizedBox());
+    });
+  }
+
   group('TBackTop 基础渲染', () {
     testWidgets('默认圆形渲染', (tester) async {
       await tester.pumpWidget(wrapWithTheme(const TBackTop()));
@@ -52,6 +545,58 @@ void main() {
         wrapWithTheme(const TBackTop(shape: TBackTopShape.halfCircle)),
       );
       expect(find.byType(TBackTop), findsOneWidget);
+      final decoration = tester
+          .widgetList<Container>(find.byType(Container))
+          .map((container) => container.decoration)
+          .whereType<ShapeDecoration>()
+          .first;
+      final token = TThemeData.defaultData();
+      expect(
+        decoration.shape,
+        RoundedRectangleBorder(
+          borderRadius: BorderRadius.only(
+            topLeft: Radius.circular(token.radiusRound),
+            bottomLeft: Radius.circular(token.radiusRound),
+          ),
+          side: BorderSide(color: token.componentBorder, width: 0.5),
+        ),
+      );
+    });
+
+    testWidgets('半圆形跟随 radiusRound，不受 radiusCircle 覆盖影响', (tester) async {
+      final token = TThemeData.defaultData().copyWith(
+        radiusMap: {'radiusRound': 12, 'radiusCircle': 8},
+      );
+      await tester.pumpWidget(
+        MaterialApp(
+          theme: ThemeData(extensions: [token]),
+          home: const Scaffold(
+            body: Row(
+              children: [
+                TBackTop(),
+                TBackTop(shape: TBackTopShape.halfCircle),
+              ],
+            ),
+          ),
+        ),
+      );
+      final decorations = tester
+          .widgetList<Container>(find.byType(Container))
+          .map((container) => container.decoration)
+          .whereType<ShapeDecoration>()
+          .toList();
+      final side = BorderSide(color: token.componentBorder, width: 0.5);
+      expect(decorations[0].shape, circleBorder(token, side: side));
+      expect(
+        decorations[1].shape,
+        RoundedRectangleBorder(
+          borderRadius: const BorderRadius.only(
+            topLeft: Radius.circular(12),
+            bottomLeft: Radius.circular(12),
+          ),
+          side: side,
+        ),
+      );
     });
 
     testWidgets('showText 为 true 时显示文案', (tester) async {
@@ -307,10 +852,16 @@ void main() {
       final decoration = tester
           .widgetList<Container>(find.byType(Container))
           .map((container) => container.decoration)
-          .whereType<BoxDecoration>()
+          .whereType<ShapeDecoration>()
           .first;
       expect(decoration.color, token.bgColorContainer);
-      expect(decoration.border?.top.color, token.componentBorderColor);
+      expect(
+        decoration.shape,
+        circleBorder(
+          token,
+          side: BorderSide(color: token.componentBorder, width: 0.5),
+        ),
+      );
       expect(
         tester.widget<Icon>(find.byIcon(TIcons.backtop)).color,
         token.textColorPrimary,
@@ -331,10 +882,16 @@ void main() {
       final decoration = tester
           .widgetList<Container>(find.byType(Container))
           .map((container) => container.decoration)
-          .whereType<BoxDecoration>()
+          .whereType<ShapeDecoration>()
           .first;
       expect(decoration.color, Colors.red);
-      expect(decoration.border?.top.color, Colors.redAccent);
+      expect(
+        decoration.shape,
+        circleBorder(
+          TThemeData.defaultData(),
+          side: const BorderSide(color: Colors.redAccent, width: 0.5),
+        ),
+      );
       expect(
         tester.widget<Icon>(find.byIcon(TIcons.backtop)).color,
         Colors.white,
@@ -399,7 +956,7 @@ void main() {
       const b = TBackTopThemeData(roundSize: 56, iconSize: 24);
       final result = a.lerp(b, 0.5);
       expect(result.roundSize, 52);
-      expect(result.iconSize, 22);
+      expect(result.iconSize, 23);
       expect(result.contentGap, null);
     });
 
@@ -476,11 +1033,11 @@ void main() {
     });
   });
 
-  group('TBackTopColorScheme 枚举', () {
+  group('TBackTopColorPreset 枚举', () {
     test('枚举值', () {
-      expect(TBackTopColorScheme.values, [
-        TBackTopColorScheme.light,
-        TBackTopColorScheme.dark,
+      expect(TBackTopColorPreset.values, [
+        TBackTopColorPreset.light,
+        TBackTopColorPreset.dark,
       ]);
     });
   });
@@ -492,10 +1049,16 @@ void main() {
       final decoration = tester
           .widgetList<Container>(find.byType(Container))
           .map((container) => container.decoration)
-          .whereType<BoxDecoration>()
+          .whereType<ShapeDecoration>()
           .first;
       expect(decoration.color, token.bgColorContainer);
-      expect(decoration.border?.top.color, token.componentBorderColor);
+      expect(
+        decoration.shape,
+        circleBorder(
+          token,
+          side: BorderSide(color: token.componentBorder, width: 0.5),
+        ),
+      );
       expect(
         tester.widget<Icon>(find.byIcon(TIcons.backtop)).color,
         token.textColorPrimary,
@@ -518,10 +1081,10 @@ void main() {
         wrapWithTheme(
           const Row(
             children: [
-              TBackTop(colorScheme: TBackTopColorScheme.dark),
+              TBackTop(colorPreset: TBackTopColorPreset.dark),
               TBackTop(
                 shape: TBackTopShape.halfCircle,
-                colorScheme: TBackTopColorScheme.dark,
+                colorPreset: TBackTopColorPreset.dark,
               ),
             ],
           ),
@@ -530,15 +1093,21 @@ void main() {
       final decorations = tester
           .widgetList<Container>(find.byType(Container))
           .map((container) => container.decoration)
-          .whereType<BoxDecoration>()
+          .whereType<ShapeDecoration>()
           .toList();
       expect(decorations[0].color, token.grayColor13);
       expect(decorations[1].color, token.grayColor14);
+      final side = BorderSide(color: token.grayColor9, width: 0.5);
+      expect(decorations[0].shape, circleBorder(token, side: side));
       expect(
-        decorations.every(
-          (decoration) => decoration.border?.top.color == token.grayColor9,
+        decorations[1].shape,
+        RoundedRectangleBorder(
+          borderRadius: BorderRadius.only(
+            topLeft: Radius.circular(token.radiusRound),
+            bottomLeft: Radius.circular(token.radiusRound),
+          ),
+          side: side,
         ),
-        isTrue,
       );
       expect(
         tester
@@ -556,10 +1125,10 @@ void main() {
           home: const Scaffold(
             body: Row(
               children: [
-                TBackTop(colorScheme: TBackTopColorScheme.dark),
+                TBackTop(colorPreset: TBackTopColorPreset.dark),
                 TBackTop(
                   shape: TBackTopShape.halfCircle,
-                  colorScheme: TBackTopColorScheme.dark,
+                  colorPreset: TBackTopColorPreset.dark,
                   showText: true,
                 ),
               ],
@@ -575,7 +1144,7 @@ void main() {
         isTrue,
       );
       expect(
-        tester.widget<TText>(find.byType(TText)).style?.color,
+        tester.widget<Text>(find.byType(Text).first).style?.color,
         token.whiteColor1,
       );
     });
@@ -599,7 +1168,7 @@ void main() {
       );
       final decoratedSizes = tester
           .widgetList<Container>(find.byType(Container))
-          .where((container) => container.decoration is BoxDecoration)
+          .where((container) => container.decoration is ShapeDecoration)
           .map((container) => tester.getSize(find.byWidget(container)));
       expect(decoratedSizes.any((size) => size.height == 44), isTrue);
       expect(tester.widget<Icon>(find.byIcon(TIcons.backtop)).size, 24);
@@ -621,10 +1190,7 @@ void main() {
         tester.widget<Icon>(find.byIcon(TIcons.backtop)).color,
         Colors.green,
       );
-      expect(
-        tester.widget<TText>(find.byType(TText)).style?.color,
-        Colors.green,
-      );
+      expect(tester.widget<Text>(find.text('顶部')).style?.color, Colors.green);
     });
 
     testWidgets('半圆形 + showText + Theme 注入', (tester) async {

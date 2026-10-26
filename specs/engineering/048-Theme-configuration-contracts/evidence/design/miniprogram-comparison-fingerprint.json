@@ -1,0 +1,11 @@
+{
+  "upstreamCommit": "a9f3ba680481d438b0be37e2e25cf4a62cf0acb3",
+  "comparedPoints": 59,
+  "comparedSourceFiles": 33,
+  "behaviorFilesUnchanged": 2277,
+  "sha256": {
+    "miniprogram-comparison.md": "80453a1d4bf49b3c2b08bb532f7999248b5ca640768102eff04d2c1bad572214",
+    "miniprogram-comparison.json": "eeea6f035317c0925a5bdddf67f8229e408434a67a033048015d6a6071edc4d1",
+    "miniprogram-source-snapshot.json": "809cebaa01a95b4ca752ef0a6ac7e2353c1def1b82843c843cecc99815f0c6e8"
+  }
+}

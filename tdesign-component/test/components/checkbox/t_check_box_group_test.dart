@@ -1,4 +1,3 @@
-import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:tdesign_flutter/src/components/checkbox/t_selection_card.dart';
 import 'package:tdesign_flutter/tdesign_flutter.dart';
@@ -374,13 +373,13 @@ void main() {
     });
 
     testWidgets('卡片高度与角标尺寸读取 TDesign token', (tester) async {
-      final token = TThemeData.defaultData().copyWithTThemeData(
-        'selection-card-token-test',
+      final token = TThemeData.defaultData().copyWith(
+        name: 'selection-card-token-test',
         fontMap: {
           'fontBodyLarge': Font(size: 17, lineHeight: 26),
           'fontBodyMedium': Font(size: 15, lineHeight: 23),
         },
-        marginMap: const {'spacer4': 5, 'spacer16': 18, 'spacer24': 27},
+        spacerMap: const {'spacer2': 18, 'spacer3': 27},
       );
       Widget selectedCard() => const TSelectionCard(
         selected: true,
@@ -405,17 +404,16 @@ void main() {
         ),
       );
 
+      expect(tester.getSize(find.byType(TSelectionCard)).height, 89);
       expect(
-        find.byWidgetPredicate(
-          (widget) => widget is SizedBox && widget.height == 90,
-        ),
-        findsOneWidget,
+        tester.getCenter(find.text('selected')).dy,
+        closeTo(tester.getCenter(find.byType(TSelectionCard)).dy, .01),
       );
-      expect(tester.widget<Icon>(find.byIcon(TIcons.check)).size, 16);
+      expect(tester.widget<Icon>(find.byIcon(TIcons.check)).size, 15.5);
       expect(
         find.byWidgetPredicate(
           (widget) =>
-              widget is CustomPaint && widget.size == const Size.square(32),
+              widget is CustomPaint && widget.size == const Size.square(31),
         ),
         findsOneWidget,
       );
@@ -437,8 +435,8 @@ void main() {
                         '_SelectionCardMarkPainter',
                   )
               as dynamic;
-      expect((border as Border).top.width, 1.875);
-      expect(markPainter.cornerRadius, 5);
+      expect((border as Border).top.width, 1.5);
+      expect(markPainter.cornerRadius, 4);
 
       await tester.pumpWidget(
         wrap(
@@ -455,12 +453,7 @@ void main() {
         ),
       );
 
-      expect(
-        find.byWidgetPredicate(
-          (widget) => widget is SizedBox && widget.height == 62,
-        ),
-        findsOneWidget,
-      );
+      expect(tester.getSize(find.byType(TSelectionCard)).height, 62);
       expect(tester.widget<Icon>(find.byIcon(TIcons.check)).size, 13.5);
       expect(
         find.byWidgetPredicate(

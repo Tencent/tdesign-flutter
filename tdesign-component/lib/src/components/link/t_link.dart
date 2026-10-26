@@ -1,13 +1,12 @@
 import 'package:flutter/material.dart';
 
+import '../../theme/t_internal_material.dart';
+import '../text/t_text_resolve.dart';
+import '../text/t_text_style_scope.dart';
 import 't_link_resolve.dart';
 import 't_link_theme_data.dart';
 import 't_link_types.dart';
 
-/// 文字超链接用于跳转一个新页面，如当前项目跳转、友情链接等。
-///
-/// 下划线、前置图标和后置图标可独立组合；路由行为由 [onPressed] 与 Flutter
-/// Navigator / Router 组合。
 class TLink extends StatelessWidget {
   const TLink({
     super.key,
@@ -15,7 +14,7 @@ class TLink extends StatelessWidget {
     this.prefixIcon,
     this.suffixIcon,
     this.underline,
-    this.colorScheme,
+    this.colorPreset,
     this.size,
     this.onPressed,
     this.semanticLabel,
@@ -31,11 +30,11 @@ class TLink extends StatelessWidget {
   /// 后置图标；为 null 时不占位。
   final Widget? suffixIcon;
 
-  /// 是否显示下划线；未设置时读取 [TLinkThemeData.underline]，最终回退 false。
+  /// 是否显示下划线；未设置时为 false。
   final bool? underline;
 
-  /// 语义颜色方案；未设置时默认为 [TLinkColorScheme.defaultTheme]。
-  final TLinkColorScheme? colorScheme;
+  /// 内置配色预设；未设置时默认为 [TLinkColorPreset.defaultTheme]。
+  final TLinkColorPreset? colorPreset;
 
   /// 链接尺寸；未设置时默认为 [TLinkSize.medium]。
   final TLinkSize? size;
@@ -56,12 +55,9 @@ class TLink extends StatelessWidget {
       child: child,
       prefixIcon: prefixIcon,
       suffixIcon: suffixIcon,
-      underline: underline ?? theme?.underline ?? false,
-      colorScheme:
-          colorScheme ??
-          theme?.defaultColorScheme ??
-          TLinkColorScheme.defaultTheme,
-      size: size ?? theme?.defaultSize ?? TLinkSize.medium,
+      underline: underline ?? false,
+      colorPreset: colorPreset ?? TLinkColorPreset.defaultTheme,
+      size: size ?? TLinkSize.medium,
       onPressed: onPressed,
       semanticLabel: semanticLabel,
       tooltip: tooltip,
@@ -76,7 +72,7 @@ class _TLinkInteraction extends StatefulWidget {
     required this.prefixIcon,
     required this.suffixIcon,
     required this.underline,
-    required this.colorScheme,
+    required this.colorPreset,
     required this.size,
     required this.onPressed,
     required this.semanticLabel,
@@ -88,7 +84,7 @@ class _TLinkInteraction extends StatefulWidget {
   final Widget? prefixIcon;
   final Widget? suffixIcon;
   final bool underline;
-  final TLinkColorScheme colorScheme;
+  final TLinkColorPreset colorPreset;
   final TLinkSize size;
   final VoidCallback? onPressed;
   final String? semanticLabel;
@@ -109,7 +105,7 @@ class _TLinkInteractionState extends State<_TLinkInteraction> {
     final disabled = widget.onPressed == null;
     final color = TLinkResolve.resolveColor(
       context: context,
-      colorScheme: widget.colorScheme,
+      colorPreset: widget.colorPreset,
       theme: widget.theme,
       isDisabled: disabled,
       isActive: !disabled && (_hovered || _focused || _pressed),
@@ -129,10 +125,10 @@ class _TLinkInteractionState extends State<_TLinkInteraction> {
       theme: widget.theme,
     );
 
-    var content = IconTheme.merge(
+    Widget content = TInternalIconTheme.merge(
       data: IconThemeData(color: color, size: iconSize),
-      child: DefaultTextStyle.merge(
-        style: textStyle,
+      child: TTextStyleScope(
+        style: TTextResolve.resolve(context: context, style: textStyle),
         child: Row(
           mainAxisSize: MainAxisSize.min,
           children: [
@@ -159,7 +155,7 @@ class _TLinkInteractionState extends State<_TLinkInteraction> {
       );
     }
 
-    content = InkWell(
+    content = TInternalInkWell(
       onTap: widget.onPressed,
       overlayColor: const WidgetStatePropertyAll(Colors.transparent),
       onHover: (value) => _updateInteraction(_Interaction.hover, value),
@@ -170,7 +166,7 @@ class _TLinkInteractionState extends State<_TLinkInteraction> {
     );
 
     if (widget.tooltip != null) {
-      content = Tooltip(message: widget.tooltip!, child: content);
+      content = TInternalTooltip(message: widget.tooltip!, child: content);
     }
     return Semantics(
       link: true,

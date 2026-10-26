@@ -1,10 +1,12 @@
 import 'package:flutter/gestures.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:tdesign_flutter/tdesign_flutter.dart';
 
+import '../../support/token_consumption_evidence.dart';
+
 void main() {
+  linkTokenConsumptionTests();
   Widget wrap(Widget child, {TLinkThemeData? linkTheme}) {
     final token = TThemeData.defaultData();
     var theme = TThemeBuilder.light(token);
@@ -82,7 +84,7 @@ void main() {
     expect(find.byIcon(Icons.arrow_forward), findsOneWidget);
   });
 
-  testWidgets('图标尺寸与图文间距默认对齐小程序', (tester) async {
+  testWidgets('图标尺寸与图文间距符合默认配置', (tester) async {
     await tester.pumpWidget(
       wrap(
         const TLink(
@@ -143,7 +145,7 @@ void main() {
     expect(taps, 1);
     expect(
       linkStyle(tester, '禁用').color,
-      TThemeData.defaultData().textDisabledColor,
+      TThemeData.defaultData().textColorDisabled,
     );
   });
 
@@ -153,7 +155,7 @@ void main() {
       wrap(
         const TLink(
           child: Text('交互链接'),
-          colorScheme: TLinkColorScheme.primary,
+          colorPreset: TLinkColorPreset.primary,
           onPressed: _noop,
         ),
       ),
@@ -164,45 +166,42 @@ void main() {
     await mouse.addPointer(location: Offset.zero);
     await mouse.moveTo(tester.getCenter(link));
     await tester.pump();
-    expect(linkStyle(tester, '交互链接').color, token.brandClickColor);
+    expect(linkStyle(tester, '交互链接').color, token.brandColorActive);
 
     await mouse.moveTo(Offset.zero);
     await tester.pump();
-    expect(linkStyle(tester, '交互链接').color, token.brandNormalColor);
+    expect(linkStyle(tester, '交互链接').color, token.brandColor);
 
     await tester.sendKeyEvent(LogicalKeyboardKey.tab);
     await tester.pump();
-    expect(linkStyle(tester, '交互链接').color, token.brandClickColor);
+    expect(linkStyle(tester, '交互链接').color, token.brandColorActive);
 
     FocusManager.instance.primaryFocus?.unfocus();
     await tester.pump();
-    expect(linkStyle(tester, '交互链接').color, token.brandNormalColor);
+    expect(linkStyle(tester, '交互链接').color, token.brandColor);
 
     final touch = await tester.startGesture(tester.getCenter(link));
     await tester.pump();
-    expect(linkStyle(tester, '交互链接').color, token.brandClickColor);
+    expect(linkStyle(tester, '交互链接').color, token.brandColorActive);
 
     await touch.up();
     await tester.pump();
-    expect(linkStyle(tester, '交互链接').color, token.brandNormalColor);
+    expect(linkStyle(tester, '交互链接').color, token.brandColor);
 
     await mouse.removePointer();
   });
 
-  testWidgets('实例参数覆盖组件 Theme 默认值', (tester) async {
+  testWidgets('实例选择器与 Theme 视觉字段独立生效', (tester) async {
     await tester.pumpWidget(
       wrap(
         const TLink(
           child: Text('优先级'),
           size: TLinkSize.small,
-          colorScheme: TLinkColorScheme.danger,
+          colorPreset: TLinkColorPreset.danger,
           underline: false,
           onPressed: _noop,
         ),
         linkTheme: const TLinkThemeData(
-          defaultSize: TLinkSize.large,
-          defaultColorScheme: TLinkColorScheme.success,
-          underline: true,
           textStyle: TextStyle(fontWeight: FontWeight.w700),
           iconGap: 12,
         ),
@@ -212,7 +211,7 @@ void main() {
     final style = linkStyle(tester, '优先级');
     expect(style.fontSize, 12);
     expect(style.fontWeight, FontWeight.w700);
-    expect(style.color, TThemeData.defaultData().errorNormalColor);
+    expect(style.color, TThemeData.defaultData().errorColor);
   });
 
   testWidgets('保留 child 显式 TextStyle 的 Flutter 原生覆盖语义', (tester) async {
@@ -255,3 +254,122 @@ void main() {
 }
 
 void _noop() {}
+
+void linkTokenConsumptionTests() {
+  for (final brightness in Brightness.values) {
+    for (final custom in [false, true]) {
+      testWidgets('token consumption link ${brightness.name} custom=$custom', (
+        tester,
+      ) async {
+        final token = evidenceTokens(brightness, custom: custom);
+        for (final entry in [
+          (
+            TLinkColorPreset.defaultTheme,
+            'Default',
+            token.textColorPrimary,
+            token.brandColorActive,
+            token.textColorDisabled,
+          ),
+          (
+            TLinkColorPreset.primary,
+            'Primary',
+            token.brandColor,
+            token.brandColorActive,
+            token.brandColorDisabled,
+          ),
+          (
+            TLinkColorPreset.danger,
+            'Danger',
+            token.errorColor,
+            token.errorColorActive,
+            token.errorColorDisabled,
+          ),
+          (
+            TLinkColorPreset.warning,
+            'Warning',
+            token.warningColor,
+            token.warningColorActive,
+            token.warningColorDisabled,
+          ),
+          (
+            TLinkColorPreset.success,
+            'Success',
+            token.successColor,
+            token.successColorActive,
+            token.successColorDisabled,
+          ),
+        ]) {
+          for (final state in ['idle', 'pressed', 'disabled']) {
+            await tester.pumpWidget(
+              evidenceHost(
+                TLink(
+                  key: ValueKey('$entry-$state'),
+                  colorPreset: entry.$1,
+                  onPressed: state == 'disabled' ? null : _noop,
+                  prefixIcon: const Icon(Icons.link),
+                  child: const Text('token link'),
+                ),
+                brightness: brightness,
+                token: token,
+              ),
+            );
+            await tester.pumpAndSettle();
+            final gesture = state == 'pressed'
+                ? await tester.startGesture(
+                    tester.getCenter(find.byType(TLink)),
+                  )
+                : null;
+            await tester.pump(const Duration(milliseconds: 300));
+            final expected = state == 'idle'
+                ? entry.$3
+                : state == 'pressed'
+                ? entry.$4
+                : entry.$5;
+            final name =
+                'link${entry.$2}${state == 'idle'
+                    ? 'Color'
+                    : state == 'pressed'
+                    ? 'ActiveColor'
+                    : 'DisabledColor'}';
+            final scenario = '${brightness.name}/custom=$custom/$state';
+            tokenObservation(
+              name,
+              scenario: '$scenario/text',
+              actual: DefaultTextStyle.of(
+                tester.element(find.text('token link')),
+              ).style.color,
+              expected: expected,
+            );
+            tokenObservation(
+              name,
+              scenario: '$scenario/icon',
+              actual: IconTheme.of(
+                tester.element(find.byIcon(Icons.link)),
+              ).color,
+              expected: expected,
+            );
+            await gesture?.up();
+            await tester.pumpAndSettle();
+          }
+        }
+        await tester.pumpWidget(
+          evidenceHost(
+            const TLink(onPressed: _noop, child: Text('theme link')),
+            brightness: brightness,
+            token: token,
+            extensions: const [
+              TLinkThemeData(textStyle: TextStyle(color: Colors.lime)),
+            ],
+          ),
+        );
+        await tester.pumpAndSettle();
+        expect(
+          DefaultTextStyle.of(
+            tester.element(find.text('theme link')),
+          ).style.color,
+          Colors.lime,
+        );
+      });
+    }
+  }
+}

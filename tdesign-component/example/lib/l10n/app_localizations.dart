@@ -98,6 +98,42 @@ abstract class AppLocalizations {
     Locale('zh'),
   ];
 
+  /// No description provided for @uploading.
+  ///
+  /// In en, this message translates to:
+  /// **'Uploading'**
+  String get uploading;
+
+  /// No description provided for @uploadSelect.
+  ///
+  /// In en, this message translates to:
+  /// **'Select files'**
+  String get uploadSelect;
+
+  /// No description provided for @uploadPending.
+  ///
+  /// In en, this message translates to:
+  /// **'Pending upload'**
+  String get uploadPending;
+
+  /// No description provided for @uploadFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Upload failed'**
+  String get uploadFailed;
+
+  /// No description provided for @uploadRetry.
+  ///
+  /// In en, this message translates to:
+  /// **'Retry upload'**
+  String get uploadRetry;
+
+  /// No description provided for @uploadSuccess.
+  ///
+  /// In en, this message translates to:
+  /// **'Upload successful'**
+  String get uploadSuccess;
+
   /// No description provided for @components.
   ///
   /// In en, this message translates to:
@@ -125,7 +161,7 @@ abstract class AppLocalizations {
   /// No description provided for @publishDate.
   ///
   /// In en, this message translates to:
-  /// **'PublishDate'**
+  /// **'Build date'**
   String get publishDate;
 
   /// No description provided for @defaultTheme.

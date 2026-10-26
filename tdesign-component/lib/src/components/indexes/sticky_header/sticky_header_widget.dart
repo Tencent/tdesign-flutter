@@ -5,14 +5,17 @@ import 'package:flutter/widgets.dart';
 import 'sticky_header_layout_builder.dart';
 import 'sticky_header_render.dart';
 
-/// Signature used by [SliverStickyHeader.builder] to build the header
-/// when the sticky header state has changed.
-typedef SliverStickyHeaderWidgetBuilder = Widget Function(
-  BuildContext context,
-  SliverStickyHeaderState state,
-);
+/// 根据吸顶状态构建头部内容。
+/// [context] 吸顶头部的构建上下文。
+/// [state] 当前吸顶及滚动进度状态。
+///
+/// ## 返回值
+/// 当前状态下的头部内容。
+typedef SliverStickyHeaderWidgetBuilder =
+    Widget Function(BuildContext context, SliverStickyHeaderState state);
 
 // ignore: prefer_mixin
+/// 吸顶 Sliver 的滚动位置控制器；位置变化时通知监听者。
 class StickyHeaderController with ChangeNotifier {
   /// The offset to use in order to jump to the first item
   /// of current the sticky header.
@@ -39,16 +42,13 @@ class StickyHeaderController with ChangeNotifier {
 /// headers are created by a stateless parent widget or by different parent
 /// widgets.
 class DefaultStickyHeaderController extends StatefulWidget {
-  const DefaultStickyHeaderController({
-    Key? key,
-    required this.child,
-  }) : super(key: key);
+  const DefaultStickyHeaderController({Key? key, required this.child})
+    : super(key: key);
 
   /// The widget below this widget in the tree.
   ///
   /// Typically a [Scaffold] whose [AppBar] includes a [TabBar].
   ///
-  /// {@macro flutter.widgets.child}
   final Widget child;
 
   /// The closest instance of this class that encloses the given context.
@@ -58,16 +58,25 @@ class DefaultStickyHeaderController extends StatefulWidget {
   /// ```dart
   /// StickyHeaderController controller = DefaultStickyHeaderController.of(context);
   /// ```
-  static StickyHeaderController? of(BuildContext context) {
-    final scope = context.dependOnInheritedWidgetOfExactType<_StickyHeaderControllerScope>();
+  ///
+  /// ## 返回值
+  /// 最近的吸顶头部控制器；上下文中没有对应作用域时为 null。
+  static StickyHeaderController? of(
+    /// 当前构建上下文，用于读取祖先配置。
+    BuildContext context,
+  ) {
+    final scope = context
+        .dependOnInheritedWidgetOfExactType<_StickyHeaderControllerScope>();
     return scope?.controller;
   }
 
   @override
-  _DefaultStickyHeaderControllerState createState() => _DefaultStickyHeaderControllerState();
+  _DefaultStickyHeaderControllerState createState() =>
+      _DefaultStickyHeaderControllerState();
 }
 
-class _DefaultStickyHeaderControllerState extends State<DefaultStickyHeaderController> {
+class _DefaultStickyHeaderControllerState
+    extends State<DefaultStickyHeaderController> {
   StickyHeaderController? _controller;
 
   @override
@@ -109,13 +118,12 @@ class _StickyHeaderControllerScope extends InheritedWidget {
 /// State describing how a sticky header is rendered.
 @immutable
 class SliverStickyHeaderState {
-  const SliverStickyHeaderState(
-    this.scrollPercentage,
-    this.isPinned,
-  );
+  const SliverStickyHeaderState(this.scrollPercentage, this.isPinned);
 
+  /// 标题滚出自身高度的比例，范围为 0 至 1。
   final double scrollPercentage;
 
+  /// 标题当前是否固定在吸顶位置。
   final bool isPinned;
 
   @override
@@ -127,7 +135,8 @@ class SliverStickyHeaderState {
       return false;
     }
     final typedOther = other;
-    return scrollPercentage == typedOther.scrollPercentage && isPinned == typedOther.isPinned;
+    return scrollPercentage == typedOther.scrollPercentage &&
+        isPinned == typedOther.isPinned;
   }
 
   @override
@@ -142,7 +151,7 @@ class SliverStickyHeaderState {
 /// Place this widget inside a [CustomScrollView] or similar.
 class SliverStickyHeader extends RenderObjectWidget {
   /// Creates a sliver that displays the [header] before its [sliver], unless
-  /// [overlapsContent] it's true.
+  /// overlapsContent is true.
   /// The [header] stays pinned when it hits the start of the viewport until
   /// the [sliver] scrolls off the viewport.
   ///
@@ -169,6 +178,8 @@ class SliverStickyHeader extends RenderObjectWidget {
   /// [DefaultStickyHeaderController.of] will be used.
   SliverStickyHeader.builder({
     Key? key,
+
+    /// 接收构建上下文及吸顶状态的标题构建器。
     required SliverStickyHeaderWidgetBuilder builder,
     Widget? sliver,
     bool overlapsContent = false,
@@ -176,16 +187,17 @@ class SliverStickyHeader extends RenderObjectWidget {
     double pinnedOffset = 0.0,
     StickyHeaderController? controller,
   }) : this(
-          key: key,
-          header: StickyHeaderValueLayoutBuilder<SliverStickyHeaderState>(
-            builder: (context, constraints) => builder(context, constraints.value),
-          ),
-          sliver: sliver,
-          overlapsContent: overlapsContent,
-          sticky: sticky,
-          pinnedOffset: pinnedOffset,
-          controller: controller,
-        );
+         key: key,
+         header: StickyHeaderValueLayoutBuilder<SliverStickyHeaderState>(
+           builder: (context, constraints) =>
+               builder(context, constraints.value),
+         ),
+         sliver: sliver,
+         overlapsContent: overlapsContent,
+         sticky: sticky,
+         pinnedOffset: pinnedOffset,
+         controller: controller,
+       );
 
   /// The header to display before the sliver.
   final Widget? header;
@@ -222,7 +234,8 @@ class SliverStickyHeader extends RenderObjectWidget {
   }
 
   @override
-  SliverStickyHeaderRenderObjectElement createElement() => SliverStickyHeaderRenderObjectElement(this);
+  SliverStickyHeaderRenderObjectElement createElement() =>
+      SliverStickyHeaderRenderObjectElement(this);
 
   @override
   void updateRenderObject(
@@ -237,9 +250,13 @@ class SliverStickyHeader extends RenderObjectWidget {
   }
 }
 
+/// 管理吸顶标题和内容 Sliver 子元素的 RenderObjectElement。
 class SliverStickyHeaderRenderObjectElement extends RenderObjectElement {
   /// Creates an element that uses the given widget as its configuration.
-  SliverStickyHeaderRenderObjectElement(SliverStickyHeader widget) : super(widget);
+  SliverStickyHeaderRenderObjectElement(
+    /// 用于配置吸顶标题和内容 Sliver 的组件。
+    SliverStickyHeader widget,
+  ) : super(widget);
 
   @override
   SliverStickyHeader get widget => super.widget as SliverStickyHeader;

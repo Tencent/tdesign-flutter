@@ -1,0 +1,30 @@
+import 'package:tdesign_flutter/tdesign_flutter.dart';
+import '../../annotation/example_code.dart';
+import '../../base/example_widget.dart';
+
+@ExampleCode(group: 'avatar')
+class DisplayAvatarExample extends StatelessWidget {
+  const DisplayAvatarExample({super.key});
+
+  /// 纯展示的头像组
+  Widget _buildDisplayAvatar(BuildContext context) {
+    return const TAvatarGroup(
+      maxCount: 5,
+      overflow: TAvatar(child: Text('+2')),
+      children: [
+        TAvatar(image: AssetImage('assets/img/t_avatar_1.png')),
+        TAvatar(image: AssetImage('assets/img/t_avatar_3.png')),
+        TAvatar(image: AssetImage('assets/img/t_avatar_4.png')),
+        TAvatar(image: AssetImage('assets/img/t_avatar_2.png')),
+        TAvatar(image: AssetImage('assets/img/t_avatar_5.png')),
+        TAvatar(image: AssetImage('assets/img/t_avatar_1.png')),
+        TAvatar(image: AssetImage('assets/img/t_avatar_2.png')),
+      ],
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return _buildDisplayAvatar(context);
+  }
+}

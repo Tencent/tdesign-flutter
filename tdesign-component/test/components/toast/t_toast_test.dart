@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:tdesign_flutter/src/components/loading/t_circle_indicator.dart';
 import 'package:tdesign_flutter/tdesign_flutter.dart';
@@ -11,7 +11,629 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 /// 注意：Widget 测试中 Timer 由 FakeAsync 接管，直接调用 show 方法后
 /// 用 `tester.pump(Duration)` 推进假时钟即可触发 Toast 显示/自动消失，
 /// 避免 `runAsync` + `pumpAndSettle` 在 Windows/WSL 跨平台时序不一致导致失败。
+void expectToastCenter(WidgetTester tester, Finder content, double fraction) {
+  final layout = find
+      .ancestor(of: content, matching: find.byType(CustomSingleChildLayout))
+      .first;
+  final widget = tester.widget<CustomSingleChildLayout>(layout);
+  final overlayRect = tester.getRect(layout);
+  final center = tester.getCenter(find.byWidget(widget.child!));
+  expect(center.dx, closeTo(overlayRect.center.dx, 0.01));
+  expect(
+    center.dy,
+    closeTo(overlayRect.top + overlayRect.height * fraction, 0.01),
+  );
+}
+
 void main() {
+  for (final painted in [false, true]) {
+    testWidgets('obscured Toast releases owner and long timer painted=$painted', (
+      tester,
+    ) async {
+      late BuildContext anchor;
+      await tester.pumpWidget(
+        MaterialApp(
+          home: Builder(
+            builder: (context) {
+              anchor = context;
+              return const SizedBox();
+            },
+          ),
+        ),
+      );
+      TToast.showText(
+        'obscured toast',
+        context: anchor,
+        duration: const Duration(hours: 1),
+      );
+      if (painted) {
+        await tester.pump();
+      }
+      final cover = OverlayEntry(
+        opaque: true,
+        builder: (_) => const ColoredBox(color: Colors.white),
+      );
+      Overlay.of(anchor).insert(cover);
+      await tester.pump();
+      expect(find.text('obscured toast'), findsNothing);
+      // The initial post-frame check has run while the owner was alive.
+      await tester.pumpWidget(const SizedBox());
+      cover.remove();
+      cover.dispose();
+      // Do not dismissAll or advance the timeout: the framework must find no pending timer.
+      expect(tester.takeException(), isNull);
+    });
+  }
+
+  testWidgets(
+    'obscured Toast keeps original content State and duration rules',
+    (tester) async {
+      late BuildContext anchor;
+      var mounts = 0;
+      var disposals = 0;
+      await tester.pumpWidget(
+        MaterialApp(
+          home: Builder(
+            builder: (context) {
+              anchor = context;
+              return const SizedBox();
+            },
+          ),
+        ),
+      );
+      TToast.showText(
+        null,
+        context: anchor,
+        duration: Duration.zero,
+        customWidget: _ToastContentLifecycleProbe(
+          onMount: () => mounts++,
+          onDispose: () => disposals++,
+        ),
+      );
+      await tester.pump();
+      expect(mounts, 1);
+      final cover = OverlayEntry(
+        opaque: true,
+        builder: (_) => const ColoredBox(color: Colors.white),
+      );
+      Overlay.of(anchor).insert(cover);
+      await tester.pump();
+      expect(
+        disposals,
+        1,
+        reason: 'The content Entry must not gain maintainState.',
+      );
+      await tester.pump(const Duration(seconds: 10));
+      cover.remove();
+      cover.dispose();
+      await tester.pump();
+      expect(mounts, 2);
+      expect(find.text('content lifecycle'), findsOneWidget);
+      TToast.dismissAll();
+      await tester.pump();
+      expect(disposals, 2);
+      expect(tester.takeException(), isNull);
+    },
+  );
+
+  testWidgets('obscured Toast still expires while its Overlay stays alive', (
+    tester,
+  ) async {
+    late BuildContext anchor;
+    await tester.pumpWidget(
+      MaterialApp(
+        home: Builder(
+          builder: (context) {
+            anchor = context;
+            return const SizedBox();
+          },
+        ),
+      ),
+    );
+    TToast.showText(
+      'expires behind cover',
+      context: anchor,
+      duration: const Duration(milliseconds: 100),
+    );
+    await tester.pump();
+    final cover = OverlayEntry(
+      opaque: true,
+      builder: (_) => const ColoredBox(color: Colors.white),
+    );
+    Overlay.of(anchor).insert(cover);
+    await tester.pump();
+    await tester.pump(const Duration(milliseconds: 100));
+    await tester.pump(const Duration(milliseconds: 200));
+    cover.remove();
+    cover.dispose();
+    await tester.pump();
+    expect(find.text('expires behind cover'), findsNothing);
+    expect(tester.takeException(), isNull);
+  });
+
+  testWidgets('obscured old Toast cannot remove a same-ID replacement', (
+    tester,
+  ) async {
+    late BuildContext anchor;
+    await tester.pumpWidget(
+      MaterialApp(
+        home: Builder(
+          builder: (context) {
+            anchor = context;
+            return const SizedBox();
+          },
+        ),
+      ),
+    );
+    TToast.showText(
+      'old obscured',
+      context: anchor,
+      toastId: 'shared',
+      duration: const Duration(milliseconds: 100),
+    );
+    await tester.pump();
+    final cover = OverlayEntry(
+      opaque: true,
+      builder: (_) => const ColoredBox(color: Colors.white),
+    );
+    Overlay.of(anchor).insert(cover);
+    await tester.pump();
+    TToast.showText(
+      'new visible',
+      context: anchor,
+      toastId: 'shared',
+      duration: Duration.zero,
+    );
+    await tester.pump(const Duration(seconds: 1));
+    expect(find.text('new visible'), findsOneWidget);
+    cover.remove();
+    cover.dispose();
+    TToast.dismissToast('shared');
+    await tester.pump();
+    expect(find.text('new visible'), findsNothing);
+    expect(tester.takeException(), isNull);
+  });
+
+  for (final painted in [false, true]) {
+    testWidgets('Toast owner unmount cleanup, painted=$painted', (
+      tester,
+    ) async {
+      late BuildContext anchor;
+      await tester.pumpWidget(
+        MaterialApp(
+          home: Builder(
+            builder: (context) {
+              anchor = context;
+              return const SizedBox();
+            },
+          ),
+        ),
+      );
+      TToast.showText(
+        'old toast',
+        context: anchor,
+        toastId: 'owner',
+        duration: const Duration(milliseconds: 50),
+      );
+      if (painted) {
+        await tester.pump();
+      }
+      await tester.pumpWidget(const SizedBox());
+      await tester.pump(const Duration(seconds: 1));
+      expect(tester.takeException(), isNull);
+      TToast.dismissToast('owner');
+      TToast.dismissAll();
+      expect(tester.takeException(), isNull);
+    });
+  }
+
+  for (final loading in [false, true]) {
+    for (final local in [false, true]) {
+      for (final scale in [1.0, 2.0]) {
+        testWidgets(
+          'Toast native paragraph loading=$loading local=$local scale=$scale',
+          (tester) async {
+            late BuildContext host;
+            const heightBehavior = TextHeightBehavior(
+              applyHeightToFirstAscent: false,
+            );
+            await tester.pumpWidget(
+              MaterialApp(
+                theme: TThemeBuilder.light(TThemeData.defaultData()),
+                builder: (context, child) => MediaQuery(
+                  data: MediaQuery.of(
+                    context,
+                  ).copyWith(textScaler: TextScaler.linear(scale)),
+                  child: DefaultTextStyle(
+                    style: const TextStyle(fontSize: 29, color: Colors.red),
+                    maxLines: 3,
+                    softWrap: false,
+                    overflow: TextOverflow.fade,
+                    textAlign: TextAlign.end,
+                    textWidthBasis: TextWidthBasis.longestLine,
+                    textHeightBehavior: heightBehavior,
+                    child: child!,
+                  ),
+                ),
+                home: Scaffold(
+                  body: DefaultTextStyle(
+                    style: const TextStyle(fontSize: 29, color: Colors.red),
+                    maxLines: 3,
+                    softWrap: false,
+                    overflow: TextOverflow.fade,
+                    textAlign: TextAlign.end,
+                    textWidthBasis: TextWidthBasis.longestLine,
+                    textHeightBehavior: heightBehavior,
+                    child: Builder(
+                      builder: (context) {
+                        host = context;
+                        return const SizedBox();
+                      },
+                    ),
+                  ),
+                ),
+              ),
+            );
+            const text = Text(
+              'First line\nSecond line',
+              key: Key('toast-native-paragraph'),
+            );
+            final custom = local
+                ? const DefaultTextStyle(
+                    style: TextStyle(fontSize: 21),
+                    maxLines: 2,
+                    softWrap: true,
+                    overflow: TextOverflow.ellipsis,
+                    textAlign: TextAlign.center,
+                    textWidthBasis: TextWidthBasis.longestLine,
+                    textHeightBehavior: heightBehavior,
+                    child: text,
+                  )
+                : text;
+            if (loading) {
+              TToast.showLoading(
+                context: host,
+                customWidget: custom,
+                duration: Duration.zero,
+              );
+            } else {
+              TToast.showText(
+                null,
+                context: host,
+                customWidget: custom,
+                duration: Duration.zero,
+              );
+            }
+            await tester.pump(const Duration(milliseconds: 400));
+            final rich = tester.widget<RichText>(
+              find.descendant(
+                of: find.byKey(const Key('toast-native-paragraph')),
+                matching: find.byType(RichText),
+              ),
+            );
+            expect(rich.maxLines, local ? 2 : 3);
+            expect(rich.softWrap, local);
+            expect(
+              rich.overflow,
+              local ? TextOverflow.ellipsis : TextOverflow.fade,
+            );
+            expect(rich.textAlign, local ? TextAlign.center : TextAlign.end);
+            expect(rich.textWidthBasis, TextWidthBasis.longestLine);
+            expect(rich.textHeightBehavior, heightBehavior);
+            expect(rich.textScaler.scale(1), scale);
+            expect(rich.text.style!.fontSize, local ? 21 : 14);
+            expect(tester.takeException(), isNull);
+            TToast.dismissAll();
+            await tester.pump(const Duration(milliseconds: 400));
+          },
+        );
+      }
+    }
+  }
+
+  for (final loading in [false, true]) {
+    for (final dark in [false, true]) {
+      for (final scale in [1.0, 2.0]) {
+        testWidgets(
+          'Toast custom typography loading=$loading dark=$dark scale=$scale',
+          (tester) async {
+            TextStyle? defaults;
+            for (final variant in [
+              'built-in',
+              'Text',
+              'TText',
+              'Row',
+              'Padding',
+              'Builder',
+              'partial',
+              'explicit',
+              'local',
+              'paragraph',
+            ]) {
+              late BuildContext host;
+              await tester.pumpWidget(
+                MaterialApp(
+                  theme: dark
+                      ? TThemeBuilder.dark(TThemeData.defaultData())
+                      : TThemeBuilder.light(TThemeData.defaultData()),
+                  builder: (context, child) => MediaQuery(
+                    data: MediaQuery.of(
+                      context,
+                    ).copyWith(textScaler: TextScaler.linear(scale)),
+                    child: child!,
+                  ),
+                  home: Scaffold(
+                    body: DefaultTextStyle(
+                      style: const TextStyle(fontSize: 32, color: Colors.red),
+                      child: Builder(
+                        builder: (context) {
+                          host = context;
+                          return const SizedBox();
+                        },
+                      ),
+                    ),
+                  ),
+                ),
+              );
+              const label = TText('Slot');
+              final custom = switch (variant) {
+                'built-in' => null,
+                'Text' => const Text('Slot'),
+                'Row' => const Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [label],
+                ),
+                'Padding' => const Padding(
+                  padding: EdgeInsets.all(3),
+                  child: label,
+                ),
+                'Builder' => Builder(builder: (_) => label),
+                'partial' => const TText(
+                  'Slot',
+                  style: TextStyle(color: Colors.orange),
+                ),
+                'explicit' => const TText(
+                  'Slot',
+                  style: TextStyle(
+                    fontSize: 23,
+                    height: 1.3,
+                    color: Colors.pink,
+                  ),
+                ),
+                'local' => Builder(
+                  builder: (context) => Theme(
+                    data: Theme.of(context).mergeExtension(
+                      (Theme.of(context).extension<TTextThemeData>() ??
+                              const TTextThemeData())
+                          .copyWith(
+                            textStyle: const TextStyle(
+                              fontSize: 21,
+                              height: 1.2,
+                              color: Colors.orange,
+                            ),
+                          ),
+                    ),
+                    child: label,
+                  ),
+                ),
+                'paragraph' => const TText(
+                  'Slot',
+                  maxLines: 2,
+                  overflow: TextOverflow.fade,
+                  softWrap: false,
+                ),
+                _ => label,
+              };
+              if (loading) {
+                TToast.showLoading(
+                  context: host,
+                  text: 'Slot',
+                  customWidget: custom,
+                  duration: Duration.zero,
+                );
+              } else {
+                TToast.showText(
+                  'Slot',
+                  context: host,
+                  customWidget: custom,
+                  duration: Duration.zero,
+                );
+              }
+              await tester.pump(const Duration(milliseconds: 400));
+              final rich = tester.widget<RichText>(
+                find.descendant(
+                  of: find.text('Slot'),
+                  matching: find.byType(RichText),
+                ),
+              );
+              final actual = rich.text.style!;
+              if (variant == 'built-in') {
+                defaults = actual;
+                expect(actual.fontSize, 14);
+              } else if (variant == 'local') {
+                expect(actual.fontSize, 21);
+                expect(actual.height, 1.2);
+                expect(actual.color, Colors.orange);
+              } else if (variant == 'explicit') {
+                expect(actual.fontSize, 23);
+                expect(actual.height, 1.3);
+                expect(actual.color, Colors.pink);
+              } else {
+                expect(actual.fontSize, defaults!.fontSize, reason: variant);
+                expect(actual.height, defaults.height, reason: variant);
+                expect(actual.fontWeight, defaults.fontWeight, reason: variant);
+                expect(
+                  actual.color,
+                  variant == 'partial' ? Colors.orange : defaults.color,
+                  reason: variant,
+                );
+                if (variant == 'paragraph') {
+                  expect(rich.maxLines, 2);
+                  expect(rich.overflow, TextOverflow.fade);
+                  expect(rich.softWrap, false);
+                } else {
+                  // Component typography is shared, not the built-in line limit.
+                  expect(rich.maxLines, isNull);
+                }
+              }
+              expect(rich.textScaler.scale(10), 10 * scale);
+              expect(tester.takeException(), isNull);
+              TToast.dismissAll();
+              await tester.pump(const Duration(milliseconds: 400));
+            }
+          },
+        );
+      }
+    }
+
+    testWidgets(
+      'Toast component and instance textStyle reach custom content loading=$loading',
+      (tester) async {
+        late BuildContext host;
+        await tester.pumpWidget(
+          MaterialApp(
+            theme: TThemeBuilder.light(TThemeData.defaultData()).mergeExtension(
+              const TToastThemeData(
+                textStyle: TextStyle(fontSize: 18, color: Colors.purple),
+              ),
+            ),
+            home: Scaffold(
+              body: Builder(
+                builder: (context) {
+                  host = context;
+                  return const SizedBox();
+                },
+              ),
+            ),
+          ),
+        );
+        for (final instance in [false, true]) {
+          if (loading) {
+            TToast.showLoading(
+              context: host,
+              text: 'Slot',
+              customWidget: const TText('Slot'),
+              duration: Duration.zero,
+              textStyle: instance
+                  ? const TextStyle(fontSize: 20, color: Colors.green)
+                  : null,
+            );
+          } else {
+            TToast.showText(
+              'Slot',
+              context: host,
+              customWidget: const TText('Slot'),
+              duration: Duration.zero,
+              textStyle: instance
+                  ? const TextStyle(fontSize: 20, color: Colors.green)
+                  : null,
+            );
+          }
+          await tester.pump(const Duration(milliseconds: 400));
+          final rich = tester.widget<RichText>(
+            find.descendant(
+              of: find.text('Slot'),
+              matching: find.byType(RichText),
+            ),
+          );
+          expect(rich.text.style!.fontSize, instance ? 20 : 18);
+          expect(
+            rich.text.style!.color,
+            instance ? Colors.green : Colors.purple,
+          );
+          expect(tester.takeException(), isNull);
+          TToast.dismissAll();
+          await tester.pump(const Duration(milliseconds: 400));
+        }
+      },
+    );
+  }
+
+  for (final dark in [false, true]) {
+    for (final kind in ['row', 'column', 'loading', 'loadingOnly']) {
+      testWidgets('Toast $kind 图标实时尺寸与显式优先 dark=$dark', (tester) async {
+        final base = TThemeData.defaultData();
+        final tokens = ValueNotifier(dark ? base.dark! : base);
+        final component = ValueNotifier<TToastThemeData?>(null);
+        await tester.pumpWidget(
+          ValueListenableBuilder<TThemeData>(
+            valueListenable: tokens,
+            builder: (_, token, __) => ValueListenableBuilder<TToastThemeData?>(
+              valueListenable: component,
+              builder: (_, config, __) => MaterialApp(
+                themeAnimationDuration: Duration.zero,
+                theme:
+                    (dark
+                            ? TThemeBuilder.dark(token)
+                            : TThemeBuilder.light(token))
+                        .copyWith(
+                          extensions: [token, if (config != null) config],
+                        ),
+                home: const Scaffold(
+                  body: SizedBox(key: ValueKey('fixed-toast-host')),
+                ),
+              ),
+            ),
+          ),
+        );
+        void show() {
+          final context = tester.element(
+            find.byKey(const ValueKey('fixed-toast-host')),
+          );
+          if (kind == 'row' || kind == 'column') {
+            TToast.showIconText(
+              '尺寸',
+              icon: Icons.info,
+              context: context,
+              duration: Duration.zero,
+              direction: kind == 'row'
+                  ? IconTextDirection.horizontal
+                  : IconTextDirection.vertical,
+            );
+          } else if (kind == 'loading') {
+            TToast.showLoading(context: context);
+          } else {
+            TToast.showLoadingWithoutText(context: context);
+          }
+        }
+
+        double size() => kind == 'row' || kind == 'column'
+            ? tester.widget<Icon>(find.byIcon(Icons.info)).size!
+            : tester
+                  .widget<TCircleIndicator>(find.byType(TCircleIndicator))
+                  .size;
+        show();
+        await tester.pump();
+        final initial = kind == 'row' ? 24.0 : 32.0;
+        final key = kind == 'row' ? 'size8' : 'size10';
+        expect(size(), initial);
+        tokens.value = tokens.value.copyWith(
+          sizeMap: {...tokens.value.sizeMap, 'size16': 73},
+        );
+        await tester.pump();
+        expect(size(), initial);
+        tokens.value = tokens.value.copyWith(
+          sizeMap: {...tokens.value.sizeMap, key: initial + 2},
+        );
+        await tester.pump();
+        expect(size(), initial + 2);
+        TToast.dismissAll();
+        await tester.pump(const Duration(seconds: 1));
+        component.value = const TToastThemeData(iconSize: 13);
+        await tester.pump();
+        show();
+        await tester.pump();
+        expect(size(), 13);
+        TToast.dismissAll();
+        await tester.pump(const Duration(seconds: 1));
+        await tester.pumpWidget(const SizedBox());
+        tokens.dispose();
+        component.dispose();
+        expect(tester.takeException(), isNull);
+      });
+    }
+  }
+
   /// 用 TTheme 包裹以提供基础 Token，含可定位的 Key 节点
   ThemeData fullTheme({TToastThemeData? toastTheme}) {
     var theme = TThemeBuilder.light(TThemeData.defaultData());
@@ -68,6 +690,324 @@ void main() {
   // ============================================================
   // E 类控制：showText 调用即显
   // ============================================================
+  testWidgets('文本 Toast 的 LR/xl 与 TB/l 独立响应且组件 padding 优先', (tester) async {
+    final tokens = ValueNotifier(TThemeData.defaultData());
+    final component = ValueNotifier<TToastThemeData?>(null);
+    await tester.pumpWidget(
+      ValueListenableBuilder<TThemeData>(
+        valueListenable: tokens,
+        builder: (context, token, child) =>
+            ValueListenableBuilder<TToastThemeData?>(
+              valueListenable: component,
+              builder: (context, custom, child) => MaterialApp(
+                themeAnimationDuration: Duration.zero,
+                theme: TThemeBuilder.light(
+                  token,
+                ).copyWith(extensions: [token, if (custom != null) custom]),
+                home: Scaffold(
+                  body: Builder(
+                    key: const Key('toast_host'),
+                    builder: (_) => const SizedBox(),
+                  ),
+                ),
+              ),
+            ),
+      ),
+    );
+    TToast.showText(
+      '设计内边距',
+      context: tester.element(find.byKey(const Key('toast_host'))),
+      duration: Duration.zero,
+    );
+    await tester.pump();
+    EdgeInsetsGeometry? padding() =>
+        tester.widget<Container>(toastBoxFinder('设计内边距')).padding;
+    expect(padding(), const EdgeInsets.symmetric(horizontal: 24, vertical: 16));
+    tokens.value = tokens.value.copyWith(sizeMap: {'size8': 30});
+    await tester.pumpAndSettle();
+    expect(padding(), const EdgeInsets.symmetric(horizontal: 30, vertical: 16));
+    tokens.value = tokens.value.copyWith(sizeMap: {'size6': 20, 'size9': 90});
+    await tester.pumpAndSettle();
+    expect(padding(), const EdgeInsets.symmetric(horizontal: 30, vertical: 20));
+    // Reopen under a local component theme to exercise capture priority.
+    TToast.dismissAll();
+    component.value = const TToastThemeData(padding: EdgeInsets.all(7));
+    await tester.pumpAndSettle();
+    TToast.showText(
+      '设计内边距',
+      context: tester.element(find.byKey(const Key('toast_host'))),
+      duration: Duration.zero,
+    );
+    await tester.pump();
+    expect(padding(), const EdgeInsets.all(7));
+    TToast.dismissAll();
+    await tester.pumpWidget(const SizedBox());
+    tokens.dispose();
+    component.dispose();
+  });
+
+  group('overlay pointer contract', () {
+    for (final showOverlay in [false, true]) {
+      for (final preventScrollThrough in [false, true]) {
+        testWidgets(
+          'showOverlay=$showOverlay preventScrollThrough=$preventScrollThrough',
+          (tester) async {
+            var taps = 0;
+            late BuildContext context;
+            addTearDown(TToast.dismissAll);
+            await tester.pumpWidget(
+              MaterialApp(
+                home: Scaffold(
+                  body: Builder(
+                    builder: (value) {
+                      context = value;
+                      return Align(
+                        alignment: Alignment.topLeft,
+                        child: TextButton(
+                          onPressed: () => taps++,
+                          child: const Text('target'),
+                        ),
+                      );
+                    },
+                  ),
+                ),
+              ),
+            );
+            TToast.showText(
+              'message',
+              context: context,
+              duration: const Duration(seconds: 5),
+              overlay: TOverlayConfig(
+                showOverlay: showOverlay,
+                preventScrollThrough: preventScrollThrough,
+              ),
+            );
+            await tester.pump();
+            await tester.tapAt(tester.getCenter(find.text('target')));
+            expect(taps, preventScrollThrough ? 0 : 1);
+            TToast.dismissAll();
+            await tester.pump();
+            await tester.tap(find.text('target'));
+            expect(taps, preventScrollThrough ? 1 : 2);
+          },
+        );
+      }
+    }
+  });
+
+  group('duration contract', () {
+    for (final duration in [Duration.zero, const Duration(milliseconds: -1)]) {
+      testWidgets('$duration keeps every Toast kind until dismissed', (
+        tester,
+      ) async {
+        await tester.pumpWidget(wrapWithTheme());
+        final context = tester.element(find.byKey(const Key('toast_host')));
+        final ids = [
+          TToast.showText(
+            'persistent text',
+            context: context,
+            duration: duration,
+            toastId: 'text',
+          ),
+          TToast.showIconText(
+            'persistent icon',
+            context: context,
+            duration: duration,
+            toastId: 'icon',
+          ),
+          TToast.showSuccess(
+            'persistent success',
+            context: context,
+            duration: duration,
+            toastId: 'success',
+          ),
+          TToast.showWarning(
+            'persistent warning',
+            context: context,
+            duration: duration,
+            toastId: 'warning',
+          ),
+          TToast.showFail(
+            'persistent error',
+            context: context,
+            duration: duration,
+            toastId: 'error',
+          ),
+          TToast.showLoading(
+            text: 'persistent loading',
+            context: context,
+            duration: duration,
+            toastId: 'loading',
+          ),
+          TToast.showLoadingWithoutText(
+            context: context,
+            duration: duration,
+            toastId: 'loading-only',
+          ),
+        ];
+        await tester.pump();
+        await tester.pump(const Duration(seconds: 10));
+        expect(find.textContaining('persistent'), findsNWidgets(6));
+        expect(find.byType(TCircleIndicator), findsNWidgets(2));
+        for (final id in ids) {
+          TToast.dismissToast(id);
+        }
+        await tester.pump();
+        expect(find.textContaining('persistent'), findsNothing);
+        expect(find.byType(TCircleIndicator), findsNothing);
+      });
+    }
+    for (final withText in [false, true]) {
+      testWidgets('loading withText=$withText defaults to 2000ms', (
+        tester,
+      ) async {
+        await tester.pumpWidget(wrapWithTheme());
+        final context = tester.element(find.byKey(const Key('toast_host')));
+        if (withText) {
+          TToast.showLoading(context: context, text: 'timed loading');
+        } else {
+          TToast.showLoadingWithoutText(context: context);
+        }
+        await tester.pump();
+        await tester.pump(const Duration(milliseconds: 1999));
+        expect(find.byType(TCircleIndicator), findsOneWidget);
+        await tester.pump(const Duration(milliseconds: 1));
+        await tester.pump(const Duration(milliseconds: 200));
+        expect(find.byType(TCircleIndicator), findsNothing);
+      });
+    }
+  });
+
+  group('background scrolling contract', () {
+    for (final showOverlay in [false, true]) {
+      for (final preventScrollThrough in [false, true]) {
+        testWidgets(
+          'mask=$showOverlay block=$preventScrollThrough blocks drag and wheel',
+          (tester) async {
+            final controller = ScrollController();
+            addTearDown(controller.dispose);
+            addTearDown(TToast.dismissAll);
+            late BuildContext context;
+            await tester.pumpWidget(
+              MaterialApp(
+                home: Scaffold(
+                  body: Builder(
+                    builder: (value) {
+                      context = value;
+                      return ListView.builder(
+                        controller: controller,
+                        itemExtent: 60,
+                        itemCount: 100,
+                        itemBuilder: (_, index) => Text('row $index'),
+                      );
+                    },
+                  ),
+                ),
+              ),
+            );
+            TToast.showText(
+              'scroll blocker',
+              context: context,
+              duration: Duration.zero,
+              overlay: TOverlayConfig(
+                showOverlay: showOverlay,
+                preventScrollThrough: preventScrollThrough,
+              ),
+            );
+            await tester.pump();
+            const point = Offset(40, 200);
+            await tester.dragFrom(point, const Offset(0, -150));
+            await tester.pumpAndSettle();
+            expect(
+              controller.offset,
+              preventScrollThrough ? 0 : greaterThan(0),
+            );
+            controller.jumpTo(0);
+            await tester.sendEventToBinding(
+              const PointerScrollEvent(
+                position: point,
+                scrollDelta: Offset(0, 100),
+              ),
+            );
+            await tester.pumpAndSettle();
+            expect(
+              controller.offset,
+              preventScrollThrough ? 0 : greaterThan(0),
+            );
+            TToast.dismissAll();
+            await tester.pump();
+            controller.jumpTo(0);
+            await tester.dragFrom(point, const Offset(0, -150));
+            await tester.pumpAndSettle();
+            expect(controller.offset, greaterThan(0));
+            controller.jumpTo(0);
+            await tester.sendEventToBinding(
+              const PointerScrollEvent(
+                position: point,
+                scrollDelta: Offset(0, 100),
+              ),
+            );
+            await tester.pumpAndSettle();
+            expect(controller.offset, greaterThan(0));
+          },
+        );
+      }
+    }
+    testWidgets('blocking background preserves custom Toast interactions', (
+      tester,
+    ) async {
+      var taps = 0;
+      await tester.pumpWidget(wrapWithTheme());
+      final context = tester.element(find.byKey(const Key('toast_host')));
+      TToast.showText(
+        null,
+        context: context,
+        duration: Duration.zero,
+        overlay: const TOverlayConfig(preventScrollThrough: true),
+        customWidget: TextButton(
+          onPressed: () => taps++,
+          child: const Text('toast action'),
+        ),
+      );
+      await tester.pump();
+      await tester.tap(find.text('toast action'));
+      expect(taps, 1);
+      TToast.dismissAll();
+      await tester.pump();
+    });
+  });
+
+  for (final height in [20.0, 150.0]) {
+    for (final placement in TToastPlacement.values) {
+      testWidgets('$placement has exact center for content height=$height', (
+        tester,
+      ) async {
+        await tester.pumpWidget(wrapWithTheme());
+        final context = tester.element(find.byKey(const Key('toast_host')));
+        TToast.showText(
+          null,
+          context: context,
+          duration: Duration.zero,
+          placement: placement,
+          customWidget: SizedBox(
+            width: 100,
+            height: height,
+            child: const Text('geometry'),
+          ),
+        );
+        await tester.pump();
+        final fraction = {
+          TToastPlacement.top: 0.25,
+          TToastPlacement.middle: 0.45,
+          TToastPlacement.bottom: 0.75,
+        }[placement]!;
+        expectToastCenter(tester, find.text('geometry'), fraction);
+        TToast.dismissAll();
+        await tester.pump();
+      });
+    }
+  }
+
   group('TToast E 类控制（showText）', () {
     testWidgets('showText 调用后 Toast 出现', (tester) async {
       await tester.pumpWidget(wrapWithTheme());
@@ -193,7 +1133,7 @@ void main() {
 
       final box = tester.widget<Container>(toastBoxFinder('默认文本'));
       final decoration = box.decoration! as BoxDecoration;
-      expect(decoration.color, token.fontGyColor2);
+      expect(decoration.color, token.fontGray2);
 
       await waitForDismiss(tester);
     });
@@ -551,7 +1491,7 @@ void main() {
         '旧 Toast',
         context: context,
         toastId: 'same',
-        overlay: const TOverlayConfig(preventTap: true),
+        overlay: const TOverlayConfig(preventScrollThrough: true),
       );
       await tester.pump();
       TToast.showText('新 Toast', context: context, toastId: 'same');
@@ -654,21 +1594,21 @@ void main() {
   });
 
   // ============================================================
-  // preventTap / customWidget
+  // preventScrollThrough / customWidget
   // ============================================================
   group('TToast 遮罩与自定义', () {
-    testWidgets('TOverlayConfig.preventTap 渲染全屏遮罩', (tester) async {
+    testWidgets('TOverlayConfig.preventScrollThrough 渲染全屏遮罩', (tester) async {
       await tester.pumpWidget(wrapWithTheme());
       await showToastAndPump(tester, (context) {
         TToast.showText(
           '防触',
           context: context,
-          overlay: const TOverlayConfig(preventTap: true),
+          overlay: const TOverlayConfig(preventScrollThrough: true),
           duration: const Duration(milliseconds: 100),
         );
       });
       expect(find.text('防触'), findsOneWidget);
-      // preventTap 时使用全屏拦截层
+      // preventScrollThrough 时使用全屏拦截层
       expect(find.byType(Positioned), findsWidgets);
       await waitForDismiss(tester);
     });
@@ -719,7 +1659,7 @@ void main() {
           overlay: const TOverlayConfig(
             showOverlay: true,
             opacity: 0.5,
-            preventTap: true,
+            preventScrollThrough: true,
           ),
           duration: const Duration(milliseconds: 100),
         );
@@ -749,7 +1689,7 @@ void main() {
   // placement 展示位置
   // ============================================================
   group('TToast placement 展示位置', () {
-    testWidgets('默认 middle 居中', (tester) async {
+    testWidgets('默认 middle 中心位于 45%', (tester) async {
       await tester.pumpWidget(wrapWithTheme());
       await showToastAndPump(tester, (context) {
         TToast.showText(
@@ -759,11 +1699,8 @@ void main() {
         );
       });
       expect(find.text('居中'), findsOneWidget);
-      // 无蒙层/拦截时不使用 Stack，直接 Align
-      final align = tester.widget<Align>(
-        find.ancestor(of: find.text('居中'), matching: find.byType(Align)).first,
-      );
-      expect(align.alignment, const FractionalOffset(0.5, 0.5));
+      // 无蒙层/拦截时按实际中心位置定位
+      expectToastCenter(tester, find.text('居中'), 0.45);
       await waitForDismiss(tester);
     });
 
@@ -778,10 +1715,7 @@ void main() {
         );
       });
       expect(find.text('顶部'), findsOneWidget);
-      final align = tester.widget<Align>(
-        find.ancestor(of: find.text('顶部'), matching: find.byType(Align)).first,
-      );
-      expect(align.alignment, const FractionalOffset(0.5, 0.25));
+      expectToastCenter(tester, find.text('顶部'), 0.25);
       await waitForDismiss(tester);
     });
 
@@ -796,10 +1730,7 @@ void main() {
         );
       });
       expect(find.text('底部'), findsOneWidget);
-      final align = tester.widget<Align>(
-        find.ancestor(of: find.text('底部'), matching: find.byType(Align)).first,
-      );
-      expect(align.alignment, const FractionalOffset(0.5, 0.75));
+      expectToastCenter(tester, find.text('底部'), 0.75);
       await waitForDismiss(tester);
     });
 
@@ -815,13 +1746,8 @@ void main() {
         );
       });
       expect(find.text('顶部遮罩'), findsOneWidget);
-      // 有蒙层时使用 Stack 包裹，Toast 仍在 Stack 内的 Align 中按 placement 定位
-      final align = tester.widget<Align>(
-        find
-            .ancestor(of: find.text('顶部遮罩'), matching: find.byType(Align))
-            .first,
-      );
-      expect(align.alignment, const FractionalOffset(0.5, 0.25));
+      // 有蒙层时 Toast 中心仍按 Overlay 高度定位
+      expectToastCenter(tester, find.text('顶部遮罩'), 0.25);
       // 可见蒙层仍渲染
       expect(
         find.byWidgetPredicate(
@@ -872,12 +1798,7 @@ void main() {
         );
       });
       expect(find.text('图标底部'), findsOneWidget);
-      final align = tester.widget<Align>(
-        find
-            .ancestor(of: find.text('图标底部'), matching: find.byType(Align))
-            .first,
-      );
-      expect(align.alignment, const FractionalOffset(0.5, 0.75));
+      expectToastCenter(tester, find.text('图标底部'), 0.75);
       await waitForDismiss(tester);
     });
 
@@ -894,12 +1815,7 @@ void main() {
       });
       expect(find.text('成功遮罩'), findsOneWidget);
       expect(find.byIcon(TIcons.check_circle), findsOneWidget);
-      final align = tester.widget<Align>(
-        find
-            .ancestor(of: find.text('成功遮罩'), matching: find.byType(Align))
-            .first,
-      );
-      expect(align.alignment, const FractionalOffset(0.5, 0.25));
+      expectToastCenter(tester, find.text('成功遮罩'), 0.25);
       await waitForDismiss(tester);
     });
 
@@ -909,13 +1825,13 @@ void main() {
         TToast.showWarning(
           '警告拦截',
           context: context,
-          overlay: const TOverlayConfig(preventTap: true),
+          overlay: const TOverlayConfig(preventScrollThrough: true),
           duration: const Duration(milliseconds: 100),
         );
       });
       expect(find.text('警告拦截'), findsOneWidget);
       expect(find.byIcon(TIcons.error_circle), findsOneWidget);
-      // preventTap 时渲染全屏拦截层
+      // preventScrollThrough 时渲染全屏拦截层
       expect(find.byType(Positioned), findsWidgets);
       await waitForDismiss(tester);
     });
@@ -932,12 +1848,7 @@ void main() {
       });
       expect(find.text('失败底部'), findsOneWidget);
       expect(find.byIcon(TIcons.close_circle), findsOneWidget);
-      final align = tester.widget<Align>(
-        find
-            .ancestor(of: find.text('失败底部'), matching: find.byType(Align))
-            .first,
-      );
-      expect(align.alignment, const FractionalOffset(0.5, 0.75));
+      expectToastCenter(tester, find.text('失败底部'), 0.75);
       await waitForDismiss(tester);
     });
 
@@ -970,15 +1881,7 @@ void main() {
         placement: TToastPlacement.top,
       );
       await tester.pump();
-      final align = tester.widget<Align>(
-        find
-            .ancestor(
-              of: find.byType(TCircleIndicator),
-              matching: find.byType(Align),
-            )
-            .first,
-      );
-      expect(align.alignment, const FractionalOffset(0.5, 0.25));
+      expectToastCenter(tester, find.byType(TCircleIndicator), 0.25);
       TToast.dismissToast(id);
       await tester.pump();
     });
@@ -1010,7 +1913,9 @@ void main() {
       await waitForDismiss(tester);
     });
 
-    testWidgets('showOverlay 与 preventTap 均关闭时不渲染蒙层/拦截层', (tester) async {
+    testWidgets('showOverlay 与 preventScrollThrough 均关闭时不渲染蒙层/拦截层', (
+      tester,
+    ) async {
       await tester.pumpWidget(wrapWithTheme());
       await showToastAndPump(tester, (context) {
         TToast.showText(
@@ -1021,11 +1926,8 @@ void main() {
         );
       });
       expect(find.text('无遮罩'), findsOneWidget);
-      // 两者皆关：Toast 直接由 Align 承载（无 Stack 全屏蒙层）
-      final align = tester.widget<Align>(
-        find.ancestor(of: find.text('无遮罩'), matching: find.byType(Align)).first,
-      );
-      expect(align.alignment, const FractionalOffset(0.5, 0.5));
+      // 两者皆关：没有全屏蒙层，中心位置仍保持一致
+      expectToastCenter(tester, find.text('无遮罩'), 0.45);
       // 无可见蒙层：不存在黑色蒙层 Container（遮罩色），且无全屏 Positioned 拦截层
       expect(
         find.byWidgetPredicate(
@@ -1099,4 +2001,34 @@ void main() {
     expect(identical(base.lerp(null, 0.5), base), isTrue);
     expect(TToastThemeData.lerpDouble(null, null, 0.5), isNull);
   });
+}
+
+class _ToastContentLifecycleProbe extends StatefulWidget {
+  const _ToastContentLifecycleProbe({
+    required this.onMount,
+    required this.onDispose,
+  });
+  final VoidCallback onMount;
+  final VoidCallback onDispose;
+  @override
+  State<_ToastContentLifecycleProbe> createState() =>
+      _ToastContentLifecycleProbeState();
+}
+
+class _ToastContentLifecycleProbeState
+    extends State<_ToastContentLifecycleProbe> {
+  @override
+  void initState() {
+    super.initState();
+    widget.onMount();
+  }
+
+  @override
+  void dispose() {
+    widget.onDispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) => const Text('content lifecycle');
 }

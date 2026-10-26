@@ -1,8 +1,11 @@
+import 'dart:math' as math;
+
 import 'package:flutter/material.dart';
+
 import '../../theme/t_spacers.dart';
 import '../../theme/t_theme.dart';
 import '../../util/context_extension.dart';
-import '../text/t_text.dart';
+import '../text/t_text_styled.dart';
 import 't_calendar_body.dart';
 import 't_calendar_cell.dart';
 import 't_calendar_header.dart';
@@ -23,53 +26,37 @@ export 't_calendar_types.dart' show DateSelectType, TCalendarFirstDayOfWeek;
 // TCalendar — 纯日历组件
 // ---------------------------------------------------------------------------
 
-/// 严格受控的日历面板，不包含弹窗、工具栏或确认操作。
-///
-/// [value] 与 [onChanged] 构成受控选择状态；[onChanged] 为 null 时禁用。
 class TCalendar extends StatefulWidget {
   TCalendar({
     super.key,
-
-    /// 受控选中日期。
     required this.value,
-
-    /// 每周从星期几开始，默认从星期日开始。
     this.firstDayOfWeek = TCalendarFirstDayOfWeek.sunday,
 
-    /// 最小可选日期。
+    /// 最小可选日期；未传时为 1970-01-01，取日期部分，不得晚于 maxDate。
     DateTime? minDate,
 
-    /// 最大可选日期。
+    /// 最大可选日期；未传时为 2100-12-31，取日期部分，不得早于 minDate。
     DateTime? maxDate,
-
-    /// 选择模式。
     this.variant = TCalendarVariant.single,
-
-    /// 选中日期变化回调；为 null 时禁用。
     this.onChanged,
-
-    /// 可见月份变化回调。
     this.onMonthChanged,
 
     /// 月标题构建器。
     TCalendarMonthTitleBuilder? monthTitleBuilder,
-
-    /// 日期格构建器。
+    this.weekdayNames,
     this.cellBuilder,
-
-    /// 日期副标题构建器。
     this.subtitleBuilder,
-
-    /// 锚点滚动是否使用动画。
     this.animateTo = false,
-
-    /// 滚动锚点日期。
     this.anchorDate,
   }) : assert(
          minDate == null ||
              maxDate == null ||
              !_dateOnly(minDate).isAfter(_dateOnly(maxDate)),
          'minDate 不能晚于 maxDate',
+       ),
+       assert(
+         weekdayNames == null || weekdayNames.length == 7,
+         'weekdayNames 必须按星期日到星期六提供 7 个文案',
        ),
        minDate = minDate == null ? _getDefaultMinDate() : _dateOnly(minDate),
        maxDate = maxDate == null ? _getDefaultMaxDate() : _dateOnly(maxDate),
@@ -92,24 +79,30 @@ class TCalendar extends StatefulWidget {
 
   /// 受控选中日期列表。
   ///
-  /// 列表长度与 [variant] 对应：
-  /// - [TCalendarVariant.single]：1 个元素（选中日期）
-  /// - [TCalendarVariant.multiple]：N 个元素（所有选中日期）
-  /// - [TCalendarVariant.range]：2 个元素（起始、结束日期）
+  /// 空列表表示未选择；single 通常使用 1 个元素，multiple 使用所有选中日期，
+  /// range 使用 1 个起始日期或 2 个起止日期。日期会去除时分秒、去重并排序。
   final List<DateTime> value;
 
-  /// 选中结果变化时触发（单选立即触发；多选每次切换；区间在端点变化时触发）。
+  /// 选中结果变化时触发；为 null 时整个日历禁用。
   ///
-  /// 父组件应在回调中更新 [value]。组件挂载时不会调用本回调。
+  /// 单选立即触发，多选每次切换，区间在端点变化时触发。父组件应在回调中
+  /// 更新 [value]。组件挂载时不会调用本回调。
   final ValueChanged<List<DateTime>>? onChanged;
 
-  /// 可见月份变化时触发（用户滑动或程序化滚动结束后），参数为当月 1 日。
+  /// 可见月份变化且不处于程序化动画滚动期间时触发，参数为当月 1 日。
   ///
-  /// 外置控制栏可只更新自身文案，避免为同步月份对 [TCalendar] 整组件 `setState`。
+  /// 程序化动画滚动不保证在结束时通知；外置控制栏应自行同步 anchorDate
+  /// 对应的目标月份，用户滑动时再根据本回调更新文案。
   final ValueChanged<DateTime>? onMonthChanged;
 
   /// 月标题构建器，参数 [DateTime] 为当月 1 日（仅年月有效）。
   final TCalendarMonthTitleBuilder monthTitleBuilder;
+
+  /// 星期标题，按星期日到星期六排列。
+  ///
+  /// 未设置时使用 `TResourceManager` 提供的当前语言文案。
+  /// 必须按星期日到星期六提供 7 个文案，与 firstDayOfWeek 无关。
+  final List<String>? weekdayNames;
 
   /// 整格自定义构建器；返回非 null 时替换该格默认布局（主数字 + 副标题均不渲染）。
   ///
@@ -138,12 +131,23 @@ class TCalendar extends StatefulWidget {
   static DateTime _getDefaultMaxDate() => DateTime(2100, 12, 31);
   static DateTime _dateOnly(DateTime date) =>
       DateTime(date.year, date.month, date.day);
-  static const double _kWeekdayHeight = 46.0;
 
   // ---------------------------------------------------------------------------
   // 默认构建器
   // ---------------------------------------------------------------------------
   static Widget _defaultMonthTitleBuilder(
+    BuildContext context,
+    DateTime monthDate,
+  ) => TTextStyled(
+    _defaultMonthTitleText(context, monthDate),
+    centerLeading: true,
+    style: _defaultMonthTitleStyle(context),
+  );
+
+  static TextStyle? _defaultMonthTitleStyle(BuildContext context) =>
+      Theme.of(context).extension<TCalendarThemeData>()?.monthTitleStyle;
+
+  static String _defaultMonthTitleText(
     BuildContext context,
     DateTime monthDate,
   ) {
@@ -162,7 +166,7 @@ class TCalendar extends StatefulWidget {
       context.resource.november,
       context.resource.december,
     ];
-    return TText('$monthYear ${monthNames[monthDate.month - 1]}');
+    return '$monthYear ${monthNames[monthDate.month - 1]}';
   }
 
   /// 将 [value] 规范为仅含年月日的 [DateTime] 列表，避免动态列表或带时分秒导致比较异常。
@@ -186,15 +190,17 @@ class _TCalendarState extends State<TCalendar> {
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    weekdayNames = [
-      context.resource.sunday,
-      context.resource.monday,
-      context.resource.tuesday,
-      context.resource.wednesday,
-      context.resource.thursday,
-      context.resource.friday,
-      context.resource.saturday,
-    ];
+    weekdayNames =
+        widget.weekdayNames ??
+        [
+          context.resource.sunday,
+          context.resource.monday,
+          context.resource.tuesday,
+          context.resource.wednesday,
+          context.resource.thursday,
+          context.resource.friday,
+          context.resource.saturday,
+        ];
     monthNames = [
       context.resource.january,
       context.resource.february,
@@ -213,19 +219,89 @@ class _TCalendarState extends State<TCalendar> {
   }
 
   /// P1: 从 ThemeExtension 解析样式（mergeExtension 子树覆盖 → token 默认）
-  TCalendarStyle _resolveStyle(BuildContext context) {
+  TCalendarStyle _resolveStyle(BuildContext context, {double? maxWidth}) {
     final theme = Theme.of(context).extension<TCalendarThemeData>();
     final base = TCalendarStyle.generateStyle(context: context);
+    final dayStyle = base.dayStyle?.merge(theme?.dayStyle);
+    final todayStyle = base.todayDayStyle?.merge(theme?.todayDayStyle);
+    final weekdayStyle = base.weekdayStyle?.merge(theme?.weekdayStyle);
+    final width = maxWidth != null && maxWidth.isFinite
+        ? maxWidth
+        : MediaQuery.sizeOf(context).width;
+    final padding =
+        theme?.bodyPadding ?? base.bodyPadding ?? context.tTheme.spacer2;
+    final weekdayGap = theme?.weekdayGap ?? base.weekdayGap ?? 4;
+    final weekdayWidth = math.max(
+      0.0,
+      (width - padding * 2 - weekdayGap * 6) / 7,
+    );
+    final verticalGap =
+        theme?.verticalGap ?? base.verticalGap ?? context.tTheme.spacer;
+    final dayWidth = math.max(0.0, (width - padding * 2 - verticalGap * 3) / 7);
+    var defaultCellHeight = base.cellHeight;
+    if (widget.cellBuilder == null && theme?.cellHeight == null) {
+      // TD dates use tabular numeric text. Measure one two-digit sample per style.
+      for (final style in [dayStyle, todayStyle]) {
+        defaultCellHeight = math.max(
+          defaultCellHeight,
+          TTextStyled(
+            '28',
+            centerLeading: true,
+            style: style,
+          ).naturalSize(context, maxWidth: dayWidth).height,
+        );
+      }
+    }
+    double labelsHeight(
+      Iterable<String> labels,
+      TextStyle? style,
+      double availableWidth,
+      double minimum,
+    ) => labels.fold<double>(
+      minimum,
+      (height, label) => math.max(
+        height,
+        TTextStyled(
+          label,
+          centerLeading: true,
+          style: style,
+        ).naturalSize(context, maxWidth: availableWidth).height,
+      ),
+    );
+    // The seven weekday labels can wrap differently even with equal character counts.
+    final weekdayHeight = labelsHeight(
+      weekdayNames,
+      weekdayStyle,
+      weekdayWidth,
+      base.weekdayHeight,
+    );
+    var defaultMonthHeight = base.monthTitleHeight;
+    if (theme?.monthTitleHeight == null &&
+        widget.monthTitleBuilder == TCalendar._defaultMonthTitleBuilder) {
+      defaultMonthHeight = labelsHeight(
+        List.generate(
+          12,
+          (index) => TCalendar._defaultMonthTitleText(
+            context,
+            DateTime(widget.maxDate.year, index + 1),
+          ),
+        ),
+        TCalendar._defaultMonthTitleStyle(context),
+        math.max(0, width - padding * 2),
+        defaultMonthHeight,
+      );
+    }
     return TCalendarStyle(
       decoration: theme?.decoration ?? base.decoration,
-      weekdayStyle: theme?.weekdayStyle ?? base.weekdayStyle,
-      monthTitleStyle: theme?.monthTitleStyle ?? base.monthTitleStyle,
-      dayStyle: theme?.dayStyle ?? base.dayStyle,
-      todayDayStyle: theme?.todayDayStyle ?? base.todayDayStyle,
+      weekdayStyle: weekdayStyle,
+      weekdayHeight: weekdayHeight,
+      monthTitleStyle: base.monthTitleStyle?.merge(theme?.monthTitleStyle),
+      dayStyle: dayStyle,
+      todayDayStyle: todayStyle,
       cellDecoration: theme?.cellDecoration ?? base.cellDecoration,
       subtitleStyle: theme?.subtitleStyle ?? base.subtitleStyle,
-      cellHeight: theme?.cellHeight ?? base.cellHeight,
-      monthTitleHeight: theme?.monthTitleHeight ?? base.monthTitleHeight,
+      cellHeight: theme?.cellHeight ?? defaultCellHeight,
+      monthTitleHeight: theme?.monthTitleHeight ?? defaultMonthHeight,
       verticalGap: theme?.verticalGap ?? base.verticalGap,
       bodyPadding: theme?.bodyPadding ?? base.bodyPadding,
       weekdayGap: theme?.weekdayGap ?? base.weekdayGap,
@@ -234,21 +310,29 @@ class _TCalendarState extends State<TCalendar> {
   }
 
   @override
-  Widget build(BuildContext context) {
-    final verticalGap = _style.verticalGap ?? context.tTheme.spacer8;
+  Widget build(BuildContext context) => LayoutBuilder(
+    builder: (context, constraints) {
+      _style = _resolveStyle(context, maxWidth: constraints.maxWidth);
+      return _buildPanel(context);
+    },
+  );
 
+  Widget _buildPanel(BuildContext context) {
+    final verticalGap = _style.verticalGap ?? context.tTheme.spacer;
+
+    final requestedHeight =
+        Theme.of(context).extension<TCalendarThemeData>()?.height ??
+        _calcInlineDefaultHeight(verticalGap);
     final calendar = Container(
-      height:
-          Theme.of(context).extension<TCalendarThemeData>()?.height ??
-          _calcInlineDefaultHeight(verticalGap),
+      height: requestedHeight,
       width: double.infinity,
       decoration: _style.decoration,
       child: Column(
         children: [
           TCalendarHeader(
             firstDayOfWeek: widget.firstDayOfWeek.index,
-            weekdayGap: _style.weekdayGap ?? context.tTheme.spacer4,
-            padding: _style.bodyPadding ?? context.tTheme.spacer16,
+            weekdayGap: _style.weekdayGap ?? 4.0,
+            padding: _style.bodyPadding ?? context.tTheme.spacer2,
             weekdayStyle: _style.weekdayStyle,
             weekdayHeight: _style.weekdayHeight,
             weekdayNames: weekdayNames,
@@ -275,7 +359,7 @@ class _TCalendarState extends State<TCalendar> {
       minDate: widget.minDate,
       maxDate: widget.maxDate,
       value: widget._value,
-      bodyPadding: _style.bodyPadding ?? context.tTheme.spacer16,
+      bodyPadding: _style.bodyPadding ?? context.tTheme.spacer2,
       monthNames: monthNames,
       monthTitleStyle: _style.monthTitleStyle,
       verticalGap: verticalGap,
@@ -375,10 +459,10 @@ class _TCalendarState extends State<TCalendar> {
   ///
   /// 布局 = weekday(46) + monthTitle(22) + 6行(cellHeight + verticalGap) + bodyPadding*2
   double _calcInlineDefaultHeight(double verticalGap) {
-    const weekdayHeight = TCalendar._kWeekdayHeight;
+    final weekdayHeight = _style.weekdayHeight;
     final monthTitleHeight = _style.monthTitleHeight;
     final cellHeight = _style.cellHeight;
-    final bodyPadding = _style.bodyPadding ?? context.tTheme.spacer16;
+    final bodyPadding = _style.bodyPadding ?? context.tTheme.spacer2;
     const visibleRows = 6;
     return weekdayHeight +
         monthTitleHeight +

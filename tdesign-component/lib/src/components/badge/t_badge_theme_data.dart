@@ -1,13 +1,60 @@
 import 'dart:ui' show lerpDouble;
 
 import 'package:flutter/material.dart';
+import 'package:meta/meta.dart';
 
-/// Material [BadgeThemeData] 未覆盖的 TDesign 徽标视觉默认值。
+import '../../theme/t_token_double_lerp.dart';
+
+import 't_badge_defaults.dart';
+
+/// TDesign 徽标的子树级视觉默认值。
 ///
-/// 只保存描边的视觉默认值，不保存形态、尺寸、内容或交互状态。
+/// 形态、内容、对齐和偏移由实例 API 控制，不从 Material BadgeTheme 读取。
+///
+/// 子树气泡圆角配置示例：
+/// ```dart
+/// Theme(
+///   data: Theme.of(context).mergeExtension(
+///     const TBadgeThemeData(bubbleBorderRadius: BorderRadius.all(Radius.circular(8))),
+///   ),
+///   child: const TBadge(variant: TBadgeVariant.bubble, label: 'NEW'),
+/// )
+/// ```
+///
+/// {@category ComponentTheme}
 @immutable
 class TBadgeThemeData extends ThemeExtension<TBadgeThemeData> {
-  const TBadgeThemeData({this.borderColor, this.borderWidth});
+  TokenDoubleLerp? get _dotSizeLerp => null;
+
+  @internal
+  double resolveDotSize(double fallback) =>
+      _dotSizeLerp?.resolve(fallback) ?? dotSize ?? fallback;
+
+  const TBadgeThemeData({
+    this.backgroundColor,
+    this.dotSize,
+    this.labelHeight,
+    this.textStyle,
+    this.padding,
+    this.borderColor,
+    this.borderWidth,
+    this.bubbleBorderRadius,
+  });
+
+  /// 徽标背景色；为空时使用全局错误色 Token。
+  final Color? backgroundColor;
+
+  /// 圆点直径；为空时读取 size4，默认 8 逻辑像素。
+  final double? dotSize;
+
+  /// 文字徽标高度；为空时由当前尺寸的字体 Token 决定。
+  final double? labelHeight;
+
+  /// 徽标文字的唯一组件级样式入口；未配置字段从字体与反色文字 Token 取得。
+  final TextStyle? textStyle;
+
+  /// 文字徽标内边距；为空时中、大尺寸分别使用左右 4、6 逻辑像素。
+  final EdgeInsetsGeometry? padding;
 
   /// 开启描边时使用的颜色；为空时回退到当前容器背景色。
   final Color? borderColor;
@@ -15,22 +62,134 @@ class TBadgeThemeData extends ThemeExtension<TBadgeThemeData> {
   /// 开启描边时使用的宽度；为空时使用 1 逻辑像素。
   final double? borderWidth;
 
+  /// 气泡徽标的四角圆角，仅对 bubble 形态生效。
+  ///
+  /// 未设置时左上、右上、右下为 10dp，左下为 1dp；不引用全局圆角。
+  /// 支持 BorderRadiusDirectional，按当前文字方向解析。
+  final BorderRadiusGeometry? bubbleBorderRadius;
+
+  /// 复制主题配置。
+  ///
+  /// ## 返回值
+  /// 返回主题副本；非空参数替换对应配置，null 参数保留当前配置。
   @override
-  TBadgeThemeData copyWith({Color? borderColor, double? borderWidth}) {
-    return TBadgeThemeData(
-      borderColor: borderColor ?? this.borderColor,
-      borderWidth: borderWidth ?? this.borderWidth,
+  TBadgeThemeData copyWith({
+    Color? backgroundColor,
+    double? dotSize,
+    double? labelHeight,
+    TextStyle? textStyle,
+    EdgeInsetsGeometry? padding,
+    Color? borderColor,
+    double? borderWidth,
+    BorderRadiusGeometry? bubbleBorderRadius,
+  }) {
+    return _InterpolatedTBadgeThemeData(
+      TBadgeThemeData(
+        backgroundColor: backgroundColor ?? this.backgroundColor,
+        dotSize: dotSize ?? this.dotSize,
+        labelHeight: labelHeight ?? this.labelHeight,
+        textStyle: textStyle ?? this.textStyle,
+        padding: padding ?? this.padding,
+        borderColor: borderColor ?? this.borderColor,
+        borderWidth: borderWidth ?? this.borderWidth,
+        bubbleBorderRadius: bubbleBorderRadius ?? this.bubbleBorderRadius,
+      ),
+      dotSizeLerp: dotSize == null ? _dotSizeLerp : null,
     );
   }
 
+  /// 生成主题过渡配置。
+  ///
+  /// ## 返回值
+  /// 按 t 在当前主题和目标主题之间生成过渡主题。
+  /// other 为空或类型不匹配时返回当前主题；字段各自采用其类型的插值规则。
   @override
-  TBadgeThemeData lerp(ThemeExtension<TBadgeThemeData>? other, double t) {
+  TBadgeThemeData lerp(
+    /// 目标主题；为空或类型不匹配时保留当前主题。
+    ThemeExtension<TBadgeThemeData>? other,
+
+    /// 插值进度；通常 0 表示当前主题，1 表示目标主题。
+    double t,
+  ) {
     if (other is! TBadgeThemeData) {
       return this;
     }
-    return TBadgeThemeData(
-      borderColor: Color.lerp(borderColor, other.borderColor, t),
-      borderWidth: lerpDouble(borderWidth, other.borderWidth, t),
+    return _InterpolatedTBadgeThemeData(
+      TBadgeThemeData(
+        backgroundColor: _lerpContextualColor(
+          backgroundColor,
+          other.backgroundColor,
+          t,
+        ),
+        dotSize: _lerpNullableDouble(dotSize, other.dotSize, t),
+        labelHeight: _lerpNullableDouble(labelHeight, other.labelHeight, t),
+        textStyle: TextStyle.lerp(textStyle, other.textStyle, t),
+        padding: EdgeInsetsGeometry.lerp(padding, other.padding, t),
+        bubbleBorderRadius:
+            bubbleBorderRadius == null && other.bubbleBorderRadius == null
+            ? null
+            : BorderRadiusGeometry.lerp(
+                bubbleBorderRadius ?? TBadgeDefaults.bubbleBorderRadius,
+                other.bubbleBorderRadius ?? TBadgeDefaults.bubbleBorderRadius,
+                t,
+              ),
+        // null 表示依赖当前上下文的容器背景色，不能把它当作透明色参与
+        // 插值；在动画中点切换配置，才能保留两端各自的运行时回退语义。
+        borderColor: _lerpContextualColor(borderColor, other.borderColor, t),
+        borderWidth: _lerpBorderWidth(borderWidth, other.borderWidth, t),
+      ),
+      dotSizeLerp: TokenDoubleLerp.between(
+        dotSize,
+        _dotSizeLerp,
+        other.dotSize,
+        other._dotSizeLerp,
+        t,
+      ),
     );
   }
+
+  static Color? _lerpContextualColor(Color? begin, Color? end, double t) {
+    if (begin == null || end == null) {
+      return t < 0.5 ? begin : end;
+    }
+    return Color.lerp(begin, end, t);
+  }
+
+  static double? _lerpBorderWidth(double? begin, double? end, double t) {
+    if (begin == null && end == null) {
+      return null;
+    }
+    return lerpDouble(
+      begin ?? TBadgeDefaults.borderWidth,
+      end ?? TBadgeDefaults.borderWidth,
+      t,
+    );
+  }
+
+  static double? _lerpNullableDouble(double? begin, double? end, double t) {
+    if (begin == null || end == null) {
+      return t < 0.5 ? begin : end;
+    }
+    return lerpDouble(begin, end, t);
+  }
+}
+
+class _InterpolatedTBadgeThemeData extends TBadgeThemeData {
+  _InterpolatedTBadgeThemeData(
+    TBadgeThemeData data, {
+    TokenDoubleLerp? dotSizeLerp,
+  }) : _dotSizeLerp = dotSizeLerp,
+       super(
+         backgroundColor: data.backgroundColor,
+         dotSize: data.dotSize,
+         labelHeight: data.labelHeight,
+         textStyle: data.textStyle,
+         padding: data.padding,
+         borderColor: data.borderColor,
+         borderWidth: data.borderWidth,
+         bubbleBorderRadius: data.bubbleBorderRadius,
+       );
+
+  @override
+  final TokenDoubleLerp? _dotSizeLerp;
 }

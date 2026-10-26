@@ -1,8 +1,9 @@
-import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:tdesign_flutter/tdesign_flutter.dart';
 
 void main() {
+  requiredMarkerOwnershipTests();
   Widget app(Widget child, {TCellThemeData? cellTheme}) {
     var theme = TThemeBuilder.light(TThemeData.defaultData());
     if (cellTheme != null) {
@@ -15,6 +16,59 @@ void main() {
   }
 
   group('TCell', () {
+    for (final nativeText in [false, true]) {
+      testWidgets('局部 Theme 只改颜色，保留各插槽字体 Token（原生=$nativeText）', (
+        tester,
+      ) async {
+        Widget text(String value) => nativeText ? Text(value) : TText(value);
+        final token = TThemeData.defaultData();
+        await tester.pumpWidget(
+          app(
+            TCellGroup(
+              title: text('组标题'),
+              cells: [
+                TCell(
+                  title: text('标题'),
+                  subtitle: text('副标题'),
+                  note: text('说明'),
+                  required: true,
+                ),
+                TCell(note: text('独立说明')),
+              ],
+            ),
+            cellTheme: const TCellThemeData(
+              titleStyle: TextStyle(color: Colors.red),
+              subtitleStyle: TextStyle(color: Colors.green),
+              noteStyle: TextStyle(color: Colors.blue),
+              groupTitleStyle: TextStyle(color: Colors.purple),
+              requiredStyle: TextStyle(fontWeight: FontWeight.w700),
+            ),
+          ),
+        );
+        await tester.pumpAndSettle();
+        for (final entry in [
+          ('标题', token.fontBodyLarge!, Colors.red),
+          ('副标题', token.fontBodyMedium!, Colors.green),
+          ('说明', token.fontBodyLarge!, Colors.blue),
+          ('独立说明', token.fontBodyLarge!, Colors.blue),
+          ('组标题', token.fontBodyMedium!, Colors.purple),
+        ]) {
+          final finder = find.text(entry.$1);
+          final style = nativeText
+              ? DefaultTextStyle.of(tester.element(finder)).style
+              : tester.widget<Text>(finder).style!;
+          expect(style.color, entry.$3);
+          expect(style.fontSize, entry.$2.size);
+          expect(style.height, entry.$2.height);
+          expect(style.fontWeight, entry.$2.fontWeight);
+        }
+        expect(
+          tester.widget<Text>(find.text(' *')).style?.color,
+          token.errorColor,
+        );
+      });
+    }
+
     testWidgets('单一 Widget 槽位完整渲染', (tester) async {
       await tester.pumpWidget(
         app(
@@ -123,7 +177,7 @@ void main() {
       });
     }
 
-    testWidgets('Theme 提供高度、对齐、边框和文字样式', (tester) async {
+    testWidgets('实例控制对齐，Theme 提供高度、边框和文字样式', (tester) async {
       await tester.pumpWidget(
         app(
           const TCell(
@@ -132,6 +186,7 @@ void main() {
             note: Text('Theme note'),
             arrow: true,
             required: true,
+            align: TCellAlign.top,
           ),
           cellTheme: const TCellThemeData(
             titleStyle: TextStyle(fontSize: 18),
@@ -142,7 +197,6 @@ void main() {
             borderColor: Colors.blue,
             backgroundColor: Colors.white,
             padding: EdgeInsets.all(8),
-            align: TCellAlign.top,
             showBottomBorder: true,
             height: 80,
           ),
@@ -174,6 +228,29 @@ void main() {
       expect(text.style?.fontWeight, FontWeight.w600);
     });
 
+    testWidgets('TText 副标题与说明采用各自组件样式，实例样式优先', (tester) async {
+      await tester.pumpWidget(
+        app(
+          const TCell(
+            title: TText('标题'),
+            subtitle: TText('副标题'),
+            note: TText('说明', style: TextStyle(color: Colors.orange)),
+          ),
+          cellTheme: const TCellThemeData(
+            subtitleStyle: TextStyle(color: Colors.purple, fontSize: 13),
+            noteStyle: TextStyle(color: Colors.blue, fontSize: 15),
+          ),
+        ),
+      );
+
+      final subtitle = tester.widget<Text>(find.text('副标题'));
+      final note = tester.widget<Text>(find.text('说明'));
+      expect(subtitle.style?.color, Colors.purple);
+      expect(subtitle.style?.fontSize, 13);
+      expect(note.style?.color, Colors.orange);
+      expect(note.style?.fontSize, 15);
+    });
+
     testWidgets('trailing 可展示较小字号的普通正文值', (tester) async {
       const value = 'Selected value';
       final token = TThemeData.defaultData();
@@ -182,7 +259,7 @@ void main() {
           Builder(
             builder: (context) => TCell(
               title: const TText('Select'),
-              trailing: TText(
+              trailing: Text(
                 value,
                 style: Theme.of(context).textTheme.bodyMedium,
               ),
@@ -194,7 +271,7 @@ void main() {
       final text = tester.widget<Text>(find.text(value));
       expect(text.style?.fontSize, token.fontBodyMedium?.size);
       expect(text.style?.color, token.textColorPrimary);
-      expect(text.style?.color, isNot(token.textDisabledColor));
+      expect(text.style?.color, isNot(token.textColorDisabled));
     });
 
     testWidgets('默认标题不继承外层粗体', (tester) async {
@@ -342,6 +419,24 @@ void main() {
       expect(tester.takeException(), isNull);
     });
 
+    testWidgets('note 优先使用内容宽度且保留标题空间', (tester) async {
+      const address = '广东 深圳 南山区 粤海街道';
+      await tester.pumpWidget(
+        app(
+          const SizedBox(
+            width: 375,
+            child: TCell(title: Text('选择地区'), note: Text(address), arrow: true),
+          ),
+        ),
+      );
+
+      final paragraph = tester.renderObject<RenderParagraph>(
+        find.text(address),
+      );
+      expect(paragraph.didExceedMaxLines, isFalse);
+      expect(find.text('选择地区'), findsOneWidget);
+    });
+
     testWidgets('显式 Text 配置可覆盖默认单行限制', (tester) async {
       const title = 'Explicitly multiline title';
 
@@ -391,12 +486,11 @@ void main() {
       expect(find.byKey(const ValueKey('cell-1')), findsOneWidget);
     });
 
-    testWidgets('card 实例形态覆盖 Theme', (tester) async {
+    testWidgets('card 形态仅由实例选择', (tester) async {
       await tester.pumpWidget(
         app(
           const TCellGroup(variant: TCellGroupVariant.card, cells: cells),
           cellTheme: const TCellThemeData(
-            groupVariant: TCellGroupVariant.standard,
             cardBorderRadius: BorderRadius.all(Radius.circular(6)),
             cardPadding: EdgeInsets.all(4),
           ),
@@ -454,6 +548,146 @@ void main() {
       );
       expect(find.byType(ListView), findsOneWidget);
     });
+
+    testWidgets('有界高度时 scrollable 撑满剩余空间并可滚动', (tester) async {
+      await tester.pumpWidget(
+        app(
+          const SizedBox(
+            height: 160,
+            child: TCellGroup(scrollable: true, cells: cells),
+          ),
+        ),
+      );
+      final listView = tester.widget<ListView>(find.byType(ListView));
+      expect(listView.shrinkWrap, isFalse);
+      // 垂直 ListView 未显式指定 physics 时，框架默认为 AlwaysScrollableScrollPhysics。
+      expect(listView.physics, isNot(isA<NeverScrollableScrollPhysics>()));
+      expect(tester.takeException(), isNull);
+    });
+
+    testWidgets('scrollable 放进 SingleChildScrollView 不触发布局异常', (tester) async {
+      await tester.pumpWidget(
+        app(
+          const SingleChildScrollView(
+            child: TCellGroup(scrollable: true, cells: cells),
+          ),
+        ),
+      );
+      expect(tester.takeException(), isNull);
+      expect(find.byType(TCell), findsNWidgets(2));
+      // 无界高度下降级为按内容高度，且不参与嵌套滚动。
+      final listView = tester.widget<ListView>(find.byType(ListView));
+      expect(listView.shrinkWrap, isTrue);
+      expect(listView.physics, isA<NeverScrollableScrollPhysics>());
+    });
+
+    testWidgets('scrollable 放进 Column 不触发布局异常', (tester) async {
+      await tester.pumpWidget(
+        app(
+          const Column(children: [TCellGroup(scrollable: true, cells: cells)]),
+        ),
+      );
+      expect(tester.takeException(), isNull);
+      expect(find.byType(TCell), findsNWidgets(2));
+    });
+
+    testWidgets('非 scrollable 保留空组的固有尺寸布局', (tester) async {
+      await tester.pumpWidget(
+        app(
+          const Center(
+            child: IntrinsicHeight(child: TCellGroup(cells: [])),
+          ),
+        ),
+      );
+      expect(tester.takeException(), isNull);
+      expect(tester.getSize(find.byType(TCellGroup)).height, 0);
+    });
+
+    testWidgets('非 scrollable 保留自定义 builder 的固有尺寸布局', (tester) async {
+      await tester.pumpWidget(
+        app(
+          Center(
+            child: IntrinsicHeight(
+              child: TCellGroup(
+                cells: cells,
+                builder: (_, cell, index) =>
+                    SizedBox(height: 40, child: Text('custom-$index')),
+              ),
+            ),
+          ),
+        ),
+      );
+      expect(tester.takeException(), isNull);
+      expect(find.text('custom-0'), findsOneWidget);
+      expect(find.text('custom-1'), findsOneWidget);
+      expect(tester.getSize(find.byType(TCellGroup)).height, 80.5);
+    });
+
+    testWidgets('有界高度下拖动实际滚动内部列表', (tester) async {
+      await tester.pumpWidget(
+        app(
+          SizedBox(
+            height: 160,
+            child: TCellGroup(
+              scrollable: true,
+              title: const Text('Group'),
+              cells: List.generate(
+                30,
+                (index) => TCell(title: Text('row-$index')),
+              ),
+            ),
+          ),
+        ),
+      );
+      final scrollable = tester.state<ScrollableState>(find.byType(Scrollable));
+      expect(scrollable.position.pixels, 0);
+      expect(scrollable.position.maxScrollExtent, greaterThan(0));
+      await tester.drag(find.byType(ListView), const Offset(0, -200));
+      await tester.pumpAndSettle();
+      expect(scrollable.position.pixels, greaterThan(0));
+      expect(find.text('Group'), findsOneWidget);
+      expect(tester.takeException(), isNull);
+    });
+
+    testWidgets('无界高度下拖动 cells 由外层容器滚动', (tester) async {
+      final controller = ScrollController();
+      addTearDown(controller.dispose);
+      await tester.pumpWidget(
+        app(
+          SingleChildScrollView(
+            controller: controller,
+            child: TCellGroup(
+              scrollable: true,
+              cells: List.generate(
+                30,
+                (index) => TCell(title: Text('row-$index')),
+              ),
+            ),
+          ),
+        ),
+      );
+      final inner = tester.state<ScrollableState>(
+        find.descendant(
+          of: find.byType(ListView),
+          matching: find.byType(Scrollable),
+        ),
+      );
+      expect(controller.offset, 0);
+      await tester.drag(find.text('row-2'), const Offset(0, -200));
+      await tester.pumpAndSettle();
+      expect(controller.offset, greaterThan(0));
+      expect(inner.position.pixels, 0);
+      expect(tester.takeException(), isNull);
+    });
+
+    testWidgets('非 scrollable 时行为不变', (tester) async {
+      await tester.pumpWidget(
+        app(const TCellGroup(title: Text('Group'), cells: cells)),
+      );
+      expect(tester.takeException(), isNull);
+      expect(find.byType(ListView), findsNothing);
+      expect(find.byType(TCell), findsNWidgets(2));
+    });
   });
 
   group('TCellThemeData', () {
@@ -472,10 +706,8 @@ void main() {
       cardBorderRadius: BorderRadius.all(Radius.circular(2)),
       cardPadding: EdgeInsets.all(3),
       titlePadding: EdgeInsets.all(4),
-      align: TCellAlign.top,
       showBottomBorder: true,
       height: 40,
-      groupVariant: TCellGroupVariant.standard,
       groupBordered: true,
       showLastDivider: false,
     );
@@ -494,18 +726,15 @@ void main() {
       cardBorderRadius: BorderRadius.all(Radius.circular(4)),
       cardPadding: EdgeInsets.all(5),
       titlePadding: EdgeInsets.all(6),
-      align: TCellAlign.bottom,
       showBottomBorder: false,
       height: 60,
-      groupVariant: TCellGroupVariant.card,
       groupBordered: false,
       showLastDivider: true,
     );
 
     test('copyWith 与 lerp 覆盖全部字段', () {
-      final copied = a.copyWith(height: 50, align: TCellAlign.center);
+      final copied = a.copyWith(height: 50);
       expect(copied.height, 50);
-      expect(copied.align, TCellAlign.center);
       expect(copied.titleStyle, a.titleStyle);
       final value = a.lerp(b, 0.5);
       expect(value.titleStyle?.fontSize, 15);
@@ -522,13 +751,106 @@ void main() {
       expect(value.cardBorderRadius, BorderRadius.circular(3));
       expect(value.cardPadding, const EdgeInsets.all(4));
       expect(value.titlePadding, const EdgeInsets.all(5));
-      expect(value.align, TCellAlign.bottom);
       expect(value.showBottomBorder, false);
       expect(value.height, 50);
-      expect(value.groupVariant, TCellGroupVariant.card);
       expect(value.groupBordered, false);
       expect(value.showLastDivider, true);
       expect(a.lerp(null, 0.5), same(a));
     });
   });
+}
+
+void requiredMarkerOwnershipTests() {
+  for (final m3 in [false, true]) {
+    testWidgets('required marker isolates ambient typography M3=$m3', (
+      tester,
+    ) async {
+      final heights = <double>[];
+      for (final hostile in [false, true]) {
+        await tester.pumpWidget(
+          MaterialApp(
+            theme: ThemeData(
+              useMaterial3: m3,
+              textTheme: TextTheme(
+                bodyMedium: TextStyle(
+                  fontSize: hostile ? 80 : 14,
+                  letterSpacing: hostile ? 18 : 0,
+                  wordSpacing: hostile ? 9 : 0,
+                  shadows: hostile
+                      ? const [Shadow(color: Colors.pink, blurRadius: 3)]
+                      : null,
+                ),
+              ),
+              extensions: [TThemeData.defaultData()],
+            ),
+            home: const Scaffold(
+              body: TCell(title: Text('title'), required: true),
+            ),
+          ),
+        );
+        await tester.pumpAndSettle();
+        final style =
+            (tester.renderObject<RenderParagraph>(find.text(' *')).text
+                    as TextSpan)
+                .style!;
+        expect(style.fontSize, 14);
+        expect(style.letterSpacing, 0);
+        expect(style.wordSpacing, 0);
+        expect(style.shadows, anyOf(isNull, isEmpty));
+        heights.add(tester.getSize(find.byType(TCell)).height);
+      }
+      expect(heights.first, heights.last);
+    });
+    testWidgets('requiredStyle and caller content theme survive M3=$m3', (
+      tester,
+    ) async {
+      await tester.pumpWidget(
+        MaterialApp(
+          theme: ThemeData(
+            useMaterial3: m3,
+            textTheme: const TextTheme(
+              bodyMedium: TextStyle(fontSize: 31, color: Colors.green),
+            ),
+            extensions: [
+              TThemeData.defaultData(),
+              const TCellThemeData(
+                requiredStyle: TextStyle(
+                  fontSize: 21,
+                  color: Colors.blue,
+                  letterSpacing: 3,
+                  shadows: [Shadow(color: Colors.blue, blurRadius: 2)],
+                ),
+              ),
+            ],
+          ),
+          home: Scaffold(
+            body: TCell(
+              required: true,
+              title: Builder(
+                builder: (context) => Text(
+                  'custom',
+                  style: Theme.of(context).textTheme.bodyMedium,
+                ),
+              ),
+            ),
+          ),
+        ),
+      );
+      await tester.pumpAndSettle();
+      final marker =
+          (tester.renderObject<RenderParagraph>(find.text(' *')).text
+                  as TextSpan)
+              .style!;
+      final custom =
+          (tester.renderObject<RenderParagraph>(find.text('custom')).text
+                  as TextSpan)
+              .style!;
+      expect(marker.fontSize, 21);
+      expect(marker.color, Colors.blue);
+      expect(marker.letterSpacing, 3);
+      expect(marker.shadows!.single.color, Colors.blue);
+      expect(custom.fontSize, 31);
+      expect(custom.color, Colors.green);
+    });
+  }
 }

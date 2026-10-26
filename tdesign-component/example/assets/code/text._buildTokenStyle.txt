@@ -1,7 +1,0 @@
-Widget _buildTokenStyle(BuildContext context) {
-    return TText(
-      exampleText,
-      font: context.tTheme.fontHeadlineSmall,
-      textColor: context.tTheme.brandNormalColor,
-    );
-  }

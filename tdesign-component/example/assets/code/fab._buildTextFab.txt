@@ -1,7 +1,0 @@
-Widget _buildTextFab(BuildContext context) {
-    return TFab(
-      icon: const Icon(TIcons.share),
-      text: '分享给朋友',
-      onPressed: _onFabPressed,
-    );
-  }

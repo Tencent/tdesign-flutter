@@ -1,59 +1,121 @@
 ## API
-### TCell
-#### 简介
-单元格组件。
-#### 默认构造方法
 
-| 参数 | 类型 | 默认值 | 说明 |
-| --- | --- | --- | --- |
-| align | TCellAlign? | - | 内容垂直对齐方式。 |
-| arrow | bool | false | 是否显示右箭头。 |
-| enableFeedback | bool | true | 点击时是否显示背景反馈。 |
-| image | Widget? | - | 单元格左侧图片区。 |
-| key | Key? | - | 组件标识，用于区分或保留组件状态。 |
-| note | Widget? | - | 右侧说明内容。 |
-| onLongPress | GestureLongPressCallback? | - | 长按回调。 |
-| onTap | GestureTapCallback? | - | 点击回调；为空时不创建点击行为。 |
-| prefix | Widget? | - | 标题左侧内容。 |
-| required | bool | false | 是否显示必填标记。 |
-| subtitle | Widget? | - | 副标题区。 |
-| title | Widget? | - | 标题区。 |
-| trailing | Widget? | - | 最右侧内容。 |
+### TCell
+
+#### 构造方法
+
+##### TCell
+
+| 名称 | 类型 | 默认值 | 说明 | 必传 |
+| --- | --- | --- | --- | --- |
+| align | TCellAlign? | - | 内容垂直对齐方式；未设置时为 `TCellAlign.center`。 | 否 |
+| arrow | bool | false | 是否显示右箭头。 | 否 |
+| enableFeedback | bool | true | 点击时是否显示背景反馈。 | 否 |
+| image | Widget? | - | 单元格左侧图片区。 | 否 |
+| key | Key? | - | 组件标识，用于区分或保留组件状态。 | 否 |
+| note | Widget? | - | 右侧说明内容。 | 否 |
+| onLongPress | GestureLongPressCallback? | - | 长按回调。 | 否 |
+| onTap | GestureTapCallback? | - | 点击回调；为空时不创建点击行为。 | 否 |
+| prefix | Widget? | - | 标题左侧内容。 | 否 |
+| required | bool | false | 是否显示必填标记。 | 否 |
+| subtitle | Widget? | - | 副标题区。 | 否 |
+| title | Widget? | - | 标题区。 | 否 |
+| trailing | Widget? | - | 最右侧内容。 | 否 |
 
 
 ### TCellGroup
-#### 简介
-单元格组。
-#### 默认构造方法
 
-| 参数 | 类型 | 默认值 | 说明 |
-| --- | --- | --- | --- |
-| builder | TCellGroupBuilder? | - | 自定义单元格外层构建器。 |
-| cells | List<TCell> | - | 单元格列表。 |
-| key | Key? | - | 组件标识，用于区分或保留组件状态。 |
-| scrollable | bool | false | 是否使用可滚动列表。 |
-| title | Widget? | - | 组标题。 |
-| variant | TCellGroupVariant? | - | 组视觉形态；未设置时读取 Theme。 |
+单元格组。
+
+#### 构造方法
+
+##### TCellGroup
+
+| 名称 | 类型 | 默认值 | 说明 | 必传 |
+| --- | --- | --- | --- | --- |
+| builder | TCellGroupBuilder? | - | 自定义单元格外层构建器。 | 否 |
+| cells | List&lt;TCell&gt; | - | 单元格列表。 | 是 |
+| key | Key? | - | 组件标识，用于区分或保留组件状态。 | 否 |
+| scrollable | bool | false | 是否使用可滚动列表。 父级提供确定高度时，列表撑满剩余空间并可滚动；父级高度为无界时 （如放在 `SingleChildScrollView` 或 `Column` 中）按内容高度展示，不再滚动。 | 否 |
+| title | Widget? | - | 组标题。 | 否 |
+| variant | TCellGroupVariant? | - | 组视觉形态；未设置时为 `TCellGroupVariant.standard`。 | 否 |
 
 
 ### TCellAlign
-#### 简介
+
 单元格内容垂直对齐方式。
 #### 枚举值
 
+| 名称 | 类型 | 默认值 | 说明 | 必传 |
+| --- | --- | --- | --- | --- |
+| top | TCellAlign | - | 顶部对齐。 | - |
+| center | TCellAlign | - | 居中对齐。 | - |
+| bottom | TCellAlign | - | 底部对齐。 | - |
 
-| 名称 | 说明 |
-| --- | --- |
-| top | 顶部对齐。 |
-| center | 居中对齐。 |
-| bottom | 底部对齐。 |
+
+### TCellGroupVariant
+
+单元格组视觉形态。
+#### 枚举值
+
+| 名称 | 类型 | 默认值 | 说明 | 必传 |
+| --- | --- | --- | --- | --- |
+| standard | TCellGroupVariant | - | 通栏形态。 | - |
+| card | TCellGroupVariant | - | 卡片形态。 | - |
 
 
 ### TCellGroupBuilder
-#### 简介
-单元格包装构建器。
-#### 类型定义
 
-```dart
-typedef TCellGroupBuilder = Widget Function(BuildContext context, TCell cell, int index);
-```
+单元格包装构建器。
+
+位置参数：`context, cell, index`
+
+
+#### 回调参数
+
+| 名称 | 类型 | 默认值 | 说明 | 必传 |
+| --- | --- | --- | --- | --- |
+| context | BuildContext | - | 单元格组的构建上下文。 | 是 |
+| cell | TCell | - | 当前待包装的单元格。 | 是 |
+| index | int | - | 单元格在组内的索引，从 0 开始。 | 是 |
+
+
+#### 返回值
+
+| 名称 | 类型 | 默认值 | 说明 | 必传 |
+| --- | --- | --- | --- | --- |
+| 返回值 | Widget | - | 包装后的单元格内容。 | - |
+
+
+### TCellThemeData
+
+Cell 与 CellGroup 的组件级 ThemeExtension。
+
+仅保存视觉和布局默认值，不保存内容、回调或列表数据。
+文字样式按字段覆盖全局 Token 派生的组件默认值；未配置字段保持默认。
+
+<!-- api-theme: fields -->
+
+#### 配置项
+
+
+| 名称 | 类型 | 默认值 | 说明 | 必传 |
+| --- | --- | --- | --- | --- |
+| arrowColor | Color? | - | 箭头颜色。 未配置时使用 textColorPlaceholder Token。 | 否 |
+| backgroundColor | Color? | - | 默认背景色。 未配置时使用 bgColorContainer Token。 | 否 |
+| borderColor | Color? | - | 分隔线颜色。 未配置时使用 componentStroke Token。 | 否 |
+| cardBorderRadius | BorderRadius? | - | 卡片组圆角。 仅卡片形态生效，未配置时使用 radiusLarge Token，默认 9 逻辑像素。 | 否 |
+| cardPadding | EdgeInsetsGeometry? | - | 卡片组内边距。 仅卡片形态生效，未配置时为左右 16 逻辑像素。 | 否 |
+| groupBorderColor | Color? | - | 单元格组边框颜色。 未配置时使用 componentStroke Token。 | 否 |
+| groupBordered | bool? | - | 是否显示组外边框。 未配置时为 false。 | 否 |
+| groupTitleStyle | TextStyle? | - | 单元格组标题样式。 默认使用 fontBodyMedium / textColorPrimary Token，按字段合并本样式。 | 否 |
+| height | double? | - | Cell 固定高度。 未配置时由内容和内边距自然决定高度。 | 否 |
+| noteStyle | TextStyle? | - | 右侧说明文字样式。 默认使用 fontBodyLarge / textColorPlaceholder Token，按字段合并本样式。 | 否 |
+| padding | EdgeInsetsGeometry? | - | 单元格内边距。 未配置时四边均使用 spacer2 Token。 | 否 |
+| pressedColor | Color? | - | 按压背景色。 未配置时使用 bgColorSecondaryContainer Token；交互反馈由实例 enableFeedback 控制。 | 否 |
+| requiredStyle | TextStyle? | - | 必填标记样式。 | 否 |
+| showBottomBorder | bool? | - | 是否显示 Cell 底部分隔线。 未配置时为 false，组内分隔线由 CellGroup 独立绘制。 | 否 |
+| showLastDivider | bool? | - | 是否显示最后一个 Cell 后的分隔线。 未配置时为 false。 | 否 |
+| subtitleStyle | TextStyle? | - | 副标题文字样式。 默认使用 fontBodyMedium / textColorSecondary Token，按字段合并本样式。 | 否 |
+| titlePadding | EdgeInsetsGeometry? | - | 组标题内边距。 未配置时四边均为 16 逻辑像素。 | 否 |
+| titleStyle | TextStyle? | - | 标题文字样式。 默认使用 fontBodyLarge / textColorPrimary Token，按字段合并本样式。 | 否 |

@@ -3,14 +3,20 @@
  */
 import 'package:flutter/material.dart';
 
+import '../../theme/t_internal_material.dart';
 import 't_collapse_types.dart';
 
 /// 根据折叠状态构建面板头部区域内容的回调。
+/// [context] 折叠面板头部的构建上下文。
+/// [isExpanded] 当前面板是否展开。
+///
+/// ## 返回值
+/// 面板头部内容。
 typedef TCollapsePanelBuilder =
     Widget Function(BuildContext context, bool isExpanded);
 
 Widget _defaultExpandIconBuilder(BuildContext context, bool isExpanded) {
-  return Icon(isExpanded ? Icons.expand_less : Icons.expand_more);
+  return TInternalIcon(isExpanded ? Icons.expand_less : Icons.expand_more);
 }
 
 /// 折叠面板配置。
@@ -45,6 +51,7 @@ class TCollapsePanel<T extends Object> {
   /// 展开内容区域的固定高度（包含内容内边距）。
   ///
   /// 适用于 [ListView] 等需要有界高度的内容；为空时由内容自然决定高度。
+  /// 非空时必须是有限且大于 0 的值。
   final double? bodyHeight;
 
   /// 是否禁用面板交互。

@@ -1,0 +1,86 @@
+# css2token
+
+纯 Dart 的 TDesign CSS → Flutter Token 转换库，零运行时依赖，不引用 Flutter、DOM 或主题控制器。目前 `publish_to: none`、版本 0.0.0，未发布；未来可整体移出该目录，确定包名和兼容版本后独立发布到 pub.dev。
+
+## 接入
+
+Flutter 官网 Example 通过 path 依赖使用该库：
+
+```yaml
+dependencies:
+  css2token:
+    path: ../../packages/css2token
+```
+
+```dart
+import 'package:css2token/css2token.dart';
+
+final theme = cssToFlutterTokens(
+  lightCss: '--td-brand-color-7:#123; --td-brand-color:var(--td-brand-color-7);',
+  darkCss: '--td-brand-color-7:#abc; --td-brand-color:var(--td-brand-color-7);',
+  extraCss: '--td-font-size-body-medium:18px;',
+);
+final json = theme.toJson(); // {light: {...}, dark: {...}}
+```
+
+单模式使用 `parseCssToFlutterTokens(css, baselineCss: baseline)`。输出含 ref、color、font、fontMetric、radius、shadow、insetShadow、margin，均为可 JSON 序列化的数据，不含 Flutter 对象。font 是稀疏字段集，不能直接传给要求完整尺寸的 Font.fromJson；Example 展示了结合默认 fontMap 构造完整 Font 的适配方式。
+
+保留 Flutter 默认外观时传入控制器原始完整 CSS 基线：
+
+```dart
+final theme = cssToFlutterTokens(
+  lightCss: currentLight,
+  darkCss: currentDark,
+  extraCss: currentExtra,
+  baseline: CssThemeParts(light: defaultLight, dark: defaultDark, extra: defaultExtra),
+);
+```
+
+基线只用于比较，不补齐当前输入。每次结果与接收端自己的原始默认主题合并，不能累加上次覆盖，否则恢复默认时会保留旧值。
+
+官网 JS 负责观察、补齐控制器需要的 CSS 和发送 `flutter-css-theme-update`（css、baseline、themeMode）；Example 收到后调用本库，再适配为 TThemeData 并更新界面。核心映射只有 Dart 一份。官网补齐所用的 extra CSS 在构建时从安装的控制器包提取，不复制默认值表；Flutter 字体的默认值由 Example 从自身主题读取。原生 Dart/Flutter 使用方可以直接调用转换函数，不需要浏览器。
+
+## 转换边界
+
+- 按声明源顺序取最后值，忽略注释并移除 important；不计算选择器、媒体查询或 CSS 优先级。light/dark 必须由调用方分离，共享 extra 声明优先。
+- 支持 td 变量引用、嵌套 fallback、循环检测。未知属性、无效值或无法解析的引用跳过，未提供的 Token 不生成默认覆盖。
+- 颜色支持 #RGB/#RGBA/#RRGGBB/#RRGGBBAA、rgb/rgba 数值和百分比、transparent。CSS RGBA 转 Flutter ARGB；不支持命名色、hsl、color-mix。
+- 长度支持 px 和无单位数值；不计算 rem、em、calc。圆角 circle 百分比映射为 Flutter 的 9999；其他百分比长度不转换。
+- 品牌、功能色、primary/gray 色阶与现有语义色映射为 color/ref。直接语义颜色同时输出自引用。
+- 字体输出稀疏 font 字段（size / lineHeight）与独立 fontMetric。只输出实际提供且相对基线变化的维度，不补默认值、不输出字重；接收端从自己的当前默认字体补齐另一维和字重，小数字号与行高保留精度。mobile 提供 title-extraLarge、body-extraSmall、mark-large、mark-extraSmall 等独立层级时优先按同名映射；旧 Web 主题缺失这些声明时才使用 title-large、body-small、mark-medium、mark-small 的派生规则。
+- 圆角支持 small/default/large/extraLarge/round/circle。shadow-1..4 支持多层外阴影与 none 清除；四方向 inset 仅支持单层、零 blur/spread 的边缘阴影，转成 color/width。
+- 字体族 `--td-font-family` / `--td-font-family-medium` 输出 `fontFamily`，保留主字体和有序 fallback，支持带引号和逗号的字体名。浏览器必须已具备对应字体；转换器不下载字体。
+- 全局尺寸 `--td-size-1..16` 输出独立 `size` 分组，与 `margin` 间距分开。接收端合并 sizeMap，未修改的尺寸保留 Flutter 默认值。
+- 显式 spacer/spacer-1..6 优先，否则使用 size-4/5/6/8/10/13/15，末项乘1.25。组件专属尺寸不机械扩展为 Flutter 全局 Token。
+
+## 验证
+
+在包目录执行 `dart pub get`、`dart test` 和 `dart analyze --fatal-infos`。
+测试样本包括迁移前转换结果以及主题控制器 1.2.6 的真实 CSS。
+
+浏览器验证实际运行 Dart 编译产物（Light/Dark 共 50 项）：
+
+```sh
+mkdir -p /tmp/css2token-browser
+dart compile js -O1 -o /tmp/css2token-browser/browser_probe.js test/browser_probe.dart
+cp test/browser.html /tmp/css2token-browser/
+cp test/fixtures/themes.json /tmp/css2token-browser/
+python3 -m http.server 19002 --bind 127.0.0.1 --directory /tmp/css2token-browser
+```
+
+打开 `http://127.0.0.1:19002/browser.html`。
+HTML 中的 JavaScript 仅加载样本与编译产物、切换页面展示模式；转换逻辑来自 Dart。
+
+## 完整生成器导出到应用
+
+`splitGeneratorCss(css)` 读取生成器下载的完整 CSS，返回可传给 `cssToFlutterTokens` 的浅/深声明集。共享根声明先合并，模式专属声明覆盖共享值；不支持的选择器或嵌套规则抛出 `FormatException`。
+
+业务接入使用仓库内 Example 的离线工具，补齐复合字体后输出公共命名主题 JSON：
+
+```sh
+cd tdesign-component/example
+flutter pub get
+dart run tool/convert_theme.dart theme.css theme.json --name ocean
+```
+
+命令从仓库根目录执行。组件包须包含 #1173 的字体小数解析修复；将生成的 `theme.json` 作为业务资产，使用 `TThemeData.fromJson('ocean', json, darkName: 'oceanDark')` 加载。运行时无需 `css2token`。参见[接入文档](../../tdesign-site/site/docs/custom-theme.md)。

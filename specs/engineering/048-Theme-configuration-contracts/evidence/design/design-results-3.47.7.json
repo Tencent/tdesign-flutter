@@ -1,0 +1,3080 @@
+{
+  "button/light": {
+    "color": {
+      "changed": true,
+      "roots": 40
+    },
+    "font": {
+      "changed": true,
+      "roots": 40
+    },
+    "radius": {
+      "changed": true,
+      "roots": 40
+    },
+    "shadow": {
+      "changed": false,
+      "roots": 40
+    },
+    "size": {
+      "changed": true,
+      "roots": 40
+    },
+    "all": {
+      "changed": true,
+      "roots": 40
+    },
+    "errors": []
+  },
+  "button/dark": {
+    "color": {
+      "changed": true,
+      "roots": 40
+    },
+    "font": {
+      "changed": true,
+      "roots": 40
+    },
+    "radius": {
+      "changed": true,
+      "roots": 40
+    },
+    "shadow": {
+      "changed": false,
+      "roots": 40
+    },
+    "size": {
+      "changed": true,
+      "roots": 40
+    },
+    "all": {
+      "changed": true,
+      "roots": 40
+    },
+    "errors": []
+  },
+  "divider/light": {
+    "color": {
+      "changed": true,
+      "roots": 10
+    },
+    "font": {
+      "changed": true,
+      "roots": 10
+    },
+    "radius": {
+      "changed": false,
+      "roots": 10
+    },
+    "shadow": {
+      "changed": false,
+      "roots": 10
+    },
+    "size": {
+      "changed": true,
+      "roots": 10
+    },
+    "all": {
+      "changed": true,
+      "roots": 10
+    },
+    "errors": []
+  },
+  "divider/dark": {
+    "color": {
+      "changed": true,
+      "roots": 10
+    },
+    "font": {
+      "changed": true,
+      "roots": 10
+    },
+    "radius": {
+      "changed": false,
+      "roots": 10
+    },
+    "shadow": {
+      "changed": false,
+      "roots": 10
+    },
+    "size": {
+      "changed": true,
+      "roots": 10
+    },
+    "all": {
+      "changed": true,
+      "roots": 10
+    },
+    "errors": []
+  },
+  "fab/light": {
+    "color": {
+      "changed": true,
+      "roots": 1
+    },
+    "font": {
+      "changed": true,
+      "roots": 1
+    },
+    "radius": {
+      "changed": false,
+      "roots": 1
+    },
+    "shadow": {
+      "changed": true,
+      "roots": 1
+    },
+    "size": {
+      "changed": true,
+      "roots": 1
+    },
+    "all": {
+      "changed": true,
+      "roots": 1
+    },
+    "errors": []
+  },
+  "fab/dark": {
+    "color": {
+      "changed": true,
+      "roots": 1
+    },
+    "font": {
+      "changed": true,
+      "roots": 1
+    },
+    "radius": {
+      "changed": false,
+      "roots": 1
+    },
+    "shadow": {
+      "changed": true,
+      "roots": 1
+    },
+    "size": {
+      "changed": true,
+      "roots": 1
+    },
+    "all": {
+      "changed": true,
+      "roots": 1
+    },
+    "errors": []
+  },
+  "icon/light": {
+    "color": {
+      "changed": true,
+      "roots": 678
+    },
+    "font": {
+      "changed": false,
+      "roots": 678
+    },
+    "radius": {
+      "changed": false,
+      "roots": 678
+    },
+    "shadow": {
+      "changed": false,
+      "roots": 678
+    },
+    "size": {
+      "changed": false,
+      "roots": 678
+    },
+    "all": {
+      "changed": true,
+      "roots": 678
+    },
+    "errors": []
+  },
+  "icon/dark": {
+    "color": {
+      "changed": true,
+      "roots": 678
+    },
+    "font": {
+      "changed": false,
+      "roots": 678
+    },
+    "radius": {
+      "changed": false,
+      "roots": 678
+    },
+    "shadow": {
+      "changed": false,
+      "roots": 678
+    },
+    "size": {
+      "changed": false,
+      "roots": 678
+    },
+    "all": {
+      "changed": true,
+      "roots": 678
+    },
+    "errors": []
+  },
+  "link/light": {
+    "color": {
+      "changed": true,
+      "roots": 21
+    },
+    "font": {
+      "changed": true,
+      "roots": 21
+    },
+    "radius": {
+      "changed": false,
+      "roots": 21
+    },
+    "shadow": {
+      "changed": false,
+      "roots": 21
+    },
+    "size": {
+      "changed": false,
+      "roots": 21
+    },
+    "all": {
+      "changed": true,
+      "roots": 21
+    },
+    "errors": []
+  },
+  "link/dark": {
+    "color": {
+      "changed": true,
+      "roots": 21
+    },
+    "font": {
+      "changed": true,
+      "roots": 21
+    },
+    "radius": {
+      "changed": false,
+      "roots": 21
+    },
+    "shadow": {
+      "changed": false,
+      "roots": 21
+    },
+    "size": {
+      "changed": false,
+      "roots": 21
+    },
+    "all": {
+      "changed": true,
+      "roots": 21
+    },
+    "errors": []
+  },
+  "text/light": {
+    "color": {
+      "changed": true,
+      "roots": 23
+    },
+    "font": {
+      "changed": true,
+      "roots": 23
+    },
+    "radius": {
+      "changed": false,
+      "roots": 23
+    },
+    "shadow": {
+      "changed": false,
+      "roots": 23
+    },
+    "size": {
+      "changed": false,
+      "roots": 23
+    },
+    "all": {
+      "changed": true,
+      "roots": 23
+    },
+    "errors": []
+  },
+  "text/dark": {
+    "color": {
+      "changed": true,
+      "roots": 23
+    },
+    "font": {
+      "changed": true,
+      "roots": 23
+    },
+    "radius": {
+      "changed": false,
+      "roots": 23
+    },
+    "shadow": {
+      "changed": false,
+      "roots": 23
+    },
+    "size": {
+      "changed": false,
+      "roots": 23
+    },
+    "all": {
+      "changed": true,
+      "roots": 23
+    },
+    "errors": []
+  },
+  "back-top/light": {
+    "color": {
+      "changed": true,
+      "roots": 1
+    },
+    "font": {
+      "changed": true,
+      "roots": 1
+    },
+    "radius": {
+      "changed": true,
+      "roots": 1
+    },
+    "shadow": {
+      "changed": false,
+      "roots": 1
+    },
+    "size": {
+      "changed": true,
+      "roots": 1
+    },
+    "all": {
+      "changed": true,
+      "roots": 1
+    },
+    "errors": []
+  },
+  "back-top/dark": {
+    "color": {
+      "changed": true,
+      "roots": 1
+    },
+    "font": {
+      "changed": true,
+      "roots": 1
+    },
+    "radius": {
+      "changed": true,
+      "roots": 1
+    },
+    "shadow": {
+      "changed": false,
+      "roots": 1
+    },
+    "size": {
+      "changed": true,
+      "roots": 1
+    },
+    "all": {
+      "changed": true,
+      "roots": 1
+    },
+    "errors": []
+  },
+  "drawer/light": {
+    "color": {
+      "changed": true,
+      "roots": 1
+    },
+    "font": {
+      "changed": true,
+      "roots": 1
+    },
+    "radius": {
+      "changed": false,
+      "roots": 1
+    },
+    "shadow": {
+      "changed": false,
+      "roots": 1
+    },
+    "size": {
+      "changed": true,
+      "roots": 1
+    },
+    "all": {
+      "changed": true,
+      "roots": 1
+    },
+    "errors": []
+  },
+  "drawer/dark": {
+    "color": {
+      "changed": true,
+      "roots": 1
+    },
+    "font": {
+      "changed": true,
+      "roots": 1
+    },
+    "radius": {
+      "changed": false,
+      "roots": 1
+    },
+    "shadow": {
+      "changed": false,
+      "roots": 1
+    },
+    "size": {
+      "changed": true,
+      "roots": 1
+    },
+    "all": {
+      "changed": true,
+      "roots": 1
+    },
+    "errors": []
+  },
+  "indexes/light": {
+    "color": {
+      "changed": true,
+      "roots": 16
+    },
+    "font": {
+      "changed": true,
+      "roots": 16
+    },
+    "radius": {
+      "changed": true,
+      "roots": 16
+    },
+    "shadow": {
+      "changed": false,
+      "roots": 16
+    },
+    "size": {
+      "changed": true,
+      "roots": 16
+    },
+    "all": {
+      "changed": true,
+      "roots": 16
+    },
+    "errors": []
+  },
+  "indexes/dark": {
+    "color": {
+      "changed": true,
+      "roots": 16
+    },
+    "font": {
+      "changed": true,
+      "roots": 16
+    },
+    "radius": {
+      "changed": true,
+      "roots": 16
+    },
+    "shadow": {
+      "changed": false,
+      "roots": 16
+    },
+    "size": {
+      "changed": true,
+      "roots": 16
+    },
+    "all": {
+      "changed": true,
+      "roots": 16
+    },
+    "errors": []
+  },
+  "navbar/light": {
+    "color": {
+      "changed": true,
+      "roots": 11
+    },
+    "font": {
+      "changed": true,
+      "roots": 11
+    },
+    "radius": {
+      "changed": false,
+      "roots": 11
+    },
+    "shadow": {
+      "changed": false,
+      "roots": 11
+    },
+    "size": {
+      "changed": true,
+      "roots": 11
+    },
+    "all": {
+      "changed": true,
+      "roots": 11
+    },
+    "errors": []
+  },
+  "navbar/dark": {
+    "color": {
+      "changed": true,
+      "roots": 11
+    },
+    "font": {
+      "changed": true,
+      "roots": 11
+    },
+    "radius": {
+      "changed": false,
+      "roots": 11
+    },
+    "shadow": {
+      "changed": false,
+      "roots": 11
+    },
+    "size": {
+      "changed": true,
+      "roots": 11
+    },
+    "all": {
+      "changed": true,
+      "roots": 11
+    },
+    "errors": []
+  },
+  "side-bar/light": {
+    "color": {
+      "changed": true,
+      "roots": 1
+    },
+    "font": {
+      "changed": true,
+      "roots": 1
+    },
+    "radius": {
+      "changed": false,
+      "roots": 1
+    },
+    "shadow": {
+      "changed": false,
+      "roots": 1
+    },
+    "size": {
+      "changed": true,
+      "roots": 1
+    },
+    "all": {
+      "changed": true,
+      "roots": 1
+    },
+    "errors": []
+  },
+  "side-bar/dark": {
+    "color": {
+      "changed": true,
+      "roots": 1
+    },
+    "font": {
+      "changed": true,
+      "roots": 1
+    },
+    "radius": {
+      "changed": false,
+      "roots": 1
+    },
+    "shadow": {
+      "changed": false,
+      "roots": 1
+    },
+    "size": {
+      "changed": true,
+      "roots": 1
+    },
+    "all": {
+      "changed": true,
+      "roots": 1
+    },
+    "errors": []
+  },
+  "steps/light": {
+    "color": {
+      "changed": true,
+      "roots": 12
+    },
+    "font": {
+      "changed": true,
+      "roots": 12
+    },
+    "radius": {
+      "changed": true,
+      "roots": 12
+    },
+    "shadow": {
+      "changed": false,
+      "roots": 12
+    },
+    "size": {
+      "changed": false,
+      "roots": 12
+    },
+    "all": {
+      "changed": true,
+      "roots": 12
+    },
+    "errors": []
+  },
+  "steps/dark": {
+    "color": {
+      "changed": true,
+      "roots": 12
+    },
+    "font": {
+      "changed": true,
+      "roots": 12
+    },
+    "radius": {
+      "changed": true,
+      "roots": 12
+    },
+    "shadow": {
+      "changed": false,
+      "roots": 12
+    },
+    "size": {
+      "changed": false,
+      "roots": 12
+    },
+    "all": {
+      "changed": true,
+      "roots": 12
+    },
+    "errors": []
+  },
+  "tab-bar/light": {
+    "color": {
+      "changed": true,
+      "roots": 9
+    },
+    "font": {
+      "changed": true,
+      "roots": 9
+    },
+    "radius": {
+      "changed": true,
+      "roots": 9
+    },
+    "shadow": {
+      "changed": true,
+      "roots": 9
+    },
+    "size": {
+      "changed": true,
+      "roots": 9
+    },
+    "all": {
+      "changed": true,
+      "roots": 9
+    },
+    "errors": []
+  },
+  "tab-bar/dark": {
+    "color": {
+      "changed": true,
+      "roots": 9
+    },
+    "font": {
+      "changed": true,
+      "roots": 9
+    },
+    "radius": {
+      "changed": true,
+      "roots": 9
+    },
+    "shadow": {
+      "changed": true,
+      "roots": 9
+    },
+    "size": {
+      "changed": true,
+      "roots": 9
+    },
+    "all": {
+      "changed": true,
+      "roots": 9
+    },
+    "errors": []
+  },
+  "tabs/light": {
+    "color": {
+      "changed": true,
+      "roots": 63
+    },
+    "font": {
+      "changed": true,
+      "roots": 63
+    },
+    "radius": {
+      "changed": false,
+      "roots": 63
+    },
+    "shadow": {
+      "changed": false,
+      "roots": 63
+    },
+    "size": {
+      "changed": false,
+      "roots": 63
+    },
+    "all": {
+      "changed": true,
+      "roots": 63
+    },
+    "errors": []
+  },
+  "tabs/dark": {
+    "color": {
+      "changed": true,
+      "roots": 63
+    },
+    "font": {
+      "changed": true,
+      "roots": 63
+    },
+    "radius": {
+      "changed": false,
+      "roots": 63
+    },
+    "shadow": {
+      "changed": false,
+      "roots": 63
+    },
+    "size": {
+      "changed": false,
+      "roots": 63
+    },
+    "all": {
+      "changed": true,
+      "roots": 63
+    },
+    "errors": []
+  },
+  "calendar/light": {
+    "color": {
+      "changed": true,
+      "roots": 1
+    },
+    "font": {
+      "changed": true,
+      "roots": 1
+    },
+    "radius": {
+      "changed": true,
+      "roots": 1
+    },
+    "shadow": {
+      "changed": false,
+      "roots": 1
+    },
+    "size": {
+      "changed": true,
+      "roots": 1
+    },
+    "all": {
+      "changed": true,
+      "roots": 1
+    },
+    "errors": []
+  },
+  "calendar/dark": {
+    "color": {
+      "changed": true,
+      "roots": 1
+    },
+    "font": {
+      "changed": true,
+      "roots": 1
+    },
+    "radius": {
+      "changed": true,
+      "roots": 1
+    },
+    "shadow": {
+      "changed": false,
+      "roots": 1
+    },
+    "size": {
+      "changed": true,
+      "roots": 1
+    },
+    "all": {
+      "changed": true,
+      "roots": 1
+    },
+    "errors": []
+  },
+  "cascader/light": {
+    "color": {
+      "changed": true,
+      "roots": 1
+    },
+    "font": {
+      "changed": true,
+      "roots": 1
+    },
+    "radius": {
+      "changed": true,
+      "roots": 1
+    },
+    "shadow": {
+      "changed": false,
+      "roots": 1
+    },
+    "size": {
+      "changed": true,
+      "roots": 1
+    },
+    "all": {
+      "changed": true,
+      "roots": 1
+    },
+    "errors": []
+  },
+  "cascader/dark": {
+    "color": {
+      "changed": true,
+      "roots": 1
+    },
+    "font": {
+      "changed": true,
+      "roots": 1
+    },
+    "radius": {
+      "changed": true,
+      "roots": 1
+    },
+    "shadow": {
+      "changed": false,
+      "roots": 1
+    },
+    "size": {
+      "changed": true,
+      "roots": 1
+    },
+    "all": {
+      "changed": true,
+      "roots": 1
+    },
+    "errors": []
+  },
+  "checkbox/light": {
+    "color": {
+      "changed": true,
+      "roots": 30
+    },
+    "font": {
+      "changed": true,
+      "roots": 30
+    },
+    "radius": {
+      "changed": true,
+      "roots": 30
+    },
+    "shadow": {
+      "changed": false,
+      "roots": 30
+    },
+    "size": {
+      "changed": true,
+      "roots": 30
+    },
+    "all": {
+      "changed": true,
+      "roots": 30
+    },
+    "errors": []
+  },
+  "checkbox/dark": {
+    "color": {
+      "changed": true,
+      "roots": 30
+    },
+    "font": {
+      "changed": true,
+      "roots": 30
+    },
+    "radius": {
+      "changed": true,
+      "roots": 30
+    },
+    "shadow": {
+      "changed": false,
+      "roots": 30
+    },
+    "size": {
+      "changed": true,
+      "roots": 30
+    },
+    "all": {
+      "changed": true,
+      "roots": 30
+    },
+    "errors": []
+  },
+  "picker/light": {
+    "color": {
+      "changed": true,
+      "roots": 1
+    },
+    "font": {
+      "changed": true,
+      "roots": 1
+    },
+    "radius": {
+      "changed": true,
+      "roots": 1
+    },
+    "shadow": {
+      "changed": false,
+      "roots": 1
+    },
+    "size": {
+      "changed": true,
+      "roots": 1
+    },
+    "all": {
+      "changed": true,
+      "roots": 1
+    },
+    "errors": []
+  },
+  "picker/dark": {
+    "color": {
+      "changed": true,
+      "roots": 1
+    },
+    "font": {
+      "changed": true,
+      "roots": 1
+    },
+    "radius": {
+      "changed": true,
+      "roots": 1
+    },
+    "shadow": {
+      "changed": false,
+      "roots": 1
+    },
+    "size": {
+      "changed": true,
+      "roots": 1
+    },
+    "all": {
+      "changed": true,
+      "roots": 1
+    },
+    "errors": []
+  },
+  "date-time-picker/light": {
+    "color": {
+      "changed": true,
+      "roots": 1
+    },
+    "font": {
+      "changed": true,
+      "roots": 1
+    },
+    "radius": {
+      "changed": true,
+      "roots": 1
+    },
+    "shadow": {
+      "changed": false,
+      "roots": 1
+    },
+    "size": {
+      "changed": true,
+      "roots": 1
+    },
+    "all": {
+      "changed": true,
+      "roots": 1
+    },
+    "errors": []
+  },
+  "date-time-picker/dark": {
+    "color": {
+      "changed": true,
+      "roots": 1
+    },
+    "font": {
+      "changed": true,
+      "roots": 1
+    },
+    "radius": {
+      "changed": true,
+      "roots": 1
+    },
+    "shadow": {
+      "changed": false,
+      "roots": 1
+    },
+    "size": {
+      "changed": true,
+      "roots": 1
+    },
+    "all": {
+      "changed": true,
+      "roots": 1
+    },
+    "errors": []
+  },
+  "form/light": {
+    "color": {
+      "changed": true,
+      "roots": 19
+    },
+    "font": {
+      "changed": true,
+      "roots": 19
+    },
+    "radius": {
+      "changed": true,
+      "roots": 19
+    },
+    "shadow": {
+      "changed": false,
+      "roots": 19
+    },
+    "size": {
+      "changed": true,
+      "roots": 19
+    },
+    "all": {
+      "changed": true,
+      "roots": 19
+    },
+    "errors": []
+  },
+  "form/dark": {
+    "color": {
+      "changed": true,
+      "roots": 19
+    },
+    "font": {
+      "changed": true,
+      "roots": 19
+    },
+    "radius": {
+      "changed": true,
+      "roots": 19
+    },
+    "shadow": {
+      "changed": false,
+      "roots": 19
+    },
+    "size": {
+      "changed": true,
+      "roots": 19
+    },
+    "all": {
+      "changed": true,
+      "roots": 19
+    },
+    "errors": []
+  },
+  "input/light": {
+    "color": {
+      "changed": true,
+      "roots": 25
+    },
+    "font": {
+      "changed": true,
+      "roots": 25
+    },
+    "radius": {
+      "changed": false,
+      "roots": 25
+    },
+    "shadow": {
+      "changed": false,
+      "roots": 25
+    },
+    "size": {
+      "changed": true,
+      "roots": 25
+    },
+    "all": {
+      "changed": true,
+      "roots": 25
+    },
+    "errors": []
+  },
+  "input/dark": {
+    "color": {
+      "changed": true,
+      "roots": 25
+    },
+    "font": {
+      "changed": true,
+      "roots": 25
+    },
+    "radius": {
+      "changed": false,
+      "roots": 25
+    },
+    "shadow": {
+      "changed": false,
+      "roots": 25
+    },
+    "size": {
+      "changed": true,
+      "roots": 25
+    },
+    "all": {
+      "changed": true,
+      "roots": 25
+    },
+    "errors": []
+  },
+  "radio/light": {
+    "color": {
+      "changed": true,
+      "roots": 32
+    },
+    "font": {
+      "changed": true,
+      "roots": 32
+    },
+    "radius": {
+      "changed": true,
+      "roots": 32
+    },
+    "shadow": {
+      "changed": false,
+      "roots": 32
+    },
+    "size": {
+      "changed": true,
+      "roots": 32
+    },
+    "all": {
+      "changed": true,
+      "roots": 32
+    },
+    "errors": []
+  },
+  "radio/dark": {
+    "color": {
+      "changed": true,
+      "roots": 32
+    },
+    "font": {
+      "changed": true,
+      "roots": 32
+    },
+    "radius": {
+      "changed": true,
+      "roots": 32
+    },
+    "shadow": {
+      "changed": false,
+      "roots": 32
+    },
+    "size": {
+      "changed": true,
+      "roots": 32
+    },
+    "all": {
+      "changed": true,
+      "roots": 32
+    },
+    "errors": []
+  },
+  "rate/light": {
+    "color": {
+      "changed": true,
+      "roots": 15
+    },
+    "font": {
+      "changed": true,
+      "roots": 15
+    },
+    "radius": {
+      "changed": true,
+      "roots": 15
+    },
+    "shadow": {
+      "changed": true,
+      "roots": 15
+    },
+    "size": {
+      "changed": true,
+      "roots": 15
+    },
+    "all": {
+      "changed": true,
+      "roots": 15
+    },
+    "errors": []
+  },
+  "rate/dark": {
+    "color": {
+      "changed": true,
+      "roots": 15
+    },
+    "font": {
+      "changed": true,
+      "roots": 15
+    },
+    "radius": {
+      "changed": true,
+      "roots": 15
+    },
+    "shadow": {
+      "changed": true,
+      "roots": 15
+    },
+    "size": {
+      "changed": true,
+      "roots": 15
+    },
+    "all": {
+      "changed": true,
+      "roots": 15
+    },
+    "errors": []
+  },
+  "search/light": {
+    "color": {
+      "changed": true,
+      "roots": 8
+    },
+    "font": {
+      "changed": true,
+      "roots": 8
+    },
+    "radius": {
+      "changed": true,
+      "roots": 8
+    },
+    "shadow": {
+      "changed": false,
+      "roots": 8
+    },
+    "size": {
+      "changed": true,
+      "roots": 8
+    },
+    "all": {
+      "changed": true,
+      "roots": 8
+    },
+    "errors": []
+  },
+  "search/dark": {
+    "color": {
+      "changed": true,
+      "roots": 8
+    },
+    "font": {
+      "changed": true,
+      "roots": 8
+    },
+    "radius": {
+      "changed": true,
+      "roots": 8
+    },
+    "shadow": {
+      "changed": false,
+      "roots": 8
+    },
+    "size": {
+      "changed": true,
+      "roots": 8
+    },
+    "all": {
+      "changed": true,
+      "roots": 8
+    },
+    "errors": []
+  },
+  "slider/light": {
+    "color": {
+      "changed": true,
+      "roots": 18
+    },
+    "font": {
+      "changed": true,
+      "roots": 18
+    },
+    "radius": {
+      "changed": false,
+      "roots": 18
+    },
+    "shadow": {
+      "changed": false,
+      "roots": 18
+    },
+    "size": {
+      "changed": true,
+      "roots": 18
+    },
+    "all": {
+      "changed": true,
+      "roots": 18
+    },
+    "errors": []
+  },
+  "slider/dark": {
+    "color": {
+      "changed": true,
+      "roots": 18
+    },
+    "font": {
+      "changed": true,
+      "roots": 18
+    },
+    "radius": {
+      "changed": false,
+      "roots": 18
+    },
+    "shadow": {
+      "changed": false,
+      "roots": 18
+    },
+    "size": {
+      "changed": true,
+      "roots": 18
+    },
+    "all": {
+      "changed": true,
+      "roots": 18
+    },
+    "errors": []
+  },
+  "stepper/light": {
+    "color": {
+      "changed": true,
+      "roots": 10
+    },
+    "font": {
+      "changed": true,
+      "roots": 10
+    },
+    "radius": {
+      "changed": true,
+      "roots": 10
+    },
+    "shadow": {
+      "changed": false,
+      "roots": 10
+    },
+    "size": {
+      "changed": true,
+      "roots": 10
+    },
+    "all": {
+      "changed": true,
+      "roots": 10
+    },
+    "errors": []
+  },
+  "stepper/dark": {
+    "color": {
+      "changed": true,
+      "roots": 10
+    },
+    "font": {
+      "changed": true,
+      "roots": 10
+    },
+    "radius": {
+      "changed": true,
+      "roots": 10
+    },
+    "shadow": {
+      "changed": false,
+      "roots": 10
+    },
+    "size": {
+      "changed": true,
+      "roots": 10
+    },
+    "all": {
+      "changed": true,
+      "roots": 10
+    },
+    "errors": []
+  },
+  "switch/light": {
+    "color": {
+      "changed": true,
+      "roots": 11
+    },
+    "font": {
+      "changed": true,
+      "roots": 11
+    },
+    "radius": {
+      "changed": false,
+      "roots": 11
+    },
+    "shadow": {
+      "changed": false,
+      "roots": 11
+    },
+    "size": {
+      "changed": true,
+      "roots": 11
+    },
+    "all": {
+      "changed": true,
+      "roots": 11
+    },
+    "errors": []
+  },
+  "switch/dark": {
+    "color": {
+      "changed": true,
+      "roots": 11
+    },
+    "font": {
+      "changed": true,
+      "roots": 11
+    },
+    "radius": {
+      "changed": false,
+      "roots": 11
+    },
+    "shadow": {
+      "changed": false,
+      "roots": 11
+    },
+    "size": {
+      "changed": true,
+      "roots": 11
+    },
+    "all": {
+      "changed": true,
+      "roots": 11
+    },
+    "errors": []
+  },
+  "textarea/light": {
+    "color": {
+      "changed": true,
+      "roots": 8
+    },
+    "font": {
+      "changed": true,
+      "roots": 8
+    },
+    "radius": {
+      "changed": true,
+      "roots": 8
+    },
+    "shadow": {
+      "changed": false,
+      "roots": 8
+    },
+    "size": {
+      "changed": true,
+      "roots": 8
+    },
+    "all": {
+      "changed": true,
+      "roots": 8
+    },
+    "errors": []
+  },
+  "textarea/dark": {
+    "color": {
+      "changed": true,
+      "roots": 8
+    },
+    "font": {
+      "changed": true,
+      "roots": 8
+    },
+    "radius": {
+      "changed": true,
+      "roots": 8
+    },
+    "shadow": {
+      "changed": false,
+      "roots": 8
+    },
+    "size": {
+      "changed": true,
+      "roots": 8
+    },
+    "all": {
+      "changed": true,
+      "roots": 8
+    },
+    "errors": []
+  },
+  "tree-select/light": {
+    "color": {
+      "changed": true,
+      "roots": 3
+    },
+    "font": {
+      "changed": true,
+      "roots": 3
+    },
+    "radius": {
+      "changed": false,
+      "roots": 3
+    },
+    "shadow": {
+      "changed": false,
+      "roots": 3
+    },
+    "size": {
+      "changed": true,
+      "roots": 3
+    },
+    "all": {
+      "changed": true,
+      "roots": 3
+    },
+    "errors": []
+  },
+  "tree-select/dark": {
+    "color": {
+      "changed": true,
+      "roots": 3
+    },
+    "font": {
+      "changed": true,
+      "roots": 3
+    },
+    "radius": {
+      "changed": false,
+      "roots": 3
+    },
+    "shadow": {
+      "changed": false,
+      "roots": 3
+    },
+    "size": {
+      "changed": true,
+      "roots": 3
+    },
+    "all": {
+      "changed": true,
+      "roots": 3
+    },
+    "errors": []
+  },
+  "upload/light": {
+    "color": {
+      "changed": true,
+      "roots": 7
+    },
+    "font": {
+      "changed": true,
+      "roots": 7
+    },
+    "radius": {
+      "changed": true,
+      "roots": 7
+    },
+    "shadow": {
+      "changed": false,
+      "roots": 7
+    },
+    "size": {
+      "changed": true,
+      "roots": 7
+    },
+    "all": {
+      "changed": true,
+      "roots": 7
+    },
+    "errors": []
+  },
+  "upload/dark": {
+    "color": {
+      "changed": true,
+      "roots": 7
+    },
+    "font": {
+      "changed": true,
+      "roots": 7
+    },
+    "radius": {
+      "changed": true,
+      "roots": 7
+    },
+    "shadow": {
+      "changed": false,
+      "roots": 7
+    },
+    "size": {
+      "changed": true,
+      "roots": 7
+    },
+    "all": {
+      "changed": true,
+      "roots": 7
+    },
+    "errors": []
+  },
+  "avatar/light": {
+    "color": {
+      "changed": true,
+      "roots": 32
+    },
+    "font": {
+      "changed": true,
+      "roots": 32
+    },
+    "radius": {
+      "changed": true,
+      "roots": 32
+    },
+    "shadow": {
+      "changed": false,
+      "roots": 32
+    },
+    "size": {
+      "changed": true,
+      "roots": 32
+    },
+    "all": {
+      "changed": true,
+      "roots": 32
+    },
+    "errors": []
+  },
+  "avatar/dark": {
+    "color": {
+      "changed": true,
+      "roots": 32
+    },
+    "font": {
+      "changed": true,
+      "roots": 32
+    },
+    "radius": {
+      "changed": true,
+      "roots": 32
+    },
+    "shadow": {
+      "changed": false,
+      "roots": 32
+    },
+    "size": {
+      "changed": true,
+      "roots": 32
+    },
+    "all": {
+      "changed": true,
+      "roots": 32
+    },
+    "errors": []
+  },
+  "badge/light": {
+    "color": {
+      "changed": true,
+      "roots": 2
+    },
+    "font": {
+      "changed": true,
+      "roots": 2
+    },
+    "radius": {
+      "changed": false,
+      "roots": 2
+    },
+    "shadow": {
+      "changed": false,
+      "roots": 2
+    },
+    "size": {
+      "changed": false,
+      "roots": 2
+    },
+    "all": {
+      "changed": true,
+      "roots": 2
+    },
+    "errors": []
+  },
+  "badge/dark": {
+    "color": {
+      "changed": true,
+      "roots": 2
+    },
+    "font": {
+      "changed": true,
+      "roots": 2
+    },
+    "radius": {
+      "changed": false,
+      "roots": 2
+    },
+    "shadow": {
+      "changed": false,
+      "roots": 2
+    },
+    "size": {
+      "changed": false,
+      "roots": 2
+    },
+    "all": {
+      "changed": true,
+      "roots": 2
+    },
+    "errors": []
+  },
+  "cell/light": {
+    "color": {
+      "changed": true,
+      "roots": 19
+    },
+    "font": {
+      "changed": true,
+      "roots": 19
+    },
+    "radius": {
+      "changed": false,
+      "roots": 19
+    },
+    "shadow": {
+      "changed": false,
+      "roots": 19
+    },
+    "size": {
+      "changed": true,
+      "roots": 19
+    },
+    "all": {
+      "changed": true,
+      "roots": 19
+    },
+    "errors": []
+  },
+  "cell/dark": {
+    "color": {
+      "changed": true,
+      "roots": 19
+    },
+    "font": {
+      "changed": true,
+      "roots": 19
+    },
+    "radius": {
+      "changed": false,
+      "roots": 19
+    },
+    "shadow": {
+      "changed": false,
+      "roots": 19
+    },
+    "size": {
+      "changed": true,
+      "roots": 19
+    },
+    "all": {
+      "changed": true,
+      "roots": 19
+    },
+    "errors": []
+  },
+  "time-counter/light": {
+    "color": {
+      "changed": true,
+      "roots": 21
+    },
+    "font": {
+      "changed": true,
+      "roots": 21
+    },
+    "radius": {
+      "changed": true,
+      "roots": 21
+    },
+    "shadow": {
+      "changed": false,
+      "roots": 21
+    },
+    "size": {
+      "changed": false,
+      "roots": 21
+    },
+    "all": {
+      "changed": true,
+      "roots": 21
+    },
+    "errors": []
+  },
+  "time-counter/dark": {
+    "color": {
+      "changed": true,
+      "roots": 21
+    },
+    "font": {
+      "changed": true,
+      "roots": 21
+    },
+    "radius": {
+      "changed": true,
+      "roots": 21
+    },
+    "shadow": {
+      "changed": false,
+      "roots": 21
+    },
+    "size": {
+      "changed": false,
+      "roots": 21
+    },
+    "all": {
+      "changed": true,
+      "roots": 21
+    },
+    "errors": []
+  },
+  "collapse/light": {
+    "color": {
+      "changed": true,
+      "roots": 4
+    },
+    "font": {
+      "changed": true,
+      "roots": 4
+    },
+    "radius": {
+      "changed": true,
+      "roots": 4
+    },
+    "shadow": {
+      "changed": false,
+      "roots": 4
+    },
+    "size": {
+      "changed": true,
+      "roots": 4
+    },
+    "all": {
+      "changed": true,
+      "roots": 4
+    },
+    "errors": []
+  },
+  "collapse/dark": {
+    "color": {
+      "changed": true,
+      "roots": 4
+    },
+    "font": {
+      "changed": true,
+      "roots": 4
+    },
+    "radius": {
+      "changed": true,
+      "roots": 4
+    },
+    "shadow": {
+      "changed": false,
+      "roots": 4
+    },
+    "size": {
+      "changed": true,
+      "roots": 4
+    },
+    "all": {
+      "changed": true,
+      "roots": 4
+    },
+    "errors": []
+  },
+  "empty/light": {
+    "color": {
+      "changed": true,
+      "roots": 3
+    },
+    "font": {
+      "changed": true,
+      "roots": 3
+    },
+    "radius": {
+      "changed": true,
+      "roots": 3
+    },
+    "shadow": {
+      "changed": false,
+      "roots": 3
+    },
+    "size": {
+      "changed": true,
+      "roots": 3
+    },
+    "all": {
+      "changed": true,
+      "roots": 3
+    },
+    "errors": []
+  },
+  "empty/dark": {
+    "color": {
+      "changed": true,
+      "roots": 3
+    },
+    "font": {
+      "changed": true,
+      "roots": 3
+    },
+    "radius": {
+      "changed": true,
+      "roots": 3
+    },
+    "shadow": {
+      "changed": false,
+      "roots": 3
+    },
+    "size": {
+      "changed": true,
+      "roots": 3
+    },
+    "all": {
+      "changed": true,
+      "roots": 3
+    },
+    "errors": []
+  },
+  "footer/light": {
+    "color": {
+      "changed": true,
+      "roots": 5
+    },
+    "font": {
+      "changed": true,
+      "roots": 5
+    },
+    "radius": {
+      "changed": false,
+      "roots": 5
+    },
+    "shadow": {
+      "changed": false,
+      "roots": 5
+    },
+    "size": {
+      "changed": true,
+      "roots": 5
+    },
+    "all": {
+      "changed": true,
+      "roots": 5
+    },
+    "errors": []
+  },
+  "footer/dark": {
+    "color": {
+      "changed": true,
+      "roots": 5
+    },
+    "font": {
+      "changed": true,
+      "roots": 5
+    },
+    "radius": {
+      "changed": false,
+      "roots": 5
+    },
+    "shadow": {
+      "changed": false,
+      "roots": 5
+    },
+    "size": {
+      "changed": true,
+      "roots": 5
+    },
+    "all": {
+      "changed": true,
+      "roots": 5
+    },
+    "errors": []
+  },
+  "image/light": {
+    "color": {
+      "changed": true,
+      "roots": 10
+    },
+    "font": {
+      "changed": true,
+      "roots": 10
+    },
+    "radius": {
+      "changed": true,
+      "roots": 10
+    },
+    "shadow": {
+      "changed": false,
+      "roots": 10
+    },
+    "size": {
+      "changed": false,
+      "roots": 10
+    },
+    "all": {
+      "changed": true,
+      "roots": 10
+    },
+    "errors": []
+  },
+  "image/dark": {
+    "color": {
+      "changed": true,
+      "roots": 10
+    },
+    "font": {
+      "changed": true,
+      "roots": 10
+    },
+    "radius": {
+      "changed": true,
+      "roots": 10
+    },
+    "shadow": {
+      "changed": false,
+      "roots": 10
+    },
+    "size": {
+      "changed": false,
+      "roots": 10
+    },
+    "all": {
+      "changed": true,
+      "roots": 10
+    },
+    "errors": []
+  },
+  "image-viewer/light": {
+    "color": {
+      "changed": true,
+      "roots": 1
+    },
+    "font": {
+      "changed": true,
+      "roots": 1
+    },
+    "radius": {
+      "changed": true,
+      "roots": 1
+    },
+    "shadow": {
+      "changed": false,
+      "roots": 1
+    },
+    "size": {
+      "changed": true,
+      "roots": 1
+    },
+    "all": {
+      "changed": true,
+      "roots": 1
+    },
+    "errors": []
+  },
+  "image-viewer/dark": {
+    "color": {
+      "changed": true,
+      "roots": 1
+    },
+    "font": {
+      "changed": true,
+      "roots": 1
+    },
+    "radius": {
+      "changed": true,
+      "roots": 1
+    },
+    "shadow": {
+      "changed": false,
+      "roots": 1
+    },
+    "size": {
+      "changed": true,
+      "roots": 1
+    },
+    "all": {
+      "changed": true,
+      "roots": 1
+    },
+    "errors": []
+  },
+  "progress/light": {
+    "color": {
+      "changed": true,
+      "roots": 20
+    },
+    "font": {
+      "changed": true,
+      "roots": 20
+    },
+    "radius": {
+      "changed": true,
+      "roots": 20
+    },
+    "shadow": {
+      "changed": false,
+      "roots": 20
+    },
+    "size": {
+      "changed": true,
+      "roots": 20
+    },
+    "all": {
+      "changed": true,
+      "roots": 20
+    },
+    "errors": []
+  },
+  "progress/dark": {
+    "color": {
+      "changed": true,
+      "roots": 20
+    },
+    "font": {
+      "changed": true,
+      "roots": 20
+    },
+    "radius": {
+      "changed": true,
+      "roots": 20
+    },
+    "shadow": {
+      "changed": false,
+      "roots": 20
+    },
+    "size": {
+      "changed": true,
+      "roots": 20
+    },
+    "all": {
+      "changed": true,
+      "roots": 20
+    },
+    "errors": []
+  },
+  "result/light": {
+    "color": {
+      "changed": true,
+      "roots": 9
+    },
+    "font": {
+      "changed": true,
+      "roots": 9
+    },
+    "radius": {
+      "changed": false,
+      "roots": 9
+    },
+    "shadow": {
+      "changed": false,
+      "roots": 9
+    },
+    "size": {
+      "changed": true,
+      "roots": 9
+    },
+    "all": {
+      "changed": true,
+      "roots": 9
+    },
+    "errors": []
+  },
+  "result/dark": {
+    "color": {
+      "changed": true,
+      "roots": 9
+    },
+    "font": {
+      "changed": true,
+      "roots": 9
+    },
+    "radius": {
+      "changed": false,
+      "roots": 9
+    },
+    "shadow": {
+      "changed": false,
+      "roots": 9
+    },
+    "size": {
+      "changed": true,
+      "roots": 9
+    },
+    "all": {
+      "changed": true,
+      "roots": 9
+    },
+    "errors": []
+  },
+  "skeleton/light": {
+    "color": {
+      "changed": true,
+      "roots": 17
+    },
+    "font": {
+      "changed": false,
+      "roots": 17
+    },
+    "radius": {
+      "changed": true,
+      "roots": 17
+    },
+    "shadow": {
+      "changed": false,
+      "roots": 17
+    },
+    "size": {
+      "changed": true,
+      "roots": 17
+    },
+    "all": {
+      "changed": true,
+      "roots": 17
+    },
+    "errors": []
+  },
+  "skeleton/dark": {
+    "color": {
+      "changed": true,
+      "roots": 17
+    },
+    "font": {
+      "changed": false,
+      "roots": 17
+    },
+    "radius": {
+      "changed": true,
+      "roots": 17
+    },
+    "shadow": {
+      "changed": false,
+      "roots": 17
+    },
+    "size": {
+      "changed": true,
+      "roots": 17
+    },
+    "all": {
+      "changed": true,
+      "roots": 17
+    },
+    "errors": []
+  },
+  "swiper/light": {
+    "color": {
+      "changed": true,
+      "roots": 11
+    },
+    "font": {
+      "changed": true,
+      "roots": 11
+    },
+    "radius": {
+      "changed": true,
+      "roots": 11
+    },
+    "shadow": {
+      "changed": false,
+      "roots": 11
+    },
+    "size": {
+      "changed": false,
+      "roots": 11
+    },
+    "all": {
+      "changed": true,
+      "roots": 11
+    },
+    "errors": []
+  },
+  "swiper/dark": {
+    "color": {
+      "changed": true,
+      "roots": 11
+    },
+    "font": {
+      "changed": true,
+      "roots": 11
+    },
+    "radius": {
+      "changed": true,
+      "roots": 11
+    },
+    "shadow": {
+      "changed": false,
+      "roots": 11
+    },
+    "size": {
+      "changed": false,
+      "roots": 11
+    },
+    "all": {
+      "changed": true,
+      "roots": 11
+    },
+    "errors": []
+  },
+  "table/light": {
+    "color": {
+      "changed": true,
+      "roots": 9
+    },
+    "font": {
+      "changed": true,
+      "roots": 9
+    },
+    "radius": {
+      "changed": false,
+      "roots": 9
+    },
+    "shadow": {
+      "changed": false,
+      "roots": 9
+    },
+    "size": {
+      "changed": false,
+      "roots": 9
+    },
+    "all": {
+      "changed": true,
+      "roots": 9
+    },
+    "errors": []
+  },
+  "table/dark": {
+    "color": {
+      "changed": true,
+      "roots": 9
+    },
+    "font": {
+      "changed": true,
+      "roots": 9
+    },
+    "radius": {
+      "changed": false,
+      "roots": 9
+    },
+    "shadow": {
+      "changed": false,
+      "roots": 9
+    },
+    "size": {
+      "changed": false,
+      "roots": 9
+    },
+    "all": {
+      "changed": true,
+      "roots": 9
+    },
+    "errors": []
+  },
+  "tag/light": {
+    "color": {
+      "changed": true,
+      "roots": 54
+    },
+    "font": {
+      "changed": true,
+      "roots": 54
+    },
+    "radius": {
+      "changed": true,
+      "roots": 54
+    },
+    "shadow": {
+      "changed": false,
+      "roots": 54
+    },
+    "size": {
+      "changed": false,
+      "roots": 54
+    },
+    "all": {
+      "changed": true,
+      "roots": 54
+    },
+    "errors": []
+  },
+  "tag/dark": {
+    "color": {
+      "changed": true,
+      "roots": 54
+    },
+    "font": {
+      "changed": true,
+      "roots": 54
+    },
+    "radius": {
+      "changed": true,
+      "roots": 54
+    },
+    "shadow": {
+      "changed": false,
+      "roots": 54
+    },
+    "size": {
+      "changed": false,
+      "roots": 54
+    },
+    "all": {
+      "changed": true,
+      "roots": 54
+    },
+    "errors": []
+  },
+  "action-sheet/light": {
+    "color": {
+      "changed": true,
+      "roots": 1
+    },
+    "font": {
+      "changed": true,
+      "roots": 1
+    },
+    "radius": {
+      "changed": true,
+      "roots": 1
+    },
+    "shadow": {
+      "changed": false,
+      "roots": 1
+    },
+    "size": {
+      "changed": true,
+      "roots": 1
+    },
+    "all": {
+      "changed": true,
+      "roots": 1
+    },
+    "errors": []
+  },
+  "action-sheet/dark": {
+    "color": {
+      "changed": true,
+      "roots": 1
+    },
+    "font": {
+      "changed": true,
+      "roots": 1
+    },
+    "radius": {
+      "changed": true,
+      "roots": 1
+    },
+    "shadow": {
+      "changed": false,
+      "roots": 1
+    },
+    "size": {
+      "changed": true,
+      "roots": 1
+    },
+    "all": {
+      "changed": true,
+      "roots": 1
+    },
+    "errors": []
+  },
+  "dialog/light": {
+    "color": {
+      "changed": true,
+      "roots": 2
+    },
+    "font": {
+      "changed": true,
+      "roots": 2
+    },
+    "radius": {
+      "changed": true,
+      "roots": 2
+    },
+    "shadow": {
+      "changed": false,
+      "roots": 2
+    },
+    "size": {
+      "changed": true,
+      "roots": 2
+    },
+    "all": {
+      "changed": true,
+      "roots": 2
+    },
+    "errors": []
+  },
+  "dialog/dark": {
+    "color": {
+      "changed": true,
+      "roots": 2
+    },
+    "font": {
+      "changed": true,
+      "roots": 2
+    },
+    "radius": {
+      "changed": true,
+      "roots": 2
+    },
+    "shadow": {
+      "changed": false,
+      "roots": 2
+    },
+    "size": {
+      "changed": true,
+      "roots": 2
+    },
+    "all": {
+      "changed": true,
+      "roots": 2
+    },
+    "errors": []
+  },
+  "dropdown-menu/light": {
+    "color": {
+      "changed": true,
+      "roots": 4
+    },
+    "font": {
+      "changed": true,
+      "roots": 4
+    },
+    "radius": {
+      "changed": true,
+      "roots": 4
+    },
+    "shadow": {
+      "changed": false,
+      "roots": 4
+    },
+    "size": {
+      "changed": true,
+      "roots": 4
+    },
+    "all": {
+      "changed": true,
+      "roots": 4
+    },
+    "errors": []
+  },
+  "dropdown-menu/dark": {
+    "color": {
+      "changed": true,
+      "roots": 4
+    },
+    "font": {
+      "changed": true,
+      "roots": 4
+    },
+    "radius": {
+      "changed": true,
+      "roots": 4
+    },
+    "shadow": {
+      "changed": false,
+      "roots": 4
+    },
+    "size": {
+      "changed": true,
+      "roots": 4
+    },
+    "all": {
+      "changed": true,
+      "roots": 4
+    },
+    "errors": []
+  },
+  "loading/light": {
+    "color": {
+      "changed": true,
+      "roots": 13
+    },
+    "font": {
+      "changed": true,
+      "roots": 13
+    },
+    "radius": {
+      "changed": false,
+      "roots": 13
+    },
+    "shadow": {
+      "changed": false,
+      "roots": 13
+    },
+    "size": {
+      "changed": true,
+      "roots": 13
+    },
+    "all": {
+      "changed": true,
+      "roots": 13
+    },
+    "errors": []
+  },
+  "loading/dark": {
+    "color": {
+      "changed": true,
+      "roots": 13
+    },
+    "font": {
+      "changed": true,
+      "roots": 13
+    },
+    "radius": {
+      "changed": false,
+      "roots": 13
+    },
+    "shadow": {
+      "changed": false,
+      "roots": 13
+    },
+    "size": {
+      "changed": true,
+      "roots": 13
+    },
+    "all": {
+      "changed": true,
+      "roots": 13
+    },
+    "errors": []
+  },
+  "message/light": {
+    "color": {
+      "changed": true,
+      "roots": 1
+    },
+    "font": {
+      "changed": true,
+      "roots": 1
+    },
+    "radius": {
+      "changed": true,
+      "roots": 1
+    },
+    "shadow": {
+      "changed": true,
+      "roots": 1
+    },
+    "size": {
+      "changed": false,
+      "roots": 1
+    },
+    "all": {
+      "changed": true,
+      "roots": 1
+    },
+    "errors": []
+  },
+  "message/dark": {
+    "color": {
+      "changed": true,
+      "roots": 1
+    },
+    "font": {
+      "changed": true,
+      "roots": 1
+    },
+    "radius": {
+      "changed": true,
+      "roots": 1
+    },
+    "shadow": {
+      "changed": true,
+      "roots": 1
+    },
+    "size": {
+      "changed": false,
+      "roots": 1
+    },
+    "all": {
+      "changed": true,
+      "roots": 1
+    },
+    "errors": []
+  },
+  "notice-bar/light": {
+    "color": {
+      "changed": true,
+      "roots": 14
+    },
+    "font": {
+      "changed": true,
+      "roots": 14
+    },
+    "radius": {
+      "changed": false,
+      "roots": 14
+    },
+    "shadow": {
+      "changed": false,
+      "roots": 14
+    },
+    "size": {
+      "changed": true,
+      "roots": 14
+    },
+    "all": {
+      "changed": true,
+      "roots": 14
+    },
+    "errors": []
+  },
+  "notice-bar/dark": {
+    "color": {
+      "changed": true,
+      "roots": 14
+    },
+    "font": {
+      "changed": true,
+      "roots": 14
+    },
+    "radius": {
+      "changed": false,
+      "roots": 14
+    },
+    "shadow": {
+      "changed": false,
+      "roots": 14
+    },
+    "size": {
+      "changed": true,
+      "roots": 14
+    },
+    "all": {
+      "changed": true,
+      "roots": 14
+    },
+    "errors": []
+  },
+  "popover/light": {
+    "color": {
+      "changed": true,
+      "roots": 2
+    },
+    "font": {
+      "changed": true,
+      "roots": 2
+    },
+    "radius": {
+      "changed": true,
+      "roots": 2
+    },
+    "shadow": {
+      "changed": true,
+      "roots": 2
+    },
+    "size": {
+      "changed": true,
+      "roots": 2
+    },
+    "all": {
+      "changed": true,
+      "roots": 2
+    },
+    "errors": []
+  },
+  "popover/dark": {
+    "color": {
+      "changed": true,
+      "roots": 2
+    },
+    "font": {
+      "changed": true,
+      "roots": 2
+    },
+    "radius": {
+      "changed": true,
+      "roots": 2
+    },
+    "shadow": {
+      "changed": true,
+      "roots": 2
+    },
+    "size": {
+      "changed": true,
+      "roots": 2
+    },
+    "all": {
+      "changed": true,
+      "roots": 2
+    },
+    "errors": []
+  },
+  "popup/light": {
+    "color": {
+      "changed": true,
+      "roots": 2
+    },
+    "font": {
+      "changed": true,
+      "roots": 2
+    },
+    "radius": {
+      "changed": true,
+      "roots": 2
+    },
+    "shadow": {
+      "changed": false,
+      "roots": 2
+    },
+    "size": {
+      "changed": true,
+      "roots": 2
+    },
+    "all": {
+      "changed": true,
+      "roots": 2
+    },
+    "errors": []
+  },
+  "popup/dark": {
+    "color": {
+      "changed": true,
+      "roots": 2
+    },
+    "font": {
+      "changed": true,
+      "roots": 2
+    },
+    "radius": {
+      "changed": true,
+      "roots": 2
+    },
+    "shadow": {
+      "changed": false,
+      "roots": 2
+    },
+    "size": {
+      "changed": true,
+      "roots": 2
+    },
+    "all": {
+      "changed": true,
+      "roots": 2
+    },
+    "errors": []
+  },
+  "pull-down-refresh/light": {
+    "color": {
+      "changed": true,
+      "roots": 3
+    },
+    "font": {
+      "changed": true,
+      "roots": 3
+    },
+    "radius": {
+      "changed": false,
+      "roots": 3
+    },
+    "shadow": {
+      "changed": false,
+      "roots": 3
+    },
+    "size": {
+      "changed": true,
+      "roots": 3
+    },
+    "all": {
+      "changed": true,
+      "roots": 3
+    },
+    "errors": []
+  },
+  "pull-down-refresh/dark": {
+    "color": {
+      "changed": true,
+      "roots": 3
+    },
+    "font": {
+      "changed": true,
+      "roots": 3
+    },
+    "radius": {
+      "changed": false,
+      "roots": 3
+    },
+    "shadow": {
+      "changed": false,
+      "roots": 3
+    },
+    "size": {
+      "changed": true,
+      "roots": 3
+    },
+    "all": {
+      "changed": true,
+      "roots": 3
+    },
+    "errors": []
+  },
+  "swipe-cell/light": {
+    "color": {
+      "changed": true,
+      "roots": 22
+    },
+    "font": {
+      "changed": true,
+      "roots": 22
+    },
+    "radius": {
+      "changed": false,
+      "roots": 22
+    },
+    "shadow": {
+      "changed": false,
+      "roots": 22
+    },
+    "size": {
+      "changed": true,
+      "roots": 22
+    },
+    "all": {
+      "changed": true,
+      "roots": 22
+    },
+    "errors": []
+  },
+  "swipe-cell/dark": {
+    "color": {
+      "changed": true,
+      "roots": 22
+    },
+    "font": {
+      "changed": true,
+      "roots": 22
+    },
+    "radius": {
+      "changed": false,
+      "roots": 22
+    },
+    "shadow": {
+      "changed": false,
+      "roots": 22
+    },
+    "size": {
+      "changed": true,
+      "roots": 22
+    },
+    "all": {
+      "changed": true,
+      "roots": 22
+    },
+    "errors": []
+  },
+  "toast/light": {
+    "color": {
+      "changed": true,
+      "roots": 1
+    },
+    "font": {
+      "changed": true,
+      "roots": 1
+    },
+    "radius": {
+      "changed": true,
+      "roots": 1
+    },
+    "shadow": {
+      "changed": false,
+      "roots": 1
+    },
+    "size": {
+      "changed": true,
+      "roots": 1
+    },
+    "all": {
+      "changed": true,
+      "roots": 1
+    },
+    "errors": []
+  },
+  "toast/dark": {
+    "color": {
+      "changed": true,
+      "roots": 1
+    },
+    "font": {
+      "changed": true,
+      "roots": 1
+    },
+    "radius": {
+      "changed": true,
+      "roots": 1
+    },
+    "shadow": {
+      "changed": false,
+      "roots": 1
+    },
+    "size": {
+      "changed": true,
+      "roots": 1
+    },
+    "all": {
+      "changed": true,
+      "roots": 1
+    },
+    "errors": []
+  },
+  "theme/light": {
+    "color": {
+      "changed": true,
+      "roots": 3
+    },
+    "font": {
+      "changed": true,
+      "roots": 3
+    },
+    "radius": {
+      "changed": false,
+      "roots": 3
+    },
+    "shadow": {
+      "changed": false,
+      "roots": 3
+    },
+    "size": {
+      "changed": false,
+      "roots": 3
+    },
+    "all": {
+      "changed": true,
+      "roots": 3
+    },
+    "errors": []
+  },
+  "theme/dark": {
+    "color": {
+      "changed": true,
+      "roots": 3
+    },
+    "font": {
+      "changed": true,
+      "roots": 3
+    },
+    "radius": {
+      "changed": false,
+      "roots": 3
+    },
+    "shadow": {
+      "changed": false,
+      "roots": 3
+    },
+    "size": {
+      "changed": false,
+      "roots": 3
+    },
+    "all": {
+      "changed": true,
+      "roots": 3
+    },
+    "errors": []
+  }
+}

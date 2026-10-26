@@ -28,6 +28,11 @@ enum TSwiperPaginationPlacement {
 }
 
 /// 单个轮播指示器标记的构建器。
+/// [context] 轮播指示器的构建上下文。
+/// [details] 当前标记的索引、选中态及指示器配置。
+///
+/// ## 返回值
+/// 当前轮播指示器标记内容。
 typedef TSwiperPaginationItemBuilder =
     Widget Function(BuildContext context, TSwiperPaginationItemDetails details);
 
@@ -65,9 +70,9 @@ enum TSwiperPageEffect {
   /// 卡片间距效果。
   cardMargin,
 
-  /// 相邻卡片沿交叉轴缩放，当前页保持完整尺寸。
+  /// 相邻卡片等比缩放，当前页保持完整尺寸。
   scale,
 
-  /// 缩放和透明度效果。
+  /// 相邻卡片等比缩放、淡化并向当前页两侧叠放。
   scaleAndFade,
 }

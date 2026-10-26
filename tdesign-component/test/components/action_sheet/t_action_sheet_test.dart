@@ -1,4 +1,3 @@
-import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:tdesign_flutter/src/components/action_sheet/t_action_sheet_grid.dart';
 import 'package:tdesign_flutter/src/components/action_sheet/t_action_sheet_list.dart';
@@ -320,11 +319,42 @@ void main() {
           matching: find.byType(Positioned),
         ),
       );
-      expect(positioned.last.height, 282);
+      expect(positioned.last.height, 294);
       expect(tester.takeException(), isNull);
 
       handle.close();
       await tester.pumpAndSettle();
+    });
+
+    testWidgets('showGridSections 展示两个独立滚动分组并回传选中项', (tester) async {
+      final context = await pumpHost(tester);
+      TActionSheetItem<String>? selected;
+      final handle = TActionSheet.showGridSections(
+        context,
+        cancelText: 'Cancel',
+        sections: const [
+          TActionSheetGridSection(
+            title: 'Forward To',
+            items: [TActionSheetItem(value: 'allen', label: 'Allen')],
+          ),
+          TActionSheetGridSection(
+            title: 'Share',
+            items: [TActionSheetItem(value: 'wechat', label: 'WeChat')],
+          ),
+        ],
+        onSelected: (item) => selected = item,
+      );
+      await tester.pumpAndSettle();
+
+      expect(find.byType(TActionSheetSectionGrid<String>), findsOneWidget);
+      expect(
+        tester.getSize(find.byType(TActionSheetSectionGrid<String>)).height,
+        340,
+      );
+      await tester.tap(find.text('WeChat'));
+      await tester.pumpAndSettle();
+      expect(selected?.value, 'wechat');
+      expect(handle.isShowing, isFalse);
     });
 
     testWidgets('showGrid 在小视口内收缩并允许纵向滚动', (tester) async {

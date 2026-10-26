@@ -1,0 +1,6638 @@
+{
+  "fileKey": "5iZtzla34Rz25j4cK7viAz",
+  "readAt": "2026-10-16",
+  "source": "Figma Plugin API read-only; bindings grouped by property and variable; sample IDs include nested consumers, not automatically attributable to the page owner",
+  "pages": {
+    "button": {
+      "page": "     Button 按钮",
+      "visited": 9029,
+      "groups": [
+        {
+          "field": "itemSpacing",
+          "variable": "--td-comp-margin/xs",
+          "count": 1915,
+          "samples": [
+            [
+              "26626:6328",
+              "Button 按钮",
+              4
+            ],
+            [
+              "26626:6330",
+              "Button 按钮",
+              4
+            ]
+          ]
+        },
+        {
+          "field": "paddingLeft",
+          "variable": "--td-comp-paddingLR/l",
+          "count": 532,
+          "samples": [
+            [
+              "26626:6328",
+              "Button 按钮",
+              16
+            ],
+            [
+              "26626:6330",
+              "Button 按钮",
+              16
+            ]
+          ]
+        },
+        {
+          "field": "paddingRight",
+          "variable": "--td-comp-paddingLR/l",
+          "count": 530,
+          "samples": [
+            [
+              "26626:6328",
+              "Button 按钮",
+              16
+            ],
+            [
+              "26626:6330",
+              "Button 按钮",
+              16
+            ]
+          ]
+        },
+        {
+          "field": "height",
+          "variable": "--td-comp-size/xl",
+          "count": 661,
+          "samples": [
+            [
+              "26626:6328",
+              "Button 按钮",
+              40
+            ],
+            [
+              "26626:6330",
+              "Button 按钮",
+              40
+            ]
+          ]
+        },
+        {
+          "field": "topLeftRadius",
+          "variable": "--td-radius-medium",
+          "count": 1243,
+          "samples": [
+            [
+              "26626:6328",
+              "Button 按钮",
+              6
+            ],
+            [
+              "26626:6330",
+              "Button 按钮",
+              6
+            ]
+          ]
+        },
+        {
+          "field": "topRightRadius",
+          "variable": "--td-radius-medium",
+          "count": 1243,
+          "samples": [
+            [
+              "26626:6328",
+              "Button 按钮",
+              6
+            ],
+            [
+              "26626:6330",
+              "Button 按钮",
+              6
+            ]
+          ]
+        },
+        {
+          "field": "bottomLeftRadius",
+          "variable": "--td-radius-medium",
+          "count": 1243,
+          "samples": [
+            [
+              "26626:6328",
+              "Button 按钮",
+              6
+            ],
+            [
+              "26626:6330",
+              "Button 按钮",
+              6
+            ]
+          ]
+        },
+        {
+          "field": "bottomRightRadius",
+          "variable": "--td-radius-medium",
+          "count": 1243,
+          "samples": [
+            [
+              "26626:6328",
+              "Button 按钮",
+              6
+            ],
+            [
+              "26626:6330",
+              "Button 按钮",
+              6
+            ]
+          ]
+        },
+        {
+          "field": "width",
+          "variable": "--td-comp-size/xl",
+          "count": 129,
+          "samples": [
+            [
+              "26646:6437",
+              "Button 按钮",
+              40
+            ],
+            [
+              "26646:6443",
+              "Button 按钮",
+              40
+            ]
+          ]
+        },
+        {
+          "field": "paddingLeft",
+          "variable": "--td-size/7",
+          "count": 6,
+          "samples": [
+            [
+              "26618:6762",
+              "Button 按钮",
+              20
+            ],
+            [
+              "26618:6763",
+              "Button 按钮",
+              20
+            ]
+          ]
+        },
+        {
+          "field": "paddingRight",
+          "variable": "--td-size/7",
+          "count": 6,
+          "samples": [
+            [
+              "26618:6762",
+              "Button 按钮",
+              20
+            ],
+            [
+              "26618:6763",
+              "Button 按钮",
+              20
+            ]
+          ]
+        },
+        {
+          "field": "height",
+          "variable": "--td-comp-size/xxl",
+          "count": 577,
+          "samples": [
+            [
+              "26618:6762",
+              "Button 按钮",
+              48
+            ],
+            [
+              "26618:6763",
+              "Button 按钮",
+              48
+            ]
+          ]
+        },
+        {
+          "field": "width",
+          "variable": "--td-comp-size/xxl",
+          "count": 115,
+          "samples": [
+            [
+              "26618:6773",
+              "Button 按钮",
+              48
+            ],
+            [
+              "26572:5867",
+              "variant=ghost, theme=primary, size=large, shape=square,",
+              48
+            ]
+          ]
+        },
+        {
+          "field": "paddingLeft",
+          "variable": "--td-comp-paddingLR/m",
+          "count": 462,
+          "samples": [
+            [
+              "26618:6799",
+              "Button 按钮",
+              12
+            ],
+            [
+              "26618:6800",
+              "Button 按钮",
+              12
+            ]
+          ]
+        },
+        {
+          "field": "paddingRight",
+          "variable": "--td-comp-paddingLR/m",
+          "count": 461,
+          "samples": [
+            [
+              "26618:6799",
+              "Button 按钮",
+              12
+            ],
+            [
+              "26618:6800",
+              "Button 按钮",
+              12
+            ]
+          ]
+        },
+        {
+          "field": "height",
+          "variable": "--td-comp-size/m",
+          "count": 577,
+          "samples": [
+            [
+              "26618:6799",
+              "Button 按钮",
+              32
+            ],
+            [
+              "26618:6800",
+              "Button 按钮",
+              32
+            ]
+          ]
+        },
+        {
+          "field": "width",
+          "variable": "--td-comp-size/m",
+          "count": 115,
+          "samples": [
+            [
+              "26618:6804",
+              "Button 按钮",
+              32
+            ],
+            [
+              "26572:6407",
+              "variant=ghost, theme=primary, size=small, shape=square,",
+              32
+            ]
+          ]
+        },
+        {
+          "field": "paddingLeft",
+          "variable": "--td-comp-paddingLR/s",
+          "count": 462,
+          "samples": [
+            [
+              "26618:6819",
+              "Button 按钮",
+              8
+            ],
+            [
+              "26618:6820",
+              "Button 按钮",
+              8
+            ]
+          ]
+        },
+        {
+          "field": "paddingRight",
+          "variable": "--td-comp-paddingLR/s",
+          "count": 465,
+          "samples": [
+            [
+              "26618:6819",
+              "Button 按钮",
+              8
+            ],
+            [
+              "26618:6820",
+              "Button 按钮",
+              8
+            ]
+          ]
+        },
+        {
+          "field": "height",
+          "variable": "--td-comp-size/s",
+          "count": 577,
+          "samples": [
+            [
+              "26618:6819",
+              "Button 按钮",
+              28
+            ],
+            [
+              "26618:6820",
+              "Button 按钮",
+              28
+            ]
+          ]
+        },
+        {
+          "field": "width",
+          "variable": "--td-comp-size/s",
+          "count": 115,
+          "samples": [
+            [
+              "26618:6824",
+              "Button 按钮",
+              28
+            ],
+            [
+              "26572:6659",
+              "variant=ghost, theme=primary, size=extraSmall, shape=sq",
+              28
+            ]
+          ]
+        },
+        {
+          "field": "topLeftRadius",
+          "variable": "--td-radius-round",
+          "count": 1150,
+          "samples": [
+            [
+              "26626:6255",
+              "Button 按钮",
+              999
+            ],
+            [
+              "26626:6256",
+              "Button 按钮",
+              999
+            ]
+          ]
+        },
+        {
+          "field": "topRightRadius",
+          "variable": "--td-radius-round",
+          "count": 1150,
+          "samples": [
+            [
+              "26626:6255",
+              "Button 按钮",
+              999
+            ],
+            [
+              "26626:6256",
+              "Button 按钮",
+              999
+            ]
+          ]
+        },
+        {
+          "field": "bottomLeftRadius",
+          "variable": "--td-radius-round",
+          "count": 1150,
+          "samples": [
+            [
+              "26626:6255",
+              "Button 按钮",
+              999
+            ],
+            [
+              "26626:6256",
+              "Button 按钮",
+              999
+            ]
+          ]
+        },
+        {
+          "field": "bottomRightRadius",
+          "variable": "--td-radius-round",
+          "count": 1150,
+          "samples": [
+            [
+              "26626:6255",
+              "Button 按钮",
+              999
+            ],
+            [
+              "26626:6256",
+              "Button 按钮",
+              999
+            ]
+          ]
+        },
+        {
+          "field": "itemSpacing",
+          "variable": "--td-comp-margin/s",
+          "count": 3,
+          "samples": [
+            [
+              "26618:6413",
+              "Button 按钮",
+              8
+            ],
+            [
+              "26523:4376",
+              "variant=base, theme=primary, size=medium, shape=rectang",
+              8
+            ]
+          ]
+        },
+        {
+          "field": "paddingLeft",
+          "variable": "VariableID:57353:2270",
+          "count": 456,
+          "samples": [
+            [
+              "26572:5633",
+              "variant=ghost, theme=primary, size=large, shape=rectang",
+              20
+            ],
+            [
+              "26572:5635",
+              "variant=ghost, theme=default, size=large, shape=rectang",
+              20
+            ]
+          ]
+        },
+        {
+          "field": "paddingRight",
+          "variable": "VariableID:57353:2270",
+          "count": 456,
+          "samples": [
+            [
+              "26572:5633",
+              "variant=ghost, theme=primary, size=large, shape=rectang",
+              20
+            ],
+            [
+              "26572:5635",
+              "variant=ghost, theme=default, size=large, shape=rectang",
+              20
+            ]
+          ]
+        }
+      ]
+    },
+    "avatar": {
+      "pageId": "24386:5260",
+      "page": "     Avatar 头像",
+      "visited": 1206,
+      "groups": [
+        {
+          "field": "width",
+          "variable": "--td-comp-size/xxl",
+          "count": 171,
+          "samples": [
+            [
+              "26722:8941",
+              "Avatar 头像",
+              48,
+              "Avatar 头像"
+            ],
+            [
+              "26711:7173",
+              "size=medium, shape=circle, image=false, icon=true",
+              48,
+              "Avatar 头像"
+            ],
+            [
+              "26711:7171",
+              "size=medium, shape=round, image=false, icon=true",
+              48,
+              "Avatar 头像"
+            ]
+          ]
+        },
+        {
+          "field": "height",
+          "variable": "--td-comp-size/xxl",
+          "count": 171,
+          "samples": [
+            [
+              "26722:8941",
+              "Avatar 头像",
+              48,
+              "Avatar 头像"
+            ],
+            [
+              "26711:7173",
+              "size=medium, shape=circle, image=false, icon=true",
+              48,
+              "Avatar 头像"
+            ],
+            [
+              "26711:7171",
+              "size=medium, shape=round, image=false, icon=true",
+              48,
+              "Avatar 头像"
+            ]
+          ]
+        },
+        {
+          "field": "topLeftRadius",
+          "variable": "--td-radius-round",
+          "count": 255,
+          "samples": [
+            [
+              "26722:8941",
+              "Avatar 头像",
+              999,
+              "Avatar 头像"
+            ],
+            [
+              "26722:8966",
+              "Badge 徽标",
+              999,
+              "Avatar 头像"
+            ],
+            [
+              "26711:7173",
+              "size=medium, shape=circle, image=false, icon=true",
+              999,
+              "Avatar 头像"
+            ]
+          ]
+        },
+        {
+          "field": "topRightRadius",
+          "variable": "--td-radius-round",
+          "count": 255,
+          "samples": [
+            [
+              "26722:8941",
+              "Avatar 头像",
+              999,
+              "Avatar 头像"
+            ],
+            [
+              "26722:8966",
+              "Badge 徽标",
+              999,
+              "Avatar 头像"
+            ],
+            [
+              "26711:7173",
+              "size=medium, shape=circle, image=false, icon=true",
+              999,
+              "Avatar 头像"
+            ]
+          ]
+        },
+        {
+          "field": "bottomLeftRadius",
+          "variable": "--td-radius-round",
+          "count": 255,
+          "samples": [
+            [
+              "26722:8941",
+              "Avatar 头像",
+              999,
+              "Avatar 头像"
+            ],
+            [
+              "26722:8966",
+              "Badge 徽标",
+              999,
+              "Avatar 头像"
+            ],
+            [
+              "26711:7173",
+              "size=medium, shape=circle, image=false, icon=true",
+              999,
+              "Avatar 头像"
+            ]
+          ]
+        },
+        {
+          "field": "bottomRightRadius",
+          "variable": "--td-radius-round",
+          "count": 255,
+          "samples": [
+            [
+              "26722:8941",
+              "Avatar 头像",
+              999,
+              "Avatar 头像"
+            ],
+            [
+              "26722:8966",
+              "Badge 徽标",
+              999,
+              "Avatar 头像"
+            ],
+            [
+              "26711:7173",
+              "size=medium, shape=circle, image=false, icon=true",
+              999,
+              "Avatar 头像"
+            ]
+          ]
+        },
+        {
+          "field": "topLeftRadius",
+          "variable": "--td-radius-medium",
+          "count": 219,
+          "samples": [
+            [
+              "26722:8944",
+              "Avatar 头像",
+              6,
+              "Avatar 头像"
+            ],
+            [
+              "26711:7171",
+              "size=medium, shape=round, image=false, icon=true",
+              6,
+              "Avatar 头像"
+            ],
+            [
+              "26711:7172",
+              "size=medium, shape=round, image=false, icon=false",
+              6,
+              "Avatar 头像"
+            ]
+          ]
+        },
+        {
+          "field": "topRightRadius",
+          "variable": "--td-radius-medium",
+          "count": 219,
+          "samples": [
+            [
+              "26722:8944",
+              "Avatar 头像",
+              6,
+              "Avatar 头像"
+            ],
+            [
+              "26711:7171",
+              "size=medium, shape=round, image=false, icon=true",
+              6,
+              "Avatar 头像"
+            ],
+            [
+              "26711:7172",
+              "size=medium, shape=round, image=false, icon=false",
+              6,
+              "Avatar 头像"
+            ]
+          ]
+        },
+        {
+          "field": "bottomLeftRadius",
+          "variable": "--td-radius-medium",
+          "count": 219,
+          "samples": [
+            [
+              "26722:8944",
+              "Avatar 头像",
+              6,
+              "Avatar 头像"
+            ],
+            [
+              "26711:7171",
+              "size=medium, shape=round, image=false, icon=true",
+              6,
+              "Avatar 头像"
+            ],
+            [
+              "26711:7172",
+              "size=medium, shape=round, image=false, icon=false",
+              6,
+              "Avatar 头像"
+            ]
+          ]
+        },
+        {
+          "field": "bottomRightRadius",
+          "variable": "--td-radius-medium",
+          "count": 219,
+          "samples": [
+            [
+              "26722:8944",
+              "Avatar 头像",
+              6,
+              "Avatar 头像"
+            ],
+            [
+              "26711:7171",
+              "size=medium, shape=round, image=false, icon=true",
+              6,
+              "Avatar 头像"
+            ],
+            [
+              "26711:7172",
+              "size=medium, shape=round, image=false, icon=false",
+              6,
+              "Avatar 头像"
+            ]
+          ]
+        },
+        {
+          "field": "width",
+          "variable": "--td-comp-size/xxxxl",
+          "count": 150,
+          "samples": [
+            [
+              "I26722:9121;26722:7302",
+              "Avatar 头像",
+              64,
+              "AvatarGroup 头像组"
+            ],
+            [
+              "26711:7165",
+              "size=large, shape=circle, image=false, icon=true",
+              64,
+              "Avatar 头像"
+            ],
+            [
+              "26711:7163",
+              "size=large, shape=round, image=false, icon=true",
+              64,
+              "Avatar 头像"
+            ]
+          ]
+        },
+        {
+          "field": "height",
+          "variable": "--td-comp-size/xxxxl",
+          "count": 150,
+          "samples": [
+            [
+              "I26722:9121;26722:7302",
+              "Avatar 头像",
+              64,
+              "AvatarGroup 头像组"
+            ],
+            [
+              "26711:7165",
+              "size=large, shape=circle, image=false, icon=true",
+              64,
+              "Avatar 头像"
+            ],
+            [
+              "26711:7163",
+              "size=large, shape=round, image=false, icon=true",
+              64,
+              "Avatar 头像"
+            ]
+          ]
+        },
+        {
+          "field": "width",
+          "variable": "--td-comp-size/xl",
+          "count": 150,
+          "samples": [
+            [
+              "I26722:9195;26722:7330",
+              "Avatar 头像",
+              40,
+              "AvatarGroup 头像组"
+            ],
+            [
+              "26711:7168",
+              "size=small, shape=circle, image=false, icon=true",
+              40,
+              "Avatar 头像"
+            ],
+            [
+              "26711:7166",
+              "size=small, shape=round, image=false, icon=true",
+              40,
+              "Avatar 头像"
+            ]
+          ]
+        },
+        {
+          "field": "height",
+          "variable": "--td-comp-size/xl",
+          "count": 150,
+          "samples": [
+            [
+              "I26722:9195;26722:7330",
+              "Avatar 头像",
+              40,
+              "AvatarGroup 头像组"
+            ],
+            [
+              "26711:7168",
+              "size=small, shape=circle, image=false, icon=true",
+              40,
+              "Avatar 头像"
+            ],
+            [
+              "26711:7166",
+              "size=small, shape=round, image=false, icon=true",
+              40,
+              "Avatar 头像"
+            ]
+          ]
+        }
+      ],
+      "styles": [
+        {
+          "id": "S:128017aafb775849a8fc9e612bec1cb5da6753ac,",
+          "name": "Headline/Large",
+          "fontSize": 36,
+          "lineHeight": {
+            "unit": "PIXELS",
+            "value": 44
+          },
+          "fontName": {
+            "family": "PingFang SC",
+            "style": "Semibold"
+          },
+          "sample": "25054:18490"
+        },
+        {
+          "id": "S:3e7d6f6bf7d63065bb8d9f0b8a4b3e8a8a883792,",
+          "name": "Title/ExtraLarge",
+          "fontSize": 20,
+          "lineHeight": {
+            "unit": "PIXELS",
+            "value": 28
+          },
+          "fontName": {
+            "family": "PingFang SC",
+            "style": "Semibold"
+          },
+          "sample": "25054:18493"
+        },
+        {
+          "id": "S:b579dcf634b1700eafcc5c6cfd0238ed3e194c30,",
+          "name": "Body/Medium",
+          "fontSize": 14,
+          "lineHeight": {
+            "unit": "PIXELS",
+            "value": 22
+          },
+          "fontName": {
+            "family": "PingFang SC",
+            "style": "Regular"
+          },
+          "sample": "25054:18658"
+        },
+        {
+          "id": "S:df0b98d1ff489fb8b2216993c69178bb5dbf2bc0,",
+          "name": "Title/Medium",
+          "fontSize": 16,
+          "lineHeight": {
+            "unit": "PIXELS",
+            "value": 24
+          },
+          "fontName": {
+            "family": "PingFang SC",
+            "style": "Semibold"
+          },
+          "sample": "I26722:8947;26711:7105"
+        },
+        {
+          "id": "S:ecc7efbfb78bfab81a57f3569325556bd226ea61,",
+          "name": "Mark/ExtraSmall",
+          "fontSize": 10,
+          "lineHeight": {
+            "unit": "PIXELS",
+            "value": 16
+          },
+          "fontName": {
+            "family": "PingFang SC",
+            "style": "Semibold"
+          },
+          "sample": "I26722:8966;25181:19263"
+        },
+        {
+          "id": "S:fc61722892f174aaade664c7ba03d34e5be262f1,",
+          "name": "Title/Small",
+          "fontSize": 14,
+          "lineHeight": {
+            "unit": "PIXELS",
+            "value": 22
+          },
+          "fontName": {
+            "family": "PingFang SC",
+            "style": "Semibold"
+          },
+          "sample": "I26722:9195;26722:7351;26711:7140"
+        },
+        {
+          "id": "S:168a36c30b93a6e58113210691c5ec3d34f3d715,",
+          "name": "Display/Medium",
+          "fontSize": 48,
+          "lineHeight": {
+            "unit": "PIXELS",
+            "value": 56
+          },
+          "fontName": {
+            "family": "PingFang SC",
+            "style": "Semibold"
+          },
+          "sample": "I27815:32210;24386:5351"
+        },
+        {
+          "id": "S:8ab6ac195800851f61ab445b08fc215cd3395a9c,",
+          "name": "Body/Large",
+          "fontSize": 16,
+          "lineHeight": {
+            "unit": "PIXELS",
+            "value": 24
+          },
+          "fontName": {
+            "family": "PingFang SC",
+            "style": "Regular"
+          },
+          "sample": "I27815:32210;24386:5358"
+        },
+        {
+          "id": "S:8a8370c4fbc15eeac09ee7776e78105a3da75759,",
+          "name": "Link/Large",
+          "fontSize": 16,
+          "lineHeight": {
+            "unit": "PIXELS",
+            "value": 24
+          },
+          "fontName": {
+            "family": "PingFang SC",
+            "style": "Regular"
+          },
+          "sample": "I27815:32210;24386:5364"
+        }
+      ]
+    },
+    "badge": {
+      "pageId": "24386:5261",
+      "page": "     Badge 徽标",
+      "visited": 199,
+      "groups": [
+        {
+          "field": "topLeftRadius",
+          "variable": "--td-radius-round",
+          "count": 15,
+          "samples": [
+            [
+              "25181:19189",
+              "Badge 徽标",
+              999,
+              "Wrapper"
+            ],
+            [
+              "27741:30887",
+              "Avatar 头像",
+              999,
+              "avatar"
+            ],
+            [
+              "25181:19258",
+              "size=medium, shape=circle, dot=true",
+              999,
+              "Badge 徽标"
+            ]
+          ]
+        },
+        {
+          "field": "topRightRadius",
+          "variable": "--td-radius-round",
+          "count": 15,
+          "samples": [
+            [
+              "25181:19189",
+              "Badge 徽标",
+              999,
+              "Wrapper"
+            ],
+            [
+              "27741:30887",
+              "Avatar 头像",
+              999,
+              "avatar"
+            ],
+            [
+              "25181:19258",
+              "size=medium, shape=circle, dot=true",
+              999,
+              "Badge 徽标"
+            ]
+          ]
+        },
+        {
+          "field": "bottomLeftRadius",
+          "variable": "--td-radius-round",
+          "count": 15,
+          "samples": [
+            [
+              "25181:19189",
+              "Badge 徽标",
+              999,
+              "Wrapper"
+            ],
+            [
+              "27741:30887",
+              "Avatar 头像",
+              999,
+              "avatar"
+            ],
+            [
+              "25181:19258",
+              "size=medium, shape=circle, dot=true",
+              999,
+              "Badge 徽标"
+            ]
+          ]
+        },
+        {
+          "field": "bottomRightRadius",
+          "variable": "--td-radius-round",
+          "count": 15,
+          "samples": [
+            [
+              "25181:19189",
+              "Badge 徽标",
+              999,
+              "Wrapper"
+            ],
+            [
+              "27741:30887",
+              "Avatar 头像",
+              999,
+              "avatar"
+            ],
+            [
+              "25181:19258",
+              "size=medium, shape=circle, dot=true",
+              999,
+              "Badge 徽标"
+            ]
+          ]
+        },
+        {
+          "field": "itemSpacing",
+          "variable": "--td-comp-margin/xs",
+          "count": 2,
+          "samples": [
+            [
+              "27741:30814",
+              "Button 按钮",
+              4,
+              "button"
+            ]
+          ]
+        },
+        {
+          "field": "paddingLeft",
+          "variable": "VariableID:57353:2270",
+          "count": 2,
+          "samples": [
+            [
+              "27741:30814",
+              "Button 按钮",
+              20,
+              "button"
+            ]
+          ]
+        },
+        {
+          "field": "paddingRight",
+          "variable": "VariableID:57353:2270",
+          "count": 2,
+          "samples": [
+            [
+              "27741:30814",
+              "Button 按钮",
+              20,
+              "button"
+            ]
+          ]
+        },
+        {
+          "field": "height",
+          "variable": "--td-comp-size/xxl",
+          "count": 4,
+          "samples": [
+            [
+              "27741:30814",
+              "Button 按钮",
+              48,
+              "button"
+            ],
+            [
+              "27741:30898",
+              "Avatar 头像",
+              48,
+              "avatar"
+            ]
+          ]
+        },
+        {
+          "field": "topLeftRadius",
+          "variable": "--td-radius-medium",
+          "count": 3,
+          "samples": [
+            [
+              "27741:30814",
+              "Button 按钮",
+              6,
+              "button"
+            ]
+          ]
+        },
+        {
+          "field": "topRightRadius",
+          "variable": "--td-radius-medium",
+          "count": 3,
+          "samples": [
+            [
+              "27741:30814",
+              "Button 按钮",
+              6,
+              "button"
+            ]
+          ]
+        },
+        {
+          "field": "bottomLeftRadius",
+          "variable": "--td-radius-medium",
+          "count": 3,
+          "samples": [
+            [
+              "27741:30814",
+              "Button 按钮",
+              6,
+              "button"
+            ]
+          ]
+        },
+        {
+          "field": "bottomRightRadius",
+          "variable": "--td-radius-medium",
+          "count": 3,
+          "samples": [
+            [
+              "27741:30814",
+              "Button 按钮",
+              6,
+              "button"
+            ]
+          ]
+        },
+        {
+          "field": "width",
+          "variable": "--td-comp-size/xxl",
+          "count": 2,
+          "samples": [
+            [
+              "27741:30842",
+              "Button 按钮",
+              48,
+              "button"
+            ],
+            [
+              "27741:30898",
+              "Avatar 头像",
+              48,
+              "avatar"
+            ]
+          ]
+        },
+        {
+          "field": "topLeftRadius",
+          "variable": "--td-radius-default",
+          "count": 3,
+          "samples": [
+            [
+              "27741:30861",
+              "Badge 徽标",
+              3,
+              "Wrapper"
+            ],
+            [
+              "25181:19264",
+              "size=medium, shape=round, dot=false",
+              3,
+              "Badge 徽标"
+            ],
+            [
+              "26750:8497",
+              "size=large, shape=round, dot=false",
+              3,
+              "Badge 徽标"
+            ]
+          ]
+        },
+        {
+          "field": "topRightRadius",
+          "variable": "--td-radius-default",
+          "count": 3,
+          "samples": [
+            [
+              "27741:30861",
+              "Badge 徽标",
+              3,
+              "Wrapper"
+            ],
+            [
+              "25181:19264",
+              "size=medium, shape=round, dot=false",
+              3,
+              "Badge 徽标"
+            ],
+            [
+              "26750:8497",
+              "size=large, shape=round, dot=false",
+              3,
+              "Badge 徽标"
+            ]
+          ]
+        },
+        {
+          "field": "bottomLeftRadius",
+          "variable": "--td-radius-default",
+          "count": 3,
+          "samples": [
+            [
+              "27741:30861",
+              "Badge 徽标",
+              3,
+              "Wrapper"
+            ],
+            [
+              "25181:19264",
+              "size=medium, shape=round, dot=false",
+              3,
+              "Badge 徽标"
+            ],
+            [
+              "26750:8497",
+              "size=large, shape=round, dot=false",
+              3,
+              "Badge 徽标"
+            ]
+          ]
+        },
+        {
+          "field": "bottomRightRadius",
+          "variable": "--td-radius-default",
+          "count": 3,
+          "samples": [
+            [
+              "27741:30861",
+              "Badge 徽标",
+              3,
+              "Wrapper"
+            ],
+            [
+              "25181:19264",
+              "size=medium, shape=round, dot=false",
+              3,
+              "Badge 徽标"
+            ],
+            [
+              "26750:8497",
+              "size=large, shape=round, dot=false",
+              3,
+              "Badge 徽标"
+            ]
+          ]
+        },
+        {
+          "field": "paddingLeft",
+          "variable": "--td-comp-paddingLR/l",
+          "count": 4,
+          "samples": [
+            [
+              "27741:30876",
+              "Cell 单元格",
+              16,
+              "cell"
+            ]
+          ]
+        },
+        {
+          "field": "itemSpacing",
+          "variable": "--td-comp-margin/l",
+          "count": 4,
+          "samples": [
+            [
+              "I27741:30876;26939:14785",
+              "Title",
+              16,
+              "Cell 单元格"
+            ]
+          ]
+        },
+        {
+          "field": "paddingTop",
+          "variable": "--td-comp-paddingTB/l",
+          "count": 4,
+          "samples": [
+            [
+              "I27741:30876;26939:14785",
+              "Title",
+              16,
+              "Cell 单元格"
+            ]
+          ]
+        },
+        {
+          "field": "paddingRight",
+          "variable": "--td-comp-paddingLR/l",
+          "count": 4,
+          "samples": [
+            [
+              "I27741:30876;26939:14785",
+              "Title",
+              16,
+              "Cell 单元格"
+            ]
+          ]
+        },
+        {
+          "field": "paddingBottom",
+          "variable": "--td-comp-paddingTB/l",
+          "count": 4,
+          "samples": [
+            [
+              "I27741:30876;26939:14785",
+              "Title",
+              16,
+              "Cell 单元格"
+            ]
+          ]
+        },
+        {
+          "field": "width",
+          "variable": "--td-comp-size/xxxxl",
+          "count": 1,
+          "samples": [
+            [
+              "27741:30887",
+              "Avatar 头像",
+              64,
+              "avatar"
+            ]
+          ]
+        },
+        {
+          "field": "height",
+          "variable": "--td-comp-size/xxxxl",
+          "count": 1,
+          "samples": [
+            [
+              "27741:30887",
+              "Avatar 头像",
+              64,
+              "avatar"
+            ]
+          ]
+        }
+      ],
+      "styles": [
+        {
+          "id": "S:128017aafb775849a8fc9e612bec1cb5da6753ac,",
+          "name": "Headline/Large",
+          "fontSize": 36,
+          "lineHeight": {
+            "unit": "PIXELS",
+            "value": 44
+          },
+          "fontName": {
+            "family": "PingFang SC",
+            "style": "Semibold"
+          },
+          "sample": "25181:19183"
+        },
+        {
+          "id": "S:3e7d6f6bf7d63065bb8d9f0b8a4b3e8a8a883792,",
+          "name": "Title/ExtraLarge",
+          "fontSize": 20,
+          "lineHeight": {
+            "unit": "PIXELS",
+            "value": 28
+          },
+          "fontName": {
+            "family": "PingFang SC",
+            "style": "Semibold"
+          },
+          "sample": "25181:19185"
+        },
+        {
+          "id": "S:8ab6ac195800851f61ab445b08fc215cd3395a9c,",
+          "name": "Body/Large",
+          "fontSize": 16,
+          "lineHeight": {
+            "unit": "PIXELS",
+            "value": 24
+          },
+          "fontName": {
+            "family": "PingFang SC",
+            "style": "Regular"
+          },
+          "sample": "25181:19188"
+        },
+        {
+          "id": "S:d236609dddd21c0c622327425c3b8c770e495063,",
+          "name": "Mark/Large",
+          "fontSize": 16,
+          "lineHeight": {
+            "unit": "PIXELS",
+            "value": 24
+          },
+          "fontName": {
+            "family": "PingFang SC",
+            "style": "Semibold"
+          },
+          "sample": "I27741:30814;26544:4000"
+        },
+        {
+          "id": "S:ecc7efbfb78bfab81a57f3569325556bd226ea61,",
+          "name": "Mark/ExtraSmall",
+          "fontSize": 10,
+          "lineHeight": {
+            "unit": "PIXELS",
+            "value": 16
+          },
+          "fontName": {
+            "family": "PingFang SC",
+            "style": "Semibold"
+          },
+          "sample": "I27741:30824;25181:19263"
+        },
+        {
+          "id": "S:b579dcf634b1700eafcc5c6cfd0238ed3e194c30,",
+          "name": "Body/Medium",
+          "fontSize": 14,
+          "lineHeight": {
+            "unit": "PIXELS",
+            "value": 22
+          },
+          "fontName": {
+            "family": "PingFang SC",
+            "style": "Regular"
+          },
+          "sample": "25181:19246"
+        },
+        {
+          "id": "S:81eda9ab0faf96f3322815393ba1365fb995d11a,",
+          "name": "Mark/Small",
+          "fontSize": 12,
+          "lineHeight": {
+            "unit": "PIXELS",
+            "value": 20
+          },
+          "fontName": {
+            "family": "PingFang SC",
+            "style": "Semibold"
+          },
+          "sample": "I27741:30892;26750:8496"
+        },
+        {
+          "id": "S:168a36c30b93a6e58113210691c5ec3d34f3d715,",
+          "name": "Display/Medium",
+          "fontSize": 48,
+          "lineHeight": {
+            "unit": "PIXELS",
+            "value": 56
+          },
+          "fontName": {
+            "family": "PingFang SC",
+            "style": "Semibold"
+          },
+          "sample": "I27815:32236;24386:5351"
+        },
+        {
+          "id": "S:df0b98d1ff489fb8b2216993c69178bb5dbf2bc0,",
+          "name": "Title/Medium",
+          "fontSize": 16,
+          "lineHeight": {
+            "unit": "PIXELS",
+            "value": 24
+          },
+          "fontName": {
+            "family": "PingFang SC",
+            "style": "Semibold"
+          },
+          "sample": "I27815:32236;24386:5362"
+        },
+        {
+          "id": "S:8a8370c4fbc15eeac09ee7776e78105a3da75759,",
+          "name": "Link/Large",
+          "fontSize": 16,
+          "lineHeight": {
+            "unit": "PIXELS",
+            "value": 24
+          },
+          "fontName": {
+            "family": "PingFang SC",
+            "style": "Regular"
+          },
+          "sample": "I27815:32236;24386:5364"
+        }
+      ]
+    },
+    "cell": {
+      "pageId": "24386:5263",
+      "page": "     Cell 单元格",
+      "visited": 1320,
+      "groups": [
+        {
+          "field": "paddingLeft",
+          "variable": "--td-comp-paddingLR/l",
+          "count": 119,
+          "samples": [
+            [
+              "27145:14329",
+              "Cell 单元格",
+              16,
+              "cell"
+            ],
+            [
+              "26895:11692",
+              "arrow=false, description=false, leftIcon=false, note=fa",
+              16,
+              "Cell 单元格"
+            ],
+            [
+              "27028:13873",
+              "arrow=false, description=true, leftIcon=false, note=fal",
+              16,
+              "Cell 单元格"
+            ]
+          ]
+        },
+        {
+          "field": "itemSpacing",
+          "variable": "--td-comp-margin/l",
+          "count": 123,
+          "samples": [
+            [
+              "I27145:14329;26939:12755",
+              "Group",
+              16,
+              "Cell 单元格"
+            ],
+            [
+              "I27145:14386;26895:11645",
+              "Operation",
+              16,
+              "Group"
+            ],
+            [
+              "26895:11614",
+              "Title",
+              16,
+              "arrow=false, description=false, leftIcon=false, note=false, requi"
+            ]
+          ]
+        },
+        {
+          "field": "paddingTop",
+          "variable": "--td-comp-paddingTB/l",
+          "count": 119,
+          "samples": [
+            [
+              "I27145:14329;26939:12755",
+              "Group",
+              16,
+              "Cell 单元格"
+            ],
+            [
+              "I27146:14742;27028:13876",
+              "Wrapper",
+              16,
+              "Cell 单元格"
+            ],
+            [
+              "26895:11614",
+              "Title",
+              16,
+              "arrow=false, description=false, leftIcon=false, note=false, requi"
+            ]
+          ]
+        },
+        {
+          "field": "paddingRight",
+          "variable": "--td-comp-paddingLR/l",
+          "count": 119,
+          "samples": [
+            [
+              "I27145:14329;26939:12755",
+              "Group",
+              16,
+              "Cell 单元格"
+            ],
+            [
+              "I27146:14742;27028:13876",
+              "Wrapper",
+              16,
+              "Cell 单元格"
+            ],
+            [
+              "26895:11614",
+              "Title",
+              16,
+              "arrow=false, description=false, leftIcon=false, note=false, requi"
+            ]
+          ]
+        },
+        {
+          "field": "paddingBottom",
+          "variable": "--td-comp-paddingTB/l",
+          "count": 119,
+          "samples": [
+            [
+              "I27145:14329;26939:12755",
+              "Group",
+              16,
+              "Cell 单元格"
+            ],
+            [
+              "I27146:14742;27028:13876",
+              "Wrapper",
+              16,
+              "Cell 单元格"
+            ],
+            [
+              "26895:11614",
+              "Title",
+              16,
+              "arrow=false, description=false, leftIcon=false, note=false, requi"
+            ]
+          ]
+        },
+        {
+          "field": "itemSpacing",
+          "variable": "--td-comp-margin/xs",
+          "count": 126,
+          "samples": [
+            [
+              "I27145:14329;26939:12760",
+              "Operation",
+              4,
+              "Group"
+            ],
+            [
+              "I27146:14470;27028:14241",
+              "Wrapper",
+              4,
+              "Group"
+            ],
+            [
+              "I27146:14508;27028:14275",
+              "Text",
+              4,
+              "Group"
+            ]
+          ]
+        },
+        {
+          "field": "topLeftRadius",
+          "variable": "--td-radius-round",
+          "count": 91,
+          "samples": [
+            [
+              "I27145:14356;26939:12769;26914:11927",
+              "Badge 徽标",
+              999,
+              "item/note"
+            ],
+            [
+              "I27145:14386;26986:13959;26914:11906",
+              "Switch 开关",
+              999,
+              "item/note"
+            ],
+            [
+              "I27146:14783;27090:14271;27079:15590",
+              "Avatar 头像",
+              999,
+              "item/image"
+            ]
+          ]
+        },
+        {
+          "field": "topRightRadius",
+          "variable": "--td-radius-round",
+          "count": 91,
+          "samples": [
+            [
+              "I27145:14356;26939:12769;26914:11927",
+              "Badge 徽标",
+              999,
+              "item/note"
+            ],
+            [
+              "I27145:14386;26986:13959;26914:11906",
+              "Switch 开关",
+              999,
+              "item/note"
+            ],
+            [
+              "I27146:14783;27090:14271;27079:15590",
+              "Avatar 头像",
+              999,
+              "item/image"
+            ]
+          ]
+        },
+        {
+          "field": "bottomLeftRadius",
+          "variable": "--td-radius-round",
+          "count": 91,
+          "samples": [
+            [
+              "I27145:14356;26939:12769;26914:11927",
+              "Badge 徽标",
+              999,
+              "item/note"
+            ],
+            [
+              "I27145:14386;26986:13959;26914:11906",
+              "Switch 开关",
+              999,
+              "item/note"
+            ],
+            [
+              "I27146:14783;27090:14271;27079:15590",
+              "Avatar 头像",
+              999,
+              "item/image"
+            ]
+          ]
+        },
+        {
+          "field": "bottomRightRadius",
+          "variable": "--td-radius-round",
+          "count": 91,
+          "samples": [
+            [
+              "I27145:14356;26939:12769;26914:11927",
+              "Badge 徽标",
+              999,
+              "item/note"
+            ],
+            [
+              "I27145:14386;26986:13959;26914:11906",
+              "Switch 开关",
+              999,
+              "item/note"
+            ],
+            [
+              "I27146:14783;27090:14271;27079:15590",
+              "Avatar 头像",
+              999,
+              "item/image"
+            ]
+          ]
+        },
+        {
+          "field": "height",
+          "variable": "--td-comp-size/s",
+          "count": 28,
+          "samples": [
+            [
+              "I27145:14386;26986:13959;26914:11906",
+              "Switch 开关",
+              28,
+              "item/note"
+            ]
+          ]
+        },
+        {
+          "field": "itemSpacing",
+          "variable": "--td-comp-margin/m",
+          "count": 79,
+          "samples": [
+            [
+              "I27146:14431;27131:15155",
+              "Content",
+              12,
+              "Group"
+            ],
+            [
+              "26939:14791",
+              "Group",
+              12,
+              "arrow=true, description=false, leftIcon=false, note=false, requir"
+            ]
+          ]
+        },
+        {
+          "field": "width",
+          "variable": "--td-comp-size/xl",
+          "count": 1,
+          "samples": [
+            [
+              "I27146:14783;27090:14271;27079:15590",
+              "Avatar 头像",
+              40,
+              "item/image"
+            ]
+          ]
+        },
+        {
+          "field": "height",
+          "variable": "--td-comp-size/xl",
+          "count": 1,
+          "samples": [
+            [
+              "I27146:14783;27090:14271;27079:15590",
+              "Avatar 头像",
+              40,
+              "item/image"
+            ]
+          ]
+        },
+        {
+          "field": "width",
+          "variable": "--td-comp-size/xxl",
+          "count": 37,
+          "samples": [
+            [
+              "I27146:14845;27131:15429;27079:15590",
+              "Avatar 头像",
+              48,
+              "item/image"
+            ],
+            [
+              "I27146:14811;27090:14271",
+              "item/image",
+              48,
+              "Content"
+            ],
+            [
+              "27079:14085",
+              "image=true, avatar=false",
+              48,
+              "item/image"
+            ]
+          ]
+        },
+        {
+          "field": "height",
+          "variable": "--td-comp-size/xxl",
+          "count": 37,
+          "samples": [
+            [
+              "I27146:14845;27131:15429;27079:15590",
+              "Avatar 头像",
+              48,
+              "item/image"
+            ],
+            [
+              "I27146:14811;27090:14271",
+              "item/image",
+              48,
+              "Content"
+            ],
+            [
+              "27079:14085",
+              "image=true, avatar=false",
+              48,
+              "item/image"
+            ]
+          ]
+        }
+      ],
+      "styles": [
+        {
+          "id": "S:128017aafb775849a8fc9e612bec1cb5da6753ac,",
+          "name": "Headline/Large",
+          "fontSize": 36,
+          "lineHeight": {
+            "unit": "PIXELS",
+            "value": 44
+          },
+          "fontName": {
+            "family": "PingFang SC",
+            "style": "Semibold"
+          },
+          "sample": "25074:19315"
+        },
+        {
+          "id": "S:3e7d6f6bf7d63065bb8d9f0b8a4b3e8a8a883792,",
+          "name": "Title/ExtraLarge",
+          "fontSize": 20,
+          "lineHeight": {
+            "unit": "PIXELS",
+            "value": 28
+          },
+          "fontName": {
+            "family": "PingFang SC",
+            "style": "Semibold"
+          },
+          "sample": "25074:19317"
+        },
+        {
+          "id": "S:8ab6ac195800851f61ab445b08fc215cd3395a9c,",
+          "name": "Body/Large",
+          "fontSize": 16,
+          "lineHeight": {
+            "unit": "PIXELS",
+            "value": 24
+          },
+          "fontName": {
+            "family": "PingFang SC",
+            "style": "Regular"
+          },
+          "sample": "I27145:14329;26939:12759"
+        },
+        {
+          "id": "S:ecc7efbfb78bfab81a57f3569325556bd226ea61,",
+          "name": "Mark/ExtraSmall",
+          "fontSize": 10,
+          "lineHeight": {
+            "unit": "PIXELS",
+            "value": 16
+          },
+          "fontName": {
+            "family": "PingFang SC",
+            "style": "Semibold"
+          },
+          "sample": "I27145:14356;26939:12769;26914:11927;25181:19263"
+        },
+        {
+          "id": "S:b579dcf634b1700eafcc5c6cfd0238ed3e194c30,",
+          "name": "Body/Medium",
+          "fontSize": 14,
+          "lineHeight": {
+            "unit": "PIXELS",
+            "value": 22
+          },
+          "fontName": {
+            "family": "PingFang SC",
+            "style": "Regular"
+          },
+          "sample": "I27146:14470;27028:14378"
+        },
+        {
+          "id": "S:168a36c30b93a6e58113210691c5ec3d34f3d715,",
+          "name": "Display/Medium",
+          "fontSize": 48,
+          "lineHeight": {
+            "unit": "PIXELS",
+            "value": 56
+          },
+          "fontName": {
+            "family": "PingFang SC",
+            "style": "Semibold"
+          },
+          "sample": "I27815:32262;24386:5351"
+        },
+        {
+          "id": "S:df0b98d1ff489fb8b2216993c69178bb5dbf2bc0,",
+          "name": "Title/Medium",
+          "fontSize": 16,
+          "lineHeight": {
+            "unit": "PIXELS",
+            "value": 24
+          },
+          "fontName": {
+            "family": "PingFang SC",
+            "style": "Semibold"
+          },
+          "sample": "I27815:32262;24386:5362"
+        },
+        {
+          "id": "S:8a8370c4fbc15eeac09ee7776e78105a3da75759,",
+          "name": "Link/Large",
+          "fontSize": 16,
+          "lineHeight": {
+            "unit": "PIXELS",
+            "value": 24
+          },
+          "fontName": {
+            "family": "PingFang SC",
+            "style": "Regular"
+          },
+          "sample": "I27815:32262;24386:5364"
+        }
+      ]
+    },
+    "checkbox": {
+      "pageId": "24386:5247",
+      "page": "     Checkbox 多选框",
+      "visited": 1461,
+      "groups": [
+        {
+          "field": "itemSpacing",
+          "variable": "--td-comp-margin/s",
+          "count": 374,
+          "samples": [
+            [
+              "I27808:34531;27763:31331",
+              "Checkbox 多选框",
+              8,
+              "Checkbox-Group 多选组"
+            ],
+            [
+              "I27808:34531;27763:31331;27502:31683",
+              "icon",
+              8,
+              "Checkbox 多选框"
+            ],
+            [
+              "I27808:34531;27763:31331;27502:31685",
+              "content",
+              8,
+              "Checkbox 多选框"
+            ]
+          ]
+        },
+        {
+          "field": "paddingLeft",
+          "variable": "--td-comp-paddingLR/l",
+          "count": 226,
+          "samples": [
+            [
+              "I27808:34531;27763:31331",
+              "Checkbox 多选框",
+              16,
+              "Checkbox-Group 多选组"
+            ],
+            [
+              "I27756:31714;27752:33941",
+              "icon",
+              16,
+              "checkbox"
+            ],
+            [
+              "27502:32553",
+              "placement=left, checked=true, content=false, indetermin",
+              16,
+              "Checkbox 多选框"
+            ]
+          ]
+        },
+        {
+          "field": "paddingTop",
+          "variable": "--td-comp-paddingTB/l",
+          "count": 320,
+          "samples": [
+            [
+              "I27808:34531;27763:31331;27502:31683",
+              "icon",
+              16,
+              "Checkbox 多选框"
+            ],
+            [
+              "I27808:34531;27763:31331;27502:31685",
+              "content",
+              16,
+              "Checkbox 多选框"
+            ]
+          ]
+        },
+        {
+          "field": "paddingRight",
+          "variable": "--td-comp-paddingLR/l",
+          "count": 226,
+          "samples": [
+            [
+              "I27808:34531;27763:31331;27502:31685",
+              "content",
+              16,
+              "Checkbox 多选框"
+            ],
+            [
+              "I27756:31714;27752:33941",
+              "icon",
+              16,
+              "checkbox"
+            ]
+          ]
+        },
+        {
+          "field": "paddingBottom",
+          "variable": "--td-comp-paddingTB/l",
+          "count": 226,
+          "samples": [
+            [
+              "I27808:34531;27763:31331;27502:31685",
+              "content",
+              16,
+              "Checkbox 多选框"
+            ],
+            [
+              "I27756:31714;27752:33941",
+              "icon",
+              16,
+              "checkbox"
+            ]
+          ]
+        },
+        {
+          "field": "itemSpacing",
+          "variable": "--td-comp-margin/xs",
+          "count": 40,
+          "samples": [
+            [
+              "I27808:34531;27763:31347;27502:32097",
+              "content",
+              4,
+              "Checkbox 多选框"
+            ]
+          ]
+        },
+        {
+          "field": "topLeftRadius",
+          "variable": "--td-radius-large",
+          "count": 9,
+          "samples": [
+            [
+              "27808:34566",
+              "Checkbox-Group 多选组",
+              9,
+              "Checkbox 多选框"
+            ],
+            [
+              "27754:31619",
+              "placement=right, count=2, theme=card",
+              9,
+              "Checkbox-Group 多选组"
+            ],
+            [
+              "27754:31618",
+              "placement=right, count=3, theme=card",
+              9,
+              "Checkbox-Group 多选组"
+            ]
+          ]
+        },
+        {
+          "field": "topRightRadius",
+          "variable": "--td-radius-large",
+          "count": 9,
+          "samples": [
+            [
+              "27808:34566",
+              "Checkbox-Group 多选组",
+              9,
+              "Checkbox 多选框"
+            ],
+            [
+              "27754:31619",
+              "placement=right, count=2, theme=card",
+              9,
+              "Checkbox-Group 多选组"
+            ],
+            [
+              "27754:31618",
+              "placement=right, count=3, theme=card",
+              9,
+              "Checkbox-Group 多选组"
+            ]
+          ]
+        },
+        {
+          "field": "bottomLeftRadius",
+          "variable": "--td-radius-large",
+          "count": 9,
+          "samples": [
+            [
+              "27808:34566",
+              "Checkbox-Group 多选组",
+              9,
+              "Checkbox 多选框"
+            ],
+            [
+              "27754:31619",
+              "placement=right, count=2, theme=card",
+              9,
+              "Checkbox-Group 多选组"
+            ],
+            [
+              "27754:31618",
+              "placement=right, count=3, theme=card",
+              9,
+              "Checkbox-Group 多选组"
+            ]
+          ]
+        },
+        {
+          "field": "bottomRightRadius",
+          "variable": "--td-radius-large",
+          "count": 9,
+          "samples": [
+            [
+              "27808:34566",
+              "Checkbox-Group 多选组",
+              9,
+              "Checkbox 多选框"
+            ],
+            [
+              "27754:31619",
+              "placement=right, count=2, theme=card",
+              9,
+              "Checkbox-Group 多选组"
+            ],
+            [
+              "27754:31618",
+              "placement=right, count=3, theme=card",
+              9,
+              "Checkbox-Group 多选组"
+            ]
+          ]
+        }
+      ],
+      "styles": [
+        {
+          "id": "S:128017aafb775849a8fc9e612bec1cb5da6753ac,",
+          "name": "Headline/Large",
+          "fontSize": 36,
+          "lineHeight": {
+            "unit": "PIXELS",
+            "value": 44
+          },
+          "fontName": {
+            "family": "PingFang SC",
+            "style": "Semibold"
+          },
+          "sample": "25474:20223"
+        },
+        {
+          "id": "S:3e7d6f6bf7d63065bb8d9f0b8a4b3e8a8a883792,",
+          "name": "Title/ExtraLarge",
+          "fontSize": 20,
+          "lineHeight": {
+            "unit": "PIXELS",
+            "value": 28
+          },
+          "fontName": {
+            "family": "PingFang SC",
+            "style": "Semibold"
+          },
+          "sample": "25474:20257"
+        },
+        {
+          "id": "S:8ab6ac195800851f61ab445b08fc215cd3395a9c,",
+          "name": "Body/Large",
+          "fontSize": 16,
+          "lineHeight": {
+            "unit": "PIXELS",
+            "value": 24
+          },
+          "fontName": {
+            "family": "PingFang SC",
+            "style": "Regular"
+          },
+          "sample": "28502:31645"
+        },
+        {
+          "id": "S:b579dcf634b1700eafcc5c6cfd0238ed3e194c30,",
+          "name": "Body/Medium",
+          "fontSize": 14,
+          "lineHeight": {
+            "unit": "PIXELS",
+            "value": 22
+          },
+          "fontName": {
+            "family": "PingFang SC",
+            "style": "Regular"
+          },
+          "sample": "I27808:34531;27763:31347;27502:32102"
+        },
+        {
+          "id": "S:168a36c30b93a6e58113210691c5ec3d34f3d715,",
+          "name": "Display/Medium",
+          "fontSize": 48,
+          "lineHeight": {
+            "unit": "PIXELS",
+            "value": 56
+          },
+          "fontName": {
+            "family": "PingFang SC",
+            "style": "Semibold"
+          },
+          "sample": "I27798:32533;24386:5351"
+        },
+        {
+          "id": "S:df0b98d1ff489fb8b2216993c69178bb5dbf2bc0,",
+          "name": "Title/Medium",
+          "fontSize": 16,
+          "lineHeight": {
+            "unit": "PIXELS",
+            "value": 24
+          },
+          "fontName": {
+            "family": "PingFang SC",
+            "style": "Semibold"
+          },
+          "sample": "I27798:32533;24386:5362"
+        },
+        {
+          "id": "S:8a8370c4fbc15eeac09ee7776e78105a3da75759,",
+          "name": "Link/Large",
+          "fontSize": 16,
+          "lineHeight": {
+            "unit": "PIXELS",
+            "value": 24
+          },
+          "fontName": {
+            "family": "PingFang SC",
+            "style": "Regular"
+          },
+          "sample": "I27798:32533;24386:5364"
+        }
+      ]
+    },
+    "stepper": {
+      "pageId": "24386:5255",
+      "page": "     Stepper 步进器",
+      "visited": 672,
+      "groups": [
+        {
+          "field": "itemSpacing",
+          "variable": "--td-comp-margin/xs",
+          "count": 19,
+          "samples": [
+            [
+              "26668:6798",
+              "Stepper 步进器",
+              4,
+              "Stepper 步进器"
+            ],
+            [
+              "26668:6675",
+              "size=large, disabled=false, theme=normal, press=false",
+              4,
+              "Stepper 步进器"
+            ],
+            [
+              "26668:6691",
+              "size=large, disabled=false, theme=normal, press=true",
+              4,
+              "Stepper 步进器"
+            ]
+          ]
+        },
+        {
+          "field": "topLeftRadius",
+          "variable": "--td-radius-default",
+          "count": 51,
+          "samples": [
+            [
+              "26668:6798",
+              "Stepper 步进器",
+              3,
+              "Stepper 步进器"
+            ],
+            [
+              "26668:6675",
+              "size=large, disabled=false, theme=normal, press=false",
+              3,
+              "Stepper 步进器"
+            ],
+            [
+              "26668:6691",
+              "size=large, disabled=false, theme=normal, press=true",
+              3,
+              "Stepper 步进器"
+            ]
+          ]
+        },
+        {
+          "field": "topRightRadius",
+          "variable": "--td-radius-default",
+          "count": 51,
+          "samples": [
+            [
+              "26668:6798",
+              "Stepper 步进器",
+              3,
+              "Stepper 步进器"
+            ],
+            [
+              "26668:6675",
+              "size=large, disabled=false, theme=normal, press=false",
+              3,
+              "Stepper 步进器"
+            ],
+            [
+              "26668:6691",
+              "size=large, disabled=false, theme=normal, press=true",
+              3,
+              "Stepper 步进器"
+            ]
+          ]
+        },
+        {
+          "field": "bottomLeftRadius",
+          "variable": "--td-radius-default",
+          "count": 51,
+          "samples": [
+            [
+              "26668:6798",
+              "Stepper 步进器",
+              3,
+              "Stepper 步进器"
+            ],
+            [
+              "26668:6675",
+              "size=large, disabled=false, theme=normal, press=false",
+              3,
+              "Stepper 步进器"
+            ],
+            [
+              "26668:6691",
+              "size=large, disabled=false, theme=normal, press=true",
+              3,
+              "Stepper 步进器"
+            ]
+          ]
+        },
+        {
+          "field": "bottomRightRadius",
+          "variable": "--td-radius-default",
+          "count": 51,
+          "samples": [
+            [
+              "26668:6798",
+              "Stepper 步进器",
+              3,
+              "Stepper 步进器"
+            ],
+            [
+              "26668:6675",
+              "size=large, disabled=false, theme=normal, press=false",
+              3,
+              "Stepper 步进器"
+            ],
+            [
+              "26668:6691",
+              "size=large, disabled=false, theme=normal, press=true",
+              3,
+              "Stepper 步进器"
+            ]
+          ]
+        },
+        {
+          "field": "paddingLeft",
+          "variable": "--td-comp-paddingLR/s",
+          "count": 39,
+          "samples": [
+            [
+              "I26668:6798;26631:6768",
+              "content",
+              8,
+              "Stepper 步进器"
+            ]
+          ]
+        },
+        {
+          "field": "paddingTop",
+          "variable": "--td-comp-paddingTB/xxs",
+          "count": 51,
+          "samples": [
+            [
+              "I26668:6798;26631:6768",
+              "content",
+              2,
+              "Stepper 步进器"
+            ]
+          ]
+        },
+        {
+          "field": "paddingRight",
+          "variable": "--td-comp-paddingLR/s",
+          "count": 39,
+          "samples": [
+            [
+              "I26668:6798;26631:6768",
+              "content",
+              8,
+              "Stepper 步进器"
+            ]
+          ]
+        },
+        {
+          "field": "paddingBottom",
+          "variable": "--td-comp-paddingTB/xxs",
+          "count": 51,
+          "samples": [
+            [
+              "I26668:6798;26631:6768",
+              "content",
+              2,
+              "Stepper 步进器"
+            ]
+          ]
+        },
+        {
+          "field": "paddingLeft",
+          "variable": "--td-comp-paddingLR/xs",
+          "count": 12,
+          "samples": [
+            [
+              "I26668:7126;26631:6770",
+              "content",
+              4,
+              "Stepper 步进器"
+            ]
+          ]
+        },
+        {
+          "field": "paddingRight",
+          "variable": "--td-comp-paddingLR/xs",
+          "count": 12,
+          "samples": [
+            [
+              "I26668:7126;26631:6770",
+              "content",
+              4,
+              "Stepper 步进器"
+            ]
+          ]
+        }
+      ],
+      "styles": [
+        {
+          "id": "S:128017aafb775849a8fc9e612bec1cb5da6753ac,",
+          "name": "Headline/Large",
+          "fontSize": 36,
+          "lineHeight": {
+            "unit": "PIXELS",
+            "value": 44
+          },
+          "fontName": {
+            "family": "PingFang SC",
+            "style": "Semibold"
+          },
+          "sample": "25306:21094"
+        },
+        {
+          "id": "S:3e7d6f6bf7d63065bb8d9f0b8a4b3e8a8a883792,",
+          "name": "Title/ExtraLarge",
+          "fontSize": 20,
+          "lineHeight": {
+            "unit": "PIXELS",
+            "value": 28
+          },
+          "fontName": {
+            "family": "PingFang SC",
+            "style": "Semibold"
+          },
+          "sample": "25306:21129"
+        },
+        {
+          "id": "S:b579dcf634b1700eafcc5c6cfd0238ed3e194c30,",
+          "name": "Body/Medium",
+          "fontSize": 14,
+          "lineHeight": {
+            "unit": "PIXELS",
+            "value": 22
+          },
+          "fontName": {
+            "family": "PingFang SC",
+            "style": "Regular"
+          },
+          "sample": "25306:21136"
+        },
+        {
+          "id": "S:7fca17294a985f5562e0aa7bb5e792869cdc3144,",
+          "name": "Body/Small",
+          "fontSize": 12,
+          "lineHeight": {
+            "unit": "PIXELS",
+            "value": 20
+          },
+          "fontName": {
+            "family": "PingFang SC",
+            "style": "Regular"
+          },
+          "sample": "I26668:6798;26631:6769"
+        },
+        {
+          "id": "S:8ab6ac195800851f61ab445b08fc215cd3395a9c,",
+          "name": "Body/Large",
+          "fontSize": 16,
+          "lineHeight": {
+            "unit": "PIXELS",
+            "value": 24
+          },
+          "fontName": {
+            "family": "PingFang SC",
+            "style": "Regular"
+          },
+          "sample": "I26668:7124;26631:6767"
+        },
+        {
+          "id": "S:2d4c1524c45add673953b76764c1dbb4c076a492,",
+          "name": "Body/ExtraSmall",
+          "fontSize": 10,
+          "lineHeight": {
+            "unit": "PIXELS",
+            "value": 16
+          },
+          "fontName": {
+            "family": "PingFang SC",
+            "style": "Regular"
+          },
+          "sample": "I26668:7126;26631:6771"
+        },
+        {
+          "id": "S:168a36c30b93a6e58113210691c5ec3d34f3d715,",
+          "name": "Display/Medium",
+          "fontSize": 48,
+          "lineHeight": {
+            "unit": "PIXELS",
+            "value": 56
+          },
+          "fontName": {
+            "family": "PingFang SC",
+            "style": "Semibold"
+          },
+          "sample": "I27815:31974;24386:5351"
+        },
+        {
+          "id": "S:df0b98d1ff489fb8b2216993c69178bb5dbf2bc0,",
+          "name": "Title/Medium",
+          "fontSize": 16,
+          "lineHeight": {
+            "unit": "PIXELS",
+            "value": 24
+          },
+          "fontName": {
+            "family": "PingFang SC",
+            "style": "Semibold"
+          },
+          "sample": "I27815:31974;24386:5362"
+        }
+      ]
+    },
+    "switch": {
+      "pageId": "24386:5256",
+      "page": "     Switch 开关",
+      "visited": 221,
+      "groups": [
+        {
+          "field": "height",
+          "variable": "--td-comp-size/s",
+          "count": 28,
+          "samples": [
+            [
+              "26941:11936",
+              "Switch 开关",
+              28,
+              "Switch 开关"
+            ],
+            [
+              "26642:6466",
+              "sized=medium, label=none, disabled=false, value=true, l",
+              28,
+              "Switch 开关"
+            ],
+            [
+              "26642:6655",
+              "sized=medium, label=icon, disabled=false, value=true, l",
+              28,
+              "Switch 开关"
+            ]
+          ]
+        },
+        {
+          "field": "topLeftRadius",
+          "variable": "--td-radius-round",
+          "count": 60,
+          "samples": [
+            [
+              "26941:11936",
+              "Switch 开关",
+              999,
+              "Switch 开关"
+            ],
+            [
+              "26642:6465",
+              "sized=large, label=none, disabled=false, value=true, lo",
+              999,
+              "Switch 开关"
+            ],
+            [
+              "26642:6649",
+              "sized=large, label=icon, disabled=false, value=true, lo",
+              999,
+              "Switch 开关"
+            ]
+          ]
+        },
+        {
+          "field": "topRightRadius",
+          "variable": "--td-radius-round",
+          "count": 60,
+          "samples": [
+            [
+              "26941:11936",
+              "Switch 开关",
+              999,
+              "Switch 开关"
+            ],
+            [
+              "26642:6465",
+              "sized=large, label=none, disabled=false, value=true, lo",
+              999,
+              "Switch 开关"
+            ],
+            [
+              "26642:6649",
+              "sized=large, label=icon, disabled=false, value=true, lo",
+              999,
+              "Switch 开关"
+            ]
+          ]
+        },
+        {
+          "field": "bottomLeftRadius",
+          "variable": "--td-radius-round",
+          "count": 60,
+          "samples": [
+            [
+              "26941:11936",
+              "Switch 开关",
+              999,
+              "Switch 开关"
+            ],
+            [
+              "26642:6465",
+              "sized=large, label=none, disabled=false, value=true, lo",
+              999,
+              "Switch 开关"
+            ],
+            [
+              "26642:6649",
+              "sized=large, label=icon, disabled=false, value=true, lo",
+              999,
+              "Switch 开关"
+            ]
+          ]
+        },
+        {
+          "field": "bottomRightRadius",
+          "variable": "--td-radius-round",
+          "count": 60,
+          "samples": [
+            [
+              "26941:11936",
+              "Switch 开关",
+              999,
+              "Switch 开关"
+            ],
+            [
+              "26642:6465",
+              "sized=large, label=none, disabled=false, value=true, lo",
+              999,
+              "Switch 开关"
+            ],
+            [
+              "26642:6649",
+              "sized=large, label=icon, disabled=false, value=true, lo",
+              999,
+              "Switch 开关"
+            ]
+          ]
+        },
+        {
+          "field": "height",
+          "variable": "--td-comp-size/xs",
+          "count": 16,
+          "samples": [
+            [
+              "26941:12280",
+              "Switch 开关",
+              24,
+              "Switch 开关"
+            ],
+            [
+              "26642:6467",
+              "sized=small, label=none, disabled=false, value=true, lo",
+              24,
+              "Switch 开关"
+            ],
+            [
+              "26642:6652",
+              "sized=small, label=icon, disabled=false, value=true, lo",
+              24,
+              "Switch 开关"
+            ]
+          ]
+        },
+        {
+          "field": "height",
+          "variable": "--td-comp-size/m",
+          "count": 16,
+          "samples": [
+            [
+              "26941:12161",
+              "Switch 开关",
+              32,
+              "Switch 开关"
+            ],
+            [
+              "26642:6465",
+              "sized=large, label=none, disabled=false, value=true, lo",
+              32,
+              "Switch 开关"
+            ],
+            [
+              "26642:6649",
+              "sized=large, label=icon, disabled=false, value=true, lo",
+              32,
+              "Switch 开关"
+            ]
+          ]
+        }
+      ],
+      "styles": [
+        {
+          "id": "S:128017aafb775849a8fc9e612bec1cb5da6753ac,",
+          "name": "Headline/Large",
+          "fontSize": 36,
+          "lineHeight": {
+            "unit": "PIXELS",
+            "value": 44
+          },
+          "fontName": {
+            "family": "PingFang SC",
+            "style": "Semibold"
+          },
+          "sample": "25306:19427"
+        },
+        {
+          "id": "S:3e7d6f6bf7d63065bb8d9f0b8a4b3e8a8a883792,",
+          "name": "Title/ExtraLarge",
+          "fontSize": 20,
+          "lineHeight": {
+            "unit": "PIXELS",
+            "value": 28
+          },
+          "fontName": {
+            "family": "PingFang SC",
+            "style": "Semibold"
+          },
+          "sample": "25306:19428"
+        },
+        {
+          "id": "S:b579dcf634b1700eafcc5c6cfd0238ed3e194c30,",
+          "name": "Body/Medium",
+          "fontSize": 14,
+          "lineHeight": {
+            "unit": "PIXELS",
+            "value": 22
+          },
+          "fontName": {
+            "family": "PingFang SC",
+            "style": "Regular"
+          },
+          "sample": "25306:19448"
+        },
+        {
+          "id": "S:7fca17294a985f5562e0aa7bb5e792869cdc3144,",
+          "name": "Body/Small",
+          "fontSize": 12,
+          "lineHeight": {
+            "unit": "PIXELS",
+            "value": 20
+          },
+          "fontName": {
+            "family": "PingFang SC",
+            "style": "Regular"
+          },
+          "sample": "I26941:12287;26642:6732"
+        },
+        {
+          "id": "S:8ab6ac195800851f61ab445b08fc215cd3395a9c,",
+          "name": "Body/Large",
+          "fontSize": 16,
+          "lineHeight": {
+            "unit": "PIXELS",
+            "value": 24
+          },
+          "fontName": {
+            "family": "PingFang SC",
+            "style": "Regular"
+          },
+          "sample": "I26941:12288;26642:6730"
+        },
+        {
+          "id": "S:168a36c30b93a6e58113210691c5ec3d34f3d715,",
+          "name": "Display/Medium",
+          "fontSize": 48,
+          "lineHeight": {
+            "unit": "PIXELS",
+            "value": 56
+          },
+          "fontName": {
+            "family": "PingFang SC",
+            "style": "Semibold"
+          },
+          "sample": "I27815:32000;24386:5351"
+        },
+        {
+          "id": "S:df0b98d1ff489fb8b2216993c69178bb5dbf2bc0,",
+          "name": "Title/Medium",
+          "fontSize": 16,
+          "lineHeight": {
+            "unit": "PIXELS",
+            "value": 24
+          },
+          "fontName": {
+            "family": "PingFang SC",
+            "style": "Semibold"
+          },
+          "sample": "I27815:32000;24386:5362"
+        }
+      ]
+    },
+    "backtop": {
+      "pageId": "24386:5237",
+      "page": "     BackTop 返回顶部",
+      "visited": 96,
+      "groups": [
+        {
+          "field": "width",
+          "variable": "--td-comp-size/xxl",
+          "count": 10,
+          "samples": [
+            [
+              "26631:6440",
+              "BackTop 返回顶部",
+              48,
+              "BackTop"
+            ],
+            [
+              "26631:6365",
+              "theme=round, icon=true, text=true",
+              48,
+              "BackTop 返回顶部"
+            ],
+            [
+              "26631:6421",
+              "theme=round-dark, icon=true, text=true",
+              48,
+              "BackTop 返回顶部"
+            ]
+          ]
+        },
+        {
+          "field": "height",
+          "variable": "--td-comp-size/xxl",
+          "count": 10,
+          "samples": [
+            [
+              "26631:6440",
+              "BackTop 返回顶部",
+              48,
+              "BackTop"
+            ],
+            [
+              "26631:6365",
+              "theme=round, icon=true, text=true",
+              48,
+              "BackTop 返回顶部"
+            ],
+            [
+              "26631:6421",
+              "theme=round-dark, icon=true, text=true",
+              48,
+              "BackTop 返回顶部"
+            ]
+          ]
+        },
+        {
+          "field": "topLeftRadius",
+          "variable": "--td-radius-round",
+          "count": 20,
+          "samples": [
+            [
+              "26631:6440",
+              "BackTop 返回顶部",
+              999,
+              "BackTop"
+            ],
+            [
+              "26631:6365",
+              "theme=round, icon=true, text=true",
+              999,
+              "BackTop 返回顶部"
+            ],
+            [
+              "26631:6421",
+              "theme=round-dark, icon=true, text=true",
+              999,
+              "BackTop 返回顶部"
+            ]
+          ]
+        },
+        {
+          "field": "topRightRadius",
+          "variable": "--td-radius-round",
+          "count": 10,
+          "samples": [
+            [
+              "26631:6440",
+              "BackTop 返回顶部",
+              999,
+              "BackTop"
+            ],
+            [
+              "26631:6365",
+              "theme=round, icon=true, text=true",
+              999,
+              "BackTop 返回顶部"
+            ],
+            [
+              "26631:6421",
+              "theme=round-dark, icon=true, text=true",
+              999,
+              "BackTop 返回顶部"
+            ]
+          ]
+        },
+        {
+          "field": "bottomLeftRadius",
+          "variable": "--td-radius-round",
+          "count": 20,
+          "samples": [
+            [
+              "26631:6440",
+              "BackTop 返回顶部",
+              999,
+              "BackTop"
+            ],
+            [
+              "26631:6365",
+              "theme=round, icon=true, text=true",
+              999,
+              "BackTop 返回顶部"
+            ],
+            [
+              "26631:6421",
+              "theme=round-dark, icon=true, text=true",
+              999,
+              "BackTop 返回顶部"
+            ]
+          ]
+        },
+        {
+          "field": "bottomRightRadius",
+          "variable": "--td-radius-round",
+          "count": 10,
+          "samples": [
+            [
+              "26631:6440",
+              "BackTop 返回顶部",
+              999,
+              "BackTop"
+            ],
+            [
+              "26631:6365",
+              "theme=round, icon=true, text=true",
+              999,
+              "BackTop 返回顶部"
+            ],
+            [
+              "26631:6421",
+              "theme=round-dark, icon=true, text=true",
+              999,
+              "BackTop 返回顶部"
+            ]
+          ]
+        },
+        {
+          "field": "itemSpacing",
+          "variable": "--td-comp-margin/xxs",
+          "count": 8,
+          "samples": [
+            [
+              "26631:6475",
+              "BackTop 返回顶部",
+              2,
+              "BackTop"
+            ],
+            [
+              "26631:6364",
+              "theme=half-round, icon=true, text=true",
+              2,
+              "BackTop 返回顶部"
+            ],
+            [
+              "26631:6428",
+              "theme=half-round-dark, icon=true, text=true",
+              2,
+              "BackTop 返回顶部"
+            ]
+          ]
+        },
+        {
+          "field": "paddingLeft",
+          "variable": "--td-comp-paddingLR/s",
+          "count": 10,
+          "samples": [
+            [
+              "26631:6475",
+              "BackTop 返回顶部",
+              8,
+              "BackTop"
+            ],
+            [
+              "26631:6364",
+              "theme=half-round, icon=true, text=true",
+              8,
+              "BackTop 返回顶部"
+            ],
+            [
+              "26631:6428",
+              "theme=half-round-dark, icon=true, text=true",
+              8,
+              "BackTop 返回顶部"
+            ]
+          ]
+        },
+        {
+          "field": "paddingRight",
+          "variable": "--td-comp-paddingLR/s",
+          "count": 10,
+          "samples": [
+            [
+              "26631:6475",
+              "BackTop 返回顶部",
+              8,
+              "BackTop"
+            ],
+            [
+              "26631:6364",
+              "theme=half-round, icon=true, text=true",
+              8,
+              "BackTop 返回顶部"
+            ],
+            [
+              "26631:6428",
+              "theme=half-round-dark, icon=true, text=true",
+              8,
+              "BackTop 返回顶部"
+            ]
+          ]
+        },
+        {
+          "field": "height",
+          "variable": "--td-comp-size/xl",
+          "count": 10,
+          "samples": [
+            [
+              "26631:6475",
+              "BackTop 返回顶部",
+              40,
+              "BackTop"
+            ],
+            [
+              "26631:6364",
+              "theme=half-round, icon=true, text=true",
+              40,
+              "BackTop 返回顶部"
+            ],
+            [
+              "26631:6428",
+              "theme=half-round-dark, icon=true, text=true",
+              40,
+              "BackTop 返回顶部"
+            ]
+          ]
+        },
+        {
+          "field": "itemSpacing",
+          "variable": "--td-comp-paddingLR/xxs",
+          "count": 2,
+          "samples": [
+            [
+              "26631:6476",
+              "BackTop 返回顶部",
+              2,
+              "BackTop"
+            ],
+            [
+              "26631:6385",
+              "theme=half-round, icon=true, text=false",
+              2,
+              "BackTop 返回顶部"
+            ]
+          ]
+        }
+      ],
+      "styles": [
+        {
+          "id": "S:128017aafb775849a8fc9e612bec1cb5da6753ac,",
+          "name": "Headline/Large",
+          "fontSize": 36,
+          "lineHeight": {
+            "unit": "PIXELS",
+            "value": 44
+          },
+          "fontName": {
+            "family": "PingFang SC",
+            "style": "Semibold"
+          },
+          "sample": "24387:6740"
+        },
+        {
+          "id": "S:3e7d6f6bf7d63065bb8d9f0b8a4b3e8a8a883792,",
+          "name": "Title/ExtraLarge",
+          "fontSize": 20,
+          "lineHeight": {
+            "unit": "PIXELS",
+            "value": 28
+          },
+          "fontName": {
+            "family": "PingFang SC",
+            "style": "Semibold"
+          },
+          "sample": "24387:6742"
+        },
+        {
+          "id": "S:ecc7efbfb78bfab81a57f3569325556bd226ea61,",
+          "name": "Mark/ExtraSmall",
+          "fontSize": 10,
+          "lineHeight": {
+            "unit": "PIXELS",
+            "value": 16
+          },
+          "fontName": {
+            "family": "PingFang SC",
+            "style": "Semibold"
+          },
+          "sample": "I26631:6440;26631:6340"
+        },
+        {
+          "id": "S:168a36c30b93a6e58113210691c5ec3d34f3d715,",
+          "name": "Display/Medium",
+          "fontSize": 48,
+          "lineHeight": {
+            "unit": "PIXELS",
+            "value": 56
+          },
+          "fontName": {
+            "family": "PingFang SC",
+            "style": "Semibold"
+          },
+          "sample": "I27798:31177;24386:5351"
+        },
+        {
+          "id": "S:8ab6ac195800851f61ab445b08fc215cd3395a9c,",
+          "name": "Body/Large",
+          "fontSize": 16,
+          "lineHeight": {
+            "unit": "PIXELS",
+            "value": 24
+          },
+          "fontName": {
+            "family": "PingFang SC",
+            "style": "Regular"
+          },
+          "sample": "I27798:31177;24386:5358"
+        },
+        {
+          "id": "S:df0b98d1ff489fb8b2216993c69178bb5dbf2bc0,",
+          "name": "Title/Medium",
+          "fontSize": 16,
+          "lineHeight": {
+            "unit": "PIXELS",
+            "value": 24
+          },
+          "fontName": {
+            "family": "PingFang SC",
+            "style": "Semibold"
+          },
+          "sample": "I27798:31177;24386:5362"
+        },
+        {
+          "id": "S:8a8370c4fbc15eeac09ee7776e78105a3da75759,",
+          "name": "Link/Large",
+          "fontSize": 16,
+          "lineHeight": {
+            "unit": "PIXELS",
+            "value": 24
+          },
+          "fontName": {
+            "family": "PingFang SC",
+            "style": "Regular"
+          },
+          "sample": "I27798:31177;24386:5364"
+        }
+      ]
+    },
+    "drawer": {
+      "pageId": "24386:5238",
+      "page": "     Drawer 抽屉",
+      "visited": 1824,
+      "groups": [
+        {
+          "field": "itemSpacing",
+          "variable": "--td-comp-margin/l",
+          "count": 400,
+          "samples": [
+            [
+              "I27362:23857;27361:21618",
+              "item",
+              16,
+              "scroll"
+            ]
+          ]
+        },
+        {
+          "field": "paddingLeft",
+          "variable": "--td-comp-paddingLR/l",
+          "count": 435,
+          "samples": [
+            [
+              "I27362:23857;27361:21618",
+              "item",
+              16,
+              "scroll"
+            ],
+            [
+              "I27362:23975;27362:21871",
+              "title",
+              16,
+              "scroll"
+            ],
+            [
+              "I27362:24323;27362:23012",
+              "footer",
+              16,
+              "Drawer"
+            ]
+          ]
+        },
+        {
+          "field": "itemSpacing",
+          "variable": "--td-comp-margin/s",
+          "count": 400,
+          "samples": [
+            [
+              "I27362:23857;27361:21619",
+              "item-title",
+              8,
+              "item"
+            ]
+          ]
+        },
+        {
+          "field": "paddingTop",
+          "variable": "--td-comp-paddingTB/l",
+          "count": 417,
+          "samples": [
+            [
+              "I27362:23857;27361:21619",
+              "item-title",
+              16,
+              "item"
+            ],
+            [
+              "I27362:24323;27362:23012",
+              "footer",
+              16,
+              "Drawer"
+            ]
+          ]
+        },
+        {
+          "field": "paddingBottom",
+          "variable": "--td-comp-paddingTB/l",
+          "count": 417,
+          "samples": [
+            [
+              "I27362:23857;27361:21619",
+              "item-title",
+              16,
+              "item"
+            ],
+            [
+              "I27362:24323;27362:23012",
+              "footer",
+              16,
+              "Drawer"
+            ]
+          ]
+        },
+        {
+          "field": "paddingTop",
+          "variable": "--td-comp-paddingTB/xl",
+          "count": 18,
+          "samples": [
+            [
+              "I27362:23975;27362:21871",
+              "title",
+              24,
+              "scroll"
+            ]
+          ]
+        },
+        {
+          "field": "paddingRight",
+          "variable": "--td-comp-paddingLR/l",
+          "count": 35,
+          "samples": [
+            [
+              "I27362:23975;27362:21871",
+              "title",
+              16,
+              "scroll"
+            ],
+            [
+              "I27362:24323;27362:23012",
+              "footer",
+              16,
+              "Drawer"
+            ]
+          ]
+        },
+        {
+          "field": "paddingBottom",
+          "variable": "--td-comp-paddingTB/s",
+          "count": 18,
+          "samples": [
+            [
+              "I27362:23975;27362:21871",
+              "title",
+              8,
+              "scroll"
+            ]
+          ]
+        },
+        {
+          "field": "itemSpacing",
+          "variable": "--td-comp-margin/xs",
+          "count": 17,
+          "samples": [
+            [
+              "I27362:24323;27362:23013",
+              "Button 按钮",
+              4,
+              "footer"
+            ]
+          ]
+        },
+        {
+          "field": "paddingLeft",
+          "variable": "VariableID:57353:2270",
+          "count": 17,
+          "samples": [
+            [
+              "I27362:24323;27362:23013",
+              "Button 按钮",
+              20,
+              "footer"
+            ]
+          ]
+        },
+        {
+          "field": "paddingRight",
+          "variable": "VariableID:57353:2270",
+          "count": 17,
+          "samples": [
+            [
+              "I27362:24323;27362:23013",
+              "Button 按钮",
+              20,
+              "footer"
+            ]
+          ]
+        },
+        {
+          "field": "height",
+          "variable": "--td-comp-size/xxl",
+          "count": 17,
+          "samples": [
+            [
+              "I27362:24323;27362:23013",
+              "Button 按钮",
+              48,
+              "footer"
+            ]
+          ]
+        },
+        {
+          "field": "topLeftRadius",
+          "variable": "--td-radius-medium",
+          "count": 17,
+          "samples": [
+            [
+              "I27362:24323;27362:23013",
+              "Button 按钮",
+              6,
+              "footer"
+            ]
+          ]
+        },
+        {
+          "field": "topRightRadius",
+          "variable": "--td-radius-medium",
+          "count": 17,
+          "samples": [
+            [
+              "I27362:24323;27362:23013",
+              "Button 按钮",
+              6,
+              "footer"
+            ]
+          ]
+        },
+        {
+          "field": "bottomLeftRadius",
+          "variable": "--td-radius-medium",
+          "count": 17,
+          "samples": [
+            [
+              "I27362:24323;27362:23013",
+              "Button 按钮",
+              6,
+              "footer"
+            ]
+          ]
+        },
+        {
+          "field": "bottomRightRadius",
+          "variable": "--td-radius-medium",
+          "count": 17,
+          "samples": [
+            [
+              "I27362:24323;27362:23013",
+              "Button 按钮",
+              6,
+              "footer"
+            ]
+          ]
+        }
+      ],
+      "styles": [
+        {
+          "id": "S:128017aafb775849a8fc9e612bec1cb5da6753ac,",
+          "name": "Headline/Large",
+          "fontSize": 36,
+          "lineHeight": {
+            "unit": "PIXELS",
+            "value": 44
+          },
+          "fontName": {
+            "family": "PingFang SC",
+            "style": "Semibold"
+          },
+          "sample": "24387:6951"
+        },
+        {
+          "id": "S:3e7d6f6bf7d63065bb8d9f0b8a4b3e8a8a883792,",
+          "name": "Title/ExtraLarge",
+          "fontSize": 20,
+          "lineHeight": {
+            "unit": "PIXELS",
+            "value": 28
+          },
+          "fontName": {
+            "family": "PingFang SC",
+            "style": "Semibold"
+          },
+          "sample": "24387:7070"
+        },
+        {
+          "id": "S:8ab6ac195800851f61ab445b08fc215cd3395a9c,",
+          "name": "Body/Large",
+          "fontSize": 16,
+          "lineHeight": {
+            "unit": "PIXELS",
+            "value": 24
+          },
+          "fontName": {
+            "family": "PingFang SC",
+            "style": "Regular"
+          },
+          "sample": "I27362:23857;27361:21620"
+        },
+        {
+          "id": "S:d8e2ceb3849030460656d5b2deaf02f93b4d2d0a,",
+          "name": "Title/Large",
+          "fontSize": 18,
+          "lineHeight": {
+            "unit": "PIXELS",
+            "value": 26
+          },
+          "fontName": {
+            "family": "PingFang SC",
+            "style": "Semibold"
+          },
+          "sample": "I27362:23975;27362:21872"
+        },
+        {
+          "id": "S:463e7b7ee9f7f941671a6f4b56a0d02b7ca63df5,",
+          "name": "Headline/Medium",
+          "fontSize": 28,
+          "lineHeight": {
+            "unit": "PIXELS",
+            "value": 36
+          },
+          "fontName": {
+            "family": "PingFang SC",
+            "style": "Semibold"
+          },
+          "sample": "I27362:24082;27362:21872"
+        },
+        {
+          "id": "S:d236609dddd21c0c622327425c3b8c770e495063,",
+          "name": "Mark/Large",
+          "fontSize": 16,
+          "lineHeight": {
+            "unit": "PIXELS",
+            "value": 24
+          },
+          "fontName": {
+            "family": "PingFang SC",
+            "style": "Semibold"
+          },
+          "sample": "I27362:24323;27362:23013;26566:4876"
+        },
+        {
+          "id": "S:168a36c30b93a6e58113210691c5ec3d34f3d715,",
+          "name": "Display/Medium",
+          "fontSize": 48,
+          "lineHeight": {
+            "unit": "PIXELS",
+            "value": 56
+          },
+          "fontName": {
+            "family": "PingFang SC",
+            "style": "Semibold"
+          },
+          "sample": "I27798:31229;24386:5351"
+        },
+        {
+          "id": "S:df0b98d1ff489fb8b2216993c69178bb5dbf2bc0,",
+          "name": "Title/Medium",
+          "fontSize": 16,
+          "lineHeight": {
+            "unit": "PIXELS",
+            "value": 24
+          },
+          "fontName": {
+            "family": "PingFang SC",
+            "style": "Semibold"
+          },
+          "sample": "I27798:31229;24386:5362"
+        },
+        {
+          "id": "S:8a8370c4fbc15eeac09ee7776e78105a3da75759,",
+          "name": "Link/Large",
+          "fontSize": 16,
+          "lineHeight": {
+            "unit": "PIXELS",
+            "value": 24
+          },
+          "fontName": {
+            "family": "PingFang SC",
+            "style": "Regular"
+          },
+          "sample": "I27798:31229;24386:5364"
+        }
+      ]
+    },
+    "search": {
+      "pageId": "24386:5253",
+      "page": "     Search 搜索框",
+      "visited": 461,
+      "groups": [
+        {
+          "field": "paddingLeft",
+          "variable": "--td-comp-paddingLR/l",
+          "count": 72,
+          "samples": [
+            [
+              "27771:32133",
+              "Search 搜索框",
+              16,
+              "Search 搜索框"
+            ],
+            [
+              "27800:31742",
+              "shape=square, left-icon=true, center=false, action=true",
+              16,
+              "Search 搜索框"
+            ],
+            [
+              "27800:31750",
+              "shape=round, left-icon=true, center=false, action=true,",
+              16,
+              "Search 搜索框"
+            ]
+          ]
+        },
+        {
+          "field": "paddingTop",
+          "variable": "--td-comp-paddingTB/s",
+          "count": 72,
+          "samples": [
+            [
+              "27771:32133",
+              "Search 搜索框",
+              8,
+              "Search 搜索框"
+            ],
+            [
+              "27800:31742",
+              "shape=square, left-icon=true, center=false, action=true",
+              8,
+              "Search 搜索框"
+            ],
+            [
+              "27800:31750",
+              "shape=round, left-icon=true, center=false, action=true,",
+              8,
+              "Search 搜索框"
+            ]
+          ]
+        },
+        {
+          "field": "paddingRight",
+          "variable": "--td-comp-paddingLR/l",
+          "count": 72,
+          "samples": [
+            [
+              "27771:32133",
+              "Search 搜索框",
+              16,
+              "Search 搜索框"
+            ],
+            [
+              "27800:31742",
+              "shape=square, left-icon=true, center=false, action=true",
+              16,
+              "Search 搜索框"
+            ],
+            [
+              "27800:31750",
+              "shape=round, left-icon=true, center=false, action=true,",
+              16,
+              "Search 搜索框"
+            ]
+          ]
+        },
+        {
+          "field": "paddingBottom",
+          "variable": "--td-comp-paddingTB/s",
+          "count": 72,
+          "samples": [
+            [
+              "27771:32133",
+              "Search 搜索框",
+              8,
+              "Search 搜索框"
+            ],
+            [
+              "27800:31742",
+              "shape=square, left-icon=true, center=false, action=true",
+              8,
+              "Search 搜索框"
+            ],
+            [
+              "27800:31750",
+              "shape=round, left-icon=true, center=false, action=true,",
+              8,
+              "Search 搜索框"
+            ]
+          ]
+        },
+        {
+          "field": "itemSpacing",
+          "variable": "--td-comp-margin/xs",
+          "count": 71,
+          "samples": [
+            [
+              "I27771:32133;27771:31347",
+              "Search",
+              4,
+              "Search 搜索框"
+            ]
+          ]
+        },
+        {
+          "field": "paddingLeft",
+          "variable": "--td-comp-paddingLR/m",
+          "count": 50,
+          "samples": [
+            [
+              "I27771:32133;27771:31347",
+              "Search",
+              12,
+              "Search 搜索框"
+            ]
+          ]
+        },
+        {
+          "field": "paddingRight",
+          "variable": "--td-comp-paddingLR/m",
+          "count": 16,
+          "samples": [
+            [
+              "I27771:32133;27771:31347",
+              "Search",
+              12,
+              "Search 搜索框"
+            ]
+          ]
+        },
+        {
+          "field": "topLeftRadius",
+          "variable": "--td-radius-medium",
+          "count": 38,
+          "samples": [
+            [
+              "I27771:32133;27771:31347",
+              "Search",
+              6,
+              "Search 搜索框"
+            ]
+          ]
+        },
+        {
+          "field": "topRightRadius",
+          "variable": "--td-radius-medium",
+          "count": 38,
+          "samples": [
+            [
+              "I27771:32133;27771:31347",
+              "Search",
+              6,
+              "Search 搜索框"
+            ]
+          ]
+        },
+        {
+          "field": "bottomLeftRadius",
+          "variable": "--td-radius-medium",
+          "count": 38,
+          "samples": [
+            [
+              "I27771:32133;27771:31347",
+              "Search",
+              6,
+              "Search 搜索框"
+            ]
+          ]
+        },
+        {
+          "field": "bottomRightRadius",
+          "variable": "--td-radius-medium",
+          "count": 38,
+          "samples": [
+            [
+              "I27771:32133;27771:31347",
+              "Search",
+              6,
+              "Search 搜索框"
+            ]
+          ]
+        },
+        {
+          "field": "itemSpacing",
+          "variable": "--td-comp-margin/l",
+          "count": 34,
+          "samples": [
+            [
+              "27771:32148",
+              "Search 搜索框",
+              16,
+              "Search 搜索框"
+            ],
+            [
+              "27800:31742",
+              "shape=square, left-icon=true, center=false, action=true",
+              16,
+              "Search 搜索框"
+            ],
+            [
+              "27800:31750",
+              "shape=round, left-icon=true, center=false, action=true,",
+              16,
+              "Search 搜索框"
+            ]
+          ]
+        },
+        {
+          "field": "topLeftRadius",
+          "variable": "--td-radius-round",
+          "count": 34,
+          "samples": [
+            [
+              "I27771:32213;27771:31511",
+              "Search",
+              999,
+              "Search 搜索框"
+            ]
+          ]
+        },
+        {
+          "field": "topRightRadius",
+          "variable": "--td-radius-round",
+          "count": 34,
+          "samples": [
+            [
+              "I27771:32213;27771:31511",
+              "Search",
+              999,
+              "Search 搜索框"
+            ]
+          ]
+        },
+        {
+          "field": "bottomLeftRadius",
+          "variable": "--td-radius-round",
+          "count": 34,
+          "samples": [
+            [
+              "I27771:32213;27771:31511",
+              "Search",
+              999,
+              "Search 搜索框"
+            ]
+          ]
+        },
+        {
+          "field": "bottomRightRadius",
+          "variable": "--td-radius-round",
+          "count": 34,
+          "samples": [
+            [
+              "I27771:32213;27771:31511",
+              "Search",
+              999,
+              "Search 搜索框"
+            ]
+          ]
+        }
+      ],
+      "styles": [
+        {
+          "id": "S:128017aafb775849a8fc9e612bec1cb5da6753ac,",
+          "name": "Headline/Large",
+          "fontSize": 36,
+          "lineHeight": {
+            "unit": "PIXELS",
+            "value": 44
+          },
+          "fontName": {
+            "family": "PingFang SC",
+            "style": "Semibold"
+          },
+          "sample": "25328:19717"
+        },
+        {
+          "id": "S:3e7d6f6bf7d63065bb8d9f0b8a4b3e8a8a883792,",
+          "name": "Title/ExtraLarge",
+          "fontSize": 20,
+          "lineHeight": {
+            "unit": "PIXELS",
+            "value": 28
+          },
+          "fontName": {
+            "family": "PingFang SC",
+            "style": "Semibold"
+          },
+          "sample": "25328:19753"
+        },
+        {
+          "id": "S:b579dcf634b1700eafcc5c6cfd0238ed3e194c30,",
+          "name": "Body/Medium",
+          "fontSize": 14,
+          "lineHeight": {
+            "unit": "PIXELS",
+            "value": 22
+          },
+          "fontName": {
+            "family": "PingFang SC",
+            "style": "Regular"
+          },
+          "sample": "25328:19798"
+        },
+        {
+          "id": "S:8ab6ac195800851f61ab445b08fc215cd3395a9c,",
+          "name": "Body/Large",
+          "fontSize": 16,
+          "lineHeight": {
+            "unit": "PIXELS",
+            "value": 24
+          },
+          "fontName": {
+            "family": "PingFang SC",
+            "style": "Regular"
+          },
+          "sample": "I27771:32133;27771:31349"
+        },
+        {
+          "id": "S:168a36c30b93a6e58113210691c5ec3d34f3d715,",
+          "name": "Display/Medium",
+          "fontSize": 48,
+          "lineHeight": {
+            "unit": "PIXELS",
+            "value": 56
+          },
+          "fontName": {
+            "family": "PingFang SC",
+            "style": "Semibold"
+          },
+          "sample": "I27815:31851;24386:5351"
+        },
+        {
+          "id": "S:df0b98d1ff489fb8b2216993c69178bb5dbf2bc0,",
+          "name": "Title/Medium",
+          "fontSize": 16,
+          "lineHeight": {
+            "unit": "PIXELS",
+            "value": 24
+          },
+          "fontName": {
+            "family": "PingFang SC",
+            "style": "Semibold"
+          },
+          "sample": "I27815:31851;24386:5362"
+        },
+        {
+          "id": "S:8a8370c4fbc15eeac09ee7776e78105a3da75759,",
+          "name": "Link/Large",
+          "fontSize": 16,
+          "lineHeight": {
+            "unit": "PIXELS",
+            "value": 24
+          },
+          "fontName": {
+            "family": "PingFang SC",
+            "style": "Regular"
+          },
+          "sample": "I27815:31851;24386:5364"
+        }
+      ]
+    },
+    "sidebar": {
+      "pageId": "24787:18812",
+      "page": "     SideBar 侧边栏",
+      "visited": 796,
+      "groups": [
+        {
+          "field": "paddingLeft",
+          "variable": "--td-comp-paddingLR/s",
+          "count": 180,
+          "samples": [
+            [
+              "I27264:21535;27264:20989",
+              "item/tag",
+              8,
+              "SideBar 侧边栏"
+            ],
+            [
+              "I27264:21535;27264:20989;27273:20750",
+              "item-active",
+              8,
+              "item/tag"
+            ],
+            [
+              "24787:18944",
+              "select=true, badge=false, icon=false, disable=false",
+              8,
+              "item/tag"
+            ]
+          ]
+        },
+        {
+          "field": "paddingTop",
+          "variable": "--td-comp-paddingTB/s",
+          "count": 180,
+          "samples": [
+            [
+              "I27264:21535;27264:20989",
+              "item/tag",
+              8,
+              "SideBar 侧边栏"
+            ],
+            [
+              "I27264:21535;27264:20989;27273:20750",
+              "item-active",
+              8,
+              "item/tag"
+            ],
+            [
+              "24787:18944",
+              "select=true, badge=false, icon=false, disable=false",
+              8,
+              "item/tag"
+            ]
+          ]
+        },
+        {
+          "field": "paddingRight",
+          "variable": "--td-comp-paddingLR/s",
+          "count": 180,
+          "samples": [
+            [
+              "I27264:21535;27264:20989",
+              "item/tag",
+              8,
+              "SideBar 侧边栏"
+            ],
+            [
+              "I27264:21535;27264:20989;27273:20750",
+              "item-active",
+              8,
+              "item/tag"
+            ],
+            [
+              "24787:18944",
+              "select=true, badge=false, icon=false, disable=false",
+              8,
+              "item/tag"
+            ]
+          ]
+        },
+        {
+          "field": "paddingBottom",
+          "variable": "--td-comp-paddingTB/s",
+          "count": 180,
+          "samples": [
+            [
+              "I27264:21535;27264:20989",
+              "item/tag",
+              8,
+              "SideBar 侧边栏"
+            ],
+            [
+              "I27264:21535;27264:20989;27273:20750",
+              "item-active",
+              8,
+              "item/tag"
+            ],
+            [
+              "24787:18944",
+              "select=true, badge=false, icon=false, disable=false",
+              8,
+              "item/tag"
+            ]
+          ]
+        },
+        {
+          "field": "itemSpacing",
+          "variable": "--td-comp-margin/xxs",
+          "count": 180,
+          "samples": [
+            [
+              "I27264:21535;27264:20989;27273:20750",
+              "item-active",
+              2,
+              "item/tag"
+            ],
+            [
+              "I27264:21235;27264:20688",
+              "item/line",
+              2,
+              "SideBar 侧边栏"
+            ],
+            [
+              "27264:19965",
+              "select=true, badge=false, icon=true, disable=false",
+              2,
+              "item/line"
+            ]
+          ]
+        },
+        {
+          "field": "topLeftRadius",
+          "variable": "--td-radius-medium",
+          "count": 90,
+          "samples": [
+            [
+              "I27264:21535;27264:20989;27273:20750",
+              "item-active",
+              6,
+              "item/tag"
+            ]
+          ]
+        },
+        {
+          "field": "topRightRadius",
+          "variable": "--td-radius-medium",
+          "count": 90,
+          "samples": [
+            [
+              "I27264:21535;27264:20989;27273:20750",
+              "item-active",
+              6,
+              "item/tag"
+            ]
+          ]
+        },
+        {
+          "field": "bottomLeftRadius",
+          "variable": "--td-radius-medium",
+          "count": 90,
+          "samples": [
+            [
+              "I27264:21535;27264:20989;27273:20750",
+              "item-active",
+              6,
+              "item/tag"
+            ]
+          ]
+        },
+        {
+          "field": "bottomRightRadius",
+          "variable": "--td-radius-medium",
+          "count": 90,
+          "samples": [
+            [
+              "I27264:21535;27264:20989;27273:20750",
+              "item-active",
+              6,
+              "item/tag"
+            ]
+          ]
+        },
+        {
+          "field": "topLeftRadius",
+          "variable": "--td-radius-round",
+          "count": 26,
+          "samples": [
+            [
+              "I27264:21737;27264:20981;27247:19851",
+              "Badge 徽标",
+              999,
+              "badge"
+            ],
+            [
+              "I27264:21235;27264:20684;27273:20531",
+              "line",
+              999,
+              "item/line"
+            ]
+          ]
+        },
+        {
+          "field": "topRightRadius",
+          "variable": "--td-radius-round",
+          "count": 26,
+          "samples": [
+            [
+              "I27264:21737;27264:20981;27247:19851",
+              "Badge 徽标",
+              999,
+              "badge"
+            ],
+            [
+              "I27264:21235;27264:20684;27273:20531",
+              "line",
+              999,
+              "item/line"
+            ]
+          ]
+        },
+        {
+          "field": "bottomLeftRadius",
+          "variable": "--td-radius-round",
+          "count": 26,
+          "samples": [
+            [
+              "I27264:21737;27264:20981;27247:19851",
+              "Badge 徽标",
+              999,
+              "badge"
+            ],
+            [
+              "I27264:21235;27264:20684;27273:20531",
+              "line",
+              999,
+              "item/line"
+            ]
+          ]
+        },
+        {
+          "field": "bottomRightRadius",
+          "variable": "--td-radius-round",
+          "count": 26,
+          "samples": [
+            [
+              "I27264:21737;27264:20981;27247:19851",
+              "Badge 徽标",
+              999,
+              "badge"
+            ],
+            [
+              "I27264:21235;27264:20684;27273:20531",
+              "line",
+              999,
+              "item/line"
+            ]
+          ]
+        },
+        {
+          "field": "paddingLeft",
+          "variable": "--td-comp-paddingLR/l",
+          "count": 90,
+          "samples": [
+            [
+              "I27264:21235;27264:20688",
+              "item/line",
+              16,
+              "SideBar 侧边栏"
+            ],
+            [
+              "27264:19965",
+              "select=true, badge=false, icon=true, disable=false",
+              16,
+              "item/line"
+            ],
+            [
+              "24787:18932",
+              "select=true, badge=true, icon=false, disable=false",
+              16,
+              "item/line"
+            ]
+          ]
+        },
+        {
+          "field": "paddingTop",
+          "variable": "--td-comp-paddingTB/l",
+          "count": 90,
+          "samples": [
+            [
+              "I27264:21235;27264:20688",
+              "item/line",
+              16,
+              "SideBar 侧边栏"
+            ],
+            [
+              "27264:19965",
+              "select=true, badge=false, icon=true, disable=false",
+              16,
+              "item/line"
+            ],
+            [
+              "24787:18932",
+              "select=true, badge=true, icon=false, disable=false",
+              16,
+              "item/line"
+            ]
+          ]
+        },
+        {
+          "field": "paddingRight",
+          "variable": "--td-comp-paddingLR/l",
+          "count": 90,
+          "samples": [
+            [
+              "I27264:21235;27264:20688",
+              "item/line",
+              16,
+              "SideBar 侧边栏"
+            ],
+            [
+              "27264:19965",
+              "select=true, badge=false, icon=true, disable=false",
+              16,
+              "item/line"
+            ],
+            [
+              "24787:18932",
+              "select=true, badge=true, icon=false, disable=false",
+              16,
+              "item/line"
+            ]
+          ]
+        },
+        {
+          "field": "paddingBottom",
+          "variable": "--td-comp-paddingTB/l",
+          "count": 90,
+          "samples": [
+            [
+              "I27264:21235;27264:20688",
+              "item/line",
+              16,
+              "SideBar 侧边栏"
+            ],
+            [
+              "27264:19965",
+              "select=true, badge=false, icon=true, disable=false",
+              16,
+              "item/line"
+            ],
+            [
+              "24787:18932",
+              "select=true, badge=true, icon=false, disable=false",
+              16,
+              "item/line"
+            ]
+          ]
+        }
+      ],
+      "styles": [
+        {
+          "id": "S:128017aafb775849a8fc9e612bec1cb5da6753ac,",
+          "name": "Headline/Large",
+          "fontSize": 36,
+          "lineHeight": {
+            "unit": "PIXELS",
+            "value": 44
+          },
+          "fontName": {
+            "family": "PingFang SC",
+            "style": "Semibold"
+          },
+          "sample": "24787:18817"
+        },
+        {
+          "id": "S:3e7d6f6bf7d63065bb8d9f0b8a4b3e8a8a883792,",
+          "name": "Title/ExtraLarge",
+          "fontSize": 20,
+          "lineHeight": {
+            "unit": "PIXELS",
+            "value": 28
+          },
+          "fontName": {
+            "family": "PingFang SC",
+            "style": "Semibold"
+          },
+          "sample": "24787:18851"
+        },
+        {
+          "id": "S:b579dcf634b1700eafcc5c6cfd0238ed3e194c30,",
+          "name": "Body/Medium",
+          "fontSize": 14,
+          "lineHeight": {
+            "unit": "PIXELS",
+            "value": 22
+          },
+          "fontName": {
+            "family": "PingFang SC",
+            "style": "Regular"
+          },
+          "sample": "24787:18854"
+        },
+        {
+          "id": "S:8ab6ac195800851f61ab445b08fc215cd3395a9c,",
+          "name": "Body/Large",
+          "fontSize": 16,
+          "lineHeight": {
+            "unit": "PIXELS",
+            "value": 24
+          },
+          "fontName": {
+            "family": "PingFang SC",
+            "style": "Regular"
+          },
+          "sample": "I27264:21535;27264:20989;27273:20752"
+        },
+        {
+          "id": "S:d236609dddd21c0c622327425c3b8c770e495063,",
+          "name": "Mark/Large",
+          "fontSize": 16,
+          "lineHeight": {
+            "unit": "PIXELS",
+            "value": 24
+          },
+          "fontName": {
+            "family": "PingFang SC",
+            "style": "Semibold"
+          },
+          "sample": "I27264:21535;27264:20981;24787:18946"
+        },
+        {
+          "id": "S:ecc7efbfb78bfab81a57f3569325556bd226ea61,",
+          "name": "Mark/ExtraSmall",
+          "fontSize": 10,
+          "lineHeight": {
+            "unit": "PIXELS",
+            "value": 16
+          },
+          "fontName": {
+            "family": "PingFang SC",
+            "style": "Semibold"
+          },
+          "sample": "I27264:21737;27264:20993;27273:20758;25181:19263"
+        },
+        {
+          "id": "S:168a36c30b93a6e58113210691c5ec3d34f3d715,",
+          "name": "Display/Medium",
+          "fontSize": 48,
+          "lineHeight": {
+            "unit": "PIXELS",
+            "value": 56
+          },
+          "fontName": {
+            "family": "PingFang SC",
+            "style": "Semibold"
+          },
+          "sample": "I27798:31390;24386:5351"
+        },
+        {
+          "id": "S:df0b98d1ff489fb8b2216993c69178bb5dbf2bc0,",
+          "name": "Title/Medium",
+          "fontSize": 16,
+          "lineHeight": {
+            "unit": "PIXELS",
+            "value": 24
+          },
+          "fontName": {
+            "family": "PingFang SC",
+            "style": "Semibold"
+          },
+          "sample": "I27798:31390;24386:5362"
+        },
+        {
+          "id": "S:8a8370c4fbc15eeac09ee7776e78105a3da75759,",
+          "name": "Link/Large",
+          "fontSize": 16,
+          "lineHeight": {
+            "unit": "PIXELS",
+            "value": 24
+          },
+          "fontName": {
+            "family": "PingFang SC",
+            "style": "Regular"
+          },
+          "sample": "I27798:31390;24386:5364"
+        }
+      ]
+    },
+    "tree": {
+      "pageId": "25584:21090",
+      "page": "     TreeSelect 树形选择器",
+      "visited": 597,
+      "groups": [
+        {
+          "field": "paddingLeft",
+          "variable": "--td-comp-paddingLR/l",
+          "count": 114,
+          "samples": [
+            [
+              "I27410:24821;27449:26354;27449:25903",
+              ".master/item/1 level",
+              16,
+              "item/1st column"
+            ],
+            [
+              "I27410:24821;27449:26582;27449:26265;27387:23839",
+              "item-active",
+              16,
+              ".master/item/3 level"
+            ],
+            [
+              "27449:25774",
+              "state=select",
+              16,
+              ".master/item/1 level"
+            ]
+          ]
+        },
+        {
+          "field": "paddingTop",
+          "variable": "--td-comp-paddingTB/l",
+          "count": 114,
+          "samples": [
+            [
+              "I27410:24821;27449:26354;27449:25903",
+              ".master/item/1 level",
+              16,
+              "item/1st column"
+            ],
+            [
+              "I27410:24821;27449:26582;27449:26265;27387:23839",
+              "item-active",
+              16,
+              ".master/item/3 level"
+            ],
+            [
+              "27449:25774",
+              "state=select",
+              16,
+              ".master/item/1 level"
+            ]
+          ]
+        },
+        {
+          "field": "paddingRight",
+          "variable": "--td-comp-paddingLR/l",
+          "count": 114,
+          "samples": [
+            [
+              "I27410:24821;27449:26354;27449:25903",
+              ".master/item/1 level",
+              16,
+              "item/1st column"
+            ],
+            [
+              "I27410:24821;27449:26582;27449:26265;27387:23839",
+              "item-active",
+              16,
+              ".master/item/3 level"
+            ],
+            [
+              "27449:25774",
+              "state=select",
+              16,
+              ".master/item/1 level"
+            ]
+          ]
+        },
+        {
+          "field": "paddingBottom",
+          "variable": "--td-comp-paddingTB/l",
+          "count": 114,
+          "samples": [
+            [
+              "I27410:24821;27449:26354;27449:25903",
+              ".master/item/1 level",
+              16,
+              "item/1st column"
+            ],
+            [
+              "I27410:24821;27449:26582;27449:26265;27387:23839",
+              "item-active",
+              16,
+              ".master/item/3 level"
+            ],
+            [
+              "27449:25774",
+              "state=select",
+              16,
+              ".master/item/1 level"
+            ]
+          ]
+        },
+        {
+          "field": "topLeftRadius",
+          "variable": "--td-radius-round",
+          "count": 10,
+          "samples": [
+            [
+              "I27410:24821;27449:26354;27449:25904;27449:25759",
+              "line",
+              999,
+              ".master/item/1 level"
+            ]
+          ]
+        },
+        {
+          "field": "topRightRadius",
+          "variable": "--td-radius-round",
+          "count": 10,
+          "samples": [
+            [
+              "I27410:24821;27449:26354;27449:25904;27449:25759",
+              "line",
+              999,
+              ".master/item/1 level"
+            ]
+          ]
+        },
+        {
+          "field": "bottomLeftRadius",
+          "variable": "--td-radius-round",
+          "count": 10,
+          "samples": [
+            [
+              "I27410:24821;27449:26354;27449:25904;27449:25759",
+              "line",
+              999,
+              ".master/item/1 level"
+            ]
+          ]
+        },
+        {
+          "field": "bottomRightRadius",
+          "variable": "--td-radius-round",
+          "count": 10,
+          "samples": [
+            [
+              "I27410:24821;27449:26354;27449:25904;27449:25759",
+              "line",
+              999,
+              ".master/item/1 level"
+            ]
+          ]
+        },
+        {
+          "field": "topLeftRadius",
+          "variable": "--td-radius-medium",
+          "count": 102,
+          "samples": [
+            [
+              "I27410:24821;27449:26582;27449:26265;27387:23839",
+              "item-active",
+              6,
+              ".master/item/3 level"
+            ]
+          ]
+        },
+        {
+          "field": "topRightRadius",
+          "variable": "--td-radius-medium",
+          "count": 102,
+          "samples": [
+            [
+              "I27410:24821;27449:26582;27449:26265;27387:23839",
+              "item-active",
+              6,
+              ".master/item/3 level"
+            ]
+          ]
+        },
+        {
+          "field": "bottomLeftRadius",
+          "variable": "--td-radius-medium",
+          "count": 102,
+          "samples": [
+            [
+              "I27410:24821;27449:26582;27449:26265;27387:23839",
+              "item-active",
+              6,
+              ".master/item/3 level"
+            ]
+          ]
+        },
+        {
+          "field": "bottomRightRadius",
+          "variable": "--td-radius-medium",
+          "count": 102,
+          "samples": [
+            [
+              "I27410:24821;27449:26582;27449:26265;27387:23839",
+              "item-active",
+              6,
+              ".master/item/3 level"
+            ]
+          ]
+        },
+        {
+          "field": "paddingLeft",
+          "variable": "--td-comp-paddingLR/s",
+          "count": 90,
+          "samples": [
+            [
+              "I41563:27833;27449:26953;27449:26058",
+              ".master/item/2 level",
+              8,
+              "item/2nd column"
+            ],
+            [
+              "I41563:27833;27449:26953;27449:26058;27449:25802",
+              "item-active",
+              8,
+              ".master/item/2 level"
+            ],
+            [
+              "27449:25809",
+              "state=select",
+              8,
+              ".master/item/2 level"
+            ]
+          ]
+        },
+        {
+          "field": "paddingTop",
+          "variable": "--td-comp-paddingTB/s",
+          "count": 90,
+          "samples": [
+            [
+              "I41563:27833;27449:26953;27449:26058",
+              ".master/item/2 level",
+              8,
+              "item/2nd column"
+            ],
+            [
+              "I41563:27833;27449:26953;27449:26058;27449:25802",
+              "item-active",
+              8,
+              ".master/item/2 level"
+            ],
+            [
+              "27449:25809",
+              "state=select",
+              8,
+              ".master/item/2 level"
+            ]
+          ]
+        },
+        {
+          "field": "paddingRight",
+          "variable": "--td-comp-paddingLR/s",
+          "count": 90,
+          "samples": [
+            [
+              "I41563:27833;27449:26953;27449:26058",
+              ".master/item/2 level",
+              8,
+              "item/2nd column"
+            ],
+            [
+              "I41563:27833;27449:26953;27449:26058;27449:25802",
+              "item-active",
+              8,
+              ".master/item/2 level"
+            ],
+            [
+              "27449:25809",
+              "state=select",
+              8,
+              ".master/item/2 level"
+            ]
+          ]
+        },
+        {
+          "field": "paddingBottom",
+          "variable": "--td-comp-paddingTB/s",
+          "count": 90,
+          "samples": [
+            [
+              "I41563:27833;27449:26953;27449:26058",
+              ".master/item/2 level",
+              8,
+              "item/2nd column"
+            ],
+            [
+              "I41563:27833;27449:26953;27449:26058;27449:25802",
+              "item-active",
+              8,
+              ".master/item/2 level"
+            ],
+            [
+              "27449:25809",
+              "state=select",
+              8,
+              ".master/item/2 level"
+            ]
+          ]
+        }
+      ],
+      "styles": [
+        {
+          "id": "S:128017aafb775849a8fc9e612bec1cb5da6753ac,",
+          "name": "Headline/Large",
+          "fontSize": 36,
+          "lineHeight": {
+            "unit": "PIXELS",
+            "value": 44
+          },
+          "fontName": {
+            "family": "PingFang SC",
+            "style": "Semibold"
+          },
+          "sample": "25584:21284"
+        },
+        {
+          "id": "S:3e7d6f6bf7d63065bb8d9f0b8a4b3e8a8a883792,",
+          "name": "Title/ExtraLarge",
+          "fontSize": 20,
+          "lineHeight": {
+            "unit": "PIXELS",
+            "value": 28
+          },
+          "fontName": {
+            "family": "PingFang SC",
+            "style": "Semibold"
+          },
+          "sample": "25584:21318"
+        },
+        {
+          "id": "S:8ab6ac195800851f61ab445b08fc215cd3395a9c,",
+          "name": "Body/Large",
+          "fontSize": 16,
+          "lineHeight": {
+            "unit": "PIXELS",
+            "value": 24
+          },
+          "fontName": {
+            "family": "PingFang SC",
+            "style": "Regular"
+          },
+          "sample": "I27410:24821;27449:26354;27449:25903;27449:25770"
+        },
+        {
+          "id": "S:d236609dddd21c0c622327425c3b8c770e495063,",
+          "name": "Mark/Large",
+          "fontSize": 16,
+          "lineHeight": {
+            "unit": "PIXELS",
+            "value": 24
+          },
+          "fontName": {
+            "family": "PingFang SC",
+            "style": "Semibold"
+          },
+          "sample": "I27410:24821;27449:26354;27449:25904;27449:25758"
+        },
+        {
+          "id": "S:168a36c30b93a6e58113210691c5ec3d34f3d715,",
+          "name": "Display/Medium",
+          "fontSize": 48,
+          "lineHeight": {
+            "unit": "PIXELS",
+            "value": 56
+          },
+          "fontName": {
+            "family": "PingFang SC",
+            "style": "Semibold"
+          },
+          "sample": "I27815:32056;24386:5351"
+        },
+        {
+          "id": "S:df0b98d1ff489fb8b2216993c69178bb5dbf2bc0,",
+          "name": "Title/Medium",
+          "fontSize": 16,
+          "lineHeight": {
+            "unit": "PIXELS",
+            "value": 24
+          },
+          "fontName": {
+            "family": "PingFang SC",
+            "style": "Semibold"
+          },
+          "sample": "I27815:32056;24386:5362"
+        },
+        {
+          "id": "S:8a8370c4fbc15eeac09ee7776e78105a3da75759,",
+          "name": "Link/Large",
+          "fontSize": 16,
+          "lineHeight": {
+            "unit": "PIXELS",
+            "value": 24
+          },
+          "fontName": {
+            "family": "PingFang SC",
+            "style": "Regular"
+          },
+          "sample": "I27815:32056;24386:5364"
+        }
+      ]
+    },
+    "toast": {
+      "pageId": "24386:5286",
+      "page": "     Toast 轻提示",
+      "visited": 152,
+      "groups": [
+        {
+          "field": "paddingLeft",
+          "variable": "--td-comp-paddingLR/xl",
+          "count": 30,
+          "samples": [
+            [
+              "26833:11129",
+              "Toast 轻提示",
+              24,
+              "Toast 轻提示"
+            ],
+            [
+              "26833:11003",
+              "direction=row, icon=false, theme=-, text=true",
+              24,
+              "Toast 轻提示"
+            ],
+            [
+              "26833:11002",
+              "direction=row, icon=true, theme=-, text=true",
+              24,
+              "Toast 轻提示"
+            ]
+          ]
+        },
+        {
+          "field": "paddingTop",
+          "variable": "--td-comp-paddingTB/l",
+          "count": 13,
+          "samples": [
+            [
+              "26833:11129",
+              "Toast 轻提示",
+              16,
+              "Toast 轻提示"
+            ],
+            [
+              "26833:11003",
+              "direction=row, icon=false, theme=-, text=true",
+              16,
+              "Toast 轻提示"
+            ],
+            [
+              "26833:11002",
+              "direction=row, icon=true, theme=-, text=true",
+              16,
+              "Toast 轻提示"
+            ]
+          ]
+        },
+        {
+          "field": "paddingRight",
+          "variable": "--td-comp-paddingLR/xl",
+          "count": 30,
+          "samples": [
+            [
+              "26833:11129",
+              "Toast 轻提示",
+              24,
+              "Toast 轻提示"
+            ],
+            [
+              "26833:11003",
+              "direction=row, icon=false, theme=-, text=true",
+              24,
+              "Toast 轻提示"
+            ],
+            [
+              "26833:11002",
+              "direction=row, icon=true, theme=-, text=true",
+              24,
+              "Toast 轻提示"
+            ]
+          ]
+        },
+        {
+          "field": "paddingBottom",
+          "variable": "--td-comp-paddingTB/l",
+          "count": 13,
+          "samples": [
+            [
+              "26833:11129",
+              "Toast 轻提示",
+              16,
+              "Toast 轻提示"
+            ],
+            [
+              "26833:11003",
+              "direction=row, icon=false, theme=-, text=true",
+              16,
+              "Toast 轻提示"
+            ],
+            [
+              "26833:11002",
+              "direction=row, icon=true, theme=-, text=true",
+              16,
+              "Toast 轻提示"
+            ]
+          ]
+        },
+        {
+          "field": "topLeftRadius",
+          "variable": "--td-radius-medium",
+          "count": 30,
+          "samples": [
+            [
+              "26833:11129",
+              "Toast 轻提示",
+              6,
+              "Toast 轻提示"
+            ],
+            [
+              "26833:11003",
+              "direction=row, icon=false, theme=-, text=true",
+              6,
+              "Toast 轻提示"
+            ],
+            [
+              "26833:11002",
+              "direction=row, icon=true, theme=-, text=true",
+              6,
+              "Toast 轻提示"
+            ]
+          ]
+        },
+        {
+          "field": "topRightRadius",
+          "variable": "--td-radius-medium",
+          "count": 30,
+          "samples": [
+            [
+              "26833:11129",
+              "Toast 轻提示",
+              6,
+              "Toast 轻提示"
+            ],
+            [
+              "26833:11003",
+              "direction=row, icon=false, theme=-, text=true",
+              6,
+              "Toast 轻提示"
+            ],
+            [
+              "26833:11002",
+              "direction=row, icon=true, theme=-, text=true",
+              6,
+              "Toast 轻提示"
+            ]
+          ]
+        },
+        {
+          "field": "bottomLeftRadius",
+          "variable": "--td-radius-medium",
+          "count": 30,
+          "samples": [
+            [
+              "26833:11129",
+              "Toast 轻提示",
+              6,
+              "Toast 轻提示"
+            ],
+            [
+              "26833:11003",
+              "direction=row, icon=false, theme=-, text=true",
+              6,
+              "Toast 轻提示"
+            ],
+            [
+              "26833:11002",
+              "direction=row, icon=true, theme=-, text=true",
+              6,
+              "Toast 轻提示"
+            ]
+          ]
+        },
+        {
+          "field": "bottomRightRadius",
+          "variable": "--td-radius-medium",
+          "count": 30,
+          "samples": [
+            [
+              "26833:11129",
+              "Toast 轻提示",
+              6,
+              "Toast 轻提示"
+            ],
+            [
+              "26833:11003",
+              "direction=row, icon=false, theme=-, text=true",
+              6,
+              "Toast 轻提示"
+            ],
+            [
+              "26833:11002",
+              "direction=row, icon=true, theme=-, text=true",
+              6,
+              "Toast 轻提示"
+            ]
+          ]
+        },
+        {
+          "field": "itemSpacing",
+          "variable": "--td-comp-margin/s",
+          "count": 27,
+          "samples": [
+            [
+              "26833:11137",
+              "Toast 轻提示",
+              8,
+              "Toast 轻提示"
+            ],
+            [
+              "26833:11002",
+              "direction=row, icon=true, theme=-, text=true",
+              8,
+              "Toast 轻提示"
+            ],
+            [
+              "26833:11001",
+              "direction=colum, icon=true, theme=-, text=true",
+              8,
+              "Toast 轻提示"
+            ]
+          ]
+        },
+        {
+          "field": "paddingTop",
+          "variable": "--td-comp-paddingTB/xl",
+          "count": 17,
+          "samples": [
+            [
+              "26833:11142",
+              "Toast 轻提示",
+              24,
+              "Toast 轻提示"
+            ],
+            [
+              "26833:11001",
+              "direction=colum, icon=true, theme=-, text=true",
+              24,
+              "Toast 轻提示"
+            ],
+            [
+              "26833:11005",
+              "direction=colum, icon=true, theme=loading, text=true",
+              24,
+              "Toast 轻提示"
+            ]
+          ]
+        },
+        {
+          "field": "paddingBottom",
+          "variable": "--td-comp-paddingTB/xl",
+          "count": 17,
+          "samples": [
+            [
+              "26833:11142",
+              "Toast 轻提示",
+              24,
+              "Toast 轻提示"
+            ],
+            [
+              "26833:11001",
+              "direction=colum, icon=true, theme=-, text=true",
+              24,
+              "Toast 轻提示"
+            ],
+            [
+              "26833:11005",
+              "direction=colum, icon=true, theme=loading, text=true",
+              24,
+              "Toast 轻提示"
+            ]
+          ]
+        }
+      ],
+      "styles": [
+        {
+          "id": "S:128017aafb775849a8fc9e612bec1cb5da6753ac,",
+          "name": "Headline/Large",
+          "fontSize": 36,
+          "lineHeight": {
+            "unit": "PIXELS",
+            "value": 44
+          },
+          "fontName": {
+            "family": "PingFang SC",
+            "style": "Semibold"
+          },
+          "sample": "25169:19890"
+        },
+        {
+          "id": "S:3e7d6f6bf7d63065bb8d9f0b8a4b3e8a8a883792,",
+          "name": "Title/ExtraLarge",
+          "fontSize": 20,
+          "lineHeight": {
+            "unit": "PIXELS",
+            "value": 28
+          },
+          "fontName": {
+            "family": "PingFang SC",
+            "style": "Semibold"
+          },
+          "sample": "25169:19892"
+        },
+        {
+          "id": "S:b579dcf634b1700eafcc5c6cfd0238ed3e194c30,",
+          "name": "Body/Medium",
+          "fontSize": 14,
+          "lineHeight": {
+            "unit": "PIXELS",
+            "value": 22
+          },
+          "fontName": {
+            "family": "PingFang SC",
+            "style": "Regular"
+          },
+          "sample": "25169:19929"
+        },
+        {
+          "id": "S:168a36c30b93a6e58113210691c5ec3d34f3d715,",
+          "name": "Display/Medium",
+          "fontSize": 48,
+          "lineHeight": {
+            "unit": "PIXELS",
+            "value": 56
+          },
+          "fontName": {
+            "family": "PingFang SC",
+            "style": "Semibold"
+          },
+          "sample": "I27817:32355;24386:5351"
+        },
+        {
+          "id": "S:8ab6ac195800851f61ab445b08fc215cd3395a9c,",
+          "name": "Body/Large",
+          "fontSize": 16,
+          "lineHeight": {
+            "unit": "PIXELS",
+            "value": 24
+          },
+          "fontName": {
+            "family": "PingFang SC",
+            "style": "Regular"
+          },
+          "sample": "I27817:32355;24386:5358"
+        },
+        {
+          "id": "S:df0b98d1ff489fb8b2216993c69178bb5dbf2bc0,",
+          "name": "Title/Medium",
+          "fontSize": 16,
+          "lineHeight": {
+            "unit": "PIXELS",
+            "value": 24
+          },
+          "fontName": {
+            "family": "PingFang SC",
+            "style": "Semibold"
+          },
+          "sample": "I27817:32355;24386:5362"
+        },
+        {
+          "id": "S:8a8370c4fbc15eeac09ee7776e78105a3da75759,",
+          "name": "Link/Large",
+          "fontSize": 16,
+          "lineHeight": {
+            "unit": "PIXELS",
+            "value": 24
+          },
+          "fontName": {
+            "family": "PingFang SC",
+            "style": "Regular"
+          },
+          "sample": "I27817:32355;24386:5364"
+        }
+      ]
+    },
+    "tabbar": {
+      "pageId": "24386:5242",
+      "page": "     TabBar 底部标签栏",
+      "visited": 2591,
+      "groups": [
+        {
+          "field": "itemSpacing",
+          "variable": "--td-comp-margin/s",
+          "count": 158,
+          "samples": [
+            [
+              "26969:13458",
+              "TabBar 底部标签栏",
+              8,
+              "TabBar 底部标签栏"
+            ],
+            [
+              "26951:13394",
+              "item=4, layout=horizontal, theme=tag, split=false, shap",
+              8,
+              "TabBar 底部标签栏"
+            ],
+            [
+              "26951:13395",
+              "item=3, layout=horizontal, theme=tag, split=false, shap",
+              8,
+              "TabBar 底部标签栏"
+            ]
+          ]
+        },
+        {
+          "field": "paddingLeft",
+          "variable": "--td-comp-paddingLR/s",
+          "count": 303,
+          "samples": [
+            [
+              "26969:13458",
+              "TabBar 底部标签栏",
+              8,
+              "TabBar 底部标签栏"
+            ],
+            [
+              "I26969:13591;26951:13896",
+              "item/tabBar-tag-horizontal/icon",
+              8,
+              "TabBar 底部标签栏"
+            ],
+            [
+              "I26969:14124;26951:15298",
+              "item/tabBar-normal-horizontal/icon",
+              8,
+              "TabBar 底部标签栏"
+            ]
+          ]
+        },
+        {
+          "field": "paddingTop",
+          "variable": "--td-comp-paddingTB/s",
+          "count": 592,
+          "samples": [
+            [
+              "26969:13458",
+              "TabBar 底部标签栏",
+              8,
+              "TabBar 底部标签栏"
+            ],
+            [
+              "I26969:13458;26951:13375",
+              "item/tabBar-tag-horizontal/content",
+              8,
+              "TabBar 底部标签栏"
+            ],
+            [
+              "I26969:13591;26951:13896",
+              "item/tabBar-tag-horizontal/icon",
+              8,
+              "TabBar 底部标签栏"
+            ]
+          ]
+        },
+        {
+          "field": "paddingRight",
+          "variable": "--td-comp-paddingLR/s",
+          "count": 303,
+          "samples": [
+            [
+              "26969:13458",
+              "TabBar 底部标签栏",
+              8,
+              "TabBar 底部标签栏"
+            ],
+            [
+              "I26969:13591;26951:13896",
+              "item/tabBar-tag-horizontal/icon",
+              8,
+              "TabBar 底部标签栏"
+            ],
+            [
+              "I26969:14124;26951:15298",
+              "item/tabBar-normal-horizontal/icon",
+              8,
+              "TabBar 底部标签栏"
+            ]
+          ]
+        },
+        {
+          "field": "paddingBottom",
+          "variable": "--td-comp-paddingTB/s",
+          "count": 592,
+          "samples": [
+            [
+              "26969:13458",
+              "TabBar 底部标签栏",
+              8,
+              "TabBar 底部标签栏"
+            ],
+            [
+              "I26969:13458;26951:13375",
+              "item/tabBar-tag-horizontal/content",
+              8,
+              "TabBar 底部标签栏"
+            ],
+            [
+              "I26969:13591;26951:13896",
+              "item/tabBar-tag-horizontal/icon",
+              8,
+              "TabBar 底部标签栏"
+            ]
+          ]
+        },
+        {
+          "field": "height",
+          "variable": "--td-comp-size/xxxl",
+          "count": 158,
+          "samples": [
+            [
+              "26969:13458",
+              "TabBar 底部标签栏",
+              56,
+              "TabBar 底部标签栏"
+            ],
+            [
+              "26951:13394",
+              "item=4, layout=horizontal, theme=tag, split=false, shap",
+              56,
+              "TabBar 底部标签栏"
+            ],
+            [
+              "26951:13395",
+              "item=3, layout=horizontal, theme=tag, split=false, shap",
+              56,
+              "TabBar 底部标签栏"
+            ]
+          ]
+        },
+        {
+          "field": "paddingLeft",
+          "variable": "--td-comp-paddingLR/l",
+          "count": 459,
+          "samples": [
+            [
+              "I26969:13458;26951:13375",
+              "item/tabBar-tag-horizontal/content",
+              16,
+              "TabBar 底部标签栏"
+            ],
+            [
+              "I26969:13509;26951:13588",
+              "item/tabBar-tag-horizontal/content&icon",
+              16,
+              "TabBar 底部标签栏"
+            ],
+            [
+              "I26969:13860;26951:15242",
+              "item/tabBar-normal-horizontal/content&icon",
+              16,
+              "TabBar 底部标签栏"
+            ]
+          ]
+        },
+        {
+          "field": "paddingRight",
+          "variable": "--td-comp-paddingLR/l",
+          "count": 459,
+          "samples": [
+            [
+              "I26969:13458;26951:13375",
+              "item/tabBar-tag-horizontal/content",
+              16,
+              "TabBar 底部标签栏"
+            ],
+            [
+              "I26969:13509;26951:13588",
+              "item/tabBar-tag-horizontal/content&icon",
+              16,
+              "TabBar 底部标签栏"
+            ],
+            [
+              "I26969:13860;26951:15242",
+              "item/tabBar-normal-horizontal/content&icon",
+              16,
+              "TabBar 底部标签栏"
+            ]
+          ]
+        },
+        {
+          "field": "height",
+          "variable": "--td-comp-size/xl",
+          "count": 604,
+          "samples": [
+            [
+              "I26969:13458;26951:13375",
+              "item/tabBar-tag-horizontal/content",
+              40,
+              "TabBar 底部标签栏"
+            ],
+            [
+              "I26969:13509;26951:13588",
+              "item/tabBar-tag-horizontal/content&icon",
+              40,
+              "TabBar 底部标签栏"
+            ],
+            [
+              "I26969:13591;26951:13896",
+              "item/tabBar-tag-horizontal/icon",
+              40,
+              "TabBar 底部标签栏"
+            ]
+          ]
+        },
+        {
+          "field": "topLeftRadius",
+          "variable": "--td-radius-round",
+          "count": 432,
+          "samples": [
+            [
+              "I26969:13458;26951:13375",
+              "item/tabBar-tag-horizontal/content",
+              999,
+              "TabBar 底部标签栏"
+            ],
+            [
+              "I26969:13509;26951:13588",
+              "item/tabBar-tag-horizontal/content&icon",
+              999,
+              "TabBar 底部标签栏"
+            ],
+            [
+              "I26969:13591;26951:13896",
+              "item/tabBar-tag-horizontal/icon",
+              999,
+              "TabBar 底部标签栏"
+            ]
+          ]
+        },
+        {
+          "field": "topRightRadius",
+          "variable": "--td-radius-round",
+          "count": 432,
+          "samples": [
+            [
+              "I26969:13458;26951:13375",
+              "item/tabBar-tag-horizontal/content",
+              999,
+              "TabBar 底部标签栏"
+            ],
+            [
+              "I26969:13509;26951:13588",
+              "item/tabBar-tag-horizontal/content&icon",
+              999,
+              "TabBar 底部标签栏"
+            ],
+            [
+              "I26969:13591;26951:13896",
+              "item/tabBar-tag-horizontal/icon",
+              999,
+              "TabBar 底部标签栏"
+            ]
+          ]
+        },
+        {
+          "field": "bottomLeftRadius",
+          "variable": "--td-radius-round",
+          "count": 432,
+          "samples": [
+            [
+              "I26969:13458;26951:13375",
+              "item/tabBar-tag-horizontal/content",
+              999,
+              "TabBar 底部标签栏"
+            ],
+            [
+              "I26969:13509;26951:13588",
+              "item/tabBar-tag-horizontal/content&icon",
+              999,
+              "TabBar 底部标签栏"
+            ],
+            [
+              "I26969:13591;26951:13896",
+              "item/tabBar-tag-horizontal/icon",
+              999,
+              "TabBar 底部标签栏"
+            ]
+          ]
+        },
+        {
+          "field": "bottomRightRadius",
+          "variable": "--td-radius-round",
+          "count": 432,
+          "samples": [
+            [
+              "I26969:13458;26951:13375",
+              "item/tabBar-tag-horizontal/content",
+              999,
+              "TabBar 底部标签栏"
+            ],
+            [
+              "I26969:13509;26951:13588",
+              "item/tabBar-tag-horizontal/content&icon",
+              999,
+              "TabBar 底部标签栏"
+            ],
+            [
+              "I26969:13591;26951:13896",
+              "item/tabBar-tag-horizontal/icon",
+              999,
+              "TabBar 底部标签栏"
+            ]
+          ]
+        },
+        {
+          "field": "paddingTop",
+          "variable": "--td-comp-paddingTB/xxs",
+          "count": 170,
+          "samples": [
+            [
+              "I26969:13509;26951:13588",
+              "item/tabBar-tag-horizontal/content&icon",
+              2,
+              "TabBar 底部标签栏"
+            ],
+            [
+              "I26969:13860;26951:15242",
+              "item/tabBar-normal-horizontal/content&icon",
+              2,
+              "TabBar 底部标签栏"
+            ],
+            [
+              "26935:12049",
+              "checked=true, badge=false, sub-tab=false",
+              2,
+              "item/tabBar-tag-horizontal/content&icon"
+            ]
+          ]
+        },
+        {
+          "field": "paddingBottom",
+          "variable": "--td-comp-paddingTB/xxs",
+          "count": 170,
+          "samples": [
+            [
+              "I26969:13509;26951:13588",
+              "item/tabBar-tag-horizontal/content&icon",
+              2,
+              "TabBar 底部标签栏"
+            ],
+            [
+              "I26969:13860;26951:15242",
+              "item/tabBar-normal-horizontal/content&icon",
+              2,
+              "TabBar 底部标签栏"
+            ],
+            [
+              "26935:12049",
+              "checked=true, badge=false, sub-tab=false",
+              2,
+              "item/tabBar-tag-horizontal/content&icon"
+            ]
+          ]
+        },
+        {
+          "field": "itemSpacing",
+          "variable": "--td-comp-margin/xs",
+          "count": 133,
+          "samples": [
+            [
+              "I26969:14344;26951:14280",
+              "item/tabBar-tag-vertical/content&icon",
+              4,
+              "TabBar 底部标签栏"
+            ],
+            [
+              "26935:13299",
+              "checked=true, badge=false, sub-tab=false",
+              4,
+              "item/tabBar-tag-vertical/content&icon"
+            ],
+            [
+              "26935:13302",
+              "checked=false, badge=false, sub-tab=false",
+              4,
+              "item/tabBar-tag-vertical/content&icon"
+            ]
+          ]
+        }
+      ],
+      "styles": [
+        {
+          "id": "S:128017aafb775849a8fc9e612bec1cb5da6753ac,",
+          "name": "Headline/Large",
+          "fontSize": 36,
+          "lineHeight": {
+            "unit": "PIXELS",
+            "value": 44
+          },
+          "fontName": {
+            "family": "PingFang SC",
+            "style": "Semibold"
+          },
+          "sample": "25529:22099"
+        },
+        {
+          "id": "S:3e7d6f6bf7d63065bb8d9f0b8a4b3e8a8a883792,",
+          "name": "Title/ExtraLarge",
+          "fontSize": 20,
+          "lineHeight": {
+            "unit": "PIXELS",
+            "value": 28
+          },
+          "fontName": {
+            "family": "PingFang SC",
+            "style": "Semibold"
+          },
+          "sample": "25529:22133"
+        },
+        {
+          "id": "S:8ab6ac195800851f61ab445b08fc215cd3395a9c,",
+          "name": "Body/Large",
+          "fontSize": 16,
+          "lineHeight": {
+            "unit": "PIXELS",
+            "value": 24
+          },
+          "fontName": {
+            "family": "PingFang SC",
+            "style": "Regular"
+          },
+          "sample": "25529:22145"
+        },
+        {
+          "id": "S:b579dcf634b1700eafcc5c6cfd0238ed3e194c30,",
+          "name": "Body/Medium",
+          "fontSize": 14,
+          "lineHeight": {
+            "unit": "PIXELS",
+            "value": 22
+          },
+          "fontName": {
+            "family": "PingFang SC",
+            "style": "Regular"
+          },
+          "sample": "25529:22157"
+        },
+        {
+          "id": "S:d236609dddd21c0c622327425c3b8c770e495063,",
+          "name": "Mark/Large",
+          "fontSize": 16,
+          "lineHeight": {
+            "unit": "PIXELS",
+            "value": 24
+          },
+          "fontName": {
+            "family": "PingFang SC",
+            "style": "Semibold"
+          },
+          "sample": "I26969:13458;26951:13375;26935:12044"
+        },
+        {
+          "id": "S:ecc7efbfb78bfab81a57f3569325556bd226ea61,",
+          "name": "Mark/ExtraSmall",
+          "fontSize": 10,
+          "lineHeight": {
+            "unit": "PIXELS",
+            "value": 16
+          },
+          "fontName": {
+            "family": "PingFang SC",
+            "style": "Semibold"
+          },
+          "sample": "I26969:13509;26951:13588;26935:12051"
+        },
+        {
+          "id": "S:2d4c1524c45add673953b76764c1dbb4c076a492,",
+          "name": "Body/ExtraSmall",
+          "fontSize": 10,
+          "lineHeight": {
+            "unit": "PIXELS",
+            "value": 16
+          },
+          "fontName": {
+            "family": "PingFang SC",
+            "style": "Regular"
+          },
+          "sample": "I26969:13509;26951:13589;26935:12055"
+        },
+        {
+          "id": "S:168a36c30b93a6e58113210691c5ec3d34f3d715,",
+          "name": "Display/Medium",
+          "fontSize": 48,
+          "lineHeight": {
+            "unit": "PIXELS",
+            "value": 56
+          },
+          "fontName": {
+            "family": "PingFang SC",
+            "style": "Semibold"
+          },
+          "sample": "I27798:31593;24386:5351"
+        },
+        {
+          "id": "S:df0b98d1ff489fb8b2216993c69178bb5dbf2bc0,",
+          "name": "Title/Medium",
+          "fontSize": 16,
+          "lineHeight": {
+            "unit": "PIXELS",
+            "value": 24
+          },
+          "fontName": {
+            "family": "PingFang SC",
+            "style": "Semibold"
+          },
+          "sample": "I27798:31593;24386:5362"
+        },
+        {
+          "id": "S:8a8370c4fbc15eeac09ee7776e78105a3da75759,",
+          "name": "Link/Large",
+          "fontSize": 16,
+          "lineHeight": {
+            "unit": "PIXELS",
+            "value": 24
+          },
+          "fontName": {
+            "family": "PingFang SC",
+            "style": "Regular"
+          },
+          "sample": "I27798:31593;24386:5364"
+        }
+      ]
+    },
+    "tabs": {
+      "pageId": "24386:5243",
+      "page": "     Tabs 选项卡",
+      "visited": 3147,
+      "groups": [
+        {
+          "field": "paddingLeft",
+          "variable": "--td-comp-paddingLR/l",
+          "count": 652,
+          "samples": [
+            [
+              "I27757:31796;27382:23998",
+              "item/normal-line",
+              16,
+              "Tabs 选项卡"
+            ],
+            [
+              "I27757:32028;27382:22984",
+              "item/normal-line&icon",
+              16,
+              "Tabs 选项卡"
+            ],
+            [
+              "I27757:32497;27382:25724",
+              "item/card",
+              16,
+              "Tabs 选项卡"
+            ]
+          ]
+        },
+        {
+          "field": "paddingRight",
+          "variable": "--td-comp-paddingLR/l",
+          "count": 652,
+          "samples": [
+            [
+              "I27757:31796;27382:23998",
+              "item/normal-line",
+              16,
+              "Tabs 选项卡"
+            ],
+            [
+              "I27757:32028;27382:22984",
+              "item/normal-line&icon",
+              16,
+              "Tabs 选项卡"
+            ],
+            [
+              "I27757:32497;27382:25724",
+              "item/card",
+              16,
+              "Tabs 选项卡"
+            ]
+          ]
+        },
+        {
+          "field": "topLeftRadius",
+          "variable": "--td-radius-round",
+          "count": 309,
+          "samples": [
+            [
+              "I27757:31796;27382:23998;26985:14054",
+              "track",
+              999,
+              "item/normal-line"
+            ],
+            [
+              "I27757:32093;27382:22984;27431:27942",
+              "Badge 徽标",
+              999,
+              "Frame 1338"
+            ],
+            [
+              "I27757:32407;27382:23584;27289:20518",
+              "item-capsule",
+              999,
+              "item/tag"
+            ]
+          ]
+        },
+        {
+          "field": "topRightRadius",
+          "variable": "--td-radius-round",
+          "count": 309,
+          "samples": [
+            [
+              "I27757:31796;27382:23998;26985:14054",
+              "track",
+              999,
+              "item/normal-line"
+            ],
+            [
+              "I27757:32093;27382:22984;27431:27942",
+              "Badge 徽标",
+              999,
+              "Frame 1338"
+            ],
+            [
+              "I27757:32407;27382:23584;27289:20518",
+              "item-capsule",
+              999,
+              "item/tag"
+            ]
+          ]
+        },
+        {
+          "field": "bottomLeftRadius",
+          "variable": "--td-radius-round",
+          "count": 309,
+          "samples": [
+            [
+              "I27757:31796;27382:23998;26985:14054",
+              "track",
+              999,
+              "item/normal-line"
+            ],
+            [
+              "I27757:32093;27382:22984;27431:27942",
+              "Badge 徽标",
+              999,
+              "Frame 1338"
+            ],
+            [
+              "I27757:32407;27382:23584;27289:20518",
+              "item-capsule",
+              999,
+              "item/tag"
+            ]
+          ]
+        },
+        {
+          "field": "bottomRightRadius",
+          "variable": "--td-radius-round",
+          "count": 309,
+          "samples": [
+            [
+              "I27757:31796;27382:23998;26985:14054",
+              "track",
+              999,
+              "item/normal-line"
+            ],
+            [
+              "I27757:32093;27382:22984;27431:27942",
+              "Badge 徽标",
+              999,
+              "Frame 1338"
+            ],
+            [
+              "I27757:32407;27382:23584;27289:20518",
+              "item-capsule",
+              999,
+              "item/tag"
+            ]
+          ]
+        },
+        {
+          "field": "itemSpacing",
+          "variable": "--td-comp-margin/xxs",
+          "count": 342,
+          "samples": [
+            [
+              "I27757:32028;27382:22984;27431:28388",
+              "item",
+              2,
+              "item/normal-line&icon"
+            ],
+            [
+              "27439:25058",
+              "Frame 1337",
+              2,
+              "selected=on, disabled=off, badge=on, size=large"
+            ],
+            [
+              "27291:20641",
+              "item-inner",
+              2,
+              "item-capsule"
+            ]
+          ]
+        },
+        {
+          "field": "paddingLeft",
+          "variable": "--td-comp-paddingLR/xs",
+          "count": 176,
+          "samples": [
+            [
+              "I27757:32407;27382:23584",
+              "item/tag",
+              4,
+              "Tabs 选项卡"
+            ],
+            [
+              "27291:20450",
+              "selected=off, disabled=on, badge=off, size=small",
+              4,
+              "item/tag"
+            ],
+            [
+              "27382:24515",
+              "selected=off, disabled=on, badge=off, size=large",
+              4,
+              "item/tag"
+            ]
+          ]
+        },
+        {
+          "field": "paddingTop",
+          "variable": "--td-comp-paddingTB/s",
+          "count": 176,
+          "samples": [
+            [
+              "I27757:32407;27382:23584",
+              "item/tag",
+              8,
+              "Tabs 选项卡"
+            ],
+            [
+              "27291:20450",
+              "selected=off, disabled=on, badge=off, size=small",
+              8,
+              "item/tag"
+            ],
+            [
+              "27382:24515",
+              "selected=off, disabled=on, badge=off, size=large",
+              8,
+              "item/tag"
+            ]
+          ]
+        },
+        {
+          "field": "paddingRight",
+          "variable": "--td-comp-paddingLR/xs",
+          "count": 176,
+          "samples": [
+            [
+              "I27757:32407;27382:23584",
+              "item/tag",
+              4,
+              "Tabs 选项卡"
+            ],
+            [
+              "27291:20450",
+              "selected=off, disabled=on, badge=off, size=small",
+              4,
+              "item/tag"
+            ],
+            [
+              "27382:24515",
+              "selected=off, disabled=on, badge=off, size=large",
+              4,
+              "item/tag"
+            ]
+          ]
+        },
+        {
+          "field": "paddingBottom",
+          "variable": "--td-comp-paddingTB/s",
+          "count": 176,
+          "samples": [
+            [
+              "I27757:32407;27382:23584",
+              "item/tag",
+              8,
+              "Tabs 选项卡"
+            ],
+            [
+              "27291:20450",
+              "selected=off, disabled=on, badge=off, size=small",
+              8,
+              "item/tag"
+            ],
+            [
+              "27382:24515",
+              "selected=off, disabled=on, badge=off, size=large",
+              8,
+              "item/tag"
+            ]
+          ]
+        }
+      ],
+      "styles": [
+        {
+          "id": "S:3e7d6f6bf7d63065bb8d9f0b8a4b3e8a8a883792,",
+          "name": "Title/ExtraLarge",
+          "fontSize": 20,
+          "lineHeight": {
+            "unit": "PIXELS",
+            "value": 28
+          },
+          "fontName": {
+            "family": "PingFang SC",
+            "style": "Semibold"
+          },
+          "sample": "25529:24921"
+        },
+        {
+          "id": "S:128017aafb775849a8fc9e612bec1cb5da6753ac,",
+          "name": "Headline/Large",
+          "fontSize": 36,
+          "lineHeight": {
+            "unit": "PIXELS",
+            "value": 44
+          },
+          "fontName": {
+            "family": "PingFang SC",
+            "style": "Semibold"
+          },
+          "sample": "25529:24879"
+        },
+        {
+          "id": "S:7373ee74fd0b0ed46c6c344e9726075131b43dfc,",
+          "name": "Mark/Medium",
+          "fontSize": 14,
+          "lineHeight": {
+            "unit": "PIXELS",
+            "value": 22
+          },
+          "fontName": {
+            "family": "PingFang SC",
+            "style": "Semibold"
+          },
+          "sample": "I27757:31796;27382:23998;26985:14053"
+        },
+        {
+          "id": "S:b579dcf634b1700eafcc5c6cfd0238ed3e194c30,",
+          "name": "Body/Medium",
+          "fontSize": 14,
+          "lineHeight": {
+            "unit": "PIXELS",
+            "value": 22
+          },
+          "fontName": {
+            "family": "PingFang SC",
+            "style": "Regular"
+          },
+          "sample": "I27757:31796;27382:24001;27248:19576"
+        },
+        {
+          "id": "S:ecc7efbfb78bfab81a57f3569325556bd226ea61,",
+          "name": "Mark/ExtraSmall",
+          "fontSize": 10,
+          "lineHeight": {
+            "unit": "PIXELS",
+            "value": 16
+          },
+          "fontName": {
+            "family": "PingFang SC",
+            "style": "Semibold"
+          },
+          "sample": "I27757:32093;27382:22996;27431:28071;25181:19263"
+        },
+        {
+          "id": "S:d236609dddd21c0c622327425c3b8c770e495063,",
+          "name": "Mark/Large",
+          "fontSize": 16,
+          "lineHeight": {
+            "unit": "PIXELS",
+            "value": 24
+          },
+          "fontName": {
+            "family": "PingFang SC",
+            "style": "Semibold"
+          },
+          "sample": "I27757:32221;27382:24775;27382:24333"
+        },
+        {
+          "id": "S:8ab6ac195800851f61ab445b08fc215cd3395a9c,",
+          "name": "Body/Large",
+          "fontSize": 16,
+          "lineHeight": {
+            "unit": "PIXELS",
+            "value": 24
+          },
+          "fontName": {
+            "family": "PingFang SC",
+            "style": "Regular"
+          },
+          "sample": "I27757:32221;27382:24776;27382:24344"
+        },
+        {
+          "id": "S:168a36c30b93a6e58113210691c5ec3d34f3d715,",
+          "name": "Display/Medium",
+          "fontSize": 48,
+          "lineHeight": {
+            "unit": "PIXELS",
+            "value": 56
+          },
+          "fontName": {
+            "family": "PingFang SC",
+            "style": "Semibold"
+          },
+          "sample": "I27798:31737;24386:5351"
+        },
+        {
+          "id": "S:df0b98d1ff489fb8b2216993c69178bb5dbf2bc0,",
+          "name": "Title/Medium",
+          "fontSize": 16,
+          "lineHeight": {
+            "unit": "PIXELS",
+            "value": 24
+          },
+          "fontName": {
+            "family": "PingFang SC",
+            "style": "Semibold"
+          },
+          "sample": "I27798:31737;24386:5362"
+        },
+        {
+          "id": "S:8a8370c4fbc15eeac09ee7776e78105a3da75759,",
+          "name": "Link/Large",
+          "fontSize": 16,
+          "lineHeight": {
+            "unit": "PIXELS",
+            "value": 24
+          },
+          "fontName": {
+            "family": "PingFang SC",
+            "style": "Regular"
+          },
+          "sample": "I27798:31737;24386:5364"
+        }
+      ]
+    },
+    "loading": {
+      "pageId": "24386:5280",
+      "page": "     Loading 加载",
+      "visited": 175,
+      "groups": [
+        {
+          "field": "width",
+          "variable": "--td-comp-size/xs",
+          "count": 7,
+          "samples": [
+            [
+              "26799:10853",
+              "Loading 加载",
+              24,
+              "Loading 加载"
+            ],
+            [
+              "26786:12854",
+              "size=24px small, theme=circular, indicator=true, text=f",
+              24,
+              "Loading 加载"
+            ],
+            [
+              "26786:12875",
+              "size=24px small, theme=spinner, indicator=true, text=fa",
+              24,
+              "Loading 加载"
+            ]
+          ]
+        },
+        {
+          "field": "height",
+          "variable": "--td-comp-size/xs",
+          "count": 7,
+          "samples": [
+            [
+              "26799:10853",
+              "Loading 加载",
+              24,
+              "Loading 加载"
+            ],
+            [
+              "26786:12854",
+              "size=24px small, theme=circular, indicator=true, text=f",
+              24,
+              "Loading 加载"
+            ],
+            [
+              "26786:12875",
+              "size=24px small, theme=spinner, indicator=true, text=fa",
+              24,
+              "Loading 加载"
+            ]
+          ]
+        },
+        {
+          "field": "itemSpacing",
+          "variable": "--td-comp-margin/s",
+          "count": 4,
+          "samples": [
+            [
+              "26799:11081",
+              "Loading 加载",
+              8,
+              "Loading 加载"
+            ],
+            [
+              "26786:12857",
+              "size=32px large, theme=circular, indicator=true, text=t",
+              8,
+              "Loading 加载"
+            ],
+            [
+              "26786:12962",
+              "size=32px large, theme=-, indicator=false, text=true, l",
+              8,
+              "Loading 加载"
+            ]
+          ]
+        },
+        {
+          "field": "width",
+          "variable": "--td-comp-size/m",
+          "count": 5,
+          "samples": [
+            [
+              "26799:11107",
+              "Loading 加载",
+              32,
+              "Loading 加载"
+            ],
+            [
+              "26786:12850",
+              "size=32px large, theme=circular, indicator=true, text=f",
+              32,
+              "Loading 加载"
+            ],
+            [
+              "26786:12883",
+              "size=32px large, theme=spinner, indicator=true, text=fa",
+              32,
+              "Loading 加载"
+            ]
+          ]
+        },
+        {
+          "field": "height",
+          "variable": "--td-comp-size/m",
+          "count": 5,
+          "samples": [
+            [
+              "26799:11107",
+              "Loading 加载",
+              32,
+              "Loading 加载"
+            ],
+            [
+              "26786:12850",
+              "size=32px large, theme=circular, indicator=true, text=f",
+              32,
+              "Loading 加载"
+            ],
+            [
+              "26786:12883",
+              "size=32px large, theme=spinner, indicator=true, text=fa",
+              32,
+              "Loading 加载"
+            ]
+          ]
+        },
+        {
+          "field": "width",
+          "variable": "--td-comp-size/s",
+          "count": 5,
+          "samples": [
+            [
+              "26799:11129",
+              "Loading 加载",
+              28,
+              "Loading 加载"
+            ],
+            [
+              "26786:12849",
+              "size=28px medium, theme=circular, indicator=true, text=",
+              28,
+              "Loading 加载"
+            ],
+            [
+              "26786:12879",
+              "size=28px medium, theme=spinner, indicator=true, text=f",
+              28,
+              "Loading 加载"
+            ]
+          ]
+        },
+        {
+          "field": "height",
+          "variable": "--td-comp-size/s",
+          "count": 5,
+          "samples": [
+            [
+              "26799:11129",
+              "Loading 加载",
+              28,
+              "Loading 加载"
+            ],
+            [
+              "26786:12849",
+              "size=28px medium, theme=circular, indicator=true, text=",
+              28,
+              "Loading 加载"
+            ],
+            [
+              "26786:12879",
+              "size=28px medium, theme=spinner, indicator=true, text=f",
+              28,
+              "Loading 加载"
+            ]
+          ]
+        }
+      ],
+      "styles": [
+        {
+          "id": "S:128017aafb775849a8fc9e612bec1cb5da6753ac,",
+          "name": "Headline/Large",
+          "fontSize": 36,
+          "lineHeight": {
+            "unit": "PIXELS",
+            "value": 44
+          },
+          "fontName": {
+            "family": "PingFang SC",
+            "style": "Semibold"
+          },
+          "sample": "25154:20855"
+        },
+        {
+          "id": "S:3e7d6f6bf7d63065bb8d9f0b8a4b3e8a8a883792,",
+          "name": "Title/ExtraLarge",
+          "fontSize": 20,
+          "lineHeight": {
+            "unit": "PIXELS",
+            "value": 28
+          },
+          "fontName": {
+            "family": "PingFang SC",
+            "style": "Semibold"
+          },
+          "sample": "25154:20857"
+        },
+        {
+          "id": "S:8ab6ac195800851f61ab445b08fc215cd3395a9c,",
+          "name": "Body/Large",
+          "fontSize": 16,
+          "lineHeight": {
+            "unit": "PIXELS",
+            "value": 24
+          },
+          "fontName": {
+            "family": "PingFang SC",
+            "style": "Regular"
+          },
+          "sample": "I26799:11081;25154:21092"
+        },
+        {
+          "id": "S:b579dcf634b1700eafcc5c6cfd0238ed3e194c30,",
+          "name": "Body/Medium",
+          "fontSize": 14,
+          "lineHeight": {
+            "unit": "PIXELS",
+            "value": 22
+          },
+          "fontName": {
+            "family": "PingFang SC",
+            "style": "Regular"
+          },
+          "sample": "I26799:11128;25154:20908"
+        },
+        {
+          "id": "S:7fca17294a985f5562e0aa7bb5e792869cdc3144,",
+          "name": "Body/Small",
+          "fontSize": 12,
+          "lineHeight": {
+            "unit": "PIXELS",
+            "value": 20
+          },
+          "fontName": {
+            "family": "PingFang SC",
+            "style": "Regular"
+          },
+          "sample": "I26799:11147;25154:20923"
+        },
+        {
+          "id": "S:168a36c30b93a6e58113210691c5ec3d34f3d715,",
+          "name": "Display/Medium",
+          "fontSize": 48,
+          "lineHeight": {
+            "unit": "PIXELS",
+            "value": 56
+          },
+          "fontName": {
+            "family": "PingFang SC",
+            "style": "Semibold"
+          },
+          "sample": "I27817:32636;24386:5351"
+        },
+        {
+          "id": "S:df0b98d1ff489fb8b2216993c69178bb5dbf2bc0,",
+          "name": "Title/Medium",
+          "fontSize": 16,
+          "lineHeight": {
+            "unit": "PIXELS",
+            "value": 24
+          },
+          "fontName": {
+            "family": "PingFang SC",
+            "style": "Semibold"
+          },
+          "sample": "I27817:32636;24386:5362"
+        },
+        {
+          "id": "S:8a8370c4fbc15eeac09ee7776e78105a3da75759,",
+          "name": "Link/Large",
+          "fontSize": 16,
+          "lineHeight": {
+            "unit": "PIXELS",
+            "value": 24
+          },
+          "fontName": {
+            "family": "PingFang SC",
+            "style": "Regular"
+          },
+          "sample": "I27817:32636;24386:5364"
+        }
+      ]
+    }
+  },
+  "unavailable": {
+    "dropdown_menu": "Figma MCP Starter call limit; page not read",
+    "message": "Figma MCP Starter call limit; page not read",
+    "refresh": "Figma MCP Starter call limit; page not read",
+    "steps": "Figma MCP Starter call limit; page not read",
+    "swiper": "Figma MCP Starter call limit; page not read",
+    "tag": "Figma MCP Starter call limit; page not read",
+    "time_counter": "Figma MCP Starter call limit; page not read"
+  }
+}

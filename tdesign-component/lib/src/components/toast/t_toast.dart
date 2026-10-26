@@ -6,13 +6,15 @@ import 'package:tdesign_flutter_icons/tdesign_flutter_icons.dart';
 
 import '../../theme/t_colors.dart';
 import '../../theme/t_fonts.dart';
+import '../../theme/t_internal_material.dart';
+import '../../theme/t_overlay_themes.dart';
 import '../../theme/t_radius.dart';
+import '../../theme/t_sizes.dart';
 import '../../theme/t_theme.dart';
 import '../../util/context_extension.dart';
-import '../../util/t_toolbar_pressable.dart';
-import '../icon/t_icon.dart';
 import '../loading/t_circle_indicator.dart';
-import '../text/t_text.dart';
+import '../text/t_text_style_scope.dart';
+import '../text/t_text_styled.dart';
 import 't_toast_theme_data.dart';
 
 /// Toast 文案排列方向
@@ -26,25 +28,25 @@ enum IconTextDirection {
 
 /// Toast 展示位置
 enum TToastPlacement {
-  /// 顶部（距屏幕顶部 25%，水平居中）
+  /// 顶部（中心距 Overlay 顶部 25%，水平居中）
   top,
 
-  /// 居中（屏幕正中）
+  /// 中间（中心距 Overlay 顶部 45%）
   middle,
 
-  /// 底部（距屏幕底部 25%，水平居中）
+  /// 底部（中心距 Overlay 顶部 75%，水平居中）
   bottom,
 }
 
 /// 蒙层行为配置
 ///
 /// 统一收敛 Toast 展示期间遮罩层的各项行为：
-/// - [showOverlay]：是否显示可见半透明蒙层（与 [preventTap] 解耦，
+/// - [showOverlay]：是否显示可见半透明蒙层（与 [preventScrollThrough] 解耦，
 ///   `true` 时展示半透明黑色蒙层遮住背景）；
 /// - [color] / [opacity]：蒙层颜色与透明度，`color` 为 null 时由
 ///   `Colors.black.withValues(alpha: opacity)` 派生黑色蒙层；
-/// - [preventTap]：是否拦截背景点击（与蒙层是否可见解耦，
-///   `true` 时展示期间背景不可点击）。
+/// - [preventScrollThrough]：是否禁止背景点击和滚动（与蒙层是否可见解耦，
+///   `true` 时展示期间阻止背景点击、触控滑动和鼠标滚轮；Toast 内容自身仍可交互）。
 class TOverlayConfig {
   /// 是否显示可见半透明蒙层（默认 false）。
   final bool showOverlay;
@@ -55,33 +57,46 @@ class TOverlayConfig {
   /// 蒙层透明度（0~1，默认 0.2）。
   final double opacity;
 
-  /// 是否拦截背景点击（默认 false）。
-  final bool preventTap;
+  /// 是否禁止背景点击和滚动（默认 false）。
+  final bool preventScrollThrough;
 
   const TOverlayConfig({
     this.showOverlay = false,
     this.color,
     this.opacity = 0.2,
-    this.preventTap = false,
+    this.preventScrollThrough = false,
   });
 }
 
 /// Toast实例管理类
 class _ToastInstance {
   final OverlayEntry overlayEntry;
+  final OverlayEntry lifecycleEntry;
   final Timer? timer;
   Timer? disposeTimer;
   bool showing = true;
   bool removed = false;
 
-  _ToastInstance({required this.overlayEntry, this.timer});
+  _ToastInstance({
+    required this.overlayEntry,
+    required this.lifecycleEntry,
+    this.timer,
+  });
+
+  VoidCallback? entryListener;
 
   void _removeEntry() {
     if (removed) {
       return;
     }
+    final listener = entryListener;
+    if (listener != null) {
+      lifecycleEntry.removeListener(listener);
+    }
     overlayEntry.remove();
     overlayEntry.dispose();
+    lifecycleEntry.remove();
+    lifecycleEntry.dispose();
     removed = true;
   }
 
@@ -101,16 +116,6 @@ class _ToastInstance {
   }
 }
 
-/// 轻提示组件
-///
-/// 支持文本、图标、加载中等样式。
-///
-/// 实例语义：
-/// - 未指定 `toastId` 时，所有匿名 Toast 共用同一个内部实例，
-///   后一次展示会替换前一次，避免重复点击叠加多个 Toast 导致半透明背景
-///   不断加深；
-/// - 指定不同 `toastId` 时，可多实例并存；
-/// - 指定相同 `toastId` 时，后一次替换前一次。
 class TToast {
   static final Map<String, _ToastInstance> _toastInstances = {};
 
@@ -118,12 +123,10 @@ class TToast {
   /// 避免重复点击叠加多个 Toast（半透明背景叠加会不断变深）。
   static const String _anonymousToastId = 'toast_anonymous';
 
-  /// 无限时长哨兵值：加载类 Toast 使用，表示"永不自动消失"。
-  /// 封装为具名常量，避免魔法数字导致用户传入相近的超长 duration
-  /// 时被误判为无限。
-  static const Duration infiniteDuration = Duration(seconds: 99999999);
-
   /// 普通文本Toast
+  ///
+  /// ## 返回值
+  /// 本次 Toast 的标识，可传给 [dismissToast]；未传 toastId 时使用共享匿名标识并复用匿名提示。
   static String showText(
     /// 提示文案；为 null 时只展示自定义内容。
     String? text, {
@@ -131,7 +134,7 @@ class TToast {
     /// 用于查找 Overlay 的上下文。
     required BuildContext context,
 
-    /// 自动关闭时长。
+    /// 自动关闭时长，默认 2000ms；零或负时长不自动关闭，请调用 dismissToast 或 dismissAll。
     Duration duration = const Duration(milliseconds: 2000),
 
     /// 文案最大行数。
@@ -146,7 +149,10 @@ class TToast {
     /// Toast 展示位置。
     TToastPlacement placement = TToastPlacement.middle,
 
-    /// 自定义内容；传入后优先展示。
+    /// 自定义文案内容；传入后优先展示。
+    ///
+    /// Text/TText 子树接入 Toast 默认字体和颜色，布局包装不切断传递。
+    /// 显式样式及内部更近的 TD 文字主题优先；自定义内容自行控制换行和布局。
     Widget? customWidget,
 
     /// Toast 背景色。
@@ -155,7 +161,7 @@ class TToast {
     /// Toast 文案样式。
     TextStyle? textStyle,
 
-    /// 指定实例 ID；不传时自动生成。
+    /// 指定实例 ID；不传时共用固定匿名 ID toast_anonymous，后一次展示替换前一次。
     String? toastId,
   }) {
     final id = toastId ?? _anonymousToastId;
@@ -180,6 +186,9 @@ class TToast {
   }
 
   /// 带图标的Toast
+  ///
+  /// ## 返回值
+  /// 本次 Toast 的标识，可传给 [dismissToast]；未传 toastId 时使用共享匿名标识并复用匿名提示。
   static String showIconText(
     /// 提示文案。
     String? text, {
@@ -193,7 +202,7 @@ class TToast {
     /// 用于查找 Overlay 的上下文。
     required BuildContext context,
 
-    /// 自动关闭时长。
+    /// 自动关闭时长，默认 2000ms；零或负时长不自动关闭，请调用 dismissToast 或 dismissAll。
     Duration duration = const Duration(milliseconds: 2000),
 
     /// 蒙层行为配置（可见遮罩、拦截点击等）。
@@ -217,7 +226,7 @@ class TToast {
     /// 图标颜色。
     Color? iconColor,
 
-    /// 指定实例 ID；不传时自动生成。
+    /// 指定实例 ID；不传时共用固定匿名 ID toast_anonymous，后一次展示替换前一次。
     String? toastId,
   }) {
     final id = toastId ?? _anonymousToastId;
@@ -244,6 +253,9 @@ class TToast {
   }
 
   /// 成功提示Toast
+  ///
+  /// ## 返回值
+  /// 本次 Toast 的标识，可传给 [dismissToast]；未传 toastId 时使用共享匿名标识并复用匿名提示。
   static String showSuccess(
     /// 提示文案。
     String? text, {
@@ -254,7 +266,7 @@ class TToast {
     /// 用于查找 Overlay 的上下文。
     required BuildContext context,
 
-    /// 自动关闭时长。
+    /// 自动关闭时长，默认 2000ms；零或负时长不自动关闭，请调用 dismissToast 或 dismissAll。
     Duration duration = const Duration(milliseconds: 2000),
 
     /// 蒙层行为配置（可见遮罩、拦截点击等）。
@@ -278,7 +290,7 @@ class TToast {
     /// 图标颜色。
     Color? iconColor,
 
-    /// 指定实例 ID；不传时自动生成。
+    /// 指定实例 ID；不传时共用固定匿名 ID toast_anonymous，后一次展示替换前一次。
     String? toastId,
   }) {
     return showIconText(
@@ -299,6 +311,9 @@ class TToast {
   }
 
   /// 警告Toast
+  ///
+  /// ## 返回值
+  /// 本次 Toast 的标识，可传给 [dismissToast]；未传 toastId 时使用共享匿名标识并复用匿名提示。
   static String showWarning(
     /// 提示文案。
     String? text, {
@@ -309,7 +324,7 @@ class TToast {
     /// 用于查找 Overlay 的上下文。
     required BuildContext context,
 
-    /// 自动关闭时长。
+    /// 自动关闭时长，默认 2000ms；零或负时长不自动关闭，请调用 dismissToast 或 dismissAll。
     Duration duration = const Duration(milliseconds: 2000),
 
     /// 蒙层行为配置（可见遮罩、拦截点击等）。
@@ -333,7 +348,7 @@ class TToast {
     /// 图标颜色。
     Color? iconColor,
 
-    /// 指定实例 ID；不传时自动生成。
+    /// 指定实例 ID；不传时共用固定匿名 ID toast_anonymous，后一次展示替换前一次。
     String? toastId,
   }) {
     return showIconText(
@@ -354,6 +369,9 @@ class TToast {
   }
 
   /// 失败提示Toast
+  ///
+  /// ## 返回值
+  /// 本次 Toast 的标识，可传给 [dismissToast]；未传 toastId 时使用共享匿名标识并复用匿名提示。
   static String showFail(
     /// 提示文案。
     String? text, {
@@ -364,7 +382,7 @@ class TToast {
     /// 用于查找 Overlay 的上下文。
     required BuildContext context,
 
-    /// 自动关闭时长。
+    /// 自动关闭时长，默认 2000ms；零或负时长不自动关闭，请调用 dismissToast 或 dismissAll。
     Duration duration = const Duration(milliseconds: 2000),
 
     /// 蒙层行为配置（可见遮罩、拦截点击等）。
@@ -388,7 +406,7 @@ class TToast {
     /// 图标颜色。
     Color? iconColor,
 
-    /// 指定实例 ID；不传时自动生成。
+    /// 指定实例 ID；不传时共用固定匿名 ID toast_anonymous，后一次展示替换前一次。
     String? toastId,
   }) {
     return showIconText(
@@ -409,6 +427,9 @@ class TToast {
   }
 
   /// 带文案的加载Toast
+  ///
+  /// ## 返回值
+  /// 本次 Toast 的标识，可传给 [dismissToast]；未传 toastId 时使用共享匿名标识并复用匿名提示。
   static String showLoading({
     /// 用于查找 Overlay 的上下文。
     required BuildContext context,
@@ -416,8 +437,8 @@ class TToast {
     /// 加载提示文案。
     String? text,
 
-    /// 自动关闭时长。
-    Duration duration = TToast.infiniteDuration,
+    /// 自动关闭时长，默认 2000ms；零或负时长不自动关闭，请调用 dismissToast 或 dismissAll。
+    Duration duration = const Duration(milliseconds: 2000),
 
     /// 蒙层行为配置（可见遮罩、拦截点击等）。
     TOverlayConfig? overlay,
@@ -425,7 +446,10 @@ class TToast {
     /// Toast 展示位置。
     TToastPlacement placement = TToastPlacement.middle,
 
-    /// 自定义加载内容；传入后优先展示。
+    /// 自定义加载文案区域；传入后替换 text 对应内容，加载指示器仍显示。
+    ///
+    /// Text/TText 子树接入加载文案默认字体和颜色，布局包装不切断传递。
+    /// 显式样式及内部更近的 TD 文字主题优先；不强加内置文案的单行限制。
     Widget? customWidget,
 
     /// Toast 背景色。
@@ -440,7 +464,7 @@ class TToast {
     /// 加载图标颜色。
     Color? iconColor,
 
-    /// 指定实例 ID；不传时自动生成。
+    /// 指定实例 ID；不传时共用固定匿名 ID toast_anonymous，后一次展示替换前一次。
     String? toastId,
   }) {
     final id = toastId ?? _anonymousToastId;
@@ -465,12 +489,15 @@ class TToast {
   }
 
   /// 不带文案的加载Toast
+  ///
+  /// ## 返回值
+  /// 本次 Toast 的标识，可传给 [dismissToast]；未传 toastId 时使用共享匿名标识并复用匿名提示。
   static String showLoadingWithoutText({
     /// 用于查找 Overlay 的上下文。
     required BuildContext context,
 
-    /// 自动关闭时长。
-    Duration duration = TToast.infiniteDuration,
+    /// 自动关闭时长，默认 2000ms；零或负时长不自动关闭，请调用 dismissToast 或 dismissAll。
+    Duration duration = const Duration(milliseconds: 2000),
 
     /// 蒙层行为配置（可见遮罩、拦截点击等）。
     TOverlayConfig? overlay,
@@ -487,7 +514,7 @@ class TToast {
     /// 加载图标颜色。
     Color? iconColor,
 
-    /// 指定实例 ID；不传时自动生成。
+    /// 指定实例 ID；不传时共用固定匿名 ID toast_anonymous，后一次展示替换前一次。
     String? toastId,
   }) {
     final id = toastId ?? _anonymousToastId;
@@ -543,58 +570,59 @@ class TToast {
       debugPrint('warn: TToast requires an Overlay ancestor.');
       return;
     }
-    final captured = InheritedTheme.capture(
+    final captured = TOverlayThemes.capture(
       from: context,
       to: overlayState.context,
     );
 
     final cfg = overlay ?? const TOverlayConfig();
-    // 拦截点击统一由 TOverlayConfig.preventTap 决定（不兼容收敛版）。
-    final finalPreventTap = cfg.preventTap;
+    // 背景点击和滚动的阻断统一由 TOverlayConfig.preventScrollThrough 决定。
+    final blockBackground = cfg.preventScrollThrough;
     final showMask = cfg.showOverlay;
     final maskColor = showMask
         ? (cfg.color ?? Colors.black.withValues(alpha: cfg.opacity))
         : Colors.transparent;
-    // 采用与小程序 / mobile-vue 一致的垂直百分比偏移（水平恒居中）：
-    // top 距顶 25%、middle 正中 50%、bottom 距底 25%。
-    // 百分比定位天然避让安全区，无需再叠加 SafeArea。
-    final alignment = switch (placement) {
-      TToastPlacement.top => const FractionalOffset(0.5, 0.25),
-      TToastPlacement.middle => const FractionalOffset(0.5, 0.5),
-      TToastPlacement.bottom => const FractionalOffset(0.5, 0.75),
-    };
+    final positionedToast = CustomSingleChildLayout(
+      delegate: _ToastPlacementDelegate(placement),
+      child: widget,
+    );
 
     OverlayEntry overlayEntry;
-    if (finalPreventTap || showMask) {
+    if (blockBackground || showMask) {
       overlayEntry = OverlayEntry(
         builder: (BuildContext context) => captured.wrap(
+          context,
           Stack(
             children: [
-              Positioned.fill(child: Container(color: maskColor)),
-              Align(
-                alignment: alignment,
-                child: widget,
+              Positioned.fill(
+                child: IgnorePointer(
+                  ignoring: !blockBackground,
+                  child: Container(color: maskColor),
+                ),
               ),
+              positionedToast,
             ],
           ),
         ),
       );
     } else {
       overlayEntry = OverlayEntry(
-        builder: (BuildContext context) => captured.wrap(
-          Align(
-            alignment: alignment,
-            child: widget,
-          ),
-        ),
+        builder: (BuildContext context) =>
+            captured.wrap(context, positionedToast),
       );
     }
 
-    overlayState.insert(overlayEntry);
+    // An inert entry observes the owner even when an opaque Entry hides content.
+    // Keep the content Entry's existing State, layout and interaction behavior.
+    final lifecycleEntry = OverlayEntry(
+      maintainState: true,
+      builder: (_) => const SizedBox.shrink(),
+    );
+    overlayState.insertAll([lifecycleEntry, overlayEntry]);
 
     Timer? timer;
 
-    if (duration != TToast.infiniteDuration) {
+    if (duration > Duration.zero) {
       timer = Timer(duration, () {
         final instance = _toastInstances[toastId];
         if (instance != null && instance.showing) {
@@ -605,11 +633,58 @@ class TToast {
       });
     }
 
-    _toastInstances[toastId] = _ToastInstance(
+    final instance = _ToastInstance(
       overlayEntry: overlayEntry,
+      lifecycleEntry: lifecycleEntry,
       timer: timer,
     );
+    _toastInstances[toastId] = instance;
+    void releaseUnmounted() {
+      // Entry 卸载通知发生时祖先 Overlay 可能尚未完成 unmount；
+      // 等本轮卸载完成后再判断 owner，并避开 ChangeNotifier 通知栈。
+      scheduleMicrotask(() {
+        if (overlayState.mounted || instance.removed) {
+          return;
+        }
+        if (identical(_toastInstances[toastId], instance)) {
+          _toastInstances.remove(toastId);
+        }
+        instance.cancel();
+      });
+    }
+
+    instance.entryListener = releaseUnmounted;
+    lifecycleEntry.addListener(releaseUnmounted);
+    WidgetsBinding.instance.addPostFrameCallback((_) => releaseUnmounted());
   }
+}
+
+/// 以 Toast 中心定位，百分比相对 Overlay 全高而非剩余空间。
+class _ToastPlacementDelegate extends SingleChildLayoutDelegate {
+  const _ToastPlacementDelegate(this.placement);
+
+  final TToastPlacement placement;
+
+  @override
+  BoxConstraints getConstraintsForChild(BoxConstraints constraints) =>
+      constraints.loosen();
+
+  @override
+  Offset getPositionForChild(Size size, Size childSize) {
+    final fraction = switch (placement) {
+      TToastPlacement.top => 0.25,
+      TToastPlacement.middle => 0.45,
+      TToastPlacement.bottom => 0.75,
+    };
+    return Offset(
+      (size.width - childSize.width) / 2,
+      size.height * fraction - childSize.height / 2,
+    );
+  }
+
+  @override
+  bool shouldRelayout(_ToastPlacementDelegate oldDelegate) =>
+      placement != oldDelegate.placement;
 }
 
 class _TIconTextToast extends StatelessWidget {
@@ -639,10 +714,11 @@ class _TIconTextToast extends StatelessWidget {
         maxHeight: 94,
       ),
       child: Container(
-        padding:
-            toastTheme.padding ?? const EdgeInsets.fromLTRB(22, 14, 22, 14),
+        padding: toastTheme.resolvePadding(
+          EdgeInsets.symmetric(horizontal: theme.size8, vertical: theme.size6),
+        ),
         decoration: BoxDecoration(
-          color: toastTheme.backgroundColor ?? theme.fontGyColor2,
+          color: toastTheme.backgroundColor ?? theme.fontGray2,
           borderRadius: BorderRadius.circular(
             toastTheme.borderRadius ?? theme.radiusDefault,
           ),
@@ -651,14 +727,14 @@ class _TIconTextToast extends StatelessWidget {
           mainAxisSize: MainAxisSize.min,
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Icon(
+            TInternalIcon(
               iconData,
-              size: toastTheme.iconSize ?? 24,
+              size: toastTheme.resolveIconSize(context.tTheme.size8),
               color: toastTheme.iconColor ?? theme.textColorAnti,
             ),
             const SizedBox(width: 8),
             Flexible(
-              child: TText(
+              child: TTextStyled(
                 text ?? '',
                 font: toastTheme.textStyle != null
                     ? null
@@ -684,9 +760,11 @@ class _TIconTextToast extends StatelessWidget {
     return ConstrainedBox(
       constraints: BoxConstraints(maxWidth: toastTheme.maxWidth ?? 136),
       child: Container(
-        padding: toastTheme.padding ?? const EdgeInsets.all(24),
+        padding: toastTheme.resolvePadding(
+          EdgeInsets.all(context.tTheme.size8),
+        ),
         decoration: BoxDecoration(
-          color: toastTheme.backgroundColor ?? theme.fontGyColor2,
+          color: toastTheme.backgroundColor ?? theme.fontGray2,
           borderRadius: BorderRadius.circular(
             toastTheme.borderRadius ?? theme.radiusDefault,
           ),
@@ -695,13 +773,13 @@ class _TIconTextToast extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           mainAxisSize: MainAxisSize.min,
           children: [
-            Icon(
+            TInternalIcon(
               iconData,
-              size: toastTheme.iconSize ?? 32,
+              size: toastTheme.resolveIconSize(context.tTheme.size10),
               color: toastTheme.iconColor ?? theme.textColorAnti,
             ),
             const SizedBox(height: 8),
-            TText(
+            TTextStyled(
               text ?? '',
               font: toastTheme.textStyle != null ? null : theme.fontBodyMedium,
               style: toastTheme.textStyle,
@@ -738,6 +816,14 @@ class _TToastLoading extends StatelessWidget {
                 const TToastThemeData())
             .merge(config);
     final maxWidth = math.max(102.0, toastTheme.maxWidth ?? 185.0);
+    final defaultLabel = TTextStyled(
+      text ?? context.resource.loadingWithPoint,
+      font: toastTheme.textStyle != null ? null : theme.fontBodyMedium,
+      style: toastTheme.textStyle,
+      maxLines: 1,
+      overflow: TextOverflow.ellipsis,
+      textColor: toastTheme.textStyle?.color ?? theme.textColorAnti,
+    );
     return ConstrainedBox(
       constraints: BoxConstraints(
         minWidth: 102,
@@ -745,10 +831,11 @@ class _TToastLoading extends StatelessWidget {
         maxWidth: maxWidth,
       ),
       child: Container(
-        padding:
-            toastTheme.padding ?? const EdgeInsets.symmetric(horizontal: 24),
+        padding: toastTheme.resolvePadding(
+          EdgeInsets.symmetric(horizontal: context.tTheme.size8),
+        ),
         decoration: BoxDecoration(
-          color: toastTheme.backgroundColor ?? theme.fontGyColor2,
+          color: toastTheme.backgroundColor ?? theme.fontGray2,
           borderRadius: BorderRadius.circular(
             toastTheme.borderRadius ?? theme.radiusDefault,
           ),
@@ -759,21 +846,16 @@ class _TToastLoading extends StatelessWidget {
           children: [
             TCircleIndicator(
               color: toastTheme.iconColor ?? theme.textColorAnti,
-              size: toastTheme.iconSize ?? 32,
+              size: toastTheme.resolveIconSize(context.tTheme.size10),
               lineWidth: 4,
             ),
             const SizedBox(height: 8),
-            customWidget ??
-                TText(
-                  text ?? context.resource.loadingWithPoint,
-                  font: toastTheme.textStyle != null
-                      ? null
-                      : theme.fontBodyMedium,
-                  style: toastTheme.textStyle,
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
-                  textColor: toastTheme.textStyle?.color ?? theme.textColorAnti,
-                ),
+            customWidget == null
+                ? defaultLabel
+                : TTextStyleScope(
+                    style: defaultLabel.getTextStyle(context),
+                    child: customWidget!,
+                  ),
           ],
         ),
       ),
@@ -796,16 +878,18 @@ class _TToastLoadingWithoutText extends StatelessWidget {
     return ConstrainedBox(
       constraints: const BoxConstraints(minWidth: 80, minHeight: 80),
       child: Container(
-        padding: toastTheme.padding ?? const EdgeInsets.all(24),
+        padding: toastTheme.resolvePadding(
+          EdgeInsets.all(context.tTheme.size8),
+        ),
         decoration: BoxDecoration(
-          color: toastTheme.backgroundColor ?? theme.fontGyColor2,
+          color: toastTheme.backgroundColor ?? theme.fontGray2,
           borderRadius: BorderRadius.circular(
             toastTheme.borderRadius ?? theme.radiusDefault,
           ),
         ),
         child: TCircleIndicator(
           color: toastTheme.iconColor ?? theme.textColorAnti,
-          size: toastTheme.iconSize ?? 32,
+          size: toastTheme.resolveIconSize(context.tTheme.size10),
           lineWidth: 4,
         ),
       ),
@@ -835,29 +919,34 @@ class _TTextToast extends StatelessWidget {
         (Theme.of(context).extension<TToastThemeData>() ??
                 const TToastThemeData())
             .merge(config);
+    final defaultLabel = TTextStyled(
+      text ?? '',
+      font: toastTheme.textStyle != null ? null : theme.fontBodyMedium,
+      style: toastTheme.textStyle,
+      maxLines: maxLines ?? 3,
+      overflow: TextOverflow.ellipsis,
+      textColor: toastTheme.textStyle?.color ?? theme.textColorAnti,
+    );
     return ConstrainedBox(
       constraints:
-          constraints ??
-          BoxConstraints(maxWidth: toastTheme.maxWidth ?? 185),
+          constraints ?? BoxConstraints(maxWidth: toastTheme.maxWidth ?? 185),
       child: Container(
-        padding:
-            toastTheme.padding ?? const EdgeInsets.fromLTRB(22, 14, 22, 14),
+        padding: toastTheme.resolvePadding(
+          EdgeInsets.symmetric(horizontal: theme.size8, vertical: theme.size6),
+        ),
         decoration: BoxDecoration(
-          color: toastTheme.backgroundColor ?? theme.fontGyColor2,
+          color: toastTheme.backgroundColor ?? theme.fontGray2,
           borderRadius: BorderRadius.circular(
             toastTheme.borderRadius ?? theme.radiusDefault,
           ),
         ),
-        child:
-            customWidget ??
-            TText(
-              text ?? '',
-              font: toastTheme.textStyle != null ? null : theme.fontBodyMedium,
-              style: toastTheme.textStyle,
-              maxLines: maxLines ?? 3,
-              overflow: TextOverflow.ellipsis,
-              textColor: toastTheme.textStyle?.color ?? theme.textColorAnti,
-            ),
+        child: customWidget == null
+            ? defaultLabel
+            : TTextStyleScope(
+                // Share typography, while custom content keeps its own layout.
+                style: defaultLabel.getTextStyle(context),
+                child: customWidget!,
+              ),
       ),
     );
   }

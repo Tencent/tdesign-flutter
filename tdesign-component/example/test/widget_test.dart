@@ -1,12 +1,11 @@
-import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:provider/provider.dart';
 import 'package:tdesign_flutter/tdesign_flutter.dart';
 import 'package:tdesign_flutter_example/base/example_base.dart';
 import 'package:tdesign_flutter_example/base/example_widget.dart';
 import 'package:tdesign_flutter_example/main.dart';
-import 'package:tdesign_flutter_example/page/t_calendar_page.dart';
-import 'package:tdesign_flutter_example/page/t_link_page.dart';
+import 'package:tdesign_flutter_example/page/calendar/calendar_page.dart';
+import 'package:tdesign_flutter_example/page/link/link_page.dart';
 import 'package:tdesign_flutter_example/provider/theme_mode_provider.dart';
 
 void main() {
@@ -18,42 +17,33 @@ void main() {
     expect(find.text('Button 按钮'), findsOneWidget);
   });
 
-  testWidgets('示例页面标题层级与小程序 Demo 壳一致', (tester) async {
+  testWidgets('示例页面标题层级保持一致', (tester) async {
     final token = TThemeData.defaultData();
-    await tester.pumpWidget(ChangeNotifierProvider(
-      create: (_) => ThemeModeProvider(),
-      child: MaterialApp(
-        theme: TThemeBuilder.light(token),
-        home: ExamplePage(
-          title: '页面标题',
-          desc: '页面说明',
-          exampleCodeGroup: 'test',
-          children: const [
-            ExampleModule(
-              title: '模块标题',
-              children: [
-                ExampleItem(
-                  ignoreCode: true,
-                  builder: _emptyExample,
-                ),
-              ],
-            ),
-          ],
+    await tester.pumpWidget(
+      ChangeNotifierProvider(
+        create: (_) => ThemeModeProvider(),
+        child: MaterialApp(
+          theme: TThemeBuilder.light(token),
+          home: ExamplePage(
+            title: '页面标题',
+            desc: '页面说明',
+            exampleCodeGroup: 'test',
+            children: const [
+              ExampleModule(
+                title: '模块标题',
+                children: [
+                  ExampleItem(ignoreCode: true, builder: _emptyExample),
+                ],
+              ),
+            ],
+          ),
         ),
       ),
-    ));
+    );
     await tester.pump();
 
-    final pageTitle = tester.widget<TText>(
-      find.byWidgetPredicate(
-        (widget) => widget is TText && widget.data == '页面标题',
-      ),
-    );
-    final moduleTitle = tester.widget<TText>(
-      find.byWidgetPredicate(
-        (widget) => widget is TText && widget.data == '01 模块标题',
-      ),
-    );
+    final pageTitle = tester.widget<Text>(find.text('页面标题').last);
+    final moduleTitle = tester.widget<Text>(find.text('01 模块标题'));
     expect(pageTitle.style?.fontSize, token.fontHeadlineSmall?.size);
     expect(pageTitle.style?.height, token.fontHeadlineSmall?.height);
     expect(moduleTitle.style?.fontSize, token.fontTitleLarge?.size);
@@ -62,10 +52,10 @@ void main() {
   });
 
   testWidgets(
-    'compact module titles follow TD tokens and explicit text theme',
+    'compact module titles follow TD tokens despite Material text theme',
     (tester) async {
-      final token = TThemeData.defaultData().copyWithTThemeData(
-        'compact-title',
+      final token = TThemeData.defaultData().copyWith(
+        name: 'compact-title',
         fontMap: {
           'fontTitleLarge': Font(
             size: 20,
@@ -110,14 +100,110 @@ void main() {
         );
         await tester.pumpAndSettle();
         final style = tester.widget<Text>(find.text('01 Module')).style!;
-        expect(style.fontSize, explicit ? 22 : 20);
-        expect(style.height, explicit ? 1.5 : 1.4);
-        expect(style.fontWeight, explicit ? FontWeight.w400 : FontWeight.w500);
+        expect(style.fontSize, 20);
+        expect(style.height, 1.4);
+        expect(style.fontWeight, FontWeight.w500);
       }
     },
   );
 
-  testWidgets('单元测试模块仅在 debug 模式按开关展示', (tester) async {
+  testWidgets('compact Demo uses the mobile page header and light canvas', (
+    tester,
+  ) async {
+    final token = TThemeData.defaultData();
+    await tester.pumpWidget(
+      ChangeNotifierProvider(
+        create: (_) => ThemeModeProvider(),
+        child: MaterialApp(
+          theme: TThemeBuilder.light(token),
+          home: ExamplePage(
+            title: '页面标题',
+            desc: '页面说明',
+            exampleCodeGroup: 'test',
+            compactDemo: true,
+            showTestModule: false,
+            children: const [
+              ExampleModule(
+                title: '模块标题',
+                children: [
+                  ExampleItem(
+                    key: ValueKey('compact-example-content'),
+                    methodName: 'EmptyExample',
+                    builder: _emptyExample,
+                  ),
+                  ExampleItem(
+                    key: ValueKey('compact-surface-content'),
+                    ignoreCode: true,
+                    compactStyle: CompactExampleStyle.surface(),
+                    builder: _emptyExample,
+                  ),
+                ],
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+    await tester.pump();
+
+    final pageTitleFinder = find.text('页面标题').last;
+    final pageDescriptionFinder = find.text('页面说明');
+    final pageTitle = tester.widget<Text>(pageTitleFinder);
+    final moduleTitleFinder = find.text('01 模块标题');
+    expect(pageTitle.style?.fontSize, token.fontHeadlineSmall?.size);
+    expect(pageTitle.style?.height, token.fontHeadlineSmall?.height);
+    expect(pageTitle.style?.fontWeight, FontWeight.w600);
+    expect(
+      tester.getTopLeft(pageDescriptionFinder).dy -
+          tester.getBottomLeft(pageTitleFinder).dy,
+      8,
+    );
+    expect(
+      tester.getTopLeft(pageTitleFinder).dy -
+          tester.getBottomLeft(find.byType(TNavBar)).dy,
+      24,
+    );
+    expect(
+      tester.getTopLeft(moduleTitleFinder).dy -
+          tester.getBottomLeft(pageDescriptionFinder).dy,
+      28,
+    );
+    expect(
+      tester.widget<Scaffold>(find.byType(Scaffold)).backgroundColor,
+      const Color(0xFFF6F6F6),
+    );
+    final compactSurface = find.byWidgetPredicate(
+      (widget) =>
+          widget is ColoredBox && widget.color == token.bgColorContainer,
+    );
+    expect(compactSurface, findsOneWidget);
+    expect(
+      find.ancestor(
+        of: find.byKey(const ValueKey('compact-example-content')),
+        matching: compactSurface,
+      ),
+      findsNothing,
+    );
+    expect(
+      find.ancestor(
+        of: find.byKey(const ValueKey('compact-surface-content')),
+        matching: compactSurface,
+      ),
+      findsOneWidget,
+    );
+    expect(
+      tester.getSize(find.byKey(const ValueKey('compact-example-content'))),
+      const Size(800, 1),
+    );
+    expect(
+      find.byWidgetPredicate(
+        (widget) => widget is SizedBox && widget.height == 32,
+      ),
+      findsOneWidget,
+    );
+  });
+
+  testWidgets('单元测试模块在 debug 模式默认展示并支持显式关闭', (tester) async {
     Widget buildPage({required bool showTestModule}) {
       return ChangeNotifierProvider(
         create: (_) => ThemeModeProvider(),
@@ -140,28 +226,71 @@ void main() {
       );
     }
 
+    await tester.pumpWidget(
+      ChangeNotifierProvider(
+        create: (_) => ThemeModeProvider(),
+        child: MaterialApp(
+          theme: TThemeBuilder.light(TThemeData.defaultData()),
+          home: ExamplePage(
+            title: 'Default test module',
+            exampleCodeGroup: 'test',
+            children: const [
+              ExampleModule(
+                title: 'Demo',
+                children: [
+                  ExampleItem(ignoreCode: true, builder: _emptyExample),
+                ],
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+    await tester.pump();
+    expect(
+      find.text('02 单元测试'),
+      const bool.fromEnvironment(
+            'TDESIGN_DEMO_TEST_MODULES',
+            defaultValue: true,
+          )
+          ? findsOneWidget
+          : findsNothing,
+    );
+
     await tester.pumpWidget(buildPage(showTestModule: true));
     await tester.pump();
-    expect(find.text('02 单元测试'), findsOneWidget);
+    expect(
+      find.text('02 单元测试'),
+      const bool.fromEnvironment(
+            'TDESIGN_DEMO_TEST_MODULES',
+            defaultValue: true,
+          )
+          ? findsOneWidget
+          : findsNothing,
+    );
 
     await tester.pumpWidget(buildPage(showTestModule: false));
     await tester.pump();
     expect(find.text('02 单元测试'), findsNothing);
-  });
+  }, tags: 'internal-demo');
 
   testWidgets('Link Demo 使用页面背景与白色示例行分层', (tester) async {
     final token = TThemeData.defaultData();
-    await tester.pumpWidget(ChangeNotifierProvider(
-      create: (_) => ThemeModeProvider(),
-      child: MaterialApp(
-        theme: TThemeBuilder.light(token),
-        home: const TLinkViewPage(),
+    await tester.pumpWidget(
+      ChangeNotifierProvider(
+        create: (_) => ThemeModeProvider(),
+        child: MaterialApp(
+          theme: TThemeBuilder.light(token),
+          home: const TLinkViewPage(),
+        ),
       ),
-    ));
+    );
     await tester.pump();
 
-    expect(tester.widget<Scaffold>(find.byType(Scaffold)).backgroundColor,
-        token.bgColorPage);
+    expect(
+      tester.widget<Scaffold>(find.byType(Scaffold)).backgroundColor,
+      token.bgColorPage,
+    );
     final exampleRows = tester.widgetList<Container>(
       find.byWidgetPredicate(
         (widget) =>
@@ -174,28 +303,25 @@ void main() {
   });
 
   testWidgets('Calendar 页面提供底部 Popup 组合入口', (tester) async {
-    setTResourceBuilder(
-      (_) => null,
-      needAlwaysBuild: false,
-    );
-    addTearDown(
-      () => setTResourceBuilder((_) => null, needAlwaysBuild: false),
-    );
+    setTResourceBuilder((_) => null, needAlwaysBuild: false);
+    addTearDown(() => setTResourceBuilder((_) => null, needAlwaysBuild: false));
     final model = ExamplePageModel(
       text: 'Calendar 日历',
       name: 'calendar',
       pageBuilder: (_, __) => const TCalendarPage(),
     );
-    await tester.pumpWidget(ChangeNotifierProvider(
-      create: (_) => ThemeModeProvider(),
-      child: MaterialApp(
-        theme: TThemeBuilder.light(TThemeData.defaultData()),
-        home: ExamplePageInheritedTheme(
-          model: model,
-          child: const TCalendarPage(),
+    await tester.pumpWidget(
+      ChangeNotifierProvider(
+        create: (_) => ThemeModeProvider(),
+        child: MaterialApp(
+          theme: TThemeBuilder.light(TThemeData.defaultData()),
+          home: ExamplePageInheritedTheme(
+            model: model,
+            child: const TCalendarPage(),
+          ),
         ),
       ),
-    ));
+    );
     await tester.pump();
 
     final pageScrollable = find.byWidgetPredicate(
@@ -205,10 +331,12 @@ void main() {
     expect(pageScrollable, findsOneWidget);
     final pageScrollState = tester.state<ScrollableState>(pageScrollable);
     const triggerKey = ValueKey('calendar-single-trigger');
-    for (var offset = 0.0;
-        offset <= pageScrollState.position.maxScrollExtent &&
-            find.byKey(triggerKey).evaluate().isEmpty;
-        offset += 300) {
+    for (
+      var offset = 0.0;
+      offset <= pageScrollState.position.maxScrollExtent &&
+          find.byKey(triggerKey).evaluate().isEmpty;
+      offset += 300
+    ) {
       pageScrollState.position.jumpTo(offset);
       await tester.pump();
     }
@@ -233,43 +361,45 @@ void main() {
     addTearDown(tester.view.resetDevicePixelRatio);
     addTearDown(tester.view.resetViewInsets);
 
-    await tester.pumpWidget(ChangeNotifierProvider(
-      create: (_) => ThemeModeProvider(),
-      child: MaterialApp(
-        theme: TThemeBuilder.light(TThemeData.defaultData()),
-        home: ExamplePage(
-          title: 'Keyboard test',
-          exampleCodeGroup: 'test',
-          scrollController: controller,
-          children: [
-            ExampleModule(
-              title: 'Input',
-              children: [
-                ExampleItem(
-                  ignoreCode: true,
-                  center: false,
-                  builder: (_) {
-                    inputBuildCount++;
-                    return const TInput(hintText: 'Input');
-                  },
-                ),
-              ],
-            ),
-            ExampleModule(
-              title: 'Content',
-              children: List.generate(
-                12,
-                (index) => ExampleItem(
-                  ignoreCode: true,
-                  center: false,
-                  builder: (_) => const SizedBox(height: 120),
+    await tester.pumpWidget(
+      ChangeNotifierProvider(
+        create: (_) => ThemeModeProvider(),
+        child: MaterialApp(
+          theme: TThemeBuilder.light(TThemeData.defaultData()),
+          home: ExamplePage(
+            title: 'Keyboard test',
+            exampleCodeGroup: 'test',
+            scrollController: controller,
+            children: [
+              ExampleModule(
+                title: 'Input',
+                children: [
+                  ExampleItem(
+                    ignoreCode: true,
+                    center: false,
+                    builder: (_) {
+                      inputBuildCount++;
+                      return const TInput(hintText: 'Input');
+                    },
+                  ),
+                ],
+              ),
+              ExampleModule(
+                title: 'Content',
+                children: List.generate(
+                  12,
+                  (index) => ExampleItem(
+                    ignoreCode: true,
+                    center: false,
+                    builder: (_) => const SizedBox(height: 120),
+                  ),
                 ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
-    ));
+    );
     await tester.pumpAndSettle();
     final buildCountBeforeKeyboard = inputBuildCount;
 

@@ -1,3 +1,0 @@
-Widget _buildRawText(BuildContext context) {
-    return const TText(exampleText).getRawText(context: context);
-  }

@@ -7,6 +7,8 @@ import '../../theme/basic.dart' show Font;
 /// 索引组件的子树级视觉主题。
 ///
 /// 仅管理尺寸、颜色和字体。吸顶、滚动方向与胶囊模式属于组件实例行为。
+///
+/// {@category ComponentTheme}
 class TIndexesThemeData extends ThemeExtension<TIndexesThemeData> {
   const TIndexesThemeData({
     this.indexListMaxHeight,
@@ -49,13 +51,13 @@ class TIndexesThemeData extends ThemeExtension<TIndexesThemeData> {
   /// 侧栏距容器右侧的距离。
   final double? sidebarRight;
 
-  /// 单个索引的尺寸。
+  /// 单个索引的尺寸；显式值保持固定，默认至少 20 并随内置文字自然行高增长。
   final double? indexItemSize;
 
   /// 相邻索引之间的距离。
   final double? indexItemSpacing;
 
-  /// 按压提示的最小尺寸。
+  /// 按压提示的最小尺寸；显式值保持固定，默认可随内置文字自然行高增长。
   final double? tipSize;
 
   /// 按压提示的最大宽度。
@@ -118,6 +120,10 @@ class TIndexesThemeData extends ThemeExtension<TIndexesThemeData> {
   /// 胶囊锚点的水平外边距。
   final double? capsuleMargin;
 
+  /// 复制主题配置。
+  ///
+  /// ## 返回值
+  /// 返回主题副本；非空参数替换对应配置，null 参数保留当前配置。
   @override
   TIndexesThemeData copyWith({
     double? indexListMaxHeight,
@@ -180,26 +186,49 @@ class TIndexesThemeData extends ThemeExtension<TIndexesThemeData> {
     );
   }
 
+  /// 生成主题过渡配置。
+  ///
+  /// ## 返回值
+  /// 按 t 在当前主题和目标主题之间生成过渡主题。
+  /// other 为空或类型不匹配时返回当前主题；字段各自采用其类型的插值规则。
   @override
-  TIndexesThemeData lerp(ThemeExtension<TIndexesThemeData>? other, double t) {
+  TIndexesThemeData lerp(
+    /// 目标主题；为空或类型不匹配时保留当前主题。
+    ThemeExtension<TIndexesThemeData>? other,
+
+    /// 插值进度；通常 0 表示当前主题，1 表示目标主题。
+    double t,
+  ) {
     if (other is! TIndexesThemeData) {
       return this;
     }
     return TIndexesThemeData(
-      indexListMaxHeight: _lerpNullableDouble(
+      indexListMaxHeight: _lerpDoubleWithDefault(
         indexListMaxHeight,
         other.indexListMaxHeight,
         t,
+        0.8,
       ),
       sidebarRight: _lerpNullableDouble(sidebarRight, other.sidebarRight, t),
-      indexItemSize: _lerpNullableDouble(indexItemSize, other.indexItemSize, t),
-      indexItemSpacing: _lerpNullableDouble(
+      indexItemSize: _lerpDoubleWithDefault(
+        indexItemSize,
+        other.indexItemSize,
+        t,
+        20,
+      ),
+      indexItemSpacing: _lerpDoubleWithDefault(
         indexItemSpacing,
         other.indexItemSpacing,
         t,
+        2,
       ),
       tipSize: _lerpNullableDouble(tipSize, other.tipSize, t),
-      tipMaxWidth: _lerpNullableDouble(tipMaxWidth, other.tipMaxWidth, t),
+      tipMaxWidth: _lerpDoubleWithDefault(
+        tipMaxWidth,
+        other.tipMaxWidth,
+        t,
+        99,
+      ),
       tipGap: _lerpNullableDouble(tipGap, other.tipGap, t),
       indexColor: _lerpNullableColor(indexColor, other.indexColor, t),
       activeIndexColor: _lerpNullableColor(
@@ -257,6 +286,18 @@ class TIndexesThemeData extends ThemeExtension<TIndexesThemeData> {
       capsuleMargin: _lerpNullableDouble(capsuleMargin, other.capsuleMargin, t),
     );
   }
+}
+
+double? _lerpDoubleWithDefault(
+  double? begin,
+  double? end,
+  double t,
+  double defaultValue,
+) {
+  if (begin == null && end == null) {
+    return null;
+  }
+  return lerpDouble(begin ?? defaultValue, end ?? defaultValue, t);
 }
 
 double? _lerpNullableDouble(double? begin, double? end, double t) {

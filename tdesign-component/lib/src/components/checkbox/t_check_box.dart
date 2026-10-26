@@ -5,11 +5,13 @@ import 'package:tdesign_flutter_icons/tdesign_flutter_icons.dart' show TIcons;
 
 import '../../theme/t_colors.dart';
 import '../../theme/t_fonts.dart';
+import '../../theme/t_internal_material.dart';
 import '../../theme/t_radius.dart';
 import '../../theme/t_spacers.dart';
 import '../../theme/t_theme.dart';
 import '../divider/t_divider.dart';
 import '../divider/t_divider_theme_data.dart';
+import '../text/t_text_styled.dart';
 import 't_checkbox_theme_data.dart';
 import 't_selection_card.dart';
 
@@ -35,45 +37,28 @@ enum TCheckboxSize {
 }
 
 /// 自定义复选框指示器构建器。
+/// [context] 复选框指示器的构建上下文。
+/// [value] 当前选中状态；null 表示半选。
+/// [disabled] 当前复选框是否禁用。
+///
+/// ## 返回值
+/// 替换内置指示器的组件。
 typedef TCheckboxIconBuilder =
     Widget Function(BuildContext context, bool? value, bool disabled);
 
-/// 严格受控的复选框；[onChanged] 为 null 时禁用。
 class TCheckbox extends StatelessWidget {
   const TCheckbox({
     super.key,
-
-    /// 受控选中态；null 表示半选。
     required this.value,
-
-    /// 选中态变更回调；为 null 时禁用。
     this.onChanged,
-
-    /// 主标题文案。
     this.title,
-
-    /// 副标题文案。
     this.subTitle,
-
-    /// 复选框尺寸。
     this.size = TCheckboxSize.medium,
-
-    /// 是否使用卡片模式。
     this.cardMode = false,
-
-    /// 普通模式是否显示底部分割线，默认显示；卡片模式不显示。
     this.showDivider = true,
-
-    /// 控件与文案排列方向。
     this.contentDirection = TContentDirection.right,
-
-    /// 主标题最大行数，默认 3 行。
     this.titleMaxLines = 3,
-
-    /// 副标题最大行数，默认 5 行。
     this.subTitleMaxLines = 5,
-
-    /// 自定义复选框指示器。
     this.customIconBuilder,
   });
 
@@ -122,32 +107,60 @@ class TCheckbox extends StatelessWidget {
     final content = _buildContent(context, theme);
     final hasContent = content != null;
 
-    final constraints = hasContent
-        ? BoxConstraints(minHeight: _contentMinHeight(context))
-        : _resolveTapTargetConstraints(context);
-
     final tileContent = LayoutBuilder(
       builder: (context, layoutConstraints) {
+        final preferredConstraints = hasContent
+            ? BoxConstraints(minHeight: _contentMinHeight(context))
+            : _resolveTapTargetConstraints(context);
+        // 表格等紧凑容器可限制外盒，但不能让默认独立 Checkbox
+        // 再从外部 Material CheckboxTheme 读取触控尺寸。
+        final constraints = BoxConstraints(
+          minWidth: math.min(
+            preferredConstraints.minWidth,
+            layoutConstraints.maxWidth,
+          ),
+          minHeight: math.min(
+            preferredConstraints.minHeight,
+            layoutConstraints.maxHeight,
+          ),
+        );
         final hasBoundedWidth = layoutConstraints.hasBoundedWidth;
+        final padding = hasContent
+            ? (theme?.customSpace ??
+                  EdgeInsets.symmetric(
+                    horizontal: theme?.insetSpacing ?? context.tTheme.spacer2,
+                    vertical: cardMode
+                        ? context.tTheme.spacer2 -
+                              selectionCardBorderWidth(context)
+                        : context.tTheme.spacer,
+                  ))
+            : EdgeInsets.zero;
+        final spacing = cardMode
+            ? 0.0
+            : theme?.spacing ?? context.tTheme.spacer;
+        final availableContentWidth = hasBoundedWidth && indicator != null
+            ? math
+                  .max(
+                    0,
+                    layoutConstraints.maxWidth -
+                        padding.resolve(Directionality.of(context)).horizontal -
+                        _indicatorSize(context) -
+                        spacing,
+                  )
+                  .toDouble()
+            : double.infinity;
+        final alignContentToTop =
+            hasContent &&
+            _contentUsesMultipleLines(context, availableContentWidth);
         final children = <Widget>[
           if (indicator != null) indicator,
-          if (indicator != null && content != null)
-            SizedBox(
-              width: cardMode ? 0 : theme?.spacing ?? context.tTheme.spacer8,
-            ),
+          if (indicator != null && content != null) SizedBox(width: spacing),
           if (content != null)
             if (hasBoundedWidth) Expanded(child: content) else content,
         ];
         return Container(
           constraints: cardMode ? null : constraints,
-          padding: hasContent
-              ? (theme?.customSpace ??
-                    EdgeInsets.symmetric(
-                      horizontal:
-                          theme?.insetSpacing ?? context.tTheme.spacer16,
-                      vertical: context.tTheme.spacer8,
-                    ))
-              : EdgeInsets.zero,
+          padding: padding,
           decoration: cardMode
               ? null
               : BoxDecoration(
@@ -162,7 +175,9 @@ class TCheckbox extends StatelessWidget {
             mainAxisAlignment: hasContent
                 ? MainAxisAlignment.start
                 : MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.center,
+            crossAxisAlignment: alignContentToTop
+                ? CrossAxisAlignment.start
+                : CrossAxisAlignment.center,
             children: contentDirection == TContentDirection.right
                 ? children
                 : children.reversed.toList(),
@@ -174,10 +189,9 @@ class TCheckbox extends StatelessWidget {
         ? TSelectionCard(
             selected: selected,
             disabled: _disabled,
-            selectedColor:
-                theme?.selectColor ?? context.tTheme.brandNormalColor,
+            selectedColor: theme?.selectColor ?? context.tTheme.brandColor,
             disabledColor:
-                theme?.disableColor ?? context.tTheme.brandDisabledColor,
+                theme?.disableColor ?? context.tTheme.brandColorDisabled,
             backgroundColor:
                 theme?.backgroundColor ?? context.tTheme.bgColorContainer,
             borderRadius: context.tTheme.radiusDefault,
@@ -186,70 +200,74 @@ class TCheckbox extends StatelessWidget {
           )
         : tileContent;
 
+    final interactiveTile = GestureDetector(
+      behavior: HitTestBehavior.opaque,
+      onTap: _disabled ? null : () => onChanged!(value == true ? false : true),
+      child: tile,
+    );
     return Semantics(
       enabled: !_disabled,
       checked: value,
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          GestureDetector(
-            behavior: HitTestBehavior.opaque,
-            onTap: _disabled
-                ? null
-                : () => onChanged!(value == true ? false : true),
-            child: tile,
-          ),
-          if (showDivider && !cardMode)
-            Padding(
-              padding: EdgeInsets.only(left: context.tTheme.spacer16),
-              child: Theme(
-                data: Theme.of(context).mergeExtension(
-                  const TDividerThemeData(margin: EdgeInsets.zero),
-                ),
-                child: const TDivider(),
-              ),
+      child: !showDivider && !cardMode
+          ? interactiveTile
+          : Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                interactiveTile,
+                if (showDivider && !cardMode)
+                  ColoredBox(
+                    color: hasContent
+                        ? context.tTheme.bgColorContainer
+                        : Colors.transparent,
+                    child: Padding(
+                      padding: EdgeInsetsDirectional.only(
+                        start:
+                            contentDirection == TContentDirection.right &&
+                                hasContent
+                            ? (theme?.insetSpacing ?? context.tTheme.spacer2) +
+                                  _indicatorSize(context) +
+                                  (theme?.spacing ?? context.tTheme.spacer)
+                            : theme?.insetSpacing ?? context.tTheme.spacer2,
+                      ),
+                      child: Theme(
+                        data: Theme.of(context).mergeExtension(
+                          const TDividerThemeData(margin: EdgeInsets.zero),
+                        ),
+                        child: const TDivider(),
+                      ),
+                    ),
+                  ),
+              ],
             ),
-        ],
-      ),
     );
   }
 
   double _contentMinHeight(BuildContext context) => switch (size) {
-    TCheckboxSize.small => context.tTheme.spacer48,
-    TCheckboxSize.medium => context.tTheme.spacer48 + context.tTheme.spacer8,
-    TCheckboxSize.large => context.tTheme.spacer64,
+    TCheckboxSize.small => context.tTheme.spacer5,
+    TCheckboxSize.medium => context.tTheme.spacer5 + context.tTheme.spacer,
+    TCheckboxSize.large => 64.0,
   };
 
   double _indicatorSize(BuildContext context) => switch (size) {
-    TCheckboxSize.small => context.tTheme.spacer16 + context.tTheme.spacer4,
-    TCheckboxSize.medium => context.tTheme.spacer24,
-    TCheckboxSize.large => context.tTheme.spacer24 + context.tTheme.spacer4,
+    TCheckboxSize.small => context.tTheme.spacer2 + 4.0,
+    TCheckboxSize.medium => context.tTheme.spacer3,
+    TCheckboxSize.large => context.tTheme.spacer3 + 4.0,
   };
 
   double _cardMinHeight(BuildContext context) {
     final titleHeight = _textLineHeight(_resolveTitleStyle(context));
     final contentHeight = subTitle?.isNotEmpty == true
-        ? titleHeight +
-              context.tTheme.spacer4 +
-              _textLineHeight(_resolveSubTitleStyle(context))
+        ? titleHeight + 4.0 + _textLineHeight(_resolveSubTitleStyle(context))
         : titleHeight;
-    return contentHeight + context.tTheme.spacer16 * 2;
+    return contentHeight + context.tTheme.spacer2 * 2;
   }
 
   double _textLineHeight(TextStyle style) =>
       style.fontSize! * (style.height ?? 1);
 
   BoxConstraints _resolveTapTargetConstraints(BuildContext context) {
-    final materialTheme = CheckboxTheme.of(context);
-    final appTheme = Theme.of(context);
-    final visualDensity =
-        materialTheme.visualDensity ??
-        appTheme.tExplicitVisualDensity ??
-        VisualDensity.standard;
-    final tapTargetSize =
-        materialTheme.materialTapTargetSize ??
-        appTheme.tExplicitMaterialTapTargetSize ??
-        MaterialTapTargetSize.padded;
+    const visualDensity = VisualDensity.standard;
+    const tapTargetSize = MaterialTapTargetSize.padded;
     final indicatorSize = _indicatorSize(context);
     final baseSize = tapTargetSize == MaterialTapTargetSize.padded
         ? kMinInteractiveDimension
@@ -262,15 +280,9 @@ class TCheckbox extends StatelessWidget {
   }
 
   Widget _buildIndicator(BuildContext context, TCheckboxThemeData? theme) {
-    final materialTheme = CheckboxTheme.of(context);
-    final colorScheme = Theme.of(context).tExplicitColorScheme;
     final variant = theme?.variant ?? TCheckboxVariant.circle;
     final selected = value == true;
     final indeterminate = value == null;
-    final states = <WidgetState>{
-      if (selected || indeterminate) WidgetState.selected,
-      if (_disabled) WidgetState.disabled,
-    };
     final icon = switch (variant) {
       TCheckboxVariant.circle =>
         indeterminate
@@ -278,60 +290,140 @@ class TCheckbox extends StatelessWidget {
             : selected
             ? TIcons.check_circle_filled
             : TIcons.circle,
-      TCheckboxVariant.square =>
-        indeterminate
-            ? TIcons.minus_rectangle_filled
-            : selected
-            ? TIcons.check_rectangle_filled
-            : TIcons.rectangle,
+      TCheckboxVariant.square => null,
       TCheckboxVariant.check =>
         selected || indeterminate
             ? (indeterminate ? TIcons.minus : TIcons.check)
             : null,
     };
     final color = _disabled
-        ? (theme?.disableColor ??
-              materialTheme.fillColor?.resolve(states) ??
-              colorScheme?.onSurface.withValues(alpha: 0.38) ??
-              context.tTheme.brandDisabledColor)
+        ? (theme?.disableColor ?? context.tTheme.brandColorDisabled)
         : selected || indeterminate
-        ? (theme?.selectColor ??
-              materialTheme.fillColor?.resolve(states) ??
-              colorScheme?.primary ??
-              context.tTheme.brandNormalColor)
-        : (materialTheme.side?.color ??
-              colorScheme?.outline ??
-              context.tTheme.componentBorderColor);
+        ? (theme?.selectColor ?? context.tTheme.brandColor)
+        : context.tTheme.componentBorder;
     final indicatorSize = _indicatorSize(context);
+    if (variant == TCheckboxVariant.square) {
+      return _buildSquareIndicator(
+        context,
+        indicatorSize: indicatorSize,
+        selected: selected,
+        indeterminate: indeterminate,
+        color: color,
+        theme: theme,
+      );
+    }
+    if (_disabled &&
+        !selected &&
+        !indeterminate &&
+        variant != TCheckboxVariant.check) {
+      final borderColor = theme?.disableColor ?? context.tTheme.componentBorder;
+      return Container(
+        width: indicatorSize,
+        height: indicatorSize,
+        decoration: BoxDecoration(
+          color: context.tTheme.bgColorComponentDisabled,
+          border: Border.all(color: borderColor),
+          shape: variant == TCheckboxVariant.circle
+              ? BoxShape.circle
+              : BoxShape.rectangle,
+          borderRadius: variant == TCheckboxVariant.square
+              ? BorderRadius.circular(context.tTheme.radiusSmall)
+              : null,
+        ),
+      );
+    }
     return SizedBox(
       width: indicatorSize,
       height: indicatorSize,
       child: icon == null
           ? null
-          : Icon(icon, size: indicatorSize, color: color),
+          : TInternalIcon(icon, size: indicatorSize, color: color),
     );
   }
 
+  Widget _buildSquareIndicator(
+    BuildContext context, {
+    required double indicatorSize,
+    required bool selected,
+    required bool indeterminate,
+    required Color color,
+    required TCheckboxThemeData? theme,
+  }) {
+    const radius = BorderRadius.all(Radius.circular(1.5));
+    final active = selected || indeterminate;
+    final fillColor = _disabled && !active
+        ? context.tTheme.bgColorComponentDisabled
+        : active
+        ? color
+        : Colors.transparent;
+    final borderColor = _disabled && !active
+        ? theme?.disableColor ?? context.tTheme.componentBorder
+        : active
+        ? color
+        : context.tTheme.componentBorder;
+    final mark = indeterminate
+        ? TIcons.minus
+        : selected
+        ? TIcons.check
+        : null;
+    return Container(
+      key: const ValueKey('checkbox-square-indicator'),
+      width: indicatorSize,
+      height: indicatorSize,
+      decoration: BoxDecoration(
+        color: fillColor,
+        border: Border.all(color: borderColor),
+        borderRadius: radius,
+      ),
+      alignment: Alignment.center,
+      child: mark == null
+          ? null
+          : TInternalIcon(
+              mark,
+              size: indicatorSize * 0.75,
+              color: context.tTheme.textColorAnti,
+            ),
+    );
+  }
+
+  bool _contentUsesMultipleLines(BuildContext context, double maxWidth) {
+    if (title != null && subTitle != null) {
+      return true;
+    }
+    final text = title ?? subTitle;
+    if (text == null || text.isEmpty) {
+      return false;
+    }
+    final style = title != null
+        ? _resolveTitleStyle(context)
+        : _resolveSubTitleStyle(context);
+    final painter = TextPainter(
+      text: TextSpan(text: text, style: style),
+      textDirection: Directionality.of(context),
+      textScaler: MediaQuery.textScalerOf(context),
+      maxLines: title != null ? titleMaxLines : subTitleMaxLines,
+    )..layout(maxWidth: maxWidth);
+    final multipleLines = painter.computeLineMetrics().length > 1;
+    painter.dispose();
+    return multipleLines;
+  }
+
   TextStyle _resolveTitleStyle(BuildContext context) {
-    final materialTextTheme = Theme.of(context).tExplicitTextTheme;
-    final materialFallback = Theme.of(context).textTheme.bodyLarge;
     final titleFont = context.tTheme.fontBodyLarge;
     return TextStyle(
-      fontSize: titleFont?.size ?? materialFallback?.fontSize,
-      height: titleFont?.height ?? materialFallback?.height,
-      fontWeight: titleFont?.fontWeight ?? materialFallback?.fontWeight,
-    ).merge(materialTextTheme?.bodyLarge ?? materialTextTheme?.bodyMedium);
+      fontSize: titleFont?.size ?? 16,
+      height: titleFont?.height,
+      fontWeight: titleFont?.fontWeight,
+    );
   }
 
   TextStyle _resolveSubTitleStyle(BuildContext context) {
-    final materialTextTheme = Theme.of(context).tExplicitTextTheme;
-    final materialFallback = Theme.of(context).textTheme.bodyMedium;
     final subtitleFont = context.tTheme.fontBodyMedium;
     return TextStyle(
-      fontSize: subtitleFont?.size ?? materialFallback?.fontSize,
-      height: subtitleFont?.height ?? materialFallback?.height,
-      fontWeight: subtitleFont?.fontWeight ?? materialFallback?.fontWeight,
-    ).merge(materialTextTheme?.bodyMedium ?? materialTextTheme?.bodySmall);
+      fontSize: subtitleFont?.size ?? 14,
+      height: subtitleFont?.height,
+      fontWeight: subtitleFont?.fontWeight,
+    );
   }
 
   Widget? _buildContent(BuildContext context, TCheckboxThemeData? theme) {
@@ -345,26 +437,25 @@ class TCheckbox extends StatelessWidget {
       mainAxisSize: MainAxisSize.min,
       children: [
         if (title != null)
-          Text(
+          TTextStyled(
             title!,
             maxLines: titleMaxLines,
             overflow: TextOverflow.ellipsis,
             style: titleStyle.copyWith(
               color: _disabled
-                  ? context.tTheme.textDisabledColor
+                  ? context.tTheme.textColorDisabled
                   : (theme?.titleColor ?? context.tTheme.textColorPrimary),
             ),
           ),
-        if (title != null && subTitle != null)
-          SizedBox(height: context.tTheme.spacer4),
+        if (title != null && subTitle != null) const SizedBox(height: 4.0),
         if (subTitle != null)
-          Text(
+          TTextStyled(
             subTitle!,
             maxLines: subTitleMaxLines,
             overflow: TextOverflow.ellipsis,
             style: subTitleStyle.copyWith(
               color: _disabled
-                  ? context.tTheme.textDisabledColor
+                  ? context.tTheme.textColorDisabled
                   : (theme?.subTitleColor ?? context.tTheme.textColorSecondary),
             ),
           ),

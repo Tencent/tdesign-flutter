@@ -1,13 +1,16 @@
-import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:tdesign_flutter/tdesign_flutter.dart';
 
 void main() {
-  Widget wrap(Widget child, {TSkeletonThemeData? skeletonTheme}) {
+  Widget wrap(
+    Widget child, {
+    TSkeletonThemeData? skeletonTheme,
+    TThemeData? token,
+  }) {
     return MaterialApp(
       theme: ThemeData(
         extensions: [
-          TThemeData.defaultData(),
+          token ?? TThemeData.defaultData(),
           if (skeletonTheme != null) skeletonTheme,
         ],
       ),
@@ -22,6 +25,18 @@ void main() {
       .toList();
 
   group('TSkeleton preset layouts', () {
+    testWidgets('circle block follows radiusCircle token', (tester) async {
+      await tester.pumpWidget(
+        wrap(
+          const TSkeleton(variant: TSkeletonVariant.avatar),
+          token: TThemeData.defaultData().copyWith(
+            radiusMap: {'radiusCircle': 7},
+          ),
+        ),
+      );
+      expect(decorations(tester).first.borderRadius, BorderRadius.circular(7));
+    });
+
     test('constructors encode exclusive preset and custom layout sources', () {
       const preset = TSkeleton();
       const custom = TSkeleton.custom(layout: TSkeletonLayout(rows: []));
@@ -272,17 +287,17 @@ void main() {
       tester,
     ) async {
       final token = TThemeData.defaultData();
-      final originalSpacing = token.spacerMap['spacer16'];
+      final originalSpacing = token.spacerMap['spacer2'];
       void restoreTokens() {
         if (originalSpacing == null) {
-          token.spacerMap.remove('spacer16');
+          token.spacerMap.remove('spacer2');
         } else {
-          token.spacerMap['spacer16'] = originalSpacing;
+          token.spacerMap['spacer2'] = originalSpacing;
         }
       }
 
       addTearDown(restoreTokens);
-      token.spacerMap['spacer16'] = 18;
+      token.spacerMap['spacer2'] = 18;
       await tester.pumpWidget(
         MaterialApp(
           theme: ThemeData(extensions: [token]),
@@ -397,7 +412,7 @@ void main() {
       expect(midpointOpacity.opacity, closeTo(.3, .001));
       expect(
         decorations(tester).first.color,
-        TThemeData.defaultData().componentStrokeColor.withValues(alpha: .3),
+        TThemeData.defaultData().componentStroke.withValues(alpha: .3),
       );
 
       await tester.pump(const Duration(seconds: 1));

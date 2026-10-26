@@ -1,12 +1,14 @@
-import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:tdesign_flutter/tdesign_flutter.dart';
+
+import '../../helpers/button_navbar_text_slots.dart';
 
 /// TNavBar Widget 测试
 ///
 /// 覆盖：默认渲染、title/centerTitle、leading/actions、useDefaultBack/onBack、
 /// ThemeData 注入、禁用 callback、TNavBarItem、TNavBarBorder。
 void main() {
+  registerNavBarTextSlotTests();
   TextStyle effectiveTextStyle(WidgetTester tester, String text) {
     final finder = find.text(text);
     final textWidget = tester.widget<Text>(finder);
@@ -105,7 +107,7 @@ void main() {
       final backIcon = tester.widget<Icon>(find.byIcon(TIcons.chevron_left));
       expect(backIcon.size, 24.0);
       expect(backIcon.color, token.textColorPrimary);
-      expect(backIcon.color, isNot(token.textDisabledColor));
+      expect(backIcon.color, isNot(token.textColorDisabled));
     });
 
     testWidgets('useDefaultBack 为 false 时不显示返回图标', (tester) async {
@@ -214,7 +216,8 @@ void main() {
     testWidgets('自定义 backgroundColor', (tester) async {
       await tester.pumpWidget(
         wrapWithTheme(
-          const TNavBar(title: Text('标题'), backgroundColor: Colors.blue),
+          const TNavBar(title: Text('标题')),
+          navBarTheme: const TNavBarThemeData(backgroundColor: Colors.blue),
         ),
       );
       expect(find.byType(TNavBar), findsOneWidget);
@@ -223,20 +226,18 @@ void main() {
     testWidgets('自定义 titleColor', (tester) async {
       await tester.pumpWidget(
         wrapWithTheme(
-          const TNavBar(title: Text('彩色标题'), titleColor: Colors.red),
+          const TNavBar(title: Text('彩色标题')),
+          navBarTheme: const TNavBarThemeData(titleColor: Colors.red),
         ),
       );
       expect(find.text('彩色标题'), findsOneWidget);
     });
 
-    testWidgets('构造器 backIconColor 覆盖默认返回图标颜色', (tester) async {
+    testWidgets('Theme backIconColor 覆盖默认返回图标颜色', (tester) async {
       await tester.pumpWidget(
         wrapWithTheme(
-          const TNavBar(
-            title: Text('标题'),
-            backIconColor: Colors.red,
-            useDefaultBack: true,
-          ),
+          const TNavBar(title: Text('标题'), useDefaultBack: true),
+          navBarTheme: const TNavBarThemeData(backIconColor: Colors.red),
         ),
       );
 
@@ -325,9 +326,7 @@ void main() {
       expect(style.fontWeight, FontWeight.w400);
     });
 
-    testWidgets('Material AppBarTheme fontSize 优先于默认 Token', (
-      tester,
-    ) async {
+    testWidgets('Material AppBarTheme fontSize 不覆盖默认 Token', (tester) async {
       final token = TThemeData.defaultData();
       Widget wrapWithMaterial(Widget child) {
         final base = TThemeBuilder.light(token);
@@ -346,11 +345,10 @@ void main() {
       );
 
       final style = effectiveTextStyle(tester, 'Material wins');
-      // 默认回退 Title Large Token，但 Material fontSize 应插在 Token 之前。
-      expect(style.fontSize, 40);
+      expect(style.fontSize, token.fontTitleLarge?.size);
     });
 
-    testWidgets('Material AppBarTheme fontFamily 在未显式配置时生效', (tester) async {
+    testWidgets('Material AppBarTheme fontFamily 不覆盖 Token', (tester) async {
       final token = TThemeData.defaultData();
       final base = TThemeBuilder.light(token);
       await tester.pumpWidget(
@@ -368,7 +366,7 @@ void main() {
       );
 
       final style = effectiveTextStyle(tester, 'Material family');
-      expect(style.fontFamily, 'packages/material_fonts/MaterialFamily');
+      expect(style.fontFamily, isNot('packages/material_fonts/MaterialFamily'));
     });
   });
 
@@ -386,7 +384,7 @@ void main() {
       expect(copied.opacity, 0.5);
     });
 
-    test('copyWith 可显式清除 nullable 字段', () {
+    test('copyWith 的 null 参数保留原值并保持字段类型安全', () {
       const theme = TNavBarThemeData(
         titleColor: Colors.red,
         opacity: 1.0,
@@ -401,10 +399,10 @@ void main() {
         boxShadow: null,
       );
 
-      expect(copied.titleColor, isNull);
-      expect(copied.opacity, isNull);
-      expect(copied.border, isNull);
-      expect(copied.boxShadow, isNull);
+      expect(copied.titleColor, Colors.red);
+      expect(copied.opacity, 1.0);
+      expect(copied.border, same(theme.border));
+      expect(copied.boxShadow, same(theme.boxShadow));
     });
 
     test('lerp', () {
@@ -415,7 +413,7 @@ void main() {
       expect(result.titleColor, Color.lerp(Colors.black, Colors.white, 0.5));
     });
 
-    test('lerp 保留 nullable 字段的默认回退语义', () {
+    test('lerp 对固定默认值连续插值并保留动态 Theme 回退语义', () {
       const defaults = TNavBarThemeData();
       const explicit = TNavBarThemeData(
         titleColor: Colors.red,
@@ -427,27 +425,81 @@ void main() {
       final beforeMidpoint = defaults.lerp(explicit, 0.25);
       expect(beforeMidpoint.titleColor, isNull);
       expect(beforeMidpoint.backgroundColor, isNull);
-      expect(beforeMidpoint.titleMargin, isNull);
-      expect(beforeMidpoint.opacity, isNull);
+      expect(beforeMidpoint.titleMargin, 18);
+      expect(beforeMidpoint.opacity, 0.875);
 
       final afterMidpoint = defaults.lerp(explicit, 0.75);
       expect(afterMidpoint.titleColor, Colors.red);
       expect(afterMidpoint.backgroundColor, Colors.blue);
-      expect(afterMidpoint.titleMargin, 24);
-      expect(afterMidpoint.opacity, 0.5);
+      expect(afterMidpoint.titleMargin, 22);
+      expect(afterMidpoint.opacity, 0.625);
 
       final reverseBeforeMidpoint = explicit.lerp(defaults, 0.25);
       expect(reverseBeforeMidpoint.titleColor, Colors.red);
-      expect(reverseBeforeMidpoint.titleMargin, 24);
+      expect(reverseBeforeMidpoint.titleMargin, 22);
       final reverseAfterMidpoint = explicit.lerp(defaults, 0.75);
       expect(reverseAfterMidpoint.titleColor, isNull);
-      expect(reverseAfterMidpoint.titleMargin, isNull);
+      expect(reverseAfterMidpoint.titleMargin, 18);
 
       final bothDefault = defaults.lerp(const TNavBarThemeData(), 0.5);
       expect(bothDefault.titleColor, isNull);
       expect(bothDefault.backgroundColor, isNull);
       expect(bothDefault.titleMargin, isNull);
       expect(bothDefault.opacity, isNull);
+    });
+
+    test('lerp 连续插值显式 padding、border 与 boxShadow', () {
+      const begin = TNavBarThemeData(
+        padding: EdgeInsets.all(4),
+        border: TNavBarBorder(
+          width: 1,
+          radius: 8,
+          color: Colors.black,
+          padding: EdgeInsets.all(2),
+        ),
+        boxShadow: [
+          BoxShadow(color: Colors.black, blurRadius: 2, offset: Offset(0, 1)),
+        ],
+      );
+      const end = TNavBarThemeData(
+        padding: EdgeInsets.all(12),
+        border: TNavBarBorder(
+          width: 3,
+          radius: 16,
+          color: Colors.white,
+          padding: EdgeInsets.all(6),
+        ),
+        boxShadow: [
+          BoxShadow(color: Colors.white, blurRadius: 6, offset: Offset(0, 5)),
+        ],
+      );
+
+      final result = begin.lerp(end, 0.5);
+      expect(result.padding, const EdgeInsets.all(8));
+      expect(result.border?.width, 2);
+      expect(result.border?.radius, 12);
+      expect(result.border?.color, Color.lerp(Colors.black, Colors.white, 0.5));
+      expect(result.border?.padding, const EdgeInsets.all(4));
+      expect(result.boxShadow, hasLength(1));
+      expect(result.boxShadow!.single.blurRadius, 4);
+      expect(result.boxShadow!.single.offset, const Offset(0, 3));
+    });
+
+    test('TNavBarBorder 从默认配置开始连续插值尺寸', () {
+      const explicit = TNavBarBorder(width: 3, radius: 10);
+      final result = const TNavBarThemeData().lerp(
+        const TNavBarThemeData(border: explicit),
+        0.5,
+      );
+
+      expect(result.border?.width, 2);
+      expect(result.border?.radius, 16);
+      expect(result.border?.color, isNull);
+      expect(result.border?.padding, isNull);
+      expect(
+        const TNavBarThemeData().lerp(const TNavBarThemeData(), 0.5).border,
+        isNull,
+      );
     });
 
     testWidgets('AnimatedTheme 切换不会把 null 回退插值成透明色', (tester) async {
@@ -619,7 +671,7 @@ void main() {
 
       final icon = tester.widget<Icon>(find.byIcon(TIcons.home));
       expect(icon.size, 24.0);
-      expect(icon.color, token.textDisabledColor);
+      expect(icon.color, token.textColorDisabled);
     });
 
     testWidgets('onTap: null 的自定义操作项使用禁用透明度', (tester) async {

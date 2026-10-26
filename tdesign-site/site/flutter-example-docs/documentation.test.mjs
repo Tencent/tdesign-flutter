@@ -1,0 +1,141 @@
+import assert from 'node:assert/strict';
+import { mkdtempSync, mkdirSync, readFileSync, writeFileSync, rmSync } from 'node:fs';
+import { tmpdir } from 'node:os';
+import path from 'node:path';
+import test from 'node:test';
+import { fileURLToPath } from 'node:url';
+import siteConfig from '../site.config.mjs';
+import { migrationSource, guideLinks, packageLinks, renderMigrationExamples, renderResourceMessages, syncDocuments } from '../../../scripts/documentation.mjs';
+import { adaptGuideLinks, adaptRepositoryDocument } from './repository-document.mjs';
+
+const root = fileURLToPath(new URL('../../../', import.meta.url));
+const marker = '<!-- migration-example:button:start -->\nold\n<!-- migration-example:button:end -->';
+const example = '// migration:button:start\nconst TButton();\n// migration:button:end';
+
+test('package README links stay usable without repository-only files', () => {
+  const output = packageLinks(`[迁移](./${migrationSource}) [章节](./${migrationSource}#button) [贡献](CONTRIBUTING.md) [中文](./README_zh_CN.md) [主题](./tdesign-site/site/docs/custom-theme.md#局部) [外链](https://example.com)`);
+  assert.match(output, /\[迁移\]\(\.\/MIGRATION.md\)/);
+  assert.match(output, /\[章节\]\(\.\/MIGRATION.md#button\)/);
+  assert.match(output, /blob\/develop\/CONTRIBUTING.md/);
+  assert.match(output, /\[中文\]\(\.\/README_zh_CN.md\)/);
+  assert.match(output, /flutter\/custom-theme#局部/);
+  assert.match(output, /\[外链\]\(https:\/\/example.com\)/);
+});
+
+test('migration examples reject missing, duplicate and unmatched markers', () => {
+  assert.match(renderMigrationExamples(marker, example), /const TButton/);
+  assert.throws(() => renderMigrationExamples(marker, ''), /Missing/);
+  assert.throws(() => renderMigrationExamples(marker + marker, example), /Duplicate/);
+  assert.throws(() => renderMigrationExamples(marker + '<!-- migration-example:form:start -->', example), /Unmatched/);
+});
+
+test('check mode detects stale copies and missing sources without writing files', () => {
+  const temp = mkdtempSync(path.join(tmpdir(), 'tdesign-docs-test-'));
+  const write = (file, text) => { mkdirSync(path.dirname(path.join(temp, file)), { recursive: true }); writeFileSync(path.join(temp, file), text); };
+  const read = file => readFileSync(path.join(temp, file), 'utf8');
+  try {
+    write(migrationSource, `---\ntitle: migration\n---\n\n${marker}\n[主题](./custom-theme.md)`);
+    write('tdesign-component/example/lib/documentation_examples.dart', `${example.replaceAll('migration:', 'documentation:')}\nconst themeJson = '''{"green":{"color":{"brandColor":"#16875D"}}}''';`);
+    write('tdesign-component/example/assets/custom_theme.json', 'stale');
+    write('tdesign-component/example/lib/base/intl_resource_delegate.dart', '');
+    write('tdesign-component/example/lib/documentation_quick_start.dart', '');
+    for (const file of ['getting-started', 'custom-theme', 'internationalization']) write(`tdesign-site/site/docs/${file}.md`, marker.replaceAll('migration-example:', 'documentation-example:'));
+    write('README.md', '# project');
+    write('README_zh_CN.md', '# 项目');
+    write('tdesign-component/tool/fixtures/token_migration/lib/migration_027_to_100_examples.dart', example);
+    assert.throws(() => syncDocuments({ root: temp, check: true }), /Stale/);
+    assert.match(read(migrationSource), /old/);
+    syncDocuments({ root: temp });
+    assert.equal(JSON.parse(read('tdesign-component/example/assets/custom_theme.json')).green.color.brandColor, '#16875D');
+    const portable = read('tdesign-component/MIGRATION.md');
+    assert.match(portable, /Generated from/);
+    assert.doesNotMatch(portable, /title: migration/);
+    assert.match(portable, /https:\/\/tdesign.tencent.com\/flutter\/custom-theme/);
+    syncDocuments({ root: temp, check: true });
+    write('tdesign-component/README.md', 'stale');
+    assert.throws(() => syncDocuments({ root: temp, check: true }), /tdesign-component\/README.md/);
+    assert.equal(read('tdesign-component/README.md'), 'stale');
+    rmSync(path.join(temp, 'README.md'));
+    assert.throws(() => syncDocuments({ root: temp }), /ENOENT/);
+    assert.equal(read('tdesign-component/README.md'), 'stale');
+  } finally { rmSync(temp, { recursive: true, force: true }); }
+});
+
+test('site contribution page reads canonical rules and resolves repository links', () => {
+  const source = '# CONTRIBUTING\n\n[spec](./specs/README.md)';
+  const rendered = adaptRepositoryDocument(source, path.join(root, 'CONTRIBUTING.md'));
+  assert.match(rendered, /^---\ntitle: 贡献指南/);
+  assert.match(rendered, /blob\/develop\/specs\/README.md/);
+  assert.doesNotMatch(rendered, /^# CONTRIBUTING/m);
+  assert.equal(adaptRepositoryDocument(source, path.join(root, 'README.md')), source);
+});
+
+test('guide links use stable routes and remain untouched in non-guide content', () => {
+  const source = '[迁移](./migration-0.2.7-to-1.0.md#button) [主题](./custom-theme.md)';
+  const rendered = adaptGuideLinks(source, path.join(root, 'tdesign-site/site/docs/getting-started.md'));
+  assert.match(rendered, /\(\/flutter\/migration-1-0#button\)/);
+  assert.match(rendered, /\(\/flutter\/custom-theme\)/);
+  assert.equal(adaptGuideLinks(source, path.join(root, 'README.md')), source);
+});
+
+test('repository copies and runnable migration snippets are synchronized', () => {
+  syncDocuments({ check: true });
+});
+
+test('migration is linked from getting started and dark mode shares the theme guide', () => {
+  const leaves = siteConfig.docs.flatMap(group => group.children ?? []);
+  assert.ok(!leaves.some(page => page.name === 'dark-mode'));
+  const migration = [...leaves, ...siteConfig.standalone].filter(page => page.path === '/flutter/migration-1-0');
+  assert.equal(migration.length, 1);
+  assert.equal(migration[0].name, 'migration-1-0');
+  assert.equal(siteConfig.standalone.find(page => page.path === '/flutter/dark-mode').redirect, '/flutter/custom-theme#明暗模式');
+  const read = file => readFileSync(path.join(root, file), 'utf8');
+  assert.match(read('tdesign-site/site/docs/getting-started.md'), /tdesign_flutter: \^1\.0\.0/);
+  assert.match(read('tdesign-site/site/docs/getting-started.md'), /migration-0\.2\.7-to-1\.0\.md/);
+  assert.doesNotMatch(read('tdesign-site/site/docs/getting-started.md'), /尚未发布|发布前|git:/);
+  assert.match(read('tdesign-site/docs/components/theme/README.md'), /title: Theme 主题/);
+});
+
+test('component links stay local in preview and become absolute in package copies', () => {
+  const content = '[Button](https://tdesign.tencent.com/flutter/components/button?tab=api) [Form](/flutter/components/form)';
+  const local = guideLinks(content);
+  assert.match(local, /\[Button\]\(\/flutter\/components\/button\?tab=api\)/);
+  assert.doesNotMatch(local, /https:/);
+  const portable = guideLinks(local, { absolute: true });
+  assert.match(portable, /https:\/\/tdesign.tencent.com\/flutter\/components\/button\?tab=api/);
+  assert.match(portable, /https:\/\/tdesign.tencent.com\/flutter\/components\/form/);
+});
+
+
+test('custom theme guide uses the shared component preview with standalone scene links', () => {
+  const guide = readFileSync(path.join(root, 'tdesign-site/site/docs/custom-theme.md'), 'utf8');
+  const runtime = readFileSync(path.join(root, 'tdesign-component/example/lib/documentation_theme_demo.dart'), 'utf8');
+  assert.match(guide, /^flutterExample: custom-theme$/m);
+  assert.doesNotMatch(guide, /<iframe/);
+  for (const scene of ['json', 'local', 'mode']) {
+    assert.ok(guide.includes(`[单独打开运行示例](/flutter/example/#custom-theme-${scene})`));
+  }
+  assert.match(runtime, /documentationLocalTheme\(/);
+});
+
+
+test('resource documentation includes translated values and placeholder declarations', () => {
+  const delegate = 'AppLocalizations.of(context)!.confirm; AppLocalizations.of(context)!.pickerColumn(index)';
+  const guide = '<!-- documentation-resource:en:start -->old<!-- documentation-resource:en:end -->';
+  const rendered = renderResourceMessages(guide, delegate, () => ({
+    confirm: 'Confirm', pickerColumn: 'Column {index}',
+    '@pickerColumn': { placeholders: { index: { type: 'int' } } }, unused: 'irrelevant',
+  }));
+  assert.match(rendered, /"confirm": "Confirm"/);
+  assert.match(rendered, /"@pickerColumn"/);
+  assert.doesNotMatch(rendered, /"unused"|>old</);
+  assert.throws(() => renderResourceMessages(guide, delegate, () => ({confirm: 'Confirm'})), /Missing en translation: pickerColumn/);
+});
+
+test('quick start shares the Flutter preview and retains its legacy theme anchor', () => {
+  const guide = readFileSync(path.join(root, 'tdesign-site/site/docs/getting-started.md'), 'utf8');
+  assert.match(guide, /^flutterExample: getting-started$/m);
+  assert.doesNotMatch(guide, /<iframe|^## 自定义主题$/m);
+  assert.match(guide, /<span id="自定义主题" aria-hidden="true"><\/span>/);
+  assert.match(guide, /\[自定义主题\]\(\.\/custom-theme\.md\)/);
+});

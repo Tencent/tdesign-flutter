@@ -2,8 +2,10 @@ import 'package:flutter/material.dart';
 
 import '../../theme/t_colors.dart';
 import '../../theme/t_fonts.dart';
+import '../../theme/t_internal_material.dart';
 import '../../theme/t_spacers.dart';
 import '../../theme/t_theme.dart';
+import '../text/t_text_styled.dart';
 import 't_field_scope.dart';
 import 't_form.dart';
 import 't_form_item_scope.dart';
@@ -13,55 +15,15 @@ import 't_form_theme_data.dart';
 class TFormItem extends StatelessWidget {
   const TFormItem({
     super.key,
-
-    /// 字段内容。
     required this.child,
-
-    /// 标签文案。
     this.label,
-
-    /// 标签区域前的内容，通常用于字段行图标。
-    ///
-    /// 该插槽属于表单项结构，不会传入输入组件的编辑内容区域。
     this.leading,
-
-    /// 是否显示必填标记；仅覆盖展示效果，不会启用或关闭
-    /// [TFormField.required] 的校验行为。
-    ///
-    /// 未传时继承最近 [TFormField] 的 required 状态。
     this.required,
-
-    /// 辅助说明文案。
     this.help,
-
-    /// 错误文案。
-    ///
-    /// 未传时自动使用最近 [TFormField] 的校验错误。
     this.errorText,
-
-    /// 标签区域宽度；为空时读取 [TFormThemeData.labelWidth]，默认 80dp。
-    this.labelWidth,
-
-    /// 标签文本对齐方式；为空时读取 [TFormThemeData.labelAlign]。
-    this.labelAlign,
-
-    /// 表单项尾部的额外内容。
-    ///
-    /// 该插槽不会被附加内边距、位移或固定尺寸。
     this.extra,
-
-    /// 水平布局下标签、字段内容和额外内容的纵向对齐方式。
-    ///
-    /// 未传时读取 [TFormThemeData.verticalAlignment]，默认顶部对齐。
     this.verticalAlignment,
-
-    /// 内容区域的水平方向对齐方式。
-    ///
-    /// 未传时读取 [TFormThemeData.contentAlignment]，默认起始侧对齐；影响
-    /// 字段控件、help 和 error 的外部位置，不影响输入文本自身的对齐方式。
     this.contentAlignment,
-
-    /// 是否展示继承的校验错误。
     this.showErrorMessage = true,
   });
 
@@ -72,23 +34,23 @@ class TFormItem extends StatelessWidget {
   final String? label;
 
   /// 标签区域前的内容，通常用于字段行图标。
+  ///
+  /// 该插槽属于表单项结构，不会传入输入组件的编辑内容区域。
   final Widget? leading;
 
   /// 是否显示必填标记；仅覆盖展示效果，不会启用或关闭
-  /// [TFormField.required] 的校验行为。未设置时继承最近的 [TFormField.required]。
+  /// [TFormField.required] 的校验行为。
+  ///
+  /// 未传时继承最近 [TFormField] 的 required 状态。
   final bool? required;
 
   /// 辅助说明文案。
   final String? help;
 
   /// 错误文案。
+  ///
+  /// 未传时自动使用最近 [TFormField] 的校验错误。
   final String? errorText;
-
-  /// 标签区域宽度。
-  final double? labelWidth;
-
-  /// 标签文本对齐方式。
-  final TextAlign? labelAlign;
 
   /// 表单项尾部的额外内容。
   ///
@@ -96,45 +58,45 @@ class TFormItem extends StatelessWidget {
   final Widget? extra;
 
   /// 水平布局下标签、字段内容和额外内容的纵向对齐方式。
+  ///
+  /// 未传时默认顶部对齐；这是单个表单项的结构布局选择。
   final TFormItemVerticalAlignment? verticalAlignment;
 
   /// 内容区域的水平方向对齐方式。
+  ///
+  /// 未传时默认起始侧对齐；影响
+  /// 字段控件、help 和 error 的外部位置，不影响输入文本自身的对齐方式。
   final TFormItemContentAlignment? contentAlignment;
 
-  /// 是否展示从 [TFormField] 继承的校验错误。
+  /// 是否展示继承的校验错误。
   final bool showErrorMessage;
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context).extension<TFormThemeData>();
-    final materialTheme = Theme.of(context);
-    final textTheme = materialTheme.tExplicitTextTheme;
     final token = context.tTheme;
     final fieldScope = TFieldScope.maybeOf(context);
     final inheritedErrorText = showErrorMessage ? fieldScope?.errorText : null;
     final effectiveErrorText = errorText ?? inheritedErrorText;
     final effectiveRequired = required ?? fieldScope?.required ?? false;
     final layout = theme?.layout ?? TFormLayout.horizontal;
-    final effectiveLabelWidth = labelWidth ?? theme?.labelWidth ?? 80;
-    final effectiveLabelAlign =
-        labelAlign ?? theme?.labelAlign ?? TextAlign.start;
-    final effectiveLeadingGap = theme?.leadingGap ?? token.spacer8;
+    final effectiveLabelWidth = theme?.labelWidth ?? 80;
+    final effectiveLabelAlign = theme?.labelAlign ?? TextAlign.start;
+    final effectiveLeadingGap = theme?.leadingGap ?? token.spacer;
     final effectiveVerticalAlignment =
-        verticalAlignment ??
-        theme?.verticalAlignment ??
-        TFormItemVerticalAlignment.start;
+        verticalAlignment ?? TFormItemVerticalAlignment.start;
     final effectiveContentAlignment =
-        contentAlignment ??
-        theme?.contentAlignment ??
-        TFormItemContentAlignment.start;
+        contentAlignment ?? TFormItemContentAlignment.start;
     final horizontalCrossAxisAlignment = switch (effectiveVerticalAlignment) {
       TFormItemVerticalAlignment.start => CrossAxisAlignment.start,
       TFormItemVerticalAlignment.center => CrossAxisAlignment.center,
     };
     final labelAlignment = switch (effectiveLabelAlign) {
-      (TextAlign.start || TextAlign.left) => AlignmentDirectional.topStart,
-      (TextAlign.center) => Alignment.topCenter,
-      _ => AlignmentDirectional.topEnd,
+      TextAlign.start || TextAlign.justify => AlignmentDirectional.topStart,
+      TextAlign.left => Alignment.topLeft,
+      TextAlign.center => Alignment.topCenter,
+      TextAlign.right => Alignment.topRight,
+      TextAlign.end => AlignmentDirectional.topEnd,
     };
     final contentAreaAlignment = switch (effectiveContentAlignment) {
       TFormItemContentAlignment.start => AlignmentDirectional.centerStart,
@@ -145,60 +107,69 @@ class TFormItem extends StatelessWidget {
       TFormItemContentAlignment.end => TextAlign.end,
     };
     final labelText = '${label ?? ''}${theme?.showColon == true ? ':' : ''}';
-    final labelFont = token.fontBodyLarge;
-    final labelStyle = TextStyle(
+    final labelFont = layout == TFormLayout.vertical
+        ? token.fontBodyMedium
+        : token.fontBodyLarge;
+    final labelBaseStyle = TextStyle(
       color: token.textColorPrimary,
       fontSize: labelFont?.size,
       height: labelFont?.height,
       fontWeight: labelFont?.fontWeight,
-    ).merge(textTheme?.bodyMedium).merge(theme?.labelStyle);
+      letterSpacing: 0,
+    );
+    final labelStyle = labelBaseStyle.merge(theme?.labelStyle);
     final helpFont = token.fontBodySmall;
     final messageTextStyle = TextStyle(
       fontSize: helpFont?.size,
       height: helpFont?.height,
       fontWeight: helpFont?.fontWeight,
-    ).merge(textTheme?.bodySmall);
+    );
     final helpStyle = messageTextStyle
         .copyWith(color: token.textColorPlaceholder)
         .merge(theme?.helpStyle);
     final errorStyle = messageTextStyle
-        .copyWith(color: token.errorNormalColor)
-        .merge(materialTheme.inputDecorationTheme.errorStyle)
+        .copyWith(color: token.errorColor)
         .merge(theme?.errorStyle);
     final labelWidget = label == null
         ? null
-        : Text(labelText, textAlign: effectiveLabelAlign, style: labelStyle);
+        : TTextStyled(
+            labelText,
+            textAlign: effectiveLabelAlign,
+            style: labelStyle,
+          );
     final requiredMark = effectiveRequired
-        ? Text(
+        ? TTextStyled(
             '*',
-            style:
-                theme?.requiredMarkStyle ??
-                TextStyle(color: context.tTheme.errorNormalColor),
+            style: TextStyle(
+              color: context.tTheme.errorColor,
+            ).merge(theme?.requiredMarkStyle),
           )
         : null;
     final markedLabel = labelWidget == null
         ? null
+        : requiredMark == null
+        ? labelWidget
         : Row(
             mainAxisSize: MainAxisSize.min,
             children: [
               if ((theme?.requiredMarkPosition ??
                       TFormRequiredMarkPosition.left) ==
                   TFormRequiredMarkPosition.left) ...[
-                if (requiredMark != null) requiredMark,
-                if (requiredMark != null) const SizedBox(width: 2),
+                requiredMark,
+                const SizedBox(width: 2),
               ],
               Flexible(child: labelWidget),
               if ((theme?.requiredMarkPosition ??
                       TFormRequiredMarkPosition.left) ==
                   TFormRequiredMarkPosition.right) ...[
-                if (requiredMark != null) const SizedBox(width: 2),
-                if (requiredMark != null) requiredMark,
+                const SizedBox(width: 2),
+                requiredMark,
               ],
             ],
           );
     final leadingWidget = leading == null
         ? null
-        : IconTheme.merge(
+        : TInternalIconTheme.merge(
             data: IconThemeData(color: token.textColorPrimary, size: 24),
             child: leading!,
           );
@@ -217,45 +188,52 @@ class TFormItem extends StatelessWidget {
           ),
         ),
         if (effectiveErrorText != null) ...[
-          SizedBox(height: theme?.messageGap ?? token.spacer4),
+          SizedBox(height: theme?.messageGap ?? 4.0),
           effectiveContentAlignment == TFormItemContentAlignment.end
               ? Align(
                   alignment: contentAreaAlignment,
-                  child: Text(
+                  child: TTextStyled(
                     effectiveErrorText,
                     textAlign: contentTextAlign,
                     style: errorStyle,
                   ),
                 )
-              : Text(effectiveErrorText, style: errorStyle),
+              : TTextStyled(effectiveErrorText, style: errorStyle),
         ] else if (help != null) ...[
-          SizedBox(height: theme?.messageGap ?? token.spacer4),
+          SizedBox(height: theme?.messageGap ?? 4.0),
           effectiveContentAlignment == TFormItemContentAlignment.end
               ? Align(
                   alignment: contentAreaAlignment,
-                  child: Text(
+                  child: TTextStyled(
                     help!,
                     textAlign: contentTextAlign,
                     style: helpStyle,
                   ),
                 )
-              : Text(help!, style: helpStyle),
+              : TTextStyled(help!, style: helpStyle),
         ],
       ],
     );
 
     return Container(
       color: theme?.backgroundColor ?? token.bgColorContainer,
+      constraints:
+          theme?.itemPadding == null && layout == TFormLayout.horizontal
+          ? const BoxConstraints(minHeight: 56)
+          : null,
       foregroundDecoration: BoxDecoration(
         border: Border(
           bottom: BorderSide(
-            color: theme?.borderColor ?? token.componentStrokeColor,
+            color: theme?.borderColor ?? token.componentStroke,
           ),
         ),
       ),
       padding:
           theme?.itemPadding ??
-          const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+          EdgeInsets.symmetric(
+            horizontal: 16,
+            vertical: layout == TFormLayout.horizontal ? 14 : 16,
+          ),
       margin: EdgeInsets.only(bottom: theme?.itemSpacing ?? 0),
       child: layout == TFormLayout.horizontal
           ? Row(
@@ -265,11 +243,13 @@ class TFormItem extends StatelessWidget {
                   leadingWidget,
                   SizedBox(width: effectiveLeadingGap),
                 ],
-                if (markedLabel != null)
+                if (markedLabel != null) ...[
                   SizedBox(
                     width: effectiveLabelWidth,
                     child: Align(alignment: labelAlignment, child: markedLabel),
                   ),
+                  SizedBox(width: token.spacer2),
+                ],
                 Expanded(child: content),
                 if (extra != null) extra!,
               ],

@@ -28,8 +28,8 @@ enum TTagShape {
   mark,
 }
 
-/// 标签语义色。
-enum TTagColorScheme {
+/// 标签内置配色预设；绘制形态由 [TTagVariant] 单独选择。
+enum TTagColorPreset {
   /// 默认中性色。
   defaultTheme,
 

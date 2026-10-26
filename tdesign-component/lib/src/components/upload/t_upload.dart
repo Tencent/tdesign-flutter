@@ -1,6 +1,7 @@
-import 'dart:typed_data';
+import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart' show OverflowBoxFit;
 import 'package:image_picker/image_picker.dart';
 import 'package:tdesign_flutter_icons/tdesign_flutter_icons.dart' show TIcons;
 
@@ -8,61 +9,44 @@ import '../../theme/basic.dart';
 import '../../theme/resource_delegate.dart';
 import '../../theme/t_colors.dart';
 import '../../theme/t_fonts.dart';
+import '../../theme/t_internal_material.dart';
 import '../../theme/t_radius.dart';
 import '../../theme/t_spacers.dart';
 import '../../theme/t_theme.dart';
 import '../button/t_button.dart';
 import '../button/t_button_types.dart';
+import '../text/t_text_styled.dart';
 import 't_upload_theme_data.dart';
 import 't_upload_types.dart';
 
 export 't_upload_types.dart';
 
-/// 严格受控的文件选择与上传状态展示组件。
 class TUpload extends StatelessWidget {
   const TUpload({
     super.key,
-
-    /// 受控文件列表。
     required this.files,
-
-    /// 文件列表变化回调；为 null 时禁用。
     this.onChanged,
-
-    /// 允许选择的媒体类型。
     this.mediaType = TUploadMediaType.image,
-
-    /// 文件布局方式。
     this.layout = TUploadLayout.grid,
-
-    /// 是否支持长按拖拽排序；禁用时不生效。
     this.draggable = false,
-
-    /// 最大文件数量；null 表示不限制。
     this.maxFiles = 1,
-
-    /// 单个文件最大字节数；null 表示不限制。
     this.maxFileSize,
-
-    /// 自定义文件选择器；为空时使用 image_picker。
     this.picker,
-
-    /// 点击任意状态的已有文件时触发；组件不会自动预览或重新上传。
     this.onFileTap,
-
-    /// 文件校验失败时触发。
     this.onValidationError,
-
-    /// 文件选择失败时触发。
     this.onError,
   }) : assert(maxFiles == null || maxFiles > 0),
        assert(maxFiles == null || files.length <= maxFiles),
        assert(mediaType == TUploadMediaType.image || maxFiles == 1);
 
   /// 受控文件列表。
+  /// 长度不能超过 maxFiles；各文件 id 应唯一。组件不执行网络上传，由业务更新上传状态。
   final List<TUploadFile> files;
 
   /// 文件列表变化回调；为 null 时禁用。
+  /// 为 null 只阻止新的交互，不取消已经开始的选择。
+  /// 异步选择完成后优先使用当前回调；当前回调为空时使用选择开始时的回调。
+  /// 组件卸载后不再通知。
   final ValueChanged<List<TUploadFile>>? onChanged;
 
   /// 允许选择的媒体类型。
@@ -78,12 +62,17 @@ class TUpload extends StatelessWidget {
   final bool draggable;
 
   /// 最大文件数量；null 表示不限制。
+  /// 非 null 时必须大于 0；video 模式必须设为 1，包括使用自定义 picker 时。
   final int? maxFiles;
 
   /// 单个文件最大字节数；null 表示不限制。
+  /// 自定义 picker 返回的文件未提供 size 时跳过大小校验，调用方需自行保证大小限制。
   final int? maxFileSize;
 
-  /// 自定义文件选择器。
+  /// 自定义文件选择器；为空时使用 image_picker。
+  ///
+  /// 同一组件选择期间忽略重复点击。选择完成后按最新的受控文件列表与
+  /// 数量、大小限制校验并合并；禁用不取消在途选择，组件卸载后不再通知。
   final TUploadPicker? picker;
 
   /// 点击任意状态的已有文件时触发。
@@ -93,10 +82,49 @@ class TUpload extends StatelessWidget {
   final ValueChanged<TUploadFile>? onFileTap;
 
   /// 文件校验失败时触发。
+  /// 新增批次超出数量或大小限制时整批拒绝，不触发 onChanged。
+  /// 异步选择完成后优先使用当前回调；当前回调为空时使用选择开始时的回调。
   final ValueChanged<TUploadValidationError>? onValidationError;
 
-  /// 文件选择失败时触发。
+  /// 文件选择器抛出异常时触发，包括读取所选文件失败。
+  ///
+  /// 不表示网络上传失败；组件不执行网络上传。业务回调（包括
+  /// [onChanged]、[onValidationError]）抛出的异常不会被捕获或转发到此回调。
+  /// 在途选择不受临时禁用影响；发生异常时优先使用当前回调，
+  /// 当前回调为空时使用选择开始时的回调。组件卸载后不再通知。
   final ValueChanged<Object>? onError;
+
+  @override
+  Widget build(BuildContext context) => _TUploadView(configuration: this);
+}
+
+class _TUploadView extends StatefulWidget {
+  const _TUploadView({required this.configuration});
+
+  final TUpload configuration;
+
+  @override
+  State<_TUploadView> createState() => _TUploadState();
+}
+
+class _TUploadState extends State<_TUploadView> {
+  bool _picking = false;
+
+  List<TUploadFile> get files => widget.configuration.files;
+  ValueChanged<List<TUploadFile>>? get onChanged =>
+      widget.configuration.onChanged;
+  TUploadMediaType get mediaType => widget.configuration.mediaType;
+  TUploadLayout get layout => widget.configuration.layout;
+  bool get draggable => widget.configuration.draggable;
+  int? get maxFiles => widget.configuration.maxFiles;
+  int? get maxFileSize => widget.configuration.maxFileSize;
+  TUploadPicker? get picker => widget.configuration.picker;
+  ValueChanged<TUploadFile>? get onFileTap => widget.configuration.onFileTap;
+  ValueChanged<TUploadValidationError>? get onValidationError =>
+      widget.configuration.onValidationError;
+  ValueChanged<Object>? get onError => widget.configuration.onError;
+
+  bool get _canPick => _enabled && _canAdd && !_picking;
 
   bool get _enabled => onChanged != null;
 
@@ -105,11 +133,57 @@ class TUpload extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context).extension<TUploadThemeData>();
-    final size = theme?.itemSize ?? 80;
+    final size = theme?.itemSize ?? _defaultItemSize(context, theme);
     final content = layout == TUploadLayout.grid
         ? _buildGrid(context, size, theme)
         : _buildList(context, theme);
     return Semantics(enabled: _enabled, child: content);
+  }
+
+  double _defaultItemSize(BuildContext context, TUploadThemeData? theme) {
+    var result = 80.0;
+    for (final file in files) {
+      if (file.bytes == null && file.url == null) {
+        final line = TTextStyled(
+          file.name,
+          maxLines: 1,
+          style: _fontStyle(
+            context.tTheme.fontBodySmall,
+            context.tTheme.textColorSecondary,
+          ),
+        ).naturalSize(context).height;
+        result = math.max(result, line + 24 + 4 + context.tTheme.spacer * 2);
+      }
+      if (file.status != TUploadFileStatus.ready &&
+          file.status != TUploadFileStatus.success) {
+        final line = TTextStyled(
+          _statusLabel(context, file),
+          maxLines: 1,
+          style: _statusTextStyle(context, theme),
+        ).naturalSize(context).height;
+        result = math.max(result, line + (theme?.statusIconSize ?? 24) + 4);
+      }
+    }
+    return result;
+  }
+
+  TextStyle _statusTextStyle(BuildContext context, TUploadThemeData? theme) =>
+      TextStyle(
+        color: context.tTheme.textColorAnti,
+        fontSize: context.tTheme.fontBodySmall?.size ?? 12,
+        height: context.tTheme.fontBodySmall?.height,
+      ).merge(theme?.statusTextStyle);
+
+  String _statusLabel(BuildContext context, TUploadFile file) {
+    final resource = TResourceManager.instance.delegate(context);
+    return file.status == TUploadFileStatus.uploading
+        ? file.progress == null
+              ? resource.uploading
+              : '${(file.progress! * 100).round()}%'
+        : file.errorText ??
+              (file.status == TUploadFileStatus.retryableError
+                  ? resource.uploadRetry
+                  : resource.uploadFailed);
   }
 
   Widget _buildGrid(
@@ -120,8 +194,8 @@ class TUpload extends StatelessWidget {
     return SizedBox(
       width: double.infinity,
       child: Wrap(
-        spacing: theme?.spacing ?? context.tTheme.spacer8,
-        runSpacing: theme?.runSpacing ?? context.tTheme.spacer8,
+        spacing: theme?.spacing ?? context.tTheme.spacer,
+        runSpacing: theme?.runSpacing ?? context.tTheme.spacer,
         alignment: theme?.alignment ?? WrapAlignment.start,
         children: [
           for (var index = 0; index < files.length; index++)
@@ -155,7 +229,7 @@ class TUpload extends StatelessWidget {
         return Column(
           children: [
             for (var index = 0; index < children.length; index++) ...[
-              if (index > 0) SizedBox(height: context.tTheme.spacer12),
+              if (index > 0) SizedBox(height: context.tTheme.spacer1),
               children[index],
             ],
           ],
@@ -180,7 +254,7 @@ class TUpload extends StatelessWidget {
       builder: (context, candidates, rejected) => LongPressDraggable<int>(
         key: ValueKey('upload-drag-${files[index].id}'),
         data: index,
-        feedback: Material(
+        feedback: TInternalMaterial(
           color: Colors.transparent,
           child: SizedBox(width: feedbackWidth, child: child),
         ),
@@ -202,26 +276,26 @@ class TUpload extends StatelessWidget {
 
   Widget _buildAdd(BuildContext context, double size, TUploadThemeData? theme) {
     final resource = TResourceManager.instance.delegate(context);
-    final backgroundColor = _enabled
+    final backgroundColor = _canPick
         ? (theme?.backgroundColor ?? context.tTheme.bgColorSecondaryContainer)
         : (theme?.disabledBackgroundColor ??
               context.tTheme.bgColorComponentDisabled);
-    final foregroundColor = _enabled
+    final foregroundColor = _canPick
         ? (theme?.foregroundColor ?? context.tTheme.textColorPlaceholder)
-        : (theme?.disabledForegroundColor ?? context.tTheme.textDisabledColor);
+        : (theme?.disabledForegroundColor ?? context.tTheme.textColorDisabled);
     return Semantics(
       button: true,
-      enabled: _enabled,
+      enabled: _canPick,
       label: resource.uploadSelect,
       child: GestureDetector(
         key: const ValueKey('upload-add'),
-        onTap: _enabled ? () => _pickFiles(context) : null,
+        onTap: _canPick ? _pickFiles : null,
         child: Container(
           width: size,
           height: size,
           decoration: _decoration(context, backgroundColor, theme),
           alignment: Alignment.center,
-          child: Icon(
+          child: TInternalIcon(
             TIcons.add,
             size: theme?.addIconSize ?? 28,
             color: foregroundColor,
@@ -278,7 +352,7 @@ class TUpload extends StatelessWidget {
                     decoration: BoxDecoration(
                       color:
                           theme?.removeButtonColor ??
-                          context.tTheme.textDisabledColor,
+                          context.tTheme.textColorDisabled,
                       borderRadius: BorderRadius.only(
                         topRight: Radius.circular(
                           _borderRadius(context, theme).topRight.x,
@@ -288,7 +362,7 @@ class TUpload extends StatelessWidget {
                         ),
                       ),
                     ),
-                    child: Icon(
+                    child: TInternalIcon(
                       TIcons.close,
                       size: theme?.removeIconSize ?? 16,
                       color: context.tTheme.textColorAnti,
@@ -329,31 +403,37 @@ class TUpload extends StatelessWidget {
       color: theme?.backgroundColor ?? context.tTheme.bgColorSecondaryContainer,
       child: Padding(
         padding: EdgeInsets.symmetric(
-          vertical: context.tTheme.spacer8,
-          horizontal: context.tTheme.spacer4,
+          vertical: context.tTheme.spacer,
+          horizontal: 4.0,
         ),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Icon(
-              _fileIcon(file.name),
-              size: 24,
-              color: _fileIconColor(context, file.name),
-            ),
-            SizedBox(height: context.tTheme.spacer4),
-            Text(
-              file.name,
-              maxLines: 1,
-              overflow: TextOverflow.ellipsis,
-              textAlign: TextAlign.center,
-              style: _fontStyle(
-                context.tTheme.fontBodySmall,
-                _enabled
-                    ? context.tTheme.textColorSecondary
-                    : context.tTheme.textDisabledColor,
+        child: OverflowBox(
+          fit: OverflowBoxFit.deferToChild,
+          minHeight: 0,
+          maxHeight: double.infinity,
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              TInternalIcon(
+                _fileIcon(file.name),
+                size: 24,
+                color: _fileIconColor(context, file.name),
               ),
-            ),
-          ],
+              const SizedBox(height: 4.0),
+              TTextStyled(
+                file.name,
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+                textAlign: TextAlign.center,
+                style: _fontStyle(
+                  context.tTheme.fontBodySmall,
+                  _enabled
+                      ? context.tTheme.textColorSecondary
+                      : context.tTheme.textColorDisabled,
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );
@@ -362,7 +442,7 @@ class TUpload extends StatelessWidget {
   Widget _placeholder(BuildContext context, TUploadThemeData? theme) {
     return ColoredBox(
       color: theme?.backgroundColor ?? context.tTheme.bgColorSecondaryContainer,
-      child: Icon(
+      child: TInternalIcon(
         TIcons.file,
         color: theme?.foregroundColor ?? context.tTheme.textColorPlaceholder,
       ),
@@ -373,7 +453,7 @@ class TUpload extends StatelessWidget {
     return theme?.disabledMaskColor ??
         (Theme.of(context).brightness == Brightness.light
             ? context.tTheme.textColorAnti.withValues(alpha: 0.6)
-            : context.tTheme.fontGyColor1.withValues(alpha: 0.6));
+            : context.tTheme.fontGray1.withValues(alpha: 0.6));
   }
 
   Widget _statusOverlay(
@@ -383,51 +463,45 @@ class TUpload extends StatelessWidget {
   ) {
     final isUploading = file.status == TUploadFileStatus.uploading;
     final isRetryableError = file.status == TUploadFileStatus.retryableError;
-    final resource = TResourceManager.instance.delegate(context);
-    final label = isUploading
-        ? file.progress == null
-              ? resource.uploading
-              : '${(file.progress! * 100).round()}%'
-        : file.errorText ??
-              (isRetryableError ? resource.uploadRetry : resource.uploadFailed);
+    final label = _statusLabel(context, file);
     final foregroundColor = context.tTheme.textColorAnti;
     return GestureDetector(
       key: ValueKey('upload-status-${file.id}'),
       onTap: _enabled && onFileTap != null ? () => onFileTap!(file) : null,
       child: ColoredBox(
-        color: theme?.overlayColor ?? context.tTheme.fontGyColor3,
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            if (isUploading)
-              SizedBox.square(
-                dimension: theme?.statusIconSize ?? 24,
-                child: CircularProgressIndicator(
-                  value: file.progress,
-                  strokeWidth: 2,
+        color: theme?.overlayColor ?? context.tTheme.fontGray3,
+        child: OverflowBox(
+          fit: OverflowBoxFit.deferToChild,
+          minHeight: 0,
+          maxHeight: double.infinity,
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              if (isUploading)
+                SizedBox.square(
+                  dimension: theme?.statusIconSize ?? 24,
+                  child: TInternalCircularProgressIndicator(
+                    value: file.progress,
+                    strokeWidth: 2,
+                    color: foregroundColor,
+                  ),
+                )
+              else
+                TInternalIcon(
+                  isRetryableError ? TIcons.refresh : TIcons.close_circle,
+                  size: theme?.statusIconSize ?? 24,
                   color: foregroundColor,
                 ),
-              )
-            else
-              Icon(
-                isRetryableError ? TIcons.refresh : TIcons.close_circle,
-                size: theme?.statusIconSize ?? 24,
-                color: foregroundColor,
+              const SizedBox(height: 4),
+              TTextStyled(
+                label,
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+                style: _statusTextStyle(context, theme),
               ),
-            const SizedBox(height: 4),
-            Text(
-              label,
-              maxLines: 1,
-              overflow: TextOverflow.ellipsis,
-              style:
-                  theme?.statusTextStyle ??
-                  TextStyle(
-                    color: foregroundColor,
-                    fontSize: context.tTheme.fontBodySmall?.size ?? 12,
-                    height: context.tTheme.fontBodySmall?.height,
-                  ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );
@@ -437,10 +511,13 @@ class TUpload extends StatelessWidget {
     return TButton(
       key: const ValueKey('upload-add'),
       size: TButtonSize.medium,
-      colorScheme: TButtonColorScheme.primary,
-      icon: const Icon(TIcons.upload),
-      onPressed: _enabled ? () => _pickFiles(context) : null,
-      child: const Text('Upload'),
+      colorPreset: TButtonColorPreset.primary,
+      icon: const TInternalIcon(TIcons.upload),
+      onPressed: _canPick ? _pickFiles : null,
+      child: Text(
+        'Upload',
+        selectionColor: context.tTheme.brandColor.withValues(alpha: 0.4),
+      ),
     );
   }
 
@@ -465,7 +542,7 @@ class TUpload extends StatelessWidget {
               onTap: () => onChanged!(
                 List.unmodifiable(files.where((item) => item.id != file.id)),
               ),
-              child: Icon(
+              child: TInternalIcon(
                 TIcons.delete,
                 size: 18,
                 color: context.tTheme.textColorPlaceholder,
@@ -483,31 +560,31 @@ class TUpload extends StatelessWidget {
     if (file.status == TUploadFileStatus.uploading) {
       return SizedBox.square(
         dimension: 24,
-        child: CircularProgressIndicator(
+        child: TInternalCircularProgressIndicator(
           value: file.progress,
           strokeWidth: 2,
           color: _enabled
-              ? context.tTheme.brandNormalColor
-              : context.tTheme.brandDisabledColor,
+              ? context.tTheme.brandColor
+              : context.tTheme.brandColorDisabled,
         ),
       );
     }
     if (file.status == TUploadFileStatus.error) {
-      return Icon(
+      return TInternalIcon(
         TIcons.error_circle_filled,
         size: 24,
         color: _enabled
-            ? context.tTheme.errorNormalColor
-            : context.tTheme.errorDisabledColor,
+            ? context.tTheme.errorColor
+            : context.tTheme.errorColorDisabled,
       );
     }
     if (file.status == TUploadFileStatus.retryableError) {
-      return Icon(
+      return TInternalIcon(
         TIcons.refresh,
         size: 24,
         color: _enabled
-            ? context.tTheme.errorNormalColor
-            : context.tTheme.errorDisabledColor,
+            ? context.tTheme.errorColor
+            : context.tTheme.errorColorDisabled,
       );
     }
     if (file.bytes != null || file.url != null) {
@@ -526,7 +603,7 @@ class TUpload extends StatelessWidget {
         ),
       );
     }
-    return Icon(
+    return TInternalIcon(
       _fileIcon(file.name),
       size: 24,
       color: _fileIconColor(context, file.name),
@@ -578,13 +655,13 @@ class TUpload extends StatelessWidget {
   }) {
     final token = context.tTheme;
     final titleColor = !_enabled
-        ? token.textDisabledColor
+        ? token.textColorDisabled
         : isFailure
-        ? token.errorNormalColor
+        ? token.errorColor
         : token.textColorPrimary;
     final subtitleColor = _enabled
         ? token.textColorPlaceholder
-        : token.textDisabledColor;
+        : token.textColorDisabled;
     return GestureDetector(
       key: key,
       onTap: onTap,
@@ -594,25 +671,25 @@ class TUpload extends StatelessWidget {
           borderRadius: BorderRadius.circular(token.radiusDefault),
         ),
         padding: EdgeInsets.symmetric(
-          vertical: token.spacer8,
-          horizontal: token.spacer12,
+          vertical: token.spacer,
+          horizontal: token.spacer1,
         ),
         child: Row(
           children: [
             SizedBox.square(dimension: 24, child: Center(child: leading)),
-            SizedBox(width: token.spacer12),
+            SizedBox(width: token.spacer1),
             Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(
+                  TTextStyled(
                     title,
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
                     style: _fontStyle(token.fontBodyMedium, titleColor),
                   ),
-                  SizedBox(height: token.spacer4),
-                  Text(
+                  const SizedBox(height: 4.0),
+                  TTextStyled(
                     subtitle,
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
@@ -621,10 +698,7 @@ class TUpload extends StatelessWidget {
                 ],
               ),
             ),
-            if (trailing != null) ...[
-              SizedBox(width: token.spacer12),
-              trailing,
-            ],
+            if (trailing != null) ...[SizedBox(width: token.spacer1), trailing],
           ],
         ),
       ),
@@ -647,18 +721,18 @@ class TUpload extends StatelessWidget {
     final token = context.tTheme;
     if (!_enabled) {
       return switch (extension) {
-        'pdf' || 'mp4' || 'mov' => token.errorDisabledColor,
-        'xls' || 'xlsx' || 'csv' => token.successDisabledColor,
-        'doc' || 'docx' => token.brandDisabledColor,
-        'ppt' || 'pptx' => token.warningDisabledColor,
-        _ => token.textDisabledColor,
+        'pdf' || 'mp4' || 'mov' => token.errorColorDisabled,
+        'xls' || 'xlsx' || 'csv' => token.successColorDisabled,
+        'doc' || 'docx' => token.brandColorDisabled,
+        'ppt' || 'pptx' => token.warningColorDisabled,
+        _ => token.textColorDisabled,
       };
     }
     return switch (extension) {
-      'pdf' || 'mp4' || 'mov' => token.errorNormalColor,
-      'xls' || 'xlsx' || 'csv' => token.successNormalColor,
-      'doc' || 'docx' => token.brandNormalColor,
-      'ppt' || 'pptx' => token.warningNormalColor,
+      'pdf' || 'mp4' || 'mov' => token.errorColor,
+      'xls' || 'xlsx' || 'csv' => token.successColor,
+      'doc' || 'docx' => token.brandColor,
+      'ppt' || 'pptx' => token.warningColor,
       _ => token.textColorPrimary,
     };
   }
@@ -670,28 +744,49 @@ class TUpload extends StatelessWidget {
     fontWeight: font?.fontWeight,
   );
 
-  Future<void> _pickFiles(BuildContext context) async {
+  Future<void> _pickFiles() async {
+    if (!_canPick) {
+      return;
+    }
+    final onChangedAtStart = onChanged!;
+    final onValidationErrorAtStart = onValidationError;
+    final onErrorAtStart = onError;
+    setState(() => _picking = true);
     try {
-      final selected = await (picker?.call() ?? _pickWithImagePicker());
-      if (!context.mounted || selected.isEmpty) {
+      late final List<TUploadFile> selected;
+      try {
+        selected = await (picker?.call() ?? _pickWithImagePicker());
+      } catch (error) {
+        if (mounted) {
+          (onError ?? onErrorAtStart)?.call(error);
+        }
+        return;
+      }
+      if (!mounted || selected.isEmpty) {
         return;
       }
       final limit = maxFiles;
       if (limit != null && files.length + selected.length > limit) {
-        onValidationError?.call(TUploadValidationError.maxFiles);
+        (onValidationError ?? onValidationErrorAtStart)?.call(
+          TUploadValidationError.maxFiles,
+        );
         return;
       }
       if (maxFileSize != null &&
           selected.any(
             (file) => file.size != null && file.size! > maxFileSize!,
           )) {
-        onValidationError?.call(TUploadValidationError.fileSize);
+        (onValidationError ?? onValidationErrorAtStart)?.call(
+          TUploadValidationError.fileSize,
+        );
         return;
       }
-      onChanged?.call(List.unmodifiable([...files, ...selected]));
-    } catch (error) {
-      if (context.mounted) {
-        onError?.call(error);
+      (onChanged ?? onChangedAtStart)(
+        List.unmodifiable([...files, ...selected]),
+      );
+    } finally {
+      if (mounted) {
+        setState(() => _picking = false);
       }
     }
   }

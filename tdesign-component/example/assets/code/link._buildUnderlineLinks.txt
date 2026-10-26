@@ -1,6 +1,0 @@
-Widget _buildUnderlineLinks(BuildContext context) {
-    return _exampleRow(context, [
-      _link(colorScheme: TLinkColorScheme.primary, underline: true),
-      _link(underline: true),
-    ]);
-  }

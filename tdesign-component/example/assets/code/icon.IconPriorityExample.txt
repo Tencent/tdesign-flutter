@@ -1,0 +1,44 @@
+import 'package:flutter/services.dart';
+import 'package:tdesign_flutter/tdesign_flutter.dart' hide TIcons;
+import 'package:tdesign_flutter_icons/tdesign_flutter_icons.dart';
+import 'package:url_launcher/link.dart';
+
+class IconPriorityExample extends StatelessWidget {
+  const IconPriorityExample({super.key});
+
+  Widget _buildIconPriorityExample(BuildContext context) {
+    // 构造器显式值覆盖 TDesign Token 默认值。
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      crossAxisAlignment: CrossAxisAlignment.center,
+      children: [
+        Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            // 构造器 size 覆盖默认 24dp。
+            const TIcon(TIcons.home_filled, size: 20),
+            const SizedBox(width: 16),
+            // 构造器 color 覆盖文字主色 Token。
+            TIcon(TIcons.setting, color: context.tTheme.errorColor),
+            const SizedBox(width: 16),
+            // 无构造器参数，使用 TDesign Token 默认值。
+            const TIcon(TIcons.notification),
+          ],
+        ),
+        const SizedBox(height: 4),
+        Text(
+          '↑ 前两个图标显式覆盖，第三个使用 Token 默认值',
+          style: TextStyle(
+            fontSize: 12,
+            color: context.tTheme.textColorSecondary,
+          ),
+        ),
+      ],
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return _buildIconPriorityExample(context);
+  }
+}

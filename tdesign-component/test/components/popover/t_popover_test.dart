@@ -1,17 +1,487 @@
 import 'dart:async';
 import 'dart:math' as math;
-import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:tdesign_flutter/src/components/popover/t_popover_widget.dart';
 import 'package:tdesign_flutter/tdesign_flutter.dart';
 
+import '../../helpers/text_slot_regression.dart';
+
 /// TPopover 组件 Widget 测试
 ///
-/// 覆盖 TPopoverColorScheme、TPopoverPlacement、内容渲染、箭头、回调等。
+/// 覆盖 TPopoverColorPreset、TPopoverPlacement、内容渲染、箭头、回调等。
 void main() {
+  for (final wrapped in [false, true]) {
+    testWidgets(
+      'Popover subtree supplies bubble defaults to TText wrapped=$wrapped',
+      (tester) async {
+        final token = TThemeData.defaultData();
+        await tester.pumpWidget(
+          MaterialApp(
+            theme: TThemeBuilder.light(token),
+            home: Scaffold(
+              body: Builder(
+                builder: (context) => Center(
+                  child: TPopoverWidget(
+                    context: context,
+                    content: wrapped
+                        ? const Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [TText('custom')],
+                          )
+                        : const TText('custom'),
+                  ),
+                ),
+              ),
+            ),
+          ),
+        );
+        await tester.pumpAndSettle();
+        final paragraph = tester.renderObject<RenderParagraph>(
+          find.text('custom'),
+        );
+        expect(paragraph.text.style!.fontSize, 16);
+        expect(paragraph.text.style!.color, token.textColorAnti);
+        expect(tester.takeException(), isNull);
+      },
+    );
+  }
+
+  registerNativeParagraphContractTests(
+    'Popover custom subtree',
+    (child) => Builder(
+      builder: (context) => TPopoverWidget(
+        context: context,
+        content: Padding(padding: const EdgeInsets.all(2), child: child),
+      ),
+    ),
+    reset: false,
+  );
+  for (final native in [true, false]) {
+    for (final scale in [1.0, 2.0]) {
+      for (final mode in ['nowrap', 'inherited', 'ellipsis', 'explicit-size']) {
+        testWidgets(
+          'Popover paragraph sizing native=$native scale=$scale mode=$mode',
+          (tester) async {
+            const data =
+                'Long words Long words Long words Long words Long words';
+            await tester.pumpWidget(
+              MaterialApp(
+                theme: TThemeBuilder.light(TThemeData.defaultData()),
+                home: Scaffold(
+                  body: MediaQuery(
+                    data: MediaQueryData(textScaler: TextScaler.linear(scale)),
+                    child: Center(
+                      child: DefaultTextStyle.merge(
+                        maxLines: mode == 'inherited' ? 1 : null,
+                        overflow: mode == 'inherited'
+                            ? TextOverflow.ellipsis
+                            : null,
+                        child: Builder(
+                          builder: (context) => TPopoverWidget(
+                            context: context,
+                            width: mode == 'explicit-size' ? 240 : null,
+                            height: mode == 'explicit-size' ? 100 : null,
+                            content: native
+                                ? Text(
+                                    data,
+                                    softWrap: mode == 'inherited'
+                                        ? null
+                                        : false,
+                                    overflow: mode == 'ellipsis'
+                                        ? TextOverflow.ellipsis
+                                        : null,
+                                  )
+                                : TText(
+                                    data,
+                                    softWrap: mode == 'inherited'
+                                        ? null
+                                        : false,
+                                    overflow: mode == 'ellipsis'
+                                        ? TextOverflow.ellipsis
+                                        : null,
+                                  ),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+            );
+            await tester.pumpAndSettle();
+            final paragraph = tester.renderObject<RenderParagraph>(
+              find.descendant(
+                of: find.byKey(const Key('t-popover-content')),
+                matching: find.byType(RichText),
+              ),
+            );
+            final panel = tester.getSize(
+              find.byKey(const Key('t-popover-content')),
+            );
+            // Compare to the rendered paragraph's own layout rules, rather than
+            // comparing two implementations that could share the same mistake.
+            final painter =
+                TextPainter(
+                  text: paragraph.text,
+                  textDirection: paragraph.textDirection,
+                  textScaler: paragraph.textScaler,
+                  maxLines: paragraph.maxLines,
+                  strutStyle: paragraph.strutStyle,
+                  ellipsis: paragraph.overflow == TextOverflow.ellipsis
+                      ? '…'
+                      : null,
+                  textHeightBehavior: paragraph.textHeightBehavior,
+                )..layout(
+                  maxWidth:
+                      paragraph.softWrap ||
+                          paragraph.overflow == TextOverflow.ellipsis
+                      ? paragraph.size.width
+                      : double.infinity,
+                );
+            if (mode == 'explicit-size') {
+              expect(panel, const Size(240, 100));
+            } else {
+              expect(panel.height, closeTo(painter.height + 24, .01));
+              expect(panel.width, lessThanOrEqualTo(300));
+            }
+            if (mode == 'inherited') {
+              expect(paragraph.maxLines, 1);
+              expect(paragraph.overflow, TextOverflow.ellipsis);
+            }
+            painter.dispose();
+            expect(tester.takeException(), isNull);
+          },
+        );
+      }
+    }
+  }
+
+  registerTextSlotParityTests(
+    'Popover text slot',
+    (child) => Builder(
+      builder: (context) => TPopoverWidget(context: context, content: child),
+    ),
+  );
+
+  for (final scale in [1.0, 2.0]) {
+    for (final long in [false, true]) {
+      testWidgets('Popover native/TD natural sizing scale=$scale long=$long', (
+        tester,
+      ) async {
+        final data = long ? List.filled(8, 'word').join(' ') : 'short';
+        Size? expected;
+        for (final native in [true, false]) {
+          await tester.pumpWidget(
+            MaterialApp(
+              theme: TThemeBuilder.light(TThemeData.defaultData()),
+              home: Scaffold(
+                body: MediaQuery(
+                  data: MediaQueryData(
+                    size: const Size(800, 600),
+                    textScaler: TextScaler.linear(scale),
+                  ),
+                  child: Builder(
+                    builder: (context) => Center(
+                      child: TPopoverWidget(
+                        context: context,
+                        content: native ? Text(data) : TText(data),
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+            ),
+          );
+          await tester.pumpAndSettle();
+          final actual = tester.getSize(
+            find.byKey(const Key('t-popover-content')),
+          );
+          if (native) {
+            expected = actual;
+          } else {
+            expect(actual, expected);
+          }
+          expect(tester.takeException(), isNull);
+        }
+      });
+    }
+  }
+
+  testWidgets(
+    'Popover natural height includes the configured paragraph strut',
+    (tester) async {
+      const strut = StrutStyle(fontSize: 18, height: 2, forceStrutHeight: true);
+      Size? expected;
+      for (final native in [true, false]) {
+        final theme = TThemeBuilder.light(
+          TThemeData.defaultData(),
+        ).mergeExtension(const TTextThemeData(strutStyle: strut));
+        await tester.pumpWidget(
+          MaterialApp(
+            theme: theme,
+            home: Scaffold(
+              body: Builder(
+                builder: (context) => Center(
+                  child: TPopoverWidget(
+                    context: context,
+                    content: native
+                        ? const Text('strut', strutStyle: strut)
+                        : const TText('strut'),
+                  ),
+                ),
+              ),
+            ),
+          ),
+        );
+        await tester.pumpAndSettle();
+        final panel = tester.getSize(
+          find.byKey(const Key('t-popover-content')),
+        );
+        final text = tester.getSize(find.text('strut'));
+        expect(panel.height, text.height + 24);
+        if (native) {
+          expected = panel;
+        } else {
+          expect(panel, expected);
+        }
+        expect(tester.takeException(), isNull);
+      }
+    },
+  );
+
+  for (final wrapper in ['Row', 'Column', 'Padding', 'Builder']) {
+    registerTextSlotParityTests(
+      'Popover wrapped $wrapper text slot',
+      (child) => Builder(
+        builder: (context) {
+          final Widget content;
+          switch (wrapper) {
+            case 'Row':
+              content = Row(mainAxisSize: MainAxisSize.min, children: [child]);
+            case 'Column':
+              content = Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [child],
+              );
+            case 'Padding':
+              content = Padding(padding: const EdgeInsets.all(4), child: child);
+            default:
+              content = Builder(builder: (_) => child);
+          }
+          return TPopoverWidget(context: context, content: content);
+        },
+      ),
+    );
+  }
+
+  testWidgets(
+    'Popover wrapped content merges partial styles and keeps explicit fonts',
+    (tester) async {
+      await tester.pumpWidget(
+        MaterialApp(
+          theme: TThemeBuilder.light(TThemeData.defaultData()),
+          home: Scaffold(
+            body: Builder(
+              builder: (context) => Center(
+                child: TPopoverWidget(
+                  context: context,
+                  content: const Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      TText('partial', style: TextStyle(color: Colors.orange)),
+                      TText(
+                        'explicit',
+                        style: TextStyle(
+                          fontSize: 20,
+                          height: 1.4,
+                          color: Colors.pink,
+                        ),
+                      ),
+                      Text(
+                        'native partial',
+                        style: TextStyle(color: Colors.orange),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ),
+          ),
+        ),
+      );
+      await tester.pumpAndSettle();
+      TextStyle style(String label) => tester
+          .widget<RichText>(
+            find.descendant(
+              of: find.text(label),
+              matching: find.byType(RichText),
+            ),
+          )
+          .text
+          .style!;
+      for (final label in ['partial', 'native partial']) {
+        expect(style(label).fontSize, 16);
+        expect(style(label).height, 1.5);
+        expect(style(label).color, Colors.orange);
+      }
+      expect(style('explicit').fontSize, 20);
+      expect(style('explicit').height, 1.4);
+      expect(style('explicit').color, Colors.pink);
+      expect(tester.takeException(), isNull);
+    },
+  );
+
+  for (final scale in [1.0, 2.0]) {
+    testWidgets('Popover constrained Row keeps wrapping scale=$scale', (
+      tester,
+    ) async {
+      await tester.pumpWidget(
+        MaterialApp(
+          theme: TThemeBuilder.light(TThemeData.defaultData()),
+          home: Scaffold(
+            body: MediaQuery(
+              data: MediaQueryData(textScaler: TextScaler.linear(scale)),
+              child: Builder(
+                builder: (context) => Center(
+                  child: TPopoverWidget(
+                    context: context,
+                    width: 240,
+                    content: const Row(
+                      children: [
+                        Expanded(
+                          child: TText(
+                            'Long words Long words Long words Long words Long words',
+                            maxLines: 2,
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+            ),
+          ),
+        ),
+      );
+      await tester.pumpAndSettle();
+      final paragraph = tester.renderObject<RenderParagraph>(
+        find.descendant(
+          of: find.byType(TText),
+          matching: find.byType(RichText),
+        ),
+      );
+      final panel = tester.getSize(find.byKey(const Key('t-popover-content')));
+      expect(panel.width, 240);
+      expect(panel.height, closeTo(paragraph.size.height + 24, .01));
+      expect(paragraph.maxLines, 2);
+      expect(paragraph.overflow, TextOverflow.ellipsis);
+      expect(paragraph.text.style!.fontSize, 16);
+      expect(paragraph.text.style!.color, Colors.white);
+      expect(tester.takeException(), isNull);
+    });
+  }
+
+  for (final dark in [false, true]) {
+    for (final scale in [1.0, 2.0]) {
+      testWidgets(
+        'Popover wrappers preserve direct typography dark=$dark scale=$scale',
+        (tester) async {
+          for (final native in [true, false]) {
+            TextStyle? expected;
+            for (final wrapper in [
+              'direct',
+              'Row',
+              'Column',
+              'Padding',
+              'Builder',
+            ]) {
+              final Widget label = native
+                  ? const Text('Slot')
+                  : const TText('Slot');
+              final Widget content;
+              switch (wrapper) {
+                case 'Row':
+                  content = Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [label],
+                  );
+                case 'Column':
+                  content = Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [label],
+                  );
+                case 'Padding':
+                  content = Padding(
+                    padding: const EdgeInsets.all(4),
+                    child: label,
+                  );
+                case 'Builder':
+                  content = Builder(builder: (_) => label);
+                default:
+                  content = label;
+              }
+              await tester.pumpWidget(
+                MaterialApp(
+                  theme: dark
+                      ? TThemeBuilder.dark(TThemeData.defaultData())
+                      : TThemeBuilder.light(TThemeData.defaultData()),
+                  home: Scaffold(
+                    body: MediaQuery(
+                      data: MediaQueryData(
+                        textScaler: TextScaler.linear(scale),
+                      ),
+                      child: Builder(
+                        builder: (context) => Center(
+                          child: TPopoverWidget(
+                            context: context,
+                            content: content,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              );
+              await tester.pumpAndSettle();
+              final actual = tester
+                  .widget<RichText>(
+                    find.descendant(
+                      of: find.text('Slot'),
+                      matching: find.byType(RichText),
+                    ),
+                  )
+                  .text
+                  .style!;
+              if (expected == null) {
+                expected = actual;
+              } else {
+                expect(actual.fontSize, expected.fontSize, reason: wrapper);
+                expect(actual.height, expected.height, reason: wrapper);
+                expect(actual.color, expected.color, reason: wrapper);
+                expect(actual.fontWeight, expected.fontWeight, reason: wrapper);
+                expect(
+                  actual.letterSpacing,
+                  expected.letterSpacing,
+                  reason: wrapper,
+                );
+              }
+              expect(tester.takeException(), isNull);
+            }
+          }
+        },
+      );
+    }
+  }
+
   /// 构建带主题的测试壳
-  Widget wrapWithTheme(Widget child, {TPopoverThemeData? popoverTheme}) {
-    var theme = TThemeBuilder.light(TThemeData.defaultData());
+  Widget wrapWithTheme(
+    Widget child, {
+    TPopoverThemeData? popoverTheme,
+    TThemeData? tokens,
+  }) {
+    var theme = TThemeBuilder.light(tokens ?? TThemeData.defaultData());
     if (popoverTheme != null) {
       theme = theme.mergeExtension(popoverTheme);
     }
@@ -32,17 +502,17 @@ void main() {
   // 枚举验证
   // ============================================================
   group('枚举', () {
-    test('TPopoverColorScheme 有六个值', () {
-      expect(TPopoverColorScheme.values.length, 6);
+    test('TPopoverColorPreset 有六个值', () {
+      expect(TPopoverColorPreset.values.length, 6);
       expect(
-        TPopoverColorScheme.values,
-        contains(TPopoverColorScheme.defaultTheme),
+        TPopoverColorPreset.values,
+        contains(TPopoverColorPreset.defaultTheme),
       );
-      expect(TPopoverColorScheme.values, contains(TPopoverColorScheme.light));
-      expect(TPopoverColorScheme.values, contains(TPopoverColorScheme.primary));
-      expect(TPopoverColorScheme.values, contains(TPopoverColorScheme.success));
-      expect(TPopoverColorScheme.values, contains(TPopoverColorScheme.warning));
-      expect(TPopoverColorScheme.values, contains(TPopoverColorScheme.danger));
+      expect(TPopoverColorPreset.values, contains(TPopoverColorPreset.light));
+      expect(TPopoverColorPreset.values, contains(TPopoverColorPreset.primary));
+      expect(TPopoverColorPreset.values, contains(TPopoverColorPreset.success));
+      expect(TPopoverColorPreset.values, contains(TPopoverColorPreset.warning));
+      expect(TPopoverColorPreset.values, contains(TPopoverColorPreset.danger));
     });
 
     test('TPopoverPlacement 有十二个值', () {
@@ -127,6 +597,44 @@ void main() {
       expect(decoration.color, token.grayColor14);
     });
 
+    testWidgets('圆角未配置时跟随全局 Token，组件 Theme 可以覆盖', (tester) async {
+      final tokens = TThemeData.defaultData().copyWith(
+        radiusMap: {'radiusDefault': 7},
+      );
+      const content = Center(child: Text('圆角 Token'));
+
+      Widget subject() => Builder(
+        builder: (context) => Center(
+          child: TPopoverWidget(context: context, content: content),
+        ),
+      );
+
+      await tester.pumpWidget(wrapWithTheme(subject(), tokens: tokens));
+      var decoration =
+          tester
+                  .widget<Container>(find.byKey(const Key('t-popover-content')))
+                  .decoration!
+              as BoxDecoration;
+      expect(decoration.borderRadius, BorderRadius.circular(7));
+
+      await tester.pumpWidget(
+        wrapWithTheme(
+          subject(),
+          tokens: tokens,
+          popoverTheme: const TPopoverThemeData(
+            borderRadius: BorderRadius.all(Radius.circular(16)),
+          ),
+        ),
+      );
+      await tester.pumpAndSettle();
+      decoration =
+          tester
+                  .widget<Container>(find.byKey(const Key('t-popover-content')))
+                  .decoration!
+              as BoxDecoration;
+      expect(decoration.borderRadius, BorderRadius.circular(16));
+    });
+
     testWidgets('主题 backgroundColor 覆盖语义色的背景 token', (tester) async {
       await tester.pumpWidget(
         wrapWithTheme(
@@ -136,7 +644,7 @@ void main() {
                 child: TPopoverWidget(
                   context: context,
                   content: const Text('自定义背景'),
-                  colorScheme: TPopoverColorScheme.primary,
+                  colorPreset: TPopoverColorPreset.primary,
                 ),
               );
             },
@@ -275,11 +783,11 @@ void main() {
   });
 
   // ============================================================
-  // colorScheme 颜色方案
+  // colorPreset 颜色方案
   // ============================================================
-  group('TPopoverWidget colorScheme', () {
-    for (final scheme in TPopoverColorScheme.values) {
-      testWidgets('colorScheme: $scheme 渲染正常', (tester) async {
+  group('TPopoverWidget colorPreset', () {
+    for (final scheme in TPopoverColorPreset.values) {
+      testWidgets('colorPreset: $scheme 渲染正常', (tester) async {
         await tester.pumpWidget(
           wrapWithTheme(
             Builder(
@@ -288,7 +796,7 @@ void main() {
                   child: TPopoverWidget(
                     context: context,
                     content: Text('${scheme.name}气泡'),
-                    colorScheme: scheme,
+                    colorPreset: scheme,
                   ),
                 );
               },
@@ -397,6 +905,51 @@ void main() {
       );
       await tester.pump();
       expect(find.text('大箭头'), findsOneWidget);
+    });
+
+    testWidgets('顶部与底部四角箭头定位点距气泡左右边缘 12px', (tester) async {
+      for (final placement in const [
+        TPopoverPlacement.topLeft,
+        TPopoverPlacement.topRight,
+        TPopoverPlacement.bottomLeft,
+        TPopoverPlacement.bottomRight,
+      ]) {
+        final controller = TPopoverController();
+        await tester.pumpWidget(
+          wrapWithTheme(
+            Center(
+              child: TPopoverAnchor(
+                controller: controller,
+                placement: placement,
+                content: SizedBox(
+                  width: 120,
+                  height: 40,
+                  child: Text(placement.name),
+                ),
+                builder: (context, controller, child) =>
+                    const SizedBox(width: 104, height: 40, child: Text('触发项')),
+              ),
+            ),
+          ),
+        );
+        controller.open();
+        await tester.pumpAndSettle();
+
+        final contentRect = tester.getRect(
+          find.byKey(const Key('t-popover-content')),
+        );
+        final arrowRect = tester.getRect(arrowContainerFinder());
+        if (placement == TPopoverPlacement.topLeft ||
+            placement == TPopoverPlacement.bottomLeft) {
+          expect(arrowRect.left - contentRect.left, 12);
+          expect(contentRect.left, tester.getRect(find.text('触发项')).left);
+        } else {
+          expect(contentRect.right - arrowRect.right, 12);
+          expect(contentRect.right, tester.getRect(find.text('触发项')).right);
+        }
+        controller.close();
+        await tester.pump();
+      }
     });
   });
 
@@ -553,7 +1106,7 @@ void main() {
           ),
           popoverTheme: const TPopoverThemeData(
             padding: EdgeInsets.all(10),
-            borderRadius: 20,
+            borderRadius: BorderRadius.all(Radius.circular(20)),
             arrowSize: 16,
           ),
         ),
@@ -941,7 +1494,7 @@ void main() {
       expect(find.text('弹出气泡'), findsOneWidget);
     });
 
-    testWidgets('showPopover 带 colorScheme', (tester) async {
+    testWidgets('showPopover 带 colorPreset', (tester) async {
       late BuildContext ctx;
       await tester.pumpWidget(
         wrapWithTheme(
@@ -958,7 +1511,7 @@ void main() {
         TPopover.showPopover(
           context: ctx,
           content: const Text('成功气泡'),
-          colorScheme: TPopoverColorScheme.success,
+          colorPreset: TPopoverColorPreset.success,
         ),
       );
       await tester.pumpAndSettle();
@@ -994,6 +1547,90 @@ void main() {
       await tester.pumpAndSettle();
 
       expect(find.text('可关闭'), findsNothing);
+    });
+
+    testWidgets('点击另一触发器时关闭旧气泡并在同一次点击中打开新气泡', (tester) async {
+      await tester.pumpWidget(
+        wrapWithTheme(
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: [
+              Builder(
+                builder: (context) => TextButton(
+                  onPressed: () {
+                    unawaited(
+                      TPopover.showPopover(
+                        context: context,
+                        content: const Text('第一个气泡'),
+                        placement: TPopoverPlacement.bottom,
+                      ),
+                    );
+                  },
+                  child: const Text('第一个触发器'),
+                ),
+              ),
+              Builder(
+                builder: (context) => TextButton(
+                  onPressed: () {
+                    unawaited(
+                      TPopover.showPopover(
+                        context: context,
+                        content: const Text('第二个气泡'),
+                        placement: TPopoverPlacement.bottom,
+                      ),
+                    );
+                  },
+                  child: const Text('第二个触发器'),
+                ),
+              ),
+            ],
+          ),
+        ),
+      );
+
+      await tester.tap(find.text('第一个触发器'));
+      await tester.pumpAndSettle();
+      expect(find.text('第一个气泡'), findsOneWidget);
+
+      await tester.tap(find.text('第二个触发器'));
+      await tester.pumpAndSettle();
+
+      expect(find.text('第一个气泡'), findsNothing);
+      expect(find.text('第二个气泡'), findsOneWidget);
+    });
+
+    testWidgets('再次点击当前触发器只关闭已展开气泡', (tester) async {
+      var pressedCount = 0;
+      await tester.pumpWidget(
+        wrapWithTheme(
+          Builder(
+            builder: (context) => TextButton(
+              onPressed: () {
+                pressedCount++;
+                unawaited(
+                  TPopover.showPopover(
+                    context: context,
+                    content: const Text('可切换气泡'),
+                    placement: TPopoverPlacement.bottom,
+                  ),
+                );
+              },
+              child: const Text('可切换触发器'),
+            ),
+          ),
+        ),
+      );
+
+      await tester.tapAt(tester.getCenter(find.text('可切换触发器')));
+      await tester.pumpAndSettle();
+      expect(find.text('可切换气泡'), findsOneWidget);
+      expect(pressedCount, 1);
+
+      await tester.tapAt(tester.getCenter(find.text('可切换触发器')));
+      await tester.pumpAndSettle();
+
+      expect(find.text('可切换气泡'), findsNothing);
+      expect(pressedCount, 1);
     });
 
     testWidgets('展示后页面仍可滚动且滚动时关闭气泡', (tester) async {
@@ -1289,6 +1926,9 @@ void main() {
               },
             ),
           ),
+          popoverTheme: const TPopoverThemeData(
+            borderRadius: BorderRadius.all(Radius.circular(20)),
+          ),
         ),
       );
 
@@ -1302,7 +1942,6 @@ void main() {
           width: 180,
           height: 150,
           placement: TPopoverPlacement.top,
-          radius: BorderRadius.circular(20),
         ),
       );
       await tester.pumpAndSettle();
@@ -1395,7 +2034,10 @@ void main() {
           ),
           popoverTheme: const TPopoverThemeData(
             backgroundColor: Colors.black,
-            borderRadius: 8,
+            borderRadius: BorderRadius.only(
+              topLeft: Radius.circular(8),
+              bottomRight: Radius.circular(16),
+            ),
             arrowSize: 10,
             minWidth: 50,
             maxHeight: 200,
@@ -1408,7 +2050,7 @@ void main() {
         TPopover.showPopover(
           context: ctx,
           content: const Text('主题气泡'),
-          colorScheme: TPopoverColorScheme.defaultTheme,
+          colorPreset: TPopoverColorPreset.defaultTheme,
         ),
       );
       await tester.pumpAndSettle();
@@ -1425,18 +2067,27 @@ void main() {
         (themedContainer.decoration! as BoxDecoration).boxShadow?.first.color,
         Colors.purple,
       );
+      expect(
+        (themedContainer.decoration! as BoxDecoration).borderRadius,
+        const BorderRadius.only(
+          topLeft: Radius.circular(8),
+          bottomRight: Radius.circular(16),
+        ),
+      );
     });
 
     test('TPopoverThemeData merge 合并', () {
       const base = TPopoverThemeData(
         backgroundColor: Colors.white,
-        borderRadius: 4,
+        borderRadius: BorderRadius.all(Radius.circular(4)),
         boxShadow: [BoxShadow(color: Colors.black)],
       );
-      const override = TPopoverThemeData(borderRadius: 8);
+      const override = TPopoverThemeData(
+        borderRadius: BorderRadius.all(Radius.circular(8)),
+      );
       final merged = base.merge(override);
       expect(merged.backgroundColor, Colors.white);
-      expect(merged.borderRadius, 8);
+      expect(merged.borderRadius, BorderRadius.circular(8));
       expect(merged.boxShadow, base.boxShadow);
     });
 
@@ -1471,10 +2122,9 @@ void main() {
         minWidth: 80,
         maxWidth: 240,
         maxHeight: 160,
-        borderRadius: 12,
+        borderRadius: BorderRadius.all(Radius.circular(12)),
         barrierColor: Colors.black54,
         arrowSize: 10,
-        showArrow: false,
         offset: 6,
         boxShadow: [BoxShadow(color: Colors.black)],
       );
@@ -1488,7 +2138,6 @@ void main() {
       expect(beforeMidpoint.borderRadius, isNull);
       expect(beforeMidpoint.barrierColor, isNull);
       expect(beforeMidpoint.arrowSize, isNull);
-      expect(beforeMidpoint.showArrow, isNull);
       expect(beforeMidpoint.offset, isNull);
       expect(beforeMidpoint.boxShadow, isNull);
 
@@ -1498,10 +2147,9 @@ void main() {
       expect(afterMidpoint.minWidth, 80);
       expect(afterMidpoint.maxWidth, 240);
       expect(afterMidpoint.maxHeight, 160);
-      expect(afterMidpoint.borderRadius, 12);
+      expect(afterMidpoint.borderRadius, BorderRadius.circular(12));
       expect(afterMidpoint.barrierColor, Colors.black54);
       expect(afterMidpoint.arrowSize, 10);
-      expect(afterMidpoint.showArrow, isFalse);
       expect(afterMidpoint.offset, 6);
       expect(afterMidpoint.boxShadow, explicit.boxShadow);
 
@@ -1517,12 +2165,14 @@ void main() {
         backgroundColor: Colors.black,
         padding: EdgeInsets.all(8),
         maxWidth: 100,
+        borderRadius: BorderRadius.all(Radius.circular(4)),
         arrowSize: 4,
       );
       const end = TPopoverThemeData(
         backgroundColor: Colors.white,
         padding: EdgeInsets.all(16),
         maxWidth: 200,
+        borderRadius: BorderRadius.all(Radius.circular(12)),
         arrowSize: 12,
       );
 
@@ -1533,6 +2183,7 @@ void main() {
       );
       expect(midpoint.padding, const EdgeInsets.all(12));
       expect(midpoint.maxWidth, 150);
+      expect(midpoint.borderRadius, BorderRadius.circular(8));
       expect(midpoint.arrowSize, 8);
     });
   });

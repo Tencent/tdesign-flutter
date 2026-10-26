@@ -3,14 +3,18 @@ import 'dart:ui' show lerpDouble;
 import 'package:flutter/material.dart';
 
 /// 结果组件级 ThemeExtension
+///
+/// {@category ComponentTheme}
 class TResultThemeData extends ThemeExtension<TResultThemeData> {
   /// 默认状态图标尺寸；自定义 icon 不使用该字段。
+  /// 未配置时为 80 逻辑像素，必须大于 0。
   final double? iconSize;
 
-  /// 标题文字样式
+  /// 标题文字样式；默认使用 fontTitleMedium / textColorPrimary Token。
   final TextStyle? titleStyle;
 
   /// 描述文字样式
+  /// 未配置时使用 fontBodyMedium / textColorSecondary Token。
   final TextStyle? descriptionStyle;
 
   const TResultThemeData({
@@ -19,6 +23,10 @@ class TResultThemeData extends ThemeExtension<TResultThemeData> {
     this.descriptionStyle,
   }) : assert(iconSize == null || iconSize > 0);
 
+  /// 复制主题配置。
+  ///
+  /// ## 返回值
+  /// 返回主题副本；非空参数替换对应配置，null 参数保留当前配置。
   @override
   TResultThemeData copyWith({
     double? iconSize,
@@ -32,8 +40,19 @@ class TResultThemeData extends ThemeExtension<TResultThemeData> {
     );
   }
 
+  /// 生成主题过渡配置。
+  ///
+  /// ## 返回值
+  /// 按 t 在当前主题和目标主题之间生成过渡主题。
+  /// other 为空或类型不匹配时返回当前主题；字段各自采用其类型的插值规则。
   @override
-  TResultThemeData lerp(ThemeExtension<TResultThemeData>? other, double t) {
+  TResultThemeData lerp(
+    /// 目标主题；为空或类型不匹配时保留当前主题。
+    ThemeExtension<TResultThemeData>? other,
+
+    /// 插值进度；通常 0 表示当前主题，1 表示目标主题。
+    double t,
+  ) {
     if (other is! TResultThemeData) {
       return this;
     }

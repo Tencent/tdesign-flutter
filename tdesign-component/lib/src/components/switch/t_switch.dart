@@ -1,7 +1,13 @@
+import 'dart:math' as math;
+
 import 'package:flutter/material.dart';
 import 'package:tdesign_flutter_icons/tdesign_flutter_icons.dart' show TIcons;
 
+import '../../theme/t_internal_material.dart';
+import '../../theme/t_sizes.dart';
+import '../../theme/t_theme.dart';
 import '../loading/t_circle_indicator.dart';
+import '../text/t_text_styled.dart';
 import 't_cupertino_switch.dart';
 import 't_switch_resolve.dart';
 import 't_switch_theme_data.dart';
@@ -9,34 +15,15 @@ import 't_switch_types.dart';
 
 export 't_switch_types.dart';
 
-/// 严格受控的开关组件。
-///
-/// [value] 由父级持有；[onChanged] 为 null 时禁用；[loading] 为 true 时
-/// 显示加载指示器并禁用交互。文字、图标和加载内容无法由 Material Switch
-/// 完整表达，因此底层保留 TDesign 自定义开关实现。
 class TSwitch extends StatelessWidget {
   const TSwitch({
     super.key,
-
-    /// 受控开关状态。
     required this.value,
-
-    /// 开关状态变更回调；为 null 时禁用。
     this.onChanged,
-
-    /// 开关尺寸；未传时读取 [TSwitchThemeData.defaultSize]。
     this.size,
-
-    /// 开关内容形态；未传时读取 [TSwitchThemeData.defaultVariant]。
     this.variant,
-
-    /// 是否处于加载状态；加载时显示指示器并禁用交互。
     this.loading = false,
-
-    /// text 形态的开启文案。
     this.openText,
-
-    /// text 形态的关闭文案。
     this.closeText,
   });
 
@@ -46,79 +33,145 @@ class TSwitch extends StatelessWidget {
   /// 开关状态变更回调；为 null 时禁用。
   final ValueChanged<bool>? onChanged;
 
-  /// 开关尺寸。
+  /// 开关尺寸；未传时以 [TSwitchSize.medium] 为最小尺寸，文字形态可随内容增长。
+  /// 显式预设尺寸保持固定，滑块文字适配其内容槽。
   final TSwitchSize? size;
 
-  /// 开关内容形态。
+  /// 开关内容形态；未传时为 [TSwitchVariant.filled]。
   final TSwitchVariant? variant;
 
   /// 是否处于加载状态；加载时显示指示器并禁用交互。
   final bool loading;
 
   /// text 形态的开启文案。
+  /// null 时显示“开”；仅开启态文本内容形态使用。
   final String? openText;
 
   /// text 形态的关闭文案。
+  /// null 时显示“关”；仅关闭态文本内容形态使用。
   final String? closeText;
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context).extension<TSwitchThemeData>();
-    final resolvedSize = size ?? theme?.defaultSize ?? TSwitchSize.medium;
-    final resolvedVariant =
-        variant ?? theme?.defaultVariant ?? TSwitchVariant.filled;
+    final resolvedSize = size ?? TSwitchSize.medium;
+    final resolvedVariant = variant ?? TSwitchVariant.filled;
     final enabled = onChanged != null && !loading;
-    final resolved = TSwitchResolve.resolve(
-      context: context,
-      enabled: enabled,
-      theme: theme,
-    );
+    final resolved = TSwitchResolve.resolve(context: context, theme: theme);
+    final textGrowth = resolvedVariant == TSwitchVariant.text
+        ? _textGrowth(context, resolved)
+        : 1.0;
 
     Widget current = TCupertinoSwitch(
       value: value,
-      activeColor: resolved.trackOnColor,
-      trackColor: resolved.trackOffColor,
+      trackWidth: _nativeTrackWidth(context, resolvedSize),
+      activeColor: enabled
+          ? resolved.trackOnColor
+          : resolved.disabledTrackOnColor,
+      trackColor: enabled
+          ? resolved.trackOffColor
+          : resolved.disabledTrackOffColor,
+      thumbColor: enabled ? resolved.thumbColor : resolved.disabledThumbColor,
       onChanged: enabled ? onChanged : null,
-      // TSwitch owns its disabled appearance below. Avoid multiplying it by
-      // TCupertinoSwitch's standalone disabled opacity.
+      // State colors are resolved independently; never dim the whole switch.
       disabledOpacity: 1,
       thumbView: _buildThumb(
+        textGrowth: textGrowth,
         resolved: resolved,
         variant: resolvedVariant,
         loading: loading,
+        disabled: onChanged == null,
         openText: openText,
         closeText: closeText,
       ),
     );
 
     if (!enabled) {
-      current = Opacity(
-        opacity: 0.4,
-        child: IgnorePointer(ignoring: true, child: current),
-      );
+      current = IgnorePointer(ignoring: true, child: current);
     }
 
+    // 默认文字开关随内容增长；显式预设尺寸仍保持固定几何。
+    final growth = size == null ? textGrowth : 1.0;
     return Semantics(
       enabled: enabled,
       toggled: value,
       child: SizedBox(
-        width: TSwitchResolve.width(resolvedSize),
-        height: TSwitchResolve.height(resolvedSize),
+        width: TSwitchResolve.width(resolvedSize) * growth,
+        height: _height(context, resolvedSize) * growth,
         child: FittedBox(child: current),
       ),
     );
   }
 
+  double _height(BuildContext context, TSwitchSize size) => switch (size) {
+    TSwitchSize.large => context.tTheme.size10,
+    TSwitchSize.medium => context.tTheme.size9,
+    TSwitchSize.small => context.tTheme.size8,
+  };
+
+  double _nativeTrackWidth(BuildContext context, TSwitchSize size) {
+    final nativeWidth = TSwitchResolve.width(TSwitchSize.medium);
+    final nativeHeight = TSwitchResolve.height(TSwitchSize.medium);
+    final height = _height(context, size);
+    // FittedBox keeps the thumb circular. Compensate only its internal track
+    // width so changing the bound height never scales the independent width.
+    // Preserve the visible width of the existing default fit for every tier.
+    final defaultFit = math.min(
+      TSwitchResolve.width(size) / nativeWidth,
+      TSwitchResolve.height(size) / nativeHeight,
+    );
+    return height == 0
+        ? nativeWidth
+        : nativeWidth * defaultFit * nativeHeight / height;
+  }
+
+  double _textGrowth(BuildContext context, TSwitchResolvedStyle resolved) {
+    var extent = 16.0;
+    for (final (configured, label) in [
+      (resolved.thumbContentOnFont, openText ?? '开'),
+      (resolved.thumbContentOffFont, closeText ?? '关'),
+    ]) {
+      final size = TTextStyled(
+        label,
+        maxLines: 1,
+        style: configured.copyWith(height: configured.height ?? 1),
+      ).naturalSize(context);
+      extent = math.max(extent, size.height);
+      if (label.characters.length <= 1) {
+        extent = math.max(extent, size.width);
+      } else {
+        final abbreviatedWidth = [label.characters.first, '…'].fold<double>(
+          0,
+          (width, part) =>
+              width +
+              TTextStyled(
+                part,
+                maxLines: 1,
+                style: configured.copyWith(height: configured.height ?? 1),
+              ).naturalSize(context).width,
+        );
+        // Measure separately: prefix/ellipsis kerning differs from the source label.
+        extent = math.max(
+          extent,
+          math.min(size.width, abbreviatedWidth).ceilToDouble(),
+        );
+      }
+    }
+    return extent / 16;
+  }
+
   Widget? _buildThumb({
+    required double textGrowth,
     required TSwitchResolvedStyle resolved,
     required TSwitchVariant variant,
     required bool loading,
+    required bool disabled,
     required String? openText,
     required String? closeText,
   }) {
     if (loading) {
       return TCircleIndicator(
-        color: resolved.thumbContentOnColor,
+        color: resolved.loadingColor,
         size: 16,
         lineWidth: 3,
       );
@@ -126,31 +179,52 @@ class TSwitch extends StatelessWidget {
     return switch (variant) {
       TSwitchVariant.text => SizedBox(
         width: 16,
-        child: Center(
-          child: Text(
-            value ? (openText ?? '开') : (closeText ?? '关'),
-            maxLines: 1,
-            overflow: TextOverflow.ellipsis,
-            style:
-                (value
-                        ? resolved.thumbContentOnFont
-                        : resolved.thumbContentOffFont)
-                    .copyWith(
-                      color: value
-                          ? resolved.thumbContentOnColor
-                          : resolved.thumbContentOffColor,
-                      height: 1,
-                      leadingDistribution: TextLeadingDistribution.even,
-                    ),
+        height: 16,
+        // 滑块是固定几何；先让文字完成自然纵向布局，再按内容槽缩小。
+        // 两个状态使用同一自然内容槽，抵消外层几何缩放，保留各自实际字号。
+        // 单字符完整展示；多字符沿用槽内省略。
+        child: FittedBox(
+          fit: BoxFit.scaleDown,
+          child: SizedBox(
+            width: 16 * textGrowth,
+            child: TTextStyled(
+              value ? (openText ?? '开') : (closeText ?? '关'),
+              maxLines: 1,
+              textAlign: TextAlign.center,
+              overflow: TextOverflow.ellipsis,
+              style:
+                  (value
+                          ? resolved.thumbContentOnFont
+                          : resolved.thumbContentOffFont)
+                      .copyWith(
+                        color: value
+                            ? (disabled
+                                  ? resolved.disabledTrackOnColor
+                                  : resolved.thumbContentOnColor)
+                            : (disabled
+                                  ? resolved.disabledTrackOffColor
+                                  : resolved.thumbContentOffColor),
+                        height:
+                            (value
+                                    ? resolved.thumbContentOnFont
+                                    : resolved.thumbContentOffFont)
+                                .height ??
+                            1,
+                      ),
+            ),
           ),
         ),
       ),
-      TSwitchVariant.icon => Icon(
+      TSwitchVariant.icon => TInternalIcon(
         value ? TIcons.check : TIcons.close,
         size: 16,
         color: value
-            ? resolved.thumbContentOnColor
-            : resolved.thumbContentOffColor,
+            ? (disabled
+                  ? resolved.disabledTrackOnColor
+                  : resolved.thumbContentOnColor)
+            : (disabled
+                  ? resolved.disabledTrackOffColor
+                  : resolved.thumbContentOffColor),
       ),
       TSwitchVariant.filled => null,
     };

@@ -1,18 +1,23 @@
 import 'package:flutter/material.dart';
 
 import '../../theme/t_colors.dart';
+import '../../theme/t_internal_material.dart';
 import '../../theme/t_theme.dart';
+import '../icon/t_icon.dart';
+import '../text/t_text_resolve.dart';
+import '../text/t_text_style_scope.dart';
+import '../text/t_text_styled.dart';
 import 't_tab_bar_theme_data.dart';
 
 /// Tab 组件
 ///
 /// TDesign 选项卡标签，通常作为 `TTabsBar.tabs` 的子项使用。
 class TTab extends Tab {
-  /// 文字内容
+  /// 文字内容；与 child 互斥，text、child、icon 至少提供一个。
   @override
   final String? text;
 
-  /// 子widget
+  /// 自定义标签内容；与 text 互斥，可与 icon 同时提供。
   @override
   final Widget? child;
 
@@ -54,20 +59,27 @@ class TTab extends Tab {
               children: <Widget>[icon!, const SizedBox(width: 4), label],
             );
     }
-    Widget content = Center(widthFactor: 1.0, child: label);
+    Widget content = Center(
+      widthFactor: 1.0,
+      heightFactor: child == null ? 1.0 : null,
+      child: label,
+    );
     if (!enabled) {
-      final disabledStyle = DefaultTextStyle.of(context).style
-          .copyWith(color: context.tTheme.textDisabledColor)
-          .merge(
-            Theme.of(
-              context,
-            ).extension<TTabsBarThemeData>()?.disabledLabelStyle,
-          );
-      content = DefaultTextStyle.merge(
-        style: disabledStyle,
-        child: IconTheme.merge(
+      final disabledStyle = TTextResolve.resolve(
+        context: context,
+        style: TextStyle(color: context.tTheme.textColorDisabled).merge(
+          Theme.of(context).extension<TTabsBarThemeData>()?.disabledLabelStyle,
+        ),
+      );
+      content = TTextStyleScope(
+        style: TTextResolve.resolve(context: context, style: disabledStyle),
+        child: TInternalIconTheme.merge(
           data: IconThemeData(color: disabledStyle.color),
-          child: content,
+          child: TIconStyleScope(
+            color: disabledStyle.color,
+            size: TIconStyleScope.maybeOf(context)?.size,
+            child: content,
+          ),
         ),
       );
     }
@@ -78,6 +90,12 @@ class TTab extends Tab {
     if (child != null) {
       return child!;
     }
-    return Text(text!, softWrap: false, overflow: TextOverflow.fade);
+    return TTextStyled(
+      text!,
+      centerLeading: true,
+      style: null,
+      softWrap: false,
+      overflow: TextOverflow.fade,
+    );
   }
 }

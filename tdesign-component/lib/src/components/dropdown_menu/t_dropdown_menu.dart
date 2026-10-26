@@ -10,30 +10,66 @@ import 'package:tdesign_flutter_icons/tdesign_flutter_icons.dart';
 
 import '../../theme/t_colors.dart';
 import '../../theme/t_fonts.dart';
-import '../../theme/t_spacers.dart';
+import '../../theme/t_internal_material.dart';
+import '../../theme/t_sizes.dart';
 import '../../theme/t_theme.dart';
+import '../text/t_text_styled.dart';
 import 't_dropdown_theme_data.dart';
 
 /// 下拉筛选面板相对筛选栏的展开位置。
-enum TDropdownMenuPlacement { auto, below, above }
+enum TDropdownMenuPlacement {
+  /// 根据触发栏上下可用空间自动选择展开方向。
+  auto,
+
+  /// 向触发栏下方展开。
+  below,
+
+  /// 向触发栏上方展开。
+  above,
+}
 
 /// 下拉筛选面板关闭的原因。
 enum TDropdownMenuCloseReason {
+  /// 单选面板提交选项后关闭。
   selection,
+
+  /// 多选面板确认草稿后关闭。
   confirm,
+
+  /// 面板取消操作或局部控制器默认关闭。
   cancel,
+
+  /// 点击面板外部区域触发关闭。
   overlay,
+
+  /// 返回键或路由返回操作触发关闭。
   back,
+
+  /// 再次点击当前触发项关闭。
   trigger,
+
+  /// 全局控制器请求关闭。
   controller,
+
+  /// 切换到其他筛选项时关闭原面板。
   switchItem,
 }
 
 /// 下拉筛选面板关闭回调。
+/// [index] 关闭面板对应的筛选项索引，从 0 开始。
+/// [reason] 本次面板关闭的原因。
+///
+/// ## 返回值
+/// 无返回值。
 typedef TDropdownMenuClosedCallback =
     void Function(int index, TDropdownMenuCloseReason reason);
 
 /// 默认触发项的面板构建器。
+/// [context] 筛选面板的构建上下文。
+/// [controller] 当前面板控制器，用于请求关闭该面板。
+///
+/// ## 返回值
+/// 当前筛选项的面板内容。
 typedef TDropdownMenuPanelBuilder =
     Widget Function(
       BuildContext context,
@@ -41,6 +77,11 @@ typedef TDropdownMenuPanelBuilder =
     );
 
 /// 自定义触发项构建器。
+/// [context] 筛选触发项的构建上下文。
+/// [state] 当前触发项的状态及操作入口。
+///
+/// ## 返回值
+/// 自定义筛选触发项内容。
 typedef TDropdownMenuTriggerBuilder =
     Widget Function(BuildContext context, TDropdownMenuTriggerState state);
 
@@ -81,9 +122,16 @@ class TDropdownMenuTriggerState {
     required this.toggle,
   });
 
+  /// 当前触发项在筛选栏中的下标。
   final int index;
+
+  /// 当前触发项对应面板是否打开。
   final bool isOpen;
+
+  /// 当前触发项是否允许交互。
   final bool enabled;
+
+  /// 切换当前面板开关状态的操作；禁用时不会打开面板。
   final VoidCallback toggle;
 }
 
@@ -94,10 +142,16 @@ class TDropdownMenuPanelController {
     required Future<void> Function(TDropdownMenuCloseReason reason) close,
   }) : _close = close;
 
+  /// 当前面板所属筛选项的下标。
   final int index;
   final Future<void> Function(TDropdownMenuCloseReason reason) _close;
 
+  /// 请求关闭当前面板；[reason] 默认 cancel。返回的 Future 表示本次关闭请求处理结束。
+  ///
+  /// ## 返回值
+  /// 当前关闭请求处理完毕时完成；被新操作打断时也可能提前完成，不保证面板已经关闭。
   Future<void> close([
+    /// 关闭原因，默认 cancel。
     TDropdownMenuCloseReason reason = TDropdownMenuCloseReason.cancel,
   ]) => _close(reason);
 }
@@ -122,47 +176,91 @@ class TDropdownMenuItem {
   }) : label = null,
        assert(flex > 0);
 
+  /// 默认触发项文案；使用 custom 构造时为空。
   final String? label;
+
+  /// 自定义触发项构建器；默认构造时为空。
   final TDropdownMenuTriggerBuilder? triggerBuilder;
+
+  /// 面板构建器，接收当前面板的局部控制器。
   final TDropdownMenuPanelBuilder panelBuilder;
+
+  /// 是否启用触发项，默认 true。
   final bool enabled;
+
+  /// 非滚动且父级宽度有界时的宽度分配权重，默认 1，必须大于 0。
   final int flex;
+
+  /// 滚动模式或父级宽度无界时的触发项宽度，默认 112 逻辑像素；
+  /// 非滚动且宽度有界时使用 [flex] 分配宽度，此字段不生效。
   final double? width;
 }
 
 /// 类型安全的下拉筛选栏控制器。
+///
+/// 重复绑定保留既有的后绑定覆盖行为，命令作用于最后绑定的筛选栏，
+/// 不提供同时控制多个筛选栏的能力。当前绑定筛选栏卸载后，不会自动恢复此前的绑定。
+/// 多个筛选栏共享 Controller 时，不保证各自状态完整隔离。
 class TDropdownMenuController extends ChangeNotifier {
   Future<void> Function(int index)? _openCallback;
   Future<void> Function(TDropdownMenuCloseReason reason)? _closeCallback;
   Future<void> Function(int index)? _toggleCallback;
   int? _openIndex;
+  Object? _owner;
 
+  /// 当前打开项的下标；没有打开的面板时为 null。
   int? get openIndex => _openIndex;
+
+  /// 当前是否有打开的面板。
   bool get isOpen => _openIndex != null;
 
-  Future<void> open(int index) async {
+  /// 打开 [index] 对应面板；未绑定筛选栏时不执行操作。Future 等待本次打开请求处理结束。
+  ///
+  /// ## 返回值
+  /// 当前打开请求处理完毕时完成；未绑定、索引无效、项目禁用或请求被打断时也会完成，不代表一定打开成功。
+  Future<void> open(
+    /// 目标筛选项下标，从 0 开始。
+    int index,
+  ) async {
     await _openCallback?.call(index);
   }
 
+  /// 关闭当前面板；未绑定筛选栏时不执行操作。Future 等待本次关闭请求处理结束。
+  ///
+  /// ## 返回值
+  /// 当前关闭请求处理完毕时完成；未绑定或被后续操作打断时也会完成，不代表面板一定已经关闭。
   Future<void> close() async {
     await _closeCallback?.call(TDropdownMenuCloseReason.controller);
   }
 
-  Future<void> toggle(int index) async {
+  /// 切换 [index] 对应面板；未绑定筛选栏时不执行操作。Future 等待本次切换请求处理结束。
+  ///
+  /// ## 返回值
+  /// 当前切换请求处理完毕时完成；未绑定或请求无效、被打断时也会完成，不代表目标状态一定已达成。
+  Future<void> toggle(
+    /// 目标筛选项下标，从 0 开始。
+    int index,
+  ) async {
     await _toggleCallback?.call(index);
   }
 
   void _attach({
+    required Object owner,
     required Future<void> Function(int index) open,
     required Future<void> Function(TDropdownMenuCloseReason reason) close,
     required Future<void> Function(int index) toggle,
   }) {
+    _owner = owner;
     _openCallback = open;
     _closeCallback = close;
     _toggleCallback = toggle;
   }
 
-  void _detach() {
+  void _detach(Object owner) {
+    if (!identical(_owner, owner)) {
+      return;
+    }
+    _owner = null;
     _openCallback = null;
     _closeCallback = null;
     _toggleCallback = null;
@@ -178,7 +276,6 @@ class TDropdownMenuController extends ChangeNotifier {
   }
 }
 
-/// 用于页面内容排序、筛选的横向下拉筛选栏。
 class TDropdownMenu extends StatefulWidget {
   const TDropdownMenu({
     super.key,
@@ -194,20 +291,38 @@ class TDropdownMenu extends StatefulWidget {
     this.onClosed,
   });
 
+  /// 按顺序展示的筛选触发项和对应面板。
   final List<TDropdownMenuItem> items;
+
+  /// 外部筛选栏控制器；为空时由组件创建和释放内部控制器。
+  /// 外部控制器由调用方释放。建议独立筛选栏分别使用 Controller；
+  /// 绑定规则见 [TDropdownMenuController]。
   final TDropdownMenuController? controller;
+
+  /// 面板展开方向，默认 auto，根据上下可用空间决定。
   final TDropdownMenuPlacement placement;
+
+  /// 筛选栏是否支持横向滚动，默认 false。
   final bool scrollable;
+
+  /// 是否绘制外部区域遮罩，默认 true。
   final bool showOverlay;
+
+  /// 点击外部区域是否关闭面板，默认 true；不依赖遮罩是否绘制。
   final bool closeOnOverlayTap;
+
+  /// 是否使用根 Overlay，默认 false。
   final bool useRootOverlay;
 
   /// 展开、关闭及切换动画时长。
   ///
-  /// 未指定时使用 [TDropdownThemeData.animationDuration]，再回退到 200ms。
-  /// 显式值（包括 [Duration.zero]）优先于主题；系统禁用动画时始终使用零时长。
+  /// 未指定时为 200ms。系统禁用动画时始终使用零时长。
   final Duration? animationDuration;
+
+  /// 面板打开动画完成后回调，参数为筛选项下标。
   final ValueChanged<int>? onOpened;
+
+  /// 面板关闭流程完成后回调，携带筛选项下标和关闭原因。
   final TDropdownMenuClosedCallback? onClosed;
 
   @override
@@ -263,9 +378,7 @@ class _TDropdownMenuState extends State<TDropdownMenu>
     if (MediaQuery.maybeOf(context)?.disableAnimations ?? false) {
       return Duration.zero;
     }
-    return widget.animationDuration ??
-        _theme.animationDuration ??
-        const Duration(milliseconds: 200);
+    return widget.animationDuration ?? const Duration(milliseconds: 200);
   }
 
   void _resetAutoPlacement({
@@ -412,7 +525,7 @@ class _TDropdownMenuState extends State<TDropdownMenu>
           _activeMenus.remove(navigator);
         }
       }
-      _controller._detach();
+      _controller._detach(this);
       if (_ownsController) {
         _controller.dispose();
       }
@@ -488,7 +601,7 @@ class _TDropdownMenuState extends State<TDropdownMenu>
     _overlayEntry = null;
     _overlayState = null;
     _capturedThemes = null;
-    _controller._detach();
+    _controller._detach(this);
     if (_ownsController) {
       _controller.dispose();
     }
@@ -504,7 +617,12 @@ class _TDropdownMenuState extends State<TDropdownMenu>
   void _bindController(TDropdownMenuController? external) {
     _ownsController = external == null;
     _controller = external ?? TDropdownMenuController();
-    _controller._attach(open: _open, close: _close, toggle: _toggle);
+    _controller._attach(
+      owner: this,
+      open: _open,
+      close: _close,
+      toggle: _toggle,
+    );
   }
 
   void _syncFocusNodes() {
@@ -522,18 +640,18 @@ class _TDropdownMenuState extends State<TDropdownMenu>
 
   @override
   Widget build(BuildContext context) {
-    final material = Theme.of(context);
-    final colorScheme = material.tExplicitColorScheme;
     final theme = _theme;
     final bar = widget.scrollable
-        ? SingleChildScrollView(
-            scrollDirection: Axis.horizontal,
-            child: Row(
-              children: List<Widget>.generate(
-                widget.items.length,
-                (index) => SizedBox(
-                  width: widget.items[index].width ?? 112,
-                  child: _buildTrigger(index),
+        ? TInternalScrollScope(
+            child: SingleChildScrollView(
+              scrollDirection: Axis.horizontal,
+              child: Row(
+                children: List<Widget>.generate(
+                  widget.items.length,
+                  (index) => SizedBox(
+                    width: widget.items[index].width ?? 112,
+                    child: _buildTrigger(index),
+                  ),
                 ),
               ),
             ),
@@ -580,18 +698,18 @@ class _TDropdownMenuState extends State<TDropdownMenu>
           trackTransforms: _controller.isOpen,
           child: Container(
             key: _barKey,
-            height: theme.barHeight ?? 48,
+            height: !theme.hasBarHeightOverride
+                ? null
+                : theme.resolveBarHeight(context.tTheme.size13),
+            constraints: !theme.hasBarHeightOverride
+                ? BoxConstraints(minHeight: context.tTheme.size13)
+                : null,
             decoration: BoxDecoration(
               color:
-                  theme.barBackgroundColor ??
-                  colorScheme?.surface ??
-                  context.tTheme.bgColorContainer,
+                  theme.barBackgroundColor ?? context.tTheme.bgColorContainer,
               border: Border(
                 bottom: BorderSide(
-                  color:
-                      theme.dividerColor ??
-                      material.tExplicitDividerColor ??
-                      context.tTheme.componentStrokeColor,
+                  color: theme.dividerColor ?? context.tTheme.componentStroke,
                   width: 0.5,
                 ),
               ),
@@ -604,8 +722,6 @@ class _TDropdownMenuState extends State<TDropdownMenu>
   }
 
   Widget _buildTrigger(int index) {
-    final material = Theme.of(context);
-    final colorScheme = material.tExplicitColorScheme;
     final item = widget.items[index];
     final isOpen = _controller.openIndex == index;
     final onTap = item.enabled ? () => unawaited(_toggle(index)) : null;
@@ -634,8 +750,6 @@ class _TDropdownMenuState extends State<TDropdownMenu>
     final activeTokenFont = context.tTheme.fontMarkMedium;
     final baseStyle =
         theme.textStyle ??
-        context.tExplicitDefaultTextStyle ??
-        material.tExplicitTextTheme?.bodyMedium ??
         TextStyle(
           color: context.tTheme.textColorPrimary,
           fontSize: tokenFont?.size,
@@ -644,31 +758,21 @@ class _TDropdownMenuState extends State<TDropdownMenu>
         );
     final style = !item.enabled
         ? theme.disabledTextStyle ??
-              baseStyle.copyWith(
-                color:
-                    material.tExplicitDisabledColor ??
-                    context.tTheme.textDisabledColor,
-              )
+              baseStyle.copyWith(color: context.tTheme.textColorDisabled)
         : isOpen
         ? theme.activeTextStyle ??
               baseStyle.copyWith(
-                color: colorScheme?.primary ?? context.tTheme.brandNormalColor,
+                color: context.tTheme.brandColor,
                 fontWeight: activeTokenFont?.fontWeight,
               )
         : baseStyle.copyWith(
             color: baseStyle.color ?? context.tTheme.textColorPrimary,
           );
     final iconColor = !item.enabled
-        ? theme.disabledIconColor ??
-              material.tExplicitDisabledColor ??
-              context.tTheme.textDisabledColor
+        ? theme.disabledIconColor ?? context.tTheme.textColorDisabled
         : isOpen
-        ? theme.activeIconColor ??
-              colorScheme?.primary ??
-              context.tTheme.brandNormalColor
-        : theme.iconColor ??
-              context.tExplicitIconTheme?.color ??
-              context.tTheme.textColorPrimary;
+        ? theme.activeIconColor ?? context.tTheme.brandColor
+        : theme.iconColor ?? context.tTheme.textColorPrimary;
     final opensAbove = switch (widget.placement) {
       TDropdownMenuPlacement.above => true,
       TDropdownMenuPlacement.below => false,
@@ -680,7 +784,7 @@ class _TDropdownMenuState extends State<TDropdownMenu>
       button: true,
       enabled: item.enabled,
       expanded: isOpen,
-      child: InkWell(
+      child: TInternalInkWell(
         focusNode: _triggerFocusNodes[index],
         onTap: onTap,
         child: Row(
@@ -688,21 +792,21 @@ class _TDropdownMenuState extends State<TDropdownMenu>
           mainAxisSize: MainAxisSize.min,
           children: [
             Flexible(
-              child: Text(
+              child: TTextStyled(
                 item.label!,
                 style: style,
                 maxLines: 1,
                 overflow: TextOverflow.ellipsis,
               ),
             ),
-            SizedBox(width: context.tTheme.spacer4),
+            const SizedBox(width: 4.0),
             AnimatedRotation(
               turns: arrowTurns,
               duration: _duration,
               curve: Curves.ease,
-              child: Icon(
+              child: TInternalIcon(
                 TIcons.caret_down_small,
-                size: theme.iconSize ?? 24,
+                size: theme.resolveIconSize(context.tTheme.size7),
                 color: iconColor,
               ),
             ),
@@ -1058,12 +1162,8 @@ class _TDropdownMenuState extends State<TDropdownMenu>
         ? math.max(maxHeight, barrierExtent)
         : barrierExtent;
     final theme = _theme;
-    final material = Theme.of(context);
-    final colorScheme = material.tExplicitColorScheme;
     final panelBackgroundColor =
-        theme.panelBackgroundColor ??
-        colorScheme?.surface ??
-        context.tTheme.bgColorContainer;
+        theme.panelBackgroundColor ?? context.tTheme.bgColorContainer;
 
     Widget buildPanel({
       required int panelIndex,
@@ -1086,7 +1186,7 @@ class _TDropdownMenuState extends State<TDropdownMenu>
           child: ConstrainedBox(
             key: measureKey,
             constraints: BoxConstraints(maxHeight: maxHeight),
-            child: Material(
+            child: TInternalMaterial(
               color: panelBackgroundColor,
               child: FocusScope(
                 child: widget.items[panelIndex].panelBuilder(

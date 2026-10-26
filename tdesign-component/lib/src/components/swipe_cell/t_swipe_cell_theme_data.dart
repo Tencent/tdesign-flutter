@@ -2,106 +2,64 @@ import 'package:flutter/material.dart';
 
 /// TSwipeCell 组件级 ThemeExtension
 ///
-/// 通过 Theme 子树注入，控制子树的默认滑动单元格样式。
-/// 遵循多层级主题控制方案：P0 实例参数 > P1 组件 Theme > P4 Token。
+/// 通过 Theme 子树注入操作项共享内边距；逐项图文样式由操作项实例控制。
+///
+/// {@category ComponentTheme}
 class TSwipeCellThemeData extends ThemeExtension<TSwipeCellThemeData> {
-  /// 操作项默认背景色。
-  final Color? actionBackgroundColor;
-
-  /// 操作项图标默认色。
-  final Color? actionIconColor;
-
-  /// 操作项文字默认样式。
-  final TextStyle? actionTextStyle;
-
-  /// 操作项图标默认尺寸。
-  final double? actionIconSize;
-
-  /// 操作项图标与文字默认间距。
-  final double? actionSpacing;
-
   /// 操作项左右内边距。
   final EdgeInsetsGeometry? actionPadding;
 
-  const TSwipeCellThemeData({
-    this.actionBackgroundColor,
-    this.actionIconColor,
-    this.actionTextStyle,
-    this.actionIconSize,
-    this.actionSpacing,
-    this.actionPadding,
-  });
+  const TSwipeCellThemeData({this.actionPadding});
 
-  /// 合并两个 ThemeExtension，[other] 优先于 this
-  TSwipeCellThemeData merge(TSwipeCellThemeData? other) {
+  /// 合并主题配置。
+  ///
+  /// ## 返回值
+  /// other 的非空字段优先的合并主题；other 为 null 时返回当前主题。
+  TSwipeCellThemeData merge(
+    /// 要合并的目标主题；为空时保留当前配置。
+    TSwipeCellThemeData? other,
+  ) {
     if (other == null) {
       return this;
     }
     return TSwipeCellThemeData(
-      actionBackgroundColor:
-          other.actionBackgroundColor ?? actionBackgroundColor,
-      actionIconColor: other.actionIconColor ?? actionIconColor,
-      actionTextStyle: other.actionTextStyle ?? actionTextStyle,
-      actionIconSize: other.actionIconSize ?? actionIconSize,
-      actionSpacing: other.actionSpacing ?? actionSpacing,
       actionPadding: other.actionPadding ?? actionPadding,
     );
   }
 
+  /// 复制主题配置。
+  ///
+  /// ## 返回值
+  /// 返回主题副本；非空参数替换对应配置，null 参数保留当前配置。
   @override
-  TSwipeCellThemeData copyWith({
-    Color? actionBackgroundColor,
-    Color? actionIconColor,
-    TextStyle? actionTextStyle,
-    double? actionIconSize,
-    double? actionSpacing,
-    EdgeInsetsGeometry? actionPadding,
-  }) {
+  TSwipeCellThemeData copyWith({EdgeInsetsGeometry? actionPadding}) {
     return TSwipeCellThemeData(
-      actionBackgroundColor:
-          actionBackgroundColor ?? this.actionBackgroundColor,
-      actionIconColor: actionIconColor ?? this.actionIconColor,
-      actionTextStyle: actionTextStyle ?? this.actionTextStyle,
-      actionIconSize: actionIconSize ?? this.actionIconSize,
-      actionSpacing: actionSpacing ?? this.actionSpacing,
       actionPadding: actionPadding ?? this.actionPadding,
     );
   }
 
+  /// 生成主题过渡配置。
+  ///
+  /// ## 返回值
+  /// 按 t 在当前主题和目标主题之间生成过渡主题。
+  /// other 为空或类型不匹配时返回当前主题；字段各自采用其类型的插值规则。
   @override
   TSwipeCellThemeData lerp(
+    /// 目标主题；为空或类型不匹配时保留当前主题。
     ThemeExtension<TSwipeCellThemeData>? other,
+
+    /// 插值进度；通常 0 表示当前主题，1 表示目标主题。
     double t,
   ) {
     if (other is! TSwipeCellThemeData) {
       return this;
     }
     return TSwipeCellThemeData(
-      actionBackgroundColor: Color.lerp(
-        actionBackgroundColor,
-        other.actionBackgroundColor,
-        t,
-      ),
-      actionIconColor: Color.lerp(actionIconColor, other.actionIconColor, t),
-      actionTextStyle: TextStyle.lerp(
-        actionTextStyle,
-        other.actionTextStyle,
-        t,
-      ),
-      actionIconSize: _lerp(actionIconSize, other.actionIconSize, t),
-      actionSpacing: _lerp(actionSpacing, other.actionSpacing, t),
       actionPadding: EdgeInsetsGeometry.lerp(
         actionPadding,
         other.actionPadding,
         t,
       ),
     );
-  }
-
-  double? _lerp(double? a, double? b, double t) {
-    if (a == null && b == null) {
-      return null;
-    }
-    return (a ?? 0) + ((b ?? 0) - (a ?? 0)) * t;
   }
 }

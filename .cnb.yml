@@ -95,7 +95,7 @@ $:
           script: cd tdesign-site && pnpm run site --mode=preview
 
         - name: build flutter web
-          script: cd tdesign-component/example && flutter build web -t ./lib/main.dart --release --base-href /flutter/example/
+          script: cd tdesign-component/example && dart ../tool/write_demo_build_info.dart && flutter build web -t ./lib/main.dart --release --base-href /flutter/example/
 
         # 将产物嵌入 _site/flutter/example 后整体复制到 nginx 根目录，nginx 即时生效
         - name: deploy to nginx root

@@ -1,26 +1,25 @@
 import 't_theme.dart';
 
-/// 常用的Margin，一般以8为倍数
+/// 全局间距 Token，单位为 Flutter 逻辑像素。
 extension TSpacers on TThemeData {
-  double get spacer4 => spacerMap['spacer4'] ?? 4.0;
+  /// 间距 Token，未配置时回退为 8 逻辑像素。
+  double get spacer => spacerMap['spacer'] ?? 8.0;
 
-  double get spacer8 => spacerMap['spacer8'] ?? 8.0;
+  /// 间距 Token，未配置时回退为 12 逻辑像素。
+  double get spacer1 => spacerMap['spacer1'] ?? 12.0;
 
-  double get spacer12 => spacerMap['spacer12'] ?? 12.0;
+  /// 间距 Token，未配置时回退为 16 逻辑像素。
+  double get spacer2 => spacerMap['spacer2'] ?? 16.0;
 
-  double get spacer16 => spacerMap['spacer16'] ?? 16.0;
+  /// 间距 Token，未配置时回退为 24 逻辑像素。
+  double get spacer3 => spacerMap['spacer3'] ?? 24.0;
 
-  double get spacer24 => spacerMap['spacer24'] ?? 24.0;
+  /// 间距 Token，未配置时回退为 32 逻辑像素。
+  double get spacer4 => spacerMap['spacer4'] ?? 32.0;
 
-  double get spacer32 => spacerMap['spacer32'] ?? 32.0;
+  /// 间距 Token，未配置时回退为 48 逻辑像素。
+  double get spacer5 => spacerMap['spacer5'] ?? 48.0;
 
-  double get spacer40 => spacerMap['spacer40'] ?? 40.0;
-
-  double get spacer48 => spacerMap['spacer48'] ?? 48.0;
-
-  double get spacer64 => spacerMap['spacer64'] ?? 64.0;
-
-  double get spacer96 => spacerMap['spacer96'] ?? 96.0;
-
-  double get spacer160 => spacerMap['spacer160'] ?? 160.0;
+  /// 间距 Token，未配置时回退为 80 逻辑像素。
+  double get spacer6 => spacerMap['spacer6'] ?? 80.0;
 }

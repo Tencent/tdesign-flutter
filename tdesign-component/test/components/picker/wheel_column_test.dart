@@ -4,6 +4,7 @@ import 'package:tdesign_flutter/src/components/picker/t_picker_types.dart';
 import 'package:tdesign_flutter/src/components/picker/wheel_column.dart';
 
 void main() {
+  _customScrollRegression();
   const options = [
     TPickerOption(label: 'A', value: 'a'),
     TPickerOption(label: 'B', value: 'b'),
@@ -105,4 +106,100 @@ void main() {
     expect(key.currentState?.nudge(1), isFalse);
     controller.dispose();
   });
+}
+
+class _CallerScrollBehavior extends ScrollBehavior {
+  const _CallerScrollBehavior();
+
+  @override
+  ScrollPhysics getScrollPhysics(BuildContext context) =>
+      const NeverScrollableScrollPhysics();
+}
+
+void _customScrollRegression() {
+  for (final m3 in [false, true]) {
+    for (final platform in [TargetPlatform.android, TargetPlatform.macOS]) {
+      testWidgets('custom item scroll stays caller-owned m3=$m3 $platform', (
+        tester,
+      ) async {
+        final nested = ScrollController();
+        final wheel = FixedExtentScrollController();
+        addTearDown(nested.dispose);
+        addTearDown(wheel.dispose);
+        var selected = 0;
+        final caller = ThemeData(
+          useMaterial3: m3,
+          platform: platform,
+          iconTheme: const IconThemeData(size: 70, color: Colors.green),
+          textTheme: const TextTheme(
+            bodyMedium: TextStyle(fontSize: 31, letterSpacing: 12),
+          ),
+        );
+        final seen = <ThemeData>[];
+        await tester.pumpWidget(
+          MaterialApp(
+            theme: caller,
+            builder: (context, child) => ScrollConfiguration(
+              behavior: const _CallerScrollBehavior(),
+              child: child!,
+            ),
+            home: Center(
+              child: SizedBox(
+                width: 300,
+                height: 200,
+                child: WheelColumn(
+                  key: GlobalKey<WheelColumnState>(),
+                  colIndex: 0,
+                  options: List.generate(
+                    10,
+                    (i) => TPickerOption(label: '$i', value: i),
+                  ),
+                  controller: wheel,
+                  itemHeight: 40,
+                  disabled: false,
+                  onItemSelected: (_, index, __) => selected = index,
+                  itemBuilder: (context, option, column, index, distance) {
+                    seen.add(Theme.of(context));
+                    if (index != 0) {
+                      return Text(option.label);
+                    }
+                    return SizedBox(
+                      width: 22,
+                      height: 22,
+                      child: SingleChildScrollView(
+                        key: const Key('custom-scroll'),
+                        controller: nested,
+                        scrollDirection: Axis.horizontal,
+                        child: const SizedBox(width: 100, height: 22),
+                      ),
+                    );
+                  },
+                ),
+              ),
+            ),
+          ),
+        );
+        await tester.drag(
+          find.byKey(const Key('custom-scroll')),
+          const Offset(-40, 0),
+        );
+        await tester.pumpAndSettle();
+        expect(nested.offset, 0);
+        expect(seen, isNotEmpty);
+        for (final theme in seen) {
+          expect(theme.useMaterial3, caller.useMaterial3);
+          expect(theme.platform, caller.platform);
+          expect(theme.textTheme.bodyMedium!.fontSize, 31);
+          expect(theme.textTheme.bodyMedium!.letterSpacing, 12);
+          expect(theme.iconTheme, caller.iconTheme);
+        }
+        // 外部 NeverScrollable 仅约束自定义内容，内置滚轮仍可原生拖动。
+        await tester.dragFrom(const Offset(450, 300), const Offset(0, -80));
+        await tester.pumpAndSettle();
+        expect(wheel.selectedItem, greaterThan(0));
+        expect(selected, wheel.selectedItem);
+        await tester.pumpWidget(const SizedBox());
+      });
+    }
+  }
 }

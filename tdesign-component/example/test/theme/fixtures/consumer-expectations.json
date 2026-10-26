@@ -1,0 +1,318 @@
+{
+  "button": [
+    "color",
+    "font",
+    "radius",
+    "size"
+  ],
+  "divider": [
+    "color",
+    "font",
+    "size"
+  ],
+  "fab": [
+    "color",
+    "font",
+    "shadow",
+    "size"
+  ],
+  "icon": [
+    "color"
+  ],
+  "link": [
+    "color",
+    "font"
+  ],
+  "text": [
+    "color",
+    "font"
+  ],
+  "back-top": [
+    "color",
+    "font",
+    "radius",
+    "size"
+  ],
+  "drawer": [
+    "color",
+    "font",
+    "size"
+  ],
+  "indexes": [
+    "color",
+    "font",
+    "radius",
+    "size"
+  ],
+  "navbar": [
+    "color",
+    "font",
+    "size"
+  ],
+  "side-bar": [
+    "color",
+    "font",
+    "radius",
+    "size"
+  ],
+  "steps": [
+    "color",
+    "font",
+    "radius"
+  ],
+  "tab-bar": [
+    "color",
+    "font",
+    "radius",
+    "shadow",
+    "size"
+  ],
+  "tabs": [
+    "color",
+    "font",
+    "size"
+  ],
+  "calendar": [
+    "color",
+    "font",
+    "radius",
+    "size"
+  ],
+  "cascader": [
+    "color",
+    "font",
+    "radius",
+    "size"
+  ],
+  "checkbox": [
+    "color",
+    "font",
+    "radius",
+    "size"
+  ],
+  "picker": [
+    "color",
+    "font",
+    "radius",
+    "size"
+  ],
+  "date-time-picker": [
+    "color",
+    "font",
+    "radius",
+    "size"
+  ],
+  "form": [
+    "color",
+    "font",
+    "radius",
+    "size"
+  ],
+  "input": [
+    "color",
+    "font",
+    "size"
+  ],
+  "radio": [
+    "color",
+    "font",
+    "radius",
+    "size"
+  ],
+  "rate": [
+    "color",
+    "font",
+    "radius",
+    "shadow",
+    "size"
+  ],
+  "search": [
+    "color",
+    "font",
+    "radius",
+    "size"
+  ],
+  "slider": [
+    "color",
+    "font",
+    "size"
+  ],
+  "stepper": [
+    "color",
+    "font",
+    "radius",
+    "size"
+  ],
+  "switch": [
+    "color",
+    "font",
+    "size"
+  ],
+  "textarea": [
+    "color",
+    "font",
+    "radius",
+    "size"
+  ],
+  "tree-select": [
+    "color",
+    "font",
+    "size"
+  ],
+  "upload": [
+    "color",
+    "font",
+    "radius",
+    "size"
+  ],
+  "avatar": [
+    "color",
+    "font",
+    "radius",
+    "size"
+  ],
+  "badge": [
+    "color",
+    "font",
+    "radius",
+    "size"
+  ],
+  "cell": [
+    "color",
+    "font",
+    "size",
+    "radius"
+  ],
+  "time-counter": [
+    "color",
+    "font",
+    "radius",
+    "size"
+  ],
+  "collapse": [
+    "color",
+    "font",
+    "radius",
+    "size"
+  ],
+  "empty": [
+    "color",
+    "font",
+    "radius",
+    "size"
+  ],
+  "footer": [
+    "color",
+    "font",
+    "size"
+  ],
+  "image": [
+    "color",
+    "font",
+    "radius"
+  ],
+  "image-viewer": [
+    "color",
+    "font",
+    "radius",
+    "size"
+  ],
+  "progress": [
+    "color",
+    "font",
+    "radius",
+    "size"
+  ],
+  "result": [
+    "color",
+    "font",
+    "size"
+  ],
+  "skeleton": [
+    "color",
+    "radius",
+    "size"
+  ],
+  "swiper": [
+    "color",
+    "font",
+    "radius",
+    "size"
+  ],
+  "table": [
+    "color",
+    "font",
+    "size"
+  ],
+  "tag": [
+    "color",
+    "font",
+    "radius"
+  ],
+  "action-sheet": [
+    "color",
+    "font",
+    "radius",
+    "size"
+  ],
+  "dialog": [
+    "color",
+    "font",
+    "radius",
+    "size"
+  ],
+  "dropdown-menu": [
+    "color",
+    "font",
+    "radius",
+    "size"
+  ],
+  "loading": [
+    "color",
+    "font",
+    "size"
+  ],
+  "message": [
+    "color",
+    "font",
+    "radius",
+    "shadow"
+  ],
+  "notice-bar": [
+    "color",
+    "font",
+    "size"
+  ],
+  "popover": [
+    "color",
+    "font",
+    "radius",
+    "shadow",
+    "size"
+  ],
+  "popup": [
+    "color",
+    "font",
+    "radius",
+    "size"
+  ],
+  "pull-down-refresh": [
+    "color",
+    "font"
+  ],
+  "swipe-cell": [
+    "color",
+    "font",
+    "size"
+  ],
+  "toast": [
+    "color",
+    "font",
+    "radius",
+    "size"
+  ],
+  "theme": [
+    "color",
+    "font"
+  ]
+}

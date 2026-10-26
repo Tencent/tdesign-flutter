@@ -1,48 +1,65 @@
+import 'dart:math' as math;
+
+import 'package:flutter/foundation.dart' show precisionErrorTolerance;
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart' show OverflowBoxFit;
 import 'package:tdesign_flutter_icons/tdesign_flutter_icons.dart' show TIcons;
 
 import '../../theme/t_colors.dart';
 import '../../theme/t_fonts.dart';
+import '../../theme/t_internal_material.dart';
 import '../../theme/t_radius.dart';
+import '../../theme/t_sizes.dart';
 import '../../theme/t_theme.dart';
 import '../../util/context_extension.dart';
-import '../text/t_text.dart';
+import '../text/t_text_styled.dart';
 import 't_backtop_theme_data.dart';
 
-/// 返回顶部组件。
-///
-/// 绑定 [controller] 后，滚动偏移达到 [visibilityOffset] 时显示；点击时先
-/// 动画回到顶部，再触发可选的 [onPressed] 完成通知。
 class TBackTop extends StatefulWidget {
   const TBackTop({
     Key? key,
     this.controller,
     this.onPressed,
+    this.onCompleted,
     this.showText = false,
     this.visibilityOffset = 200,
     this.tooltip,
     this.shape = TBackTopShape.circle,
-    this.colorScheme = TBackTopColorScheme.light,
+    this.colorPreset = TBackTopColorPreset.light,
   }) : assert(visibilityOffset >= 0),
        super(key: key);
 
   /// 页面滚动控制器。
   ///
   /// 未传时组件始终可见，点击只触发 [onPressed]；传入后组件监听滚动偏移并
-  /// 在点击时动画回到该滚动位置的最小边界。
+  /// 在点击时以 500 毫秒、Curves.easeIn 动画回到该滚动位置的最小边界。
+  /// 控制器由调用方创建和释放，组件只管理自己的滚动监听。
   final ScrollController? controller;
 
-  /// 回顶动画完成后的通知。
+  /// 点击后的通知。
   ///
-  /// `null` 不表示禁用；只要提供 [controller]，组件仍可点击并执行回顶。
+  /// 未绑定滚动位置时立即触发；已绑定时，在回顶动画的 Future 结束后
+  /// 触发，动画中断也可能通知。
+  ///
+  /// 计划在 2.0 统一为点击时触发，成功回顶通知使用 [onCompleted]。
+  ///
+  /// `null` 不表示禁用；提供 [controller] 时仍可点击回顶。
   final VoidCallback? onPressed;
+
+  /// 配合 [controller] 使用，在本组件成功回顶后通知。
+  ///
+  /// 完成时，组件仍挂载，原滚动位置已到最小边界且仍绑定原控制器，
+  /// 该控制器仍为当前 [controller]。
+  ///
+  /// 在 [onPressed] 之后通知，成功结果按 [onPressed] 执行前的状态判断。
+  final VoidCallback? onCompleted;
 
   /// 是否显示设计内置文案。
   ///
   /// 圆形显示“顶部”，半圆形显示“返回/顶部”，文案来自当前资源代理。
   final bool showText;
 
-  /// 绑定 [controller] 时的显示阈值，默认 200。
+  /// 绑定 [controller] 时的显示阈值，默认 200；必须大于或等于 0。
   ///
   /// 滚动偏移大于或等于该值时显示；未绑定 [controller] 时不参与显隐。
   final double visibilityOffset;
@@ -53,8 +70,8 @@ class TBackTop extends StatefulWidget {
   /// 结构形态，默认 [TBackTopShape.circle]。
   final TBackTopShape shape;
 
-  /// 预设配色，默认 [TBackTopColorScheme.light]。
-  final TBackTopColorScheme colorScheme;
+  /// 局部配色预设，默认 [TBackTopColorPreset.light]；不切换全局明暗主题。
+  final TBackTopColorPreset colorPreset;
 
   @override
   State<TBackTop> createState() => _TBackTopState();
@@ -141,7 +158,7 @@ class _TBackTopState extends State<TBackTop> {
       button: true,
       enabled: hasAction,
       label: _resolveTooltip(context),
-      child: Tooltip(
+      child: TInternalTooltip(
         message: _resolveTooltip(context),
         child: GestureDetector(
           behavior: HitTestBehavior.opaque,
@@ -158,11 +175,20 @@ class _TBackTopState extends State<TBackTop> {
     }
 
     final controller = widget.controller;
+    ScrollPosition? position;
+
+    bool isCurrentBinding() =>
+        mounted &&
+        identical(controller, widget.controller) &&
+        position != null &&
+        controller!.positions.contains(position);
+
     if (controller != null && controller.hasClients) {
+      position = controller.position;
       _isAnimating = true;
       try {
         await controller.animateTo(
-          controller.position.minScrollExtent,
+          position.minScrollExtent,
           duration: const Duration(milliseconds: 500),
           curve: Curves.easeIn,
         );
@@ -171,15 +197,24 @@ class _TBackTopState extends State<TBackTop> {
       }
     }
 
+    // The legacy callback may change scroll pixels. Record this operation's
+    // result first, while keeping the historical notification order/timing.
+    final completed =
+        isCurrentBinding() &&
+        (position!.pixels - position.minScrollExtent).abs() <=
+            precisionErrorTolerance;
     if (mounted) {
       widget.onPressed?.call();
+      if (completed && isCurrentBinding()) {
+        widget.onCompleted?.call();
+      }
     }
   }
 
   _BackTopVisualStyle _resolveStyle(BuildContext context) {
     final token = context.tTheme;
     final theme = _themeData;
-    final isDark = widget.colorScheme == TBackTopColorScheme.dark;
+    final isDark = widget.colorPreset == TBackTopColorPreset.dark;
     final defaultBackground = isDark
         ? widget.shape == TBackTopShape.circle
               ? token.grayColor13
@@ -190,52 +225,78 @@ class _TBackTopState extends State<TBackTop> {
       backgroundColor: theme.backgroundColor ?? defaultBackground,
       borderColor:
           theme.borderColor ??
-          (isDark ? token.grayColor9 : token.componentBorderColor),
+          (isDark ? token.grayColor9 : token.componentBorder),
       contentColor: theme.contentColor ?? defaultContent,
-      roundSize: theme.roundSize ?? 48,
-      halfCircleHeight: theme.halfCircleHeight ?? 40,
       halfCircleMinWidth: theme.halfCircleMinWidth ?? 38,
-      iconSize: theme.iconSize ?? 20,
+      iconSize: theme.iconSize ?? 22,
       borderWidth: theme.borderWidth ?? 0.5,
-      halfCircleHorizontalPadding: theme.halfCircleHorizontalPadding ?? 8,
-      contentGap: theme.contentGap ?? 2,
-      textStyle: TextStyle(
-        fontSize: token.fontMarkExtraSmall?.size ?? 10,
-        height: 1.2,
-        fontWeight: token.fontMarkExtraSmall?.fontWeight ?? FontWeight.w600,
-      ).merge(theme.textStyle).copyWith(
-        color: theme.contentColor ?? defaultContent,
+      halfCircleHorizontalPadding: theme.resolveHalfCircleHorizontalPadding(
+        token.size4,
       ),
+      contentGap: theme.resolveContentGap(token.size1),
+      textStyle:
+          TextStyle(
+                fontSize: token.fontMarkExtraSmall?.size ?? 10,
+                height: 1.2,
+                fontWeight:
+                    token.fontMarkExtraSmall?.fontWeight ?? FontWeight.w600,
+              )
+              .merge(theme.textStyle)
+              .copyWith(color: theme.contentColor ?? defaultContent),
     );
   }
 
   Widget _buildCircleWidget(BuildContext context) {
     final style = _resolveStyle(context);
+    final theme = Theme.of(context).extension<TBackTopThemeData>();
+    final textSize = widget.showText
+        ? TTextStyled(
+            context.resource.top,
+            maxLines: 1,
+            style: style.textStyle,
+          ).naturalSize(context)
+        : Size.zero;
+    final contentWidth = math.max(style.iconSize, textSize.width);
+    final contentHeight = style.iconSize + textSize.height;
+    final defaultRoundSize = math.max(
+      context.tTheme.size13,
+      math.sqrt(contentWidth * contentWidth + contentHeight * contentHeight) +
+          style.borderWidth * 2,
+    );
+    final roundSize =
+        theme?.resolveRoundSize(defaultRoundSize) ?? defaultRoundSize;
     return Container(
-      width: style.roundSize,
-      height: style.roundSize,
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(context.tTheme.radiusCircle),
-        border: Border.all(color: style.borderColor, width: style.borderWidth),
+      width: roundSize,
+      height: roundSize,
+      decoration: ShapeDecoration(
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(context.tTheme.radiusCircle),
+          side: BorderSide(color: style.borderColor, width: style.borderWidth),
+        ),
         color: style.backgroundColor,
       ),
       child: Center(
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Icon(
-              TIcons.backtop,
-              size: style.iconSize,
-              color: style.contentColor,
-            ),
-            if (widget.showText)
-              TText(
-                context.resource.top,
-                maxLines: 1,
-                overflow: TextOverflow.ellipsis,
-                style: style.textStyle,
+        child: OverflowBox(
+          fit: OverflowBoxFit.deferToChild,
+          minHeight: 0,
+          maxHeight: double.infinity,
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              TInternalIcon(
+                TIcons.backtop,
+                size: style.iconSize,
+                color: style.contentColor,
               ),
-          ],
+              if (widget.showText)
+                TTextStyled(
+                  context.resource.top,
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  style: style.textStyle,
+                ),
+            ],
+          ),
         ),
       ),
     );
@@ -243,41 +304,63 @@ class _TBackTopState extends State<TBackTop> {
 
   Widget _buildHalfCircleWidget(BuildContext context) {
     final style = _resolveStyle(context);
+    final theme = Theme.of(context).extension<TBackTopThemeData>();
+    final textSize = widget.showText
+        ? TTextStyled(
+            '${context.resource.back}\n${context.resource.top}',
+            maxLines: 2,
+            style: style.textStyle,
+          ).naturalSize(context)
+        : Size.zero;
+    final defaultHeight = math.max(
+      context.tTheme.size12,
+      math.max(style.iconSize, textSize.height) + style.borderWidth * 2,
+    );
+    final height =
+        theme?.resolveHalfCircleHeight(defaultHeight) ?? defaultHeight;
     return ConstrainedBox(
       constraints: BoxConstraints(minWidth: style.halfCircleMinWidth),
       child: Container(
-        height: style.halfCircleHeight,
+        height: height,
         padding: EdgeInsets.symmetric(
           horizontal: style.halfCircleHorizontalPadding,
         ),
-        decoration: BoxDecoration(
+        decoration: ShapeDecoration(
           color: style.backgroundColor,
-          borderRadius: BorderRadius.only(
-            topLeft: Radius.circular(context.tTheme.radiusCircle),
-            bottomLeft: Radius.circular(context.tTheme.radiusCircle),
-          ),
-          border: Border.all(
-            color: style.borderColor,
-            width: style.borderWidth,
+          // 半圆形使用 radiusRound；正圆形使用 radiusCircle。
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.only(
+              topLeft: Radius.circular(context.tTheme.radiusRound),
+              bottomLeft: Radius.circular(context.tTheme.radiusRound),
+            ),
+            side: BorderSide(
+              color: style.borderColor,
+              width: style.borderWidth,
+            ),
           ),
         ),
         child: Row(
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            Icon(
+            TInternalIcon(
               TIcons.backtop,
               size: style.iconSize,
               color: style.contentColor,
             ),
             if (widget.showText) ...[
               SizedBox(width: style.contentGap),
-              TText(
-                '${context.resource.back}\n${context.resource.top}',
-                maxLines: 2,
-                overflow: TextOverflow.ellipsis,
-                textAlign: TextAlign.center,
-                style: style.textStyle,
+              OverflowBox(
+                fit: OverflowBoxFit.deferToChild,
+                minHeight: 0,
+                maxHeight: double.infinity,
+                child: TTextStyled(
+                  '${context.resource.back}\n${context.resource.top}',
+                  maxLines: 2,
+                  overflow: TextOverflow.ellipsis,
+                  textAlign: TextAlign.center,
+                  style: style.textStyle,
+                ),
               ),
             ],
           ],
@@ -292,8 +375,6 @@ class _BackTopVisualStyle {
     required this.backgroundColor,
     required this.borderColor,
     required this.contentColor,
-    required this.roundSize,
-    required this.halfCircleHeight,
     required this.halfCircleMinWidth,
     required this.iconSize,
     required this.borderWidth,
@@ -305,8 +386,6 @@ class _BackTopVisualStyle {
   final Color backgroundColor;
   final Color borderColor;
   final Color contentColor;
-  final double roundSize;
-  final double halfCircleHeight;
   final double halfCircleMinWidth;
   final double iconSize;
   final double borderWidth;

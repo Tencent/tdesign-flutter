@@ -1,32 +1,18 @@
 import 'package:flutter/material.dart';
 
+import '../../theme/t_colors.dart';
+import '../../theme/t_theme.dart';
 import 't_field_scope.dart';
+import 't_form_theme_data.dart';
 
-/// TDesign 表单容器。
-///
-/// 校验和字段生命周期委托给 Flutter [Form] 与 [FormState]。
 class TForm extends StatefulWidget {
   const TForm({
     super.key,
-
-    /// 表单内容。
     required this.child,
-
-    /// 表单控制器。
     this.controller,
-
-    /// 自动校验时机。
     this.autovalidateMode,
-
-    /// 任意字段值变化时触发。
-    ///
-    /// 仅清除校验状态或外部错误时不会触发。
     this.onChanged,
-
-    /// 校验通过后触发，参数为各 [TFormField] 注册的字段值。
     this.onSubmit,
-
-    /// 是否向字段 builder 暴露错误文案。
     this.showErrorMessage = true,
   });
 
@@ -34,6 +20,7 @@ class TForm extends StatefulWidget {
   final Widget child;
 
   /// 表单控制器。
+  /// 建议独立表单分别使用 Controller；绑定规则见 [TFormController]。
   final TFormController? controller;
 
   /// 自动校验时机。
@@ -43,12 +30,13 @@ class TForm extends StatefulWidget {
   /// [Form] 的校验语义。
   final AutovalidateMode? autovalidateMode;
 
-  /// 任意字段值变化时触发。
+  /// 用户通过 [TFormField] 提交字段值变化时触发。
   ///
-  /// 仅清除校验状态或外部错误时不会触发。
+  /// 回调执行时 [TFormController.values] 已包含本次变化。仅同步外部受控值、
+  /// 清除校验状态或外部错误时不会触发。
   final VoidCallback? onChanged;
 
-  /// 校验通过后触发。
+  /// 校验通过后触发，参数为各 [TFormField] 注册的字段值。
   final ValueChanged<Map<String, Object?>>? onSubmit;
 
   /// 是否向字段 builder 暴露错误文案。
@@ -60,6 +48,7 @@ class TForm extends StatefulWidget {
 
 /// [TForm] 的公开状态。
 class TFormState extends State<TForm> {
+  TFormController? _boundController;
   final _formKey = GlobalKey<FormState>();
   final Map<String, Object?> _values = {};
   final Map<String, Object> _fieldOwners = {};
@@ -77,6 +66,9 @@ class TFormState extends State<TForm> {
   ///
   /// [fields] 为空时校验所有已注册字段；传入字段名后只校验指定字段。
   /// 未注册或尚未构建完成的字段视为校验失败。
+  ///
+  /// ## 返回值
+  /// 所有参与校验的字段均通过时为 true；未注册或尚未构建完成的指定字段视为失败。
   bool validate({Iterable<String>? fields}) {
     return fields == null
         ? _formKey.currentState?.validate() ?? false
@@ -93,7 +85,11 @@ class TFormState extends State<TForm> {
     return valid;
   }
 
-  /// 校验并在成功时触发 [TForm.onSubmit]。
+  /// 校验表单；校验成功后保存字段，并在配置 [TForm.onSubmit] 时触发提交回调。
+  ///
+  /// ## 返回值
+  /// 表单校验结果；true 仅表示校验通过并已保存字段，不表示业务请求成功。
+  /// 若未配置 [TForm.onSubmit]，不会触发业务提交回调。
   bool submit() {
     final valid = validate();
     if (valid) {
@@ -127,7 +123,10 @@ class TFormState extends State<TForm> {
   /// 清除全部或指定字段的校验状态。
   ///
   /// 同时清除通过 [setValidateMessage] 注入的外部错误。
-  void clearValidate({Iterable<String>? fields}) {
+  void clearValidate({
+    /// 本次操作的字段名；为空时操作全部已注册字段。
+    Iterable<String>? fields,
+  }) {
     final names = fields?.toSet();
     final callbacks = names == null
         ? _clearValidateCallbacks.entries
@@ -154,7 +153,10 @@ class TFormState extends State<TForm> {
   ///
   /// 常用于服务端校验。传入 `null` 的字段会清除对应外部错误；外部错误
   /// 会覆盖字段本地校验错误，直到调用 [clearValidate] 或再次设置。
-  void setValidateMessage(Map<String, String?> messages) {
+  void setValidateMessage(
+    /// 字段名与外部校验消息的映射；消息为 null 或空字符串时清除对应错误。
+    Map<String, String?> messages,
+  ) {
     for (final entry in messages.entries) {
       final message = entry.value;
       if (message == null || message.isEmpty) {
@@ -237,41 +239,51 @@ class TFormState extends State<TForm> {
   void initState() {
     super.initState();
     widget.controller?._attach(this);
+    _boundController = widget.controller;
   }
 
   @override
   void didUpdateWidget(covariant TForm oldWidget) {
     super.didUpdateWidget(oldWidget);
-    if (oldWidget.controller != widget.controller) {
-      oldWidget.controller?._detach(this);
+    if (!identical(_boundController, widget.controller)) {
       widget.controller?._attach(this);
+      _boundController?._detach(this);
+      _boundController = widget.controller;
     }
   }
 
   @override
   void dispose() {
-    widget.controller?._detach(this);
+    _boundController?._detach(this);
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context).extension<TFormThemeData>();
     return _TFormScope(
       state: this,
       showErrorMessage: widget.showErrorMessage,
       autovalidateMode: _effectiveAutovalidateMode,
       validationVersion: _validationVersion,
-      child: Form(
-        key: _formKey,
-        autovalidateMode: _effectiveAutovalidateMode,
-        onChanged: _handleChanged,
-        child: widget.child,
+      child: ColoredBox(
+        color: theme?.backgroundColor ?? context.tTheme.bgColorContainer,
+        child: Form(
+          key: _formKey,
+          autovalidateMode: _effectiveAutovalidateMode,
+          onChanged: _handleChanged,
+          child: widget.child,
+        ),
       ),
     );
   }
 }
 
 /// 命令式触发表单提交、校验和重置。
+///
+/// 同一 Controller 同时绑定多个表单时，断言开启会报错；断言关闭时保留后绑定覆盖，
+/// 命令作用于最后绑定的表单，不提供同时控制多个表单的能力。
+/// 当前绑定表单卸载后，不会自动恢复此前的绑定。
 class TFormController {
   TFormState? _state;
 
@@ -279,24 +291,43 @@ class TFormController {
   Map<String, Object?> get values => _state?.values ?? const {};
 
   /// 运行表单字段校验。
-  bool validate({Iterable<String>? fields}) =>
-      _state?.validate(fields: fields) ?? false;
+  ///
+  /// ## 返回值
+  /// 绑定表单的校验结果；未绑定表单时为 false。
+  bool validate({
+    /// 本次操作的字段名；为空时操作全部已注册字段。
+    Iterable<String>? fields,
+  }) => _state?.validate(fields: fields) ?? false;
 
   /// 校验并提交表单。
+  ///
+  /// ## 返回值
+  /// 绑定表单的校验与提交结果；未绑定表单或校验失败时为 false。
   bool submit() => _state?.submit() ?? false;
 
   /// 重置表单。
   void reset() => _state?.reset();
 
   /// 清除全部或指定字段的校验状态。
-  void clearValidate({Iterable<String>? fields}) =>
-      _state?.clearValidate(fields: fields);
+  void clearValidate({
+    /// 本次操作的字段名；为空时操作全部已注册字段。
+    Iterable<String>? fields,
+  }) => _state?.clearValidate(fields: fields);
 
   /// 设置字段的外部校验错误。
-  void setValidateMessage(Map<String, String?> messages) =>
-      _state?.setValidateMessage(messages);
+  void setValidateMessage(
+    /// 字段名与外部校验消息的映射；消息为 null 或空字符串时清除对应错误。
+    Map<String, String?> messages,
+  ) => _state?.setValidateMessage(messages);
 
-  void _attach(TFormState state) => _state = state;
+  void _attach(TFormState state) {
+    assert(
+      _state == null || identical(_state, state),
+      'A TFormController cannot be attached to more than one TForm at the '
+      'same time.',
+    );
+    _state = state;
+  }
 
   void _detach(TFormState state) {
     if (identical(_state, state)) {
@@ -332,6 +363,13 @@ class _TFormScope extends InheritedWidget {
 }
 
 /// TDesign 字段 builder。
+/// [context] 表单字段的构建上下文。
+/// [value] 当前字段值。
+/// [onChanged] 更新字段值的回调；为 null 时字段不可编辑。
+/// [errorText] 当前字段校验错误；为 null 时无错误文案。
+///
+/// ## 返回值
+/// 表单字段的输入与展示内容。
 typedef TFormFieldBuilder<T> =
     Widget Function(
       BuildContext context,
@@ -344,36 +382,18 @@ typedef TFormFieldBuilder<T> =
 class TFormField<T> extends StatefulWidget {
   const TFormField({
     super.key,
-
-    /// 字段名，在表单提交数据中作为 key。
     required this.name,
-
-    /// 受控字段值。
     required this.value,
-
-    /// 字段内容 builder。
     required this.builder,
-
-    /// 字段值变化回调；为 null 时禁用字段。
     this.onChanged,
-
-    /// 是否执行内置必填校验，并让表单项默认显示必填标记。
     this.required = false,
-
-    /// 内置必填校验失败时的错误文案。
     this.requiredMessage = '此项不能为空',
-
-    /// 字段校验器。
     this.validator,
-
-    /// 保存字段时触发。
     this.onSaved,
-
-    /// 自动校验时机；为空时继承 [TForm]。
     this.autovalidateMode,
   });
 
-  /// 字段名。
+  /// 字段名，在表单提交数据中作为 key。
   final String name;
 
   /// 受控字段值。
@@ -382,7 +402,7 @@ class TFormField<T> extends StatefulWidget {
   /// 字段值变化回调；为 null 时禁用字段。
   final ValueChanged<T>? onChanged;
 
-  /// 是否执行内置必填校验。
+  /// 是否执行内置必填校验，并让表单项默认显示必填标记。
   ///
   /// 内置规则仅将 null、空白字符串、空 [Iterable] 和空 [Map] 视为未填写；
   /// false 与 0 均是有效值。对象内部的未选择状态应通过 [validator] 描述。
@@ -400,7 +420,7 @@ class TFormField<T> extends StatefulWidget {
   /// 保存字段时触发。
   final FormFieldSetter<T>? onSaved;
 
-  /// 自动校验时机。
+  /// 自动校验时机；为空时继承 [TForm]。
   final AutovalidateMode? autovalidateMode;
 
   @override
@@ -409,7 +429,8 @@ class TFormField<T> extends StatefulWidget {
 
 class _TFormFieldState<T> extends State<TFormField<T>> {
   _TFormScope? _scope;
-  GlobalKey<FormFieldState<T>> _fieldKey = GlobalKey<FormFieldState<T>>();
+  final GlobalKey<_TControlledFormFieldState<T>> _fieldKey =
+      GlobalKey<_TControlledFormFieldState<T>>();
   bool _syncScheduled = false;
 
   @override
@@ -456,7 +477,7 @@ class _TFormFieldState<T> extends State<TFormField<T>> {
       }
       final field = _fieldKey.currentState;
       if (field != null && field.value != widget.value) {
-        field.didChange(widget.value);
+        field.syncControlledValue(widget.value);
         _scope?.state._setValue(widget.name, this, widget.value);
       }
     });
@@ -474,12 +495,7 @@ class _TFormFieldState<T> extends State<TFormField<T>> {
   }
 
   void _clearValidate() {
-    setState(() {
-      // Recreate only Flutter's validation state. Using FormFieldState.reset
-      // here would also restore initialValue and diverge from widget.value,
-      // which remains the single source of truth for this controlled field.
-      _fieldKey = GlobalKey<FormFieldState<T>>();
-    });
+    _fieldKey.currentState?.clearValidation();
   }
 
   bool _isRequiredEmpty(Object? value) {
@@ -500,7 +516,7 @@ class _TFormFieldState<T> extends State<TFormField<T>> {
 
   @override
   Widget build(BuildContext context) {
-    return FormField<T>(
+    return _TControlledFormField<T>(
       key: _fieldKey,
       initialValue: widget.value,
       enabled: widget.onChanged != null,
@@ -526,8 +542,8 @@ class _TFormFieldState<T> extends State<TFormField<T>> {
             widget.onChanged == null
                 ? null
                 : (next) {
-                    field.didChange(next);
                     _scope?.state._setValue(widget.name, this, next);
+                    field.didChange(next);
                     widget.onChanged?.call(next);
                     _scheduleValueSync();
                   },
@@ -537,4 +553,29 @@ class _TFormFieldState<T> extends State<TFormField<T>> {
       },
     );
   }
+}
+
+/// [FormField] bridge that synchronizes a controlled value without treating
+/// the update as user interaction or emitting [Form.onChanged].
+class _TControlledFormField<T> extends FormField<T> {
+  const _TControlledFormField({
+    required super.builder,
+    super.key,
+    super.initialValue,
+    super.enabled,
+    super.validator,
+    super.onSaved,
+    super.autovalidateMode,
+  });
+
+  @override
+  FormFieldState<T> createState() => _TControlledFormFieldState<T>();
+}
+
+class _TControlledFormFieldState<T> extends FormFieldState<T> {
+  void syncControlledValue(T value) {
+    setState(() => setValue(value));
+  }
+
+  void clearValidation() => reset();
 }

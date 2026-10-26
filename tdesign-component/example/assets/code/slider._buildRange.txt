@@ -1,9 +1,0 @@
-Widget _buildRange(BuildContext context) => _panel(
-    TRangeSlider(
-      key: const ValueKey('slider-range'),
-      value: _range,
-      min: 0,
-      max: 100,
-      onChanged: (value) => setState(() => _range = value),
-    ),
-  );

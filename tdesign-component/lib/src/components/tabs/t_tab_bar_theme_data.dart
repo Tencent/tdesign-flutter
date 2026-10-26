@@ -17,6 +17,8 @@ enum TTabsBarVariant {
 /// TabBar 组件 ThemeExtension
 ///
 /// 管理 TTabsBar 的子树级视觉默认样式。
+///
+/// {@category ComponentTheme}
 class TTabsBarThemeData extends ThemeExtension<TTabsBarThemeData> {
   /// 栏背景色。
   final Color? backgroundColor;
@@ -30,7 +32,8 @@ class TTabsBarThemeData extends ThemeExtension<TTabsBarThemeData> {
   /// 禁用标签文字和图标样式。
   final TextStyle? disabledLabelStyle;
 
-  /// 标签内容边距。
+  /// 标签外层内容边距。
+  /// tag 形态内框另有左右 spacer2 Token（默认各 16 逻辑像素）的内边距。
   final EdgeInsetsGeometry? labelPadding;
 
   /// 组件主题指示器；非空时覆盖内置形态指示器。
@@ -63,6 +66,10 @@ class TTabsBarThemeData extends ThemeExtension<TTabsBarThemeData> {
     this.tagBackgroundColor,
   });
 
+  /// 复制主题配置。
+  ///
+  /// ## 返回值
+  /// 返回主题副本；非空参数替换对应配置，null 参数保留当前配置。
   @override
   TTabsBarThemeData copyWith({
     Color? backgroundColor,
@@ -91,8 +98,19 @@ class TTabsBarThemeData extends ThemeExtension<TTabsBarThemeData> {
     );
   }
 
+  /// 生成主题过渡配置。
+  ///
+  /// ## 返回值
+  /// 按 t 在当前主题和目标主题之间生成过渡主题。
+  /// other 为空或类型不匹配时返回当前主题；字段各自采用其类型的插值规则。
   @override
-  TTabsBarThemeData lerp(ThemeExtension<TTabsBarThemeData>? other, double t) {
+  TTabsBarThemeData lerp(
+    /// 目标主题；为空或类型不匹配时保留当前主题。
+    ThemeExtension<TTabsBarThemeData>? other,
+
+    /// 插值进度；通常 0 表示当前主题，1 表示目标主题。
+    double t,
+  ) {
     if (other is! TTabsBarThemeData) {
       return this;
     }

@@ -99,14 +99,14 @@ Demo 展示组件能力，不替组件补实现或修复默认样式：
 - 连续尺寸、进度等确有逐实例配置需求的值可以保留为实例参数；“属于可见样式”本身不是迁入 Theme 或删除实例参数的充分理由。
 - 只有存在已验证的子树批量默认需求时，才评估由 Theme 提供默认值。实例参数必须允许未指定，不得同时保留非空实例默认值和同义 Theme 默认值形成两个默认源；视觉字段完整解析链见第 4 节，语义选择器见下节。
 
-### `variant`、`colorScheme`、`status` 与 Theme 的判定模型
+### `variant`、`colorPreset`、`status` 与 Theme 的判定模型
 
 `TButton` 只提供职责拆分参考，不是所有组件枚举取值的命名模板。Web / 小程序的 `theme`、`type` 等名称不能机械映射；必须根据调用者意图和运行效果判断维度，再记录枚举全部取值、默认值、空值语义、有效组合和公开字段类型。
 
 | 维度 | 判定标准 | 示例 | 所有权 |
 |---|---|---|---|
 | `variant` | 改变结构、布局、边框或填充/描边等绘制处理；不是任意色相切换 | fill / outline / text / ghost、solid / tinted、linear / circular | 实例 API；满足严格条件时 Theme 可提供 `defaultVariant` |
-| `colorScheme` | 业务含义和绘制处理不变，只选择一组协调的预设颜色 | defaultTheme / primary / danger，以及组件确有需要的其他调色预设 | 仅实例 API；Theme 不保存该选择器 |
+| `colorPreset` | 业务含义和绘制处理不变，只选择一组协调的内置预设颜色，不传入实际 Material `ColorScheme` | defaultTheme / primary / danger，以及组件确有需要的其他调色预设 | 仅实例 API；Theme 不保存该选择器 |
 | `status` / `state` | 表达组件、内容或数据当前所处的业务或生命周期状态 | normal / info / success / warning / error、ready / uploading | 实例、数据模型或 Controller 中唯一合适的一处；Theme 不拥有状态 |
 | `style` / 具体样式字段 | 完整或局部覆盖最终呈现 | `ButtonStyle`、颜色、文字样式、间距 | 实例完整 style 或组件 Theme；不得再造同义选择器 |
 
@@ -114,17 +114,17 @@ Demo 展示组件能力，不替组件补实现或修复默认样式：
 
 1. 值是否描述“当前发生了什么”，或会决定默认图标、提示语、无障碍语义、交互和生命周期？是则属于 `status` / `state`，即使当前实现暂时只改变颜色。
 2. 值是否改变填充、描边、文本、层级、布局或绘制处理？是则属于 `variant`。例如同一组件的实色、浅色填充和描边可以是不同 variant。
-3. 前两项都不成立，只在相同状态和相同绘制处理中替换协调调色板，才属于 `colorScheme`。
+3. 前两项都不成立，只在相同状态和相同绘制处理中替换内置配色预设，才属于 `colorPreset`。
 
-因此 `info / success / warning / error` 既不能一律判为状态，也不能一律判为配色：输入框校验、上传进度或公告状态属于 `status`；Tag 或 Popover 若只是由调用者选择视觉调色板、没有状态行为和默认内容语义，可以属于 `colorScheme`。`light` 也不是固定维度：表示浅色填充处理时属于 `variant`，表示一套独立调色板时才属于 `colorScheme`。dartdoc 必须写清实际语义，不能让调用者依赖猜测。
+因此 `info / success / warning / error` 既不能一律判为状态，也不能一律判为配色：输入框校验、上传进度或公告状态属于 `status`；Tag 或 Popover 若只是由调用者选择内置配色、没有状态行为和默认内容语义，可以属于 `colorPreset`。`light` 也不是固定维度：表示浅色填充处理时属于 `variant`，表示一套独立配色时才属于 `colorPreset`。dartdoc 必须写清实际语义，不能让调用者依赖猜测。
 
 Theme 与默认值遵循以下所有权规则：
 
-- 组件不得公开 `colorTheme`，也不得在组件 ThemeExtension 中保存组件枚举型 `colorScheme`、`defaultColorScheme`、`status` 或 `defaultStatus`。Flutter 官方 `ThemeData.colorScheme` 与类型 `ColorScheme` 是 Material 实际调色板，不受此限制；内部私有/常量形式的内置默认配色也不是 Theme 选择器。
+- 组件不得公开 `colorTheme`，也不得在组件 ThemeExtension 中保存组件枚举型 `colorPreset`、`defaultColorPreset`、`status` 或 `defaultStatus`。Flutter 官方 `ThemeData.colorScheme` 与类型 `ColorScheme` 是 Material 实际调色板，不受此限制；内部私有/常量形式的内置默认配色也不是 Theme 选择器。
 - ThemeExtension 可以保存具体 `Color`、`TextStyle`、`ButtonStyle`、布局值和按状态派生的样式。`resolve(context, status: instanceStatus)` 接收实例状态计算样式不表示 Theme 拥有状态；Theme 不得自行选择或覆盖当前状态。
 - Theme 仅在 variant 是稳定的呈现偏好、存在真实的子树批量默认需求、且实例 `variant` 为 nullable 时，才可提供 `defaultVariant`。解析顺序必须是 `instance.variant ?? theme.defaultVariant ?? builtInDefault`。实例已经使用非空内置默认值时，不再增加 Theme `defaultVariant` 形成第二默认源。
-- `colorScheme` 与 `status` 不提供 Theme 回退，使用实例值或组件内置默认值。枚举成员词汇按组件语义决定；Button 的取值不是强制全集。已发布的 `defaultTheme` 等名称保持兼容，重命名必须按 breaking change 处理。
-- 只有 `variant`、`colorScheme`、`status` 彼此独立且至少存在两组有意义的交叉组合时，才同时公开。若组合被禁止、没有真实用例或一个维度可由另一个推导，则合并或只保留权威入口。
+- `colorPreset` 与 `status` 不提供 Theme 回退，使用实例值或组件内置默认值。枚举成员词汇按组件语义决定；Button 的取值不是强制全集。已发布的 `defaultTheme` 等名称保持兼容，重命名必须按 breaking change 处理。
+- 只有 `variant`、`colorPreset`、`status` 彼此独立且至少存在两组有意义的交叉组合时，才同时公开。若组合被禁止、没有真实用例或一个维度可由另一个推导，则合并或只保留权威入口。
 - 新增或正在修改的契约必须遵守本模型。未触及的已发布历史 API 若不符合规则，记录为技术债，不自动阻塞无关 PR，也不能作为复制先例；当同一组件契约进入修改范围时，必须评估迁移。若迁移会造成未授权的范围扩大，则明确记录独立 breaking 方案并停止扩散，而不是悄悄删除或继续新增重复入口。
 
 以下情况默认视为冗余：
@@ -138,11 +138,28 @@ Theme 与默认值遵循以下所有权规则：
 
 未发布的冗余 API 直接收敛；已发布 API 必须说明 breaking 风险和迁移方式。没有逐项证据时，不得断言“API 已完全收敛”或“符合 Flutter 设计模式”。
 
+### 公开 API 文档覆盖门禁
+
+API Review 不以“字段有一句 dartdoc”为完成。对本次新增、修改或用于表达公开 Demo 的每项公开契约，建立“公开行为 → 实现与测试 → 源码 dartdoc → 生成 API / 可复制示例”的对应关系，并检查用户是否无需阅读实现即可正确使用。至少覆盖：
+
+- 名称、类型、默认值、空值语义和生效条件；
+- 状态、`variant`、`colorPreset`、style、Theme 与实例参数各自职责及字段级覆盖优先级；
+- 会改变父布局、排列、绘制或交互模式的触发条件，以及混合配置时的行为；
+- 参数之间的互斥、依赖、无效组合和断言条件；
+- callback、Future、Controller、自动关闭、返回值和生命周期所有权；
+- 枚举全部取值、默认映射和有意义的组合；不能要求用户从多个字段注释自行拼出行为矩阵；
+- 便捷组件与底层组件的默认映射、能力边界及何时应改用底层组件；
+- 一个最小、真实、可复制的典型示例；关键配置不能只隐藏在未展示的私有 helper 中。
+
+源码 dartdoc 是文档事实源，但必须运行仓库 API 生成器并检查实际生成产物；只在 IDE 注释中清楚、生成 API 中丢失仍判为未完成。特别核对生成器选取的是构造参数还是字段注释，避免同一参数的短注释覆盖完整契约。生成成功或产物同步只证明生成链路可用，不证明内容覆盖完整。
+
+文档只描述用户可观察的公开契约，不暴露私有类、内部算法或仅服务 Demo 的常量。本次变更涉及的公开行为若缺少上述说明，或生成示例无法让用户复现，属于阻塞问题；与当前范围无关的历史文档缺口单独登记，不扩大无关 PR。不要用仅匹配关键词或固定文案的测试冒充文档完整性验证。
+
 ## 4. Theme 与视觉
 
-具体视觉字段的解析优先级为：实例显式参数或完整 style > 当前子树的组件 ThemeExtension 显式字段 > 调用者显式提供且语义适用的 Flutter 标准主题字段（如 `TextTheme`、`IconTheme`、Material 组件 Theme 或 `ColorScheme`）> TDesign 语义 token / 已文档化的内置默认值。Flutter 自动生成的 Material 默认视觉不应覆盖 TD 默认样式；第 3 节的语义选择器不套用此视觉字段解析链。
+TD 内置视觉和行为字段的解析优先级为：实例显式参数或受支持的完整 style > 当前子树的 TD 组件 ThemeExtension 显式字段 > TDesign 语义 token / 已文档化的内置默认值。外部 Material/M2/M3 默认及显式主题不作为 TD 视觉或行为入口；实例 style 可以复用 Flutter 样式类型，但不因此开放 Material 主题继承。child、prefix、suffix、builder 等调用方内容保留自身的主题行为，内部隔离不得覆盖用户内容树。原生选择与编辑、Tooltip、反馈及焦点、键盘、无障碍能力继续支持，但其可配置行为和视觉由 TD 明确，不透传外部 Material 主题；不将其使用 Material 实现本身判为样式泄漏。亮暗模式、字体缩放、平台输入、焦点、键盘、方向与无障碍机制继续支持。第 3 节的语义选择器不套用视觉解析链。
 
-- token 是最终兜底，不应预填到高优先级 ThemeExtension 并遮蔽 Flutter 主题继承；
+- token 是最终兜底，不应预填到高优先级 TD ThemeExtension 并遮蔽组件的显式配置；
 - ThemeData 只承载视觉、布局和稳定的呈现默认值，不承载内容、业务状态、回调、Controller 或业务流程开关；动画时长等运动视觉参数可以进入 Theme，但是否启用业务能力仍由组件状态或回调表达；
 - 组合组件应让 `TText`、`TLoading` 等子组件继承当前 Theme 子树，不接收子组件 ThemeData；
 - 比较视觉时固定视口、DPR、字体缩放、主题、语言和状态；页面壳的合理平台差异不机械对齐。
@@ -250,6 +267,10 @@ ThemeExtension 的配置值、运行时有效值和插值值必须使用同一�
 
 ### Golden
 
+- 建立可审计的 Golden 覆盖矩阵，逐项记录“公开 `ExampleItem` / 场景 → 初始或操作后稳定可见状态 → 真实触发步骤 → 是否存在实质视觉差异 → light/dark Golden → 功能测试 → 未单独截图时的等价覆盖依据”。场景清单从实际公开页面和目标设计取得，不能只从现有 Golden 文件反推。
+- 主页或初始页面 Golden 不能替代点击、选择、翻页、展开、滚动、输入、加载完成等操作后才出现的稳定视觉状态。每个存在实质视觉差异且属于当前验收范围的稳定状态都必须有对应 Golden；仅回调结果、不可稳定捕获的瞬时动画或没有视觉差异的交互用功能测试覆盖，并在矩阵中说明。
+- 多个场景只有在使用相同渲染路径、关键配置和布局结果时才可共用代表性 Golden，并记录“被代表场景 → 代表 Golden → 等价依据”。文案长度、图标、状态、按钮模式、分页、溢出或尺寸会改变布局时不得视为等价。不要为了数量机械复制相同快照，也不能以“看起来接近”省略差异场景。
+- 将公开场景集合、Golden 登记集合和功能测试集合做集合核对。新增、删除或改名公开场景时同步更新矩阵与登记；无解释的缺失场景、操作后状态或孤立基线属于阻塞问题。只有矩阵无遗漏、等价关系有证据且登记测试实际执行时，才能宣称 Golden 覆盖完整；否则明确报告为代表性或部分覆盖。
 - 功能断言与像素比较必须解耦；混合文件应拆分或用标签分流。执行平台见下方“执行环境”，不能因 Golden 的平台限制缩减功能测试矩阵。
 - Golden 固定 viewport、device pixel ratio、字体缩放、语言和主题，同时覆盖 light / dark；加载确定性的中文字体和实际使用的图标字体，基线中不得保留缺字方框。
 - Golden 边界包含真实 Demo 页面背景、标题、描述、组间距和组件容器。长页面按稳定 `ExampleItem` / 分组边界分别截图，或生成完整滚动页面证据；仅覆盖首屏不能宣称整页齐备。

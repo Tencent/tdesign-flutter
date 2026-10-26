@@ -11,64 +11,7 @@ import 't_colors.dart';
 import 't_component_theme_data.dart';
 import 't_default_theme.dart';
 import 't_fonts.dart';
-import 't_text_theme_source.dart';
-
-bool _tTextStyleTypographyEquivalent(TextStyle? left, TextStyle? right) {
-  if (left == null || right == null) {
-    return left == right;
-  }
-  const lists = ListEquality<Object?>();
-  return left.inherit == right.inherit &&
-      left.fontFamily == right.fontFamily &&
-      lists.equals(left.fontFamilyFallback, right.fontFamilyFallback) &&
-      left.fontSize == right.fontSize &&
-      left.fontWeight == right.fontWeight &&
-      left.fontStyle == right.fontStyle &&
-      left.letterSpacing == right.letterSpacing &&
-      left.wordSpacing == right.wordSpacing &&
-      left.textBaseline == right.textBaseline &&
-      left.height == right.height &&
-      left.leadingDistribution == right.leadingDistribution &&
-      left.locale == right.locale &&
-      lists.equals(left.fontFeatures, right.fontFeatures) &&
-      lists.equals(left.fontVariations, right.fontVariations) &&
-      left.decoration == right.decoration &&
-      left.decorationStyle == right.decorationStyle &&
-      left.decorationThickness == right.decorationThickness;
-}
-
-bool _tTextThemeTypographyEquivalent(TextTheme left, TextTheme right) {
-  return _tTextStyleTypographyEquivalent(
-        left.displayLarge,
-        right.displayLarge,
-      ) &&
-      _tTextStyleTypographyEquivalent(
-        left.displayMedium,
-        right.displayMedium,
-      ) &&
-      _tTextStyleTypographyEquivalent(left.displaySmall, right.displaySmall) &&
-      _tTextStyleTypographyEquivalent(
-        left.headlineLarge,
-        right.headlineLarge,
-      ) &&
-      _tTextStyleTypographyEquivalent(
-        left.headlineMedium,
-        right.headlineMedium,
-      ) &&
-      _tTextStyleTypographyEquivalent(
-        left.headlineSmall,
-        right.headlineSmall,
-      ) &&
-      _tTextStyleTypographyEquivalent(left.titleLarge, right.titleLarge) &&
-      _tTextStyleTypographyEquivalent(left.titleMedium, right.titleMedium) &&
-      _tTextStyleTypographyEquivalent(left.titleSmall, right.titleSmall) &&
-      _tTextStyleTypographyEquivalent(left.bodyLarge, right.bodyLarge) &&
-      _tTextStyleTypographyEquivalent(left.bodyMedium, right.bodyMedium) &&
-      _tTextStyleTypographyEquivalent(left.bodySmall, right.bodySmall) &&
-      _tTextStyleTypographyEquivalent(left.labelLarge, right.labelLarge) &&
-      _tTextStyleTypographyEquivalent(left.labelMedium, right.labelMedium) &&
-      _tTextStyleTypographyEquivalent(left.labelSmall, right.labelSmall);
-}
+import 't_size_defaults.dart';
 
 // ============================================================
 // L2: 全局 theme.of 基础设施
@@ -79,316 +22,49 @@ bool _tTextThemeTypographyEquivalent(TextTheme left, TextTheme right) {
 /// 统一走 Material 的 `Theme.of(context)`。
 /// 全库读取全局 Token（色板/间距/圆角/字体）统一用 `context.tTheme`。
 extension TThemeContextExtension on BuildContext {
-  /// 获取全局 TThemeData（P4 Token），取不到则回退默认值
+  /// 获取当前主题中的全局 Token；未配置时回退默认主题。
   TThemeData get tTheme =>
       Theme.of(this).extension<TThemeData>() ?? TThemeData.defaultData();
-
-  /// 返回显式子树 [DefaultTextStyle]，过滤 ThemeData 自动注入的文本样式。
-  TextStyle? get tExplicitDefaultTextStyle {
-    final material = Theme.of(this);
-    final inherited = DefaultTextStyle.of(this).style;
-    if (material.tExplicitTextTheme != null) {
-      return inherited;
-    }
-    final implicitStyles = <TextStyle?>[
-      material.textTheme.displayLarge,
-      material.textTheme.displayMedium,
-      material.textTheme.displaySmall,
-      material.textTheme.headlineLarge,
-      material.textTheme.headlineMedium,
-      material.textTheme.headlineSmall,
-      material.textTheme.titleLarge,
-      material.textTheme.titleMedium,
-      material.textTheme.titleSmall,
-      material.textTheme.bodyLarge,
-      material.textTheme.bodyMedium,
-      material.textTheme.bodySmall,
-      material.textTheme.labelLarge,
-      material.textTheme.labelMedium,
-      material.textTheme.labelSmall,
-    ];
-    return implicitStyles.contains(inherited) ? null : inherited;
-  }
-
-  /// 返回显式子树或 ThemeData IconTheme，过滤 Flutter 自动默认值。
-  IconThemeData? get tExplicitIconTheme {
-    final material = Theme.of(this);
-    final inherited = IconTheme.of(this);
-    final explicitRoot = material.tExplicitIconTheme;
-    if (explicitRoot != null) {
-      return inherited;
-    }
-    return inherited == material.iconTheme ||
-            inherited ==
-                const IconThemeData.fallback().merge(material.iconTheme) ||
-            inherited == const IconThemeData.fallback()
-        ? null
-        : inherited;
-  }
 }
 
-/// ThemeData 扩展：子树 merge Extension（禁用 copyWith(extensions:) 覆盖）
+/// ThemeData 扩展：在子树中替换一个组件 ThemeExtension，同时保留其他扩展。
 ///
-/// 子树覆盖统一用 `mergeExtension(...)`，
-/// 禁止 `copyWith(extensions: [...])`（会覆盖其它 Extension）。
+/// 子树覆盖统一用 `mergeExtension(...)`；直接使用 `copyWith(extensions: [...])` 时，
+/// 调用方需要自行保留未修改的其他扩展。
 extension TThemeDataMergeExtension on ThemeData {
-  /// 合并 Extension：保留现有所有 Extension，仅替换指定类型
+  /// 合并指定类型的主题扩展。
+  ///
+  /// ## 返回值
+  /// 保留当前其他主题配置与扩展、仅替换指定类型扩展的新 ThemeData。
   ///
   /// 示例：
   /// ```dart
   /// Theme(
   ///   data: Theme.of(context).mergeExtension(
-  ///     TButtonThemeData(defaultVariant: TButtonVariant.outline),
+  ///     const TTagThemeData(squareBorderRadius: 6),
   ///   ),
-  ///   child: TButton(onPressed: () {}, child: Text('描边区')),
+  ///   child: const TTag('局部圆角'),
   /// )
   /// ```
-  ThemeData mergeExtension<T extends ThemeExtension<T>>(T extension) {
+  ThemeData mergeExtension<T extends ThemeExtension<T>>(
+    /// 要安装到主题中的扩展；仅替换同类型扩展，其他扩展保持不变。
+    T extension,
+  ) {
     final merged = Map<Type, ThemeExtension<dynamic>>.from(extensions);
     merged[T] = extension;
     return copyWith(extensions: merged.values.toList());
   }
 }
 
-/// 返回调用方显式定制的 [ColorScheme]。
+/// TDesign 样式解析器。
 ///
-/// Flutter 会在没有任何配置时也生成一套 Material 默认色板。组件不能把
-/// 这套隐式默认值当成 P3 配置，否则仅仅升级到 Material 3 就会改变
-/// TDesign 的默认视觉。[TThemeBuilder] 的 Token 投影同样视为默认来源。
-/// 未检测到显式色板时返回 null，由组件继续回退 Token。
-extension TExplicitColorSchemeExtension on ThemeData {
-  bool get tUsesTokenColorScheme {
-    final projection = extension<_TMaterialProjectionThemeData>();
-    return projection != null && colorScheme == projection.colorScheme;
-  }
-
-  ColorScheme? get tExplicitColorScheme {
-    if (tUsesTokenColorScheme) {
-      return null;
-    }
-    final materialDefault = ThemeData(
-      brightness: brightness,
-      useMaterial3: useMaterial3,
-    ).colorScheme;
-    final hasExplicitSemanticColor =
-        colorScheme.primary != materialDefault.primary ||
-        colorScheme.onPrimary != materialDefault.onPrimary ||
-        colorScheme.surface != materialDefault.surface ||
-        colorScheme.onSurface != materialDefault.onSurface ||
-        colorScheme.error != materialDefault.error ||
-        colorScheme.outline != materialDefault.outline;
-    return hasExplicitSemanticColor ? colorScheme : null;
-  }
-}
-
-/// 只暴露调用方显式配置的 Material 默认字段。
-///
-/// [ThemeData] 会根据 Material 版本和 ColorScheme 自动补全 TextTheme、
-/// IconTheme、disabledColor 等值。TDesign 组件不能把这些自动值放在 Token
-/// 之前；只有与同配置下的 Flutter 默认主题不同，且不是 [TThemeBuilder]
-/// 的 Token 投影时，才视为显式 Material 配置。
-extension TExplicitMaterialThemeExtension on ThemeData {
-  ThemeData get _tImplicitMaterialDefaults => ThemeData(
-    brightness: brightness,
-    colorScheme: colorScheme,
-    useMaterial3: useMaterial3,
-  );
-
-  TextTheme? get tExplicitTextTheme {
-    final projection = extension<_TMaterialProjectionThemeData>();
-    if (projection != null &&
-        _tLocalizedTextThemes(
-          projection.textTheme,
-        ).any((theme) => _tTextThemeTypographyEquivalent(textTheme, theme))) {
-      return null;
-    }
-    final implicitTextTheme = ThemeData(
-      brightness: brightness,
-      useMaterial3: useMaterial3,
-    ).textTheme;
-    return _tLocalizedTextThemes(
-          implicitTextTheme,
-        ).any((theme) => _tTextThemeTypographyEquivalent(textTheme, theme))
-        ? null
-        : textTheme;
-  }
-
-  Iterable<TextTheme> _tLocalizedTextThemes(TextTheme base) {
-    final typography = useMaterial3
-        ? Typography.material2021(platform: platform)
-        : Typography.material2014(platform: platform);
-    // ThemeData.localize 会按当前语言的 ScriptCategory 合并字体几何：
-    // 中文使用 dense，英文使用 englishLike，部分语言使用 tall。
-    // ThemeData 本身不保存 ScriptCategory，因此需要排除全部三种本地化投影。
-    return [
-      typography.englishLike.merge(base),
-      typography.dense.merge(base),
-      typography.tall.merge(base),
-    ];
-  }
-
-  IconThemeData? get tExplicitIconTheme {
-    final projection = extension<_TMaterialProjectionThemeData>();
-    if (projection != null && iconTheme == projection.iconTheme) {
-      return null;
-    }
-    if (iconTheme == const IconThemeData() ||
-        iconTheme == const IconThemeData.fallback()) {
-      return null;
-    }
-    return iconTheme == _tImplicitMaterialDefaults.iconTheme ? null : iconTheme;
-  }
-
-  Color? get tExplicitDisabledColor {
-    final defaults = _tImplicitMaterialDefaults;
-    return disabledColor == defaults.disabledColor ? null : disabledColor;
-  }
-
-  Color? get tExplicitDividerColor {
-    final projection = extension<_TMaterialProjectionThemeData>();
-    if (projection != null && dividerTheme == projection.dividerTheme) {
-      return null;
-    }
-    final defaults = _tImplicitMaterialDefaults;
-    if (dividerTheme.color != null &&
-        dividerTheme.color != defaults.dividerTheme.color) {
-      return dividerTheme.color;
-    }
-    return dividerColor == defaults.dividerColor ? null : dividerColor;
-  }
-
-  VisualDensity? get tExplicitVisualDensity {
-    final defaults = _tImplicitMaterialDefaults;
-    return visualDensity == defaults.visualDensity ? null : visualDensity;
-  }
-
-  MaterialTapTargetSize? get tExplicitMaterialTapTargetSize {
-    final defaults = _tImplicitMaterialDefaults;
-    return materialTapTargetSize == defaults.materialTapTargetSize
-        ? null
-        : materialTapTargetSize;
-  }
-}
-
-/// 识别 [TMaterialThemeBuilder] 自动投影的 Material ButtonStyle。
-///
-/// 自动投影用于让原生 Material Button 继承 TDesign Token，但对 TButton
-/// 来说它仍属于 Token 默认值，不能反过来覆盖组件既有视觉。这里记录样式
-/// 来源而不是比较具体颜色，确保调用方 copyWith 后的显式定制仍可被识别。
-extension TMaterialProjectionExtension on ThemeData {
-  bool tIsTokenProjectedButtonStyle(ButtonStyle? style) {
-    final projection = extension<_TMaterialProjectionThemeData>();
-    return style != null &&
-        projection != null &&
-        (style == projection.elevatedButtonStyle ||
-            style == projection.outlinedButtonStyle ||
-            style == projection.textButtonStyle);
-  }
-
-  /// 返回调用方显式配置的 [BadgeThemeData]。
-  ///
-  /// [TThemeBuilder] 会为原生 Material [Badge] 投影一份 TDesign 默认主题，
-  /// 但该投影不能覆盖 `TBadge` 自己的尺寸 Token。这里按来源对象识别投影，
-  /// 避免用字体、内边距等数值相等关系猜测调用方是否显式配置。
-  BadgeThemeData? get tExplicitBadgeTheme {
-    final projection = extension<_TMaterialProjectionThemeData>();
-    return projection != null && identical(badgeTheme, projection.badgeTheme)
-        ? null
-        : badgeTheme;
-  }
-}
-
-class _TMaterialProjectionThemeData
-    extends ThemeExtension<_TMaterialProjectionThemeData>
-    implements TTextThemeSource {
-  const _TMaterialProjectionThemeData({
-    required this.colorScheme,
-    required this.textTheme,
-    required this.iconTheme,
-    required this.dividerTheme,
-    required this.badgeTheme,
-    required this.elevatedButtonStyle,
-    required this.outlinedButtonStyle,
-    required this.textButtonStyle,
-  });
-
-  final ColorScheme colorScheme;
-  @override
-  final TextTheme textTheme;
-  final IconThemeData iconTheme;
-  final DividerThemeData dividerTheme;
-  final BadgeThemeData badgeTheme;
-  final ButtonStyle elevatedButtonStyle;
-  final ButtonStyle outlinedButtonStyle;
-  final ButtonStyle textButtonStyle;
-
-  @override
-  _TMaterialProjectionThemeData copyWith({
-    ColorScheme? colorScheme,
-    TextTheme? textTheme,
-    IconThemeData? iconTheme,
-    DividerThemeData? dividerTheme,
-    BadgeThemeData? badgeTheme,
-    ButtonStyle? elevatedButtonStyle,
-    ButtonStyle? outlinedButtonStyle,
-    ButtonStyle? textButtonStyle,
-  }) {
-    return _TMaterialProjectionThemeData(
-      colorScheme: colorScheme ?? this.colorScheme,
-      textTheme: textTheme ?? this.textTheme,
-      iconTheme: iconTheme ?? this.iconTheme,
-      dividerTheme: dividerTheme ?? this.dividerTheme,
-      badgeTheme: badgeTheme ?? this.badgeTheme,
-      elevatedButtonStyle: elevatedButtonStyle ?? this.elevatedButtonStyle,
-      outlinedButtonStyle: outlinedButtonStyle ?? this.outlinedButtonStyle,
-      textButtonStyle: textButtonStyle ?? this.textButtonStyle,
-    );
-  }
-
-  @override
-  _TMaterialProjectionThemeData lerp(
-    covariant _TMaterialProjectionThemeData? other,
-    double t,
-  ) {
-    if (other == null) {
-      return this;
-    }
-    return _TMaterialProjectionThemeData(
-      colorScheme: ColorScheme.lerp(colorScheme, other.colorScheme, t),
-      textTheme: TextTheme.lerp(textTheme, other.textTheme, t),
-      iconTheme: IconThemeData.lerp(iconTheme, other.iconTheme, t),
-      dividerTheme: DividerThemeData.lerp(dividerTheme, other.dividerTheme, t),
-      badgeTheme: BadgeThemeData.lerp(badgeTheme, other.badgeTheme, t),
-      elevatedButtonStyle: ButtonStyle.lerp(
-        elevatedButtonStyle,
-        other.elevatedButtonStyle,
-        t,
-      )!,
-      outlinedButtonStyle: ButtonStyle.lerp(
-        outlinedButtonStyle,
-        other.outlinedButtonStyle,
-        t,
-      )!,
-      textButtonStyle: ButtonStyle.lerp(
-        textButtonStyle,
-        other.textButtonStyle,
-        t,
-      )!,
-    );
-  }
-}
-
-/// P0–P4 统一样式解析器
-///
-/// 优先级（覆盖方向，强 → 弱）：
-/// **P0 实例 > P1 组件 Theme > P2 Material > P3 ColorScheme > P4 Token**
+/// 实例显式样式、组件 Theme 和全局 Token 是单向样式链。
 ///
 /// 用法：
 /// ```dart
 /// final resolver = TStyleResolver.of(context);
 /// final token = resolver.token;              // P4
 /// final buttonTheme = resolver.componentExtension<TButtonThemeData>(); // P1
-/// final colorScheme = resolver.colorScheme;  // P3
 /// ```
 class TStyleResolver {
   TStyleResolver._(this._context);
@@ -396,31 +72,34 @@ class TStyleResolver {
   final BuildContext _context;
 
   /// 创建解析器实例
-  static TStyleResolver of(BuildContext context) => TStyleResolver._(context);
+  ///
+  /// ## 返回值
+  /// 绑定当前 context 的样式解析器。
+  static TStyleResolver of(
+    /// 当前构建上下文，用于读取祖先配置。
+    BuildContext context,
+  ) => TStyleResolver._(context);
 
-  /// P4: 全局设计 Token（色板 / 间距原始值）
+  /// 全局设计 Token（色板 / 间距原始值）。
   TThemeData get token =>
       Theme.of(_context).extension<TThemeData>() ?? TThemeData.defaultData();
 
-  /// P3: Material ColorScheme
-  ColorScheme get colorScheme => Theme.of(_context).colorScheme;
-
-  /// P3: Material TextTheme
-  TextTheme get textTheme => Theme.of(_context).textTheme;
-
-  /// P2: Material ThemeData（子主题）
-  ThemeData get materialTheme => Theme.of(_context);
-
-  /// P1: 组件 ThemeExtension
+  /// 组件 ThemeExtension。
+  ///
+  /// ## 返回值
+  /// 上下文主题中的指定 ThemeExtension；未配置时为 null。
   E? componentExtension<E extends ThemeExtension<E>>() =>
       Theme.of(_context).extension<E>();
 }
 
 /// Token → 完整 ThemeData 的构建器
 ///
-/// 四层架构的 L2 层：接收 [TThemeData] token，产出完整 [ThemeData]。
-/// 内部完成 Token → ColorScheme 映射、Token Font → TextTheme、
-/// Token 颜色 → M3 子主题，同时将 [TThemeData] 自身作为 Extension 注入。
+/// 将 [TThemeData] 的颜色与字体映射为 Material 配色、文字样式和组件主题，
+/// 同时保留该 Token 主题作为 ThemeExtension。
+///
+/// 此映射供原生 Material Widget 使用；TD 内置样式仅使用受支持的实例配置、
+/// TD ThemeExtension 与 Token，不反向继承外部 Material/M2/M3 样式配置。
+/// 调用方自定义内容保留其 Flutter 主题行为；原生选择、编辑、反馈和焦点能力继续支持。
 ///
 /// 通常不直接使用，通过 [TThemeBuilder.light] / [TThemeBuilder.dark] 入口。
 class TMaterialThemeBuilder {
@@ -430,6 +109,9 @@ class TMaterialThemeBuilder {
   final TThemeData token;
 
   /// 构建亮色 ThemeData
+  ///
+  /// ## 返回值
+  /// 由亮色 Token 构建的 Material ThemeData。
   ThemeData buildLight() {
     final light = token.light;
     return _buildBase(
@@ -440,6 +122,9 @@ class TMaterialThemeBuilder {
   }
 
   /// 构建暗色 ThemeData
+  ///
+  /// ## 返回值
+  /// 由暗色 Token 构建的 Material ThemeData；无暗色配置时回退当前 Token。
   ThemeData buildDark() {
     final dark = token.dark ?? token;
     return _buildBase(
@@ -461,7 +146,7 @@ class TMaterialThemeBuilder {
     );
     final iconTheme = IconThemeData(color: extensionData.textColorPrimary);
     final dividerTheme = DividerThemeData(
-      color: extensionData.componentStrokeColor,
+      color: extensionData.componentStroke,
       thickness: 0.5,
     );
     final buttonStyle = _materialButtonStyle(extensionData, colorScheme);
@@ -485,11 +170,11 @@ class TMaterialThemeBuilder {
       textTheme: textTheme,
       dividerTheme: dividerTheme,
       badgeTheme: BadgeThemeData(
-        backgroundColor: extensionData.errorNormalColor,
+        backgroundColor: extensionData.errorColor,
         textColor: extensionData.textColorAnti,
         textStyle: _textStyle(
           extensionData.fontMarkExtraSmall,
-        )?.copyWith(color: extensionData.textColorAnti),
+        )?.copyWith(color: extensionData.textColorAnti, letterSpacing: 0),
         largeSize: 16,
         padding: const EdgeInsets.symmetric(horizontal: 4),
       ),
@@ -504,40 +189,24 @@ class TMaterialThemeBuilder {
           color: extensionData.textColorPlaceholder,
         ),
         enabledBorder: UnderlineInputBorder(
-          borderSide: BorderSide(color: extensionData.componentBorderColor),
+          borderSide: BorderSide(color: extensionData.componentBorder),
         ),
         focusedBorder: UnderlineInputBorder(
           borderSide: BorderSide(color: colorScheme.primary),
         ),
         disabledBorder: UnderlineInputBorder(
-          borderSide: BorderSide(color: extensionData.componentStrokeColor),
+          borderSide: BorderSide(color: extensionData.componentStroke),
         ),
       ),
       useMaterial3: true,
     );
-    return base.copyWith(
-      extensions: [
-        ...base.extensions.values,
-        _TMaterialProjectionThemeData(
-          colorScheme: base.colorScheme,
-          textTheme: base.textTheme,
-          iconTheme: base.iconTheme,
-          dividerTheme: base.dividerTheme,
-          badgeTheme: base.badgeTheme,
-          elevatedButtonStyle: base.elevatedButtonTheme.style!,
-          outlinedButtonStyle: base.outlinedButtonTheme.style!,
-          textButtonStyle: base.textButtonTheme.style!,
-        ),
-      ],
-    );
+    return base;
   }
 
   List<ThemeExtension<dynamic>> _themeExtensions(TThemeData token) {
     return <ThemeExtension<dynamic>>[
       token,
       const TButtonThemeData(),
-      _textExtension(token),
-      _iconTheme(token),
       _dividerTheme(token),
       _linkTheme(token),
       const TFabThemeData(),
@@ -579,6 +248,7 @@ class TMaterialThemeBuilder {
       const TTableThemeData(),
       const TTabsBarThemeData(),
       const TTagThemeData(),
+      const TTextThemeData(),
       const TTimeCounterThemeData(),
       const TToastThemeData(),
       const TTreeSelectThemeData(),
@@ -621,7 +291,7 @@ class TMaterialThemeBuilder {
       backgroundColor: colorScheme.primary,
       foregroundColor: colorScheme.onPrimary,
       disabledBackgroundColor: token.bgColorComponentDisabled,
-      disabledForegroundColor: token.textDisabledColor,
+      disabledForegroundColor: token.textColorDisabled,
       textStyle: _textStyle(token.fontLinkMedium),
     );
   }
@@ -666,16 +336,6 @@ class TMaterialThemeBuilder {
     );
   }
 
-  TTextThemeData _textExtension(TThemeData _) {
-    // Token defaults are exposed through Material TextTheme and TText's final
-    // fallback. Keeping this extension empty lets local DefaultTextStyle work.
-    return const TTextThemeData();
-  }
-
-  TIconThemeData _iconTheme(TThemeData _) {
-    return const TIconThemeData();
-  }
-
   TDividerThemeData _dividerTheme(TThemeData _) {
     return const TDividerThemeData();
   }
@@ -688,36 +348,36 @@ class TMaterialThemeBuilder {
   ColorScheme _lightColorScheme(TThemeData t) {
     return ColorScheme.light(
       // 品牌主色
-      primary: t.brandNormalColor,
+      primary: t.brandColor,
       onPrimary: t.textColorAnti,
-      primaryContainer: t.brandLightColor,
-      onPrimaryContainer: t.brandNormalColor,
+      primaryContainer: t.brandColorLight,
+      onPrimaryContainer: t.brandColor,
       // 次级
-      secondary: t.brandHoverColor,
+      secondary: t.brandColor6,
       onSecondary: t.textColorAnti,
       secondaryContainer: t.bgColorSecondaryContainer,
       onSecondaryContainer: t.textColorPrimary,
       // 警告色
-      tertiary: t.warningNormalColor,
+      tertiary: t.warningColor,
       onTertiary: t.textColorAnti,
-      tertiaryContainer: t.warningLightColor,
-      onTertiaryContainer: t.warningNormalColor,
+      tertiaryContainer: t.warningColorLight,
+      onTertiaryContainer: t.warningColor,
       // 错误色
-      error: t.errorNormalColor,
+      error: t.errorColor,
       onError: t.textColorAnti,
-      errorContainer: t.errorLightColor,
-      onErrorContainer: t.errorNormalColor,
+      errorContainer: t.errorColorLight,
+      onErrorContainer: t.errorColor,
       // 背景与表面
       surface: t.bgColorContainer,
       onSurface: t.textColorPrimary,
       surfaceContainerHighest: t.bgColorComponent,
       onSurfaceVariant: t.textColorSecondary,
       // 描边
-      outline: t.componentBorderColor,
-      outlineVariant: t.componentStrokeColor,
+      outline: t.componentBorder,
+      outlineVariant: t.componentStroke,
       // 反色
       inverseSurface: t.grayColor13,
-      onInverseSurface: t.fontWhColor1,
+      onInverseSurface: t.fontWhite1,
       inversePrimary: t.brandColor3,
       // 基础
       shadow: Colors.black,
@@ -729,36 +389,36 @@ class TMaterialThemeBuilder {
   ColorScheme _darkColorScheme(TThemeData t) {
     return ColorScheme.dark(
       // 品牌主色
-      primary: t.brandNormalColor,
+      primary: t.brandColor,
       onPrimary: t.textColorAnti,
-      primaryContainer: t.brandLightColor,
-      onPrimaryContainer: t.brandNormalColor,
+      primaryContainer: t.brandColorLight,
+      onPrimaryContainer: t.brandColor,
       // 次级
-      secondary: t.brandHoverColor,
+      secondary: t.brandColor6,
       onSecondary: t.textColorAnti,
       secondaryContainer: t.bgColorSecondaryContainer,
       onSecondaryContainer: t.textColorPrimary,
       // 警告色
-      tertiary: t.warningNormalColor,
+      tertiary: t.warningColor,
       onTertiary: t.textColorAnti,
-      tertiaryContainer: t.warningLightColor,
-      onTertiaryContainer: t.warningNormalColor,
+      tertiaryContainer: t.warningColorLight,
+      onTertiaryContainer: t.warningColor,
       // 错误色
-      error: t.errorNormalColor,
+      error: t.errorColor,
       onError: t.textColorAnti,
-      errorContainer: t.errorLightColor,
-      onErrorContainer: t.errorNormalColor,
+      errorContainer: t.errorColorLight,
+      onErrorContainer: t.errorColor,
       // 背景与表面
       surface: t.bgColorContainer,
       onSurface: t.textColorPrimary,
       surfaceContainerHighest: t.bgColorComponent,
       onSurfaceVariant: t.textColorSecondary,
       // 描边
-      outline: t.componentBorderColor,
-      outlineVariant: t.componentStrokeColor,
+      outline: t.componentBorder,
+      outlineVariant: t.componentStroke,
       // 反色
       inverseSurface: t.grayColor13,
-      onInverseSurface: t.fontWhColor1,
+      onInverseSurface: t.fontWhite1,
       inversePrimary: t.brandColor3,
       // 基础
       shadow: Colors.black,
@@ -783,12 +443,22 @@ class TThemeBuilder {
   const TThemeBuilder._();
 
   /// 亮色主题
-  static ThemeData light(TThemeData token) =>
-      TMaterialThemeBuilder(token).buildLight();
+  ///
+  /// ## 返回值
+  /// 由指定 Token 构建的亮色 Material ThemeData。
+  static ThemeData light(
+    /// 用于构建完整 Material 主题的 Token 数据源。
+    TThemeData token,
+  ) => TMaterialThemeBuilder(token).buildLight();
 
   /// 暗色主题
-  static ThemeData dark(TThemeData token) =>
-      TMaterialThemeBuilder(token).buildDark();
+  ///
+  /// ## 返回值
+  /// 由指定 Token 构建的暗色 Material ThemeData。
+  static ThemeData dark(
+    /// 用于构建完整 Material 主题的 Token 数据源。
+    TThemeData token,
+  ) => TMaterialThemeBuilder(token).buildDark();
 }
 
 /// 设置全局资源代理。
@@ -797,7 +467,10 @@ class TThemeBuilder {
 /// 需要区分情况去获取，则可以设置 needAlwaysBuild 为 true，业务自己判断返回哪个 delegate。
 /// [needAlwaysBuild]=false: 返回 delegate 为 null，则每次都会走 build 方法。
 void setTResourceBuilder(
+  /// 根据构建上下文提供资源代理的回调。
   TResourceBuilder delegate, {
+
+  /// 是否每次读取资源时调用构建器；false 时复用首次成功构建的缓存，返回 null 时继续尝试构建。
   bool needAlwaysBuild = false,
 }) {
   TResourceManager.instance.setResourceBuilder(delegate, needAlwaysBuild);
@@ -807,7 +480,6 @@ void setTResourceBuilder(
 // L1: TThemeData（JSON Token）—— 保持不变
 // ============================================================
 
-/// 主题数据
 class TThemeData extends ThemeExtension<TThemeData> {
   static const String _defaultThemeName = 'default';
   static const String _defaultDartThemeName = 'defaultDark';
@@ -828,6 +500,9 @@ class TThemeData extends ThemeExtension<TThemeData> {
   /// 字体尺寸
   late TMap<String, Font> fontMap;
 
+  /// 独立字号与行高 Token，单位为 Flutter 逻辑像素。
+  late TMap<String, double> fontMetricMap;
+
   /// 圆角
   late TMap<String, double> radiusMap;
 
@@ -837,8 +512,14 @@ class TThemeData extends ThemeExtension<TThemeData> {
   /// 阴影
   late TMap<String, List<BoxShadow>> shadowMap;
 
+  /// 内投影对应的定向内侧边线。
+  late TMap<String, BorderSide> insetShadowMap;
+
   /// 间隔
   late TMap<String, double> spacerMap;
+
+  /// 全局尺寸刻度，单位为逻辑像素；与间距 Token 独立。
+  late TMap<String, double> sizeMap;
 
   /// 映射关系
   late TMap<String, String> refMap;
@@ -850,18 +531,30 @@ class TThemeData extends ThemeExtension<TThemeData> {
     required this.name,
     required this.colorMap,
     required this.fontMap,
+    TMap<String, double>? fontMetricMap,
     required this.radiusMap,
     required this.fontFamilyMap,
     required this.shadowMap,
+    TMap<String, BorderSide>? insetShadowMap,
     required this.spacerMap,
+    TMap<String, double>? sizeMap,
     required this.refMap,
     this.extraThemeData,
   }) {
+    this.sizeMap = sizeMap ?? TMap<String, double>();
+    this.fontMetricMap = fontMetricMap ?? TMap<String, double>();
+    this.insetShadowMap = insetShadowMap ?? TMap<String, BorderSide>();
     light = this;
   }
 
   /// 获取默认Data，一个App里只有一个，用于没有context的地方
-  static TThemeData defaultData({TExtraThemeData? extraThemeData}) {
+  ///
+  /// ## 返回值
+  /// 全局默认 Token 主题；首次调用时创建并缓存，后续调用返回同一默认主题。
+  static TThemeData defaultData({
+    /// 扩展主题数据；默认主题仅在首次初始化时读取。
+    TExtraThemeData? extraThemeData,
+  }) {
     _defaultThemeData ??= fromJson(
       _defaultThemeName,
       TDefaultTheme.defaultThemeConfig,
@@ -880,57 +573,69 @@ class TThemeData extends ThemeExtension<TThemeData> {
     return _defaultThemeData!;
   }
 
-  /// 从父类拷贝
-  TThemeData copyWithTThemeData(
-    String name, {
-    Map<String, Color>? colorMap,
-    Map<String, Font>? fontMap,
-    Map<String, double>? radiusMap,
-    Map<String, FontFamily>? fontFamilyMap,
-    Map<String, List<BoxShadow>>? shadowMap,
-    Map<String, double>? marginMap,
-    TExtraThemeData? extraThemeData,
-  }) {
-    return copyWith(
-          name: name,
-          colorMap: colorMap,
-          fontMap: fontMap,
-          radiusMap: radiusMap,
-          fontFamilyMap: fontFamilyMap,
-          shadowMap: shadowMap,
-          marginMap: marginMap,
-          extraThemeData: extraThemeData,
-        )
-        as TThemeData;
-  }
-
+  /// 复制主题配置。
+  ///
+  /// ## 返回值
+  /// 复制 Token 主题并合并传入的映射；未传入的映射值沿用当前配置。
+  /// name 和 extraThemeData 为空时保留当前名称和扩展数据。
   @override
-  ThemeExtension<TThemeData> copyWith({
+  TThemeData copyWith({
     String? name,
     Map<String, Color>? colorMap,
     Map<String, Font>? fontMap,
+    Map<String, double>? fontMetricMap,
     Map<String, double>? radiusMap,
     Map<String, FontFamily>? fontFamilyMap,
     Map<String, List<BoxShadow>>? shadowMap,
-    Map<String, double>? marginMap,
+    Map<String, BorderSide>? insetShadowMap,
+
+    /// 间距 Token 的增量映射；传入值覆盖同名 Token，其他值沿用当前配置。
+    Map<String, double>? spacerMap,
+
+    /// 尺寸刻度的增量映射；未提供时保留当前值。
+    Map<String, double>? sizeMap,
     TExtraThemeData? extraThemeData,
   }) {
+    final copiedRefs = _copyMap<String>(refMap, null);
     return TThemeData(
-      name: name ?? 'default',
-      colorMap: _copyMap<Color>(this.colorMap, colorMap),
-      fontMap: _copyMap<Font>(this.fontMap, fontMap),
-      radiusMap: _copyMap<double>(this.radiusMap, radiusMap),
-      fontFamilyMap: _copyMap<FontFamily>(this.fontFamilyMap, fontFamilyMap),
-      shadowMap: _copyMap<List<BoxShadow>>(this.shadowMap, shadowMap),
-      spacerMap: _copyMap<double>(spacerMap, marginMap),
-      refMap: _copyMap<String>(refMap, refMap),
+      name: name ?? this.name,
+      colorMap: _copyMap<Color>(this.colorMap, colorMap, copiedRefs),
+      fontMap: _copyMap<Font>(this.fontMap, fontMap, copiedRefs),
+      fontMetricMap: _copyMap<double>(
+        this.fontMetricMap,
+        fontMetricMap,
+        copiedRefs,
+      ),
+      radiusMap: _copyMap<double>(this.radiusMap, radiusMap, copiedRefs),
+      fontFamilyMap: _copyMap<FontFamily>(
+        this.fontFamilyMap,
+        fontFamilyMap,
+        copiedRefs,
+      ),
+      shadowMap: _copyMap<List<BoxShadow>>(
+        this.shadowMap,
+        shadowMap,
+        copiedRefs,
+      ),
+      insetShadowMap: _copyMap<BorderSide>(
+        this.insetShadowMap,
+        insetShadowMap,
+        copiedRefs,
+      ),
+      spacerMap: _copyMap<double>(this.spacerMap, spacerMap, copiedRefs),
+      sizeMap: _copyMap<double>(this.sizeMap, sizeMap, copiedRefs),
+      refMap: copiedRefs,
       extraThemeData: extraThemeData ?? this.extraThemeData,
     );
   }
 
   /// 拷贝Map,防止内层
-  TMap<String, T> _copyMap<T>(TMap<String, T> src, Map<String, T>? add) {
-    var map = TMap<String, T>(factory: () => src);
+  TMap<String, T> _copyMap<T>(
+    TMap<String, T> src,
+    Map<String, T>? add, [
+    TMap<String, String>? refs,
+  ]) {
+    var map = TMap<String, T>(factory: () => src, refs: refs);
 
     src.forEach((key, value) {
       map[key] = value;
@@ -942,32 +647,53 @@ class TThemeData extends ThemeExtension<TThemeData> {
   }
 
   /// 创建空对象
-  static TThemeData _emptyData(String name, {TExtraThemeData? extraThemeData}) {
-    var refMap = TMap<String, String>();
+  static TThemeData _emptyData(
+    String name, {
+    TExtraThemeData? extraThemeData,
+    bool preferDarkDefaults = false,
+  }) {
+    TThemeData defaults() => preferDarkDefaults
+        ? defaultData().dark ?? defaultData()
+        : defaultData();
+    var refMap = TMap<String, String>(factory: () => defaults().refMap);
     return TThemeData(
       name: name,
-      colorMap: TMap(factory: () => defaultData().colorMap, refs: refMap),
-      fontMap: TMap(factory: () => defaultData().fontMap, refs: refMap),
-      radiusMap: TMap(factory: () => defaultData().radiusMap, refs: refMap),
-      fontFamilyMap: TMap(
-        factory: () => defaultData().fontFamilyMap,
+      colorMap: TMap(factory: () => defaults().colorMap, refs: refMap),
+      fontMap: TMap(factory: () => defaults().fontMap, refs: refMap),
+      fontMetricMap: TMap(
+        factory: () => defaults().fontMetricMap,
         refs: refMap,
       ),
-      shadowMap: TMap(factory: () => defaultData().shadowMap, refs: refMap),
-      spacerMap: TMap(factory: () => defaultData().spacerMap, refs: refMap),
+      radiusMap: TMap(factory: () => defaults().radiusMap, refs: refMap),
+      fontFamilyMap: TMap(
+        factory: () => defaults().fontFamilyMap,
+        refs: refMap,
+      ),
+      shadowMap: TMap(factory: () => defaults().shadowMap, refs: refMap),
+      insetShadowMap: TMap(
+        factory: () => defaults().insetShadowMap,
+        refs: refMap,
+      ),
+      spacerMap: TMap(factory: () => defaults().spacerMap, refs: refMap),
+      sizeMap: TMap(factory: () => defaults().sizeMap, refs: refMap),
       refMap: refMap,
     );
   }
 
-  /// 解析配置的json文件为主题数据
+  /// 解析主题 JSON；空字符串、格式错误或缺少 name 对应配置时返回 null。
+  /// 浅色与深色块中未配置的 Token 分别回退默认浅色与深色主题；
+  /// 深色块不存在时不自动创建，暗色构建仍回退当前 Token。
   ///
   /// [name] 主题名称，目前只支持一级键
   ///
   /// [themeJson] 主题json字符串，要求json配置必须正确
   ///
-  /// [recoverDefault] 是否恢复为默认主题数据
+  /// [recoverDefault] 解析成功后是否将结果设为全局默认主题，默认 false
   ///
   /// [extraThemeData] 额外扩展的主题数据
+  ///
+  /// ## 返回值
+  /// 解析成功的 Token 主题；空字符串、格式错误或缺少指定配置时为 null。
   static TThemeData? fromJson(
     String name,
     String themeJson, {
@@ -985,12 +711,17 @@ class TThemeData extends ThemeExtension<TThemeData> {
       /// 要求json配置必须正确
       final themeConfig = json.decode(themeJson);
       if (themeConfig.containsKey(name)) {
-        var theme = parseThemeData(name, themeConfig, extraThemeData);
+        var theme = _parseThemeData(name, themeConfig, extraThemeData);
         theme.light = theme;
         darkName ??= '${name}Dark';
         if (themeConfig[darkName] != null) {
           // 解析暗色模式
-          var darkTheme = parseThemeData(darkName, themeConfig, extraThemeData);
+          var darkTheme = _parseThemeData(
+            darkName,
+            themeConfig,
+            extraThemeData,
+            preferDarkDefaults: true,
+          );
           darkTheme.light = theme;
           theme.dark = darkTheme;
           // 填充暗色模式缺失数据
@@ -1015,14 +746,25 @@ class TThemeData extends ThemeExtension<TThemeData> {
     }
   }
 
-  static TThemeData parseThemeData(
+  /// 从已解析的 [themeConfig] 读取 [name] 对应的主题。
+  /// 配置不存在或对应映射为空时，返回本地映射为空但仍可通过默认 Token 回退解析的主题；
+  /// 此时不会解析或安装 [extraThemeData]。仅当对应配置存在且非空时，非空 [extraThemeData]
+  /// 才会参与解析并安装到返回主题。
+  ///
+  /// ## 返回值
+  /// 指定名称的 Token 主题；缺失配置时返回带默认映射回退的空本地主题。
+  static TThemeData _parseThemeData(
+    /// 待解析的主题名称。
     String name,
 
     /// 已解析的主题 JSON 配置。
     dynamic themeConfig,
-    TExtraThemeData? extraThemeData,
-  ) {
-    var theme = _emptyData(name);
+
+    /// 可选的额外主题数据；仅在 name 对应的配置存在且非空时解析并安装。
+    TExtraThemeData? extraThemeData, {
+    bool preferDarkDefaults = false,
+  }) {
+    var theme = _emptyData(name, preferDarkDefaults: preferDarkDefaults);
     Map<String, dynamic>? curThemeMap = themeConfig['$name'];
     if (curThemeMap?.isEmpty ?? true) {
       return theme;
@@ -1047,6 +789,12 @@ class TThemeData extends ThemeExtension<TThemeData> {
     Map<String, dynamic>? fontsMap = curThemeMap?['font'];
     fontsMap?.forEach((key, value) {
       theme.fontMap[key] = Font.fromJson(value);
+    });
+
+    /// 字体尺寸与行高可独立覆盖，不能只保留复合 Font。
+    Map<String, dynamic>? fontMetricsMap = curThemeMap?['fontMetric'];
+    fontMetricsMap?.forEach((key, value) {
+      theme.fontMetricMap[key] = (value as num).toDouble();
     });
 
     /// 设置圆角
@@ -1082,6 +830,25 @@ class TThemeData extends ThemeExtension<TThemeData> {
       theme.shadowMap[key] = list;
     });
 
+    /// 默认内阴影使用宽度 0.5 逻辑像素的内侧描边。
+    Map<String, dynamic>? insetShadowsMap = curThemeMap?['insetShadow'];
+    insetShadowsMap?.forEach((key, value) {
+      theme.insetShadowMap[key] = BorderSide(
+        color: toColor(value['color']) ?? Colors.transparent,
+        width: (value['width'] as num).toDouble(),
+      );
+    });
+
+    /// 独立尺寸刻度；非法尺寸使整份配置被 fromJson 拒绝。
+    final sizes = curThemeMap?['size'] as Map<String, dynamic>?;
+    sizes?.forEach((key, value) {
+      final size = (value as num).toDouble();
+      if (!size.isFinite || size < 0) {
+        throw FormatException('Invalid size token: $key');
+      }
+      theme.sizeMap[key] = size;
+    });
+
     /// 设置Margin
     Map<String, dynamic>? marginsMap = curThemeMap?['margin'];
     marginsMap?.forEach((key, value) {
@@ -1095,83 +862,232 @@ class TThemeData extends ThemeExtension<TThemeData> {
     return theme;
   }
 
-  Color? ofColor(String? key) {
-    return colorMap[key];
-  }
-
-  Font? ofFont(String? key) {
-    return fontMap[key];
-  }
-
-  double? ofCorner(String? key) {
-    return radiusMap[key];
-  }
-
-  FontFamily? ofFontFamily(String? key) {
-    return fontFamilyMap[key];
-  }
-
-  List<BoxShadow>? ofShadow(String? key) {
-    return shadowMap[key];
-  }
-
-  T? ofExtra<T extends TExtraThemeData>() {
-    try {
-      return extraThemeData as T;
-    } catch (e) {
-      Log.e('TThemeData ofExtra error: $e');
-    }
-    return null;
-  }
-
+  /// 在当前主题与目标主题间生成过渡配置。
+  ///
+  /// t 为 0 或 1 时返回对应端点；目标为空时返回当前主题。
+  /// 颜色、字号、行高、圆角、阴影和间距按有效 Token 值插值，
+  /// 单侧存在的 Token 保留；名称、字体族、业务扩展和明暗关联在 t=0.5 切换。
+  /// 相同且未显式覆盖的 Token 引用继续沿用，其他值保存在新的映射中。
+  ///
+  /// ## 返回值
+  /// 两端之间的 Token 主题；端点返回原主题，中间值返回独立映射。
   @override
-  ThemeExtension<TThemeData> lerp(ThemeExtension<TThemeData>? other, double t) {
-    if (other is! TThemeData) {
+  TThemeData lerp(
+    /// 目标主题；为空或类型不匹配时返回当前主题。
+    ThemeExtension<TThemeData>? other,
+
+    /// 过渡进度；0 为当前主题，1 为目标主题，离散配置在 0.5 切换。
+    double t,
+  ) {
+    if (other is! TThemeData || identical(this, other) || t == 0) {
       return this;
     }
-    return TThemeData(
-      name: other.name,
-      colorMap: other.colorMap,
-      fontMap: other.fontMap,
-      radiusMap: other.radiusMap,
-      fontFamilyMap: other.fontFamilyMap,
-      shadowMap: other.shadowMap,
-      spacerMap: other.spacerMap,
-      refMap: other.refMap,
+    if (t == 1) {
+      return other;
+    }
+    final selected = t < 0.5 ? this : other;
+    final refs = _copyMap<String>(selected.refMap, null);
+    final result = TThemeData(
+      name: selected.name,
+      colorMap: _lerpMap(
+        colorMap,
+        other.colorMap,
+        refs,
+        t,
+        (a, b, t) => Color.lerp(a, b, t)!,
+      ),
+      fontMap: _lerpMap(fontMap, other.fontMap, refs, t, _lerpFont),
+      fontMetricMap: _lerpMap(
+        fontMetricMap,
+        other.fontMetricMap,
+        refs,
+        t,
+        _lerpNumber,
+      ),
+      radiusMap: _lerpMap(radiusMap, other.radiusMap, refs, t, _lerpNumber),
+      fontFamilyMap: _lerpMap(
+        fontFamilyMap,
+        other.fontFamilyMap,
+        refs,
+        t,
+        (a, b, t) => t < 0.5 ? a : b,
+      ),
+      shadowMap: _lerpMap(
+        shadowMap,
+        other.shadowMap,
+        refs,
+        t,
+        (a, b, t) => BoxShadow.lerpList(a, b, t)!,
+      ),
+      insetShadowMap: _lerpMap(
+        insetShadowMap,
+        other.insetShadowMap,
+        refs,
+        t,
+        BorderSide.lerp,
+      ),
+      spacerMap: _lerpMap(spacerMap, other.spacerMap, refs, t, _lerpNumber),
+      sizeMap: _lerpMap(
+        sizeMap,
+        other.sizeMap,
+        refs,
+        t,
+        _lerpNumber,
+        defaults: defaultSizeTokens,
+      ),
+      refMap: refs,
+      extraThemeData: selected.extraThemeData,
     );
+    result.light = identical(selected.light, selected)
+        ? result
+        : selected.light;
+    result.dark = selected.dark;
+    return result;
+  }
+
+  static double _lerpNumber(double a, double b, double t) => a + (b - a) * t;
+
+  static Font _lerpFont(Font a, Font b, double t) {
+    final result = Font(
+      size: 1,
+      lineHeight: 1,
+      fontWeight: FontWeight.lerp(a.fontWeight, b.fontWeight, t)!,
+    );
+    result.size = _lerpNumber(a.size, b.size, t);
+    final lineHeight = _lerpNumber(a.size * a.height, b.size * b.height, t);
+    result.height = result.size == 0
+        ? _lerpNumber(a.height, b.height, t)
+        : lineHeight / result.size;
+    return result;
+  }
+
+  static Set<String> _tokenKeys(TMap<dynamic, dynamic> map) {
+    final keys = <String>{};
+    final visited = <TMap<dynamic, dynamic>>{};
+    void collect(TMap<dynamic, dynamic> current) {
+      if (!visited.add(current)) {
+        return;
+      }
+      keys.addAll(current.keys.whereType<String>());
+      final refs = current.refs;
+      if (refs != null) {
+        collect(refs);
+      }
+      final fallback = current.factory?.call();
+      if (fallback != null) {
+        collect(fallback);
+      }
+    }
+
+    collect(map);
+    return keys;
+  }
+
+  TMap<String, V> _lerpMap<V>(
+    TMap<String, V> a,
+    TMap<String, V> b,
+    TMap<String, String> refs,
+    double t,
+    V Function(V, V, double) interpolate, {
+    Map<String, V> defaults = const {},
+  }) {
+    final result = TMap<String, V>(refs: refs);
+    for (final key in {..._tokenKeys(a), ..._tokenKeys(b), ...defaults.keys}) {
+      final reference = a.refs?[key];
+      if (reference != null &&
+          reference == b.refs?[key] &&
+          a.get(key) == null &&
+          b.get(key) == null) {
+        continue;
+      }
+      final first = a[key] ?? defaults[key];
+      final second = b[key] ?? defaults[key];
+      final value = first == null
+          ? second
+          : second == null
+          ? first
+          : interpolate(first, second, t);
+      if (value != null) {
+        result[key] = value;
+      }
+    }
+    return result;
   }
 }
 
 /// 扩展主题数据
 abstract class TExtraThemeData {
   /// 解析json
-  void parse(String name, Map<String, dynamic> curThemeMap);
+  void parse(
+    /// 待解析主题的名称。
+    String name,
+
+    /// 当前主题对应的已解析 JSON 映射。
+    Map<String, dynamic> curThemeMap,
+  );
 }
 
+/// 创建默认 Token 映射的回调；返回 null 时不提供默认值。
+///
+/// ## 返回值
+/// 默认 Token 映射；返回 null 时不提供默认映射。
 typedef DefaultMapFactory = TMap? Function();
 
 /// 自定义Map
 class TMap<K, V> extends DelegatingMap<K, V> {
   TMap({this.factory, this.refs}) : super({});
+
+  /// 查不到本地值或引用值时获取默认映射的回调；为空时不使用默认映射。
   DefaultMapFactory? factory;
+
+  /// Token 名称到引用名称的映射；本地显式值优先于引用，循环引用会中止该引用链的解析。
   TMap? refs;
 
+  /// 读取 Token 值：依次尝试本地显式值、引用链和默认映射。
+  /// 循环引用会中止该引用链；仍可尝试默认映射，全部未命中时返回 null。
+  ///
+  /// ## 返回值
+  /// 依次查找本地值、引用链和默认映射得到的 Token；全部未命中时为 null。
   @override
-  V? operator [](Object? key) {
-    // return super[key];
-    key = refs?[key] ?? key;
-    var value = super[key];
-    if (value != null) {
-      return value;
-    }
-    var defaultValue = factory?.call()?.get(key);
-    if (defaultValue is V) {
-      return defaultValue;
-    }
-    return null;
+  V? operator [](
+    /// 要查询的 Token 键；支持当前映射的键类型。
+    Object? key,
+  ) {
+    return _resolve(key, <Object?>{});
   }
 
-  V? get(Object? key) {
+  V? _resolve(Object? key, Set<Object?> visited) {
+    if (!visited.add(key)) {
+      return null;
+    }
+    // Explicit Token values override reference and default-map fallbacks.
+    final localValue = super[key];
+    if (localValue != null) {
+      return localValue;
+    }
+    final reference = refs?[key];
+    if (reference != null) {
+      final referencedValue = _resolve(reference, visited);
+      if (referencedValue != null) {
+        return referencedValue;
+      }
+    }
+    final fallback = factory?.call();
+    if (identical(fallback, this)) {
+      return null;
+    }
+    final defaultValue = fallback?[key];
+    return defaultValue is V ? defaultValue : null;
+  }
+
+  /// 仅读取 [key] 的本地存储值，不解析引用或默认映射。
+  ///
+  /// ## 返回值
+  /// 本地存储的 Token 值；不存在时为 null，不解析引用链或默认映射。
+  V? get(
+    /// 要读取本地存储值的键；不解析引用或默认映射。
+    Object? key,
+  ) {
     return super[key];
   }
 }

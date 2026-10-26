@@ -10,35 +10,49 @@
       "api": {
         "names": [
           "TButton",
-          "TButtonStyle"
+          "TButtonColorPreset",
+          "TButtonThemeData",
+          "TButtonSize",
+          "TButtonVariant",
+          "TButtonIconPosition",
+          "TButtonShape"
         ],
-        "getComments": false
+        "getComments": true
       }
     },
     {
       "slug": "divider",
       "source": {
-        "type": "file",
-        "path": "lib/src/components/divider/t_divider.dart"
+        "type": "folder",
+        "path": "lib/src/components/divider"
       },
       "api": {
         "names": [
-          "TDivider"
+          "TDivider",
+          "TDividerLayout",
+          "TDividerAlign",
+          "TDividerThemeData"
         ],
-        "getComments": false
+        "getComments": true
       }
     },
     {
       "slug": "fab",
       "source": {
-        "type": "file",
-        "path": "lib/src/components/fab/t_fab.dart"
+        "type": "folder",
+        "path": "lib/src/components/fab"
       },
       "api": {
         "names": [
-          "TFab"
+          "TFab",
+          "TFabDragAxis",
+          "TFabMagnet",
+          "TFabBounds",
+          "TFabDragDetails",
+          "TFabDragCallback",
+          "TFabThemeData"
         ],
-        "getComments": false
+        "getComments": true
       }
     },
     {
@@ -49,8 +63,7 @@
       },
       "api": {
         "names": [
-          "TIcon",
-          "TIconThemeData"
+          "TIcon"
         ],
         "getComments": true
       }
@@ -58,14 +71,17 @@
     {
       "slug": "link",
       "source": {
-        "type": "file",
-        "path": "lib/src/components/link/t_link.dart"
+        "type": "folder",
+        "path": "lib/src/components/link"
       },
       "api": {
         "names": [
-          "TLink"
+          "TLink",
+          "TLinkColorPreset",
+          "TLinkThemeData",
+          "TLinkSize"
         ],
-        "getComments": false
+        "getComments": true
       }
     },
     {
@@ -81,7 +97,7 @@
           "TTextThemeData",
           "TFontLoader"
         ],
-        "getComments": false
+        "getComments": true
       }
     },
     {
@@ -95,9 +111,9 @@
           "TBackTop",
           "TBackTopThemeData",
           "TBackTopShape",
-          "TBackTopColorScheme"
+          "TBackTopColorPreset"
         ],
-        "getComments": false
+        "getComments": true
       }
     },
     {
@@ -112,12 +128,13 @@
           "TDrawerHandle",
           "TDrawerPlacement",
           "TDrawerThemeData",
-          "TDrawerItem"
+          "TDrawerItem",
+          "TDrawerItemClickCallback"
         ],
+        "getComments": true,
         "functions": [
           "showTDrawer"
-        ],
-        "getComments": true
+        ]
       }
     },
     {
@@ -131,7 +148,13 @@
           "TIndexes",
           "TIndexesAnchor",
           "TIndexesList",
-          "TIndexesThemeData"
+          "TIndexesThemeData",
+          "SliverStickyHeaderWidgetBuilder",
+          "StickyHeaderController",
+          "DefaultStickyHeaderController",
+          "SliverStickyHeaderState",
+          "SliverStickyHeader",
+          "SliverStickyHeaderRenderObjectElement"
         ],
         "getComments": true
       }
@@ -139,15 +162,17 @@
     {
       "slug": "navbar",
       "source": {
-        "type": "file",
-        "path": "lib/src/components/navbar/t_nav_bar.dart"
+        "type": "folder",
+        "path": "lib/src/components/navbar"
       },
       "api": {
         "names": [
           "TNavBar",
-          "TNavBarItem"
+          "TNavBarItem",
+          "TNavBarBorder",
+          "TNavBarThemeData"
         ],
-        "getComments": false
+        "getComments": true
       }
     },
     {
@@ -159,9 +184,11 @@
       "api": {
         "names": [
           "TSideBar",
-          "TSideBarItem"
+          "TSideBarItem",
+          "TSideBarThemeData",
+          "TSideBarVariant"
         ],
-        "getComments": false
+        "getComments": true
       }
     },
     {
@@ -173,9 +200,12 @@
       "api": {
         "names": [
           "TSteps",
-          "TStepsItemData"
+          "TStepsItemData",
+          "TStepsDirection",
+          "TStepsIndicator",
+          "TStepsStatus"
         ],
-        "getComments": false
+        "getComments": true
       }
     },
     {
@@ -190,9 +220,15 @@
           "TTabBarItemConfig",
           "TTabBarPopUpBtnConfig",
           "TTabBarPopUpShapeConfig",
-          "TTabBarMenuItem"
+          "TTabBarMenuItem",
+          "TTabBarThemeData",
+          "TTabBarType",
+          "TTabBarItemStyle",
+          "TTabBarStyle",
+          "TTabBarIconTextLayout",
+          "TTabBarIndicatorAnimation"
         ],
-        "getComments": false
+        "getComments": true
       }
     },
     {
@@ -208,9 +244,10 @@
           "TTabsBarView",
           "TTabsBarIndicator",
           "TTabsBarThemeData",
-          "TTabsBarVariant"
+          "TTabsBarVariant",
+          "TTabsBarSize"
         ],
-        "getComments": false
+        "getComments": true
       }
     },
     {
@@ -222,11 +259,17 @@
       "api": {
         "names": [
           "TCalendar",
-          "TCalendarStyle",
           "TCalendarCellModel",
-          "TCalendarSubtitleContext"
+          "TCalendarSubtitleContext",
+          "TCalendarSubtitleBuilder",
+          "TCalendarCellBuilder",
+          "TCalendarMonthTitleBuilder",
+          "DateSelectType",
+          "TCalendarFirstDayOfWeek",
+          "TCalendarThemeData",
+          "TCalendarVariant"
         ],
-        "getComments": false
+        "getComments": true
       }
     },
     {
@@ -242,7 +285,7 @@
           "TCascaderThemeData",
           "TCascaderVariant"
         ],
-        "getComments": false
+        "getComments": true
       }
     },
     {
@@ -254,9 +297,16 @@
       "api": {
         "names": [
           "TCheckbox",
-          "TCheckboxGroup"
+          "TCheckboxGroup",
+          "TContentDirection",
+          "TCheckboxSize",
+          "TCheckboxIconBuilder",
+          "TCheckboxOption",
+          "TCheckboxOptionBuilder",
+          "TCheckboxThemeData",
+          "TCheckboxVariant"
         ],
-        "getComments": false
+        "getComments": true
       }
     },
     {
@@ -268,11 +318,15 @@
       "api": {
         "names": [
           "TPicker",
+          "TPickerPopup",
           "TPickerOption",
           "TPickerValue",
           "TPickerColumns",
           "TPickerLinked",
-          "TPickerKeys"
+          "TPickerPopupHeaderBuilder",
+          "TPickerThemeData",
+          "TPickerItemBuilder",
+          "TPickerItems"
         ],
         "getComments": true
       }
@@ -314,7 +368,8 @@
           "TFormLayout",
           "TFormRequiredMarkPosition",
           "TFormItemVerticalAlignment",
-          "TFormThemeData"
+          "TFormThemeData",
+          "TFormItemContentAlignment"
         ],
         "getComments": true
       }
@@ -322,28 +377,35 @@
     {
       "slug": "input",
       "source": {
-        "type": "file",
-        "path": "lib/src/components/input/t_input.dart"
+        "type": "folder",
+        "path": "lib/src/components/input"
       },
       "api": {
         "names": [
           "TInput",
-          "TInputSpacer"
+          "TInputThemeData",
+          "TInputClearButtonMode",
+          "TInputStatus"
         ],
-        "getComments": false
+        "getComments": true
       }
     },
     {
       "slug": "radio",
       "source": {
-        "type": "file",
-        "path": "lib/src/components/radio/t_radio.dart"
+        "type": "folder",
+        "path": "lib/src/components/radio"
       },
       "api": {
         "names": [
-          "TRadioStyle",
           "TRadio",
-          "TRadioGroup"
+          "TRadioGroup",
+          "TRadioOption",
+          "TRadioSize",
+          "TRadioIconType",
+          "TRadioVariant",
+          "TRadioIconBuilder",
+          "TRadioThemeData"
         ],
         "getComments": true
       }
@@ -351,14 +413,16 @@
     {
       "slug": "rate",
       "source": {
-        "type": "file",
-        "path": "lib/src/components/rate/t_rate.dart"
+        "type": "folder",
+        "path": "lib/src/components/rate"
       },
       "api": {
         "names": [
-          "TRate"
+          "TRate",
+          "TRateIconBuilder",
+          "TRateThemeData"
         ],
-        "getComments": false
+        "getComments": true
       }
     },
     {
@@ -374,22 +438,24 @@
           "TSearchBarVariant",
           "TSearchBarAlignment"
         ],
-        "getComments": false
+        "getComments": true
       }
     },
     {
       "slug": "slider",
       "source": {
-        "type": "file",
-        "path": "lib/src/components/slider/t_slider.dart"
+        "type": "folder",
+        "path": "lib/src/components/slider"
       },
       "api": {
         "names": [
           "TSlider",
           "TRangeSlider",
-          "TSliderThemeData"
+          "TSliderVariant",
+          "TSliderThemeData",
+          "TSliderThumbFormatter"
         ],
-        "getComments": false
+        "getComments": true
       }
     },
     {
@@ -405,31 +471,35 @@
           "TStepperSize",
           "TStepperVariant"
         ],
-        "getComments": false
+        "getComments": true
       }
     },
     {
       "slug": "switch",
       "source": {
-        "type": "file",
-        "path": "lib/src/components/switch/t_switch.dart"
+        "type": "folder",
+        "path": "lib/src/components/switch"
       },
       "api": {
         "names": [
-          "TSwitch"
+          "TSwitch",
+          "TSwitchThemeData",
+          "TSwitchSize",
+          "TSwitchVariant"
         ],
-        "getComments": false
+        "getComments": true
       }
     },
     {
       "slug": "textarea",
       "source": {
-        "type": "file",
-        "path": "lib/src/components/textarea/t_textarea.dart"
+        "type": "folder",
+        "path": "lib/src/components/textarea"
       },
       "api": {
         "names": [
-          "TTextarea"
+          "TTextarea",
+          "TTextareaLayout"
         ],
         "getComments": true
       }
@@ -437,15 +507,16 @@
     {
       "slug": "tree-select",
       "source": {
-        "type": "file",
-        "path": "lib/src/components/tree/t_tree_select.dart"
+        "type": "folder",
+        "path": "lib/src/components/tree"
       },
       "api": {
         "names": [
           "TTreeSelect",
-          "TTreeSelectOption"
+          "TTreeSelectOption",
+          "TTreeSelectThemeData"
         ],
-        "getComments": false
+        "getComments": true
       }
     },
     {
@@ -461,23 +532,30 @@
           "TUploadFileStatus",
           "TUploadLayout",
           "TUploadThemeData",
-          "TUploadVariant"
+          "TUploadVariant",
+          "TUploadMediaType",
+          "TUploadValidationError",
+          "TUploadPicker"
         ],
-        "getComments": false
+        "getComments": true
       }
     },
     {
       "slug": "avatar",
       "source": {
-        "type": "file",
-        "path": "lib/src/components/avatar/t_avatar.dart"
+        "type": "folder",
+        "path": "lib/src/components/avatar"
       },
       "api": {
         "names": [
           "TAvatar",
-          "TAvatarGroup"
+          "TAvatarGroup",
+          "TAvatarThemeData",
+          "TAvatarSize",
+          "TAvatarShape",
+          "TAvatarGroupCascading"
         ],
-        "getComments": false
+        "getComments": true
       }
     },
     {
@@ -489,7 +567,10 @@
       "api": {
         "names": [
           "TBadge",
-          "TBadgeThemeData"
+          "TBadgeConfig",
+          "TBadgeThemeData",
+          "TBadgeVariant",
+          "TBadgeSize"
         ],
         "getComments": true
       }
@@ -504,7 +585,10 @@
         "names": [
           "TCell",
           "TCellGroup",
-          "TCellStyle"
+          "TCellThemeData",
+          "TCellAlign",
+          "TCellGroupBuilder",
+          "TCellGroupVariant"
         ],
         "getComments": true
       }
@@ -519,7 +603,11 @@
         "names": [
           "TTimeCounter",
           "TTimeCounterController",
-          "TTimeCounterStyle"
+          "TTimeCounterThemeData",
+          "TTimeCounterDirection",
+          "TTimeCounterSize",
+          "TTimeCounterVariant",
+          "TTimeCounterBuilder"
         ],
         "getComments": true
       }
@@ -532,7 +620,13 @@
       },
       "api": {
         "names": [
-          "TCollapse"
+          "TCollapse",
+          "TCollapsePanelBuilder",
+          "TCollapsePanel",
+          "TCollapseThemeData",
+          "TCollapseMode",
+          "TCollapseVariant",
+          "TCollapsePlacement"
         ],
         "getComments": true
       }
@@ -540,38 +634,44 @@
     {
       "slug": "empty",
       "source": {
-        "type": "file",
-        "path": "lib/src/components/empty/t_empty.dart"
+        "type": "folder",
+        "path": "lib/src/components/empty"
       },
       "api": {
         "names": [
-          "TEmpty"
+          "TEmpty",
+          "TEmptyThemeData"
         ],
-        "getComments": false
+        "getComments": true
       }
     },
     {
       "slug": "footer",
       "source": {
-        "type": "file",
-        "path": "lib/src/components/footer/t_footer.dart"
+        "type": "folder",
+        "path": "lib/src/components/footer"
       },
       "api": {
-        "names": ["TFooter"],
-        "getComments": false
+        "names": [
+          "TFooter",
+          "TFooterThemeData"
+        ],
+        "getComments": true
       }
     },
     {
       "slug": "image",
       "source": {
-        "type": "file",
-        "path": "lib/src/components/image/t_image.dart"
+        "type": "folder",
+        "path": "lib/src/components/image"
       },
       "api": {
         "names": [
-          "TImage"
+          "TImage",
+          "TImageShape",
+          "TImageThemeData"
         ],
-        "getComments": false
+        "getComments": true
       }
     },
     {
@@ -583,35 +683,41 @@
       "api": {
         "names": [
           "TImageViewer",
-          "TImageViewerWidget"
+          "TImageViewerItemBuilder",
+          "TImageViewerThemeData"
         ],
-        "getComments": false
+        "getComments": true
       }
     },
     {
       "slug": "progress",
       "source": {
-        "type": "file",
-        "path": "lib/src/components/progress/t_progress.dart"
+        "type": "folder",
+        "path": "lib/src/components/progress"
       },
       "api": {
         "names": [
-          "TProgress"
+          "TProgress",
+          "TProgressThemeData",
+          "TProgressVariant",
+          "TProgressStatus"
         ],
-        "getComments": false
+        "getComments": true
       }
     },
     {
       "slug": "result",
       "source": {
-        "type": "file",
-        "path": "lib/src/components/result/t_result.dart"
+        "type": "folder",
+        "path": "lib/src/components/result"
       },
       "api": {
         "names": [
-          "TResult"
+          "TResult",
+          "TResultStatus",
+          "TResultThemeData"
         ],
-        "getComments": false
+        "getComments": true
       }
     },
     {
@@ -625,9 +731,13 @@
           "TSkeleton",
           "TSkeletonLayout",
           "TSkeletonBlockStyle",
-          "TSkeletonBlock"
+          "TSkeletonBlock",
+          "TSkeletonAnimation",
+          "TSkeletonVariant",
+          "TSkeletonBlockShape",
+          "TSkeletonThemeData"
         ],
-        "getComments": false
+        "getComments": true
       }
     },
     {
@@ -644,7 +754,8 @@
           "TSwiperPaginationVariant",
           "TSwiperPaginationPlacement",
           "TSwiperPaginationItemDetails",
-          "TSwiperPageEffect"
+          "TSwiperPageEffect",
+          "TSwiperPaginationItemBuilder"
         ],
         "getComments": true
       }
@@ -658,10 +769,22 @@
       "api": {
         "names": [
           "TTable",
-          "TTableCol",
-          "TTableEmpty"
+          "TTableColumn",
+          "TTableThemeData",
+          "TTableSelectionMode",
+          "TTableSortDirection",
+          "TTableSort",
+          "TTableColumnFixed",
+          "TTableColumnAlign",
+          "TTableCellContext",
+          "TTableCellSpan",
+          "TTableCellSpanBuilder",
+          "TTableCellTap",
+          "TTableRowKey",
+          "TTableRowTap",
+          "TTableCellBuilder"
         ],
-        "getComments": false
+        "getComments": true
       }
     },
     {
@@ -674,9 +797,13 @@
         "names": [
           "TTag",
           "TSelectTag",
-          "TTagStyle"
+          "TTagThemeData",
+          "TTagColorPreset",
+          "TTagSize",
+          "TTagShape",
+          "TTagVariant"
         ],
-        "getComments": false
+        "getComments": true
       }
     },
     {
@@ -693,6 +820,7 @@
           "TActionSheetAlign",
           "TActionSheetGridLayout",
           "TActionSheetGridMode",
+          "TActionSheetGridSection",
           "TActionSheetOnSelected"
         ],
         "getComments": true
@@ -712,7 +840,7 @@
           "TConfirmDialog",
           "TDialogThemeData"
         ],
-        "getComments": false
+        "getComments": true
       }
     },
     {
@@ -724,10 +852,19 @@
       "api": {
         "names": [
           "TDropdownMenu",
-          "TDropdownMenuDirection",
-          "TDropdownItem",
-          "TDropdownItemOption",
-          "TDropdownItemController"
+          "TDropdownMenuOption",
+          "TDropdownSingleSelectPanel",
+          "TDropdownMultiSelectPanel",
+          "TDropdownMenuPlacement",
+          "TDropdownMenuCloseReason",
+          "TDropdownMenuClosedCallback",
+          "TDropdownMenuPanelBuilder",
+          "TDropdownMenuTriggerBuilder",
+          "TDropdownMenuTriggerState",
+          "TDropdownMenuPanelController",
+          "TDropdownMenuItem",
+          "TDropdownMenuController",
+          "TDropdownThemeData"
         ],
         "getComments": true
       }
@@ -735,30 +872,34 @@
     {
       "slug": "loading",
       "source": {
-        "type": "file",
-        "path": "lib/src/components/loading/t_loading.dart"
+        "type": "folder",
+        "path": "lib/src/components/loading"
       },
       "api": {
         "names": [
-          "TLoading"
+          "TLoading",
+          "TLoadingIcon",
+          "TLoadingController",
+          "TLoadingThemeData"
         ],
-        "getComments": false
+        "getComments": true
       }
     },
     {
       "slug": "message",
       "source": {
-        "type": "file",
-        "path": "lib/src/components/message/t_message.dart"
+        "type": "folder",
+        "path": "lib/src/components/message"
       },
       "api": {
         "names": [
           "TMessage",
-          "MessageTheme",
-          "MessageMarquee",
-          "MessageLink"
+          "TMessageMarquee",
+          "TMessageHandle",
+          "TMessageThemeData",
+          "TMessageStatus"
         ],
-        "getComments": false
+        "getComments": true
       }
     },
     {
@@ -788,8 +929,10 @@
           "TPopover",
           "TPopoverAnchor",
           "TPopoverController",
-          "TPopoverColorScheme",
-          "TPopoverPlacement"
+          "TPopoverThemeData",
+          "TPopoverColorPreset",
+          "TPopoverPlacement",
+          "TPopoverAnchorBuilder"
         ],
         "getComments": true
       }
@@ -808,7 +951,16 @@
           "TPopupHandle",
           "TPopupOverlayConfig",
           "TPopupPlacement",
-          "TPopupTrigger"
+          "TPopupTrigger",
+          "TPopupInset",
+          "TPopupBottomInset",
+          "TPopupTopInset",
+          "TPopupLeftInset",
+          "TPopupRightInset",
+          "TPopupHeaderBuilder",
+          "TPopupSlotBuilder",
+          "TPopupVisibleChangeCallback",
+          "TPopupThemeData"
         ],
         "getComments": true
       }
@@ -851,28 +1003,60 @@
     {
       "slug": "toast",
       "source": {
-        "type": "file",
-        "path": "lib/src/components/toast/t_toast.dart"
+        "type": "folder",
+        "path": "lib/src/components/toast"
       },
       "api": {
         "names": [
-          "TToast"
+          "TToast",
+          "IconTextDirection",
+          "TToastPlacement",
+          "TOverlayConfig",
+          "TToastThemeData"
         ],
-        "getComments": false
+        "getComments": true
       }
     },
     {
       "slug": "theme",
       "source": {
-        "type": "file",
-        "path": "lib/src/theme/t_theme.dart"
+        "type": "folder",
+        "path": "lib/src"
       },
       "api": {
         "names": [
-          "TTheme",
-          "TThemeData"
+          "TThemeData",
+          "Font",
+          "FontFamily",
+          "TResourceBuilder",
+          "TResourceManager",
+          "TResourceDelegate",
+          "TStyleResolver",
+          "TMaterialThemeBuilder",
+          "TThemeBuilder",
+          "TExtraThemeData",
+          "DefaultMapFactory",
+          "TMap",
+          "PlatformUtil",
+          "TToolbarPressable",
+          "FontExtensions",
+          "TColors",
+          "TResolvedFontFamily",
+          "TFontFamilies",
+          "TFontMetrics",
+          "TFonts",
+          "TRadius",
+          "TBoxShadows",
+          "TInsetShadows",
+          "TSpacers",
+          "TSizes",
+          "TThemeContextExtension",
+          "TThemeDataMergeExtension"
         ],
-        "getComments": false
+        "getComments": true,
+        "functions": [
+          "setTResourceBuilder"
+        ]
       }
     }
   ]

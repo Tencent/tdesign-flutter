@@ -1,9 +1,0 @@
-TButton _buildPrimaryGhostButton(BuildContext context) {
-    return TButton(
-      child: const Text('幽灵按钮'),
-      size: TButtonSize.large,
-      variant: TButtonVariant.ghost,
-      colorScheme: TButtonColorScheme.primary,
-      onPressed: _onTap,
-    );
-  }

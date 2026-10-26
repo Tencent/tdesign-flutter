@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../text/t_text.dart';
+import '../text/t_text_styled.dart';
 
 // ---------------------------------------------------------------------------
 // TCalendarHeader — 星期标题栏
@@ -59,14 +59,15 @@ class TCalendarHeader extends StatelessWidget {
               child: SizedBox(
                 height: weekdayHeight,
                 child: Center(
-                  child: TText(
+                  child: TTextStyled(
                     list[index],
                     style: weekdayStyle,
+                    centerLeading: true,
                   ),
                 ),
               ),
             ),
-          ]
+          ],
         ],
       ),
     );

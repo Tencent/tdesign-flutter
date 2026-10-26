@@ -1,7 +1,6 @@
 import 'dart:async';
 import 'dart:io';
 
-import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:tdesign_flutter/tdesign_flutter.dart';
@@ -23,7 +22,10 @@ void main() {
     );
     final robotoFont = FontLoader('Roboto')
       ..addFont(robotoFile.readAsBytes().then(ByteData.sublistView));
-    await robotoFont.load();
+    final cjkFile = File('example/test/fonts/TDesignGoldenCJK-Regular.otf');
+    final cjkFont = FontLoader('TDesign Golden CJK')
+      ..addFont(cjkFile.readAsBytes().then(ByteData.sublistView));
+    await Future.wait([robotoFont.load(), cjkFont.load()]);
   });
 
   testWidgets('基础刷新 demo（固定视口）', (tester) async {
@@ -34,7 +36,10 @@ void main() {
     await tester.pumpWidget(
       MaterialApp(
         theme: TThemeBuilder.light(TThemeData.defaultData()).copyWith(
-          textTheme: ThemeData.light().textTheme.apply(fontFamily: 'Roboto'),
+          textTheme: ThemeData.light().textTheme.apply(
+            fontFamily: 'Roboto',
+            fontFamilyFallback: const ['TDesign Golden CJK'],
+          ),
         ),
         home: Scaffold(body: _buildRefreshDemo()),
       ),
@@ -55,7 +60,10 @@ void main() {
     await tester.pumpWidget(
       MaterialApp(
         theme: TThemeBuilder.light(TThemeData.defaultData()).copyWith(
-          textTheme: ThemeData.light().textTheme.apply(fontFamily: 'Roboto'),
+          textTheme: ThemeData.light().textTheme.apply(
+            fontFamily: 'Roboto',
+            fontFamilyFallback: const ['TDesign Golden CJK'],
+          ),
         ),
         home: Scaffold(body: _buildLoadingTextsDemo()),
       ),
@@ -76,7 +84,10 @@ void main() {
     await tester.pumpWidget(
       MaterialApp(
         theme: TThemeBuilder.light(TThemeData.defaultData()).copyWith(
-          textTheme: ThemeData.light().textTheme.apply(fontFamily: 'Roboto'),
+          textTheme: ThemeData.light().textTheme.apply(
+            fontFamily: 'Roboto',
+            fontFamilyFallback: const ['TDesign Golden CJK'],
+          ),
         ),
         home: Scaffold(body: _buildTimeoutDemo()),
       ),

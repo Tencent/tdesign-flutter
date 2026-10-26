@@ -9,14 +9,14 @@ import '../button/t_button_types.dart';
 class TFabDefaults {
   TFabDefaults._(); // coverage:ignore-line
 
-  /// 默认尺寸：与小程序 Fab 的 large 基线一致。
+  /// 默认 large 尺寸。
   static const defaultSize = TButtonSize.large;
 
   /// 默认变体：Fab 始终使用填充动作层。
   static const defaultVariant = TButtonVariant.fill;
 
   /// 默认配色：Fab 默认表达主操作。
-  static const defaultColorScheme = TButtonColorScheme.primary;
+  static const defaultColorPreset = TButtonColorPreset.primary;
 
   /// 默认图标
   static const IconData defaultIconData = TIcons.add;

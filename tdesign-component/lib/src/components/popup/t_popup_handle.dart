@@ -10,7 +10,7 @@ part of 't_popup.dart';
 ///   options: TPopupOptions.bottom(child: panel),
 /// );
 /// handle.close();
-/// handle.open(); // 可省略 context，复用已缓存的 Navigator
+/// handle.open(); // 可省略 context；destroyOnClose 为 false 时复用内容 State
 /// ```
 class TPopupHandle {
   TPopupHandle._({
@@ -18,9 +18,10 @@ class TPopupHandle {
     required this.themeContext,
     this.navigatorContext,
     this.useRootNavigator = false,
-  });
+    bool reusable = true,
+  }) : _reusable = reusable;
 
-  /// 创建时传入的配置；每次 [open] 会按 [TPopupOptions.placement] 裁剪无效字段后使用。
+  /// [TPopup.show] 合并显式配置与 [TPopupThemeData] 后的配置；重新 [open] 不重新解析已合并的主题值，并按 [TPopupOptions.placement] 裁剪无效字段。
   final TPopupOptions options;
 
   /// 用于捕获调用点局部 Theme 的 context。
@@ -32,35 +33,40 @@ class TPopupHandle {
   /// 与 [TPopup.show] 的 [useRootNavigator] 相同。
   final bool useRootNavigator;
 
+  // Drawer has no reopen entry and keeps its legacy one-shot lifecycle.
+  final bool _reusable;
   _PopupNavigatorRoute<dynamic>? _route;
   NavigatorState? _lastNavigator;
+  _PopupRetention? _retention;
   bool _isClosed = false;
   int _openEpoch = 0;
   Completer<Object?>? _resultCompleter;
 
-  /// 当前这次打开结束后的路由结果。
+  /// 本次打开的路由结果；关闭时完成，不等待关闭动画结束，动画完成通知见 [TPopupOptions.onClosed]。
   ///
-  /// 每次 [open] 都会创建新的 Future；应在对应的 [open] 之后读取。
+  /// 每次成功 [open] 都会创建新的 Future；应在对应的 [open] 之后读取。
   Future<Object?> get result =>
       (_resultCompleter ??= Completer<Object?>()).future;
 
-  /// 浮层是否仍在展示（路由在栈中且未进入关闭流程）。
-  ///
-  /// 额外校验 [Route.isActive]：当路由被外部移除（如 Navigator 被销毁或
-  /// 路由被直接 pop）时，[_route] 引用可能残留，此时应视为未展示，
-  /// 避免句柄常驻为“展示中”而阻断后续 open。
+  /// 浮层仍在路由栈中且未开始关闭时为 true。
   bool get isShowing =>
       _route != null && !_isClosed && (_route?.isActive ?? false);
 
-  /// 打开或重新打开浮层。
+  /// 使用创建句柄时的 [options] 打开或重新打开浮层。
   ///
-  /// [context] 可选。首次调用须能解析 [Navigator]（传入 [context] 或依赖
-  /// [navigatorContext]）；后续可省略，优先复用缓存的 [NavigatorState]。
+  /// 不更新配置或创建独立会话；更换配置请调用 [TPopup.show]。
   ///
-  /// 已展示时调用无副作用。Navigator 已销毁且未提供新 [context] 时，debug 下 assert，
-  /// release 下静默返回。
+  /// destroyOnClose 为 false 时，同一 Navigator 内复用保留的内容 State；
+  /// 切换 Navigator 时创建新 State。每次 TPopup.show 创建独立会话。
   ///
-  /// 配置非法时会直接抛出 [FlutterError]，debug / release 行为一致。
+  /// | 状态 | 行为 |
+  /// | --- | --- |
+  /// | 已展示 | 不重复打开 |
+  /// | Navigator 可用 | 打开浮层，创建新的 [result] Future |
+  /// | 无可用 Navigator | debug 触发断言，release 返回 |
+  /// | 参数与方向不匹配 | debug / release 均抛出 [FlutterError] |
+  ///
+  /// [context] 导航上下文；未指定或无效时依次尝试缓存的 Navigator、[navigatorContext]。有效时重新捕获此处的内容 Theme，否则使用 [themeContext]；不重新解析 [options] 中已合并的 Popup 主题值。
   void open([BuildContext? context]) {
     if (isShowing) {
       return;
@@ -87,13 +93,33 @@ class TPopupHandle {
     _resultCompleter = resultCompleter;
     final captureFrom = context?.mounted == true ? context! : themeContext;
     final capturedThemes = captureFrom.mounted
-        ? InheritedTheme.capture(from: captureFrom, to: navigator.context)
+        ? TOverlayThemes.capture(from: captureFrom, to: navigator.context)
         : null;
 
+    if (_retention != null && !identical(_retention!.navigator, navigator)) {
+      _retention!.release();
+      _retention = null;
+    }
+    if (_reusable && !options.destroyOnClose && _retention == null) {
+      late final _PopupRetention retention;
+      retention = _PopupRetention(navigator, () {
+        if (identical(_retention, retention)) {
+          _retention = null;
+        }
+      });
+      _retention = retention;
+    }
     _isClosed = false;
     _lastNavigator = navigator;
 
     _PopupNavigatorRoute<dynamic>? route;
+    var tracked = true;
+    void untrack() {
+      if (tracked) {
+        tracked = false;
+        _PopupTracker.remove(navigator, this);
+      }
+    }
 
     void closeWithTrigger(TPopupTrigger trigger) {
       final currentRoute = route;
@@ -104,6 +130,15 @@ class TPopupHandle {
     }
 
     route = _PopupNavigatorRoute<dynamic>(
+      retention: _retention,
+      maintainWhenCovered: _reusable || !options.destroyOnClose,
+      onDisposed: () {
+        untrack();
+        final disposedRoute = route;
+        if (disposedRoute != null) {
+          _detachRoute(disposedRoute);
+        }
+      },
       options: normalized.copyWith(
         onClosed: () {
           if (_openEpoch == openEpoch) {
@@ -114,6 +149,7 @@ class TPopupHandle {
       onCloseWithTrigger: closeWithTrigger,
       capturedThemes: capturedThemes,
     );
+    _retention?.activate(route);
     _route = route;
 
     _PopupTracker.push(navigator, this);
@@ -126,7 +162,7 @@ class TPopupHandle {
           }
         })
         .whenComplete(() {
-          _PopupTracker.remove(navigator, this);
+          untrack();
           final completedRoute = route;
           if (completedRoute != null) {
             _detachRoute(completedRoute);
@@ -134,12 +170,17 @@ class TPopupHandle {
         });
   }
 
-  /// 关闭当前展示的浮层；[TPopupOptions.onVisibleChange] 的 [TPopupTrigger] 为
-  /// [TPopupTrigger.api]。
+  /// 关闭此句柄对应的浮层，触发源为 [TPopupTrigger.api]。
   ///
-  /// 已关闭或未展示时调用无副作用。
-  /// 嵌套浮层场景下会关闭当前 handle 对应的那一层，而不会误关栈顶其它浮层。
-  void close([Object? result]) {
+  /// | 状态 | 行为 |
+  /// | --- | --- |
+  /// | 未展示或已开始关闭 | 不执行操作 |
+  /// | 位于栈顶 | 返回上一层，执行关闭动画 |
+  /// | 位于其他浮层下方 | 直接移除此层，保留其他浮层 |
+  void close([
+    /// 关闭浮层时返回的业务结果；通过该句柄的 result Future 接收。
+    Object? result,
+  ]) {
     final route = _route;
     final navigator = route?.navigator ?? _lastNavigator;
     if (!isShowing || route == null || navigator == null) {

@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:tdesign_flutter_icons/tdesign_flutter_icons.dart' show TIcons;
 
 import '../../theme/t_colors.dart';
+import '../../theme/t_internal_material.dart';
 import '../../theme/t_radius.dart';
 import '../../theme/t_theme.dart';
 import 't_image_theme_data.dart';
@@ -20,7 +21,6 @@ enum TImageShape {
   circle,
 }
 
-/// 统一展示网络、asset 或本地文件图片。
 class TImage extends StatelessWidget {
   const TImage({
     super.key,
@@ -198,7 +198,12 @@ class TImage extends StatelessWidget {
     if (value == null) {
       return _placeholder(
         context,
-        loadingWidget ?? const Icon(TIcons.ellipsis, size: 22),
+        loadingWidget ??
+            TInternalIcon(
+              TIcons.ellipsis,
+              size: 22,
+              color: context.tTheme.textColorPlaceholder,
+            ),
         width: width,
         height: height,
       );
@@ -228,7 +233,12 @@ class TImage extends StatelessWidget {
                 ? child
                 : _placeholder(
                     context,
-                    loadingWidget ?? const Icon(TIcons.ellipsis, size: 22),
+                    loadingWidget ??
+                        TInternalIcon(
+                          TIcons.ellipsis,
+                          size: 22,
+                          color: context.tTheme.textColorPlaceholder,
+                        ),
                     width: width,
                     height: height,
                   ),
@@ -284,7 +294,7 @@ class TImage extends StatelessWidget {
       child: ColoredBox(
         color: context.tTheme.bgColorComponent,
         child: Center(
-          child: IconTheme.merge(
+          child: TInternalIconTheme.merge(
             data: IconThemeData(color: context.tTheme.textColorPlaceholder),
             child: child,
           ),
@@ -370,7 +380,12 @@ class _TImageLifecycleState extends State<_TImageLifecycle> {
     return widget.image.errorBuilder?.call(context, error, stackTrace) ??
         widget.image._placeholder(
           context,
-          widget.image.errorWidget ?? const Icon(TIcons.close, size: 22),
+          widget.image.errorWidget ??
+              TInternalIcon(
+                TIcons.close,
+                size: 22,
+                color: context.tTheme.textColorPlaceholder,
+              ),
           width: widget.image.width ?? 72,
           height: widget.image.height ?? 72,
         );

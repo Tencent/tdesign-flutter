@@ -1,0 +1,215 @@
+import 'package:flutter_test/flutter_test.dart';
+import 'package:provider/provider.dart';
+import 'package:tdesign_flutter/tdesign_flutter.dart';
+import 'package:tdesign_flutter_example/page/popover/popover_page.dart';
+import 'package:tdesign_flutter_example/provider/theme_mode_provider.dart';
+
+void main() {
+  tearDown(TToast.dismissAll);
+
+  Widget buildPage({
+    Brightness brightness = Brightness.light,
+    double textScale = 1,
+  }) {
+    return ChangeNotifierProvider(
+      create: (_) => ThemeModeProvider(),
+      child: MaterialApp(
+        debugShowCheckedModeBanner: false,
+        theme: brightness == Brightness.dark
+            ? TThemeBuilder.dark(TThemeData.defaultData())
+            : TThemeBuilder.light(TThemeData.defaultData()),
+        builder: (context, child) => MediaQuery(
+          data: MediaQuery.of(
+            context,
+          ).copyWith(textScaler: TextScaler.linear(textScale)),
+          child: child!,
+        ),
+        home: const TPopoverPage(showInternalExamples: true),
+      ),
+    );
+  }
+
+  void configurePhone(WidgetTester tester, {Size size = const Size(375, 812)}) {
+    tester.view.physicalSize = size;
+    tester.view.devicePixelRatio = 1;
+    addTearDown(tester.view.resetPhysicalSize);
+    addTearDown(tester.view.resetDevicePixelRatio);
+    addTearDown(tester.view.resetViewInsets);
+  }
+
+  Future<void> showPage(WidgetTester tester) async {
+    await tester.pumpWidget(buildPage());
+    await tester.pumpAndSettle();
+  }
+
+  Future<void> reveal(WidgetTester tester, Finder finder) async {
+    await tester.scrollUntilVisible(
+      finder,
+      400,
+      scrollable: find.byType(Scrollable).first,
+    );
+    await tester.pumpAndSettle();
+  }
+
+  testWidgets('事件回调展示真实状态变化', (tester) async {
+    configurePhone(tester);
+    await showPage(tester);
+
+    final eventTrigger = find.byKey(const Key('popover-event-trigger'));
+    await reveal(tester, eventTrigger);
+    await tester.tap(eventTrigger);
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('点击或长按我'));
+    await tester.pump();
+    expect(find.text('onTap：点击或长按我'), findsOneWidget);
+
+    await tester.longPress(find.text('点击或长按我'));
+    await tester.pump();
+    expect(find.text('onLongTap：点击或长按我'), findsOneWidget);
+  });
+
+  testWidgets('公开自定义内容每个选项显示 Toast 并关闭', (tester) async {
+    configurePhone(tester);
+    await showPage(tester);
+
+    final trigger = find.byKey(const Key('popover-custom-content-trigger'));
+    await reveal(tester, trigger);
+    for (var index = 1; index <= 3; index++) {
+      await tester.tap(trigger);
+      await tester.pumpAndSettle();
+
+      expect(find.byKey(const Key('t-popover-content')), findsOneWidget);
+      await tester.tap(find.byKey(Key('popover-custom-option-$index')));
+      await tester.pump();
+
+      expect(find.byKey(const Key('t-popover-content')), findsNothing);
+      expect(find.text('已选择：选项$index'), findsOneWidget);
+      TToast.dismissAll();
+      await tester.pump();
+    }
+  });
+
+  for (final brightness in Brightness.values) {
+    for (final textScale in [1.0, 1.2, 2.0]) {
+      testWidgets('自定义内容适应字体缩放 ${brightness.name} $textScale', (tester) async {
+        configurePhone(tester);
+        await tester.pumpWidget(
+          buildPage(brightness: brightness, textScale: textScale),
+        );
+        await tester.pumpAndSettle();
+
+        final trigger = find.byKey(const Key('popover-custom-content-trigger'));
+        await reveal(tester, trigger);
+        await tester.tap(trigger);
+        await tester.pumpAndSettle();
+
+        expect(tester.takeException(), isNull);
+        final contentRect = tester.getRect(
+          find.byKey(const Key('t-popover-content')),
+        );
+        for (var index = 1; index <= 3; index++) {
+          final option = find.byKey(Key('popover-custom-option-$index'));
+          final optionRect = tester.getRect(option);
+          expect(optionRect.top, greaterThanOrEqualTo(contentRect.top));
+          expect(optionRect.bottom, lessThanOrEqualTo(contentRect.bottom));
+          expect(option.hitTestable(), findsOneWidget);
+        }
+
+        await tester.tap(find.byKey(const Key('popover-custom-option-3')));
+        await tester.pumpAndSettle();
+        expect(find.byKey(const Key('t-popover-content')), findsNothing);
+        expect(find.text('已选择：选项3'), findsOneWidget);
+        TToast.dismissAll();
+        await tester.pump();
+      });
+    }
+  }
+
+  testWidgets('公开 Demo 单击另一触发器时关闭旧气泡并打开新气泡', (tester) async {
+    configurePhone(tester);
+    await showPage(tester);
+
+    await tester.tap(find.text('带箭头'));
+    await tester.pumpAndSettle();
+    expect(find.text('弹出气泡内容'), findsOneWidget);
+
+    final customTrigger = find.byKey(
+      const Key('popover-custom-content-trigger'),
+    );
+    await tester.tap(customTrigger);
+    await tester.pumpAndSettle();
+
+    expect(find.text('弹出气泡内容'), findsNothing);
+    expect(find.byKey(const Key('popover-custom-option-1')), findsOneWidget);
+    expect(find.byKey(const Key('t-popover-content')), findsOneWidget);
+  });
+
+  testWidgets('主题背景与尺寸约束在 Demo 中可观察', (tester) async {
+    configurePhone(tester);
+    await showPage(tester);
+
+    final trigger = find.byKey(const Key('popover-theme-short-trigger'));
+    await reveal(tester, trigger);
+    await tester.tap(trigger);
+    await tester.pumpAndSettle();
+
+    final containerFinder = find.byKey(const Key('t-popover-content'));
+    final container = tester.widget<Container>(containerFinder);
+    expect(
+      (container.decoration! as BoxDecoration).color,
+      const Color(0xFF5E3BB7),
+    );
+    final size = tester.getSize(containerFinder);
+    expect(size.width, greaterThanOrEqualTo(120));
+    expect(size.width, lessThanOrEqualTo(180));
+    expect(size.height, lessThan(120));
+  });
+
+  testWidgets('窄屏右下角和键盘场景保持在可用视口内', (tester) async {
+    configurePhone(tester, size: const Size(320, 640));
+    await showPage(tester);
+
+    final boundaryTrigger = find.byKey(const Key('popover-boundary-右下'));
+    await reveal(tester, boundaryTrigger);
+    await tester.tap(boundaryTrigger);
+    await tester.pumpAndSettle();
+    var rect = tester.getRect(find.text('右下边界内容'));
+    expect(rect.left, greaterThanOrEqualTo(0));
+    expect(rect.right, lessThanOrEqualTo(320));
+    expect(rect.bottom, lessThanOrEqualTo(640));
+
+    await tester.tapAt(const Offset(8, 80));
+    await tester.pumpAndSettle();
+    final input = find.byKey(const Key('popover-keyboard-input'));
+    await reveal(tester, input);
+    await tester.tap(input);
+    tester.view.viewInsets = const FakeViewPadding(bottom: 240);
+    tester.binding.handleMetricsChanged();
+    await tester.pumpAndSettle();
+
+    final keyboardTrigger = find.byKey(const Key('popover-keyboard-trigger'));
+    await reveal(tester, keyboardTrigger);
+    await tester.tap(keyboardTrigger);
+    await tester.pumpAndSettle();
+    rect = tester.getRect(find.text('键盘弹出时保持在可用区域'));
+    expect(rect.bottom, lessThanOrEqualTo(400));
+  });
+
+  testWidgets('移除 Demo 锚点后展示 Future 完成状态', (tester) async {
+    configurePhone(tester);
+    await showPage(tester);
+
+    final anchor = find.byKey(const Key('popover-lifecycle-anchor'));
+    await reveal(tester, anchor);
+    await tester.tap(anchor);
+    await tester.pump();
+    expect(find.text('移除锚点后自动关闭'), findsOneWidget);
+
+    await tester.tap(find.byKey(const Key('popover-lifecycle-toggle')));
+    await tester.pump();
+    await tester.pump();
+
+    expect(find.text('移除锚点后自动关闭'), findsNothing);
+    expect(find.text('Future 已完成，Overlay 已清理'), findsOneWidget);
+  });
+}

@@ -1,0 +1,145 @@
+import 'package:flutter_test/flutter_test.dart';
+import 'package:provider/provider.dart';
+import 'package:tdesign_flutter/tdesign_flutter.dart';
+import 'package:tdesign_flutter_example/base/example_base.dart';
+import 'package:tdesign_flutter_example/base/example_widget.dart';
+import 'package:tdesign_flutter_example/page/search_bar/search_bar_page.dart';
+import 'package:tdesign_flutter_example/provider/theme_mode_provider.dart';
+
+void main() {
+  Widget buildPage() {
+    final model = ExamplePageModel(
+      text: 'Search 搜索框',
+      name: 'search',
+      pageBuilder: (_, __) => const TSearchBarPage(),
+    );
+    return ChangeNotifierProvider(
+      create: (_) => ThemeModeProvider(),
+      child: MaterialApp(
+        theme: TThemeBuilder.light(TThemeData.defaultData()),
+        home: ExamplePageInheritedTheme(
+          model: model,
+          child: const TSearchBarPage(),
+        ),
+      ),
+    );
+  }
+
+  testWidgets('Search 页面覆盖搜索场景和 40dp 组件本体', (tester) async {
+    tester.view.physicalSize = const Size(375, 1600);
+    tester.view.devicePixelRatio = 1;
+    addTearDown(tester.view.resetPhysicalSize);
+    addTearDown(tester.view.resetDevicePixelRatio);
+
+    await tester.pumpWidget(buildPage());
+    await tester.pump();
+
+    expect(find.text('基础搜索框'), findsOneWidget);
+    expect(find.text('字数限制'), findsOneWidget);
+    expect(find.text('获取焦点后显示取消按钮'), findsOneWidget);
+    expect(find.text('取消'), findsNothing);
+    expect(find.text('搜索框形状'), findsOneWidget);
+    expect(find.text('默认状态其他对齐方式'), findsOneWidget);
+    expect(find.text('03 组件状态'), findsNothing);
+    expect(find.byType(TSearchBar), findsNWidgets(8));
+
+    final page = tester.widget<ExamplePage>(find.byType(ExamplePage));
+    expect(page.compactDemo, isTrue);
+    expect(page.showTestModule, isTrue);
+    expect(page.children.map((module) => module.title), ['组件类型', '组件样式']);
+    expect(page.children.last.children.map((item) => item.desc), [
+      '搜索框形状',
+      '默认状态其他对齐方式',
+    ]);
+
+    final searchBars = tester.widgetList<TSearchBar>(find.byType(TSearchBar));
+    expect(
+      searchBars.where((searchBar) => searchBar.hintText == '最多输入10个汉字'),
+      hasLength(1),
+    );
+    expect(
+      searchBars
+          .singleWhere((searchBar) => searchBar.onActionPressed != null)
+          .textAlignment,
+      isNull,
+    );
+    final actionSearchBar = find.byWidgetPredicate(
+      (widget) => widget is TSearchBar && widget.onActionPressed != null,
+    );
+    await tester.tap(
+      find.descendant(of: actionSearchBar, matching: find.byType(TextField)),
+    );
+    await tester.pump();
+    expect(find.text('取消'), findsOneWidget);
+    expect(
+      searchBars.where((searchBar) => searchBar.hintText == '最多输入10个字符（汉字算两个）'),
+      hasLength(1),
+    );
+    expect(
+      searchBars.where(
+        (searchBar) => searchBar.textAlignment == TSearchBarAlignment.center,
+      ),
+      hasLength(1),
+    );
+
+    for (final element in find.byType(TSearchBar).evaluate()) {
+      expect(tester.getSize(find.byWidget(element.widget)).height, 40);
+    }
+  });
+
+  testWidgets('搜索结果由 Demo 组合而非 TSearchBar 公共 API', (tester) async {
+    tester.view.physicalSize = const Size(375, 1600);
+    tester.view.devicePixelRatio = 1;
+    addTearDown(tester.view.resetPhysicalSize);
+    addTearDown(tester.view.resetDevicePixelRatio);
+
+    await tester.pumpWidget(buildPage());
+    await tester.pump();
+
+    final resultField = find.descendant(
+      of: find.byWidgetPredicate(
+        (widget) =>
+            widget is TSearchBar && widget.hintText == '输入tdesign，有预览结果',
+      ),
+      matching: find.byType(TextField),
+    );
+    await tester.tap(resultField);
+    await tester.pump();
+
+    for (final result in [
+      'tdesign-vue',
+      'tdesign-react',
+      'tdesign-miniprogram',
+      'tdesign-angular',
+      'tdesign-mobile-vue',
+      'tdesign-mobile-react',
+    ]) {
+      expect(find.text(result), findsOneWidget);
+    }
+
+    await tester.enterText(resultField, 'mobile');
+    await tester.pump();
+
+    expect(find.text('tdesign-mobile-vue'), findsOneWidget);
+    expect(find.text('tdesign-mobile-react'), findsOneWidget);
+    expect(find.text('tdesign-vue'), findsNothing);
+    final highlighted = tester
+        .widgetList<Text>(find.byType(Text))
+        .where((text) => text.textSpan?.toPlainText() == 'tdesign-mobile-vue')
+        .single;
+    final spans = (highlighted.textSpan! as TextSpan).children!;
+    expect((spans[1] as TextSpan).text, 'mobile');
+    expect(
+      (spans[1] as TextSpan).style?.color,
+      TThemeData.defaultData().brandColor,
+    );
+
+    await tester.tap(find.text('tdesign-mobile-vue'));
+    await tester.pump();
+    expect(fieldText(resultField, tester), 'tdesign-mobile-vue');
+    expect(find.text('tdesign-mobile-react'), findsNothing);
+  });
+}
+
+String fieldText(Finder finder, WidgetTester tester) =>
+    tester.widget<TextField>(finder).controller!.text;

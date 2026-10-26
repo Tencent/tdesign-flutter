@@ -1,8 +1,54 @@
-import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:tdesign_flutter/tdesign_flutter.dart';
 
+import '../../helpers/text_slot_regression.dart';
+
 void main() {
+  registerNativeParagraphContractTests(
+    'Link brand slot',
+    (child) => TLink(
+      colorPreset: TLinkColorPreset.primary,
+      onPressed: () {},
+      child: child,
+    ),
+    reset: false,
+  );
+  registerNativeParagraphContractTests(
+    'Link disabled slot',
+    (child) => TLink(colorPreset: TLinkColorPreset.primary, child: child),
+    reset: false,
+  );
+  registerNativeParagraphContractTests(
+    'Link danger slot',
+    (child) => TLink(
+      colorPreset: TLinkColorPreset.danger,
+      onPressed: () {},
+      child: child,
+    ),
+    reset: false,
+  );
+
+  registerTextSlotParityTests(
+    'Link brand slot',
+    (child) => TLink(
+      colorPreset: TLinkColorPreset.primary,
+      onPressed: () {},
+      child: child,
+    ),
+  );
+  registerTextSlotParityTests(
+    'Link disabled slot',
+    (child) => TLink(colorPreset: TLinkColorPreset.primary, child: child),
+  );
+  registerTextSlotParityTests(
+    'Link danger slot',
+    (child) => TLink(
+      colorPreset: TLinkColorPreset.danger,
+      onPressed: () {},
+      child: child,
+    ),
+  );
+
   Widget wrap(Widget child) => MaterialApp(home: Scaffold(body: child));
 
   testWidgets('basic / underline / prefix / suffix 官方类型可构建', (tester) async {
@@ -37,10 +83,10 @@ void main() {
       wrap(
         Column(
           children: [
-            for (final scheme in TLinkColorScheme.values)
+            for (final scheme in TLinkColorPreset.values)
               TLink(
                 child: Text(scheme.name),
-                colorScheme: scheme,
+                colorPreset: scheme,
                 onPressed: _noop,
               ),
             for (final size in TLinkSize.values)
@@ -54,7 +100,7 @@ void main() {
     expect(
       find.byType(TLink),
       findsNWidgets(
-        TLinkColorScheme.values.length + TLinkSize.values.length + 1,
+        TLinkColorPreset.values.length + TLinkSize.values.length + 1,
       ),
     );
   });

@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:tdesign_flutter/tdesign_flutter.dart';
 
@@ -7,15 +7,288 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 /// 覆盖 status 四档、marquee 滚动、prefix/operation/suffix、onPressed 回调、
 /// Theme 注入、边界情况。
 void main() {
+  testWidgets(
+    'built-in long hold preserves legacy tap; custom region filters it',
+    (tester) async {
+      final targets = <TNoticeBarTapTarget>[];
+      await tester.pumpWidget(
+        MaterialApp(
+          home: Scaffold(
+            body: TNoticeBar(
+              content: 'built-in content',
+              operation: const SizedBox(
+                width: 100,
+                height: 40,
+                child: Text('custom operation'),
+              ),
+              onPressed: targets.add,
+            ),
+          ),
+        ),
+      );
+      final builtIn = await tester.startGesture(
+        tester.getCenter(find.text('built-in content')),
+      );
+      await tester.pump(const Duration(seconds: 1));
+      await builtIn.up();
+      expect(targets, [TNoticeBarTapTarget.content]);
+      targets.clear();
+      final custom = await tester.startGesture(
+        tester.getCenter(find.text('custom operation')),
+      );
+      await tester.pump(const Duration(seconds: 1));
+      await custom.up();
+      expect(targets, isEmpty);
+      await tester.pumpWidget(const SizedBox());
+    },
+  );
+
+  testWidgets(
+    'cross-region two fingers preserve built-in tap while custom is suppressed',
+    (tester) async {
+      final targets = <TNoticeBarTapTarget>[];
+      await tester.pumpWidget(
+        MaterialApp(
+          home: Scaffold(
+            body: TNoticeBar(
+              content: 'built-in content',
+              operation: const SizedBox(
+                width: 100,
+                height: 40,
+                child: Text('custom operation'),
+              ),
+              onPressed: targets.add,
+            ),
+          ),
+        ),
+      );
+      final builtIn = await tester.startGesture(
+        tester.getCenter(find.text('built-in content')),
+        pointer: 1,
+      );
+      final custom = await tester.startGesture(
+        tester.getCenter(find.text('custom operation')),
+        pointer: 2,
+      );
+      await builtIn.up();
+      await custom.up();
+      expect(targets, [TNoticeBarTapTarget.content]);
+      await tester.pumpWidget(const SizedBox());
+    },
+  );
+
+  for (final prefixFirst in [false, true]) {
+    for (final cancelFirst in [false, true]) {
+      testWidgets(
+        'cross-region multi-touch prefixFirst=$prefixFirst cancelFirst=$cancelFirst',
+        (tester) async {
+          final targets = <TNoticeBarTapTarget>[];
+          var childCalls = 0;
+          Widget area(String label) => GestureDetector(
+            onTap: () => childCalls++,
+            child: SizedBox(width: 80, height: 40, child: Text(label)),
+          );
+          await tester.pumpWidget(
+            MaterialApp(
+              home: Scaffold(
+                body: TNoticeBar(
+                  content: 'notice',
+                  prefix: area('prefix area'),
+                  operation: area('operation area'),
+                  onPressed: targets.add,
+                ),
+              ),
+            ),
+          );
+          final prefix = await tester.startGesture(
+            tester.getCenter(find.text('prefix area')),
+            pointer: 1,
+          );
+          final operation = await tester.startGesture(
+            tester.getCenter(find.text('operation area')),
+            pointer: 2,
+          );
+          final first = prefixFirst ? prefix : operation;
+          final last = prefixFirst ? operation : prefix;
+          if (cancelFirst) {
+            await first.cancel();
+          } else {
+            await first.up();
+          }
+          expect(targets, isEmpty);
+          await last.up();
+          expect(targets, isEmpty);
+          expect(
+            childCalls,
+            cancelFirst ? 1 : 2,
+            reason: 'Child gestures remain independent.',
+          );
+          await tester.tap(find.text('operation area'));
+          expect(targets, [TNoticeBarTapTarget.operation]);
+          expect(childCalls, cancelFirst ? 2 : 3);
+        },
+      );
+    }
+  }
+
+  for (final finalButtons in [kPrimaryButton, kSecondaryButton]) {
+    testWidgets('mouse button chord invalidates candidate: $finalButtons', (
+      tester,
+    ) async {
+      final targets = <TNoticeBarTapTarget>[];
+      var childCalls = 0;
+      await tester.pumpWidget(
+        MaterialApp(
+          home: Scaffold(
+            body: TNoticeBar(
+              content: 'notice',
+              operation: GestureDetector(
+                onTap: () => childCalls++,
+                child: const SizedBox(
+                  width: 80,
+                  height: 40,
+                  child: Text('chord target'),
+                ),
+              ),
+              onPressed: targets.add,
+            ),
+          ),
+        ),
+      );
+      final position = tester.getCenter(find.text('chord target'));
+      final gesture = await tester.startGesture(
+        position,
+        pointer: 1,
+        kind: PointerDeviceKind.mouse,
+      );
+      for (final buttons in [kPrimaryButton | kSecondaryButton, finalButtons]) {
+        await gesture.updateWithCustomEvent(
+          PointerMoveEvent(
+            pointer: 1,
+            kind: PointerDeviceKind.mouse,
+            position: position,
+            buttons: buttons,
+          ),
+        );
+      }
+      await gesture.up();
+      expect(targets, isEmpty);
+      expect(childCalls, 0);
+      final next = await tester.startGesture(
+        position,
+        pointer: 2,
+        kind: PointerDeviceKind.mouse,
+      );
+      await next.up();
+      expect(targets, [TNoticeBarTapTarget.operation]);
+      expect(childCalls, 1);
+    });
+  }
+
+  for (final mode in [
+    'cancel',
+    'longPress',
+    'multiPointer',
+    'secondaryButton',
+    'smallMove',
+  ]) {
+    testWidgets('custom target tap classification: $mode', (tester) async {
+      final targets = <TNoticeBarTapTarget>[];
+      await tester.pumpWidget(
+        MaterialApp(
+          home: Scaffold(
+            body: TNoticeBar(
+              content: 'notice',
+              operation: const SizedBox(
+                width: 80,
+                height: 40,
+                child: Text('target'),
+              ),
+              onPressed: targets.add,
+            ),
+          ),
+        ),
+      );
+      final position = tester.getCenter(find.text('target'));
+      final gesture = await tester.createGesture(
+        pointer: 1,
+        buttons: mode == 'secondaryButton' ? kSecondaryButton : kPrimaryButton,
+      );
+      await gesture.down(position);
+      switch (mode) {
+        case 'cancel':
+          await gesture.cancel();
+          break;
+        case 'longPress':
+          await tester.pump(const Duration(milliseconds: 600));
+          await gesture.up();
+          break;
+        case 'multiPointer':
+          final second = await tester.startGesture(position, pointer: 2);
+          await second.up();
+          await gesture.up();
+          break;
+        case 'smallMove':
+          await gesture.moveBy(const Offset(2, 2));
+          await gesture.up();
+          break;
+        default:
+          await gesture.up();
+      }
+      await tester.pump();
+      expect(
+        targets,
+        mode == 'smallMove' ? [TNoticeBarTapTarget.operation] : isEmpty,
+      );
+    });
+  }
+
+  testWidgets('NoticeBar custom target does not report a drag as a tap', (
+    tester,
+  ) async {
+    final targets = <TNoticeBarTapTarget>[];
+    var buttonCalls = 0;
+    await tester.pumpWidget(
+      MaterialApp(
+        home: Scaffold(
+          body: TNoticeBar(
+            content: 'notice',
+            operation: TButton(
+              onPressed: () => buttonCalls++,
+              child: const Text('operation'),
+            ),
+            onPressed: targets.add,
+          ),
+        ),
+      ),
+    );
+    final gesture = await tester.startGesture(
+      tester.getCenter(find.text('operation')),
+    );
+    await gesture.moveBy(const Offset(0, 100));
+    await gesture.up();
+    await tester.pump();
+    expect(buttonCalls, 0);
+    expect(
+      targets,
+      isEmpty,
+      reason: 'A cancelled button gesture must not become a NoticeBar tap.',
+    );
+  });
+
   /// 用 TTheme 包裹以提供基础 Token
-  Widget wrapWithTheme(Widget child, {TNoticeBarThemeData? noticeBarTheme}) {
+  Widget wrapWithTheme(
+    Widget child, {
+    TNoticeBarThemeData? noticeBarTheme,
+    TThemeData? themeData,
+  }) {
     final themeExtensions = <ThemeExtension>[
       if (noticeBarTheme != null) noticeBarTheme,
     ];
     // 注意：必须通过 MaterialApp.theme 传递 extensions
     return MaterialApp(
       theme: ThemeData(
-        extensions: [TThemeData.defaultData(), ...themeExtensions],
+        extensions: [themeData ?? TThemeData.defaultData(), ...themeExtensions],
       ),
       home: Scaffold(body: child),
     );
@@ -120,8 +393,37 @@ void main() {
 
       final iconContext = tester.element(find.byIcon(Icons.info));
       final iconTheme = IconTheme.of(iconContext);
-      expect(iconTheme.color, iconContext.tTheme.warningNormalColor);
+      expect(iconTheme.color, iconContext.tTheme.warningColor);
       expect(iconTheme.size, 22);
+    });
+
+    testWidgets('自定义 prefix 与正文统一保留 8px 间距', (tester) async {
+      await tester.pumpWidget(
+        wrapWithTheme(
+          const TNoticeBar(content: '带前缀图标', prefix: Icon(Icons.info)),
+        ),
+      );
+
+      final iconRect = tester.getRect(find.byIcon(Icons.info));
+      final textRect = tester.getRect(find.text('带前缀图标'));
+      expect(textRect.left - iconRect.right, 8);
+    });
+
+    testWidgets('prefix 与正文间距跟随 spacer8 Token', (tester) async {
+      final themeData = TThemeData.defaultData().copyWith(
+        name: 'notice-bar-spacing-test',
+        spacerMap: const {'spacer': 13},
+      );
+      await tester.pumpWidget(
+        wrapWithTheme(
+          const TNoticeBar(content: '带前缀图标', prefix: Icon(Icons.info)),
+          themeData: themeData,
+        ),
+      );
+
+      final iconRect = tester.getRect(find.byIcon(Icons.info));
+      final textRect = tester.getRect(find.text('带前缀图标'));
+      expect(textRect.left - iconRect.right, 13);
     });
 
     testWidgets('prefix 中的 Icon 可显式覆盖颜色与尺寸', (tester) async {
@@ -155,6 +457,7 @@ void main() {
         ),
       );
       expect(find.byIcon(TIcons.info_circle_filled), findsNothing);
+      expect(tester.getTopLeft(find.text('内容')).dx, 16);
     });
 
     testWidgets('operation 与 suffixIcon 同时渲染', (tester) async {
@@ -390,6 +693,103 @@ void main() {
       expect(mid.height, 26);
     });
 
+    test('TNoticeBarThemeData.lerp 使用真实默认尺寸且不生成透明色', () {
+      const defaults = TNoticeBarThemeData();
+      const custom = TNoticeBarThemeData(
+        height: 30,
+        backgroundColor: Colors.red,
+        textStyle: TextStyle(color: Colors.blue),
+        leftIconColor: Colors.green,
+        rightIconColor: Colors.orange,
+        padding: EdgeInsets.all(20),
+      );
+
+      final forwardBeforeSwitch = defaults.lerp(custom, 0.25);
+      final forwardAfterSwitch = defaults.lerp(custom, 0.75);
+      final reverseBeforeSwitch = custom.lerp(defaults, 0.25);
+      final reverseAfterSwitch = custom.lerp(defaults, 0.75);
+      const alternate = TNoticeBarThemeData(backgroundColor: Colors.blue);
+
+      expect(defaults.lerp(custom, 0).height, 22);
+      expect(
+        defaults.lerp(custom, 0).padding,
+        TNoticeBarThemeData.defaultPadding,
+      );
+      expect(defaults.lerp(custom, 1).height, 30);
+      expect(defaults.lerp(custom, 1).padding, const EdgeInsets.all(20));
+      expect(forwardBeforeSwitch.height, 24);
+      expect(forwardAfterSwitch.height, 28);
+      expect(
+        forwardBeforeSwitch.padding,
+        const EdgeInsets.fromLTRB(17, 14.75, 14, 14.75),
+      );
+      expect(forwardBeforeSwitch.backgroundColor, isNull);
+      expect(forwardAfterSwitch.backgroundColor, Colors.red);
+      expect(forwardBeforeSwitch.textStyle, isNull);
+      expect(forwardAfterSwitch.textStyle, custom.textStyle);
+      expect(reverseBeforeSwitch.backgroundColor, Colors.red);
+      expect(reverseAfterSwitch.backgroundColor, isNull);
+      expect(reverseBeforeSwitch.leftIconColor, Colors.green);
+      expect(reverseAfterSwitch.leftIconColor, isNull);
+      expect(
+        custom.lerp(alternate, 0.5).backgroundColor,
+        Color.lerp(Colors.red, Colors.blue, 0.5),
+      );
+      expect(const TNoticeBarThemeData().lerp(defaults, 0.5).height, isNull);
+      expect(const TNoticeBarThemeData().lerp(defaults, 0.5).padding, isNull);
+    });
+
+    test('lerpDouble 对缺省值离散切换而不是按 0 插值', () {
+      expect(TNoticeBarThemeData.lerpDouble(null, 30, 0.25), isNull);
+      expect(TNoticeBarThemeData.lerpDouble(null, 30, 0.75), 30);
+      expect(TNoticeBarThemeData.lerpDouble(30, null, 0.25), 30);
+      expect(TNoticeBarThemeData.lerpDouble(30, null, 0.75), isNull);
+      expect(TNoticeBarThemeData.lerpDouble(22, 30, 0.5), 26);
+    });
+
+    testWidgets('AnimatedTheme 以默认高度 22 平滑过渡到自定义高度', (tester) async {
+      var useCustomTheme = false;
+      late StateSetter setState;
+
+      Widget buildAnimatedTheme() {
+        return MaterialApp(
+          home: StatefulBuilder(
+            builder: (context, setter) {
+              setState = setter;
+              final noticeBarTheme = useCustomTheme
+                  ? const TNoticeBarThemeData(height: 30)
+                  : const TNoticeBarThemeData();
+              return AnimatedTheme(
+                duration: const Duration(seconds: 1),
+                curve: Curves.linear,
+                data: ThemeData(
+                  extensions: [TThemeData.defaultData(), noticeBarTheme],
+                ),
+                child: const Scaffold(body: TNoticeBar(content: '内容')),
+              );
+            },
+          ),
+        );
+      }
+
+      await tester.pumpWidget(buildAnimatedTheme());
+      expect(tester.widget<Icon>(find.byType(Icon).first).size, 22);
+
+      setState(() => useCustomTheme = true);
+      await tester.pump();
+      await tester.pump(const Duration(milliseconds: 500));
+      expect(tester.widget<Icon>(find.byType(Icon).first).size, 26);
+      await tester.pump(const Duration(milliseconds: 500));
+      expect(tester.widget<Icon>(find.byType(Icon).first).size, 30);
+
+      setState(() => useCustomTheme = false);
+      await tester.pump();
+      await tester.pump(const Duration(milliseconds: 500));
+      expect(tester.widget<Icon>(find.byType(Icon).first).size, 26);
+      await tester.pump(const Duration(milliseconds: 500));
+      expect(tester.widget<Icon>(find.byType(Icon).first).size, 22);
+    });
+
     testWidgets('TNoticeBarThemeData.resolve 根据 status 解析颜色', (tester) async {
       late BuildContext capturedContext;
       await tester.pumpWidget(wrapWithTheme(const TNoticeBar(content: '内容')));
@@ -402,9 +802,9 @@ void main() {
       // 校验具体色值：warning 变体应解析为警示色，而非仅断言非空
       expect(
         resolved.backgroundColor,
-        capturedContext.tTheme.warningLightColor,
+        capturedContext.tTheme.warningColorLight,
       );
-      expect(resolved.leftIconColor, capturedContext.tTheme.warningNormalColor);
+      expect(resolved.leftIconColor, capturedContext.tTheme.warningColor);
     });
 
     testWidgets('TNoticeBarThemeData.resolve 各状态色值正确', (tester) async {
@@ -418,19 +818,19 @@ void main() {
 
       expect(
         resolveBg(TNoticeBarStatus.info),
-        capturedContext.tTheme.brandLightColor,
+        capturedContext.tTheme.brandColorLight,
       );
       expect(
         resolveBg(TNoticeBarStatus.success),
-        capturedContext.tTheme.successLightColor,
+        capturedContext.tTheme.successColorLight,
       );
       expect(
         resolveBg(TNoticeBarStatus.warning),
-        capturedContext.tTheme.warningLightColor,
+        capturedContext.tTheme.warningColorLight,
       );
       expect(
         resolveBg(TNoticeBarStatus.error),
-        capturedContext.tTheme.errorLightColor,
+        capturedContext.tTheme.errorColorLight,
       );
     });
   });
