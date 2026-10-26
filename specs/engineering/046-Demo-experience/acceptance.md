@@ -198,3 +198,19 @@ macOS Flutter 3.32.0 / 3.47.7：Example 严格分析均无诊断，Theme 与 doc
 运行候选 170d95c6（合并 develop 304bf7d6）。冲突仅涉及 Spec 046 四份文档和 package.json 的 theme-generator 版本，分别保留导航与色板记录、选择 1.3.0。site-components 继续使用 0.18.1。站点目录与合并前 c6015bfc 完全一致，tdesign-component 目录与 develop 304bf7d6 完全一致，未覆盖两边实现。
 
 Node 24.15.0 / pnpm 11.20.0 冻结安装、站点测试 51/51、57 页/360 示例映射和生产构建通过；macOS Flutter 3.32.0 Example 严格分析无诊断，Theme 与 documentation_examples 非 Golden 测试 24/24 通过。git diff --check 通过。未重跑浏览器、双版本完整矩阵或 Golden；本轮结果仅覆盖上述检查，最终远端 CI 另行核对。
+
+## 2026-10-26 PR #1202：迁移指南精简与锚点修复
+
+基线为 4b262697e557849676cc9698ee8b4c47b6044260。最终源码逐文件指纹见[候选摘要](./evidence/pr1202-migration-compact-summary.json)。本节为本次提交的本地验收；远端 CI 按推送后的最终 head 核对。
+
+修复重复点击同一链接后章节不展开、附录表格未展开和标题直达被固定页头遮挡的问题。精简开头、组件摘要和附录重复规则，明确版本边界与 null 禁用语义；不提供专用搜索控件。站点只显示统一页头，保留原标题片段地址；包内 Markdown 保留独立标题并由脚本同步。
+
+Markdown 源由 85,538 字符减少至 70,984 字符（17.0%）；388 项旧类型的名称/去向、12 段 Dart 示例与精简前逐项一致，原有显式锚点和全部不同链接目标均保留。补充的页签、底部导航、轮播示例来自独立消费项目的同一源码。原正文的 PR 分工、patch 发布策略及 Golden 授权流水已移出用户指南；清理不改变已有组件行为或基线，不推定当前 Golden 通过。
+
+Node 24.15.0：站点测试 56/56、57 页/360 示例映射、8 份文档同步检查、diff 检查及生产构建通过。迁移消费者在 Flutter 3.32.0 / 3.47.7 下严格分析均无诊断，测试各 24/24；后续文案精简未改变消费者源码和示例代码。未修改库公开 API 或 Golden。
+
+[逐项浏览器记录](./evidence/pr1202-migration-compact-browser.json)：生产预览中逐一激活 461 处正文/目录链接，检查 61 处页面/API 页签往返，以及 64 个当前或旧标题片段。移除零宽的重复 H1 permalink 前共 558 处链接均通过；最终 557 处链接是此前清单的子集，无新目标，复查分组展开与详细改法均定位在顶部 80px。搜索控件不存在；重复点击、附录展开与历史恢复已验证。[最终截图](./evidence/pr1202-migration-compact-local.png)。
+
+正式官网 60 个不同目标的[HTTP 记录](./evidence/pr1202-migration-official-http.json)均为 200；对应浏览器检查 58/60，Skeleton / 自定义主题页面存在动态模块加载失败，已保留在浏览器记录的 earlierOfficialBrowserCheck 中。文案精简未改变正式 URL，未重复执行外部检查，不把 HTTP 200 当成渲染通过。
+
+上述结果仅覆盖本地桌面浏览器与列明的测试，不代表正式部署、移动设备、其他浏览器或两个官网全量回归；剩余事项见 tasks.md。

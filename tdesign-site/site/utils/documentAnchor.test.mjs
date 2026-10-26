@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
-import { createDocumentNavigation, revealDocumentAnchor } from './documentAnchor.mjs';
+import { createDocumentNavigation, revealDocumentAnchor, revealClickedDocumentAnchor } from './documentAnchor.mjs';
 
 function fixture() {
   const outer = { tagName: 'DETAILS', open: false, parentElement: null };
@@ -196,4 +196,42 @@ test('new navigation discards the fold snapshot of a replaced forward entry', as
   await visit(other, page, 2);
   await visit(page, other, 1, { top: 0 });
   assert.deepEqual([outer.open, inner.open], [false, false]);
+});
+
+
+test('repeated clicks reveal a section after it was manually closed', () => {
+  const { root, inner, target } = fixture();
+  const link = { target: '', hasAttribute: () => false, getAttribute: () => guide.hash };
+  const event = { button: 0, target: { closest: () => link } };
+  assert.equal(revealClickedDocumentAnchor(event, root), target);
+  assert.equal(inner.open, true);
+  inner.open = false;
+  assert.equal(revealClickedDocumentAnchor(event, root), target);
+  assert.equal(inner.open, true);
+});
+
+test('modified clicks, downloads, external links and new tabs do not change folds', () => {
+  for (const override of [{ button: 1 }, { ctrlKey: true }, { metaKey: true }, { shiftKey: true }, { altKey: true }, { defaultPrevented: true }]) {
+    const { root, inner } = fixture();
+    const link = { target: '', hasAttribute: () => false, getAttribute: () => guide.hash };
+    revealClickedDocumentAnchor({ button: 0, target: { closest: () => link }, ...override }, root);
+    assert.equal(inner.open, false);
+  }
+  for (const link of [
+    { target: '_blank', hasAttribute: () => false, getAttribute: () => guide.hash },
+    { target: '', hasAttribute: () => true, getAttribute: () => guide.hash },
+    { target: '', hasAttribute: () => false, getAttribute: () => 'https://example.com/#按钮' },
+  ]) {
+    const { root, inner } = fixture();
+    revealClickedDocumentAnchor({ button: 0, target: { closest: () => link } }, root);
+    assert.equal(inner.open, false);
+  }
+});
+
+test('explicit appendix marker reveals the table beyond its heading and introduction', () => {
+  const section = { tagName: 'DETAILS', open: false };
+  const target = { tagName: 'A', getAttribute: () => 'migration-legacy-types-table' };
+  const root = { getElementById: id => id === 'migration-legacy-types' ? target : section };
+  assert.equal(revealDocumentAnchor('#migration-legacy-types', root), target);
+  assert.equal(section.open, true);
 });

@@ -1,6 +1,7 @@
 <template>
   <td-doc-content
     ref="tdDocContent"
+    @click.capture="revealAnchor"
     platform="mobile"
     :class="{ 'flutter-preview-layout': info.isComponent || info.flutterExample }"
     page-status="hidden"
@@ -33,6 +34,7 @@ import 'prismjs/components/prism-dart.js';
 import 'prismjs/components/prism-yaml.js';
 
 import FlutterPreview from './flutter-preview.vue';
+import { revealClickedDocumentAnchor } from '../utils/documentAnchor.mjs';
 import { flutterExampleLiveUrl } from '../flutter-example-docs/live-url.mjs';
 
 export default defineComponent({
@@ -66,6 +68,12 @@ export default defineComponent({
     },
   },
 
+  methods: {
+    revealAnchor(event) {
+      revealClickedDocumentAnchor(event);
+    },
+  },
+
   mounted() {
     const { info } = this;
     const { tdDocContent, tdDocHeader, tdDocTabs } = this.$refs;
@@ -86,6 +94,10 @@ export default defineComponent({
 </script>
 
 <style lang="less">
+.migration-guide [id] {
+  scroll-margin-top: 80px;
+}
+
 // Guides use the same phone sidebar spacing as component pages.
 td-doc-content.flutter-preview-layout {
   --content-padding-right: 400px;

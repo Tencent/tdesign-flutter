@@ -2,16 +2,17 @@
 title: 从 0.2.7 升级到 1.0
 description: 0.2.7 使用方升级到 1.0 的接口与行为迁移说明。
 spline: explain
+docClass: migration-guide
 ---
 
 # 从 0.2.7 升级到 1.0
 
-本文仅面向 `tdesign_flutter 0.2.7` 使用方。1.0 是不兼容升级，旧参数和旧行为不会通过兼容别名保留；不能对全项目执行一次 `TD` → `T` 替换后就认为迁移结束。
+<a id="适用版本与阅读方式"></a>
+适用于 `tdesign_flutter 0.2.7 → 1.0.0`，最低要求 Flutter ≥ 3.32.0、Dart ≥ 3.8.0。构造参数、状态和默认行为均有变化，不能只替换 `TD` 前缀。
 
-升级时将依赖更新为 `tdesign_flutter: ^1.0.0`。本文仅说明 0.2.7 到 1.0 的迁移；alpha 版本之间的升级不在本文范围。
+依赖 `^1.0.0` 可解析到后续 1.x 版本，以 `pubspec.lock` 为准。本文示例和 API 页面随配套源码维护；选择目标版本后，请核对[更新日志](./changelog.md)和[1.0.0 之后的升级注意](#migration-after-1-0)。安装步骤见[快速开始](./getting-started.md)。
 
-已有具体组件需要迁移时，可直接跳到[按组件查找迁移方式](#migration-components)；首次升级建议先按下面的顺序处理公共配置。
-
+<a id="先判断需要做哪些工作"></a>
 ## 升级顺序
 
 1. 保留当前依赖锁文件、主题 JSON 与关键页面截图；先在业务分支迁移。
@@ -27,48 +28,18 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 
 仍可显式导入 Material；业务另有同名类型时用 import 前缀或 show/hide 解决。不要从 `package:tdesign_flutter/src/...` 导入旧 State、Painter 或内部适配类型。
 
-## 先判断需要做哪些工作
-
-**先处理公共配置。** 升级依赖和SDK后，先迁移导入、主题和文字，再处理实际使用的组件。
-
-**参数或状态变化，需要改写调用处。** 按钮内容与回调、复选框受控值和输入控制器不能只替换类名。先看具体改法，再核对组件API。
-
-**交互职责变化，需要重组业务流程。** Form、Picker/日期确认、浮层、Upload、页签和轮播，需要检查状态、提交/取消及资源释放，不能仅以编译通过作为完成标准。
-
-尚未逐项确认的业务用法应继续核对API和真实操作，不归为“只改名即可”。下面索引用于查找，具体改法解释主要场景，完整API不在本文重复列出。
-
-### 直接查看主要改法
-
-- [主题、文字与样式](#migration-theme)
-- [按钮与禁用语义](#migration-button)
-- [受控值、输入与选择](#migration-controlled)
-- [表单改为字段树](#migration-form)
-- [Picker、日期与浮层确认分离](#migration-picker)
-- [Popup、Dialog、Toast](#migration-overlay)
-- [Upload 与平台依赖](#migration-upload)
-- [两种 TabBar 与 Swiper](#migration-tabs)
-
 <a id="migration-components"></a>
 ## 按组件查找迁移方式
 
-只需要迁移项目中实际使用的组件。先搜索代码中的旧类名，例如 `TDButton`，再按下面的分类找到它。分组默认收起，展开后查看对应入口和提示。
+按项目实际使用的组件展开分组。每项列出旧入口、新入口和关键差异；组件名称链接到 API，“具体改法”链接到下方示例与行为说明。查找旧枚举、Controller 或 State 时，展开[旧类型名称对照](#migration-legacy-types)，再使用浏览器或编辑器查找。
 
-1. **找对应入口**：每项先列出“0.2.7旧入口 → 1.0入口”，用于定位新组件。
-2. **完成用法调整**：阅读“需要调整”，并结合下方具体改法修改参数、数据和回调；箭头不表示只改类名就能完成迁移。
-3. **核对当前用法**：点击组件名称进入1.0 API文档，再验证真实操作、主题及布局。
-
-例如，搜索到 `TDButton` 时，先看[按钮与禁用语义](#migration-button)，把文字和点击回调迁到新的内容槽与回调，再查看按钮API。不要仅把它改名为 `TButton` 后就结束。
-
-### 选择你正在迁移的组件
-
+<a id="选择你正在迁移的组件"></a>
 - [主题与全局配置](#migration-group-global)（1项）
 - [按钮、文字与基础组件](#migration-group-basic)（6项）
 - [页面导航与页签](#migration-group-navigation)（8项）
 - [表单、输入与选择](#migration-group-input)（16项）
 - [内容与数据展示](#migration-group-display)（15项）
 - [浮层、提示与交互反馈](#migration-group-feedback)（11项）
-
-查找旧枚举、Controller、State等辅助类型时，使用文末的[旧类型名称对照](#migration-legacy-types)。该附录用于定位处置方向，组件迁移优先按下面的分组进行。
 
 <a id="migration-group-global"></a>
 <details>
@@ -80,7 +51,7 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 <a id="migration-component-theme"></a>
 - **[Theme 主题](https://tdesign.tencent.com/flutter/components/theme?tab=api)**：`TDTheme / TDThemeData` → `context.tTheme / TThemeData / TThemeBuilder`。
 
-  **需要调整**：`TDTheme.of(context)` → `context.tTheme`；应用用 `TThemeBuilder.light/dark(TThemeData)`。全局 Token、组件 Theme 和实例配置分层，Material 主题不反向改变 TD 内置外观；旧文字全局开关改为局部 Theme/实例/布局。 [查看相关改法](#migration-theme)
+  **关键调整**：先迁移全局主题，再调整组件 Theme 与局部文字样式。 [具体改法](#migration-theme)
 
 </details>
 
@@ -94,7 +65,7 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 <a id="migration-component-button"></a>
 - **[Button 按钮](https://tdesign.tencent.com/flutter/components/button?tab=api)**：`TDButton` → `TButton`。
 
-  **需要调整**：`text` → `child: Text(...)`，`onTap` → `onPressed`，`type/theme` → `variant/colorPreset`。删除 `disabled` 后用空回调禁用；旧三套状态样式合并为 `ButtonStyle`，图标改传 Widget。 [查看相关改法](#migration-button)
+  **关键调整**：内容改为 `child`，点击用 `onPressed`；传 `null` 禁用，空函数仍可点击。 [具体改法](#migration-button)
 
 <a id="migration-component-divider"></a>
 - **[Divider 分割线](https://tdesign.tencent.com/flutter/components/divider?tab=api)**：`TDDivider` → `TDivider`。
@@ -109,7 +80,7 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 <a id="migration-component-icon"></a>
 - **[Icon 图标](https://tdesign.tencent.com/flutter/components/icon?tab=api)**：`TDIcons / Icon` → `TIcons / TIcon`。
 
-  **需要调整**：图标数据使用外部包 `tdesign_flutter_icons` 导出的 `TIcons`，展示使用 `TIcon(TIcons.add, size: ..., color: ...)`。在当前依赖0.0.6中，`TDIcons.list/video_camera_3/video_camera_3_filled` 没有同名新常量；旧 all Map 改为 `TIcons.allIconsMap`，键名也需核对。图标字体及 Widget 的迁移不能仅替换类名前缀。
+  **需要调整**：图标数据使用外部包 `tdesign_flutter_icons` 导出的 `TIcons`，展示使用 `TIcon(TIcons.add, size: ..., color: ...)`。在图标包 0.0.6 中，`TDIcons.list/video_camera_3/video_camera_3_filled` 没有同名新常量；旧 all Map 改为 `TIcons.allIconsMap`，键名也需核对。图标字体及 Widget 的迁移不能仅替换类名前缀。
 
 <a id="migration-component-link"></a>
 - **[Link 链接](https://tdesign.tencent.com/flutter/components/link?tab=api)**：`TDLink` → `TLink`。
@@ -119,7 +90,7 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 <a id="migration-component-text"></a>
 - **[Text 文本](https://tdesign.tencent.com/flutter/components/text?tab=api)**：`TDText / TDTextSpan` → `TText / TTextSpan`。
 
-  **需要调整**：`textColor/fontWeight/fontFamily` 合并为 `style`，`textScaleFactor` → `textScaler`。删除字体 padding 与全局强制居中开关；通过父布局和文字 Theme 表达，不恢复旧全局变量。 [查看相关改法](#migration-theme)
+  **关键调整**：文字样式改为 `TextStyle`，缩放改为 `textScaler`；旧全局文字开关已移除。 [具体改法](#migration-theme)
 
 </details>
 
@@ -163,12 +134,12 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 <a id="migration-component-tab-bar"></a>
 - **[TabBar 标签栏](https://tdesign.tencent.com/flutter/components/tab-bar?tab=api)**：`TDBottomTabBar` → `TTabBar`。
 
-  **需要调整**：提供必填 `type/navigationTabs/value`，在 `onChanged` 回写索引；旧 basic/component/outline 三种配置分别核对 `type/itemStyle/style`。徽标使用 `TBadgeConfig`；旧 expansionPanel 和弹出菜单配置无直接替代。 [查看相关改法](#migration-tabs)
+  **关键调整**：底部导航使用受控 `value/onChanged`；旧 basic/component/outline 分别核对 `type/itemStyle/style`，展开面板需业务组合。 [具体改法](#migration-tabs)
 
 <a id="migration-component-tabs"></a>
 - **[Tabs 选项卡](https://tdesign.tencent.com/flutter/components/tabs?tab=api)**：`TDTabBar / TDTabBarView` → `TTabsBar / TTabsBarView`。
 
-  **需要调整**：顶部页签使用 `TTabsBar(tabs: ...)` 和 `TTabsBarView(children: ...)`，共享 `TabController` 或 `DefaultTabController`。旧 `isSlideSwitch` 改为显式 `physics`；不要迁成底部导航 `TTabBar`。 [查看相关改法](#migration-tabs)
+  **关键调整**：顶部页签使用 `TTabsBar / TTabsBarView`，共享控制器；旧 `isSlideSwitch` 改为 `physics`，默认不可滑动。 [具体改法](#migration-tabs)
 
 </details>
 
@@ -182,7 +153,7 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 <a id="migration-component-calendar"></a>
 - **[Calendar 日历](https://tdesign.tencent.com/flutter/components/calendar?tab=api)**：`TDCalendar` → `TCalendar`。
 
-  **需要调整**：必填 `value` 为 `List<DateTime>`，`variant` 决定单选/多选/区间，`onChanged` 回写。`minDate/maxDate` 管边界；旧 `TDCalendarPopup` 改用 `TPopup + TCalendar`，旧 builder/样式按当前具名回调与 Theme 重写。 [查看相关改法](#migration-picker)
+  **关键调整**：值改为 `List<DateTime>`；单选/多选/区间由 `variant` 决定，旧 `TDCalendarPopup` 改用 `TPopup + TCalendar` 组合确认。 [具体改法](#migration-picker)
 
 <a id="migration-component-cascader"></a>
 - **[Cascader 级联选择器](https://tdesign.tencent.com/flutter/components/cascader?tab=api)**：`TDCascader / TDMultiCascader` → `TCascader`。
@@ -192,37 +163,37 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 <a id="migration-component-checkbox"></a>
 - **[CheckBox 多选框](https://tdesign.tencent.com/flutter/components/checkbox?tab=api)**：`TDCheckbox / TDCheckboxGroup` → `TCheckbox / TCheckboxGroup`。
 
-  **需要调整**：单项使用必填 `value` 和 `onChanged`，空回调禁用；组使用 `options` 和受控 `List<T>`。旧 `checked/id/controller` 不再作为状态源；自定义图标使用 `customIconBuilder`，组内容使用 `itemBuilder`。 [查看相关改法](#migration-controlled)
+  **关键调整**：单项使用 `value/onChanged`，组使用 `options` 与受控列表；图标/组选项使用 `customIconBuilder/itemBuilder`，旧 id/controller 不再作为状态源。 [具体改法](#migration-controlled)
 
 <a id="migration-component-date-time-picker"></a>
 - **[DateTimePicker 时间选择器](https://tdesign.tencent.com/flutter/components/date-time-picker?tab=api)**：`TDDatePicker` → `TDateTimePicker`。
 
-  **需要调整**：`DatePickerModel` 改为 `TDateTimePickerValue`，按 `DateTimePickerMode` 设置日期/时间列；边界用 `start/end`，步进用 `steps`。组件只选择，不提交业务结果；确认/取消在外部浮层管理。 [查看相关改法](#migration-picker)
+  **关键调整**：`DatePickerModel` 改为 `TDateTimePickerValue`；边界用 `start/end`、步进用 `steps`，确认在外部管理。 [具体改法](#migration-picker)
 
 <a id="migration-component-form"></a>
 - **[Form 表单](https://tdesign.tencent.com/flutter/components/form?tab=api)**：`TDForm / FormController` → `TForm / TFormField / TFormController`。
 
-  **需要调整**：旧 `items/rules/data` 改为 `TForm(child: ...)` 字段树；每个 `TFormField` 提供 `name/value/builder`，校验用 `required/validator`。`TFormController` 负责表单命令，不能继续传旧 `TDFormValidation` 列表。 [查看相关改法](#migration-form)
+  **关键调整**：旧 `items/rules/data` 改为字段树，由 `TFormField` 连接业务值和校验。 [具体改法](#migration-form)
 
 <a id="migration-component-input"></a>
 - **[Input 输入框](https://tdesign.tencent.com/flutter/components/input?tab=api)**：`TDInput` → `TInput`。
 
-  **需要调整**：`controller` 与 `initialValue` 互斥，`onChanged` 通知业务；占位用 `hintText`，插槽用 `prefix/suffix`。旧 `TDInputType` 是布局枚举，不对应 `TextInputType`；多行、卡片或附加布局分别用 `TTextarea`、Theme 和外层组合。 [查看相关改法](#migration-controlled)
+  **关键调整**：`controller` 与 `initialValue` 互斥；占位与插槽用 `hintText/prefix/suffix`；旧 `TDInputType` 是布局枚举，多行用 `TTextarea`。 [具体改法](#migration-controlled)
 
 <a id="migration-component-picker"></a>
 - **[Picker 选择器](https://tdesign.tencent.com/flutter/components/picker?tab=api)**：`TDPicker / TDMultiPicker / TDMultiLinkedPicker` → `TPicker + TPickerColumns / TPickerLinked`。
 
-  **需要调整**：列数据改为 `TPickerColumns` 或 `TPickerLinked`，每项是不可变 `TPickerOption`；当前值是 `List<Object?>`。旧 `TDPicker.show*` 把弹层和确认合在一起，1.0 用 `TPickerPopup` 外部组合草稿/确认/取消。实时选择用 `onChanged`，通用 Picker 的列停止滚动通知用 `onColumnScrollEnd`，两者不能当成同一触发时机。 [查看相关改法](#migration-picker)
+  **关键调整**：列数据改为 `TPickerColumns / TPickerLinked`；`onChanged` 更新草稿，`TPickerPopup` 组合确认/取消。列停止通知用 `onColumnScrollEnd`。 [具体改法](#migration-picker)
 
 <a id="migration-component-radio"></a>
 - **[Radio 单选框](https://tdesign.tencent.com/flutter/components/radio?tab=api)**：`TDRadio / TDRadioGroup` → `TRadio / TRadioGroup<T>`。
 
-  **需要调整**：单项 `TRadio<T>(value: ...)` 必须位于同类型 `TRadioGroup<T>` 下；选中值和 `onChanged` 在组上管理。数据化入口用 `TRadioGroup.options`，不再为每项保存 checked 或持有旧 State。 [查看相关改法](#migration-controlled)
+  **关键调整**：单项放在同类型 `TRadioGroup<T>` 中，由组统一持有选中值与回调。 [具体改法](#migration-controlled)
 
 <a id="migration-component-rate"></a>
 - **[Rate 评分](https://tdesign.tencent.com/flutter/components/rate?tab=api)**：`TDRate` → `TRate`。
 
-  **需要调整**：使用必填 `double value`、`onChanged` 和 `allowHalf`，`count` 为总星数。1.0 没有独立 readOnly 参数，空回调表示不可交互；图标构建使用 `icon`，文字用 `texts`，不要直接搬旧指示器位置枚举。
+  **需要调整**：使用必填 `double value`、`onChanged` 和 `allowHalf`，`count` 为总星数。1.0 没有独立 readOnly 参数，`onChanged: null` 表示不可交互；图标构建使用 `icon`，文字用 `texts`，不要直接搬旧指示器位置枚举。
 
 <a id="migration-component-search"></a>
 - **[Search 搜索框](https://tdesign.tencent.com/flutter/components/search?tab=api)**：`TDSearchBar` → `TSearchBar`。
@@ -232,32 +203,32 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 <a id="migration-component-slider"></a>
 - **[Slider 滑动选择器](https://tdesign.tencent.com/flutter/components/slider?tab=api)**：`TDSlider / TDRangeSlider` → `TSlider / TRangeSlider`。
 
-  **需要调整**：单值用 `TSlider(value: double)`，区间用 `TRangeSlider(value: RangeValues)`；空 `onChanged` 禁用。用 `variant` 选择普通/胶囊，格式化用 `thumbFormatter/scaleFormatter`；旧 Track/Thumb 类和 mixin 无公开继承替代。
+  **需要调整**：单值用 `TSlider(value: double)`，区间用 `TRangeSlider(value: RangeValues)`；`onChanged: null` 表示禁用。用 `variant` 选择普通/胶囊，格式化用 `thumbFormatter/scaleFormatter`；旧 Track/Thumb 类和 mixin 无公开继承替代。
 
 <a id="migration-component-stepper"></a>
 - **[Stepper 步进器](https://tdesign.tencent.com/flutter/components/stepper?tab=api)**：`TDStepper` → `TStepper`。
 
-  **需要调整**：提供必填 `value`，在 `onChanged` 接受候选数值后重建；边界和步长用 `min/max/step`。旧 `defaultValue/eventController` 不再有效，空回调表示禁用；自建状态不应再与控制器双向通知。 [查看相关改法](#migration-controlled)
+  **需要调整**：提供必填 `value`，在 `onChanged` 接受候选数值后重建；边界和步长用 `min/max/step`。旧 `defaultValue/eventController` 不再有效，`onChanged: null` 表示禁用；自建状态不应再与控制器双向通知。 [具体改法](#migration-controlled)
 
 <a id="migration-component-switch"></a>
 - **[Switch 开关](https://tdesign.tencent.com/flutter/components/switch?tab=api)**：`TDSwitch` → `TSwitch`。
 
-  **需要调整**：提供必填 `value` 并在 `onChanged` 回写，空回调禁用；旧 fill 改为 `TSwitchVariant.filled`，text/icon 按同名 variant；旧 loading 形态改为 `loading: true`。`loading` 表达加载状态，文字用 `openText/closeText`；具体配色从 `TSwitchThemeData` 配置。 [查看相关改法](#migration-controlled)
+  **需要调整**：提供必填 `value` 并在 `onChanged` 回写，`onChanged: null` 表示禁用；旧 fill 改为 `TSwitchVariant.filled`，text/icon 按同名 variant；旧 loading 形态改为 `loading: true`。`loading` 表达加载状态，文字用 `openText/closeText`；具体配色从 `TSwitchThemeData` 配置。 [具体改法](#migration-controlled)
 
 <a id="migration-component-textarea"></a>
 - **[Textarea 多行文本框](https://tdesign.tencent.com/flutter/components/textarea?tab=api)**：`TDTextarea` → `TTextarea`。
 
-  **需要调整**：保留多行组件职责，用 `minLines/maxLines`、`controller` 或 `initialValue` 和 `onChanged`。旧装饰、标签样式与 padding 迁入受支持的 `TTextareaThemeData` 或外部组合；限制长度与计数仍使用 `maxLength/maxCharacter/indicator`。 [查看相关改法](#migration-controlled)
+  **关键调整**：使用 `TTextarea` 承接多行输入；旧装饰与 padding 按 Theme 和外层布局调整。长度限制仍用 `maxLength/maxCharacter/indicator`。 [具体改法](#migration-controlled)
 
 <a id="migration-component-tree-select"></a>
 - **[TreeSelect 树形选择](https://tdesign.tencent.com/flutter/components/tree-select?tab=api)**：`TDTreeSelect / TDSelectOption` → `TTreeSelect / TTreeSelectOption`。
 
-  **需要调整**：旧 `TDSelectOption` 改为 `TTreeSelectOption(label/value/children)`；受控 `value` 是 `List<List<Object?>>`，单选也按路径列表传入。`multiple` 决定多选，空 `onChanged` 禁用；移除旧副作用控制器。
+  **需要调整**：旧 `TDSelectOption` 改为 `TTreeSelectOption(label/value/children)`；受控 `value` 是 `List<List<Object?>>`，单选也按路径列表传入。`multiple` 决定多选，`onChanged: null` 表示禁用；移除旧副作用控制器。
 
 <a id="migration-component-upload"></a>
 - **[Upload 上传](https://tdesign.tencent.com/flutter/components/upload?tab=api)**：`TDUpload` → `TUpload`。
 
-  **需要调整**：必填 `files` 与 `onChanged` 管列表；`max/sizeLimit` → `maxFiles/maxFileSize`，一次只配置一种 `mediaType`。自定义 picker 返回 `Future<List<TUploadFile>>`；上传 HTTP、进度和持久化由业务负责。 [查看相关改法](#migration-upload)
+  **关键调整**：文件列表由 `files/onChanged` 管理；网络上传、进度和持久化由业务负责。 [具体改法](#migration-upload)
 
 </details>
 
@@ -326,7 +297,7 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 <a id="migration-component-swiper"></a>
 - **[Swiper 轮播图](https://tdesign.tencent.com/flutter/components/swiper?tab=api)**：`Swiper + TDSwiperPagination` → `TSwiper / TSwiperController`。
 
-  **需要调整**：用 `TSwiper(children: ...)` 或 `itemBuilder/itemCount`，自建 `TSwiperController` 需释放。旧第三方分页插件改为 `pagination/paginationPlacement/paginationItemBuilder`，动画效果用 `pageEffect`；loop/autoplay 默认 false。 [查看相关改法](#migration-tabs)
+  **关键调整**：使用 `children` 或 `itemBuilder/itemCount`，默认不循环、不自动播放；旧第三方控制器/分页配置需重写。 [具体改法](#migration-tabs)
 
 <a id="migration-component-table"></a>
 - **[Table 表格](https://tdesign.tencent.com/flutter/components/table?tab=api)**：`TDTable / TDTableCol` → `TTable<T> / TTableColumn<T>`。
@@ -360,7 +331,7 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 <a id="migration-component-dialog"></a>
 - **[Dialog 对话框](https://tdesign.tencent.com/flutter/components/dialog?tab=api)**：`TDAlertDialog / TDConfirmDialog / TDInputDialog` → `TDialog / TConfirmDialog / TDialogAction`。
 
-  **需要调整**：单确认用 `TConfirmDialog`，多操作用 `TDialog(actions: [TDialogAction(...)])`；title/content 改传 Widget。旧输入弹窗和图片弹窗分别组合 `TInput` 或图片内容，业务持有输入与提交逻辑，不用全屏预览替代图片弹窗。 [查看相关改法](#migration-overlay)
+  **需要调整**：单确认用 `TConfirmDialog`，多操作用 `TDialog(actions: [TDialogAction(...)])`；title/content 改传 Widget。旧输入弹窗和图片弹窗分别组合 `TInput` 或图片内容，业务持有输入与提交逻辑，不用全屏预览替代图片弹窗。 [具体改法](#migration-overlay)
 
 <a id="migration-component-dropdown-menu"></a>
 - **[DropdownMenu 下拉菜单](https://tdesign.tencent.com/flutter/components/dropdown-menu?tab=api)**：`TDDropdownMenu / TDDropdownItem` → `TDropdownMenu / TDropdownMenuItem`。
@@ -390,7 +361,7 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 <a id="migration-component-popup"></a>
 - **[Popup 弹出层](https://tdesign.tencent.com/flutter/components/popup?tab=api)**：`TDPopup*Panel / TDSlidePopupRoute` → `TPopup.show + TPopupOptions + TPopupHandle`。
 
-  **需要调整**：`TDSlidePopupRoute/TDPopup*Panel` 改为 `TPopup.show`、方向专属 `TPopupOptions` 与句柄。通过 `handle.close/result` 管理关闭和结果；旧确认面板改用 `TPickerPopup` 或自己的 header/content 组合。 [查看相关改法](#migration-overlay)
+  **关键调整**：通过 `TPopup.show`、方向专属 Options 和 Handle 管理展示、关闭及结果；旧确认面板改为组合。 [具体改法](#migration-overlay)
 
 <a id="migration-component-pull-down-refresh"></a>
 - **[PullDownRefresh 下拉刷新](https://tdesign.tencent.com/flutter/components/pull-down-refresh?tab=api)**：`TDRefreshHeader` → `TPullDownRefresh`。
@@ -405,20 +376,18 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 <a id="migration-component-toast"></a>
 - **[Toast 轻提示](https://tdesign.tencent.com/flutter/components/toast?tab=api)**：`TDToast` → `TToast`。
 
-  **需要调整**：时长统一为 `Duration`，加载提示默认也会结束；持续任务显式 `Duration.zero`。保留返回ID并用 `dismissToast(id)` 结束；旧 `TDToastConfig` 的视觉和拦截意图分别迁到 Theme/`TOverlayConfig`。 [查看相关改法](#migration-overlay)
+  **关键调整**：时长改为 `Duration`；持续加载用 `Duration.zero`，保存返回 ID 后主动关闭；旧 `TDToastConfig` 的样式与拦截分别迁到 Theme / `TOverlayConfig`。 [具体改法](#migration-overlay)
 
 </details>
 
+<a id="直接查看主要改法"></a>
 <a id="migration-theme"></a>
 ## 主题、文字与样式
 
-### 先处理旧配置
+<a id="先处理旧配置"></a>
 
-- 将读取当前主题的 `TDTheme.of(context)` 改为 `context.tTheme`，固定默认配置不能代替局部主题。
-- 旧文字样式字段迁入 `TextStyle`；布局用父级Padding/Align表达，不恢复旧字体padding补偿。
-- 全局Token、组件Theme和单个实例配置分别处理，不能把所有旧样式都放入全局JSON。
-
-### 1.0写法与注意事项
+<a id="_1-0写法与注意事项"></a>
+### 主题与文字：1.0写法与注意事项
 
 旧 `TDTheme.of(context)` 对应 `context.tTheme`；全局数据为 `TThemeData`，应用使用 `TThemeBuilder.light/dark`。让组件跟随局部主题时读取 `context.tTheme`，不要用固定默认值绕开子树 Theme。
 
@@ -456,9 +425,10 @@ TThemeData migratedThemeCopy(TThemeData tokens) {
 - 旧 `copyWithTDThemeData(name, marginMap: ...)` 改为 `copyWith(name: name, spacerMap: ...)`，不再需要把结果强制转换为具体主题类型；`copyWith/lerp` 返回 `TThemeData`，业务子类的重写签名也需同步。省略或传 null 的 name 保留当前名称。
 - 旧 `ofColor/ofFont/ofCorner/ofFontFamily/ofShadow` 改为相应的 `colorMap/fontMap/radiusMap/fontFamilyMap/shadowMap` 按键查询；先检查键名及空值，不继续调用已删除的动态查询包装。`ofExtra<T>()` 改为读取 `extraThemeData` 并做业务类型判断。
 - 旧公开 `parseThemeData` 不再可调用；统一使用 `TThemeData.fromJson`，输入必须是包含主题名称配置的 JSON 字符串，不能把旧 Map 直接作为字符串参数传入。
-- 自定义主题 JSON 需要核对字段与最终默认值；旧按钮状态样式、组件形态、交互时长等不能一律塞进 Theme。具体视觉默认值与实例的状态/规格选择分开。
+- 自定义主题 JSON 需要核对字段与最终默认值；旧按钮状态样式、组件形态、交互时长等不能一律塞进 Theme。具体视觉默认值与实例的状态/规格选择分开。完整接入步骤见[自定义主题](./custom-theme.md)。
 
-### 迁移后怎样确认
+<a id="迁移后怎样确认"></a>
+### 主题与文字：迁移后怎样确认
 
 - 明暗切换和局部Theme下内置组件读取正确配色。
 - 覆盖一个组件Theme时其他扩展保持预期，文字行高与系统缩放正常。
@@ -468,14 +438,10 @@ TThemeData migratedThemeCopy(TThemeData tokens) {
 <a id="migration-button"></a>
 ## 按钮与禁用语义
 
-### 参数如何调整
+<a id="参数如何调整"></a>
 
-- 文字：`text` 改为Widget内容 `child`，普通字符串用 `Text` 包装。
-- 点击：`onTap` 改为 `onPressed`；禁用时传null，启用时必须传有效回调。
-- 外观分类：`type` 改为 `variant`，`theme` 改为 `colorPreset`。
-- 状态样式：旧 `style/activeStyle/disableStyle` 合并到 `ButtonStyle` 的状态属性。
-
-### 1.0写法与注意事项
+<a id="_1-0写法与注意事项-1"></a>
+### 按钮：1.0写法与注意事项
 
 0.2.7：`TDButton(text: '保存', type: TDButtonType.fill, theme: TDButtonTheme.primary, onTap: save)`。
 
@@ -498,7 +464,8 @@ Widget migratedButton(VoidCallback? onPressed) {
 
 自定义反色主题时，默认配色的 `TButtonVariant.ghost` 文字与描边读取 `textColorAnti`，禁用时读取 `fontWhite4`；不要仅修改原始白色层级 `fontWhite1` 来控制这类按钮。单个按钮的前景、边框和交互状态仍通过 `ButtonStyle` 覆盖。
 
-### 迁移后怎样确认
+<a id="迁移后怎样确认-1"></a>
+### 按钮：迁移后怎样确认
 
 - 启用按钮点击一次仅执行业务回调一次。
 - 禁用不执行点击/长按；普通、按压、加载及禁用样式符合业务预期。
@@ -508,16 +475,12 @@ Widget migratedButton(VoidCallback? onPressed) {
 <a id="migration-controlled"></a>
 ## 受控值、输入与选择
 
-### 值由谁更新
+<a id="值由谁更新"></a>
 
-- 旧checked、id或Controller方案需要逐组件改写，不能对所有组件统一替换字段名。
-- 在页面State或业务状态中持有当前值，传入value；在onChanged中保存新值并触发重建。
-- 父级重置或外部修改时更新同一状态来源，不额外维护第二份选中状态。
-- 输入框需要持续控制文本、重置或保留选区时使用TextEditingController；initialValue只负责初始化。
+<a id="_1-0写法与注意事项-2"></a>
+### 受控值：1.0写法与注意事项
 
-### 1.0写法与注意事项
-
-对于 `TCheckbox`、`TRadioGroup`、`TSwitch`、`TStepper`、Picker、Calendar 等，父级应接受回调并重建传回新值。只记录回调而不更新 value，会导致保持旧值或滚动结束回退；空回调的禁用规则以各组件 API 为准。
+对于 `TCheckbox`、`TRadioGroup`、`TSwitch`、`TStepper`、Picker、Calendar 等，父级应接受回调并重建传回新值。只记录回调而不更新 value，会导致保持旧值或滚动结束回退；回调为 `null` 时是否禁用，以各组件 API 为准；空函数不是 `null`。
 
 <!-- migration-example:choices:start -->
 ```dart
@@ -542,7 +505,8 @@ Widget migratedRadio(String value, ValueChanged<String>? onChanged) {
 
 输入框的 `controller` 与 `initialValue` 互斥；`initialValue` 仅初始化内部值。需要外部更新、表单重置或保留选区时使用 `TextEditingController`，由创建方释放。单行用 `TInput`，多行用 `TTextarea`；不要把旧 TDInput 的 maxLines 参数当成完整多行迁移方案。重验空内容粘贴、中文组合输入、清空按钮、焦点与键盘遮挡。
 
-### 迁移后怎样确认
+<a id="迁移后怎样确认-2"></a>
+### 受控值：迁移后怎样确认
 
 - 操作后显示新值，父级重置也能反映在组件上。
 - 复选框不确定态及单选组泛型符合业务，输入清空、组合输入和焦点正常。
@@ -553,14 +517,10 @@ Widget migratedRadio(String value, ValueChanged<String>? onChanged) {
 <a id="migration-form"></a>
 ## 表单改为字段树
 
-### 旧版配置分别放到哪里
+<a id="旧版配置分别放到哪里"></a>
 
-- `items`：改成TForm子树中的字段Widget，不再提交一份表单项配置列表。
-- `data`：字段的业务值由调用方持有，通过TFormField.value/onChanged连接。
-- `rules`：在字段上配置required或validator，并显示builder传出的错误文案。
-- 提交/重置：调用方编排业务操作；提交前使用TFormController.validate()，重置时同步业务值与文本控制器。
-
-### 1.0写法与注意事项
+<a id="_1-0写法与注意事项-3"></a>
+### 表单：1.0写法与注意事项
 
 旧 `items/rules/data` 配置改为 `TForm + TFormField<T> + TFormItem`。字段持有业务 value/onChanged，validator 返回错误文案；`TFormController.validate()` 用于主动校验，`required: true` 执行必填校验，单独设置表单项必填标记不等于校验。
 
@@ -593,7 +553,8 @@ Widget migratedForm({
 
 示例中的 text/form 由页面持有，value 由父级在 onChanged 中更新；页面销毁时释放自建 TextEditingController。业务执行 reset 时，同时更新字段值与自己的文本控制器；不要指望 initialValue 覆盖现有编辑状态。
 
-### 迁移后怎样确认
+<a id="迁移后怎样确认-3"></a>
+### 表单：迁移后怎样确认
 
 - 空值提交显示正确错误文案，合法值可以通过校验。
 - 提交读取最新业务值，在校验通过前不会发起业务请求。
@@ -604,14 +565,10 @@ Widget migratedForm({
 <a id="migration-picker"></a>
 ## Picker、日期与浮层确认分离
 
-### 将选择与提交分成两步
+<a id="将选择与提交分成两步"></a>
 
-- 旧TDPicker.show*等入口可能同时处理内容、标题和确认回调；新面板只处理数据及候选值。
-- 标题和操作按钮使用TPopupHeader等公开组件；打开时从业务保存值复制草稿。
-- 滚动只更新草稿，确认才提交业务值，取消丢弃草稿。
-- 旧日期数组和DatePickerModel应转换为当前日期值模型，旧回调参数不能原样传给新组件。
-
-### 1.0写法与注意事项
+<a id="_1-0写法与注意事项-4"></a>
+### Picker 与日期：1.0写法与注意事项
 
 `TDPicker/TDMultiPicker/TDMultiLinkedPicker` 改为 `TPicker` 和不可变 `TPickerColumns/TPickerLinked` 数据。面板回调只是候选值变化，不是业务确认。
 
@@ -688,7 +645,8 @@ Widget migratedDateTime(
 
 **重新验证边界**：最小/最大日期的时分、跨天、闰日、区间端点、数据源变更、连续滚动与惯性。不要用整数时间戳或旧通知器替代新受控值。
 
-### 迁移后怎样确认
+<a id="迁移后怎样确认-4"></a>
+### Picker 与日期：迁移后怎样确认
 
 - 滚动后取消，业务保存值不变化。
 - 确认只提交当前草稿，重新打开从已保存值开始。
@@ -699,14 +657,10 @@ Widget migratedDateTime(
 <a id="migration-overlay"></a>
 ## Popup、Dialog、Toast
 
-### 按原业务目的选择新入口
+<a id="按原业务目的选择新入口"></a>
 
-- 普通弹出层使用TPopup.show，对应方向/布局放入TPopupOptions，保存句柄管理关闭和结果。
-- 只有一个确认动作时可用TConfirmDialog；有确认/取消等多个动作时使用TDialog.actions与TDialogAction。
-- 旧输入弹窗改为TDialog与TInput组合，由业务持有输入值和提交逻辑。
-- 加载提示使用Toast并明确持续时间，任务结束后关闭对应ID。
-
-### 1.0写法与注意事项
+<a id="_1-0写法与注意事项-5"></a>
+### 浮层与提示：1.0写法与注意事项
 
 旧 `TDPopup*Panel/TDSlidePopupRoute` 组合改为 `TPopup.show(context, options: ...)`。按方向选择 `TPopupOptions.bottom/center/left/right/top` 与对应 Inset；从返回的 `TPopupHandle` 关闭/重开并读取本次 `result`。用正确 Theme/Navigator 子树的 context 打开；handle 重开不会自动重新解析已经合并的主题选项，需要新配置时重新创建。
 
@@ -744,7 +698,8 @@ String migratedLoading(BuildContext context) {
 
 结束任务时调用 `TToast.dismissToast(id)`。匿名提示会复用匿名 ID；需要并存时提供不同 toastId。`TMessage.duration` 同样使用 Duration，显示由 Widget 树或其公开命令管理，不能继续用旧 visible 参数控制。
 
-### 迁移后怎样确认
+<a id="迁移后怎样确认-5"></a>
+### 浮层与提示：迁移后怎样确认
 
 - 确认、取消、遮罩与返回键产生各自预期结果。
 - 输入弹窗提交最新文本，取消不会误提交。
@@ -763,7 +718,8 @@ String migratedLoading(BuildContext context) {
 - `disabled`：通过当前公开交互配置处理，例如onChanged为null；禁用不等于取消已开始的异步选择。
 - 网络上传仍由业务执行并更新文件状态，选择完成不代表服务器上传成功。
 
-### 1.0写法与注意事项
+<a id="_1-0写法与注意事项-6"></a>
+### Upload：1.0写法与注意事项
 
 Upload 只负责选择及文件列表交互，不执行 HTTP 上传。旧 `max/sizeLimit/multiple/disabled/onChange` 不能仅改名：改为 `maxFiles/maxFileSize`、单一 mediaType、受控 files/onChanged；自定义业务 picker 使用 `Future<List<TUploadFile>>`。
 
@@ -789,7 +745,8 @@ Widget migratedUpload({
 
 相册权限、iOS Info.plist、文件持久化和 Android 进程回收后的恢复属于宿主集成。默认选择器底层是 image_picker；业务可用 picker 接入自己的权限、恢复和上传流程。升级后重新构建原生宿主，并检查实际解析的平台实现版本；Dart 编译通过不能证明权限与系统相册行为通过。
 
-### 迁移后怎样确认
+<a id="迁移后怎样确认-6"></a>
+### Upload：迁移后怎样确认
 
 - 选择和删除后列表更新，取消选择不会误新增文件。
 - 超过数量或大小限制、选择失败和上传失败有正确处理。
@@ -800,20 +757,68 @@ Widget migratedUpload({
 <a id="migration-tabs"></a>
 ## 两种 TabBar 与 Swiper
 
-### 先区分三种迁移路径
+<a id="先区分三种迁移路径"></a>
 
-- 顶部页签：TDTabBar/TDTabBarView迁为TTabsBar/TTabsBarView，并共享TabController。
-- 底部导航：TDBottomTabBar迁为TTabBar，由value/onChanged控制当前选择。
-- 轮播：旧Swiper迁为TSwiper，不再传第三方控制器或分页插件。
-- 先按下面的行为差异改写，再核对API；顶部页签和底部导航不能合并成一种替换。
-
-### 1.0写法与注意事项
+<a id="_1-0写法与注意事项-7"></a>
+### 页签与轮播：1.0写法与注意事项
 
 - **顶部页签**：旧 `TDTabBar/TDTabBarView` → `TTabsBar/TTabsBarView`，显式共享 TabController 或位于同一个 DefaultTabController。TTabsBarView 默认不可滑动，需要手势切页时显式配置 physics。
 - **底部导航**：旧 `TDBottomTabBar` → `TTabBar`，提供 type、navigationTabs、受控 value/onChanged；旧 `topBorder/showTopBorder/centerDistance` 没有等价开关恢复，按新的默认边线和内置图文布局验收。
 - **Swiper**：使用 `TSwiper` 的 children 或 itemBuilder/itemCount；自建 `TSwiperController` 并在页面 dispose 中释放。旧第三方 SwiperPlugin/SwiperController 和 TDSwiperPagination 不能直接传入；按当前分页、箭头与 pageEffect 能力重组。TSwiper 默认 loop/autoplay 均 false，业务需要时显式打开。
 
-### 迁移后怎样确认
+顶部页签原来的 `TDTabBar/TDTabBarView` 改为共享同一控制器的 `TTabsBar/TTabsBarView`；下面通过 `DefaultTabController` 管理创建与释放。旧底部导航的选中索引改为 `value/onChanged`，业务仍需保存回调的新值。旧 Swiper 的子项改为 `children`，本例显式开启循环与自动播放。
+
+<!-- migration-example:navigation:start -->
+```dart
+Widget migratedTopTabs() {
+  return const DefaultTabController(
+    length: 2,
+    child: SizedBox(
+      height: 240,
+      child: Column(
+        children: [
+          TTabsBar(
+            tabs: [
+              TTab(text: '概览'),
+              TTab(text: '详情'),
+            ],
+          ),
+          Expanded(child: TTabsBarView(children: [Text('概览内容'), Text('详情内容')])),
+        ],
+      ),
+    ),
+  );
+}
+
+Widget migratedBottomTabs(int value, ValueChanged<int>? onChanged) {
+  return TTabBar(
+    type: TTabBarType.text,
+    navigationTabs: const [
+      TTabBarItemConfig(tabText: '首页'),
+      TTabBarItemConfig(tabText: '我的'),
+    ],
+    value: value,
+    onChanged: onChanged,
+  );
+}
+
+Widget migratedSwiper() {
+  return const SizedBox(
+    height: 160,
+    child: TSwiper(
+      loop: true,
+      autoplay: true,
+      children: [Text('第一页'), Text('第二页')],
+    ),
+  );
+}
+```
+<!-- migration-example:navigation:end -->
+
+调用底部导航示例时，在父级 `setState` 中更新 `value`；轮播用 `SizedBox` 提供高度。需要命令式轮播控制时再创建 `TSwiperController`，并由创建方释放。
+
+<a id="迁移后怎样确认-7"></a>
+### 页签与轮播：迁移后怎样确认
 
 - 顶部页签与内容共享同一控制器，切换后内容一致。
 - 底部导航回调更新value，外部重置也正确显示选中项。
@@ -891,7 +896,7 @@ Widget migratedIndexes() {
 
 **图片的适配与形状已拆分。** 旧 `TDImageType.fitHeight/fitWidth/stretch/clip` 的适配意图使用 `fit`，square/roundedSquare/circle 使用 `shape`，不要对整个旧枚举做一次前缀替换。需要旧版才透传的 color/opacity/centerSlice 等原生 Image 配置时，使用 Flutter Image 及业务外层布局；`TImage` 没有这些参数的兼容入口。
 
-**图标常量和字体信息也有差异。** 当前 `tdesign_flutter_icons 0.0.6` 不提供旧 `TDIcons.list`、`TDIcons.video_camera_3`、`TDIcons.video_camera_3_filled` 的同名常量。需要列表图标时可评估 `TIcons.view_list`，视频类从当前实际图标中选择；这些选择不保证与旧图形完全一致，需要保留原图形时由业务提供自己的图标资源。旧 `TDIcons.all` 改为 `TIcons.allIconsMap`，现有同名图标仍可使用例如 `accessibility_filled` 的键，但上述3个缺失图标不能继续按旧键查询，也不要假定两份全集完全一致；旧私有图标数据的 name 属性也不是新 IconData 的属性。不要复制旧 codePoint/fontFamily/fontPackage 来拼装新字体中的图标。
+**图标常量和字体信息也有差异。** 图标包 `tdesign_flutter_icons 0.0.6` 不提供旧 `TDIcons.list`、`TDIcons.video_camera_3`、`TDIcons.video_camera_3_filled` 的同名常量。需要列表图标时可评估 `TIcons.view_list`，视频类从当前实际图标中选择；这些选择不保证与旧图形完全一致，需要保留原图形时由业务提供自己的图标资源。旧 `TDIcons.all` 改为 `TIcons.allIconsMap`，现有同名图标仍可使用例如 `accessibility_filled` 的键，但上述3个缺失图标不能继续按旧键查询，也不要假定两份全集完全一致；旧私有图标数据的 name 属性也不是新 IconData 的属性。不要复制旧 codePoint/fontFamily/fontPackage 来拼装新字体中的图标。
 
 **文字全局开关改为局部配置。** `kTextForceVerticalCenterEnable` 与 `kTextNeedGlobalFontFamily` 已移除。通过 `TTextThemeData`、实例 TextStyle 以及父级布局管理字体和排版，保留系统文字缩放；没有新的全局布尔开关一一替代，也不要裁切段落恢复旧像素补偿。
 
@@ -923,414 +928,18 @@ Widget migratedIndexes() {
 
 不存在替代入口的旧公开 State、Painter、布局适配和静态辅助类，不应通过深层 src 导入恢复。若业务依赖其具体能力，应使用公开 Widget/Theme/Flutter 原语重新组合，或在业务中维护对应实现；这类代码需要人工迁移。
 
-<a id="migration-legacy-types"></a>
-## 附录：按旧类型名称查找
 
-以下覆盖 0.2.7 主入口追踪到的388项自有公开声明，包含公开 mixin 和顶层变量（不包括外部包导出）。它用于查找旧名和定位处置方向，**不是自动替换表**。即使目标同名，构造参数、回调、默认值或行为也可能变化。公开基类的继承成员与业务自行继承/深层导入需额外审查。当前入口还导出 Material；同名的 Flutter 类型不作为旧 TD 自有声明的兼容实现。
+<a id="migration-after-1-0"></a>
+## 1.0.0 之后的升级注意
 
-<details>
-<summary>展开0.2.7旧类型名称对照表（388项）</summary>
-
-| 0.2.7 名称 | 当前入口或处置 | 范围 |
-|---|---|---|
-| `BadgeConfig` | `TBadgeConfig / TBadgeConfig.custom` | 组合徽标配置重组；showBadge 改为是否提供配置，tdBadge 改为自定义 badge；偏移按新 alignment/offset 重验；[具体改法](#migration-component-badge) |
-| `CalendarBuilder` | 旧声明已移除 | 不保留此类型的继承或调用契约；按该组件的公开参数、回调或内容槽改写；[具体改法](#migration-component-calendar) |
-| `CalendarFormat` | 旧声明已移除 | 不保留此类型的继承或调用契约；按该组件的公开参数、回调或内容槽改写；[具体改法](#migration-component-calendar) |
-| `CalendarTrigger` | 旧声明已移除 | 不保留此类型的继承或调用契约；按该组件的公开参数、回调或内容槽改写；[具体改法](#migration-component-calendar) |
-| `CalendarType` | `TCalendarVariant` | 入口重组，见对应组件；不保证参数/行为兼容；[具体改法](#migration-component-calendar) |
-| `CellBuilder` | 旧声明已移除 | 不保留此类型的继承或调用契约；按该组件的公开参数、回调或内容槽改写；[具体改法](#migration-component-cell) |
-| `ChevronPainter` | 旧声明已移除 | 不保留此类型的继承或调用契约；按该组件的公开参数、回调或内容槽改写；[具体改法](#migration-component-table) |
-| `Chinese2Formatter` | 旧声明已移除 | 不保留此类型的继承或调用契约；按该组件的公开参数、回调或内容槽改写；[具体改法](#migration-component-input) |
-| `ContentBuilder` | 旧声明已移除 | 不保留此类型的继承或调用契约；按该组件的公开参数、回调或内容槽改写；[具体改法](#migration-component-checkbox) |
-| `DatePickerCallback` | 旧声明已移除 | 不保留此类型的继承或调用契约；按该组件的公开参数、回调或内容槽改写；[具体改法](#migration-component-date-time-picker) |
-| `DatePickerModel` | `TDateTimePickerValue` | 入口重组，见对应组件；不保证参数/行为兼容；[具体改法](#migration-component-date-time-picker) |
-| `DateSelectType` | `DateSelectType` | 同名或前缀对应，仍需核对参数/默认行为；[具体改法](#migration-component-calendar) |
-| `DateSelectTypeNotifier` | 旧声明已移除 | 不保留此类型的继承或调用契约；按该组件的公开参数、回调或内容槽改写；[具体改法](#migration-component-calendar) |
-| `DateTypeKey` | 旧声明已移除 | 不保留此类型的继承或调用契约；按该组件的公开参数、回调或内容槽改写；[具体改法](#migration-component-date-time-picker) |
-| `DefaultMapFactory` | `DefaultMapFactory` | 同名或前缀对应，仍需核对参数/默认行为；[具体改法](#migration-component-theme) |
-| `DefaultStickyHeaderController` | `DefaultStickyHeaderController` | 同名或前缀对应，仍需核对参数/默认行为；[具体改法](#migration-component-indexes) |
-| `Font` | `Font` | 同名或前缀对应，仍需核对参数/默认行为；[具体改法](#migration-component-theme) |
-| `FontExtensions` | `FontExtensions` | 同名或前缀对应，仍需核对参数/默认行为；[具体改法](#migration-component-theme) |
-| `FontFamily` | `FontFamily` | 同名或前缀对应，仍需核对参数/默认行为；[具体改法](#migration-component-theme) |
-| `FormController` | `TFormController` | 入口重组，见对应组件；不保证参数/行为兼容；[具体改法](#migration-component-form) |
-| `FormItemNotifier` | 旧声明已移除 | 不保留此类型的继承或调用契约；按该组件的公开参数、回调或内容槽改写；[具体改法](#migration-component-form) |
-| `HollowCircle` | 旧声明已移除 | 不保留此类型的继承或调用契约；按该组件的公开参数、回调或内容槽改写；[具体改法](#migration-component-radio) |
-| `IconBuilder` | 旧声明已移除 | 不保留此类型的继承或调用契约；按该组件的公开参数、回调或内容槽改写；[具体改法](#migration-component-checkbox) |
-| `IconTextDirection` | `IconTextDirection` | 同名或前缀对应，仍需核对参数/默认行为；[具体改法](#migration-component-toast) |
-| `ImageWidget` | 旧声明已移除 | 不保留此类型的继承或调用契约；按该组件的公开参数、回调或内容槽改写；[具体改法](#migration-component-image) |
-| `ItemBuilderType` | 旧声明已移除 | 不保留此类型的继承或调用契约；按该组件的公开参数、回调或内容槽改写；[具体改法](#migration-component-picker) |
-| `ItemDistanceCalculator` | 旧声明已移除 | 不保留此类型的继承或调用契约；按该组件的公开参数、回调或内容槽改写；[具体改法](#migration-component-picker) |
-| `LabelBuilder` | 旧声明已移除 | 不保留此类型的继承或调用契约；按该组件的公开参数、回调或内容槽改写；[具体改法](#migration-component-dropdown-menu) |
-| `LeftItemBuilder` | 旧声明已移除 | 不保留此类型的继承或调用契约；按该组件的公开参数、回调或内容槽改写；[具体改法](#migration-component-image-viewer) |
-| `LeftLinePainter` | 旧声明已移除 | 不保留此类型的继承或调用契约；按该组件的公开参数、回调或内容槽改写；[具体改法](#migration-component-cascader) |
-| `LeftLineWidget` | 旧声明已移除 | 不保留此类型的继承或调用契约；按该组件的公开参数、回调或内容槽改写；[具体改法](#migration-component-cascader) |
-| `LinkClick` | 旧声明已移除 | 不保留此类型的继承或调用契约；按该组件的公开参数、回调或内容槽改写；[具体改法](#migration-component-link) |
-| `MessageLink` | 旧声明已移除 | 不保留此类型的继承或调用契约；按该组件的公开参数、回调或内容槽改写；[具体改法](#migration-component-message) |
-| `MessageMarquee` | `TMessageMarquee` | speed/delay 的毫秒数改为 Duration；loop 0/1 改为 repeat false/true；[具体改法](#migration-component-message) |
-| `MessageTheme` | `TMessageStatus` | 入口重组，见对应组件；不保证参数/行为兼容；[具体改法](#migration-component-message) |
-| `MultiCascaderCallback` | 旧声明已移除 | 不保留此类型的继承或调用契约；按该组件的公开参数、回调或内容槽改写；[具体改法](#migration-component-cascader) |
-| `MultiCascaderListModel` | 旧声明已移除 | 不保留此类型的继承或调用契约；按该组件的公开参数、回调或内容槽改写；[具体改法](#migration-component-cascader) |
-| `MultiLinkedPickerModel` | 旧声明已移除 | 不保留此类型的继承或调用契约；按该组件的公开参数、回调或内容槽改写；[具体改法](#migration-component-picker) |
-| `MultiPickerCallback` | 旧声明已移除 | 不保留此类型的继承或调用契约；按该组件的公开参数、回调或内容槽改写；[具体改法](#migration-component-picker) |
-| `OnCellTap` | 旧声明已移除 | 不保留此类型的继承或调用契约；按该组件的公开参数、回调或内容槽改写；[具体改法](#migration-component-table) |
-| `OnCheckBoxGroupChange` | 旧声明已移除 | 不保留此类型的继承或调用契约；按该组件的公开参数、回调或内容槽改写；[具体改法](#migration-component-checkbox) |
-| `OnCheckValueChanged` | 旧声明已移除 | 不保留此类型的继承或调用契约；按该组件的公开参数、回调或内容槽改写；[具体改法](#migration-component-checkbox) |
-| `OnClose` | 旧声明已移除 | 不保留此类型的继承或调用契约；按该组件的公开参数、回调或内容槽改写；[具体改法](#migration-component-image-viewer) |
-| `OnDelete` | 旧声明已移除 | 不保留此类型的继承或调用契约；按该组件的公开参数、回调或内容槽改写；[具体改法](#migration-component-image-viewer) |
-| `OnGroupChange` | 旧声明已移除 | 不保留此类型的继承或调用契约；按该组件的公开参数、回调或内容槽改写；[具体改法](#migration-component-checkbox) |
-| `OnImageTap` | 旧声明已移除 | 不保留此类型的继承或调用契约；按该组件的公开参数、回调或内容槽改写；[具体改法](#migration-component-image-viewer) |
-| `OnIndexChange` | 旧声明已移除 | 不保留此类型的继承或调用契约；按该组件的公开参数、回调或内容槽改写；[具体改法](#migration-component-image-viewer) |
-| `OnLongPress` | 旧声明已移除 | 不保留此类型的继承或调用契约；按该组件的公开参数、回调或内容槽改写；[具体改法](#migration-component-image-viewer) |
-| `OnLongTap` | 旧声明已移除 | 不保留此类型的继承或调用契约；按该组件的公开参数、回调或内容槽改写；[具体改法](#migration-component-popover) |
-| `OnRadioGroupChange` | 旧声明已移除 | 不保留此类型的继承或调用契约；按该组件的公开参数、回调或内容槽改写；[具体改法](#migration-component-radio) |
-| `OnRowSelect` | 旧声明已移除 | 不保留此类型的继承或调用契约；按该组件的公开参数、回调或内容槽改写；[具体改法](#migration-component-table) |
-| `OnScroll` | 旧声明已移除 | 不保留此类型的继承或调用契约；按该组件的公开参数、回调或内容槽改写；[具体改法](#migration-component-table) |
-| `OnSelect` | 旧声明已移除 | 不保留此类型的继承或调用契约；按该组件的公开参数、回调或内容槽改写；[具体改法](#migration-component-table) |
-| `OnSliderThemeDataUpdate` | 旧声明已移除 | 不保留此类型的继承或调用契约；按该组件的公开参数、回调或内容槽改写；[具体改法](#migration-component-slider) |
-| `OnSwitchChanged` | 旧声明已移除 | 不保留此类型的继承或调用契约；按该组件的公开参数、回调或内容槽改写；[具体改法](#migration-component-switch) |
-| `OnTap` | 旧声明已移除 | 不保留此类型的继承或调用契约；按该组件的公开参数、回调或内容槽改写；[具体改法](#migration-component-popover) |
-| `PanelWithDownArrow` | 旧声明已移除 | 不保留此类型的继承或调用契约；按该组件的公开参数、回调或内容槽改写；[具体改法](#migration-component-tab-bar) |
-| `PlacementEnum` | 旧声明已移除 | 不保留此类型的继承或调用契约；按该组件的公开参数、回调或内容槽改写；[具体改法](#migration-component-rate) |
-| `PlatformUtil` | `PlatformUtil` | 同名或前缀对应，仍需核对参数/默认行为；[具体改法](#migration-component-theme) |
-| `PopRoute` | 旧声明已移除 | 不保留此类型的继承或调用契约；按该组件的公开参数、回调或内容槽改写；[具体改法](#migration-component-tab-bar) |
-| `PopUpMenuItem` | 旧声明已移除 | 不保留此类型的继承或调用契约；按该组件的公开参数、回调或内容槽改写；[具体改法](#migration-component-tab-bar) |
-| `PopupClick` | 旧声明已移除 | 不保留此类型的继承或调用契约；按该组件的公开参数、回调或内容槽改写；[具体改法](#migration-component-popup) |
-| `PopupDialog` | 旧声明已移除 | 不保留此类型的继承或调用契约；按该组件的公开参数、回调或内容槽改写；[具体改法](#migration-component-tab-bar) |
-| `PopupDialogState` | 旧声明已移除 | 不保留此类型的继承或调用契约；按该组件的公开参数、回调或内容槽改写；[具体改法](#migration-component-tab-bar) |
-| `Position` | 旧声明已移除 | 不保留此类型的继承或调用契约；按该组件的公开参数、回调或内容槽改写；[具体改法](#migration-component-slider) |
-| `ProgressIndicator` | 旧声明已移除 | 不保留此类型的继承或调用契约；按该组件的公开参数、回调或内容槽改写；[具体改法](#migration-component-progress) |
-| `RadioCorner` | 旧声明已移除 | 不保留此类型的继承或调用契约；按该组件的公开参数、回调或内容槽改写；[具体改法](#migration-component-checkbox) |
-| `RadioCornerIcon` | 旧声明已移除 | 不保留此类型的继承或调用契约；按该组件的公开参数、回调或内容槽改写；[具体改法](#migration-component-checkbox) |
-| `RectClipper` | 旧声明已移除 | 不保留此类型的继承或调用契约；按该组件的公开参数、回调或内容槽改写；[具体改法](#migration-component-popup) |
-| `RightItemBuilder` | 旧声明已移除 | 不保留此类型的继承或调用契约；按该组件的公开参数、回调或内容槽改写；[具体改法](#migration-component-image-viewer) |
-| `RowCheckFunc` | 旧声明已移除 | 不保留此类型的继承或调用契约；按该组件的公开参数、回调或内容槽改写；[具体改法](#migration-component-table) |
-| `ScaleFormatter` | 旧声明已移除 | 不保留此类型的继承或调用契约；按该组件的公开参数、回调或内容槽改写；[具体改法](#migration-component-slider) |
-| `SelectableFunc` | 旧声明已移除 | 不保留此类型的继承或调用契约；按该组件的公开参数、回调或内容槽改写；[具体改法](#migration-component-table) |
-| `SideItemProps` | 旧声明已移除 | 不保留此类型的继承或调用契约；按该组件的公开参数、回调或内容槽改写；[具体改法](#migration-component-side-bar) |
-| `SlideTransitionFrom` | 旧声明已移除 | 不保留此类型的继承或调用契约；按该组件的公开参数、回调或内容槽改写；[具体改法](#migration-component-popup) |
-| `SliderMeasureData` | 旧声明已移除 | 不保留此类型的继承或调用契约；按该组件的公开参数、回调或内容槽改写；[具体改法](#migration-component-slider) |
-| `SliverStickyHeader` | `SliverStickyHeader` | 同名或前缀对应，仍需核对参数/默认行为；[具体改法](#migration-component-indexes) |
-| `SliverStickyHeaderRenderObjectElement` | `SliverStickyHeaderRenderObjectElement` | 同名或前缀对应，仍需核对参数/默认行为；[具体改法](#migration-component-indexes) |
-| `SliverStickyHeaderState` | `SliverStickyHeaderState` | 同名或前缀对应，仍需核对参数/默认行为；[具体改法](#migration-component-indexes) |
-| `SliverStickyHeaderWidgetBuilder` | `SliverStickyHeaderWidgetBuilder` | 同名或前缀对应，仍需核对参数/默认行为；[具体改法](#migration-component-indexes) |
-| `StickyHeaderController` | `StickyHeaderController` | 同名或前缀对应，仍需核对参数/默认行为；[具体改法](#migration-component-indexes) |
-| `SwipeMotion` | 旧声明已移除 | 不保留此类型的继承或调用契约；按该组件的公开参数、回调或内容槽改写；[具体改法](#migration-component-swipe-cell) |
-| `TDActionSheet` | `TActionSheet` | 同名或前缀对应，仍需核对参数/默认行为；[具体改法](#migration-component-action-sheet) |
-| `TDActionSheetAlign` | `TActionSheetAlign` | 同名或前缀对应，仍需核对参数/默认行为；[具体改法](#migration-component-action-sheet) |
-| `TDActionSheetItem` | `TActionSheetItem` | 同名或前缀对应，仍需核对参数/默认行为；[具体改法](#migration-component-action-sheet) |
-| `TDActionSheetItemCallback` | 旧声明已移除 | 不保留此类型的继承或调用契约；按该组件的公开参数、回调或内容槽改写；[具体改法](#migration-component-action-sheet) |
-| `TDActionSheetTheme` | `TActionSheet.showList/showGrid/showGridSections` | 旧列表/宫格/分组意图改由对应打开入口表达；[具体改法](#migration-component-action-sheet) |
-| `TDAlertDialog` | `TDialog` | 入口重组，见对应组件；不保证参数/行为兼容；[具体改法](#migration-component-dialog) |
-| `TDAvatar` | `TAvatar` | 同名或前缀对应，仍需核对参数/默认行为；[具体改法](#migration-component-avatar) |
-| `TDAvatarShape` | `TAvatarShape` | 同名或前缀对应，仍需核对参数/默认行为；[具体改法](#migration-component-avatar) |
-| `TDAvatarSize` | `TAvatarSize` | 同名或前缀对应，仍需核对参数/默认行为；[具体改法](#migration-component-avatar) |
-| `TDAvatarType` | 旧声明已移除 | 不保留此类型的继承或调用契约；按该组件的公开参数、回调或内容槽改写；[具体改法](#migration-component-avatar) |
-| `TDBackTop` | `TBackTop` | 同名或前缀对应，仍需核对参数/默认行为；[具体改法](#migration-component-back-top) |
-| `TDBackTopStyle` | 旧声明已移除 | 不保留此类型的继承或调用契约；按该组件的公开参数、回调或内容槽改写；[具体改法](#migration-component-back-top) |
-| `TDBackTopTheme` | 旧声明已移除 | 不保留此类型的继承或调用契约；按该组件的公开参数、回调或内容槽改写；[具体改法](#migration-component-back-top) |
-| `TDBadge` | `TBadge` | 同名或前缀对应，仍需核对参数/默认行为；[具体改法](#migration-component-badge) |
-| `TDBadgeBorder` | 旧声明已移除 | 不保留此类型的继承或调用契约；按该组件的公开参数、回调或内容槽改写；[具体改法](#migration-component-badge) |
-| `TDBadgeSize` | `TBadgeSize` | 同名或前缀对应，仍需核对参数/默认行为；[具体改法](#migration-component-badge) |
-| `TDBadgeType` | `TBadgeVariant` | redPoint → dot；其余形态按 circle/square/bubble/ribbon 等当前枚举重新选择；[具体改法](#migration-component-badge) |
-| `TDBarItemAction` | 旧声明已移除 | 不保留此类型的继承或调用契约；按该组件的公开参数、回调或内容槽改写；[具体改法](#migration-component-navbar) |
-| `TDBaseRangeSliderTrackShape` | 已移除；`TSlider / TRangeSlider` 的公开配置 | 不再公开 Track/Thumb mixin 继承契约；超出现有 Theme/formatter 的绘制需业务实现；[具体改法](#migration-component-slider) |
-| `TDBottomTabBar` | `TTabBar` | 入口重组，见对应组件；不保证参数/行为兼容；[具体改法](#migration-component-tab-bar) |
-| `TDBottomTabBarBasicType` | `TTabBarType` | text/iconText/icon 按需选择；expansionPanel 没有直接替代，不机械改为 doubleLayer；[具体改法](#migration-component-tab-bar) |
-| `TDBottomTabBarComponentType` | `TTabBarItemStyle` | normal/label 按当前条目样式配置；[具体改法](#migration-component-tab-bar) |
-| `TDBottomTabBarIndicatorAnimation` | 旧声明已移除 | 不保留此类型的继承或调用契约；按该组件的公开参数、回调或内容槽改写；[具体改法](#migration-component-tab-bar) |
-| `TDBottomTabBarItemWithBadge` | 旧声明已移除 | 不保留此类型的继承或调用契约；按该组件的公开参数、回调或内容槽改写；[具体改法](#migration-component-tab-bar) |
-| `TDBottomTabBarOutlineType` | `TTabBarStyle` | filled/capsule 按当前导航外形配置；[具体改法](#migration-component-tab-bar) |
-| `TDBottomTabBarPopUpBtnConfig` | 旧声明已移除 | 不保留此类型的继承或调用契约；按该组件的公开参数、回调或内容槽改写；[具体改法](#migration-component-tab-bar) |
-| `TDBottomTabBarPopUpShapeConfig` | 旧声明已移除 | 不保留此类型的继承或调用契约；按该组件的公开参数、回调或内容槽改写；[具体改法](#migration-component-tab-bar) |
-| `TDBottomTabBarTabConfig` | `TTabBarItemConfig` | 入口重组，见对应组件；不保证参数/行为兼容；[具体改法](#migration-component-tab-bar) |
-| `TDBoxShadows` | `TBoxShadows` | 同名或前缀对应，仍需核对参数/默认行为；[具体改法](#migration-component-theme) |
-| `TDButton` | `TButton` | 同名或前缀对应，仍需核对参数/默认行为；[具体改法](#migration-component-button) |
-| `TDButtonEvent` | 旧声明已移除 | 不保留此类型的继承或调用契约；按该组件的公开参数、回调或内容槽改写；[具体改法](#migration-component-button) |
-| `TDButtonIconPosition` | `TButtonIconPosition` | 同名或前缀对应，仍需核对参数/默认行为；[具体改法](#migration-component-button) |
-| `TDButtonShape` | `TButtonShape` | 同名或前缀对应，仍需核对参数/默认行为；[具体改法](#migration-component-button) |
-| `TDButtonSize` | `TButtonSize` | 同名或前缀对应，仍需核对参数/默认行为；[具体改法](#migration-component-button) |
-| `TDButtonStatus` | 旧声明已移除 | 不保留此类型的继承或调用契约；按该组件的公开参数、回调或内容槽改写；[具体改法](#migration-component-button) |
-| `TDButtonStyle` | `ButtonStyle`（Flutter） | 状态属性合并普通/按压/禁用样式；不是旧样式类的兼容别名；[具体改法](#migration-component-button) |
-| `TDButtonTheme` | `TButtonColorPreset` | 入口重组，见对应组件；不保证参数/行为兼容；[具体改法](#migration-component-button) |
-| `TDButtonType` | `TButtonVariant` | 入口重组，见对应组件；不保证参数/行为兼容；[具体改法](#migration-component-button) |
-| `TDCalendar` | `TCalendar` | 同名或前缀对应，仍需核对参数/默认行为；[具体改法](#migration-component-calendar) |
-| `TDCalendarBody` | 旧声明已移除 | 不保留此类型的继承或调用契约；按该组件的公开参数、回调或内容槽改写；[具体改法](#migration-component-calendar) |
-| `TDCalendarCell` | 旧声明已移除 | 不保留此类型的继承或调用契约；按该组件的公开参数、回调或内容槽改写；[具体改法](#migration-component-calendar) |
-| `TDCalendarHeader` | 旧声明已移除 | 不保留此类型的继承或调用契约；按该组件的公开参数、回调或内容槽改写；[具体改法](#migration-component-calendar) |
-| `TDCalendarInherited` | 旧声明已移除 | 不保留此类型的继承或调用契约；按该组件的公开参数、回调或内容槽改写；[具体改法](#migration-component-calendar) |
-| `TDCalendarPopup` | 旧声明已移除 | 不保留此类型的继承或调用契约；按该组件的公开参数、回调或内容槽改写；[具体改法](#migration-component-calendar) |
-| `TDCalendarStyle` | 旧声明已移除 | 不保留此类型的继承或调用契约；按该组件的公开参数、回调或内容槽改写；[具体改法](#migration-component-calendar) |
-| `TDCapsuleRangeSliderThumbShape` | 旧声明已移除 | 不保留此类型的继承或调用契约；按该组件的公开参数、回调或内容槽改写；[具体改法](#migration-component-slider) |
-| `TDCapsuleRangeSliderTickMarkShape` | 旧声明已移除 | 不保留此类型的继承或调用契约；按该组件的公开参数、回调或内容槽改写；[具体改法](#migration-component-slider) |
-| `TDCapsuleRectAdjustment` | 已移除；`TSlider / TRangeSlider` 的公开配置 | 不再公开 Track/Thumb mixin 继承契约；超出现有 Theme/formatter 的绘制需业务实现；[具体改法](#migration-component-slider) |
-| `TDCapsuleRectRangeSliderTrackShape` | 旧声明已移除 | 不保留此类型的继承或调用契约；按该组件的公开参数、回调或内容槽改写；[具体改法](#migration-component-slider) |
-| `TDCapsuleRectSliderTrackShape` | 旧声明已移除 | 不保留此类型的继承或调用契约；按该组件的公开参数、回调或内容槽改写；[具体改法](#migration-component-slider) |
-| `TDCapsuleRectThemeData` | 旧声明已移除 | 不保留此类型的继承或调用契约；按该组件的公开参数、回调或内容槽改写；[具体改法](#migration-component-slider) |
-| `TDCapsuleSliderThumbShape` | 旧声明已移除 | 不保留此类型的继承或调用契约；按该组件的公开参数、回调或内容槽改写；[具体改法](#migration-component-slider) |
-| `TDCapsuleSliderTickMarkShape` | 旧声明已移除 | 不保留此类型的继承或调用契约；按该组件的公开参数、回调或内容槽改写；[具体改法](#migration-component-slider) |
-| `TDCapsuleTrackShape` | 已移除；`TSlider / TRangeSlider` 的公开配置 | 不再公开 Track/Thumb mixin 继承契约；超出现有 Theme/formatter 的绘制需业务实现；[具体改法](#migration-component-slider) |
-| `TDCardStyle` | 旧声明已移除 | 不保留此类型的继承或调用契约；按该组件的公开参数、回调或内容槽改写；[具体改法](#migration-component-input) |
-| `TDCascader` | `TCascader` | 同名或前缀对应，仍需核对参数/默认行为；[具体改法](#migration-component-cascader) |
-| `TDCascaderAction` | 旧声明已移除 | 不保留此类型的继承或调用契约；按该组件的公开参数、回调或内容槽改写；[具体改法](#migration-component-cascader) |
-| `TDCell` | `TCell` | 同名或前缀对应，仍需核对参数/默认行为；[具体改法](#migration-component-cell) |
-| `TDCellAlign` | `TCellAlign` | 同名或前缀对应，仍需核对参数/默认行为；[具体改法](#migration-component-cell) |
-| `TDCellClick` | 旧声明已移除 | 不保留此类型的继承或调用契约；按该组件的公开参数、回调或内容槽改写；[具体改法](#migration-component-cell) |
-| `TDCellGroup` | `TCellGroup` | 同名或前缀对应，仍需核对参数/默认行为；[具体改法](#migration-component-cell) |
-| `TDCellGroupTheme` | 旧声明已移除 | 不保留此类型的继承或调用契约；按该组件的公开参数、回调或内容槽改写；[具体改法](#migration-component-cell) |
-| `TDCellStyle` | 旧声明已移除 | 不保留此类型的继承或调用契约；按该组件的公开参数、回调或内容槽改写；[具体改法](#migration-component-cell) |
-| `TDCheckBoxSize` | `TCheckboxSize` | 入口重组，见对应组件；不保证参数/行为兼容；[具体改法](#migration-component-checkbox) |
-| `TDCheckbox` | `TCheckbox` | 同名或前缀对应，仍需核对参数/默认行为；[具体改法](#migration-component-checkbox) |
-| `TDCheckboxGroup` | `TCheckboxGroup` | 同名或前缀对应，仍需核对参数/默认行为；[具体改法](#migration-component-checkbox) |
-| `TDCheckboxGroupContainer` | 旧声明已移除 | 不保留此类型的继承或调用契约；按该组件的公开参数、回调或内容槽改写；[具体改法](#migration-component-checkbox) |
-| `TDCheckboxGroupContainerState` | 旧声明已移除 | 不保留此类型的继承或调用契约；按该组件的公开参数、回调或内容槽改写；[具体改法](#migration-component-checkbox) |
-| `TDCheckboxGroupController` | 旧声明已移除 | 不保留此类型的继承或调用契约；按该组件的公开参数、回调或内容槽改写；[具体改法](#migration-component-checkbox) |
-| `TDCheckboxGroupInherited` | 旧声明已移除 | 不保留此类型的继承或调用契约；按该组件的公开参数、回调或内容槽改写；[具体改法](#migration-component-checkbox) |
-| `TDCheckboxGroupState` | 旧声明已移除 | 不保留此类型的继承或调用契约；按该组件的公开参数、回调或内容槽改写；[具体改法](#migration-component-checkbox) |
-| `TDCheckboxState` | 旧声明已移除 | 不保留此类型的继承或调用契约；按该组件的公开参数、回调或内容槽改写；[具体改法](#migration-component-checkbox) |
-| `TDCheckboxStyle` | 旧声明已移除 | 不保留此类型的继承或调用契约；按该组件的公开参数、回调或内容槽改写；[具体改法](#migration-component-checkbox) |
-| `TDCircleIndicator` | 旧声明已移除 | 不保留此类型的继承或调用契约；按该组件的公开参数、回调或内容槽改写；[具体改法](#migration-component-loading) |
-| `TDCollapse` | `TCollapse` | 同名或前缀对应，仍需核对参数/默认行为；[具体改法](#migration-component-collapse) |
-| `TDCollapseIconTextBuilder` | 旧声明已移除 | 不保留此类型的继承或调用契约；按该组件的公开参数、回调或内容槽改写；[具体改法](#migration-component-collapse) |
-| `TDCollapsePanel` | `TCollapsePanel` | 同名或前缀对应，仍需核对参数/默认行为；[具体改法](#migration-component-collapse) |
-| `TDCollapseStyle` | 旧声明已移除 | 不保留此类型的继承或调用契约；按该组件的公开参数、回调或内容槽改写；[具体改法](#migration-component-collapse) |
-| `TDColors` | `TColors` | 同名或前缀对应，仍需核对参数/默认行为；[具体改法](#migration-component-theme) |
-| `TDConfirmDialog` | `TConfirmDialog` | 同名或前缀对应，仍需核对参数/默认行为；[具体改法](#migration-component-dialog) |
-| `TDContentDirection` | `TContentDirection` | 同名或前缀对应，仍需核对参数/默认行为；[具体改法](#migration-component-checkbox) |
-| `TDCustomTab` | 旧声明已移除 | 不保留此类型的继承或调用契约；按该组件的公开参数、回调或内容槽改写；[具体改法](#migration-component-cascader) |
-| `TDDatePicker` | `TDateTimePicker` | 入口重组，见对应组件；不保证参数/行为兼容；[具体改法](#migration-component-date-time-picker) |
-| `TDDialogButtonOptions` | `TDialogAction` | 入口重组，见对应组件；不保证参数/行为兼容；[具体改法](#migration-component-dialog) |
-| `TDDialogButtonStyle` | 旧声明已移除 | 不保留此类型的继承或调用契约；按该组件的公开参数、回调或内容槽改写；[具体改法](#migration-component-dialog) |
-| `TDDialogImagePosition` | 旧声明已移除 | 不保留此类型的继承或调用契约；按该组件的公开参数、回调或内容槽改写；[具体改法](#migration-component-dialog) |
-| `TDDivider` | `TDivider` | 同名或前缀对应，仍需核对参数/默认行为；[具体改法](#migration-component-divider) |
-| `TDDrawer` | `TDrawer` | 同名或前缀对应，仍需核对参数/默认行为；[具体改法](#migration-component-drawer) |
-| `TDDrawerItem` | `TDrawerItem` | 同名或前缀对应，仍需核对参数/默认行为；[具体改法](#migration-component-drawer) |
-| `TDDrawerItemClickCallback` | `TDrawerItemClickCallback` | 同名或前缀对应，仍需核对参数/默认行为；[具体改法](#migration-component-drawer) |
-| `TDDrawerPlacement` | `TDrawerPlacement` | 同名或前缀对应，仍需核对参数/默认行为；[具体改法](#migration-component-drawer) |
-| `TDDrawerWidget` | `TDrawer` | 入口重组，见对应组件；不保证参数/行为兼容；[具体改法](#migration-component-drawer) |
-| `TDDropdownItem` | `TDropdownMenuItem` | 入口重组，见对应组件；不保证参数/行为兼容；[具体改法](#migration-component-dropdown-menu) |
-| `TDDropdownItemBuilder` | 旧声明已移除 | 不保留此类型的继承或调用契约；按该组件的公开参数、回调或内容槽改写；[具体改法](#migration-component-dropdown-menu) |
-| `TDDropdownItemContentBuilder` | 旧声明已移除 | 不保留此类型的继承或调用契约；按该组件的公开参数、回调或内容槽改写；[具体改法](#migration-component-dropdown-menu) |
-| `TDDropdownItemController` | 旧声明已移除 | 不保留此类型的继承或调用契约；按该组件的公开参数、回调或内容槽改写；[具体改法](#migration-component-dropdown-menu) |
-| `TDDropdownItemOption` | `TDropdownMenuOption` | 入口重组，见对应组件；不保证参数/行为兼容；[具体改法](#migration-component-dropdown-menu) |
-| `TDDropdownItemOptionsCallback` | 旧声明已移除 | 不保留此类型的继承或调用契约；按该组件的公开参数、回调或内容槽改写；[具体改法](#migration-component-dropdown-menu) |
-| `TDDropdownMenu` | `TDropdownMenu` | 同名或前缀对应，仍需核对参数/默认行为；[具体改法](#migration-component-dropdown-menu) |
-| `TDDropdownMenuDirection` | 旧声明已移除 | 不保留此类型的继承或调用契约；按该组件的公开参数、回调或内容槽改写；[具体改法](#migration-component-dropdown-menu) |
-| `TDEmpty` | `TEmpty` | 同名或前缀对应，仍需核对参数/默认行为；[具体改法](#migration-component-empty) |
-| `TDEmptyType` | 旧声明已移除 | 不保留此类型的继承或调用契约；按该组件的公开参数、回调或内容槽改写；[具体改法](#migration-component-empty) |
-| `TDExtraThemeData` | `TExtraThemeData` | 同名或前缀对应，仍需核对参数/默认行为；[具体改法](#migration-component-theme) |
-| `TDFab` | `TFab` | 同名或前缀对应，仍需核对参数/默认行为；[具体改法](#migration-component-fab) |
-| `TDFabShape` | 旧声明已移除 | 不保留此类型的继承或调用契约；按该组件的公开参数、回调或内容槽改写；[具体改法](#migration-component-fab) |
-| `TDFabSize` | 旧声明已移除 | 不保留此类型的继承或调用契约；按该组件的公开参数、回调或内容槽改写；[具体改法](#migration-component-fab) |
-| `TDFabTheme` | 旧声明已移除 | 不保留此类型的继承或调用契约；按该组件的公开参数、回调或内容槽改写；[具体改法](#migration-component-fab) |
-| `TDFontFamilies` | `TFontFamilies` | 同名或前缀对应，仍需核对参数/默认行为；[具体改法](#migration-component-theme) |
-| `TDFontLoader` | `TFontLoader` | 同名或前缀对应，仍需核对参数/默认行为；[具体改法](#migration-component-text) |
-| `TDFontLoaderWidget` | 旧声明已移除 | 不保留此类型的继承或调用契约；按该组件的公开参数、回调或内容槽改写；[具体改法](#migration-component-text) |
-| `TDFonts` | `TFonts` | 同名或前缀对应，仍需核对参数/默认行为；[具体改法](#migration-component-theme) |
-| `TDFooter` | `TFooter` | 同名或前缀对应，仍需核对参数/默认行为；[具体改法](#migration-component-footer) |
-| `TDFooterType` | 旧声明已移除 | 不保留此类型的继承或调用契约；按该组件的公开参数、回调或内容槽改写；[具体改法](#migration-component-footer) |
-| `TDForm` | `TForm` | 同名或前缀对应，仍需核对参数/默认行为；[具体改法](#migration-component-form) |
-| `TDFormItem` | `TFormItem` | 同名或前缀对应，仍需核对参数/默认行为；[具体改法](#migration-component-form) |
-| `TDFormItemType` | 旧声明已移除 | 不保留此类型的继承或调用契约；按该组件的公开参数、回调或内容槽改写；[具体改法](#migration-component-form) |
-| `TDFormValidation` | 旧声明已移除 | 不保留此类型的继承或调用契约；按该组件的公开参数、回调或内容槽改写；[具体改法](#migration-component-form) |
-| `TDFractionPagination` | 旧声明已移除 | 不保留此类型的继承或调用契约；按该组件的公开参数、回调或内容槽改写；[具体改法](#migration-component-swiper) |
-| `TDIconLabel` | 旧声明已移除 | 不保留此类型的继承或调用契约；按该组件的公开参数、回调或内容槽改写；[具体改法](#migration-component-progress) |
-| `TDIcons` | `TIcons` | 入口重组，见对应组件；不保证参数/行为兼容；[具体改法](#migration-component-icon) |
-| `TDImage` | `TImage` | 同名或前缀对应，仍需核对参数/默认行为；[具体改法](#migration-component-image) |
-| `TDImageDialog` | `TDialog` + 图片 Widget | 图片业务弹窗保留标题、内容和操作；不是全屏 TImageViewer；[具体改法](#migration-component-dialog) |
-| `TDImageType` | `TImage.shape` + `fit` | 形状和图片适配拆成两个维度；部分旧 Image 透传能力需使用 Flutter Image；[具体改法](#migration-component-image) |
-| `TDImageViewer` | `TImageViewer` | 同名或前缀对应，仍需核对参数/默认行为；[具体改法](#migration-component-image-viewer) |
-| `TDImageViewerWidget` | `TImageViewer` | 入口重组，见对应组件；不保证参数/行为兼容；[具体改法](#migration-component-image-viewer) |
-| `TDIndexes` | `TIndexes` | 同名或前缀对应，仍需核对参数/默认行为；[具体改法](#migration-component-indexes) |
-| `TDIndexesAnchor` | `TIndexesAnchor` | 同名或前缀对应，仍需核对参数/默认行为；[具体改法](#migration-component-indexes) |
-| `TDIndexesList` | `TIndexesList` | 同名或前缀对应，仍需核对参数/默认行为；[具体改法](#migration-component-indexes) |
-| `TDInput` | `TInput` | 同名或前缀对应，仍需核对参数/默认行为；[具体改法](#migration-component-input) |
-| `TDInputDialog` | `TDialog` | 入口重组，见对应组件；不保证参数/行为兼容；[具体改法](#migration-component-dialog) |
-| `TDInputSize` | 旧声明已移除 | 不保留此类型的继承或调用契约；按该组件的公开参数、回调或内容槽改写；[具体改法](#migration-component-input) |
-| `TDInputSpacer` | 旧声明已移除 | 不保留此类型的继承或调用契约；按该组件的公开参数、回调或内容槽改写；[具体改法](#migration-component-input) |
-| `TDInputType` | 旧声明已移除 | 不保留此类型的继承或调用契约；按该组件的公开参数、回调或内容槽改写；[具体改法](#migration-component-input) |
-| `TDInputView` | 旧声明已移除 | 不保留此类型的继承或调用契约；按该组件的公开参数、回调或内容槽改写；[具体改法](#migration-component-input) |
-| `TDItemWidget` | 旧声明已移除 | 不保留此类型的继承或调用契约；按该组件的公开参数、回调或内容槽改写；[具体改法](#migration-component-picker) |
-| `TDLabelWidget` | 旧声明已移除 | 不保留此类型的继承或调用契约；按该组件的公开参数、回调或内容槽改写；[具体改法](#migration-component-progress) |
-| `TDLink` | `TLink` | 同名或前缀对应，仍需核对参数/默认行为；[具体改法](#migration-component-link) |
-| `TDLinkConfiguration` | 旧声明已移除 | 不保留此类型的继承或调用契约；按该组件的公开参数、回调或内容槽改写；[具体改法](#migration-component-link) |
-| `TDLinkSize` | `TLinkSize` | 同名或前缀对应，仍需核对参数/默认行为；[具体改法](#migration-component-link) |
-| `TDLinkState` | 旧声明已移除 | 不保留此类型的继承或调用契约；按该组件的公开参数、回调或内容槽改写；[具体改法](#migration-component-link) |
-| `TDLinkStyle` | 旧声明已移除 | 不保留此类型的继承或调用契约；按该组件的公开参数、回调或内容槽改写；[具体改法](#migration-component-link) |
-| `TDLinkType` | `TLink.underline/prefixIcon/suffixIcon` | 旧枚举表达结构，不对应配色选择器；按是否加下划线、前后图标分别组合；[具体改法](#migration-component-link) |
-| `TDLoading` | `TLoading` | 同名或前缀对应，仍需核对参数/默认行为；[具体改法](#migration-component-loading) |
-| `TDLoadingController` | `TLoadingController` | 同名或前缀对应，仍需核对参数/默认行为；[具体改法](#migration-component-loading) |
-| `TDLoadingIcon` | `TLoadingIcon` | 同名或前缀对应，仍需核对参数/默认行为；[具体改法](#migration-component-loading) |
-| `TDLoadingSize` | `TLoading.size` | 枚举改为逻辑像素数值，按当前规格验收；不承诺旧枚举尺寸完全一致；[具体改法](#migration-component-loading) |
-| `TDMap` | `TMap` | 同名或前缀对应，仍需核对参数/默认行为；[具体改法](#migration-component-theme) |
-| `TDMessage` | `TMessage` | 同名或前缀对应，仍需核对参数/默认行为；[具体改法](#migration-component-message) |
-| `TDMultiCascader` | `TCascader` | 多级单路径回调从逐层模型转为value路径；不再自动关闭，排序和Action/Tab扩展由业务组合；[具体改法](#migration-component-cascader) |
-| `TDMultiLinkedPicker` | `TPicker` | 入口重组，见对应组件；不保证参数/行为兼容；[具体改法](#migration-component-picker) |
-| `TDMultiPicker` | `TPicker` | 入口重组，见对应组件；不保证参数/行为兼容；[具体改法](#migration-component-picker) |
-| `TDNavBar` | `TNavBar` | 同名或前缀对应，仍需核对参数/默认行为；[具体改法](#migration-component-navbar) |
-| `TDNavBarItem` | `TNavBarItem` | 同名或前缀对应，仍需核对参数/默认行为；[具体改法](#migration-component-navbar) |
-| `TDNavBarItemBorder` | 旧声明已移除 | 不保留此类型的继承或调用契约；按该组件的公开参数、回调或内容槽改写；[具体改法](#migration-component-navbar) |
-| `TDNoOverlayShape` | 旧声明已移除 | 不保留此类型的继承或调用契约；按该组件的公开参数、回调或内容槽改写；[具体改法](#migration-component-slider) |
-| `TDNoneIndicator` | 旧声明已移除 | 不保留此类型的继承或调用契约；按该组件的公开参数、回调或内容槽改写；[具体改法](#migration-component-tabs) |
-| `TDNoticeBar` | `TNoticeBar` | 同名或前缀对应，仍需核对参数/默认行为；[具体改法](#migration-component-notice-bar) |
-| `TDNoticeBarStyle` | 旧声明已移除 | 不保留此类型的继承或调用契约；按该组件的公开参数、回调或内容槽改写；[具体改法](#migration-component-notice-bar) |
-| `TDNoticeBarTheme` | `TNoticeBarStatus` | 入口重组，见对应组件；不保证参数/行为兼容；[具体改法](#migration-component-notice-bar) |
-| `TDNoticeBarType` | 旧声明已移除 | 不保留此类型的继承或调用契约；按该组件的公开参数、回调或内容槽改写；[具体改法](#migration-component-notice-bar) |
-| `TDPageTransformer` | 旧声明已移除 | 不保留此类型的继承或调用契约；按该组件的公开参数、回调或内容槽改写；[具体改法](#migration-component-swiper) |
-| `TDPicker` | `TPicker` | 同名或前缀对应，仍需核对参数/默认行为；[具体改法](#migration-component-picker) |
-| `TDPopover` | `TPopover` | 同名或前缀对应，仍需核对参数/默认行为；[具体改法](#migration-component-popover) |
-| `TDPopoverPlacement` | `TPopoverPlacement` | 同名或前缀对应，仍需核对参数/默认行为；[具体改法](#migration-component-popover) |
-| `TDPopoverTheme` | 旧声明已移除 | 不保留此类型的继承或调用契约；按该组件的公开参数、回调或内容槽改写；[具体改法](#migration-component-popover) |
-| `TDPopoverWidget` | 旧声明已移除 | 不保留此类型的继承或调用契约；按该组件的公开参数、回调或内容槽改写；[具体改法](#migration-component-popover) |
-| `TDPopupBasePanel` | 旧声明已移除 | 不保留此类型的继承或调用契约；按该组件的公开参数、回调或内容槽改写；[具体改法](#migration-component-popup) |
-| `TDPopupBottomConfirmPanel` | `TPickerPopup` | 入口重组，见对应组件；不保证参数/行为兼容；[具体改法](#migration-component-popup) |
-| `TDPopupBottomDisplayPanel` | `TPopupOptions` | 入口重组，见对应组件；不保证参数/行为兼容；[具体改法](#migration-component-popup) |
-| `TDPopupCenterPanel` | `TPopupOptions` | 入口重组，见对应组件；不保证参数/行为兼容；[具体改法](#migration-component-popup) |
-| `TDProgress` | `TProgress` | 同名或前缀对应，仍需核对参数/默认行为；[具体改法](#migration-component-progress) |
-| `TDProgressLabelPosition` | 旧声明已移除 | 不保留此类型的继承或调用契约；按该组件的公开参数、回调或内容槽改写；[具体改法](#migration-component-progress) |
-| `TDProgressStatus` | `TProgressStatus` | 同名或前缀对应，仍需核对参数/默认行为；[具体改法](#migration-component-progress) |
-| `TDProgressType` | `TProgressVariant` | 入口重组，见对应组件；不保证参数/行为兼容；[具体改法](#migration-component-progress) |
-| `TDRadio` | `TRadio` | 同名或前缀对应，仍需核对参数/默认行为；[具体改法](#migration-component-radio) |
-| `TDRadioGroup` | `TRadioGroup` | 同名或前缀对应，仍需核对参数/默认行为；[具体改法](#migration-component-radio) |
-| `TDRadioGroupState` | 旧声明已移除 | 不保留此类型的继承或调用契约；按该组件的公开参数、回调或内容槽改写；[具体改法](#migration-component-radio) |
-| `TDRadioState` | 旧声明已移除 | 不保留此类型的继承或调用契约；按该组件的公开参数、回调或内容槽改写；[具体改法](#migration-component-radio) |
-| `TDRadioStyle` | 旧声明已移除 | 不保留此类型的继承或调用契约；按该组件的公开参数、回调或内容槽改写；[具体改法](#migration-component-radio) |
-| `TDRadius` | `TRadius` | 同名或前缀对应，仍需核对参数/默认行为；[具体改法](#migration-component-theme) |
-| `TDRangeSlider` | `TRangeSlider` | 同名或前缀对应，仍需核对参数/默认行为；[具体改法](#migration-component-slider) |
-| `TDRate` | `TRate` | 同名或前缀对应，仍需核对参数/默认行为；[具体改法](#migration-component-rate) |
-| `TDRefreshHeader` | `TPullDownRefresh` | 入口重组，见对应组件；不保证参数/行为兼容；[具体改法](#migration-component-pull-down-refresh) |
-| `TDResourceDelegate` | `TResourceDelegate` | 同名或前缀对应，仍需核对参数/默认行为；[具体改法](#migration-component-theme) |
-| `TDResourceManager` | `TResourceManager` | 同名或前缀对应，仍需核对参数/默认行为；[具体改法](#migration-component-theme) |
-| `TDResult` | `TResult` | 同名或前缀对应，仍需核对参数/默认行为；[具体改法](#migration-component-result) |
-| `TDResultTheme` | `TResultStatus` | defaultTheme → info；success/warning/error 按对应状态迁移；[具体改法](#migration-component-result) |
-| `TDRoundRangeSliderThumbShape` | 旧声明已移除 | 不保留此类型的继承或调用契约；按该组件的公开参数、回调或内容槽改写；[具体改法](#migration-component-slider) |
-| `TDRoundRangeSliderTickMarkShape` | 旧声明已移除 | 不保留此类型的继承或调用契约；按该组件的公开参数、回调或内容槽改写；[具体改法](#migration-component-slider) |
-| `TDRoundSliderThumbShape` | 旧声明已移除 | 不保留此类型的继承或调用契约；按该组件的公开参数、回调或内容槽改写；[具体改法](#migration-component-slider) |
-| `TDRoundSliderTickMarkShape` | 旧声明已移除 | 不保留此类型的继承或调用契约；按该组件的公开参数、回调或内容槽改写；[具体改法](#migration-component-slider) |
-| `TDRoundedRectRangeSliderTrackShape` | 旧声明已移除 | 不保留此类型的继承或调用契约；按该组件的公开参数、回调或内容槽改写；[具体改法](#migration-component-slider) |
-| `TDRoundedRectSliderTrackShape` | 旧声明已移除 | 不保留此类型的继承或调用契约；按该组件的公开参数、回调或内容槽改写；[具体改法](#migration-component-slider) |
-| `TDSearchAlignment` | `TSearchBarAlignment` | 实例 textAlignment 配置，不作为旧样式对象复用；[具体改法](#migration-component-search) |
-| `TDSearchBar` | `TSearchBar` | 同名或前缀对应，仍需核对参数/默认行为；[具体改法](#migration-component-search) |
-| `TDSearchBarCallBack` | 旧声明已移除 | 不保留此类型的继承或调用契约；按该组件的公开参数、回调或内容槽改写；[具体改法](#migration-component-search) |
-| `TDSearchBarClearEvent` | 旧声明已移除 | 不保留此类型的继承或调用契约；按该组件的公开参数、回调或内容槽改写；[具体改法](#migration-component-search) |
-| `TDSearchBarEvent` | 旧声明已移除 | 不保留此类型的继承或调用契约；按该组件的公开参数、回调或内容槽改写；[具体改法](#migration-component-search) |
-| `TDSearchStyle` | 旧声明已移除 | 不保留此类型的继承或调用契约；按该组件的公开参数、回调或内容槽改写；[具体改法](#migration-component-search) |
-| `TDSelectOption` | `TTreeSelectOption` | 入口重组，见对应组件；不保证参数/行为兼容；[具体改法](#migration-component-tree-select) |
-| `TDSelectTag` | `TSelectTag` | 同名或前缀对应，仍需核对参数/默认行为；[具体改法](#migration-component-tag) |
-| `TDSideBar` | `TSideBar` | 同名或前缀对应，仍需核对参数/默认行为；[具体改法](#migration-component-side-bar) |
-| `TDSideBarController` | 旧声明已移除 | 不保留此类型的继承或调用契约；按该组件的公开参数、回调或内容槽改写；[具体改法](#migration-component-side-bar) |
-| `TDSideBarItem` | `TSideBarItem` | 同名或前缀对应，仍需核对参数/默认行为；[具体改法](#migration-component-side-bar) |
-| `TDSideBarStyle` | 旧声明已移除 | 不保留此类型的继承或调用契约；按该组件的公开参数、回调或内容槽改写；[具体改法](#migration-component-side-bar) |
-| `TDSkeleton` | `TSkeleton` | 同名或前缀对应，仍需核对参数/默认行为；[具体改法](#migration-component-skeleton) |
-| `TDSkeletonAnimation` | `TSkeletonAnimation` | 同名或前缀对应，仍需核对参数/默认行为；[具体改法](#migration-component-skeleton) |
-| `TDSkeletonRowCol` | 旧声明已移除 | 不保留此类型的继承或调用契约；按该组件的公开参数、回调或内容槽改写；[具体改法](#migration-component-skeleton) |
-| `TDSkeletonRowColObj` | 旧声明已移除 | 不保留此类型的继承或调用契约；按该组件的公开参数、回调或内容槽改写；[具体改法](#migration-component-skeleton) |
-| `TDSkeletonRowColObjStyle` | 旧声明已移除 | 不保留此类型的继承或调用契约；按该组件的公开参数、回调或内容槽改写；[具体改法](#migration-component-skeleton) |
-| `TDSkeletonRowColStyle` | 旧声明已移除 | 不保留此类型的继承或调用契约；按该组件的公开参数、回调或内容槽改写；[具体改法](#migration-component-skeleton) |
-| `TDSkeletonTheme` | `TSkeletonVariant` | 入口重组，见对应组件；不保证参数/行为兼容；[具体改法](#migration-component-skeleton) |
-| `TDSlidePopupRoute` | `TPopup` | 入口重组，见对应组件；不保证参数/行为兼容；[具体改法](#migration-component-popup) |
-| `TDSlider` | `TSlider` | 同名或前缀对应，仍需核对参数/默认行为；[具体改法](#migration-component-slider) |
-| `TDSliderState` | 旧声明已移除 | 不保留此类型的继承或调用契约；按该组件的公开参数、回调或内容槽改写；[具体改法](#migration-component-slider) |
-| `TDSliderThemeData` | `TSliderThemeData` | 同名或前缀对应，仍需核对参数/默认行为；[具体改法](#migration-component-slider) |
-| `TDSpacers` | `TSpacers` | 同名或前缀对应，仍需核对参数/默认行为；[具体改法](#migration-component-theme) |
-| `TDStepper` | `TStepper` | 同名或前缀对应，仍需核对参数/默认行为；[具体改法](#migration-component-stepper) |
-| `TDStepperController` | 旧声明已移除 | 不保留此类型的继承或调用契约；按该组件的公开参数、回调或内容槽改写；[具体改法](#migration-component-stepper) |
-| `TDStepperEventType` | 旧声明已移除 | 不保留此类型的继承或调用契约；按该组件的公开参数、回调或内容槽改写；[具体改法](#migration-component-stepper) |
-| `TDStepperIconButton` | 旧声明已移除 | 不保留此类型的继承或调用契约；按该组件的公开参数、回调或内容槽改写；[具体改法](#migration-component-stepper) |
-| `TDStepperIconType` | 旧声明已移除 | 不保留此类型的继承或调用契约；按该组件的公开参数、回调或内容槽改写；[具体改法](#migration-component-stepper) |
-| `TDStepperOverlimitFunction` | 旧声明已移除 | 不保留此类型的继承或调用契约；按该组件的公开参数、回调或内容槽改写；[具体改法](#migration-component-stepper) |
-| `TDStepperOverlimitType` | 旧声明已移除 | 不保留此类型的继承或调用契约；按该组件的公开参数、回调或内容槽改写；[具体改法](#migration-component-stepper) |
-| `TDStepperSize` | `TStepperSize` | 同名或前缀对应，仍需核对参数/默认行为；[具体改法](#migration-component-stepper) |
-| `TDStepperTheme` | `TStepperVariant` | 入口重组，见对应组件；不保证参数/行为兼容；[具体改法](#migration-component-stepper) |
-| `TDSteps` | `TSteps` | 同名或前缀对应，仍需核对参数/默认行为；[具体改法](#migration-component-steps) |
-| `TDStepsDirection` | `TStepsDirection` | 同名或前缀对应，仍需核对参数/默认行为；[具体改法](#migration-component-steps) |
-| `TDStepsItemData` | `TStepsItemData` | 同名或前缀对应，仍需核对参数/默认行为；[具体改法](#migration-component-steps) |
-| `TDStepsStatus` | `TStepsStatus` | 同名或前缀对应，仍需核对参数/默认行为；[具体改法](#migration-component-steps) |
-| `TDSwipeCell` | `TSwipeCell` | 同名或前缀对应，仍需核对参数/默认行为；[具体改法](#migration-component-swipe-cell) |
-| `TDSwipeCellAction` | `TSwipeCellAction` | 同名或前缀对应，仍需核对参数/默认行为；[具体改法](#migration-component-swipe-cell) |
-| `TDSwipeCellInherited` | 旧声明已移除 | 不保留此类型的继承或调用契约；按该组件的公开参数、回调或内容槽改写；[具体改法](#migration-component-swipe-cell) |
-| `TDSwipeCellPanel` | `TSwipeCellPanel` | 同名或前缀对应，仍需核对参数/默认行为；[具体改法](#migration-component-swipe-cell) |
-| `TDSwipeDirection` | 旧声明已移除 | 不保留此类型的继承或调用契约；按该组件的公开参数、回调或内容槽改写；[具体改法](#migration-component-swipe-cell) |
-| `TDSwiperArrowPagination` | 旧声明已移除 | 不保留此类型的继承或调用契约；按该组件的公开参数、回调或内容槽改写；[具体改法](#migration-component-swiper) |
-| `TDSwiperDotsPagination` | 旧声明已移除 | 不保留此类型的继承或调用契约；按该组件的公开参数、回调或内容槽改写；[具体改法](#migration-component-swiper) |
-| `TDSwiperPagination` | 旧声明已移除 | 不保留此类型的继承或调用契约；按该组件的公开参数、回调或内容槽改写；[具体改法](#migration-component-swiper) |
-| `TDSwitch` | `TSwitch` | 同名或前缀对应，仍需核对参数/默认行为；[具体改法](#migration-component-switch) |
-| `TDSwitchSize` | `TSwitchSize` | 同名或前缀对应，仍需核对参数/默认行为；[具体改法](#migration-component-switch) |
-| `TDSwitchState` | 旧声明已移除 | 不保留此类型的继承或调用契约；按该组件的公开参数、回调或内容槽改写；[具体改法](#migration-component-switch) |
-| `TDSwitchType` | `TSwitchVariant` | 入口重组，见对应组件；不保证参数/行为兼容；[具体改法](#migration-component-switch) |
-| `TDTDResourceBuilder` | 旧声明已移除 | 不保留此类型的继承或调用契约；按该组件的公开参数、回调或内容槽改写；[具体改法](#migration-component-theme) |
-| `TDTab` | `TTab` | 同名或前缀对应，仍需核对参数/默认行为；[具体改法](#migration-component-tabs) |
-| `TDTabBar` | `TTabsBar` | 入口重组，见对应组件；不保证参数/行为兼容；[具体改法](#migration-component-tabs) |
-| `TDTabBarIndicator` | 旧声明已移除 | 不保留此类型的继承或调用契约；按该组件的公开参数、回调或内容槽改写；[具体改法](#migration-component-tabs) |
-| `TDTabBarOutlineType` | 旧声明已移除 | 不保留此类型的继承或调用契约；按该组件的公开参数、回调或内容槽改写；[具体改法](#migration-component-tabs) |
-| `TDTabBarVerticalIndicator` | 旧声明已移除 | 不保留此类型的继承或调用契约；按该组件的公开参数、回调或内容槽改写；[具体改法](#migration-component-tabs) |
-| `TDTabBarView` | `TTabsBarView` | 入口重组，见对应组件；不保证参数/行为兼容；[具体改法](#migration-component-tabs) |
-| `TDTabOutlineType` | 旧声明已移除 | 不保留此类型的继承或调用契约；按该组件的公开参数、回调或内容槽改写；[具体改法](#migration-component-tabs) |
-| `TDTabSize` | `TTabsBarSize` | 入口重组，见对应组件；不保证参数/行为兼容；[具体改法](#migration-component-tabs) |
-| `TDTable` | `TTable` | 同名或前缀对应，仍需核对参数/默认行为；[具体改法](#migration-component-table) |
-| `TDTableCol` | `TTableColumn` | 入口重组，见对应组件；不保证参数/行为兼容；[具体改法](#migration-component-table) |
-| `TDTableColAlign` | `TTableColumnAlign` | 入口重组，见对应组件；不保证参数/行为兼容；[具体改法](#migration-component-table) |
-| `TDTableColFixed` | 旧声明已移除 | 不保留此类型的继承或调用契约；按该组件的公开参数、回调或内容槽改写；[具体改法](#migration-component-table) |
-| `TDTableEmpty` | 旧声明已移除 | 不保留此类型的继承或调用契约；按该组件的公开参数、回调或内容槽改写；[具体改法](#migration-component-table) |
-| `TDTableState` | 旧声明已移除 | 不保留此类型的继承或调用契约；按该组件的公开参数、回调或内容槽改写；[具体改法](#migration-component-table) |
-| `TDTag` | `TTag` | 同名或前缀对应，仍需核对参数/默认行为；[具体改法](#migration-component-tag) |
-| `TDTagShape` | `TTagShape` | 同名或前缀对应，仍需核对参数/默认行为；[具体改法](#migration-component-tag) |
-| `TDTagSize` | `TTagSize` | 同名或前缀对应，仍需核对参数/默认行为；[具体改法](#migration-component-tag) |
-| `TDTagStyle` | 旧声明已移除 | 不保留此类型的继承或调用契约；按该组件的公开参数、回调或内容槽改写；[具体改法](#migration-component-tag) |
-| `TDTagTheme` | `TTagColorPreset` | 入口重组，见对应组件；不保证参数/行为兼容；[具体改法](#migration-component-tag) |
-| `TDTapEvent` | 旧声明已移除 | 不保留此类型的继承或调用契约；按该组件的公开参数、回调或内容槽改写；[具体改法](#migration-component-empty) |
-| `TDTapFunction` | 旧声明已移除 | 不保留此类型的继承或调用契约；按该组件的公开参数、回调或内容槽改写；[具体改法](#migration-component-stepper) |
-| `TDText` | `TText` | 同名或前缀对应，仍需核对参数/默认行为；[具体改法](#migration-component-text) |
-| `TDTextConfiguration` | `TTextThemeData` | 入口重组，见对应组件；不保证参数/行为兼容；[具体改法](#migration-component-text) |
-| `TDTextLabel` | 旧声明已移除 | 不保留此类型的继承或调用契约；按该组件的公开参数、回调或内容槽改写；[具体改法](#migration-component-progress) |
-| `TDTextPaddingConfig` | 旧声明已移除 | 不保留此类型的继承或调用契约；按该组件的公开参数、回调或内容槽改写；[具体改法](#migration-component-text) |
-| `TDTextSpan` | `TTextSpan` | 同名或前缀对应，仍需核对参数/默认行为；[具体改法](#migration-component-text) |
-| `TDTextarea` | `TTextarea` | 同名或前缀对应，仍需核对参数/默认行为；[具体改法](#migration-component-textarea) |
-| `TDTextareaLayout` | `TTextareaLayout` | 同名或前缀对应，仍需核对参数/默认行为；[具体改法](#migration-component-textarea) |
-| `TDTheme` | `TThemeData` | 入口重组，见对应组件；不保证参数/行为兼容；[具体改法](#migration-component-theme) |
-| `TDThemeData` | `TThemeData` | 同名或前缀对应，仍需核对参数/默认行为；[具体改法](#migration-component-theme) |
-| `TDTimeCounter` | `TTimeCounter` | 同名或前缀对应，仍需核对参数/默认行为；[具体改法](#migration-component-time-counter) |
-| `TDTimeCounterController` | `TTimeCounterController` | 同名或前缀对应，仍需核对参数/默认行为；[具体改法](#migration-component-time-counter) |
-| `TDTimeCounterDirection` | `TTimeCounterDirection` | 同名或前缀对应，仍需核对参数/默认行为；[具体改法](#migration-component-time-counter) |
-| `TDTimeCounterSize` | `TTimeCounterSize` | 同名或前缀对应，仍需核对参数/默认行为；[具体改法](#migration-component-time-counter) |
-| `TDTimeCounterStatus` | 旧声明已移除 | 不保留此类型的继承或调用契约；按该组件的公开参数、回调或内容槽改写；[具体改法](#migration-component-time-counter) |
-| `TDTimeCounterStyle` | `TTimeCounterThemeData` + `content` | 不等价于 TTimeCounterVariant；仅现有颜色/圆角可用 Theme，任意块布局由 content 实现；[具体改法](#migration-component-time-counter) |
-| `TDTimeCounterTheme` | `TTimeCounterVariant` | 入口重组，见对应组件；不保证参数/行为兼容；[具体改法](#migration-component-time-counter) |
-| `TDToast` | `TToast` | 同名或前缀对应，仍需核对参数/默认行为；[具体改法](#migration-component-toast) |
-| `TDToastConfig` | 旧声明已移除 | 不保留此类型的继承或调用契约；按该组件的公开参数、回调或内容槽改写；[具体改法](#migration-component-toast) |
-| `TDTreeSelect` | `TTreeSelect` | 同名或前缀对应，仍需核对参数/默认行为；[具体改法](#migration-component-tree-select) |
-| `TDTreeSelectChangeEvent` | 旧声明已移除 | 不保留此类型的继承或调用契约；按该组件的公开参数、回调或内容槽改写；[具体改法](#migration-component-tree-select) |
-| `TDTreeSelectStyle` | 旧声明已移除 | 不保留此类型的继承或调用契约；按该组件的公开参数、回调或内容槽改写；[具体改法](#migration-component-tree-select) |
-| `TDUpload` | `TUpload` | 同名或前缀对应，仍需核对参数/默认行为；[具体改法](#migration-component-upload) |
-| `TDUploadBoxType` | 旧声明已移除 | 不保留此类型的继承或调用契约；按该组件的公开参数、回调或内容槽改写；[具体改法](#migration-component-upload) |
-| `TDUploadClickEvent` | 旧声明已移除 | 不保留此类型的继承或调用契约；按该组件的公开参数、回调或内容槽改写；[具体改法](#migration-component-upload) |
-| `TDUploadErrorEvent` | 旧声明已移除 | 不保留此类型的继承或调用契约；按该组件的公开参数、回调或内容槽改写；[具体改法](#migration-component-upload) |
-| `TDUploadFile` | `TUploadFile` | 同名或前缀对应，仍需核对参数/默认行为；[具体改法](#migration-component-upload) |
-| `TDUploadFileStatus` | `TUploadFileStatus` | 同名或前缀对应，仍需核对参数/默认行为；[具体改法](#migration-component-upload) |
-| `TDUploadMediaType` | `TUploadMediaType` | 同名或前缀对应，仍需核对参数/默认行为；[具体改法](#migration-component-upload) |
-| `TDUploadType` | 旧声明已移除 | 不保留此类型的继承或调用契约；按该组件的公开参数、回调或内容槽改写；[具体改法](#migration-component-upload) |
-| `TDUploadValidatorError` | 旧声明已移除 | 不保留此类型的继承或调用契约；按该组件的公开参数、回调或内容槽改写；[具体改法](#migration-component-upload) |
-| `TDUploadValidatorEvent` | 旧声明已移除 | 不保留此类型的继承或调用契约；按该组件的公开参数、回调或内容槽改写；[具体改法](#migration-component-upload) |
-| `TDUploadValueChangedEvent` | 旧声明已移除 | 不保留此类型的继承或调用契约；按该组件的公开参数、回调或内容槽改写；[具体改法](#migration-component-upload) |
-| `TDate` | 旧声明已移除 | 不保留此类型的继承或调用契约；按该组件的公开参数、回调或内容槽改写；[具体改法](#migration-component-calendar) |
-| `TGIconHeaderWidget` | 旧声明已移除 | 不保留此类型的继承或调用契约；按该组件的公开参数、回调或内容槽改写；[具体改法](#migration-component-pull-down-refresh) |
-| `TGIconHeaderWidgetState` | 旧声明已移除 | 不保留此类型的继承或调用契约；按该组件的公开参数、回调或内容槽改写；[具体改法](#migration-component-pull-down-refresh) |
-| `TapCallback` | 旧声明已移除 | 不保留此类型的继承或调用契约；按该组件的公开参数、回调或内容槽改写；[具体改法](#migration-component-cascader) |
-| `TextAlignment` | `TDividerAlign` | 通过 align 配置；方向另由 layout 决定；[具体改法](#migration-component-divider) |
-| `TrapezoidPath` | 旧声明已移除 | 不保留此类型的继承或调用契约；按该组件的公开参数、回调或内容槽改写；[具体改法](#migration-component-badge) |
-| `horizontalChild` | 旧声明已移除 | 不保留此类型的继承或调用契约；按该组件的公开参数、回调或内容槽改写；[具体改法](#migration-component-radio) |
-| `kTextForceVerticalCenterEnable` | 已移除；局部布局和文字样式 | 无新的全局强制居中开关，不能按旧像素补偿强制裁切段落；[具体改法](#migration-component-text) |
-| `kTextNeedGlobalFontFamily` | 已移除；`TTextThemeData` / `TextStyle` | 字体通过局部主题或实例style配置，在线字体由业务预加载；[具体改法](#migration-component-text) |
-| `slideTransitionFromToAlignment` | 旧声明已移除 | 不保留此类型的继承或调用契约；按该组件的公开参数、回调或内容槽改写；[具体改法](#migration-component-popup) |
-
-</details>
+以下为 1.0.0 发布后开发分支的调整。仅在目标版本包含这些变化时适用，生效版本以正式更新日志为准。
 
 ### 已有文字槽遗漏修复
 
 Avatar、Calendar 副标题、Collapse、Divider、Link、Progress、Table 及内部操作文字槽为 TText 补齐既有组件默认值；Drawer 标题继续保留已有 TD 段落设置。未设置样式的 TText 外观可能随组件字体或状态色修正；显式字段及内容内部更近的主题仍优先。原生 Text 的段落 reset/merge 边界不改变。
 
-Popover 的测量修复不新增组合内容默认样式，也不改变 TText 全局隔离。自定义文字槽统一由独立 #1184 交付，与 #1182 的既有漏接修复分开；本轮均按 patch 策略发布。
-
-### 自定义文字槽默认值统一（patch）
+<a id="自定义文字槽默认值统一（patch）"></a>
+### 自定义文字槽默认值统一
 
 Popover 内容、Drawer 菜单 content、Toast customWidget、Picker itemBuilder、Steps customTitle/customContent、TabBar 弹出菜单 itemWidget 开始接入所属组件的默认字体和状态色。Row、Padding、Builder 不会切断文字槽样式。TText 全局仍与外部 Material 默认文字隔离，不增加开关或配置。
 
@@ -1341,8 +950,415 @@ Popover 内容、Drawer 菜单 content、Toast customWidget、Picker itemBuilder
 - Steps 自定义标题/说明随方向、状态采用内置默认值，需检查字号、状态色、粗体和换行。
 - TabBar 自定义菜单默认文字从正文样式调整为菜单样式，自动行高按真实内容适配；显式 popUpItemHeight 保持原约束。Column/Expanded 等依赖确定高度的内容继续显式给定该现有高度配置。
 
-本轮与 Button/NavBar 的默认文字槽调整采用同一 patch 发布策略，但仍包含默认行为变化，升级 1.0.x 时也应复核上述自定义内容，不能理解为无需页面验收。
+升级时检查明暗主题、字体缩放、长内容和背景对比度，并留意换行、省略、弹层尺寸与点击范围。要保留旧外观，应明确设置所需文字字段；仅设置颜色不能保留旧字号或字重。原生 Text 的段落语义不变，不向自定义内容强加内置标签的 maxLines/overflow。
 
-无样式、空样式、部分样式以及依赖外层通用文字主题的内容都可能变化；部分原生 Text 也会接受新的字体默认值。字号、字重、行高、字距和颜色变化可能进一步影响换行、省略、弹层尺寸与点击范围，自带背景的 Popover/Toast 内容应单独确认对比度。要保留旧外观，在文字实例或内容内部局部主题中明确所需字段；仅指定颜色不能保留旧字号或字重。
+### Popup 配置与关闭生命周期
 
-原生 Text 的段落参数保持既有语义，不将组件内置标签的 maxLines/overflow 强加给自定义子树。两张 Popover 自定义菜单明暗 Golden 差异已经确认，并按授权更新基线；其他基线不变。基线更新记录的是预期默认样式变化，不表示变化消失、旧外观兼容或完整业务页面已验证。
+开发分支中面向 1.0.1 的 Popup 调整涉及蒙层配置继承与关闭后的资源保留。使用过旧配置的 `extends/implements`、mock 或依赖关闭即销毁的业务，需要单独核对 [Popup API 与升级说明](https://tdesign.tencent.com/flutter/components/popup?tab=api)，并验证关闭、重新打开和页面卸载。该版本说明不表示 1.0.1 已发布。
+
+[返回组件导航](#migration-components)
+
+<a id="migration-legacy-types" data-expand-details="migration-legacy-types-table"></a>
+## 附录：按旧类型名称查找
+
+对照表保留 0.2.7 主入口的 388 项自有公开声明（含 mixin 和顶层变量，不含外部包导出）。展开后可用浏览器或编辑器查找旧名称。
+
+- **同名或改名**：仍需核对构造参数、回调与默认行为；名称对应不等于直接替换。
+- **旧声明已移除**：改用对应组件的公开参数、回调、内容槽或业务组合；不保留旧继承与调用契约。
+- **业务继承与深层导入**：需单独检查；Flutter Material 的同名类型不代表旧 TD 类型仍兼容。
+
+<details id="migration-legacy-types-table">
+<summary>展开0.2.7旧类型名称对照表（388项）</summary>
+
+| 0.2.7 名称 | 当前入口或处置 | 说明与改法 |
+|---|---|---|
+| `BadgeConfig` | `TBadgeConfig / TBadgeConfig.custom` | 组合徽标配置重组；showBadge 改为是否提供配置，tdBadge 改为自定义 badge；偏移按新 alignment/offset 重验；[具体改法](#migration-component-badge) |
+| `CalendarBuilder` | 旧声明已移除 | [具体改法](#migration-component-calendar) |
+| `CalendarFormat` | 旧声明已移除 | [具体改法](#migration-component-calendar) |
+| `CalendarTrigger` | 旧声明已移除 | [具体改法](#migration-component-calendar) |
+| `CalendarType` | `TCalendarVariant` | [具体改法](#migration-component-calendar) |
+| `CellBuilder` | 旧声明已移除 | [具体改法](#migration-component-cell) |
+| `ChevronPainter` | 旧声明已移除 | [具体改法](#migration-component-table) |
+| `Chinese2Formatter` | 旧声明已移除 | [具体改法](#migration-component-input) |
+| `ContentBuilder` | 旧声明已移除 | [具体改法](#migration-component-checkbox) |
+| `DatePickerCallback` | 旧声明已移除 | [具体改法](#migration-component-date-time-picker) |
+| `DatePickerModel` | `TDateTimePickerValue` | [具体改法](#migration-component-date-time-picker) |
+| `DateSelectType` | `DateSelectType` | [具体改法](#migration-component-calendar) |
+| `DateSelectTypeNotifier` | 旧声明已移除 | [具体改法](#migration-component-calendar) |
+| `DateTypeKey` | 旧声明已移除 | [具体改法](#migration-component-date-time-picker) |
+| `DefaultMapFactory` | `DefaultMapFactory` | [具体改法](#migration-component-theme) |
+| `DefaultStickyHeaderController` | `DefaultStickyHeaderController` | [具体改法](#migration-component-indexes) |
+| `Font` | `Font` | [具体改法](#migration-component-theme) |
+| `FontExtensions` | `FontExtensions` | [具体改法](#migration-component-theme) |
+| `FontFamily` | `FontFamily` | [具体改法](#migration-component-theme) |
+| `FormController` | `TFormController` | [具体改法](#migration-component-form) |
+| `FormItemNotifier` | 旧声明已移除 | [具体改法](#migration-component-form) |
+| `HollowCircle` | 旧声明已移除 | [具体改法](#migration-component-radio) |
+| `IconBuilder` | 旧声明已移除 | [具体改法](#migration-component-checkbox) |
+| `IconTextDirection` | `IconTextDirection` | [具体改法](#migration-component-toast) |
+| `ImageWidget` | 旧声明已移除 | [具体改法](#migration-component-image) |
+| `ItemBuilderType` | 旧声明已移除 | [具体改法](#migration-component-picker) |
+| `ItemDistanceCalculator` | 旧声明已移除 | [具体改法](#migration-component-picker) |
+| `LabelBuilder` | 旧声明已移除 | [具体改法](#migration-component-dropdown-menu) |
+| `LeftItemBuilder` | 旧声明已移除 | [具体改法](#migration-component-image-viewer) |
+| `LeftLinePainter` | 旧声明已移除 | [具体改法](#migration-component-cascader) |
+| `LeftLineWidget` | 旧声明已移除 | [具体改法](#migration-component-cascader) |
+| `LinkClick` | 旧声明已移除 | [具体改法](#migration-component-link) |
+| `MessageLink` | 旧声明已移除 | [具体改法](#migration-component-message) |
+| `MessageMarquee` | `TMessageMarquee` | speed/delay 的毫秒数改为 Duration；loop 0/1 改为 repeat false/true；[具体改法](#migration-component-message) |
+| `MessageTheme` | `TMessageStatus` | [具体改法](#migration-component-message) |
+| `MultiCascaderCallback` | 旧声明已移除 | [具体改法](#migration-component-cascader) |
+| `MultiCascaderListModel` | 旧声明已移除 | [具体改法](#migration-component-cascader) |
+| `MultiLinkedPickerModel` | 旧声明已移除 | [具体改法](#migration-component-picker) |
+| `MultiPickerCallback` | 旧声明已移除 | [具体改法](#migration-component-picker) |
+| `OnCellTap` | 旧声明已移除 | [具体改法](#migration-component-table) |
+| `OnCheckBoxGroupChange` | 旧声明已移除 | [具体改法](#migration-component-checkbox) |
+| `OnCheckValueChanged` | 旧声明已移除 | [具体改法](#migration-component-checkbox) |
+| `OnClose` | 旧声明已移除 | [具体改法](#migration-component-image-viewer) |
+| `OnDelete` | 旧声明已移除 | [具体改法](#migration-component-image-viewer) |
+| `OnGroupChange` | 旧声明已移除 | [具体改法](#migration-component-checkbox) |
+| `OnImageTap` | 旧声明已移除 | [具体改法](#migration-component-image-viewer) |
+| `OnIndexChange` | 旧声明已移除 | [具体改法](#migration-component-image-viewer) |
+| `OnLongPress` | 旧声明已移除 | [具体改法](#migration-component-image-viewer) |
+| `OnLongTap` | 旧声明已移除 | [具体改法](#migration-component-popover) |
+| `OnRadioGroupChange` | 旧声明已移除 | [具体改法](#migration-component-radio) |
+| `OnRowSelect` | 旧声明已移除 | [具体改法](#migration-component-table) |
+| `OnScroll` | 旧声明已移除 | [具体改法](#migration-component-table) |
+| `OnSelect` | 旧声明已移除 | [具体改法](#migration-component-table) |
+| `OnSliderThemeDataUpdate` | 旧声明已移除 | [具体改法](#migration-component-slider) |
+| `OnSwitchChanged` | 旧声明已移除 | [具体改法](#migration-component-switch) |
+| `OnTap` | 旧声明已移除 | [具体改法](#migration-component-popover) |
+| `PanelWithDownArrow` | 旧声明已移除 | [具体改法](#migration-component-tab-bar) |
+| `PlacementEnum` | 旧声明已移除 | [具体改法](#migration-component-rate) |
+| `PlatformUtil` | `PlatformUtil` | [具体改法](#migration-component-theme) |
+| `PopRoute` | 旧声明已移除 | [具体改法](#migration-component-tab-bar) |
+| `PopUpMenuItem` | 旧声明已移除 | [具体改法](#migration-component-tab-bar) |
+| `PopupClick` | 旧声明已移除 | [具体改法](#migration-component-popup) |
+| `PopupDialog` | 旧声明已移除 | [具体改法](#migration-component-tab-bar) |
+| `PopupDialogState` | 旧声明已移除 | [具体改法](#migration-component-tab-bar) |
+| `Position` | 旧声明已移除 | [具体改法](#migration-component-slider) |
+| `ProgressIndicator` | 旧声明已移除 | [具体改法](#migration-component-progress) |
+| `RadioCorner` | 旧声明已移除 | [具体改法](#migration-component-checkbox) |
+| `RadioCornerIcon` | 旧声明已移除 | [具体改法](#migration-component-checkbox) |
+| `RectClipper` | 旧声明已移除 | [具体改法](#migration-component-popup) |
+| `RightItemBuilder` | 旧声明已移除 | [具体改法](#migration-component-image-viewer) |
+| `RowCheckFunc` | 旧声明已移除 | [具体改法](#migration-component-table) |
+| `ScaleFormatter` | 旧声明已移除 | [具体改法](#migration-component-slider) |
+| `SelectableFunc` | 旧声明已移除 | [具体改法](#migration-component-table) |
+| `SideItemProps` | 旧声明已移除 | [具体改法](#migration-component-side-bar) |
+| `SlideTransitionFrom` | 旧声明已移除 | [具体改法](#migration-component-popup) |
+| `SliderMeasureData` | 旧声明已移除 | [具体改法](#migration-component-slider) |
+| `SliverStickyHeader` | `SliverStickyHeader` | [具体改法](#migration-component-indexes) |
+| `SliverStickyHeaderRenderObjectElement` | `SliverStickyHeaderRenderObjectElement` | [具体改法](#migration-component-indexes) |
+| `SliverStickyHeaderState` | `SliverStickyHeaderState` | [具体改法](#migration-component-indexes) |
+| `SliverStickyHeaderWidgetBuilder` | `SliverStickyHeaderWidgetBuilder` | [具体改法](#migration-component-indexes) |
+| `StickyHeaderController` | `StickyHeaderController` | [具体改法](#migration-component-indexes) |
+| `SwipeMotion` | 旧声明已移除 | [具体改法](#migration-component-swipe-cell) |
+| `TDActionSheet` | `TActionSheet` | [具体改法](#migration-component-action-sheet) |
+| `TDActionSheetAlign` | `TActionSheetAlign` | [具体改法](#migration-component-action-sheet) |
+| `TDActionSheetItem` | `TActionSheetItem` | [具体改法](#migration-component-action-sheet) |
+| `TDActionSheetItemCallback` | 旧声明已移除 | [具体改法](#migration-component-action-sheet) |
+| `TDActionSheetTheme` | `TActionSheet.showList/showGrid/showGridSections` | 旧列表/宫格/分组意图改由对应打开入口表达；[具体改法](#migration-component-action-sheet) |
+| `TDAlertDialog` | `TDialog` | [具体改法](#migration-component-dialog) |
+| `TDAvatar` | `TAvatar` | [具体改法](#migration-component-avatar) |
+| `TDAvatarShape` | `TAvatarShape` | [具体改法](#migration-component-avatar) |
+| `TDAvatarSize` | `TAvatarSize` | [具体改法](#migration-component-avatar) |
+| `TDAvatarType` | 旧声明已移除 | [具体改法](#migration-component-avatar) |
+| `TDBackTop` | `TBackTop` | [具体改法](#migration-component-back-top) |
+| `TDBackTopStyle` | 旧声明已移除 | [具体改法](#migration-component-back-top) |
+| `TDBackTopTheme` | 旧声明已移除 | [具体改法](#migration-component-back-top) |
+| `TDBadge` | `TBadge` | [具体改法](#migration-component-badge) |
+| `TDBadgeBorder` | 旧声明已移除 | [具体改法](#migration-component-badge) |
+| `TDBadgeSize` | `TBadgeSize` | [具体改法](#migration-component-badge) |
+| `TDBadgeType` | `TBadgeVariant` | redPoint → dot；其余形态按 circle/square/bubble/ribbon 等当前枚举重新选择；[具体改法](#migration-component-badge) |
+| `TDBarItemAction` | 旧声明已移除 | [具体改法](#migration-component-navbar) |
+| `TDBaseRangeSliderTrackShape` | 已移除；`TSlider / TRangeSlider` 的公开配置 | 不再公开 Track/Thumb mixin 继承契约；超出现有 Theme/formatter 的绘制需业务实现；[具体改法](#migration-component-slider) |
+| `TDBottomTabBar` | `TTabBar` | [具体改法](#migration-component-tab-bar) |
+| `TDBottomTabBarBasicType` | `TTabBarType` | text/iconText/icon 按需选择；expansionPanel 没有直接替代，不机械改为 doubleLayer；[具体改法](#migration-component-tab-bar) |
+| `TDBottomTabBarComponentType` | `TTabBarItemStyle` | normal/label 按当前条目样式配置；[具体改法](#migration-component-tab-bar) |
+| `TDBottomTabBarIndicatorAnimation` | 旧声明已移除 | [具体改法](#migration-component-tab-bar) |
+| `TDBottomTabBarItemWithBadge` | 旧声明已移除 | [具体改法](#migration-component-tab-bar) |
+| `TDBottomTabBarOutlineType` | `TTabBarStyle` | filled/capsule 按当前导航外形配置；[具体改法](#migration-component-tab-bar) |
+| `TDBottomTabBarPopUpBtnConfig` | 旧声明已移除 | [具体改法](#migration-component-tab-bar) |
+| `TDBottomTabBarPopUpShapeConfig` | 旧声明已移除 | [具体改法](#migration-component-tab-bar) |
+| `TDBottomTabBarTabConfig` | `TTabBarItemConfig` | [具体改法](#migration-component-tab-bar) |
+| `TDBoxShadows` | `TBoxShadows` | [具体改法](#migration-component-theme) |
+| `TDButton` | `TButton` | [具体改法](#migration-component-button) |
+| `TDButtonEvent` | 旧声明已移除 | [具体改法](#migration-component-button) |
+| `TDButtonIconPosition` | `TButtonIconPosition` | [具体改法](#migration-component-button) |
+| `TDButtonShape` | `TButtonShape` | [具体改法](#migration-component-button) |
+| `TDButtonSize` | `TButtonSize` | [具体改法](#migration-component-button) |
+| `TDButtonStatus` | 旧声明已移除 | [具体改法](#migration-component-button) |
+| `TDButtonStyle` | `ButtonStyle`（Flutter） | 状态属性合并普通/按压/禁用样式；不是旧样式类的兼容别名；[具体改法](#migration-component-button) |
+| `TDButtonTheme` | `TButtonColorPreset` | [具体改法](#migration-component-button) |
+| `TDButtonType` | `TButtonVariant` | [具体改法](#migration-component-button) |
+| `TDCalendar` | `TCalendar` | [具体改法](#migration-component-calendar) |
+| `TDCalendarBody` | 旧声明已移除 | [具体改法](#migration-component-calendar) |
+| `TDCalendarCell` | 旧声明已移除 | [具体改法](#migration-component-calendar) |
+| `TDCalendarHeader` | 旧声明已移除 | [具体改法](#migration-component-calendar) |
+| `TDCalendarInherited` | 旧声明已移除 | [具体改法](#migration-component-calendar) |
+| `TDCalendarPopup` | 旧声明已移除 | [具体改法](#migration-component-calendar) |
+| `TDCalendarStyle` | 旧声明已移除 | [具体改法](#migration-component-calendar) |
+| `TDCapsuleRangeSliderThumbShape` | 旧声明已移除 | [具体改法](#migration-component-slider) |
+| `TDCapsuleRangeSliderTickMarkShape` | 旧声明已移除 | [具体改法](#migration-component-slider) |
+| `TDCapsuleRectAdjustment` | 已移除；`TSlider / TRangeSlider` 的公开配置 | 不再公开 Track/Thumb mixin 继承契约；超出现有 Theme/formatter 的绘制需业务实现；[具体改法](#migration-component-slider) |
+| `TDCapsuleRectRangeSliderTrackShape` | 旧声明已移除 | [具体改法](#migration-component-slider) |
+| `TDCapsuleRectSliderTrackShape` | 旧声明已移除 | [具体改法](#migration-component-slider) |
+| `TDCapsuleRectThemeData` | 旧声明已移除 | [具体改法](#migration-component-slider) |
+| `TDCapsuleSliderThumbShape` | 旧声明已移除 | [具体改法](#migration-component-slider) |
+| `TDCapsuleSliderTickMarkShape` | 旧声明已移除 | [具体改法](#migration-component-slider) |
+| `TDCapsuleTrackShape` | 已移除；`TSlider / TRangeSlider` 的公开配置 | 不再公开 Track/Thumb mixin 继承契约；超出现有 Theme/formatter 的绘制需业务实现；[具体改法](#migration-component-slider) |
+| `TDCardStyle` | 旧声明已移除 | [具体改法](#migration-component-input) |
+| `TDCascader` | `TCascader` | [具体改法](#migration-component-cascader) |
+| `TDCascaderAction` | 旧声明已移除 | [具体改法](#migration-component-cascader) |
+| `TDCell` | `TCell` | [具体改法](#migration-component-cell) |
+| `TDCellAlign` | `TCellAlign` | [具体改法](#migration-component-cell) |
+| `TDCellClick` | 旧声明已移除 | [具体改法](#migration-component-cell) |
+| `TDCellGroup` | `TCellGroup` | [具体改法](#migration-component-cell) |
+| `TDCellGroupTheme` | 旧声明已移除 | [具体改法](#migration-component-cell) |
+| `TDCellStyle` | 旧声明已移除 | [具体改法](#migration-component-cell) |
+| `TDCheckBoxSize` | `TCheckboxSize` | [具体改法](#migration-component-checkbox) |
+| `TDCheckbox` | `TCheckbox` | [具体改法](#migration-component-checkbox) |
+| `TDCheckboxGroup` | `TCheckboxGroup` | [具体改法](#migration-component-checkbox) |
+| `TDCheckboxGroupContainer` | 旧声明已移除 | [具体改法](#migration-component-checkbox) |
+| `TDCheckboxGroupContainerState` | 旧声明已移除 | [具体改法](#migration-component-checkbox) |
+| `TDCheckboxGroupController` | 旧声明已移除 | [具体改法](#migration-component-checkbox) |
+| `TDCheckboxGroupInherited` | 旧声明已移除 | [具体改法](#migration-component-checkbox) |
+| `TDCheckboxGroupState` | 旧声明已移除 | [具体改法](#migration-component-checkbox) |
+| `TDCheckboxState` | 旧声明已移除 | [具体改法](#migration-component-checkbox) |
+| `TDCheckboxStyle` | 旧声明已移除 | [具体改法](#migration-component-checkbox) |
+| `TDCircleIndicator` | 旧声明已移除 | [具体改法](#migration-component-loading) |
+| `TDCollapse` | `TCollapse` | [具体改法](#migration-component-collapse) |
+| `TDCollapseIconTextBuilder` | 旧声明已移除 | [具体改法](#migration-component-collapse) |
+| `TDCollapsePanel` | `TCollapsePanel` | [具体改法](#migration-component-collapse) |
+| `TDCollapseStyle` | 旧声明已移除 | [具体改法](#migration-component-collapse) |
+| `TDColors` | `TColors` | [具体改法](#migration-component-theme) |
+| `TDConfirmDialog` | `TConfirmDialog` | [具体改法](#migration-component-dialog) |
+| `TDContentDirection` | `TContentDirection` | [具体改法](#migration-component-checkbox) |
+| `TDCustomTab` | 旧声明已移除 | [具体改法](#migration-component-cascader) |
+| `TDDatePicker` | `TDateTimePicker` | [具体改法](#migration-component-date-time-picker) |
+| `TDDialogButtonOptions` | `TDialogAction` | [具体改法](#migration-component-dialog) |
+| `TDDialogButtonStyle` | 旧声明已移除 | [具体改法](#migration-component-dialog) |
+| `TDDialogImagePosition` | 旧声明已移除 | [具体改法](#migration-component-dialog) |
+| `TDDivider` | `TDivider` | [具体改法](#migration-component-divider) |
+| `TDDrawer` | `TDrawer` | [具体改法](#migration-component-drawer) |
+| `TDDrawerItem` | `TDrawerItem` | [具体改法](#migration-component-drawer) |
+| `TDDrawerItemClickCallback` | `TDrawerItemClickCallback` | [具体改法](#migration-component-drawer) |
+| `TDDrawerPlacement` | `TDrawerPlacement` | [具体改法](#migration-component-drawer) |
+| `TDDrawerWidget` | `TDrawer` | [具体改法](#migration-component-drawer) |
+| `TDDropdownItem` | `TDropdownMenuItem` | [具体改法](#migration-component-dropdown-menu) |
+| `TDDropdownItemBuilder` | 旧声明已移除 | [具体改法](#migration-component-dropdown-menu) |
+| `TDDropdownItemContentBuilder` | 旧声明已移除 | [具体改法](#migration-component-dropdown-menu) |
+| `TDDropdownItemController` | 旧声明已移除 | [具体改法](#migration-component-dropdown-menu) |
+| `TDDropdownItemOption` | `TDropdownMenuOption` | [具体改法](#migration-component-dropdown-menu) |
+| `TDDropdownItemOptionsCallback` | 旧声明已移除 | [具体改法](#migration-component-dropdown-menu) |
+| `TDDropdownMenu` | `TDropdownMenu` | [具体改法](#migration-component-dropdown-menu) |
+| `TDDropdownMenuDirection` | 旧声明已移除 | [具体改法](#migration-component-dropdown-menu) |
+| `TDEmpty` | `TEmpty` | [具体改法](#migration-component-empty) |
+| `TDEmptyType` | 旧声明已移除 | [具体改法](#migration-component-empty) |
+| `TDExtraThemeData` | `TExtraThemeData` | [具体改法](#migration-component-theme) |
+| `TDFab` | `TFab` | [具体改法](#migration-component-fab) |
+| `TDFabShape` | 旧声明已移除 | [具体改法](#migration-component-fab) |
+| `TDFabSize` | 旧声明已移除 | [具体改法](#migration-component-fab) |
+| `TDFabTheme` | 旧声明已移除 | [具体改法](#migration-component-fab) |
+| `TDFontFamilies` | `TFontFamilies` | [具体改法](#migration-component-theme) |
+| `TDFontLoader` | `TFontLoader` | [具体改法](#migration-component-text) |
+| `TDFontLoaderWidget` | 旧声明已移除 | [具体改法](#migration-component-text) |
+| `TDFonts` | `TFonts` | [具体改法](#migration-component-theme) |
+| `TDFooter` | `TFooter` | [具体改法](#migration-component-footer) |
+| `TDFooterType` | 旧声明已移除 | [具体改法](#migration-component-footer) |
+| `TDForm` | `TForm` | [具体改法](#migration-component-form) |
+| `TDFormItem` | `TFormItem` | [具体改法](#migration-component-form) |
+| `TDFormItemType` | 旧声明已移除 | [具体改法](#migration-component-form) |
+| `TDFormValidation` | 旧声明已移除 | [具体改法](#migration-component-form) |
+| `TDFractionPagination` | 旧声明已移除 | [具体改法](#migration-component-swiper) |
+| `TDIconLabel` | 旧声明已移除 | [具体改法](#migration-component-progress) |
+| `TDIcons` | `TIcons` | [具体改法](#migration-component-icon) |
+| `TDImage` | `TImage` | [具体改法](#migration-component-image) |
+| `TDImageDialog` | `TDialog` + 图片 Widget | 图片业务弹窗保留标题、内容和操作；不是全屏 TImageViewer；[具体改法](#migration-component-dialog) |
+| `TDImageType` | `TImage.shape` + `fit` | 形状和图片适配拆成两个维度；部分旧 Image 透传能力需使用 Flutter Image；[具体改法](#migration-component-image) |
+| `TDImageViewer` | `TImageViewer` | [具体改法](#migration-component-image-viewer) |
+| `TDImageViewerWidget` | `TImageViewer` | [具体改法](#migration-component-image-viewer) |
+| `TDIndexes` | `TIndexes` | [具体改法](#migration-component-indexes) |
+| `TDIndexesAnchor` | `TIndexesAnchor` | [具体改法](#migration-component-indexes) |
+| `TDIndexesList` | `TIndexesList` | [具体改法](#migration-component-indexes) |
+| `TDInput` | `TInput` | [具体改法](#migration-component-input) |
+| `TDInputDialog` | `TDialog` | [具体改法](#migration-component-dialog) |
+| `TDInputSize` | 旧声明已移除 | [具体改法](#migration-component-input) |
+| `TDInputSpacer` | 旧声明已移除 | [具体改法](#migration-component-input) |
+| `TDInputType` | 旧声明已移除 | [具体改法](#migration-component-input) |
+| `TDInputView` | 旧声明已移除 | [具体改法](#migration-component-input) |
+| `TDItemWidget` | 旧声明已移除 | [具体改法](#migration-component-picker) |
+| `TDLabelWidget` | 旧声明已移除 | [具体改法](#migration-component-progress) |
+| `TDLink` | `TLink` | [具体改法](#migration-component-link) |
+| `TDLinkConfiguration` | 旧声明已移除 | [具体改法](#migration-component-link) |
+| `TDLinkSize` | `TLinkSize` | [具体改法](#migration-component-link) |
+| `TDLinkState` | 旧声明已移除 | [具体改法](#migration-component-link) |
+| `TDLinkStyle` | 旧声明已移除 | [具体改法](#migration-component-link) |
+| `TDLinkType` | `TLink.underline/prefixIcon/suffixIcon` | 旧枚举表达结构，不对应配色选择器；按是否加下划线、前后图标分别组合；[具体改法](#migration-component-link) |
+| `TDLoading` | `TLoading` | [具体改法](#migration-component-loading) |
+| `TDLoadingController` | `TLoadingController` | [具体改法](#migration-component-loading) |
+| `TDLoadingIcon` | `TLoadingIcon` | [具体改法](#migration-component-loading) |
+| `TDLoadingSize` | `TLoading.size` | 枚举改为逻辑像素数值，按当前规格验收；不承诺旧枚举尺寸完全一致；[具体改法](#migration-component-loading) |
+| `TDMap` | `TMap` | [具体改法](#migration-component-theme) |
+| `TDMessage` | `TMessage` | [具体改法](#migration-component-message) |
+| `TDMultiCascader` | `TCascader` | 多级单路径回调从逐层模型转为value路径；不再自动关闭，排序和Action/Tab扩展由业务组合；[具体改法](#migration-component-cascader) |
+| `TDMultiLinkedPicker` | `TPicker` | [具体改法](#migration-component-picker) |
+| `TDMultiPicker` | `TPicker` | [具体改法](#migration-component-picker) |
+| `TDNavBar` | `TNavBar` | [具体改法](#migration-component-navbar) |
+| `TDNavBarItem` | `TNavBarItem` | [具体改法](#migration-component-navbar) |
+| `TDNavBarItemBorder` | 旧声明已移除 | [具体改法](#migration-component-navbar) |
+| `TDNoOverlayShape` | 旧声明已移除 | [具体改法](#migration-component-slider) |
+| `TDNoneIndicator` | 旧声明已移除 | [具体改法](#migration-component-tabs) |
+| `TDNoticeBar` | `TNoticeBar` | [具体改法](#migration-component-notice-bar) |
+| `TDNoticeBarStyle` | 旧声明已移除 | [具体改法](#migration-component-notice-bar) |
+| `TDNoticeBarTheme` | `TNoticeBarStatus` | [具体改法](#migration-component-notice-bar) |
+| `TDNoticeBarType` | 旧声明已移除 | [具体改法](#migration-component-notice-bar) |
+| `TDPageTransformer` | 旧声明已移除 | [具体改法](#migration-component-swiper) |
+| `TDPicker` | `TPicker` | [具体改法](#migration-component-picker) |
+| `TDPopover` | `TPopover` | [具体改法](#migration-component-popover) |
+| `TDPopoverPlacement` | `TPopoverPlacement` | [具体改法](#migration-component-popover) |
+| `TDPopoverTheme` | 旧声明已移除 | [具体改法](#migration-component-popover) |
+| `TDPopoverWidget` | 旧声明已移除 | [具体改法](#migration-component-popover) |
+| `TDPopupBasePanel` | 旧声明已移除 | [具体改法](#migration-component-popup) |
+| `TDPopupBottomConfirmPanel` | `TPickerPopup` | [具体改法](#migration-component-popup) |
+| `TDPopupBottomDisplayPanel` | `TPopupOptions` | [具体改法](#migration-component-popup) |
+| `TDPopupCenterPanel` | `TPopupOptions` | [具体改法](#migration-component-popup) |
+| `TDProgress` | `TProgress` | [具体改法](#migration-component-progress) |
+| `TDProgressLabelPosition` | 旧声明已移除 | [具体改法](#migration-component-progress) |
+| `TDProgressStatus` | `TProgressStatus` | [具体改法](#migration-component-progress) |
+| `TDProgressType` | `TProgressVariant` | [具体改法](#migration-component-progress) |
+| `TDRadio` | `TRadio` | [具体改法](#migration-component-radio) |
+| `TDRadioGroup` | `TRadioGroup` | [具体改法](#migration-component-radio) |
+| `TDRadioGroupState` | 旧声明已移除 | [具体改法](#migration-component-radio) |
+| `TDRadioState` | 旧声明已移除 | [具体改法](#migration-component-radio) |
+| `TDRadioStyle` | 旧声明已移除 | [具体改法](#migration-component-radio) |
+| `TDRadius` | `TRadius` | [具体改法](#migration-component-theme) |
+| `TDRangeSlider` | `TRangeSlider` | [具体改法](#migration-component-slider) |
+| `TDRate` | `TRate` | [具体改法](#migration-component-rate) |
+| `TDRefreshHeader` | `TPullDownRefresh` | [具体改法](#migration-component-pull-down-refresh) |
+| `TDResourceDelegate` | `TResourceDelegate` | [具体改法](#migration-component-theme) |
+| `TDResourceManager` | `TResourceManager` | [具体改法](#migration-component-theme) |
+| `TDResult` | `TResult` | [具体改法](#migration-component-result) |
+| `TDResultTheme` | `TResultStatus` | defaultTheme → info；success/warning/error 按对应状态迁移；[具体改法](#migration-component-result) |
+| `TDRoundRangeSliderThumbShape` | 旧声明已移除 | [具体改法](#migration-component-slider) |
+| `TDRoundRangeSliderTickMarkShape` | 旧声明已移除 | [具体改法](#migration-component-slider) |
+| `TDRoundSliderThumbShape` | 旧声明已移除 | [具体改法](#migration-component-slider) |
+| `TDRoundSliderTickMarkShape` | 旧声明已移除 | [具体改法](#migration-component-slider) |
+| `TDRoundedRectRangeSliderTrackShape` | 旧声明已移除 | [具体改法](#migration-component-slider) |
+| `TDRoundedRectSliderTrackShape` | 旧声明已移除 | [具体改法](#migration-component-slider) |
+| `TDSearchAlignment` | `TSearchBarAlignment` | 实例 textAlignment 配置，不作为旧样式对象复用；[具体改法](#migration-component-search) |
+| `TDSearchBar` | `TSearchBar` | [具体改法](#migration-component-search) |
+| `TDSearchBarCallBack` | 旧声明已移除 | [具体改法](#migration-component-search) |
+| `TDSearchBarClearEvent` | 旧声明已移除 | [具体改法](#migration-component-search) |
+| `TDSearchBarEvent` | 旧声明已移除 | [具体改法](#migration-component-search) |
+| `TDSearchStyle` | 旧声明已移除 | [具体改法](#migration-component-search) |
+| `TDSelectOption` | `TTreeSelectOption` | [具体改法](#migration-component-tree-select) |
+| `TDSelectTag` | `TSelectTag` | [具体改法](#migration-component-tag) |
+| `TDSideBar` | `TSideBar` | [具体改法](#migration-component-side-bar) |
+| `TDSideBarController` | 旧声明已移除 | [具体改法](#migration-component-side-bar) |
+| `TDSideBarItem` | `TSideBarItem` | [具体改法](#migration-component-side-bar) |
+| `TDSideBarStyle` | 旧声明已移除 | [具体改法](#migration-component-side-bar) |
+| `TDSkeleton` | `TSkeleton` | [具体改法](#migration-component-skeleton) |
+| `TDSkeletonAnimation` | `TSkeletonAnimation` | [具体改法](#migration-component-skeleton) |
+| `TDSkeletonRowCol` | 旧声明已移除 | [具体改法](#migration-component-skeleton) |
+| `TDSkeletonRowColObj` | 旧声明已移除 | [具体改法](#migration-component-skeleton) |
+| `TDSkeletonRowColObjStyle` | 旧声明已移除 | [具体改法](#migration-component-skeleton) |
+| `TDSkeletonRowColStyle` | 旧声明已移除 | [具体改法](#migration-component-skeleton) |
+| `TDSkeletonTheme` | `TSkeletonVariant` | [具体改法](#migration-component-skeleton) |
+| `TDSlidePopupRoute` | `TPopup` | [具体改法](#migration-component-popup) |
+| `TDSlider` | `TSlider` | [具体改法](#migration-component-slider) |
+| `TDSliderState` | 旧声明已移除 | [具体改法](#migration-component-slider) |
+| `TDSliderThemeData` | `TSliderThemeData` | [具体改法](#migration-component-slider) |
+| `TDSpacers` | `TSpacers` | [具体改法](#migration-component-theme) |
+| `TDStepper` | `TStepper` | [具体改法](#migration-component-stepper) |
+| `TDStepperController` | 旧声明已移除 | [具体改法](#migration-component-stepper) |
+| `TDStepperEventType` | 旧声明已移除 | [具体改法](#migration-component-stepper) |
+| `TDStepperIconButton` | 旧声明已移除 | [具体改法](#migration-component-stepper) |
+| `TDStepperIconType` | 旧声明已移除 | [具体改法](#migration-component-stepper) |
+| `TDStepperOverlimitFunction` | 旧声明已移除 | [具体改法](#migration-component-stepper) |
+| `TDStepperOverlimitType` | 旧声明已移除 | [具体改法](#migration-component-stepper) |
+| `TDStepperSize` | `TStepperSize` | [具体改法](#migration-component-stepper) |
+| `TDStepperTheme` | `TStepperVariant` | [具体改法](#migration-component-stepper) |
+| `TDSteps` | `TSteps` | [具体改法](#migration-component-steps) |
+| `TDStepsDirection` | `TStepsDirection` | [具体改法](#migration-component-steps) |
+| `TDStepsItemData` | `TStepsItemData` | [具体改法](#migration-component-steps) |
+| `TDStepsStatus` | `TStepsStatus` | [具体改法](#migration-component-steps) |
+| `TDSwipeCell` | `TSwipeCell` | [具体改法](#migration-component-swipe-cell) |
+| `TDSwipeCellAction` | `TSwipeCellAction` | [具体改法](#migration-component-swipe-cell) |
+| `TDSwipeCellInherited` | 旧声明已移除 | [具体改法](#migration-component-swipe-cell) |
+| `TDSwipeCellPanel` | `TSwipeCellPanel` | [具体改法](#migration-component-swipe-cell) |
+| `TDSwipeDirection` | 旧声明已移除 | [具体改法](#migration-component-swipe-cell) |
+| `TDSwiperArrowPagination` | 旧声明已移除 | [具体改法](#migration-component-swiper) |
+| `TDSwiperDotsPagination` | 旧声明已移除 | [具体改法](#migration-component-swiper) |
+| `TDSwiperPagination` | 旧声明已移除 | [具体改法](#migration-component-swiper) |
+| `TDSwitch` | `TSwitch` | [具体改法](#migration-component-switch) |
+| `TDSwitchSize` | `TSwitchSize` | [具体改法](#migration-component-switch) |
+| `TDSwitchState` | 旧声明已移除 | [具体改法](#migration-component-switch) |
+| `TDSwitchType` | `TSwitchVariant` | [具体改法](#migration-component-switch) |
+| `TDTDResourceBuilder` | 旧声明已移除 | [具体改法](#migration-component-theme) |
+| `TDTab` | `TTab` | [具体改法](#migration-component-tabs) |
+| `TDTabBar` | `TTabsBar` | [具体改法](#migration-component-tabs) |
+| `TDTabBarIndicator` | 旧声明已移除 | [具体改法](#migration-component-tabs) |
+| `TDTabBarOutlineType` | 旧声明已移除 | [具体改法](#migration-component-tabs) |
+| `TDTabBarVerticalIndicator` | 旧声明已移除 | [具体改法](#migration-component-tabs) |
+| `TDTabBarView` | `TTabsBarView` | [具体改法](#migration-component-tabs) |
+| `TDTabOutlineType` | 旧声明已移除 | [具体改法](#migration-component-tabs) |
+| `TDTabSize` | `TTabsBarSize` | [具体改法](#migration-component-tabs) |
+| `TDTable` | `TTable` | [具体改法](#migration-component-table) |
+| `TDTableCol` | `TTableColumn` | [具体改法](#migration-component-table) |
+| `TDTableColAlign` | `TTableColumnAlign` | [具体改法](#migration-component-table) |
+| `TDTableColFixed` | 旧声明已移除 | [具体改法](#migration-component-table) |
+| `TDTableEmpty` | 旧声明已移除 | [具体改法](#migration-component-table) |
+| `TDTableState` | 旧声明已移除 | [具体改法](#migration-component-table) |
+| `TDTag` | `TTag` | [具体改法](#migration-component-tag) |
+| `TDTagShape` | `TTagShape` | [具体改法](#migration-component-tag) |
+| `TDTagSize` | `TTagSize` | [具体改法](#migration-component-tag) |
+| `TDTagStyle` | 旧声明已移除 | [具体改法](#migration-component-tag) |
+| `TDTagTheme` | `TTagColorPreset` | [具体改法](#migration-component-tag) |
+| `TDTapEvent` | 旧声明已移除 | [具体改法](#migration-component-empty) |
+| `TDTapFunction` | 旧声明已移除 | [具体改法](#migration-component-stepper) |
+| `TDText` | `TText` | [具体改法](#migration-component-text) |
+| `TDTextConfiguration` | `TTextThemeData` | [具体改法](#migration-component-text) |
+| `TDTextLabel` | 旧声明已移除 | [具体改法](#migration-component-progress) |
+| `TDTextPaddingConfig` | 旧声明已移除 | [具体改法](#migration-component-text) |
+| `TDTextSpan` | `TTextSpan` | [具体改法](#migration-component-text) |
+| `TDTextarea` | `TTextarea` | [具体改法](#migration-component-textarea) |
+| `TDTextareaLayout` | `TTextareaLayout` | [具体改法](#migration-component-textarea) |
+| `TDTheme` | `TThemeData` | [具体改法](#migration-component-theme) |
+| `TDThemeData` | `TThemeData` | [具体改法](#migration-component-theme) |
+| `TDTimeCounter` | `TTimeCounter` | [具体改法](#migration-component-time-counter) |
+| `TDTimeCounterController` | `TTimeCounterController` | [具体改法](#migration-component-time-counter) |
+| `TDTimeCounterDirection` | `TTimeCounterDirection` | [具体改法](#migration-component-time-counter) |
+| `TDTimeCounterSize` | `TTimeCounterSize` | [具体改法](#migration-component-time-counter) |
+| `TDTimeCounterStatus` | 旧声明已移除 | [具体改法](#migration-component-time-counter) |
+| `TDTimeCounterStyle` | `TTimeCounterThemeData` + `content` | 不等价于 TTimeCounterVariant；仅现有颜色/圆角可用 Theme，任意块布局由 content 实现；[具体改法](#migration-component-time-counter) |
+| `TDTimeCounterTheme` | `TTimeCounterVariant` | [具体改法](#migration-component-time-counter) |
+| `TDToast` | `TToast` | [具体改法](#migration-component-toast) |
+| `TDToastConfig` | 旧声明已移除 | [具体改法](#migration-component-toast) |
+| `TDTreeSelect` | `TTreeSelect` | [具体改法](#migration-component-tree-select) |
+| `TDTreeSelectChangeEvent` | 旧声明已移除 | [具体改法](#migration-component-tree-select) |
+| `TDTreeSelectStyle` | 旧声明已移除 | [具体改法](#migration-component-tree-select) |
+| `TDUpload` | `TUpload` | [具体改法](#migration-component-upload) |
+| `TDUploadBoxType` | 旧声明已移除 | [具体改法](#migration-component-upload) |
+| `TDUploadClickEvent` | 旧声明已移除 | [具体改法](#migration-component-upload) |
+| `TDUploadErrorEvent` | 旧声明已移除 | [具体改法](#migration-component-upload) |
+| `TDUploadFile` | `TUploadFile` | [具体改法](#migration-component-upload) |
+| `TDUploadFileStatus` | `TUploadFileStatus` | [具体改法](#migration-component-upload) |
+| `TDUploadMediaType` | `TUploadMediaType` | [具体改法](#migration-component-upload) |
+| `TDUploadType` | 旧声明已移除 | [具体改法](#migration-component-upload) |
+| `TDUploadValidatorError` | 旧声明已移除 | [具体改法](#migration-component-upload) |
+| `TDUploadValidatorEvent` | 旧声明已移除 | [具体改法](#migration-component-upload) |
+| `TDUploadValueChangedEvent` | 旧声明已移除 | [具体改法](#migration-component-upload) |
+| `TDate` | 旧声明已移除 | [具体改法](#migration-component-calendar) |
+| `TGIconHeaderWidget` | 旧声明已移除 | [具体改法](#migration-component-pull-down-refresh) |
+| `TGIconHeaderWidgetState` | 旧声明已移除 | [具体改法](#migration-component-pull-down-refresh) |
+| `TapCallback` | 旧声明已移除 | [具体改法](#migration-component-cascader) |
+| `TextAlignment` | `TDividerAlign` | 通过 align 配置；方向另由 layout 决定；[具体改法](#migration-component-divider) |
+| `TrapezoidPath` | 旧声明已移除 | [具体改法](#migration-component-badge) |
+| `horizontalChild` | 旧声明已移除 | [具体改法](#migration-component-radio) |
+| `kTextForceVerticalCenterEnable` | 已移除；局部布局和文字样式 | 无新的全局强制居中开关，不能按旧像素补偿强制裁切段落；[具体改法](#migration-component-text) |
+| `kTextNeedGlobalFontFamily` | 已移除；`TTextThemeData` / `TextStyle` | 字体通过局部主题或实例style配置，在线字体由业务预加载；[具体改法](#migration-component-text) |
+| `slideTransitionFromToAlignment` | 旧声明已移除 | [具体改法](#migration-component-popup) |
+
+</details>

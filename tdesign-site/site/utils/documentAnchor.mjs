@@ -5,6 +5,9 @@ export function revealDocumentAnchor(hash, root = document) {
   try { id = decodeURIComponent(hash.slice(1)); } catch { return null; }
   const target = root.getElementById(id);
   if (!target) return null;
+  const sectionId = target.getAttribute?.('data-expand-details');
+  const explicitSection = sectionId && root.getElementById(sectionId);
+  if (explicitSection?.tagName === 'DETAILS') explicitSection.open = true;
   // Markdown renders a standalone <a id> before <details> inside an empty
   // paragraph. That anchor labels the following folded section.
   if (target.tagName === 'A') {
@@ -18,6 +21,15 @@ export function revealDocumentAnchor(hash, root = document) {
     if (parent.tagName === 'DETAILS') parent.open = true;
   }
   return target;
+}
+
+/** Reveal on every ordinary click, including an unchanged URL fragment. */
+export function revealClickedDocumentAnchor(event, root = document) {
+  if (event.defaultPrevented || event.button !== 0 || event.ctrlKey || event.metaKey || event.shiftKey || event.altKey) return null;
+  const link = event.target?.closest?.('a[href]');
+  if (!link || link.hasAttribute('download') || (link.target && link.target !== '_self')) return null;
+  const href = link.getAttribute('href');
+  return href?.startsWith('#') ? revealDocumentAnchor(href, root) : null;
 }
 
 /** Wait for rendered content before resolving either a history position or an anchor. */
