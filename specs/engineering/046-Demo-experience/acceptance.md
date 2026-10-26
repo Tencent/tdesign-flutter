@@ -67,4 +67,19 @@ Base: `182f8cd956edeee4dfd7ef977176309f051e3c3c`. Binary diff SHA-256 (`git diff
 
 macOS Flutter 3.32.0 / 3.47.7：Example 严格分析均无诊断，文档示例与 Theme 非 Golden 功能测试各 20/20；3.32.0 回归清单、覆盖率 runner、视觉 runner 和示例生成器自测 41/41，生成片段 --check 通过。Node 24.22.1：站点测试 39/39，57 页/360 示例映射、8 份同步输出检查及生产构建通过。Linux amd64 / Flutter 3.32.0：主题与指南 Golden 14/14 精确比对通过，使用 TDESIGN_DEMO_TEST_MODULES=false；未运行更新基线命令，未修改容差。截图内容沿用来源候选中的预期视觉。
 
-仍缺完整指南浏览器交互（含预览 reload 主题同步）及移动设备验收，见 tasks.md；未推送、未执行本分支远端 CI。
+上述检查点尚未执行指南浏览器交互；后续验证及修复见下文。移动设备验收与本分支远端 CI 当时均未执行。
+
+
+### 2026-10-26 浏览器交互与预览刷新复核
+
+基线仍为 `673ddf8cc69d41632f68832a9079385623af7df1`；本轮最终源码补丁 SHA-256（scripts / tdesign-component / tdesign-site，不含 Spec）为 `faa8ca5a5c3be612c56fc20d5cde99d1a04ccf8d6fc8fb32c81da319a960e4e9`。本地发布构建使用 Flutter 3.47.7，禁用 Web 资源 CDN，挂载于 http://127.0.0.1:19117/flutter/；最终 main.dart.js SHA-256 为 `e2c55e167f28ceb16691d177658212816aaced22b4aa24949b05b96741bf2b90`。测试使用本机内置浏览器和当前分支生产站点，不连接已发布的 Flutter Demo。
+
+- 发现并修复主题指南的实际刷新缺陷：内层带 home 的 MaterialApp 创建 Navigator，挂载时将 iframe 地址覆盖为首页，刷新后落到组件清单。局部应用改为 builder 渲染内容，保留主题、本地化和字体环境，路由由 Example 宿主唯一管理；完整可复制应用的 documentationThemeApp 用法不变。新增宿主导航所有权回归，覆盖完整指南及 JSON / local / mode 三个独立场景。
+- 快速开始：实际点击计数增加；站点切换浅深色时计数保持。主题工具选择非默认腾讯云配色，浅色 `#006eff`、深色 `#2684ff`。在两种模式下只刷新 iframe，宿主 loader ID 均不变、iframe loader ID 变化，重新启动的计数为 0，当前外观及非默认配色恢复。刷新前后截图存于本地 artifacts/pr1156-split-local-20261026/guides-fixed-counter-*.png。
+- 主题指南：默认/业务主题可切换；业务主题浅色为 green / `#16875D`、深色为 greenDark / `#56C08D`。输入“浏览器验证”及保存操作在站点明暗切换时保持。修复后的浅深色 iframe 刷新均保留 `#custom-theme` 路由，恢复对应主题，不再进入组件清单。临时输入、保存及选择跨刷新重新初始化，不承诺持久化。独立 JSON / local / mode 场景刷新后均保留原 hash；浅色、深色及跟随系统的实际文案与配色正确。
+- 共享预览：从指南离开再进入可以挂载；Button 组件页沿用同一预览组件，非默认配色下刷新仍保留 `#button` 路由和当前外观。
+- 国际化：仓库外临时入口直接调用本分支 runLocaleApp，浏览器实际完成“确认 → Confirm → 确认”。资源主题入口直接调用 runThemeApp，实际加载 assets/custom_theme.json 并渲染业务主题按钮；没有为截图手写平行实现。
+- 390px 桌面浏览器视口仿真：正文右侧预留归零，document scrollWidth 374px，不超过 390px 视口。检查后清除视口仿真，并恢复本地站点默认配色；不将该结果记为移动设备验收。
+- 修复后 Flutter 3.32.0 / 3.47.7 严格分析均无诊断；功能测试各 21/21；工具自测 41/41、示例片段 --check、站点测试 39/39、57 页/360 示例映射、8 份同步输出和生产构建通过。Linux Flutter 3.32.0 Golden 14/14 精确比对再次通过，未更新基线或容差。
+
+结构化观察及必要截图保存于本地 artifacts/pr1156-split-local-20261026/。浏览器的外部页面装饰连接出现 Failed to fetch 日志；未验证其线上服务，不据此声称全站外部服务已通过。本轮只补充本机浏览器证据，未执行其他浏览器、真机、发布部署或远端 CI；这些范围见 tasks.md。

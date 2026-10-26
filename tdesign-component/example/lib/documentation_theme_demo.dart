@@ -11,6 +11,19 @@ ThemeMode _previewMode(BuildContext context, ThemeMode? selection) =>
         ? ThemeMode.dark
         : ThemeMode.light);
 
+// The host owns the Web route. A second Navigator would report '/' to the
+// browser and make a reload leave the guide. Keep only the themed app shell.
+Widget _documentationThemePreview(
+  ThemeMode mode,
+  Widget home, {
+  required TThemeData tokens,
+}) => MaterialApp(
+  theme: TThemeBuilder.light(tokens),
+  darkTheme: TThemeBuilder.dark(tokens),
+  themeMode: mode,
+  builder: (_, _) => home,
+);
+
 /// 自定义主题指南的独立运行入口，复用生成文档所用的配置函数。
 class DocumentationThemeDemo extends StatefulWidget {
   const DocumentationThemeDemo({required this.scene, super.key});
@@ -35,7 +48,7 @@ class _DocumentationThemeDemoState extends State<DocumentationThemeDemo> {
   @override
   Widget build(BuildContext context) {
     final mode = _previewMode(context, _selection);
-    return documentationThemeApp(
+    return _documentationThemePreview(
       mode,
       Builder(
         builder: (context) => Scaffold(
@@ -200,7 +213,7 @@ class _DocumentationThemeGuidePageState
   @override
   Widget build(BuildContext context) {
     final mode = _previewMode(context, _selection);
-    return documentationThemeApp(
+    return _documentationThemePreview(
       mode,
       Builder(
         builder: (context) {

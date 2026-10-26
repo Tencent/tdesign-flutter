@@ -386,6 +386,34 @@ void main() {
     }
   });
 
+  testWidgets('theme previews retain the host as their only route owner', (
+    tester,
+  ) async {
+    for (final page in [
+      const DocumentationThemeGuidePage(),
+      for (final scene in DocumentationThemeScene.values)
+        DocumentationThemeDemo(scene: scene),
+    ]) {
+      await pumpFullDemoPage(
+        tester,
+        DemoPageTestSpec(
+          name: 'theme-route-owner',
+          title: '主题预览',
+          page: page,
+          expectedTexts: const [],
+        ),
+        ThemeMode.light,
+      );
+      final host = tester.state<NavigatorState>(find.byType(Navigator).first);
+      expect(find.byType(Navigator), findsOneWidget);
+      for (final element in tester.elementList(find.byType(TTag))) {
+        expect(Navigator.of(element), same(host));
+      }
+      expect(tester.takeException(), isNull);
+      await disposeDemoPage(tester);
+    }
+  });
+
   testWidgets(
     'business and default themes update every scene and preserve input',
     (tester) async {

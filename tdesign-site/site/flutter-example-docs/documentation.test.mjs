@@ -115,7 +115,6 @@ test('custom theme guide uses the shared component preview with standalone scene
   for (const scene of ['json', 'local', 'mode']) {
     assert.ok(guide.includes(`[单独打开运行示例](/flutter/example/#custom-theme-${scene})`));
   }
-  assert.match(runtime, /documentationThemeApp\(/);
   assert.match(runtime, /documentationLocalTheme\(/);
 });
 
