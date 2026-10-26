@@ -259,8 +259,8 @@
 
 表单项内容区域的水平方向对齐方式。
 
-与小程序端 Form/FormItem 的 contentAlign(left/right) 对齐，
-暂不提供 center 居中档；如需居中场景请在单独 issue 中讨论设计依据。
+与 Form/FormItem 的 contentAlign(left/right) 保持一致，
+暂不提供 center 居中档；如需居中场景请在单独 issue 中给出设计依据。
 #### 枚举值
 
 | 名称 | 类型 | 默认值 | 说明 | 必传 |
