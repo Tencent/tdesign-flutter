@@ -165,3 +165,11 @@ macOS Flutter 3.32.0 / 3.47.7：Example 严格分析均无诊断，Theme 与 doc
 将原 `tdesign-component/tool/fixtures/token_migration/` 与运行器移至 `scripts/fixtures/token_migration/`、`scripts/run_migration_consumer.dart`；同步临时消费者的组件依赖路径、文档生成器、测试夹具、工具共用入口和 CI 路径过滤。历史附件中的旧路径仍按其原候选解释，不改写历史指纹。
 
 当前本地：站点与工具入口测试合计 46/46、生产构建和 8 份文档同步检查通过；迁移正文与包内副本逐字节不变。Flutter 3.32.0 经 GitHub/CNB 共用 shell 入口、3.47.7 经仓库根目录直接运行入口，严格分析均无诊断，测试各 24/24。消费示例和测试内容未因搬迁改变，组件公开入口及 Golden 未改动。远端检查按本次推送后的最终提交重新核对。
+
+## 2026-10-27 目录命名与测试职责收敛
+
+去除 fixtures 中间层，项目与包名统一为 scripts/migration_consumer / tdesign_migration_consumer。文档唯一示例源命名为 lib/guide_examples.dart，公开参数替代示例命名为 lib/public_api_examples.dart；测试按 guide_examples_test 与 public_api_usage_test 区分。根目录运行入口及 GitHub/CNB 的共用命令不变，更新引用、组件依赖相对路径与 CI 过滤。
+
+运行时用例由 24 项收敛到 16 项：4 项以构造或属性读取为主的检查转为静态编译示例；Text/Avatar/Tag 的 3 项重复样式用例交由已有组件回归，Calendar/DatePicker 仅挂载无异常的用例由静态示例及既有组件/Demo 覆盖。保留 12 项直接调用指南函数的交互组合，以及 4 项 Theme 链、TabBar、Popover、Popup 的独立消费契约；SwipeCell 参数互斥仍由现有组件测试覆盖。
+
+Flutter 3.32.0 / 3.47.7：严格分析均无诊断，运行时测试各 16/16；3.32.0 经 CI 共用入口、3.47.7 经根目录直接入口验证。本地站点及工具入口 46/46 测试、57 页/360 示例映射、8 份文档同步与生产构建通过，迁移正文和包内副本逐字节不变。临时负向对照为未被调用的公开参数示例加入不存在的参数，静态分析按 undefined_named_parameter 拒绝，说明删除构造数量测试后签名检查仍生效；负向样本不进入仓库。未改组件实现或 Golden。

@@ -5,21 +5,21 @@ import 'dart:io';
 Future<void> main() async {
   final root = File.fromUri(Platform.script).parent.parent;
   final component = Directory('${root.path}/tdesign-component');
-  final fixture = Directory('${root.path}/scripts/fixtures/token_migration');
+  final sourceProject = Directory('${root.path}/scripts/migration_consumer');
   final consumer = await Directory.systemTemp.createTemp('tdesign-migration-');
   try {
-    await for (final entity in fixture.list(recursive: true)) {
+    await for (final entity in sourceProject.list(recursive: true)) {
       if (entity is! File) {
         continue;
       }
-      final relative = entity.path.substring(fixture.path.length + 1);
+      final relative = entity.path.substring(sourceProject.path.length + 1);
       final target = File('${consumer.path}/$relative');
       await target.parent.create(recursive: true);
       if (relative == 'pubspec.yaml') {
         final source = await entity.readAsString();
         final path = component.absolute.path.replaceAll("'", "''");
         await target.writeAsString(
-          source.replaceFirst('../../../tdesign-component', path),
+          source.replaceFirst('../../tdesign-component', path),
         );
       } else {
         await entity.copy(target.path);
