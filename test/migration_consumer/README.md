@@ -8,7 +8,7 @@
 bash scripts/run-tooling-checks.sh migration
 ```
 
-脚本将验证项目和 Example 中的迁移示例复制到临时目录，通过组件公开入口执行依赖解析、严格静态分析和测试。GitHub/CNB 使用同一入口，在最低支持版和当前稳定版 Flutter 下验证。
+专用运行器位于本目录 `run.dart`，也可在仓库根目录执行 `dart run test/migration_consumer/run.dart`。运行器仅将验证输入（pubspec、分析配置、lib 和 test）和 Example 中的迁移示例复制到临时目录，通过组件公开入口执行依赖解析、严格静态分析和测试。GitHub/CNB 使用同一入口，在最低支持版和当前稳定版 Flutter 下验证。
 
 ## 内容与验证边界
 

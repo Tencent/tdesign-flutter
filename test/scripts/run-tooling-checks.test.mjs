@@ -46,7 +46,7 @@ test('full entry uses one ordered sequence and discovers the tool test directory
   ]);
   assert.ok(result.calls.slice(0, 3).every((c) => c.cwd.endsWith('/packages/css2token')));
   assert.ok(result.calls.slice(3).every((c) => c.cwd.endsWith('/tdesign-component')));
-  assert.ok(result.calls[3].args[1].endsWith('/scripts/run_migration_consumer.dart'));
+  assert.ok(result.calls[3].args[1].endsWith('/test/migration_consumer/run.dart'));
   assert.deepEqual(result.calls[4].args, ['test', '--no-pub', 'test/tool']);
   assert.ok(result.calls[5].args[1].endsWith('/test/scripts/*.test.mjs'));
   assert.ok(result.calls.some((c) => c.args[0] === 'tool/generate_api.mjs' && c.args.includes('--check')));

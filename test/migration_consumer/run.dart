@@ -3,9 +3,9 @@ import 'dart:io';
 /// Runs migration examples with an independent package configuration outside
 /// the checkout, so tests cannot accidentally rely on library-private imports.
 Future<void> main() async {
-  final root = File.fromUri(Platform.script).parent.parent;
+  final sourceProject = File.fromUri(Platform.script).parent;
+  final root = sourceProject.parent.parent;
   final component = Directory('${root.path}/tdesign-component');
-  final sourceProject = Directory('${root.path}/test/migration_consumer');
   final consumer = await Directory.systemTemp.createTemp('tdesign-migration-');
   try {
     await for (final entity in sourceProject.list(recursive: true)) {
@@ -13,6 +13,12 @@ Future<void> main() async {
         continue;
       }
       final relative = entity.path.substring(sourceProject.path.length + 1);
+      if (relative != 'pubspec.yaml' &&
+          relative != 'analysis_options.yaml' &&
+          !relative.startsWith('lib/') &&
+          !relative.startsWith('test/')) {
+        continue;
+      }
       final target = File('${consumer.path}/$relative');
       await target.parent.create(recursive: true);
       if (relative == 'pubspec.yaml') {

@@ -18,7 +18,7 @@ run_step() {
         dart analyze --fatal-infos
       )
       ;;
-    migration) dart run "$TOOLING_REPOSITORY_ROOT/scripts/run_migration_consumer.dart" ;;
+    migration) dart run "$TOOLING_REPOSITORY_ROOT/test/migration_consumer/run.dart" ;;
     # Discover the directory so new tooling tests need no workflow registration.
     tool-tests) flutter test --no-pub test/tool ;;
     runner-tests) node --test "$TOOLING_REPOSITORY_ROOT/test/scripts/"*.test.mjs ;;
