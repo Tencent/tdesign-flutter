@@ -27,3 +27,7 @@ Demo步骤标题是静态数据，不随索引切换“已完成/当前/未完�
 范围：横纵方向及状态对应的自定义标题/说明字体、布局包装、显式与局部样式，以及段落和受限布局。
 
 最终候选、双版本功能与视觉结果集中记录在 [Theme 文字槽验收](../../engineering/048-Theme-configuration-contracts/acceptance.md#自定义文字槽统一验收2026-10-22)，本组件不重复保存验证流水。既有设备及设计待办继续保留；本地结果不替代当前候选的远端 CI 或真机验证，截图不存 Spec。
+
+## API 兼容迁移候选
+
+基线 develop `3704434fd2adfb6988110bc760aaaa52a814581c`。本轮候选、双版本结果与未覆盖范围见[统一验收记录](../028-Navigation-TabBar/evidence/api-naming.md)。双版本验证及本地 Review 通过。

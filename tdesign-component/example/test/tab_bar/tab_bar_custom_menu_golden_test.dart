@@ -48,7 +48,7 @@ void main() {
                           tabText: 'Menu',
                           onTap: () {},
                           popUpButtonConfig: TTabBarPopUpBtnConfig(
-                            onChanged: (_) {},
+                            onSelected: (_) {},
                             popUpDialogConfig: TTabBarPopUpShapeConfig(
                               popUpWidth: 210,
                             ),
