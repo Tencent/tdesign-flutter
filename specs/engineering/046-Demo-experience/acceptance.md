@@ -294,3 +294,7 @@ Node 24.15.0 / pnpm 11.20.0：主题/导航 22/22、文档 33/33，共 55/55；5
 控制台边界：首次启动的 Flutter 调试预览出现一次 TextPainter debugSize == size 断言，定位到 example_widget.dart:542 的模块标题 Text；页面复载、后续交互和不加载 site-components 的独立 Flutter 预览未复现。当前无法归因于 0.20.4，不能声称运行全程无异常；保留后续冷启动复核项。另有外部 notice.json / components-notice.json 请求失败，来源为 tdesign-site-services.surge.sh，本轮四项交互与布局仍通过，不代表公告服务验收完成。
 
 这是本地桌面聚焦验证，未执行移动视口/真机、全部浏览器、全部组件、uni 官网或 Golden 全量回归。最终文档提交的远端 CI 需按新 head 核对，保持 PR 打开且不合并。
+
+### @tdesign 作用域发布时间豁免
+
+按用户要求，将 minimumReleaseAgeExclude 的逐包逐版本条目改为单一 @tdesign/* 模式，覆盖该作用域内所有包；其他作用域的发布时间限制保持不变。冻结锁文件安装通过，依赖版本及锁文件未变化；本次仅调整包管理策略，不刷新此前浏览器验收结论。
