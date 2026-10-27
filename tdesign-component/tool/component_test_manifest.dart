@@ -949,7 +949,11 @@ const componentTestManifests = <ComponentTestManifest>[
   ComponentTestManifest(
     name: 'slider',
     coverageTargets: ['lib/src/components/slider/'],
-    componentTests: ['test/components/slider/t_slider_test.dart'],
+    componentTests: [
+      'test/components/slider/t_slider_test.dart',
+      'test/components/slider/t_slider_geometry_test.dart',
+      'test/components/slider/t_slider_constraints_test.dart',
+    ],
     exampleTests: ['test/slider/slider_demo_test.dart'],
     visualTests: [
       VisualTestManifest(
@@ -964,6 +968,7 @@ const componentTestManifests = <ComponentTestManifest>[
         testFiles: [
           'test/slider/slider_demo_golden_test.dart',
           'test/slider/slider_dragged_golden_test.dart',
+          'test/slider/slider_geometry_golden_test.dart',
         ],
       ),
     ],

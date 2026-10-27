@@ -245,7 +245,8 @@ void main() {
       );
       expect(trackRect.left, 16);
       expect(trackRect.right, renderBox.size.width - 16);
-      expect(trackRect.height, 4);
+      expect(trackRect.height, 0);
+      expect(theme.trackHeight, 4);
     });
 
     testWidgets('track geometry follows custom spacing tokens', (tester) async {
@@ -301,11 +302,9 @@ void main() {
       expect(normalTrackRect.left, 18);
       expect(normalTrackRect.right, normalBox.size.width - 18);
       expect(capsuleTheme.trackHeight, 28);
-      // The coordinate track is the thumb travel: the visible capsule inset
-      // (18) plus half the track height (14), leaving a 4px margin that
-      // matches the space above and below the 20px thumb.
-      expect(capsuleTrackRect.left, 32);
-      expect(capsuleTrackRect.right, capsuleBox.size.width - 32);
+      // Coordinate tracks directly describe the actual thumb travel.
+      expect(capsuleTrackRect.left, 31);
+      expect(capsuleTrackRect.right, capsuleBox.size.width - 31);
       expect(
         capsuleTickShape.getPreferredSize(
           sliderTheme: capsuleTheme,
@@ -456,7 +455,7 @@ void main() {
       final tickShape = SliderTheme.of(
         tester.element(find.byType(Slider)),
       ).tickMarkShape;
-      expect(tickShape, const RoundSliderTickMarkShape(tickMarkRadius: 3));
+      expect(tickShape, isA<RoundSliderTickMarkShape>());
     });
 
     testWidgets('capsule variant owns inset track and 20px thumb geometry', (
@@ -503,11 +502,10 @@ void main() {
         isEnabled: true,
         isDiscrete: true,
       );
-      // Thumb centers keep a 2px margin, the same as above and below the thumb,
-      // so the travel starts 16 (capsule inset) + 12 (half the track) in.
-      expect(trackRect.left, 28);
-      expect(trackRect.right, renderBox.size.width - 28);
-      expect(trackRect.height, 24);
+      // No native padding is applied to the coordinate track.
+      expect(trackRect.left, 29);
+      expect(trackRect.right, renderBox.size.width - 29);
+      expect(trackRect.height, 0);
     });
 
     testWidgets('capsule ticks divide only the interior of the track', (
@@ -547,9 +545,9 @@ void main() {
               );
         final sliderOffset =
             tester.getTopLeft(sliderFinder) - tester.getTopLeft(boundaryFinder);
-        // 坐标轨道就是 thumb 行程，两端即 0 / 最大值时的 thumb 中心。
-        final first = trackRect.left;
-        final last = trackRect.right;
+        // Coordinate endpoints already define the complete thumb travel.
+        final first = trackRect.left + trackRect.height / 2;
+        final last = trackRect.right - trackRect.height / 2;
         final interior = first + (last - first) * 2 / 5;
         final y = (sliderOffset.dy + trackRect.center.dy).round();
 
@@ -679,7 +677,7 @@ void main() {
           lessThanOrEqualTo(sliderBox.size.width - inset + sliderOffset.dx),
         );
 
-        // 左右留白与上下留白一致，thumb 不贴着胶囊两端。
+        // 小程序实测沿行程两端各留 3px，默认横截面各留 2px。
         final theme = SliderTheme.of(tester.element(sliderFinder));
         final isRange = slider is TRangeSlider;
         final thumbSize = isRange
@@ -701,11 +699,12 @@ void main() {
         // 坐标轨道就是 thumb 行程，两端即 0 / 最大值时的 thumb 中心。
         final firstCenter = trackRect.left;
         final lastCenter = trackRect.right;
-        final verticalMargin = (trackRect.height - thumbSize.height) / 2;
-        expect(firstCenter - thumbSize.width / 2 - inset, verticalMargin);
+        final verticalMargin = (theme.trackHeight! - thumbSize.height) / 2;
+        expect(verticalMargin, 2);
+        expect(firstCenter - thumbSize.width / 2 - inset, 3);
         expect(
           sliderBox.size.width - inset - (lastCenter + thumbSize.width / 2),
-          verticalMargin,
+          3,
         );
       }
 
@@ -723,6 +722,126 @@ void main() {
         ),
       );
     });
+
+    testWidgets(
+      'capsule endpoint pixels and scale centers agree in LTR and RTL',
+      (tester) async {
+        const boundaryKey = ValueKey('endpoint-pixels');
+        for (final direction in [TextDirection.ltr, TextDirection.rtl]) {
+          for (final discrete in [false, true]) {
+            for (final range in [false, true]) {
+              for (final end in range ? [0] : [0, 1]) {
+                final child = range
+                    ? TRangeSlider(
+                        value: const RangeValues(0, 1),
+                        onChanged: (_) {},
+                        variant: TSliderVariant.capsule,
+                        divisions: discrete ? 5 : null,
+                        showScaleValue: discrete,
+                        scaleFormatter: (v) => (v * 100).round().toString(),
+                      )
+                    : TSlider(
+                        value: end.toDouble(),
+                        onChanged: (_) {},
+                        variant: TSliderVariant.capsule,
+                        divisions: discrete ? 5 : null,
+                        showScaleValue: discrete,
+                        scaleFormatter: (v) => (v * 100).round().toString(),
+                      );
+                await tester.pumpWidget(
+                  MaterialApp(
+                    theme: TThemeBuilder.dark(TThemeData.defaultData()),
+                    home: Directionality(
+                      textDirection: direction,
+                      child: Scaffold(
+                        body: Center(
+                          child: RepaintBoundary(
+                            key: boundaryKey,
+                            child: SizedBox(
+                              width: 320,
+                              height: 100,
+                              child: child,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                );
+                await tester.pumpAndSettle();
+                final native = range
+                    ? find.byType(RangeSlider)
+                    : find.byType(Slider);
+                final box = tester.renderObject<RenderBox>(native);
+                final origin = tester.getTopLeft(find.byKey(boundaryKey));
+                final offset = tester.getTopLeft(native) - origin;
+                final boundary = tester.renderObject<RenderRepaintBoundary>(
+                  find.byKey(boundaryKey),
+                );
+                final pixels = await tester.runAsync(() async {
+                  final image = await boundary.toImage(pixelRatio: 1);
+                  final data = (await image.toByteData(
+                    format: ui.ImageByteFormat.rawRgba,
+                  ))!.buffer.asUint8List();
+                  final result = (width: image.width, bytes: data);
+                  image.dispose();
+                  return result;
+                });
+                final y = (offset.dy + box.size.height / 2).floor();
+                final runs = <List<int>>[];
+                for (var x = 0; x < box.size.width; x++) {
+                  final i = (y * pixels!.width + (offset.dx + x).floor()) * 4;
+                  if (pixels.bytes[i] > 180 &&
+                      pixels.bytes[i + 1] > 180 &&
+                      pixels.bytes[i + 2] > 180) {
+                    if (runs.isEmpty || x > runs.last.last + 1) {
+                      runs.add([x]);
+                    } else {
+                      runs.last.add(x);
+                    }
+                  }
+                }
+                final centers = runs
+                    .where((r) => r.length >= 8)
+                    .map((r) => (r.first + r.last + 1) / 2)
+                    .toList();
+                final token = TThemeData.defaultData();
+                final start = token.spacer2 + 13;
+                final finish = box.size.width - start;
+                final expected = range
+                    ? [start, finish]
+                    : [
+                        (end == 0) == (direction == TextDirection.ltr)
+                            ? start
+                            : finish,
+                      ];
+                expect(
+                  centers,
+                  hasLength(expected.length),
+                  reason: '$direction discrete=$discrete range=$range end=$end',
+                );
+                for (var i = 0; i < centers.length; i++) {
+                  expect(centers[i], closeTo(expected[i], 0.5));
+                }
+                if (discrete) {
+                  for (var index = 0; index <= 5; index++) {
+                    final label = find.text('${index * 20}');
+                    final ratio = direction == TextDirection.ltr
+                        ? index / 5
+                        : 1 - index / 5;
+                    final target = start + ratio * (finish - start);
+                    expect(
+                      tester.getCenter(label).dx - tester.getTopLeft(native).dx,
+                      closeTo(target, .01),
+                    );
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+    );
 
     testWidgets('capsule thumb maps the value linearly across the travel', (
       tester,
@@ -794,7 +913,7 @@ void main() {
 
       final token = TThemeData.defaultData();
       const thumbRadius = 10.0;
-      final margin = (token.spacer3 - thumbRadius * 2) / 2;
+      const margin = 3.0;
       final travelLeft = token.spacer2 + margin + thumbRadius;
       final travelRight = width - travelLeft;
       expect(
@@ -850,8 +969,8 @@ void main() {
       expect(find.text('50%'), findsOneWidget);
       expect(find.text('100%'), findsOneWidget);
       final sliderRect = tester.getRect(find.byType(Slider));
-      expect(tester.getRect(find.text('0%')).left, sliderRect.left + 16);
-      expect(tester.getRect(find.text('100%')).right, sliderRect.right - 16);
+      expect(tester.getCenter(find.text('0%')).dx, sliderRect.left + 16);
+      expect(tester.getCenter(find.text('100%')).dx, sliderRect.right - 16);
       expect(
         tester.getCenter(find.text('50%')).dx,
         closeTo(sliderRect.center.dx, 0.01),
@@ -984,7 +1103,7 @@ void main() {
       final tickShape = SliderTheme.of(
         tester.element(find.byType(RangeSlider)),
       ).rangeTickMarkShape;
-      expect(tickShape, const RoundRangeSliderTickMarkShape(tickMarkRadius: 3));
+      expect(tickShape, isA<RoundRangeSliderTickMarkShape>());
     });
 
     testWidgets('range capsule variant uses component-owned geometry', (

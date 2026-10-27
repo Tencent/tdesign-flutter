@@ -1,3 +1,4 @@
+import 'package:tdesign_flutter/src/components/slider/t_slider_geometry.dart';
 import 'package:tdesign_flutter/tdesign_flutter.dart';
 import '../../annotation/example_code.dart';
 
@@ -19,75 +20,83 @@ class _SliderVerticalExampleState extends State<SliderVerticalExample> {
   static const double _trackLength = 200;
 
   /// 旋转后滑块自身的厚度，容纳 24px 半径的按压态光晕。
-  static const double _thumbZoneWidth = 48;
+  static const double _thumbZoneWidth = SliderGeometry.hitRadius * 2;
 
   /// 数值与刻度文字所在的列宽。
   static const double _labelWidth = 42;
 
   Widget _buildVertical(BuildContext context) {
-    final token = context.tTheme;
-    final trackInset = token.spacer2;
-    final capsuleThickness = token.spacer3;
-    const normalThickness = 4.0;
-
     Widget verticalSlider({
       required Widget slider,
-      required double trackThickness,
+      bool capsule = false,
       String? thumbLabel,
       double? normalizedValue,
       bool showMarks = false,
       Key? labelKey,
       Key? marksKey,
-      double height = 202,
+      double extraSpace = 2,
     }) {
-      // thumb 中心两端各内缩「端部内缩 + 半个轨道厚度」，刻度与数值必须落在这段行程上。
-      final thumbInset = trackInset + trackThickness / 2;
-      final thumbTravel = _trackLength - thumbInset * 2;
-      double thumbOffset(double ratio) => thumbInset + ratio * thumbTravel;
+      return SliderGeometryScope(
+        axis: Axis.vertical,
+        child: Builder(
+          builder: (context) {
+            final metrics = SliderGeometry.resolve(
+              context,
+              capsule: capsule,
+            ).forTrackLength(_trackLength, crossExtent: _thumbZoneWidth);
 
-      final marks = <Widget>[
-        if (showMarks)
-          for (var index = 0; index < 6; index++)
-            Positioned(
-              top: thumbOffset(index / 5),
-              child: FractionalTranslation(
-                translation: const Offset(0, -0.5),
-                child: TText('${index * 20}'),
-              ),
-            ),
-        if (thumbLabel != null && normalizedValue != null)
-          Positioned(
-            top: thumbOffset(normalizedValue),
-            child: FractionalTranslation(
-              translation: const Offset(0, -0.5),
-              child: TText(thumbLabel, key: labelKey),
-            ),
-          ),
-      ];
-
-      return SizedBox(
-        height: height,
-        child: Center(
-          child: SizedBox(
-            height: _trackLength,
-            child: Row(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                SizedBox(
-                  width: _thumbZoneWidth,
-                  height: _trackLength,
-                  child: RotatedBox(quarterTurns: 1, child: slider),
-                ),
-                if (marks.isNotEmpty)
-                  SizedBox(
-                    key: marksKey,
-                    width: _labelWidth,
-                    height: _trackLength,
-                    child: Stack(clipBehavior: Clip.none, children: marks),
+            final marks = <Widget>[
+              if (showMarks)
+                for (var index = 0; index < 6; index++)
+                  Positioned(
+                    top: metrics.thumbOffset(index / 5),
+                    child: FractionalTranslation(
+                      translation: const Offset(0, -0.5),
+                      child: TText('${index * 20}'),
+                    ),
                   ),
-              ],
-            ),
-          ),
+              if (thumbLabel != null && normalizedValue != null)
+                Positioned(
+                  top: metrics.thumbOffset(normalizedValue),
+                  child: FractionalTranslation(
+                    translation: const Offset(0, -0.5),
+                    child: TText(thumbLabel, key: labelKey),
+                  ),
+                ),
+            ];
+
+            return SizedBox(
+              height: metrics.width + extraSpace,
+              child: Center(
+                child: SizedBox(
+                  height: metrics.width,
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      SizedBox(
+                        width: _thumbZoneWidth,
+                        height: metrics.width,
+                        child: Directionality(
+                          textDirection: TextDirection.ltr,
+                          child: RotatedBox(quarterTurns: 1, child: slider),
+                        ),
+                      ),
+                      if (marks.isNotEmpty)
+                        SizedBox(
+                          key: marksKey,
+                          width: _labelWidth,
+                          height: metrics.width,
+                          child: Stack(
+                            clipBehavior: Clip.none,
+                            children: marks,
+                          ),
+                        ),
+                    ],
+                  ),
+                ),
+              ),
+            );
+          },
         ),
       );
     }
@@ -102,7 +111,6 @@ class _SliderVerticalExampleState extends State<SliderVerticalExample> {
           max: 100,
           onChanged: (value) => setState(() => _vertical = value),
         ),
-        trackThickness: normalThickness,
         thumbLabel: _integer(_vertical),
         normalizedValue: _vertical / 100,
         labelKey: const ValueKey('slider-vertical-label'),
@@ -116,7 +124,6 @@ class _SliderVerticalExampleState extends State<SliderVerticalExample> {
           divisions: 5,
           onChanged: (value) => setState(() => _verticalScaleRange = value),
         ),
-        trackThickness: normalThickness,
         showMarks: true,
         marksKey: const ValueKey('slider-vertical-scale-labels'),
       ),
@@ -129,7 +136,7 @@ class _SliderVerticalExampleState extends State<SliderVerticalExample> {
           variant: TSliderVariant.capsule,
           onChanged: (value) => setState(() => _verticalCapsule = value),
         ),
-        trackThickness: capsuleThickness,
+        capsule: true,
         thumbLabel: _integer(_verticalCapsule),
         normalizedValue: _verticalCapsule / 100,
         labelKey: const ValueKey('slider-vertical-capsule-label'),
@@ -145,10 +152,10 @@ class _SliderVerticalExampleState extends State<SliderVerticalExample> {
           onChanged: (value) =>
               setState(() => _verticalCapsuleScaleRange = value),
         ),
-        trackThickness: capsuleThickness,
+        capsule: true,
         showMarks: true,
         marksKey: const ValueKey('slider-vertical-capsule-scale-labels'),
-        height: 218,
+        extraSpace: 18,
       ),
     };
   }

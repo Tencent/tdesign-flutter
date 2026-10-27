@@ -5,9 +5,45 @@ import 'package:tdesign_flutter_example/page/slider/slider_capsule_example.dart'
 import 'package:tdesign_flutter_example/page/slider/slider_disabled_example.dart';
 
 import '../demo_page_test_utils.dart';
+import '../support/review_golden.dart';
+import 'slider_constraints_fixture.dart';
 import 'slider_demo_test_spec.dart';
+import 'slider_endpoint_test_utils.dart';
 
 void main() {
+  for (final endpoint in [0, 100]) {
+    testWidgets('constraint fixture real gestures endpoint $endpoint', (
+      tester,
+    ) async {
+      tester.view.physicalSize = const Size(390, 1000);
+      tester.view.devicePixelRatio = 1;
+      addTearDown(tester.view.resetPhysicalSize);
+      addTearDown(tester.view.resetDevicePixelRatio);
+      await tester.pumpWidget(
+        MaterialApp(
+          theme: withDemoGoldenFonts(
+            TThemeBuilder.light(TThemeData.defaultData()),
+            sliderDemoPageTestSpec,
+          ),
+          home: const Scaffold(body: SliderConstraintsFixture()),
+        ),
+      );
+      await tester.pumpAndSettle();
+      await exerciseSliderConstraintsFixture(tester, endpoint);
+      if (const bool.fromEnvironment('BOUNDARY_REVIEW_CAPTURE')) {
+        const label = String.fromEnvironment('BOUNDARY_CAPTURE_LABEL');
+        await captureGoldenEvidence(
+          tester,
+          find.byType(Scaffold),
+          'boundary_runtime_${label}_$endpoint.png',
+        );
+      }
+
+      await tester.pumpWidget(const SizedBox.shrink());
+      await tester.pumpAndSettle();
+    }, tags: 'demo');
+  }
+
   registerDemoStructureTests(sliderDemoPageTestSpec);
 
   testWidgets('Slider Demo keeps official scenarios in order', (tester) async {
@@ -226,18 +262,8 @@ void main() {
         matching: find.byType(RotatedBox),
       ),
     );
-    // 刻度落在 thumb 行程上：两端各内缩「轨道端部内缩 + 半个轨道厚度」。
-    final verticalSliderTheme = SliderTheme.of(
-      tester.element(
-        find.descendant(
-          of: find.byKey(const ValueKey('slider-vertical-scale-range')),
-          matching: find.byType(RangeSlider),
-        ),
-      ),
-    );
-    final labelInset =
-        tester.element(verticalSectionTitle).tTheme.spacer2 +
-        verticalSliderTheme.trackHeight! / 2;
+    // 普通轨道的刻度覆盖完整垂直行程，端点不随 divisions 内缩。
+    const labelInset = 10.5;
     expect(
       tester.getCenter(scaleLabelFinder.at(0)).dy,
       closeTo(verticalTrackRect.top + labelInset, 0.01),
@@ -253,9 +279,7 @@ void main() {
         matching: find.byType(RotatedBox),
       ),
     );
-    final capsuleInset =
-        tester.element(verticalSectionTitle).tTheme.spacer2 +
-        tester.element(verticalSectionTitle).tTheme.spacer3 / 2;
+    const capsuleInset = 23.5;
     expect(
       tester
           .getCenter(
@@ -303,4 +327,151 @@ void main() {
     }
     await disposeDemoPage(tester);
   }, tags: 'demo');
+  for (final end in [0, 100]) {
+    testWidgets(
+      'endpoint $end keeps vertical values and scale centers aligned',
+      (tester) async {
+        await pumpFullDemoPage(tester, sliderDemoPageTestSpec, ThemeMode.dark);
+        await moveSliderDemoToEndpoints(tester, end);
+        for (final id in ['vertical', 'vertical-capsule']) {
+          final native = find.descendant(
+            of: find.byKey(ValueKey('slider-$id')),
+            matching: find.byType(Slider),
+          );
+          final box = tester.renderObject<RenderBox>(native);
+          // The visible track is 200px; 10.5px at each end belongs to the
+          // complete thumb hit area rather than being deducted from the track.
+          expect(box.size.width, 221, reason: id);
+          final theme = SliderTheme.of(tester.element(native));
+          final travel = theme.trackShape!.getPreferredRect(
+            parentBox: box,
+            sliderTheme: theme,
+          );
+          expect(travel.width, id.contains('capsule') ? 174 : 200, reason: id);
+          final start = id.contains('capsule') ? 23.5 : 10.5;
+          final expected = box.localToGlobal(
+            Offset(
+              start + end / 100 * (box.size.width - start * 2),
+              box.size.height / 2,
+            ),
+          );
+          expect(
+            tester.getCenter(find.byKey(ValueKey('slider-$id-label'))).dy,
+            closeTo(expected.dy, 0.01),
+          );
+        }
+        for (final id in [
+          'vertical-scale-range',
+          'vertical-capsule-scale-range',
+        ]) {
+          final native = find.descendant(
+            of: find.byKey(ValueKey('slider-$id')),
+            matching: find.byType(RangeSlider),
+          );
+          final box = tester.renderObject<RenderBox>(native);
+          final start = id.contains('capsule') ? 23.5 : 10.5;
+          final labelKey =
+              'slider-${id.replaceFirst('-scale-range', '-scale-labels')}';
+          final root = find.byKey(ValueKey(labelKey));
+          for (var index = 0; index <= 5; index++) {
+            final expected = box.localToGlobal(
+              Offset(
+                start + index / 5 * (box.size.width - start * 2),
+                box.size.height / 2,
+              ),
+            );
+            expect(
+              tester
+                  .getCenter(
+                    find.descendant(
+                      of: root,
+                      matching: find.text('${index * 20}'),
+                    ),
+                  )
+                  .dy,
+              closeTo(expected.dy, 0.01),
+            );
+          }
+        }
+        await disposeDemoPage(tester);
+      },
+      tags: 'demo',
+    );
+  }
+  for (final height in [8.0, 24.0]) {
+    for (final direction in [TextDirection.ltr, TextDirection.rtl]) {
+      for (final end in [0, 100]) {
+        testWidgets(
+          'custom height $height $direction endpoint $end stays aligned',
+          (tester) async {
+            await pumpFullDemoPage(
+              tester,
+              sliderGeometryDemoSpec(height, direction),
+              ThemeMode.dark,
+            );
+            await moveSliderDemoToEndpoints(tester, end);
+            for (final id in ['vertical', 'vertical-capsule']) {
+              final native = find.descendant(
+                of: find.byKey(ValueKey('slider-$id')),
+                matching: find.byType(Slider),
+              );
+              expect(
+                Directionality.of(tester.element(native)),
+                TextDirection.ltr,
+              );
+              final box = tester.renderObject<RenderBox>(native);
+              final start = id.contains('capsule') ? 23.5 : 10.5;
+              final expected = box.localToGlobal(
+                Offset(
+                  start + end / 100 * (box.size.width - 2 * start),
+                  box.size.height / 2,
+                ),
+              );
+              expect(
+                tester.getCenter(find.byKey(ValueKey('slider-$id-label'))).dy,
+                closeTo(expected.dy, .01),
+              );
+            }
+            for (final id in [
+              'vertical-scale-range',
+              'vertical-capsule-scale-range',
+            ]) {
+              final native = find.descendant(
+                of: find.byKey(ValueKey('slider-$id')),
+                matching: find.byType(RangeSlider),
+              );
+              final box = tester.renderObject<RenderBox>(native);
+              final start = id.contains('capsule') ? 23.5 : 10.5;
+              final root = find.byKey(
+                ValueKey(
+                  'slider-${id.replaceFirst('-scale-range', '-scale-labels')}',
+                ),
+              );
+              for (var index = 0; index <= 5; index++) {
+                final expected = box.localToGlobal(
+                  Offset(
+                    start + index / 5 * (box.size.width - 2 * start),
+                    box.size.height / 2,
+                  ),
+                );
+                expect(
+                  tester
+                      .getCenter(
+                        find.descendant(
+                          of: root,
+                          matching: find.text('${index * 20}'),
+                        ),
+                      )
+                      .dy,
+                  closeTo(expected.dy, .01),
+                );
+              }
+            }
+            await disposeDemoPage(tester);
+          },
+          tags: 'demo',
+        );
+      }
+    }
+  }
 }

@@ -3,6 +3,7 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 
 import '../demo_page_test_utils.dart';
 import 'slider_demo_test_spec.dart';
+import 'slider_endpoint_test_utils.dart';
 
 void main() {
   registerDemoGoldenTests(sliderDemoPageTestSpec);
@@ -28,5 +29,18 @@ void main() {
       );
       await disposeDemoPage(tester);
     }, tags: 'golden');
+  }
+  for (final mode in [ThemeMode.light, ThemeMode.dark]) {
+    for (final end in [0, 100]) {
+      testWidgets('slider endpoint $end ${mode.name} golden', (tester) async {
+        await pumpFullDemoPage(tester, sliderDemoPageTestSpec, mode);
+        await moveSliderDemoToEndpoints(tester, end);
+        await expectLater(
+          find.byKey(const ValueKey('slider-demo-page')),
+          matchesGoldenFile('goldens/slider_endpoint_${end}_${mode.name}.png'),
+        );
+        await disposeDemoPage(tester);
+      }, tags: 'golden');
+    }
   }
 }
