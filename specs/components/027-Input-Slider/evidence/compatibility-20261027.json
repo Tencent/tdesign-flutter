@@ -1,0 +1,45 @@
+{
+  "base_commit": "a65182d898f534e5181841c17e1298962336fc30",
+  "scope": "local working tree, no push",
+  "files_sha256": {
+    "tdesign-component/lib/src/components/slider/t_slider.dart": "adade463d81164d81850f9b93ec008ba8dc5a88b4a571fa8e68e38547ec3f3e2",
+    "tdesign-component/lib/src/components/slider/t_slider_geometry.dart": "ebecf3084920b97d89853752a38ec873dccba2ea457a66f3c4a65429a5e73676",
+    "tdesign-component/test/components/slider/t_slider_geometry_test.dart": "e60f9ec187404a93d014345cd469089328039187c53b9a37de064dd96c032f6e",
+    "tdesign-component/test/components/slider/t_slider_constraints_test.dart": "e520c23f13a446f51416e9eeec19f79133178730cd39ac269085621b10fd09a7",
+    "tdesign-component/test/components/slider/t_slider_test.dart": "0cd2168d6470b8c752e57ae45af8265255a6773721aa6e94aa993d2a10191953",
+    "tdesign-component/test/components/slider/t_slider_golden_test.dart": "0d3cd81e28110aa477fe0aaaa0ab7b37887acc3d30ba6dd4c9d92c0fb9a21347",
+    "tdesign-component/example/test/slider/slider_demo_test.dart": "267851f8048e872b77db5afdec3b6a3580d6309bbda167debfc1f4d6717842d0",
+    "tdesign-component/example/test/slider/slider_demo_golden_test.dart": "c08a002c6dd90854906adde41e754565b5727ead976e968fd36cd7d057bb47ff",
+    "tdesign-component/example/test/slider/slider_endpoint_golden_test.dart": "04c1ba6b5e826e96748b29be52785b15b16206a379f7a480233406d8509e1ee3",
+    "tdesign-component/example/test/slider/slider_boundary_golden_test.dart": "c83d6a0d1e6450185ebaf9ec15261f8a38771675a31e61ecf98561f19a2ab933",
+    "tdesign-component/example/test/slider/slider_boundary_sources.dart": "aaf37eae9ba4e5c55d2b7e321ea37388c45235545215c102e9218f63c9e6729d",
+    "tdesign-component/example/test/slider/slider_golden_matrix.dart": "64740f4b129fa918b9117d40439390572c5a367267e8d6a1d364034f58434dab",
+    "tdesign-component/example/test/slider/goldens/slider_boundaries_dark.png": "7f7f7bd4d3f7fa0052e47d8dd304ff1192a28387bbcb01bd71407db1ba6bfe1f",
+    "tdesign-component/example/test/slider/goldens/slider_boundaries_light.png": "69b047a4948f404d1f7dd50ae9ea759ad5ffbe53c42486519dfaa67c50c0d7a2",
+    "tdesign-component/example/test/slider/goldens/slider_endpoints_dark.png": "b63bbc3bc397fbe0dc2ea7f19094b54be2a4e6f48754170e6639f01fe9115d8c",
+    "tdesign-component/example/test/slider/goldens/slider_endpoints_light.png": "453fd9cc6b27abba00401be05b191f3b210eb1c269010aef8b84c8b83b744405",
+    "tdesign-component/example/test/slider/goldens/slider_page_dark.png": "c8b9b468af693072e65424f88fb904a55148e4aa52d893020ce2a26534433b73",
+    "tdesign-component/example/test/slider/goldens/slider_page_light.png": "0c0dc340aa5c695469154679202084bff29d8576ccb4baac15024de1e0a8d133",
+    "tdesign-component/test/components/slider/goldens/t_slider_material.png": "95c967976172cf8872f34aa623837c5161e244b65e460ab0bddc77b9bf215729"
+  },
+  "validation": {
+    "flutter_3.32.0_linux": {
+      "component_tests": 88,
+      "demo_tests": 17,
+      "component_analysis": "pass",
+      "demo_golden": 6,
+      "component_golden": 1
+    },
+    "flutter_3.47.8_macos": {
+      "component_tests": 88,
+      "demo_tests": 17,
+      "component_analysis": "pass"
+    },
+    "golden_comparator": "exact, no updates",
+    "public_api": "compared selected Slider declarations and barrel to origin/develop; unchanged"
+  },
+  "limits": [
+    "whole-project tooling, coverage and generated outputs not repeated for this candidate",
+    "remote CI and devices not validated"
+  ]
+}
