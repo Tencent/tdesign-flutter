@@ -132,12 +132,13 @@ class _TSliderPageState extends State<TSliderPage> {
         title: '垂直型滑块',
         children: [
           ExampleItem(
-            desc: '',
+            desc: '单游标垂直滑块',
             compactStyle: const CompactExampleStyle.surface(contentSpacing: 2),
             methodName: 'SliderVerticalExample',
             builder: (_) => const SliderVerticalExample(),
           ),
           ExampleItem(
+            desc: '带刻度的双游标垂直滑块',
             ignoreCode: true,
             compactStyle: const CompactExampleStyle.surface(),
             builder: (_) => const SliderVerticalExample(
@@ -145,6 +146,7 @@ class _TSliderPageState extends State<TSliderPage> {
             ),
           ),
           ExampleItem(
+            desc: '胶囊型垂直滑块',
             ignoreCode: true,
             compactStyle: const CompactExampleStyle.surface(),
             builder: (_) => const SliderVerticalExample(
@@ -152,6 +154,7 @@ class _TSliderPageState extends State<TSliderPage> {
             ),
           ),
           ExampleItem(
+            desc: '带刻度的胶囊型垂直滑块',
             ignoreCode: true,
             compactStyle: const CompactExampleStyle.surface(),
             builder: (_) => const SliderVerticalExample(

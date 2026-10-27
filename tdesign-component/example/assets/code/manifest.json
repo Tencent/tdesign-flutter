@@ -1592,7 +1592,7 @@
         "title": "垂直型滑块",
         "items": [
           {
-            "description": "",
+            "description": "单游标垂直滑块",
             "assetKey": "slider.SliderVerticalExample"
           }
         ]
