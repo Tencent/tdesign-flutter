@@ -52,3 +52,8 @@ Flutter 3.32.0 使用 Linux x86_64，3.47.8 使用 macOS arm64；自动 Golden �
 - Flutter 3.32.0 Linux 与 3.47.8 macOS 分别执行88项 Slider 组件功能回归、17项 Demo 功能回归及组件严格静态分析，均通过。真实拖动覆盖普通和胶囊窄区间，验证间距及回调取值；既有用例覆盖约束、缩放、两端、RTL 与生命周期。
 - Linux Flutter 3.32.0 按 `TDESIGN_DEMO_TEST_MODULES=false` 执行6项 Demo Golden 和1项组件 Golden，使用默认精确比较器，均通过；本轮没有更新基线。未针对当前候选重跑全项目工具测试、覆盖率及生成产物检查，历史结果不作为当前候选通过证明。
 - 本轮 Slider 构造参数、字段、方法、枚举、formatter typedef 与包导出经 AST 对照 develop 均未变化；仅恢复 formatter 输入和可容纳情况下原有最小间距。靠近取值边界时的间距约束是为避免非法回调而保留的修复，不能宣称所有边界行为与旧版逐项相同。相关本地测试和文件哈希见 [本轮验证记录](./evidence/compatibility-20261027.json)。
+
+## 跨组件 Golden 同步
+
+- PR head `804fac7da54be20e7d1a921d8606c408e643bfdf` 的 CI 暴露出 Swiper、Loading 示例和 Theme 组合场景中引用的 Slider 仍使用旧基线。与 develop 隔离复现并只替换 Slider 源码的对照确认差异由 Slider 修复引起；共享字体保持 PR 版本时换回旧 Slider 即通过。
+- 逐张检查并更新 Swiper 6 张、Loading 4 张及 Theme 1 张基线。图片尺寸不变，像素差异均在 Slider 区域；新图与该 CI 的实际渲染逐像素一致。Linux Flutter 3.32.0 使用默认精确比较器复验，不放宽容差；最终远端 CI 仍需按推送后的 head 单独核对。
