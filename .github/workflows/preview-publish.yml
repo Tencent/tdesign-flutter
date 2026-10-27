@@ -22,7 +22,7 @@ jobs:
     steps:
       - name: Resolve source PR
         id: pr
-        # 固定 github-script v9.0.0：根据 Build run 的提交校验真实来源 PR，避免信任 Artifact 中的 PR 编号。
+        # 按来源分支查询 PR，并校验来源仓库和提交，避免信任 Artifact 中的 PR 编号。
         uses: actions/github-script@3a2844b7e9c422d3c10d287c895573f7108da1b3 # v9.0.0
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
@@ -47,7 +47,7 @@ jobs:
               pull.head.repo?.full_name === source &&
               pull.head.ref === run.head_branch
             );
-            if (matches.length !== 1 || !Number.isSafeInteger(matches[0].number) || matches[0].number <= 0) {
+            if (matches.length !== 1) {
               core.setFailed(`Expected one source PR for ${run.head_sha}, found ${matches.length}`);
               return;
             }
@@ -228,7 +228,7 @@ jobs:
     steps:
       - name: Resolve source PR
         id: pr
-        # 固定 github-script v9.0.0：Build 失败时仍按提交定位来源 PR，以便写入失败评论。
+        # 按来源分支查询 PR，并校验来源仓库和提交，以便写入失败评论。
         uses: actions/github-script@3a2844b7e9c422d3c10d287c895573f7108da1b3 # v9.0.0
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
@@ -253,7 +253,7 @@ jobs:
               pull.head.repo?.full_name === source &&
               pull.head.ref === run.head_branch
             );
-            if (matches.length !== 1 || !Number.isSafeInteger(matches[0].number) || matches[0].number <= 0) {
+            if (matches.length !== 1) {
               core.setFailed(`Expected one source PR for ${run.head_sha}, found ${matches.length}`);
               return;
             }
