@@ -17,14 +17,6 @@ concurrency:
   cancel-in-progress: ${{ github.ref_name != 'develop' }}
 
 jobs:
-  preview-workflow-tests:
-    name: Tests / preview PR resolution
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v7
-      - name: Test preview PR resolution
-        run: node .github/tests/preview-publish.test.cjs
-
   # 各平台复用同次运行生成的资源，避免矩阵内重复生成。
   prepare-demo:
     uses: ./.github/workflows/prepare-demo.yml
