@@ -727,6 +727,63 @@ void main() {
       expect(ended, isNotNull);
     });
 
+    testWidgets('click halo clears: thumb focus released after pointer up', (
+      tester,
+    ) async {
+      await tester.pumpWidget(
+        wrap(
+          TRangeSlider(
+            value: const RangeValues(20, 60),
+            min: 0,
+            max: 100,
+            onChanged: (value) {},
+          ),
+        ),
+      );
+
+      final gesture = await tester.createGesture(
+        kind: ui.PointerDeviceKind.mouse,
+      );
+      await gesture.addPointer(location: Offset.zero);
+      addTearDown(gesture.removePointer);
+
+      // Newer Flutter SDKs grant the hovered thumb focus on pointer down
+      // (framework #182185, issue #189205) and keep painting the overlay at
+      // full strength while focused; older SDKs never focus it here. The
+      // invariant on both: no focus may remain inside the slider once the
+      // pointer interaction ends.
+      bool focusInsideSlider() {
+        final focus = FocusManager.instance.primaryFocus;
+        final focusContext = focus?.context;
+        if (focusContext == null) {
+          return false;
+        }
+        var inside = false;
+        focusContext.visitAncestorElements((element) {
+          if (identical(element, tester.element(find.byType(RangeSlider)))) {
+            inside = true;
+            return false;
+          }
+          return true;
+        });
+        return inside;
+      }
+
+      final center = tester.getCenter(find.byType(RangeSlider));
+      await gesture.down(center + const Offset(100, 0));
+      await tester.pump();
+      await gesture.up();
+      await tester.pumpAndSettle();
+      // The halo must clear as soon as the pointer interaction ends, even
+      // while the pointer is still inside the slider.
+      expect(focusInsideSlider(), isFalse);
+
+      // And it must stay cleared after the pointer leaves the slider.
+      await gesture.moveTo(center - const Offset(320, 0));
+      await tester.pumpAndSettle();
+      expect(focusInsideSlider(), isFalse);
+    });
+
     testWidgets('onChanged null disables and decoration wraps range slider', (
       tester,
     ) async {
