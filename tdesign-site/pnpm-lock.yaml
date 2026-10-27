@@ -9,8 +9,8 @@ importers:
   .:
     devDependencies:
       '@tdesign/site-components':
-        specifier: ^0.20.2
-        version: 0.20.2
+        specifier: ^0.20.4
+        version: 0.20.4
       '@tdesign/theme-generator':
         specifier: 1.3.0
         version: 1.3.0(typescript@4.7.4)
@@ -452,8 +452,8 @@ packages:
   '@rtsao/scc@1.1.0':
     resolution: {integrity: sha512-zt6OdqaDoOnJ1ZYsCYGt9YmWzDXl4vQdKTyJev62gFhRGKdx7mcT54V9KIjg+d2wi9EXsPvAPKe7i7WjfVWB8g==}
 
-  '@tdesign/site-components@0.20.2':
-    resolution: {integrity: sha512-1zRT0CGJyapYnJlKCkeT8T0Xf/Q85rhbeVkt+IEAYbGmtyzMJnLRSiBe3pY2RIdrGYJ6+hKSK7d7FW9ZPR8ldA==}
+  '@tdesign/site-components@0.20.4':
+    resolution: {integrity: sha512-CpoFdvwD+OI47tNRbRqKANU0wJG+rVtcID2V9Ec8PloGN3XJH8JRqZ4ukYXfyEi89o4CfU+teeQkm/MRjeET7Q==}
 
   '@tdesign/theme-generator@1.3.0':
     resolution: {integrity: sha512-BRd1IV/xnwow/8YCGG6yEIREevVMO6fIEs8Hq4zCWuRcmeg0u4pEjlEPeIc4dAe0bW803Q8Px0vqhSVvWBeouA==}
@@ -2313,7 +2313,7 @@ snapshots:
 
   '@rtsao/scc@1.1.0': {}
 
-  '@tdesign/site-components@0.20.2':
+  '@tdesign/site-components@0.20.4':
     dependencies:
       '@popperjs/core': 2.11.8
       hybrids: 9.2.1
