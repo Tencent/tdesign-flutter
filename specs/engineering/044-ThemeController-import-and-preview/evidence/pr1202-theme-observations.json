@@ -1,0 +1,50 @@
+{
+  "themeDefault": {
+    "device": "mobile",
+    "frames": [
+      "http://127.0.0.1:19040/flutter/example/#button"
+    ],
+    "mode": "dark",
+    "radius": "6px"
+  },
+  "themeAdjusted": {
+    "device": "mobile",
+    "frames": [
+      "http://127.0.0.1:19040/flutter/example/#button"
+    ],
+    "mode": "dark",
+    "radius": "4px"
+  },
+  "themeReset": {
+    "device": "mobile",
+    "frames": [
+      "http://127.0.0.1:19040/flutter/example/#button"
+    ],
+    "mode": "dark",
+    "radius": "6px"
+  },
+  "themeLight": {
+    "device": "mobile",
+    "frames": [
+      "http://127.0.0.1:19040/flutter/example/#button"
+    ],
+    "mode": "light",
+    "radius": "6px"
+  },
+  "themeRoute": {
+    "device": "mobile",
+    "frames": [
+      "http://127.0.0.1:19040/flutter/example/#button"
+    ],
+    "mode": "light",
+    "radius": "6px"
+  },
+  "themeDark": {
+    "device": "mobile",
+    "frames": [
+      "http://127.0.0.1:19040/flutter/example/#button"
+    ],
+    "mode": "dark",
+    "radius": "6px"
+  }
+}

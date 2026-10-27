@@ -59,6 +59,44 @@ Base: `182f8cd956edeee4dfd7ef977176309f051e3c3c`. Binary diff SHA-256 (`git diff
 - Current FAQ, audit dispositions and unused-version cleanup come from develop. No push, remote PR mutation, deployment or current remote CI verification.
 
 
+## 文档锚点与历史恢复
+
+来源 PR #1156 `a9a44f1985af4f7b4ca3b46b53f26d5c7d90085e`；独立基线 develop `673ddf8cc69d41632f68832a9079385623af7df1`。仅包含本章节职责；验证结果仅适用于以下本地候选，不继承原 PR CI 或其他拆分分支结果。
+
+2026-10-26 本地验证：相对上述基线的源码二进制补丁 SHA-256（scripts / tdesign-component / tdesign-site，不含本记录）为 `5a33996bd87ebd61b6ef8615f4bc499f08c48bd42e3e35e33ab17375b683dfb0`。
+
+Node 24.22.1：导航、主题桥及站点文档测试 47/47；57 页/360 示例映射、6 份同步输出检查和 Vite 生产构建通过。仅改站点，未运行 Flutter 或 Golden。
+
+本机内置浏览器访问当前分支生产预览 http://127.0.0.1:19116/flutter/：首次验证发现 Markdown 将分组锚点渲染为空段落中的 a，锚点不是 details 的祖先，原逻辑只定位不展开。修复识别相邻折叠章节的空锚点，并增加对应回归及非空段落不误展开测试。修复后 migration-group-basic 和 migration-component-button 均展开对应章节，目标距视口顶部 80px；跨页 FAQ 返回恢复滚动 2321px。相同无 hash URL 的独立历史条目 B / C 分别恢复 basic / display 折叠状态及 2051px / 2159px，前进至 C 仍恢复对应状态。必要截图见本地 artifacts/pr1156-split-local-20261026/navigation-browser-anchor.png。
+
+这是本机浏览器聚焦检查，不代表全部浏览器、移动视口、发布站点或设备验收。未推送、未执行本分支远端 CI。
+
+
+本节按文字记录折叠展开与定位结论，不归档页面截图。
+
+
+### 2026-10-26 PR #1205 在线导航复验
+
+运行源码 `2695c64d96cc5fb0dd65f03731c158ec87b48f75`；[在线预览](https://preview-pr-1205-40282829021-1-tdesign-flutter.surge.sh/flutter/migration-1-0) 的部署任务 40282829021 下载构建任务 40282224119 的产物，构建 head 与上述提交一致。
+
+- 分组 `#migration-group-basic` 与折叠块内部 `#migration-component-icon` 深链接均自动展开基础组件章节；内部目标距视口顶部 80px。截图另向上滚动以完整展示章节上下文，不把截图后的滚动位置当成定位断言。
+- 通过真实侧栏导航访问“迁移指南 → FAQ → 同一迁移指南”，两次 URL 均为 `/flutter/migration-1-0`。第一次仅展开基础组件，滚动位置 2051；第二次仅展开输入组件，滚动位置 2123。浏览器连续后退恢复第一次，连续前进恢复第二次，折叠数组与滚动值均与各自离开前完全一致。
+- [结构化运行记录](./evidence/pr1205-browser-observations.json)保留各项实际观察与结果；不另存页面截图。
+
+该源码提交的远端构建及相关检查已通过。站点实现不变，验收复用已有 47/47 测试及构建结果；无需重跑 Flutter 或 Golden。本轮为桌面浏览器验证，未执行移动设备或其他浏览器验收；证据提交的新 head CI 需另行核对。
+
+### 2026-10-26 PR #1202 整合复验
+
+包含 #1205 全部提交和 theme-generator 1.3.0。基线 673ddf8cc69d41632f68832a9079385623af7df1，站点二进制补丁 SHA-256 e7884d66243819bb703865b8dacd01b5769fe5bbb90988d098f7a94b26cbd710（计算入口同 Spec 044）。#1205 导航实现与测试未改动。
+
+仅升级主题生成器的对照版本中，内部 #migration-component-icon 章节仍折叠，证明未覆盖 #1205。整合后的生产预览中，内部锚点及 #migration-group-basic 均自动展开，目标距视口顶部均为 80px。
+
+真实侧栏导航创建同一无 hash URL 的历史条目：A 仅展开基础组件、滚动 2339px；B 仅展开输入组件、滚动 2483px。后退到 B、继续后退到 A、前进回 B，折叠数组和滚动值分别完全恢复。见[结构化观察](./evidence/pr1202-navigation-observations.json)。
+
+整合候选站点测试共 47/47、生产构建通过。本轮为本地桌面浏览器验收，未代表线上部署、移动设备或全部浏览器；旧 #1205 远端结果只适用于其原 head。
+
+
+
 ## 主题功能色板
 
 来源 PR #1156 `a9a44f1985af4f7b4ca3b46b53f26d5c7d90085e`；独立基线 develop `673ddf8cc69d41632f68832a9079385623af7df1`。仅包含本章节职责；验证结果仅适用于以下本地候选，不继承原 PR CI 或其他拆分分支结果。
@@ -124,6 +162,15 @@ macOS Flutter 3.32.0 / 3.47.7：Example 严格分析均无诊断，文档示例�
 
 该源码提交的远端构建及相关检查已通过。原候选的证据补充未改变运行源码、生成片段或 Golden 基线；复用上文同一源码的双版本与 Golden 检查。本轮为桌面浏览器验证，未执行移动设备或其他浏览器验收；证据提交的新 head CI 需另行核对。
 
+### PR #1202：site-components 回退至 main 版本
+
+依据 Flutter main d0de29e8，依赖从 ^0.20.0 回退为 ^0.18.1，锁文件实际解析 0.18.1；hybrids 连带回退至 8.2.2。其他依赖版本及运行源码未变。
+
+站点目录 Git tree f076189826367459837dccf8e68d423b64ac9d7f（git rev-parse HEAD:tdesign-site），Node 24.15.0 / pnpm 11.20.0：冻结安装成功，实际安装版本 0.18.1；站点测试 51/51、57 页 / 360 示例映射和生产构建通过。
+
+本机浏览器：移动端默认圆角 6px，调节后 4px，重置恢复 6px；内部锚点自动展开并定位在顶部 80px，跳转 FAQ 后后退恢复章节展开及滚动 2640px。
+
+
 ### 2026-10-26 同步最新 develop 后复核
 
 合并 develop 942152009bf2520b98681da0a63d130ef9883d46（#1204）；运行候选 22c2284d29102aa654bb8f0b6e6c58cb93d703cc。相对该基线的源码二进制补丁 SHA-256（git diff --binary --no-ext-diff origin/develop -- scripts tdesign-component tdesign-site，不含本记录）为 4c630c97c579d71e72c931e45500606804339e70fc61bf238efd3f15c793aa40。
@@ -145,6 +192,19 @@ macOS Flutter 3.32.0 / 3.47.7：Example 严格分析均无诊断，Theme 与 doc
 本机浏览器：Theme 页面及功能色生成代码面板可展示。纯站点生产预览未包含 Flutter 构建资产，不作为 Flutter iframe 功能验收。
 
 本轮未重跑完整 Flutter 演示、真机或两个官网全量回归；原截图和 Flutter 测试仍绑定原候选。最终远端 CI 单独核对。
+
+### PR #1202：合并 develop 304bf7d6 后冲突复核
+
+运行候选 170d95c6（合并 develop 304bf7d6）。冲突仅涉及 Spec 046 四份文档和 package.json 的 theme-generator 版本，分别保留导航与色板记录、选择 1.3.0。site-components 继续使用 0.18.1。站点目录与合并前 c6015bfc 完全一致，tdesign-component 目录与 develop 304bf7d6 完全一致，未覆盖两边实现。
+
+Node 24.15.0 / pnpm 11.20.0 冻结安装、站点测试 51/51、57 页/360 示例映射和生产构建通过；macOS Flutter 3.32.0 Example 严格分析无诊断，Theme 与 documentation_examples 非 Golden 测试 24/24 通过。git diff --check 通过。未重跑浏览器、双版本完整矩阵或 Golden；本轮结果仅覆盖上述检查，最终远端 CI 另行核对。
+
+## 2026-10-26 PR #1202 拆分后的站点修复验证
+
+基线 develop `920babc94ff62b822c4c093a35cba016bfc243d9`；站点源码补丁 SHA-256 `257a952a48f81113547eced6614cd8ae1ef4bcc8c9c6be49904450ab312fb42e`。本 PR 只保留主题初始化、默认 CSS 提取、锚点展开与路由历史恢复；迁移正文、消费示例和专属文档布局移至独立文档 PR，不在本分支重复维护。
+
+现有本地 Node 工具直接执行正式测试文件与构建入口：54/54 测试、57 页/360 示例映射、8 份文档同步、生产构建及差异检查通过。包管理器自动安装因 registry 请求失败及无交互终端未启动，未将其记作项目测试失败。未重新执行 Flutter、Golden、设备或完整浏览器矩阵；本次范围仅为站点源码，远端 CI 按最终提交核对。
+
 
 ## 2026-10-26 独立迁移指南整理
 
@@ -189,3 +249,52 @@ Flutter 3.32.0 / 3.47.7：严格分析均无诊断，运行时测试各 16/16；
 本地通过共用入口执行 7 项脚本测试及 Flutter 3.32.0 / 3.47.7 严格分析、各 16 项消费者测试；另通过 42 项站点测试、8 份文档同步、57 页/360 示例映射与文档相对链接检查。联网依赖解析等待未完成，双版本重跑使用临时适配仅为 pub get 添加 --offline，其余入口和测试不变。指南与包内副本逐字节不变；未重复浏览器、构建或完整组件/Golden/设备矩阵。
 
 运行器聚合补充：在 `3abf5810e107e87ddb320ca26a492e1d765dd06e` 上将专用运行器移入 `test/migration_consumer/run.dart`，从自身目录定位仓库，仅复制 pubspec、分析配置、lib/test 与 Example 示例。运行器 SHA-256：`fb3739b8e43b534284de2ae5d9480a5a04edfd9dccda7c43fad51077cac81a76`。共用入口的 7 项脚本测试及 8 份文档同步通过；Flutter 3.32.0 经共用入口、3.47.7 从仓库外目录直接运行，使用缓存依赖的严格分析与各 16 项测试通过。指南源码及测试用例不变；本补充未重跑站点构建或浏览器。
+
+### 2026-10-27：复用公共定位并精简导航
+
+基线 develop 8bd4605c0760d968ac20f4eec9ff4fb6bb095fc5；相对该基线的站点二进制补丁 SHA-256（git diff --binary --no-ext-diff origin/develop -- tdesign-site）为 a18cca8c8a84774a25330d18e7e51c7f79d8eb8385853e10a1ca01bb316bf03a。合入最新迁移指南后，正文及组件源码与 develop 一致，不回退 #1210 或 #1203。
+
+对照 Tencent/tdesign main 41ae3ff8c4f20a9863edfbac70d5b652c982f210 的 td-doc-content：首次加载和标题点击的定位由公共组件负责；本分支只补 Vue Router 正文就绪、实际折叠展开和独立历史条目恢复。移除旧分组的相邻空锚点猜测、额外 80px 滚动偏移和重复 CSS，精简等待回调。附录仍消费 data-expand-details，保留该最小关联。运行源码与相应测试净减少 39 行，移除的两项测试只验证已删除的旧分组兼容。
+
+Node 24.15.0：主题/导航 22/22、站点文档 33/33，共 55/55；57 页/360 示例映射、8 份文档同步、生产构建与 diff 检查通过。
+
+本地生产预览：普通 Icon 锚点不追加偏移，锚点盒顶部 0、可见内容顶部 123.5px；附录自动展开，标题顶部 184px。原生重复点击同一附录 hash，在手动收起后重新展开并定位；组件默认与既有文档间距仍生效。对同一无 hash URL 创建 A（附录展开、27966.5px）和 B（附录收起、0px）两次访问，后退 B、后退 A、前进 B 的折叠与滚动值分别完全恢复。
+
+本轮未执行真机、完整浏览器矩阵或 Golden；原候选截图和旧 80px 观察不外推到本次精简版本。最终远端 CI 按新 head 独立核对。
+
+### 2026-10-27：正式升级 site-components 0.20.2
+
+从 npm 官方源安装 @tdesign/site-components 0.20.2（非源码构建替代包），package.json 配置 ^0.20.2，锁文件与实际 node_modules 均为 0.20.2；完整性与官方 dist.integrity 一致。保留 theme-generator 1.3.0，hybrids 连带升级为 9.2.1。pnpm 为刚发布且已验证的精确版本添加 minimumReleaseAgeExclude，不扩大其他包或版本范围；冻结锁文件安装通过。
+
+基线 develop 8bd4605c0760d968ac20f4eec9ff4fb6bb095fc5，站点二进制补丁 SHA-256（git diff --binary --no-ext-diff origin/develop -- tdesign-site）6512abe1adf937b6684f66e3afc9d77bbe301cb622cc6e9a5131349d07daf50b。Node 24.15.0 / pnpm 11.20.0：主题/导航 22/22、站点文档 33/33，共 55/55；57 页/360 示例映射、8 份文档同步检查及生产构建通过。
+
+本机桌面浏览器加载真实 npm 包，Flutter Web 示例使用 3.47.7：默认圆角 6px，调整 4px，重置 6px；浅深色和 Button → Divider → Button 切换正常，真实 Flutter 预览同步。生产预览中普通 Icon 锚点的可见内容顶部 123.5px；附录初始及重复同 hash 点击均能展开，锚点盒顶部为 0。独立历史条目 A（展开、27966.5px）和 B（收起、0px）在后退/前进时完全恢复。
+
+页尾实测：目录底部与手机预览底部均为 185px，对应页脚顶部 245px，分别保持 60px 间隔；页脚宽度 1004px，未叠加手机预览侧栏的额外右侧内边距。源码审查确认 0.20.2 新增公共页脚和目录/手机避让修复，没有提供 Vue Router 就绪等待或折叠历史恢复，故保留本站的必要补充逻辑。
+
+本轮聚焦验收未发现回归，不代表 uni 官网、所有组件/浏览器、移动视口、真机或 Golden 已完成全量回归；远端 CI 按升级后的最终 head 核对。
+
+### 2026-10-27：升级 npm latest 0.20.4
+
+官方 npm latest 核对为 0.20.4，配置 ^0.20.4、锁文件及实际安装均为 0.20.4。仅更新依赖、锁文件及精确版本的发布时间豁免，移除旧 0.20.2 豁免。候选为 11e7ed35 加本次站点补丁，git diff --binary HEAD -- tdesign-site SHA-256 1a510b9f995b9b72afbd8243563f825861c037c885dff6aab6049fd945137a0e。
+
+Node 24.15.0 / pnpm 11.20.0：主题/导航 22/22、文档 33/33，共 55/55；57 页/360 示例映射、8 份同步检查及生产构建通过。此前浏览器布局、主题和历史恢复观察仍绑定 0.20.2，本轮不外推为 0.20.4 的完整浏览器或真机复验；远端 CI 按最终 head 核对。
+
+### 2026-10-27：site-components 0.20.4 浏览器复验
+
+运行源码 02dedb50d42bac0d76ec97f6cfa9890d7a27168d，站点 Git tree bc92d56b4efd623552a52d6323c7405fd1a6bee5；实际安装 npm 正式包 @tdesign/site-components 0.20.4、theme-generator 1.3.0。Node 24.15.0、Flutter Web 3.47.7，本机内置桌面浏览器 1280×720。本轮重新构建生产站点，在独立端口运行；主题页连接同一源码的真实 Flutter 示例，不使用旧版截图作通过证明。
+
+- 主题：默认 6px → 调整 4px → 重置 6px；明暗往返及 Button → Divider → Button 正常，真实 Flutter 预览同步。
+- 锚点：Icon 普通锚点盒顶部 0，可见内容顶部 123.5px；附录深链接自动展开，标题顶部 184px，手动收起后原生重复点击同一 hash 重新展开并定位。
+- 历史：同一无 hash URL 的 A（附录展开、27966.5px）与 B（附录收起、720px）独立保存；后退 B、继续后退 A、前进 B，折叠数组及滚动值分别完全恢复。
+- 页脚：深浅色下，目录与手机预览底部均为 185px，对应页脚顶部 245px，均保留 60px 间隔；页脚宽 1004px，未叠加预览侧栏右侧内边距，实际图像检查未见覆盖。
+
+[结构化浏览器记录](./evidence/pr1202-site-components-0204-browser.json)绑定上述源码；截图仅保存在本地 artifacts，不新增 Spec 页面图片。此前 55/55 自动化检查与静态分析仍绑定同一运行源码，本轮只重跑生产构建与浏览器检查，未将历史自动化结果刷新为新执行。
+
+控制台边界：首次启动的 Flutter 调试预览出现一次 TextPainter debugSize == size 断言，定位到 example_widget.dart:542 的模块标题 Text；页面复载、后续交互和不加载 site-components 的独立 Flutter 预览未复现。当前无法归因于 0.20.4，不能声称运行全程无异常；保留后续冷启动复核项。另有外部 notice.json / components-notice.json 请求失败，来源为 tdesign-site-services.surge.sh，本轮四项交互与布局仍通过，不代表公告服务验收完成。
+
+这是本地桌面聚焦验证，未执行移动视口/真机、全部浏览器、全部组件、uni 官网或 Golden 全量回归。最终文档提交的远端 CI 需按新 head 核对，保持 PR 打开且不合并。
+
+### @tdesign 作用域发布时间豁免
+
+按用户要求，将 minimumReleaseAgeExclude 的逐包逐版本条目改为单一 @tdesign/* 模式，覆盖该作用域内所有包；其他作用域的发布时间限制保持不变。冻结锁文件安装通过，依赖版本及锁文件未变化；本次仅调整包管理策略，不刷新此前浏览器验收结论。

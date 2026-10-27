@@ -592,6 +592,7 @@ const componentTestManifests = <ComponentTestManifest>[
     coverageTargets: ['lib/src/components/tabbar/'],
     componentTests: [
       'test/components/tabbar/t_tab_bar_test.dart',
+      'test/components/tabbar/t_api_compatibility_test.dart',
       'test/components/tabbar/t_tab_bar_menu_callback_test.dart',
       'test/theme/theme_implements_compatibility_test.dart',
     ],

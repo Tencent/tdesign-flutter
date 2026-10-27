@@ -60,7 +60,7 @@
 - `operation` 是内容右侧、尾部图标左侧的 Widget 插槽，可与 `suffixIcon` 共存；点击报告 `TNoticeBarTapTarget.operation`。
 - 删除职责重复或含义模糊的 `left`、`right`、`prefixIcon` 与 ThemeData `variant`。
 - 移除 `_effectiveMarquee`、`_effectiveInterval`，改用 `widget.marquee`、`widget.interval`。
-- 站点 README 只描述最终 API：`content`、`items`、`status`、`prefix`、`operation`、`suffixIcon`、`direction`、`maxLines`、`marquee`、`speed`、`interval`、`onPressed`、`TNoticeBarTapTarget`、`TNoticeBarThemeData`、`TNoticeBarStatus`。
+- 站点 README 只描述最终 API：`content`、`items`、`status`、`prefix`、`operation`、`suffixIcon`、`direction`、`maxLines`、`marquee`、`speed`、`interval`、`onTargetTap`、兼容入口 `onPressed`、`TNoticeBarTapTarget`、`TNoticeBarThemeData`、`TNoticeBarStatus`。
 - 公开 Example 顺序为“组件类型 / 组件状态 / 可滚动公告栏”，对应官方页面 8 个 Demo 块、14 个 `TNoticeBar` 实例。
 - “组件类型”依次展示纯文字、带图标、带关闭、带入口、自定义样式、自定义内容；同一官方 Demo 块中的多个实例由单个 Example builder 组合。
 - “组件状态”在同一 Demo 块内依次展示普通、成功、警示、错误四种状态；“可滚动公告栏”在同一 Demo 块内依次展示无图标水平滚动、带图标水平滚动、垂直滚动。
@@ -122,3 +122,11 @@
 ### 过滤范围与内置区域兼容边界
 
 上述新增过滤仅作用于自定义 prefix 和 operation，不作用于内置前缀图标、正文或尾部图标。内置区域沿用原点击识别：正文按住超过长按时限后松开仍可通知；正文与自定义操作区分别有手指按下时，正文仍可按原手势通知，而自定义操作区通知被抑制。公开 dartdoc 和生成 API 必须明确此范围，不通过收紧内置手势去匹配宽泛文案。正式回归同时断言内置通知和自定义过滤结果。
+
+## 1.0.1 API 兼容迁移
+
+`onTargetTap` 替代 `onPressed`，保留区域目标参数；过滤仅适用于自定义区域，内置区域保留原手势。
+
+新旧参数同时提供时，新参数优先，仅通知一次；没有新参数时保留旧公开 getter 的继承覆盖。旧入口及类型保留，标注推荐入口和 2.0.0 删除计划。旧 API、默认行为及 Controller 绑定规则不变。
+
+验收覆盖旧调用、继承覆盖、新参数优先级、空回调及实际交互。

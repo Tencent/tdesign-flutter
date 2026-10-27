@@ -26,7 +26,8 @@
 | width | double? | - | 内容外框宽度（包含 padding）。 未设置时按 `content` 的实际布局宽度确定，并受组件主题尺寸约束。 | 否 |
 | height | double? | - | 内容外框高度（包含 padding）。 未设置时按 `content` 的实际布局高度确定，并受组件主题尺寸约束。 | 否 |
 | onTap | VoidCallback? | - | 点击气泡内容时触发。 | 否 |
-| onLongTap | VoidCallback? | - | 长按气泡内容时触发。 | 否 |
+| onLongTap | VoidCallback? | - | 已废弃，此为兼容入口。请使用 onLongPress；将在 2.0.0 删除。 | 否 |
+| onLongPress | VoidCallback? | - | 长按气泡内容时触发，与旧参数同时提供时本参数优先。 | 否 |
 
 
 ###### 返回值
@@ -65,7 +66,8 @@
 | height | double? | - | 内容外框高度（包含 padding）。 | 否 |
 | key | Key? | - | 组件标识，用于区分或保留组件状态。 | 否 |
 | onClose | VoidCallback? | - | 气泡通过任意路径关闭后触发。 | 否 |
-| onLongTap | VoidCallback? | - | 长按气泡内容时触发。 | 否 |
+| onLongPress | VoidCallback? | - | 长按气泡内容时触发。 与旧参数同时提供时优先使用本参数。 | 否 |
+| onLongTap | VoidCallback? | - | 已废弃，此为兼容入口。请使用 `onLongPress`；将在 2.0.0 删除。 | 否 |
 | onOpen | VoidCallback? | - | 气泡展开后触发。 | 否 |
 | onTap | VoidCallback? | - | 点击气泡内容时触发。 | 否 |
 | placement | TPopoverPlacement | TPopoverPlacement.top | 浮层出现位置。 | 否 |

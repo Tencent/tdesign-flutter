@@ -1,0 +1,91 @@
+{
+  "baselineAnchor": {
+    "folds": [
+      false
+    ],
+    "found": true,
+    "targetTop": 0
+  },
+  "integratedAnchor": {
+    "folds": [
+      true
+    ],
+    "found": true,
+    "scrollY": 2600,
+    "targetTop": 120
+  },
+  "productionInsideAnchor": {
+    "open": true,
+    "top": 80,
+    "scrollY": 2640
+  },
+  "groupCheck": {
+    "open": true,
+    "top": 80
+  },
+  "historyA": {
+    "folds": [
+      false,
+      true,
+      false,
+      false,
+      false,
+      false,
+      false
+    ],
+    "url": "http://127.0.0.1:19041/flutter/migration-1-0",
+    "y": 2339
+  },
+  "historyB": {
+    "folds": [
+      false,
+      false,
+      false,
+      true,
+      false,
+      false,
+      false
+    ],
+    "url": "http://127.0.0.1:19041/flutter/migration-1-0",
+    "y": 2483
+  },
+  "backB": {
+    "folds": [
+      false,
+      false,
+      false,
+      true,
+      false,
+      false,
+      false
+    ],
+    "url": "http://127.0.0.1:19041/flutter/migration-1-0",
+    "y": 2483
+  },
+  "backA": {
+    "folds": [
+      false,
+      true,
+      false,
+      false,
+      false,
+      false,
+      false
+    ],
+    "url": "http://127.0.0.1:19041/flutter/migration-1-0",
+    "y": 2339
+  },
+  "forwardB": {
+    "folds": [
+      false,
+      false,
+      false,
+      true,
+      false,
+      false,
+      false
+    ],
+    "url": "http://127.0.0.1:19041/flutter/migration-1-0",
+    "y": 2483
+  }
+}
