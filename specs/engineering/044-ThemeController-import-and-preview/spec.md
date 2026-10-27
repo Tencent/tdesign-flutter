@@ -55,3 +55,11 @@
 覆盖在线消息生命周期、非法与跨源消息、完整 CSS 导出离线转换、浅深 JSON 加载、小数与零行高、实例覆盖优先级。旧整数 JSON 保持兼容；实时消息协议与离线 CSS 解析范围分别验证。
 
 验收标准描述应满足的行为，不表示已执行或通过；执行范围与证据见 [acceptance.md](./acceptance.md)，剩余事项只在 [tasks.md](./tasks.md) 维护。
+
+## 官网主题生成器 1.3.0 接入
+
+旧版生成器在自定义元素属性初始化前按 Web 设备生成主题，覆盖移动端 6px 圆角为 3px。升级固定依赖到 @tdesign/theme-generator@1.3.0 后，上游按移动端初始化，官网恢复普通 device="mobile"，不再保留 .attr 兼容绕过。
+
+新版包移除了旧 raw-loader 默认 CSS 结构，默认主题基线改为 TypeScript AST 静态提取：关联设备归一化条件和主题选择条件，读取 mobile/web 两组 light/dark/extra 字符串。不执行依赖 bundle，不硬编码压缩变量名，不复制主题 token；结构不符合预期时显式失败。复用现有 TypeScript 依赖，保持 CSS 到 Flutter token 的转换协议及导入行为。
+
+验收标准：移动端默认 6px；调整、重置、明暗和组件页面切换正常；默认 CSS fixtures 不变；主题桥、文档导航检查和生产构建通过。不改变 Dart 公开 API。

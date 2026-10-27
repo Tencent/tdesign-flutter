@@ -5,3 +5,6 @@ allowBuilds:
   esbuild: true
   fsevents: true
   less: true
+
+minimumReleaseAgeExclude:
+  - '@tdesign/*'

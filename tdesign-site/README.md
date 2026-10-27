@@ -38,3 +38,5 @@ pnpm install --frozen-lockfile
 包内README和迁移副本统一执行 `node ../scripts/sync-readme.mjs` 生成，或加 `--check` 只读检查。`script/copy-readme.js` 仅保留兼容入口。
 
 更新日志保留现有发布工具入口，不在文档构建时生成或覆盖；版本发布步骤见[PUBLISH.md](../PUBLISH.md)。
+
+文档锚点与浏览器历史恢复测试通过 `pnpm test:theme` 执行。

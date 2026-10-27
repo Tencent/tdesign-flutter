@@ -1,6 +1,7 @@
 <template>
   <td-doc-content
     ref="tdDocContent"
+    @click.capture="revealAnchor"
     platform="mobile"
     :class="{ 'flutter-preview-layout': info.isComponent || info.flutterExample }"
     page-status="hidden"
@@ -33,6 +34,7 @@ import 'prismjs/components/prism-dart.js';
 import 'prismjs/components/prism-yaml.js';
 
 import FlutterPreview from './flutter-preview.vue';
+import { revealClickedDocumentAnchor } from '../utils/documentAnchor.mjs';
 import { flutterExampleLiveUrl } from '../flutter-example-docs/live-url.mjs';
 
 export default defineComponent({
@@ -63,6 +65,12 @@ export default defineComponent({
         hostname: window.location.hostname,
         devServerPort: import.meta.env.VITE_FLUTTER_WEB_PORT || '19001',
       });
+    },
+  },
+
+  methods: {
+    revealAnchor(event) {
+      revealClickedDocumentAnchor(event);
     },
   },
 
