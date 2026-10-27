@@ -53,6 +53,10 @@ function customRender({ source, file, md }: any) {
     ...data,
   };
 
+  const toc = pageData.toc
+    ? `${pageData.tocLevel ? `$<toc${JSON.stringify({ level: pageData.tocLevel })}>` : '[toc]'}\n`
+    : '';
+
   // md filename
   const reg = file.match(/docs\/components\/(\S*)(?=\/\S*.md)/);
   const componentName = reg && reg[1];
@@ -73,12 +77,12 @@ function customRender({ source, file, md }: any) {
     mdSegment.demoMd = md.render.call(md, `${demoMd.replace(/<!--[\s\S]+?-->/g, '')}`).html;
     mdSegment.apiMd = md.render.call(
       md,
-      `${pageData.toc ? '[toc]\n' : ''}${apiMd.replace(/<!--[\s\S]+?-->/g, '')}`,
+      `${toc}${apiMd.replace(/<!--[\s\S]+?-->/g, '')}`,
     ).html;
   } else {
     mdSegment.docMd = md.render.call(
       md,
-      `${pageData.toc ? '[toc]\n' : ''}${content.replace(/<!--[\s\S]+?-->/g, '')}`,
+      `${toc}${content.replace(/<!--[\s\S]+?-->/g, '')}`,
     ).html;
   }
 
@@ -88,7 +92,7 @@ function customRender({ source, file, md }: any) {
 
     if (fs.existsSync(designDocPath)) {
       const designMd = fs.readFileSync(designDocPath, 'utf-8');
-      mdSegment.designMd = md.render.call(md, `${pageData.toc ? '[toc]\n' : ''}${designMd}`).html;
+      mdSegment.designMd = md.render.call(md, `${toc}${designMd}`).html;
     }
   }
 

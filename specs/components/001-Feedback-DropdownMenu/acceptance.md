@@ -87,3 +87,34 @@ Form 关闭断言后的绑定兼容性另有独立的[双版本 Web release 验�
 - Flutter 3.32.0 / 3.47.7 在独立目录分别生成并检查 57 份 API，两版本全部产物逐字一致；相对起点仅五份目标 API 文档变化。
 - 每 SDK：字体覆盖及相关工具测试 14 项通过，组件包严格 analyze 零诊断；未修改字体清单或资源。命令包括 `node tool/generate_api.mjs`、`node tool/generate_api.mjs --check`、`flutter test --no-pub test/tool/run_visual_regression_test.dart --reporter expanded`、`flutter analyze --no-pub --fatal-infos`，均使用对应 SDK。
 - 六份源码及五份生成 API 的路径/NUL/字节 SHA-256 为 `799e3947381c0fd1747aaafd582dda9d3d78bf6eff716040b39d87b6b193ce2f`。环境、依赖锁文件、命令、token 对比与日志摘要见[验证数据](evidence/1.0.1-controller-api-docs.json)；原始日志保存在工作区外层 `artifacts/pr1148-independent/publication/pr1191-controller-api-docs/`。
+
+
+<a id="shared-controller-validation"></a>
+
+## 共享 Controller 状态与回调隔离（2026-10-26，#1195 / #1203）
+
+### 候选与审查结论
+
+- 已重新拉取 develop `304bf7d6696d2c2eb6f2d4efb604ae7ea6310f08` 与 PR head `455666bf85cb0fcad0c973163d79947c5c2af57b`；两者的 DropdownMenu 差异仅为原 owner 写保护、didUpdateWidget 读隔离及对应测试，原修复未过时。
+- #1203 对 items 更新的修复合理，但原候选还缺少旧 trigger 和异步完成后的回调/焦点保护。本地追加补丁保留私有 API、默认行为及后绑定覆盖规则，补齐入口和恢复点校验；旧关闭操作继续清理本地浮层，失去绑定后不再派发业务回调。
+- 验证时的本地候选为上述 PR head 加未提交的源码/测试 diff；完整源码、测试和 diff SHA-256、SDK 元数据、锁文件/LCOV/日志摘要见[验证数据](evidence/pr1203-shared-controller.json)。交付提交由 Git/PR 历史追溯；文档整理不改变该代码指纹，本地结果不等于远端最终 head CI 通过。
+
+### 对照与最终结果
+
+| 范围 | 环境 | 结果与证明范围 |
+| --- | --- | --- |
+| 原 PR 源码 + 最终新增的 5 项回归 | macOS arm64 / Flutter 3.47.7 | 2 通过、3 失败：旧 trigger、打开动画换绑、关闭动画换绑分别误发旧实例回调；items 禁用/删除后的关闭重开通过。确认这是原候选的边界缺口。 |
+| 本地修复，全部 DropdownMenu 正式测试 | macOS arm64 / Flutter 3.32.0 | 105/105 通过；严格 analyze 零诊断；生产覆盖率 1041/1049 = 99.24%。 |
+| 同一源码/测试修复，全部 DropdownMenu 正式测试 | macOS arm64 / Flutter 3.47.7 | 105/105 通过；严格 analyze 零诊断；生产覆盖率 1041/1049 = 99.24%。 |
+
+5 项新增回归均加入现有 manifest 已登记的 t_dropdown_menu_test.dart；未新增独立测试入口。覆盖旧 trigger 回调、打开/关闭动画中换绑、旧 items 禁用与删除，以及新 owner 状态、面板、回调次数、关闭重开与请求 Future 完成。覆盖率按现有 dropdown_menu 生产目录过滤，未混入 Demo 或测试源码。
+
+两个 SDK 还分别运行组件/视觉调度器与共享字体清单自测 25 项，全部通过；连同组件测试每 SDK 合计 130 项。此处视觉调度器自测检查登记与字体覆盖，不渲染或更新 Golden。
+
+执行入口：组件包内分别使用对应 SDK 的 `flutter pub get --offline`、`flutter test --no-pub test/components/dropdown_menu/ test/tool/run_component_regression_test.dart test/tool/run_visual_regression_test.dart --coverage --reporter expanded`、`dart run tool/check_component_coverage.dart dropdown_menu`、`flutter analyze --no-pub --fatal-infos`。两个 SDK 分别解析依赖，独立保存锁文件、LCOV 和日志。
+
+3.47.7 初次运行遇到前一 SDK 构建的 ink_sparkle shader 缓存解码失败；删除隔离目录的 build 与 .dart_tool/flutter_build 后，同一源码、测试与断言通过。该准备问题不记为组件逻辑回归，也不省略失败记录。
+
+### 验证边界
+
+本地测试不代表远端最终 head CI、真机或发布验证。未改变布局、绘制、Theme、公开 Demo、资源或公开 API，本事项不生成/更新 Golden，不向 specs 添加图片。原有设备和视觉待办保留；已打开面板向新 owner 自动迁移不在本事项承诺内。交付与重验待办见 [tasks.md](./tasks.md)。
