@@ -14,60 +14,45 @@ permissions:
   pull-requests: write
 
 jobs:
-  resolve-pr:
+  preview-success:
     runs-on: ubuntu-latest
     if: >
       github.event.workflow_run.event == 'pull_request' &&
-      (github.event.workflow_run.conclusion == 'success' || github.event.workflow_run.conclusion == 'failure')
-    outputs:
-      number: ${{ steps.pr.outputs.number }}
+      github.event.workflow_run.conclusion == 'success'
     steps:
       - name: Resolve source PR
         id: pr
+        # 固定 github-script v9.0.0：根据 Build run 的提交校验真实来源 PR，避免信任 Artifact 中的 PR 编号。
         uses: actions/github-script@3a2844b7e9c422d3c10d287c895573f7108da1b3 # v9.0.0
         with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          result-encoding: string
           script: |
             const run = context.payload.workflow_run;
             const source = run.head_repository?.full_name;
-            const branch = run.head_branch;
-            if (!source || !branch || !run.head_sha) {
+            if (!source || !run.head_branch || !run.head_sha) {
               throw new Error('Source repository, branch, or SHA is missing');
             }
-            const owner = source.split('/')[0];
             const pulls = await github.paginate(github.rest.pulls.list, {
               owner: context.repo.owner,
               repo: context.repo.repo,
-              state: 'all',
-              head: `${owner}:${branch}`,
+              state: 'open',
+              head: `${source.split('/')[0]}:${run.head_branch}`,
               per_page: 100,
             });
-            const candidates = pulls.filter((pull) =>
+            const matches = pulls.filter((pull) =>
               pull.base.repo.full_name === `${context.repo.owner}/${context.repo.repo}` &&
               ['develop', 'main'].includes(pull.base.ref) &&
+              pull.head.sha === run.head_sha &&
               pull.head.repo?.full_name === source &&
-              pull.head.ref === branch
+              pull.head.ref === run.head_branch
             );
-            const open = candidates.filter((pull) => pull.state === 'open');
-            const matches = open.filter((pull) => pull.head.sha === run.head_sha);
-            if (matches.length > 1) {
-              throw new Error(`Multiple source PRs match ${source}:${branch} at ${run.head_sha}`);
+            if (matches.length !== 1 || !Number.isSafeInteger(matches[0].number) || matches[0].number <= 0) {
+              core.setFailed(`Expected one source PR for ${run.head_sha}, found ${matches.length}`);
+              return;
             }
-            if (matches.length === 0) {
-              if (candidates.length > 0) {
-                core.notice(`Skipping outdated preview for ${source}:${branch} at ${run.head_sha}`);
-                return;
-              }
-              throw new Error(`No open source PR found for ${source}:${branch} at ${run.head_sha}`);
-            }
-            core.setOutput('number', String(matches[0].number));
+            return String(matches[0].number);
 
-  preview-success:
-    needs: resolve-pr
-    runs-on: ubuntu-latest
-    if: >
-      needs.resolve-pr.outputs.number != '' &&
-      github.event.workflow_run.conclusion == 'success'
-    steps:
       - name: Download preview metadata
         uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c # v8.0.1
         with:
@@ -80,7 +65,7 @@ jobs:
         id: build_env
         shell: bash
         env:
-          EXPECTED_PR_NUMBER: ${{ needs.resolve-pr.outputs.number }}
+          EXPECTED_PR_NUMBER: ${{ steps.pr.outputs.result }}
         run: |
           set -euo pipefail
           METADATA_FILE="$RUNNER_TEMP/preview-metadata/build-env.txt"
@@ -157,32 +142,10 @@ jobs:
             }
             return `${context.serverUrl}/${context.repo.owner}/${context.repo.repo}/actions/runs/${runId}/artifacts/${artifact.id}`;
 
-      - name: Check PR before deployment
-        id: before_deploy
-        uses: actions/github-script@3a2844b7e9c422d3c10d287c895573f7108da1b3 # v9.0.0
-        env:
-          PR_NUMBER: ${{ needs.resolve-pr.outputs.number }}
-        with:
-          script: |
-            const run = context.payload.workflow_run;
-            const { data: pull } = await github.rest.pulls.get({
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              pull_number: Number(process.env.PR_NUMBER),
-            });
-            const current = pull.state === 'open' &&
-              pull.base.repo.full_name === `${context.repo.owner}/${context.repo.repo}` &&
-              ['develop', 'main'].includes(pull.base.ref) &&
-              pull.head.repo?.full_name === run.head_repository.full_name &&
-              pull.head.ref === run.head_branch && pull.head.sha === run.head_sha;
-            if (!current) core.notice('Skipping outdated preview for changed or closed PR');
-            core.setOutput('current', String(current));
-
       - name: Deploy preview to Surge
-        if: steps.before_deploy.outputs.current == 'true'
         id: deploy
         env:
-          PR_NUMBER: ${{ needs.resolve-pr.outputs.number }}
+          PR_NUMBER: ${{ steps.pr.outputs.result }}
           SURGE_TOKEN: ${{ secrets.TDESIGN_SURGE_TOKEN }}
         run: |
           set -euo pipefail
@@ -197,7 +160,6 @@ jobs:
           echo "url=$DEPLOY_DOMAIN" >> "$GITHUB_OUTPUT"
 
       - name: Verify deployed Flutter Web assets
-        if: steps.before_deploy.outputs.current == 'true'
         env:
           DEPLOY_URL: ${{ steps.deploy.outputs.url }}
         run: |
@@ -230,29 +192,7 @@ jobs:
           echo "Flutter Web deployment is incomplete; preview comment will not publish a broken URL" >&2
           exit 1
 
-      - name: Check PR before preview comment
-        id: before_comment
-        uses: actions/github-script@3a2844b7e9c422d3c10d287c895573f7108da1b3 # v9.0.0
-        env:
-          PR_NUMBER: ${{ needs.resolve-pr.outputs.number }}
-        with:
-          script: |
-            const run = context.payload.workflow_run;
-            const { data: pull } = await github.rest.pulls.get({
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              pull_number: Number(process.env.PR_NUMBER),
-            });
-            const current = pull.state === 'open' &&
-              pull.base.repo.full_name === `${context.repo.owner}/${context.repo.repo}` &&
-              ['develop', 'main'].includes(pull.base.ref) &&
-              pull.head.repo?.full_name === run.head_repository.full_name &&
-              pull.head.ref === run.head_branch && pull.head.sha === run.head_sha;
-            if (!current) core.notice('Skipping outdated preview for changed or closed PR');
-            core.setOutput('current', String(current));
-
       - name: Update preview comment
-        if: steps.before_deploy.outputs.current == 'true' && steps.before_comment.outputs.current == 'true'
         uses: TDesignOteam/workflows/actions/maintain-one-comment@4e2d1063b106761c54bf9bf58a7502f9017c4b4b
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
@@ -266,77 +206,65 @@ jobs:
             - [下载 APK（ZIP，解压后安装）](${{ steps.apk.outputs.result }})
 
             <!-- AUTO_PREVIEW_HOOK -->
-          number: ${{ needs.resolve-pr.outputs.number }}
+          number: ${{ steps.pr.outputs.result }}
           body-include: "<!-- AUTO_PREVIEW_HOOK -->"
 
-      - name: Check PR before publish failure comment
-        id: before_publish_failure
-        if: failure()
-        uses: actions/github-script@3a2844b7e9c422d3c10d287c895573f7108da1b3 # v9.0.0
-        env:
-          PR_NUMBER: ${{ needs.resolve-pr.outputs.number }}
-        with:
-          script: |
-            const run = context.payload.workflow_run;
-            const { data: pull } = await github.rest.pulls.get({
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              pull_number: Number(process.env.PR_NUMBER),
-            });
-            const current = pull.state === 'open' &&
-              pull.base.repo.full_name === `${context.repo.owner}/${context.repo.repo}` &&
-              ['develop', 'main'].includes(pull.base.ref) &&
-              pull.head.repo?.full_name === run.head_repository.full_name &&
-              pull.head.ref === run.head_branch && pull.head.sha === run.head_sha;
-            if (!current) core.notice('Skipping outdated preview for changed or closed PR');
-            core.setOutput('current', String(current));
-
       - name: Report publish failure
-        if: failure() && steps.before_publish_failure.outputs.current == 'true'
+        if: failure() && steps.pr.outcome == 'success'
         uses: TDesignOteam/workflows/actions/maintain-one-comment@4e2d1063b106761c54bf9bf58a7502f9017c4b4b
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
           body: |
             [<img height="96" alt="失败" src="https://user-images.githubusercontent.com/5378891/75333447-1e63a280-58c1-11ea-975d-235367fd1522.png">](${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }})
             <!-- AUTO_PREVIEW_HOOK -->
-          number: ${{ needs.resolve-pr.outputs.number }}
+          number: ${{ steps.pr.outputs.result }}
           body-include: "<!-- AUTO_PREVIEW_HOOK -->"
 
   preview-failed:
-    needs: resolve-pr
     runs-on: ubuntu-latest
     if: >
-      needs.resolve-pr.outputs.number != '' &&
+      github.event.workflow_run.event == 'pull_request' &&
       github.event.workflow_run.conclusion == 'failure'
     steps:
-      - name: Check PR before build failure comment
-        id: before_failure_comment
+      - name: Resolve source PR
+        id: pr
+        # 固定 github-script v9.0.0：Build 失败时仍按提交定位来源 PR，以便写入失败评论。
         uses: actions/github-script@3a2844b7e9c422d3c10d287c895573f7108da1b3 # v9.0.0
-        env:
-          PR_NUMBER: ${{ needs.resolve-pr.outputs.number }}
         with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          result-encoding: string
           script: |
             const run = context.payload.workflow_run;
-            const { data: pull } = await github.rest.pulls.get({
+            const source = run.head_repository?.full_name;
+            if (!source || !run.head_branch || !run.head_sha) {
+              throw new Error('Source repository, branch, or SHA is missing');
+            }
+            const pulls = await github.paginate(github.rest.pulls.list, {
               owner: context.repo.owner,
               repo: context.repo.repo,
-              pull_number: Number(process.env.PR_NUMBER),
+              state: 'open',
+              head: `${source.split('/')[0]}:${run.head_branch}`,
+              per_page: 100,
             });
-            const current = pull.state === 'open' &&
+            const matches = pulls.filter((pull) =>
               pull.base.repo.full_name === `${context.repo.owner}/${context.repo.repo}` &&
               ['develop', 'main'].includes(pull.base.ref) &&
-              pull.head.repo?.full_name === run.head_repository.full_name &&
-              pull.head.ref === run.head_branch && pull.head.sha === run.head_sha;
-            if (!current) core.notice('Skipping outdated preview for changed or closed PR');
-            core.setOutput('current', String(current));
+              pull.head.sha === run.head_sha &&
+              pull.head.repo?.full_name === source &&
+              pull.head.ref === run.head_branch
+            );
+            if (matches.length !== 1 || !Number.isSafeInteger(matches[0].number) || matches[0].number <= 0) {
+              core.setFailed(`Expected one source PR for ${run.head_sha}, found ${matches.length}`);
+              return;
+            }
+            return String(matches[0].number);
 
       - name: Report build failure
-        if: steps.before_failure_comment.outputs.current == 'true'
         uses: TDesignOteam/workflows/actions/maintain-one-comment@4e2d1063b106761c54bf9bf58a7502f9017c4b4b
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
           body: |
             [<img height="96" alt="失败" src="https://user-images.githubusercontent.com/5378891/75333447-1e63a280-58c1-11ea-975d-235367fd1522.png">](${{ github.event.workflow_run.html_url }})
             <!-- AUTO_PREVIEW_HOOK -->
-          number: ${{ needs.resolve-pr.outputs.number }}
+          number: ${{ steps.pr.outputs.result }}
           body-include: "<!-- AUTO_PREVIEW_HOOK -->"
