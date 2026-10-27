@@ -88,6 +88,14 @@
 
 发布归类：本轮与 Button/NavBar 的默认文字槽调整采用同一 patch 策略。未配置、空样式或部分显式样式仍可能改变字体、颜色、换行、尺寸和省略位置；原生 Text 的字体也可能受新默认值影响，段落参数沿用既有语义。保留旧外观需在实例或内容内部主题中明确所需字段；不以参数签名不变或测试通过承诺零兼容风险。
 
+## 1.0.1 API 兼容迁移
+
+`onItemTap` / `TDrawerItemTapCallback` 替代 `onItemClick` / `TDrawerItemClickCallback`，保留索引、选项和调用时机。命名迁移不调整 showTDrawer 的状态或关闭生命周期；同步 develop 后保持下节既有一次性规则。
+
+新旧参数同时提供时，新参数优先，仅通知一次；没有新参数时保留旧公开 getter 的继承覆盖。旧入口及类型保留，标注推荐入口和 2.0.0 删除计划。旧 API、默认行为及 Controller 绑定规则不变。
+
+验收覆盖旧调用、继承覆盖、新参数优先级、空回调及实际交互。
+
 ## destroyOnClose 关闭生命周期
 
 保持 1.0.0 的一次性展示行为：默认 false 在不透明路由遮挡时保留内容 State；true 时允许释放，返回时重新构建。无论取值如何，实际关闭完成后均销毁内容，不等到 Navigator 卸载。TDrawerHandle 仍只提供 isShowing 和 close，不新增重开入口或其他公开 API。

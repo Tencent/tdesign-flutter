@@ -22,7 +22,16 @@ class TStepsVertical extends StatelessWidget {
   final TStepsMode mode;
 
   /// 选择步骤回调。
-  final ValueChanged<int>? onChange;
+  /// 与旧参数同时提供时优先使用本参数。
+  // ignore: deprecated_member_use_from_same_package
+  ValueChanged<int>? get onStepTapped => _onStepTapped ?? onChange;
+
+  final ValueChanged<int>? _onStepTapped;
+  final ValueChanged<int>? _onChange;
+
+  /// 已废弃，此为兼容入口。请使用 [onStepTapped]；将在 2.0.0 删除。
+  @Deprecated('Use onStepTapped instead. Deprecated in 1.0.1; remove in 2.0.0.')
+  ValueChanged<int>? get onChange => _onChange;
 
   const TStepsVertical({
     super.key,
@@ -31,8 +40,13 @@ class TStepsVertical extends StatelessWidget {
     required this.status,
     required this.indicator,
     required this.mode,
-    this.onChange,
-  });
+    @Deprecated(
+      'Use onStepTapped instead. Deprecated in 1.0.1; remove in 2.0.0.',
+    )
+    ValueChanged<int>? onChange,
+    ValueChanged<int>? onStepTapped,
+  }) : _onStepTapped = onStepTapped,
+       _onChange = onStepTapped ?? onChange;
 
   @override
   Widget build(BuildContext context) {
@@ -46,7 +60,7 @@ class TStepsVertical extends StatelessWidget {
         status: status,
         indicator: indicator,
         mode: mode,
-        onTap: onChange == null ? null : () => onChange?.call(item.key),
+        onTap: onStepTapped == null ? null : () => onStepTapped?.call(item.key),
       );
     }).toList();
 
