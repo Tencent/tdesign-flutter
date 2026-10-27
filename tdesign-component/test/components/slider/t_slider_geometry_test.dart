@@ -259,51 +259,129 @@ void main() {
     },
   );
 
-  testWidgets(
-    'off-grid controlled values and formatter receive the snapped value',
-    (tester) async {
-      final formatted = <double>[];
+  testWidgets('off-grid values keep formatter inputs while positions snap', (
+    tester,
+  ) async {
+    final formatted = <double>[];
+    await pump(
+      tester,
+      TSlider(
+        value: 23,
+        min: 0,
+        max: 100,
+        divisions: 5,
+        showThumbValue: true,
+        thumbFormatter: (v) {
+          formatted.add(v);
+          return '$v';
+        },
+      ),
+    );
+    expect(tester.widget<Slider>(find.byType(Slider)).value, 20);
+    expect(formatted, [23]);
+    final dynamic singleShape = SliderTheme.of(
+      tester.element(find.byType(Slider)),
+    ).thumbShape;
+    expect(singleShape.label, '23.0');
+    await pump(
+      tester,
+      const TRangeSlider(
+        value: RangeValues(23, 77),
+        min: 0,
+        max: 100,
+        divisions: 5,
+        showThumbValue: true,
+      ),
+    );
+    expect(
+      tester.widget<RangeSlider>(find.byType(RangeSlider)).values,
+      const RangeValues(20, 80),
+    );
+    final dynamic rangeShape = SliderTheme.of(
+      tester.element(find.byType(RangeSlider)),
+    ).rangeThumbShape;
+    expect(rangeShape.labels.start, '23.00');
+    expect(rangeShape.labels.end, '77.00');
+    formatted.clear();
+    await pump(
+      tester,
+      TRangeSlider(
+        value: const RangeValues(23, 77),
+        min: 0,
+        max: 100,
+        divisions: 5,
+        showThumbValue: true,
+        thumbFormatter: (v) {
+          formatted.add(v);
+          return '$v';
+        },
+      ),
+    );
+    expect(formatted, isNotEmpty);
+    expect(formatted.toSet(), {23, 77});
+  });
+
+  testWidgets('normal-sized narrow controlled range retains native gap', (
+    tester,
+  ) async {
+    for (final variant in TSliderVariant.values) {
+      var values = const RangeValues(.40, .41);
+      final changes = <RangeValues>[];
       await pump(
         tester,
-        TSlider(
-          value: 23,
-          min: 0,
-          max: 100,
-          divisions: 5,
-          showThumbValue: true,
-          thumbFormatter: (v) {
-            formatted.add(v);
-            return '$v';
-          },
+        StatefulBuilder(
+          builder: (context, setState) => TRangeSlider(
+            value: values,
+            variant: variant,
+            onChanged: (next) {
+              changes.add(next);
+              setState(() => values = next);
+            },
+          ),
         ),
       );
-      expect(tester.widget<Slider>(find.byType(Slider)).value, 20);
-      expect(formatted, [20]);
-      final dynamic singleShape = SliderTheme.of(
-        tester.element(find.byType(Slider)),
-      ).thumbShape;
-      expect(singleShape.label, '20.0');
-      await pump(
-        tester,
-        const TRangeSlider(
-          value: RangeValues(23, 77),
-          min: 0,
-          max: 100,
-          divisions: 5,
-          showThumbValue: true,
-        ),
+      final range = find.byType(RangeSlider);
+      final theme = SliderTheme.of(tester.element(range));
+      expect(theme.minThumbSeparation, 8);
+      final box = tester.renderObject<RenderBox>(range);
+      final track = theme.rangeTrackShape!.getPreferredRect(
+        parentBox: box,
+        offset: Offset.zero,
+        sliderTheme: theme,
+        isEnabled: true,
+        isDiscrete: false,
       );
+      final start =
+          tester.getTopLeft(range) +
+          Offset(track.left + track.width * .40, box.size.height / 2);
+      final gesture = await tester.startGesture(start);
+      await gesture.moveBy(const Offset(-20, 0));
+      await tester.pump();
+      await gesture.moveBy(const Offset(40, 0));
+      await tester.pump();
+      await gesture.up();
+      await tester.pumpAndSettle();
+      expect(changes, isNotEmpty);
+      expect(changes.last.start, greaterThanOrEqualTo(0));
+      expect(changes.last.end, lessThanOrEqualTo(1));
       expect(
-        tester.widget<RangeSlider>(find.byType(RangeSlider)).values,
-        const RangeValues(20, 80),
+        (changes.last.end - changes.last.start) * track.width,
+        closeTo(8, .00001),
       );
-      final dynamic rangeShape = SliderTheme.of(
-        tester.element(find.byType(RangeSlider)),
-      ).rangeThumbShape;
-      expect(rangeShape.labels.start, '20.00');
-      expect(rangeShape.labels.end, '80.00');
-    },
-  );
+    }
+  });
+
+  test('gap is bounded by domain edges rather than current interval', () {
+    final metrics = const SliderGeometry(
+      capsule: false,
+      trackHeight: 4,
+      horizontalInset: 0,
+    ).forWidth(320);
+    expect(metrics.rangeSeparation(.4, .41), 8);
+    expect(metrics.rangeSeparation(.5, .5), 8);
+    expect(metrics.rangeSeparation(0, .001), lessThan(8));
+    expect(metrics.rangeSeparation(.999, 1), lessThan(8));
+  });
   testWidgets('intrinsic and unbounded compositions retain native sizing', (
     tester,
   ) async {

@@ -186,11 +186,11 @@ class SliderMetrics {
   final double visualInset;
   final double thumbInset;
 
-  // A minimum gap cannot exceed an already valid controlled interval. This
-  // keeps narrow/overlapping input values valid without forcing them apart.
-  double rangeSeparation(double normalizedSpan) => math.min(
+  // Keep the native gap whenever both thumbs can move within their bounds.
+  double rangeSeparation(double start, double end) => math.min(
     SliderGeometry.minimumRangeSeparation * scale,
-    math.max(0.0, width - thumbInset * 2) * normalizedSpan.clamp(0.0, 1.0),
+    math.max(0.0, width - thumbInset * 2) *
+        math.min(end.clamp(0.0, 1.0), 1 - start.clamp(0.0, 1.0)),
   );
 
   Size get thumbSize => Size.fromRadius(thumbRadius);

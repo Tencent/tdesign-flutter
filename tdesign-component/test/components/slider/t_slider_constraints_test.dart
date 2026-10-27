@@ -633,7 +633,8 @@ void main() {
                     theme.minThumbSeparation,
                     range
                         ? expected.rangeSeparation(
-                            (values.end - values.start) / 100,
+                            (values.start - 10) / 100,
+                            (values.end - 10) / 100,
                           )
                         : SliderGeometry.minimumRangeSeparation,
                   );

@@ -967,8 +967,8 @@ const componentTestManifests = <ComponentTestManifest>[
         workingDirectory: 'example',
         testFiles: [
           'test/slider/slider_demo_golden_test.dart',
-          'test/slider/slider_dragged_golden_test.dart',
-          'test/slider/slider_geometry_golden_test.dart',
+          'test/slider/slider_endpoint_golden_test.dart',
+          'test/slider/slider_boundary_golden_test.dart',
         ],
       ),
     ],

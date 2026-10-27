@@ -348,8 +348,7 @@ class TSlider extends StatelessWidget {
       capsule: variant == TSliderVariant.capsule,
     );
     final label = showThumbValue
-        ? (thumbFormatter?.call(effectiveValue) ??
-              effectiveValue.toStringAsFixed(2))
+        ? (thumbFormatter?.call(value) ?? value.toStringAsFixed(2))
         : null;
     final layout = _SliderGeometryLayout(geometry);
     void pointerChanged(Offset position) {
@@ -565,10 +564,8 @@ class TRangeSlider extends StatelessWidget {
     );
     final labels = showThumbValue
         ? RangeLabels(
-            thumbFormatter?.call(effectiveStart) ??
-                effectiveStart.toStringAsFixed(2),
-            thumbFormatter?.call(effectiveEnd) ??
-                effectiveEnd.toStringAsFixed(2),
+            thumbFormatter?.call(value.start) ?? value.start.toStringAsFixed(2),
+            thumbFormatter?.call(value.end) ?? value.end.toStringAsFixed(2),
           )
         : null;
     final layout = _SliderGeometryLayout(geometry);
@@ -632,7 +629,8 @@ class TRangeSlider extends StatelessWidget {
             return SliderTheme(
               data: sliderTheme.copyWith(
                 minThumbSeparation: metrics.rangeSeparation(
-                  (effectiveEnd - effectiveStart) / (max - min),
+                  (effectiveStart - min) / (max - min),
+                  (effectiveEnd - min) / (max - min),
                 ),
               ),
               child: slider,
