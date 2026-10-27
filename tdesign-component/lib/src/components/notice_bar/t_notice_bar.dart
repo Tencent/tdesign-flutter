@@ -42,7 +42,7 @@ class TNoticeBar extends StatefulWidget {
     this.speed = 50,
     this.interval = const Duration(seconds: 2),
     @Deprecated(
-      'Use onTargetTap instead. Deprecated in 1.0.1; remove in 2.0.0.',
+      'Use onTargetTap instead. Deprecated in 1.1.0; remove in 2.0.0.',
     )
     ValueChanged<TNoticeBarTapTarget>? onPressed,
     ValueChanged<TNoticeBarTapTarget>? onTargetTap,
@@ -112,7 +112,7 @@ class TNoticeBar extends StatefulWidget {
   final ValueChanged<TNoticeBarTapTarget>? _onPressed;
 
   /// 已废弃，此为兼容入口。请使用 [onTargetTap]；将在 2.0.0 删除。
-  @Deprecated('Use onTargetTap instead. Deprecated in 1.0.1; remove in 2.0.0.')
+  @Deprecated('Use onTargetTap instead. Deprecated in 1.1.0; remove in 2.0.0.')
   ValueChanged<TNoticeBarTapTarget>? get onPressed => _onPressed;
 
   @override

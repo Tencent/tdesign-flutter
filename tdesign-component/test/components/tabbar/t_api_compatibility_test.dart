@@ -675,7 +675,7 @@ void main() {
               .single
               .stringValue!;
           expect(message, contains(contract.value));
-          expect(message, contains('1.0.1'));
+          expect(message, contains('1.1.0'));
           expect(message, contains('2.0.0'));
         }
       }

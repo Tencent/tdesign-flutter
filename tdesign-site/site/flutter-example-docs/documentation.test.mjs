@@ -91,7 +91,7 @@ test('migration is linked from getting started and dark mode shares the theme gu
   assert.equal(migration[0].name, 'migration-1-0');
   assert.equal(siteConfig.standalone.find(page => page.path === '/flutter/dark-mode').redirect, '/flutter/custom-theme#明暗模式');
   const read = file => readFileSync(path.join(root, file), 'utf8');
-  assert.match(read('tdesign-site/site/docs/getting-started.md'), /tdesign_flutter: \^1\.0\.0/);
+  assert.match(read('tdesign-site/site/docs/getting-started.md'), /tdesign_flutter: \^1\.1\.0/);
   assert.match(read('tdesign-site/site/docs/getting-started.md'), /migration-0\.2\.7-to-1\.0\.md/);
   assert.doesNotMatch(read('tdesign-site/site/docs/getting-started.md'), /尚未发布|发布前|git:/);
   assert.match(read('tdesign-site/docs/components/theme/README.md'), /title: Theme 主题/);

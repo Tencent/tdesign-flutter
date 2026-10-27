@@ -171,7 +171,7 @@ class TPopoverAnchor extends StatefulWidget {
     this.height,
     this.onTap,
     @Deprecated(
-      'Use onLongPress instead. Deprecated in 1.0.1; remove in 2.0.0.',
+      'Use onLongPress instead. Deprecated in 1.1.0; remove in 2.0.0.',
     )
     VoidCallback? onLongTap,
     VoidCallback? onLongPress,
@@ -228,7 +228,7 @@ class TPopoverAnchor extends StatefulWidget {
   final VoidCallback? _onLongTap;
 
   /// 已废弃，此为兼容入口。请使用 [onLongPress]；将在 2.0.0 删除。
-  @Deprecated('Use onLongPress instead. Deprecated in 1.0.1; remove in 2.0.0.')
+  @Deprecated('Use onLongPress instead. Deprecated in 1.1.0; remove in 2.0.0.')
   VoidCallback? get onLongTap => _onLongTap;
 
   /// 气泡展开后触发。
@@ -414,7 +414,7 @@ class TPopover {
 
     /// 已废弃，此为兼容入口。请使用 onLongPress；将在 2.0.0 删除。
     @Deprecated(
-      'Use onLongPress instead. Deprecated in 1.0.1; remove in 2.0.0.',
+      'Use onLongPress instead. Deprecated in 1.1.0; remove in 2.0.0.',
     )
     VoidCallback? onLongTap,
 
