@@ -704,7 +704,7 @@ Widget migratedIndexes() {
 
 <a id="migration-after-1-0"></a>
 <a id="自定义文字槽默认值统一（patch）"></a>
-后续版本的升级事项请参阅[后续版本升级指南](https://tdesign.tencent.com/flutter/migration-1-0-to-1-1)。
+后续版本的升级事项请参阅[更新日志](https://tdesign.tencent.com/flutter/changelog)。
 
 <a id="migration-legacy-types" data-expand-details="migration-legacy-types-table"></a>
 ## 附录：按旧类型名称查找

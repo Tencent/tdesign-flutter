@@ -7,27 +7,14 @@ import siteConfig from '../site.config.mjs';
 test('migration guide is discoverable in the start menu with one stable route', () => {
   const start = siteConfig.docs.find(group => group.title === '开始');
   assert.deepEqual(start.children.map(page => page.title), [
-    '快速开始', '迁移指南', '1.0 → 1.1 升级指南', '组件概览', '常见问题', '更新日志', '贡献指南',
+    '快速开始', '迁移指南', '组件概览', '常见问题', '更新日志', '贡献指南',
   ]);
   const pages = [...siteConfig.standalone, ...siteConfig.docs.flatMap(group => group.children ?? [])];
   const migration = pages.filter(page => page.path === '/flutter/migration-1-0');
   assert.equal(migration.length, 1);
   assert.equal(migration[0].name, 'migration-1-0');
   assert.equal(migration[0].meta.docType, 'explain');
-  const nextMigration = pages.filter(page => page.path === '/flutter/migration-1-0-to-1-1');
-  assert.equal(nextMigration.length, 1);
-  assert.equal(nextMigration[0].name, 'migration-1-1');
   assert.ok(!start.children.some(page => page.name === 'dark-mode'));
-});
-
-test('1.1 upgrade details have their own guide and the old guide keeps its anchors', () => {
-  const oldGuide = readFileSync(new URL('../docs/migration-0.2.7-to-1.0.md', import.meta.url), 'utf8');
-  const nextGuide = readFileSync(new URL('../docs/migration-1-0-to-1-1.md', import.meta.url), 'utf8');
-  assert.doesNotMatch(oldGuide, /1\.1\.0/);
-  assert.match(oldGuide, /id="migration-after-1-0"/);
-  assert.match(oldGuide, /id="自定义文字槽默认值统一（patch）"/);
-  assert.match(oldGuide, /\]\(\.\/migration-1-0-to-1-1\.md\)/);
-  assert.match(nextGuide, /1\.0\.0 → 1\.1\.0 事件与主题配置/);
 });
 
 test('getting started offers official demos and keeps the migration entry', () => {

@@ -47,7 +47,3 @@ TD内置外观使用全局Token、组件Theme及公开实例配置。Material的
 ## 如何反馈问题或申请组件能力？
 
 先查看当前组件API和示例，确认问题后在[GitHub Issues](https://github.com/Tencent/tdesign-flutter/issues)提供组件版本、Flutter版本、运行平台、最小复现及预期结果。提交修复前阅读[贡献指南](/flutter/develop)。
-
-## 从 1.0.0 升级到 1.1.0 需要注意什么？
-
-`^1.0.0` 允许解析到 1.1.0。当前候选包含公开接口和默认行为变化；请先阅读[升级注意事项](./migration-1-0-to-1-1.md)，核对 Popup、回调、主题实现及业务回归。1.1.0 的最终内容以正式更新日志为准。
