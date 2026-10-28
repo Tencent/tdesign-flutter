@@ -25,6 +25,13 @@ export default {
           component: () => import('@docs/migration-0.2.7-to-1.0.md'),
         },
         {
+          title: '1.0 → 1.1 升级指南',
+          name: 'migration-1-1',
+          meta: { docType: 'explain' },
+          path: '/flutter/migration-1-0-to-1-1',
+          component: () => import('@docs/migration-1-0-to-1-1.md'),
+        },
+        {
           title: '组件概览',
           name: 'overview',
           meta: { docType: 'explain' },
