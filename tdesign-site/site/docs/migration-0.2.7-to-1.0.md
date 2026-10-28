@@ -11,7 +11,7 @@ tocLevel: [2]
 <a id="适用版本与阅读方式"></a>
 适用于 `tdesign_flutter 0.2.7 → 1.0.0`，最低要求 Flutter ≥ 3.32.0、Dart ≥ 3.8.0。构造参数、状态和默认行为均有变化，不能只替换 `TD` 前缀。
 
-依赖 `^1.0.0` 可解析到后续 1.x 版本，以 `pubspec.lock` 为准。本文示例和 API 页面随配套源码维护；选择目标版本后，请核对[更新日志](./changelog.md)和[1.0.0 之后的升级注意](#migration-after-1-0)。安装步骤见[快速开始](./getting-started.md)。
+依赖 `^1.0.0` 可解析到后续 1.x 版本，以 `pubspec.lock` 为准。本文示例和 API 页面随配套源码维护；选择目标版本后，请核对[更新日志](./changelog.md)。安装步骤见[快速开始](./getting-started.md)。
 
 <a id="先判断需要做哪些工作"></a>
 ## 升级顺序

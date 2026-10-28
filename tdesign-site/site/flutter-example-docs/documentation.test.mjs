@@ -1,6 +1,6 @@
 import { createRequire } from 'node:module';
 import assert from 'node:assert/strict';
-import { mkdtempSync, mkdirSync, readFileSync, writeFileSync, rmSync } from 'node:fs';
+import { existsSync, mkdtempSync, mkdirSync, readFileSync, writeFileSync, rmSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import path from 'node:path';
 import test from 'node:test';
@@ -15,8 +15,8 @@ const example = '// migration:button:start\nconst TButton();\n// migration:butto
 
 test('package README links stay usable without repository-only files', () => {
   const output = packageLinks(`[迁移](./${migrationSource}) [章节](./${migrationSource}#button) [贡献](CONTRIBUTING.md) [中文](./README_zh_CN.md) [主题](./tdesign-site/site/docs/custom-theme.md#局部) [外链](https://example.com)`);
-  assert.match(output, /\[迁移\]\(\.\/MIGRATION.md\)/);
-  assert.match(output, /\[章节\]\(\.\/MIGRATION.md#button\)/);
+  assert.match(output, /\[迁移\]\(https:\/\/tdesign\.tencent\.com\/flutter\/migration-1-0\)/);
+  assert.match(output, /\[章节\]\(https:\/\/tdesign\.tencent\.com\/flutter\/migration-1-0#button\)/);
   assert.match(output, /blob\/develop\/CONTRIBUTING.md/);
   assert.match(output, /\[中文\]\(\.\/README_zh_CN.md\)/);
   assert.match(output, /flutter\/custom-theme#局部/);
@@ -48,10 +48,8 @@ test('check mode detects stale copies and missing sources without writing files'
     assert.match(read(migrationSource), /old/);
     syncDocuments({ root: temp });
     assert.equal(JSON.parse(read('tdesign-component/example/assets/custom_theme.json')).green.color.brandColor, '#16875D');
-    const portable = read('tdesign-component/MIGRATION.md');
-    assert.match(portable, /Generated from/);
-    assert.doesNotMatch(portable, /title: migration/);
-    assert.match(portable, /https:\/\/tdesign.tencent.com\/flutter\/custom-theme/);
+    assert.match(read(migrationSource), /const TButton/);
+    assert.equal(existsSync(path.join(temp, 'tdesign-component/MIGRATION.md')), false);
     syncDocuments({ root: temp, check: true });
     write('tdesign-component/README.md', 'stale');
     assert.throws(() => syncDocuments({ root: temp, check: true }), /tdesign-component\/README.md/);
@@ -142,7 +140,7 @@ test('quick start shares the Flutter preview and retains its legacy theme anchor
 });
 
 
-test('every migration source and generated package link resolves to an anchor or registered route', () => {
+test('every migration source link resolves to an anchor or registered route', () => {
   const require = createRequire(import.meta.url);
   const pluginRequire = createRequire(require.resolve('vite-plugin-tdoc'));
   const MarkdownIt = pluginRequire('markdown-it');
@@ -170,7 +168,7 @@ test('every migration source and generated package link resolves to an anchor or
     return found;
   };
   const local = links(guideLinks(guide));
-  const portable = links(readFileSync(path.join(root, 'tdesign-component/MIGRATION.md'), 'utf8'));
+  const portable = links(guideLinks(guide, { absolute: true }));
   assert.equal(local.length, portable.length);
   for (const [index, href] of local.entries()) {
     if (href.startsWith('#')) {
@@ -186,12 +184,12 @@ test('every migration source and generated package link resolves to an anchor or
   }
 });
 
-test('migration site uses its page header while portable Markdown retains its title', () => {
+test('migration site uses its page header while the source retains its title', () => {
   const guide = readFileSync(path.join(root, migrationSource), 'utf8');
   const adapted = adaptGuideLinks(guide, path.join(root, migrationSource));
   assert.doesNotMatch(adapted, /^# 从 0\.2\.7 升级到 1\.0$/m);
   assert.match(adapted, /<a id="从-0-2-7-升级到-1-0"><\/a>/);
-  assert.match(readFileSync(path.join(root, 'tdesign-component/MIGRATION.md'), 'utf8'), /^# 从 0\.2\.7 升级到 1\.0$/m);
+  assert.match(guide, /^# 从 0\.2\.7 升级到 1\.0$/m);
 });
 
 test('migration component groups and legacy appendix render as complete tables', () => {
