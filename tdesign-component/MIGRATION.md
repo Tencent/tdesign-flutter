@@ -727,7 +727,7 @@ Popover 内容、Drawer 菜单 content、Toast customWidget、Picker itemBuilder
 
 ### Popup 配置与关闭生命周期
 
-开发分支中面向 1.0.1 的 Popup 调整涉及蒙层配置继承与关闭后的资源保留。使用过旧配置的 `extends/implements`、mock 或依赖关闭即销毁的业务，需要单独核对 [Popup API 与升级说明](https://tdesign.tencent.com/flutter/components/popup?tab=api)，并验证关闭、重新打开和页面卸载。该版本说明不表示 1.0.1 已发布。
+开发分支中面向 1.1.0 的 Popup 调整涉及蒙层配置继承与关闭后的资源保留，兼容性调整仍在准备中。使用过旧配置的 `extends/implements`、mock 或依赖关闭即销毁的业务，需要单独核对 [Popup API 与升级说明](https://tdesign.tencent.com/flutter/components/popup?tab=api)，并验证关闭、重新打开和页面卸载。最终行为以正式版本和更新日志为准；该版本说明不表示 1.1.0 已发布。
 
 [返回组件导航](#migration-components)
 
