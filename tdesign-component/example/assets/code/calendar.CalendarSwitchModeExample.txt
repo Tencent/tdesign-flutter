@@ -60,17 +60,17 @@ class _CalendarSwitchModeExampleState extends State<CalendarSwitchModeExample> {
       Navigator.of(context).context,
       options: TPopupOptions.bottom(
         height: MediaQuery.sizeOf(context).height * 0.85,
-        headerBuilder: (_, close) => SizedBox(
+        headerBuilder: (ctx, close) => SizedBox(
           height: TPopupHeader.headerHeight,
           child: Stack(
             alignment: Alignment.center,
             children: [
               TText(
                 localized ? 'Select Date' : '请选择日期',
-                font: context.tTheme.fontTitleLarge,
+                font: ctx.tTheme.fontTitleLarge,
               ),
               Positioned(
-                right: context.tTheme.spacer,
+                right: ctx.tTheme.spacer,
                 child: IconButton(
                   tooltip: localized ? 'Close' : '关闭',
                   onPressed: close,
@@ -81,7 +81,7 @@ class _CalendarSwitchModeExampleState extends State<CalendarSwitchModeExample> {
           ),
         ),
         child: StatefulBuilder(
-          builder: (context, setPopupState) {
+          builder: (ctx, setPopupState) {
             final first = DateTime(anchor.year, anchor.month);
             final last = DateTime(anchor.year, anchor.month + 1, 0);
             final calendar = TCalendar(
@@ -105,7 +105,7 @@ class _CalendarSwitchModeExampleState extends State<CalendarSwitchModeExample> {
               onChanged: (next) => setPopupState(() => draft = next),
             );
             final body = Material(
-              color: context.tTheme.bgColorContainer,
+              color: ctx.tTheme.bgColorContainer,
               child: Column(
                 children: [
                   if (showMonthSwitcher)
@@ -118,10 +118,8 @@ class _CalendarSwitchModeExampleState extends State<CalendarSwitchModeExample> {
                   Expanded(
                     child: showMonthSwitcher
                         ? Theme(
-                            data: Theme.of(context).mergeExtension(
-                              (Theme.of(
-                                        context,
-                                      ).extension<TCalendarThemeData>() ??
+                            data: Theme.of(ctx).mergeExtension(
+                              (Theme.of(ctx).extension<TCalendarThemeData>() ??
                                       const TCalendarThemeData())
                                   .copyWith(monthTitleHeight: 0),
                             ),
@@ -130,7 +128,7 @@ class _CalendarSwitchModeExampleState extends State<CalendarSwitchModeExample> {
                         : calendar,
                   ),
                   Padding(
-                    padding: EdgeInsets.all(context.tTheme.spacer2),
+                    padding: EdgeInsets.all(ctx.tTheme.spacer2),
                     child: SizedBox(
                       width: double.infinity,
                       child: TButton(
@@ -154,7 +152,7 @@ class _CalendarSwitchModeExampleState extends State<CalendarSwitchModeExample> {
             );
             return localized
                 ? Localizations.override(
-                    context: context,
+                    context: ctx,
                     locale: const Locale('en'),
                     delegates: GlobalMaterialLocalizations.delegates,
                     child: body,
