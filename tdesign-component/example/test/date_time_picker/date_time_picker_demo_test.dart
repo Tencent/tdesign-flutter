@@ -199,6 +199,8 @@ void main() {
   testWidgets('DateTimePicker popup commits only after confirm', (
     tester,
   ) async {
+    tester.view.padding = const FakeViewPadding(bottom: 34);
+    addTearDown(tester.view.resetPadding);
     await pumpFullDemoPage(
       tester,
       dateTimePickerDemoPageTestSpec,
@@ -211,6 +213,10 @@ void main() {
     await tester.pumpAndSettle();
     final panel = find.byKey(const ValueKey('date-time-picker-month-panel'));
     expect(tester.getSize(panel).height, 200);
+    expect(
+      tester.getBottomLeft(panel).dy,
+      tester.view.physicalSize.height / tester.view.devicePixelRatio - 34,
+    );
     tester.widget<TDateTimePicker>(panel).onChanged!(
       const TDateTimePickerValue(year: 2026, month: 8),
     );

@@ -36,7 +36,7 @@
 | --- | --- | --- | --- | --- |
 | context | BuildContext | - | 当前构建上下文，用于读取祖先配置。 | 是 |
 | dialog | Widget | - | 要放入模态路由的弹窗内容。 | 是 |
-| barrierDismissible | bool | false | 默认为 false，点击蒙层不会关闭。 显式开启后，蒙层关闭成功时返回 `barrierResult`（默认 null）； 操作按钮与内置关闭按钮分别返回各自配置的结果。 蒙层与内置关闭按钮通过 Navigator.maybePop 关闭，遵守 PopScope。 系统返回及未携带结果的 Navigator.pop 仍返回 null，不使用 `barrierResult`。 | 否 |
+| barrierDismissible | bool | false | 默认为 false，点击蒙层不会关闭。 显式开启后，蒙层关闭成功时返回 `barrierResult`（默认 null）； 操作按钮与内置关闭按钮分别返回各自配置的结果。 蒙层与内置关闭按钮通过 Navigator.maybePop 关闭，遵守 PopScope。 系统返回及未携带结果的 Navigator.pop 仍返回 null，不使用 `barrierResult`。 键盘弹出时，弹窗在键盘上方的可用区域内居中。 自定义内容保留当前可用区域的有限高度约束；标准 `TDialog` 在高度不足时 支持整体滚动，使操作区仍可使用。 | 否 |
 | barrierResult | T? | - | 开启蒙层关闭后，由蒙层成功关闭路由时返回的结果；默认 null。 | 否 |
 | barrierColor | Color? | - | 蒙层颜色；为空时使用 Colors.black54。 | 否 |
 | useRootNavigator | bool | true | 是否将弹窗推入根 Navigator，默认 true。 | 否 |
