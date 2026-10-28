@@ -6,7 +6,7 @@ spline: explain
 
 ## 使用哪个版本和 Flutter SDK？
 
-1.0项目使用 `tdesign_flutter: ^1.0.0`，要求 Flutter ≥3.32.0、Dart ≥3.8.0。Android/iOS最低系统版本还取决于实际解析的Flutter和平台插件，应在目标宿主构建验证。完整步骤见[快速开始](./getting-started.md)。
+1.1.0 发布后，新项目可使用 `tdesign_flutter: ^1.1.0`，要求 Flutter ≥3.32.0、Dart ≥3.8.0。已有项目应根据依赖约束和锁文件确认实际版本。Android/iOS最低系统版本还取决于实际解析的Flutter和平台插件，应在目标宿主构建验证。完整步骤见[快速开始](./getting-started.md)。
 
 ## 从0.2.7升级，只替换TD前缀是否足够？
 
