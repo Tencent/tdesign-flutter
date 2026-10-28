@@ -111,6 +111,8 @@ void main() {
     testWidgets('all Picker popups share the design geometry in ${mode.name}', (
       tester,
     ) async {
+      tester.view.padding = const FakeViewPadding(bottom: 34);
+      addTearDown(tester.view.resetPadding);
       await pumpDemoPageAtPhoneViewport(tester, pickerDemoPageTestSpec, mode);
       const titles = {
         'city': '选择地区',
@@ -124,6 +126,13 @@ void main() {
         await tester.ensureVisible(trigger);
         await tester.tap(trigger);
         await tester.pumpAndSettle();
+        expect(
+          tester
+              .getBottomLeft(find.byKey(ValueKey('picker-${entry.key}-panel')))
+              .dy,
+          778,
+          reason: '${entry.key} should avoid the bottom system inset',
+        );
         final wheel = find.byType(ListWheelScrollView).first;
         expect(tester.getSize(wheel).height, 200, reason: entry.key);
         expect(
