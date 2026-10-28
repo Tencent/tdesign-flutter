@@ -182,9 +182,6 @@ class TDialog extends StatelessWidget {
   /// 操作按钮与内置关闭按钮分别返回各自配置的结果。
   /// 蒙层与内置关闭按钮通过 Navigator.maybePop 关闭，遵守 PopScope。
   /// 系统返回及未携带结果的 Navigator.pop 仍返回 null，不使用 [barrierResult]。
-  /// 键盘弹出时，弹窗在键盘上方的可用区域内居中。
-  /// 自定义内容保留当前可用区域的有限高度约束；标准 [TDialog] 在高度不足时
-  /// 支持整体滚动，使操作区仍可使用。
   ///
   /// ## 返回值
   /// 路由被弹出时完成并提供关闭结果；未携带结果时为 null，不等待关闭动画结束。
@@ -224,14 +221,7 @@ class TDialog extends StatelessWidget {
         transitionDuration: const Duration(milliseconds: 240),
         pageBuilder: (routeContext, animation, secondaryAnimation) {
           final centered = Center(child: dialog);
-          final content = AnimatedPadding(
-            padding: EdgeInsets.only(
-              bottom: MediaQuery.viewInsetsOf(routeContext).bottom,
-            ),
-            duration: const Duration(milliseconds: 150),
-            curve: Curves.easeOut,
-            child: useSafeArea ? SafeArea(child: centered) : centered,
-          );
+          final content = useSafeArea ? SafeArea(child: centered) : centered;
           return capturedThemes.wrap(routeContext, content);
         },
         transitionBuilder:
@@ -321,7 +311,7 @@ class TDialog extends StatelessWidget {
     final effectiveActionSpacing = actionSpacing ?? token.spacer1;
     final closeButtonExtent = 24 + token.spacer + token.spacer2;
 
-    final panel = Semantics(
+    return Semantics(
       namesRoute: true,
       scopesRoute: true,
       label: semanticLabel,
@@ -406,19 +396,6 @@ class TDialog extends StatelessWidget {
           ),
         ),
       ),
-    );
-    return LayoutBuilder(
-      builder: (context, constraints) {
-        if (constraints.maxHeight >= effectiveMaxHeight) {
-          return panel;
-        }
-        // 仅标准面板在高度受限时整体滚动；展示入口继续为自定义内容
-        // 提供有限高度，保留 Expanded 和 LayoutBuilder 的布局契约。
-        return SingleChildScrollView(
-          hitTestBehavior: HitTestBehavior.deferToChild,
-          child: panel,
-        );
-      },
     );
   }
 }

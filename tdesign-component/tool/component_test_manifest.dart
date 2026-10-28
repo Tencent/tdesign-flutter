@@ -408,14 +408,6 @@ const componentTestManifests = <ComponentTestManifest>[
     exampleTests: ['test/dialog/dialog_page_test.dart'],
     visualTests: [
       VisualTestManifest(
-        name: 'Dialog keyboard',
-        workingDirectory: '.',
-        testFiles: [
-          'test/components/dialog/t_dialog_keyboard_golden_test.dart',
-        ],
-        kind: VisualTestKind.component,
-      ),
-      VisualTestManifest(
         name: 'Dialog Popup Consumer',
         workingDirectory: '.',
         testFiles: ['test/components/theme/t_popup_consumers_golden_test.dart'],

@@ -24,7 +24,6 @@ Dialog 的核心弹层能力已存在，但默认顶边距和关闭按钮位置�
 - Dialog Example 页、Example 测试和自动生成代码片段。
 
 - Dialog 使用 Flutter 标准模态路由承载居中自适应面板；不新增 Popup 公开 API，普通 Popup 的 240×240 默认契约保持不变。
-- Dialog 展示入口在键盘弹出时根据底部 viewInsets 在可用区域内居中，键盘收起后恢复；系统安全区开关独立生效。展示入口保留对子内容的有限高度约束，兼容自定义 Column + Expanded、LayoutBuilder 和滚动列表。标准 TDialog（包括便捷封装）在横屏等可用高度不足时自身支持整体滚动，操作区可达；滚动容器不得拦截面板外的蒙层点击。
 - Dialog 保留现有构造与 `Future<T?>` 展示 API；仅增加可选的蒙层与关闭按钮返回值。
 
 ### 不涉及
