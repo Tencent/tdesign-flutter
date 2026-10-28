@@ -40,11 +40,6 @@ docClass: timeline
 ### 🐞 Bug Fixes
 
 - `DropdownMenu`: 隔离共享 Controller 的状态与过期回调 @lnuxe ([#1203](https://github.com/Tencent/tdesign-flutter/pull/1203))
-- `Example`: 修复功能色板在不等长、稀疏或空配置下的展示 @RSS1102 ([#1206](https://github.com/Tencent/tdesign-flutter/pull/1206))
-- `Site`: 
-  - 修复主题指南预览刷新后进入组件首页的问题 @RSS1102 ([#1204](https://github.com/Tencent/tdesign-flutter/pull/1204))
-  - 修复官网移动端主题初始化，恢复按钮默认圆角。 @RSS1102 ([#1202](https://github.com/Tencent/tdesign-flutter/pull/1202))
-  - 修复折叠章节深链接及前进后退时的阅读状态恢复。 @RSS1102 ([#1202](https://github.com/Tencent/tdesign-flutter/pull/1202))
 - `TAvatar`: 补齐 TText 头像文字默认样式 @RSS1102 ([#1182](https://github.com/Tencent/tdesign-flutter/pull/1182))
 - `TCalendar`: 补齐日期副标题的 TText 默认样式 @RSS1102 ([#1182](https://github.com/Tencent/tdesign-flutter/pull/1182))
 - `TCellGroup`: 修复 scrollable 在无界高度父级下触发布局异常 @runoob-coder ([#1162](https://github.com/Tencent/tdesign-flutter/pull/1162))
@@ -64,8 +59,6 @@ docClass: timeline
 - `Theme`: 
   - 修复主题 Token 更新后已打开浮层未实时响应的问题，保留显式配置优先级。 @RSS1102 ([#1172](https://github.com/Tencent/tdesign-flutter/pull/1172))
   - 修复稀疏尺寸 Token 默认端点及 Tag 分档内边距中断过渡的覆盖丢失。 @RSS1102 ([#1172](https://github.com/Tencent/tdesign-flutter/pull/1172))
-  - 修复小数字号和行高导致主题 JSON 加载失败的问题。 @RSS1102 ([#1176](https://github.com/Tencent/tdesign-flutter/pull/1176))
-  - 补齐主题生成器 CSS 导出到应用主题 JSON 的离线转换接入。 @RSS1102 ([#1176](https://github.com/Tencent/tdesign-flutter/pull/1176))
 - `TLink`: 补齐 TText 链接默认样式 @RSS1102 ([#1182](https://github.com/Tencent/tdesign-flutter/pull/1182))
 - `TLoading`: 修复所属 Overlay 卸载后全局加载会话未自动释放的问题 @RSS1102 ([#1190](https://github.com/Tencent/tdesign-flutter/pull/1190))
 - `TMessage`: 修复所属 Overlay 卸载时遗留句柄和 Entry 的问题 @RSS1102 ([#1190](https://github.com/Tencent/tdesign-flutter/pull/1190))
@@ -75,7 +68,9 @@ docClass: timeline
   - 修复自然尺寸及单行、省略和支柱测量 @RSS1102 ([#1182](https://github.com/Tencent/tdesign-flutter/pull/1182))
   - 自定义内容子树接入气泡默认字体和颜色 @RSS1102 ([#1184](https://github.com/Tencent/tdesign-flutter/pull/1184))
 - `TProgress`: 补齐 TText 进度标签默认样式 @RSS1102 ([#1182](https://github.com/Tencent/tdesign-flutter/pull/1182))
-- `TPullDownRefresh`: 修复旧组件解绑影响后绑定组件刷新命令的问题 @RSS1102 ([#1191](https://github.com/Tencent/tdesign-flutter/pull/1191))
+- `TPullDownRefresh`: 
+  - 修复旧组件解绑影响后绑定组件刷新命令的问题 @RSS1102 ([#1191](https://github.com/Tencent/tdesign-flutter/pull/1191))
+  - 修复未下拉刷新时顶部提示文字溢出绘制的问题。 @RSS1102 ([#1209](https://github.com/Tencent/tdesign-flutter/pull/1209))
 - `TSlider`: 
   - 修复滑块端点、数值和刻度的位置不对齐。 @runoob-coder ([#1212](https://github.com/Tencent/tdesign-flutter/pull/1212))
   - 修复受限尺寸及布局变化时滑块拖动异常。 @runoob-coder ([#1212](https://github.com/Tencent/tdesign-flutter/pull/1212))
