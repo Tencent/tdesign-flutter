@@ -5,6 +5,86 @@ toc: false
 docClass: timeline
 ---
 
+## 🌈 1.1.0 `2026-10-28`
+
+### 🚨 Breaking Changes
+
+- **升级提示**：本版本包含公开 API、默认行为和视觉变化。使用 `tdesign_flutter: ^1.0.0` 的项目可能解析到 1.1.0；升级前请检查以下兼容性影响，并回归相关业务场景。
+
+- `TActionSheet`: 命令式入口返回的 Popup 句柄默认在关闭后保留内容 State；重开时可复用，所属 Navigator 卸载时释放。替换会话时请检查 GlobalKey、Controller 和资源释放。 @RSS1102 ([#1197](https://github.com/Tencent/tdesign-flutter/pull/1197))
+- `TButton`: child 中的 TText 默认接受按钮尺寸、配色和状态文案样式；显式字段优先，依赖原正文默认值的用法需明确样式。 @RSS1102 ([#1180](https://github.com/Tencent/tdesign-flutter/pull/1180))
+- `TCheckboxGroup`: 新增 `onSelectionLimitExceeded`，保留旧参数和回调 `onMaxSelected`（业务自定义 `implements TCheckboxGroup` 须补 `onSelectionLimitExceeded` getter，否则无法编译；旧入口已废弃，计划在 2.0.0 删除）。 @RSS1102 ([#1196](https://github.com/Tencent/tdesign-flutter/pull/1196))
+- `TDrawer`: 新增 `onItemTap` / `TDrawerItemTapCallback`，保留旧参数、回调入口及类型（业务自定义 `implements TDrawer` 须补 `onItemTap` getter，否则无法编译；旧入口已废弃，计划在 2.0.0 删除）。 @RSS1102 ([#1196](https://github.com/Tencent/tdesign-flutter/pull/1196))
+- `Theme`: 
+  - 调整 Badge、SideBar、Cell 圆角，Table、Tabs、Toast 内边距，以及 BackTop、Dropdown、Refresh 图标的默认规格。 @RSS1102 ([#1174](https://github.com/Tencent/tdesign-flutter/pull/1174))
+  - 将已核实的组件默认属性接入全局 Token，自定义主题时对应尺寸、间距及圆角开始联动，保留显式覆盖优先级。 @RSS1102 ([#1174](https://github.com/Tencent/tdesign-flutter/pull/1174))
+  - 部分组件 ThemeData 新增配置或解析成员；业务通过 `implements` 自行实现这些类型时，可能需要补充成员或调整实现，升级前请检查编译结果。 @RSS1102 ([#1172](https://github.com/Tencent/tdesign-flutter/pull/1172)) ([#1174](https://github.com/Tencent/tdesign-flutter/pull/1174))
+- `TNavBar`: title 中的 TText 默认接受导航标题字体和颜色；复合标题及长标题可能改变布局，保留旧外观需显式定制。 @RSS1102 ([#1180](https://github.com/Tencent/tdesign-flutter/pull/1180))
+- `TNoticeBar`: 新增 `onTargetTap`，保留旧参数和回调 `onPressed`（业务自定义 `implements TNoticeBar` 须补 `onTargetTap` getter，否则无法编译；旧入口已废弃，计划在 2.0.0 删除）。 @RSS1102 ([#1196](https://github.com/Tencent/tdesign-flutter/pull/1196))
+- `TPickerPopup`: 关闭后默认保留内容 State；同一句柄在同一 Navigator 中重开时可复用。设置 `destroyOnClose: true` 时关闭后释放。1.0.0 关闭后始终释放，升级时请检查状态重置和资源生命周期。 @RSS1102 ([#1197](https://github.com/Tencent/tdesign-flutter/pull/1197))
+- `TPopover`: 新增 `onLongPress`，保留旧参数和回调 `onLongTap`（业务自定义 `implements TPopoverAnchor` 或 `TPopoverWidget` 须补 `onLongPress` getter，否则无法编译；旧入口已废弃，计划在 2.0.0 删除）。 @RSS1102 ([#1196](https://github.com/Tencent/tdesign-flutter/pull/1196))
+- `TPopup`: 
+  - `TPopupOverlayConfig` 改为 `final class`，包外继承、`implements` 和相关 mock 需要改用直接构造或组合。旧 `onClick` 保留但已废弃；`onTap` 非空时优先。 @RSS1102 ([#1199](https://github.com/Tencent/tdesign-flutter/pull/1199))
+  - 关闭后默认保留内容 State；同一句柄在同一 Navigator 中重开时可复用。设置 `destroyOnClose: true` 时关闭后释放。1.0.0 关闭后始终释放，升级时请检查状态重置和资源生命周期。 @RSS1102 ([#1197](https://github.com/Tencent/tdesign-flutter/pull/1197))
+- `TSteps`: 新增 `onStepTapped`，保留旧参数和回调 `onChange`，保留当前步骤点击通知（业务自定义 `implements TSteps`、`TStepsHorizontal` 或 `TStepsVertical` 须补 `onStepTapped` getter，否则无法编译；旧入口已废弃，计划在 2.0.0 删除）。 @RSS1102 ([#1196](https://github.com/Tencent/tdesign-flutter/pull/1196))
+- `TTabBar`: 
+  - 新增菜单 `onSelected`，保留旧参数和回调 `onChanged`（业务自定义 `implements TTabBarPopUpBtnConfig` 须补 `onSelected` getter，否则无法编译；旧入口已废弃，计划在 2.0.0 删除）。 @RSS1102 ([#1196](https://github.com/Tencent/tdesign-flutter/pull/1196))
+  - 新增 `notifyOnReselect`，保留旧参数和字段 `allowMultipleTaps`（业务自定义 `implements TTabBarItemConfig` 须补 `notifyOnReselect` getter，否则无法编译；旧入口已废弃，计划在 2.0.0 删除）。 @RSS1102 ([#1196](https://github.com/Tencent/tdesign-flutter/pull/1196))
+
+### 🚀 Features
+
+- `TBackTop`: 新增 `onCompleted`，成功回顶后触发；`onPressed` 保持原有时机（计划在 2.0 统一为点击时触发，成功回顶通知使用 `onCompleted`）。 @RSS1102 ([#1193](https://github.com/Tencent/tdesign-flutter/pull/1193))
+- `Theme`: 新增 Badge 气泡圆角、Button 四档图标尺寸和 Tag 四档内边距配置；默认视觉变化见上方说明。 @RSS1102 ([#1172](https://github.com/Tencent/tdesign-flutter/pull/1172))
+- `TPopup`: 新增蒙层点击回调 `onTap`，兼容旧入口。 @RSS1102 ([#1199](https://github.com/Tencent/tdesign-flutter/pull/1199))
+
+### 🐞 Bug Fixes
+
+- `DropdownMenu`: 隔离共享 Controller 的状态与过期回调 @lnuxe ([#1203](https://github.com/Tencent/tdesign-flutter/pull/1203))
+- `TAvatar`: 补齐 TText 头像文字默认样式 @RSS1102 ([#1182](https://github.com/Tencent/tdesign-flutter/pull/1182))
+- `TCalendar`: 补齐日期副标题的 TText 默认样式 @RSS1102 ([#1182](https://github.com/Tencent/tdesign-flutter/pull/1182))
+- `TCellGroup`: 修复 scrollable 在无界高度父级下触发布局异常 @runoob-coder ([#1162](https://github.com/Tencent/tdesign-flutter/pull/1162))
+- `TCollapse`: 补齐标题、正文和尾部的 TText 默认样式 @RSS1102 ([#1182](https://github.com/Tencent/tdesign-flutter/pull/1182))
+- `TDialog`: 
+  - 修复 TText 标题与正文未应用弹窗文字样式的问题 @RSS1102 ([#1181](https://github.com/Tencent/tdesign-flutter/pull/1181))
+  - 修复文字操作区在长文案换行或文字缩放时的裁切，默认高度保持56，内容需要时增高。 @RSS1102 ([#1180](https://github.com/Tencent/tdesign-flutter/pull/1180))
+- `TDivider`: 补齐 TText 分隔线标签默认样式 @RSS1102 ([#1182](https://github.com/Tencent/tdesign-flutter/pull/1182))
+- `TDrawer`: 
+  - 保留标题的 TD 段落设置 @RSS1102 ([#1182](https://github.com/Tencent/tdesign-flutter/pull/1182))
+  - 自定义菜单正文接入菜单默认字体 @RSS1102 ([#1184](https://github.com/Tencent/tdesign-flutter/pull/1184))
+- `TDropdownMenu`: 修复旧组件解绑影响后绑定组件菜单命令的问题 @RSS1102 ([#1191](https://github.com/Tencent/tdesign-flutter/pull/1191))
+- `TFooter`: 
+  - 修复 Web 端链接文字被压缩后逐字竖排的问题 @liweijie0812 ([#1113](https://github.com/Tencent/tdesign-flutter/pull/1113))
+  - 修复链接组换行后分隔线出现在行尾或独占一行的问题 @liweijie0812 ([#1113](https://github.com/Tencent/tdesign-flutter/pull/1113))
+- `TForm`: 修复 Controller 替换失败后原绑定失效及卸载清理异常 @RSS1102 ([#1191](https://github.com/Tencent/tdesign-flutter/pull/1191))
+- `Theme`: 
+  - 修复主题 Token 更新后已打开浮层未实时响应的问题，保留显式配置优先级。 @RSS1102 ([#1172](https://github.com/Tencent/tdesign-flutter/pull/1172))
+  - 修复稀疏尺寸 Token 默认端点及 Tag 分档内边距中断过渡的覆盖丢失。 @RSS1102 ([#1172](https://github.com/Tencent/tdesign-flutter/pull/1172))
+- `TLink`: 补齐 TText 链接默认样式 @RSS1102 ([#1182](https://github.com/Tencent/tdesign-flutter/pull/1182))
+- `TLoading`: 修复所属 Overlay 卸载后全局加载会话未自动释放的问题 @RSS1102 ([#1190](https://github.com/Tencent/tdesign-flutter/pull/1190))
+- `TMessage`: 修复所属 Overlay 卸载时遗留句柄和 Entry 的问题 @RSS1102 ([#1190](https://github.com/Tencent/tdesign-flutter/pull/1190))
+- `TNoticeBar`: 修复自定义区域将拖动、长按、多指及鼠标按键组合误判为点击的问题 @RSS1102 ([#1192](https://github.com/Tencent/tdesign-flutter/pull/1192))
+- `TPicker`: 自定义选项接入选中与禁用状态字体 @RSS1102 ([#1184](https://github.com/Tencent/tdesign-flutter/pull/1184))
+- `TPopover`: 
+  - 修复自然尺寸及单行、省略和支柱测量 @RSS1102 ([#1182](https://github.com/Tencent/tdesign-flutter/pull/1182))
+  - 自定义内容子树接入气泡默认字体和颜色 @RSS1102 ([#1184](https://github.com/Tencent/tdesign-flutter/pull/1184))
+- `TProgress`: 补齐 TText 进度标签默认样式 @RSS1102 ([#1182](https://github.com/Tencent/tdesign-flutter/pull/1182))
+- `TPullDownRefresh`: 
+  - 修复旧组件解绑影响后绑定组件刷新命令的问题 @RSS1102 ([#1191](https://github.com/Tencent/tdesign-flutter/pull/1191))
+  - 修复未下拉刷新时顶部提示文字溢出绘制的问题。 @RSS1102 ([#1209](https://github.com/Tencent/tdesign-flutter/pull/1209))
+- `TSlider`: 
+  - 修复滑块端点、数值和刻度的位置不对齐。 @runoob-coder ([#1212](https://github.com/Tencent/tdesign-flutter/pull/1212))
+  - 修复受限尺寸及布局变化时滑块拖动异常。 @runoob-coder ([#1212](https://github.com/Tencent/tdesign-flutter/pull/1212))
+- `TSteps`: 自定义标题和说明接入对应方向及状态字体 @RSS1102 ([#1184](https://github.com/Tencent/tdesign-flutter/pull/1184))
+- `TSwipeCell`: 修复 Controller 替换失败后原控制器无法继续控制的问题 @RSS1102 ([#1191](https://github.com/Tencent/tdesign-flutter/pull/1191))
+- `TSwiper`: 修复重复提交无效 Controller 时绕过绑定校验的问题 @RSS1102 ([#1191](https://github.com/Tencent/tdesign-flutter/pull/1191))
+- `TTabBar`: 
+  - 自定义菜单项接入默认字体并按真实内容适配行高 @RSS1102 ([#1184](https://github.com/Tencent/tdesign-flutter/pull/1184))
+  - 修复菜单回调内导航或自行关闭后误关其他页面的问题，保留原回调时机；新页面覆盖时仅移除原菜单。 @RSS1102 ([#1198](https://github.com/Tencent/tdesign-flutter/pull/1198))
+- `TTable`: 补齐表头和单元格的 TText 默认样式 @RSS1102 ([#1182](https://github.com/Tencent/tdesign-flutter/pull/1182))
+- `TToast`: 
+  - 自定义普通/加载文案接入 Toast 默认字体和颜色 @RSS1102 ([#1184](https://github.com/Tencent/tdesign-flutter/pull/1184))
+  - 修复所属 Overlay 被遮挡后卸载时遗留实例和计时任务的问题 @RSS1102 ([#1190](https://github.com/Tencent/tdesign-flutter/pull/1190))
+
 ## 🌈 1.0.0 `2026-10-15`
 
 TDesign Flutter 1.0 正式发布！
