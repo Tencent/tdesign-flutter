@@ -41,8 +41,7 @@
 
 ## Header 静止态绘制回归
 
-- 本地候选以 PR #1209 的 `4fc609f3c1d4138f70722c401c58b9f7499fea8e` 为基础，生产文件 SHA-256 为 `06d4ab3bd1e15e14934cf6547cb722cb6f6d79060920e1a08d2daabf77f31d04`，测试文件 SHA-256 为 `99fb2d71728e64dd11b8f365347f1b4f09b4814bc940a4d43c9ae3efc2f52b96`。
-- macOS 本地 Flutter 3.32.0 和 3.47.8：分别离线解析依赖，执行 `flutter test --no-pub test/components/refresh/t_refresh_test.dart`，各 37 项通过；`flutter analyze --no-pub --fatal-infos` 均无问题。测试对比刷新前与复位后的像素，并确认 Header 高度为零；同文件的既有测试覆盖下拉、刷新及样式。
-- Flutter 3.32.0 下临时使用 PR 父提交的生产文件时，该像素断言失败；恢复 PR 实现后通过。测试文件已在 `tool/component_test_manifest.dart` 登记。
-- 未执行真实设备、同尺寸视觉对照或最终候选远端 CI；未单独验证下拉小偏移的视觉效果，相关待办见 [tasks.md](./tasks.md)。
-- Linux amd64 Flutter 3.32.0 容器使用离线缓存依赖，对当前候选运行 `flutter test --no-pub test/components/refresh/t_refresh_golden_test.dart`：三张既有基线分别有 101、162、101 个像素差异，均位于顶部 5 像素。相同容器与依赖中，仅还原 PR 父提交的生产文件后 3 项通过，表明差异由此修复引入。更新三张基线后，在同一环境不带更新参数复跑 Golden，3 项通过；组件测试 37 项通过。图片变更仍仅涉及上述顶部区域的透明度。容器离线解析使用了缓存的工具依赖版本，非远端 CI 结果。
+- 验证候选：`43bf194d1604b73db774b4308e373c04cc50a7da`。刷新复位后的像素回归测试确认提示内容不再溢出，并验证修复前失败、修复后通过；测试已登记在组件回归清单中。
+- macOS Flutter 3.32.0 / 3.47.8：`test/components/refresh/t_refresh_test.dart` 各 37 项通过，静态检查无问题。
+- Linux amd64 Flutter 3.32.0：更新三个初始状态 Golden 后，无更新参数复跑 3 项通过，组件测试 37 项通过。基线差异仅为顶部 5 像素内的提示文字残留消失；验证使用缓存依赖，不代表远端 CI 结果。
+- 真机、同尺寸视觉对照和下拉小偏移的视觉效果未验证；最终候选 CI 以实际运行结果为准。待办见 [tasks.md](./tasks.md)。
