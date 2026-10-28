@@ -87,7 +87,7 @@ class TSteps extends StatelessWidget {
     this.status = TStepsStatus.process,
     this.indicator = TStepsIndicator.standard,
     @Deprecated(
-      'Use onStepTapped instead. Deprecated in 1.0.1; remove in 2.0.0.',
+      'Use onStepTapped instead. Deprecated in 1.1.0; remove in 2.0.0.',
     )
     ValueChanged<int>? onChange,
 
@@ -107,7 +107,7 @@ class TSteps extends StatelessWidget {
     required this.steps,
     required this.value,
     @Deprecated(
-      'Use onStepTapped instead. Deprecated in 1.0.1; remove in 2.0.0.',
+      'Use onStepTapped instead. Deprecated in 1.1.0; remove in 2.0.0.',
     )
     ValueChanged<int>? onChange,
 
@@ -163,7 +163,7 @@ class TSteps extends StatelessWidget {
   final ValueChanged<int>? _onChange;
 
   /// 已废弃，此为兼容入口。请使用 [onStepTapped]；将在 2.0.0 删除。
-  @Deprecated('Use onStepTapped instead. Deprecated in 1.0.1; remove in 2.0.0.')
+  @Deprecated('Use onStepTapped instead. Deprecated in 1.1.0; remove in 2.0.0.')
   ValueChanged<int>? get onChange => _onChange;
 
   final TStepsMode _mode;

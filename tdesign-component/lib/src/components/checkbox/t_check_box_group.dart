@@ -57,7 +57,7 @@ class TCheckboxGroup<T> extends StatelessWidget {
     this.size = TCheckboxSize.medium,
     this.maxSelected,
     @Deprecated(
-      'Use onSelectionLimitExceeded instead. Deprecated in 1.0.1; remove in 2.0.0.',
+      'Use onSelectionLimitExceeded instead. Deprecated in 1.1.0; remove in 2.0.0.',
     )
     VoidCallback? onMaxSelected,
     VoidCallback? onSelectionLimitExceeded,
@@ -110,7 +110,7 @@ class TCheckboxGroup<T> extends StatelessWidget {
 
   /// 已废弃，此为兼容入口。请使用 [onSelectionLimitExceeded]；将在 2.0.0 删除。
   @Deprecated(
-    'Use onSelectionLimitExceeded instead. Deprecated in 1.0.1; remove in 2.0.0.',
+    'Use onSelectionLimitExceeded instead. Deprecated in 1.1.0; remove in 2.0.0.',
   )
   VoidCallback? get onMaxSelected => _onMaxSelected;
 

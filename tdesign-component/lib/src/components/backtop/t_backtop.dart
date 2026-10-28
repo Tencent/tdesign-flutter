@@ -36,7 +36,7 @@ class TBackTop extends StatefulWidget {
   /// 控制器由调用方创建和释放，组件只管理自己的滚动监听。
   final ScrollController? controller;
 
-  /// 点击后的通知。
+  /// 点击后触发的通知，具体时机取决于是否绑定滚动位置。
   ///
   /// 未绑定滚动位置时立即触发；已绑定时，在回顶动画的 Future 结束后
   /// 触发，动画中断也可能通知。

@@ -31,7 +31,7 @@ class TDrawer extends StatelessWidget {
     this.enableFeedback = true,
     this.showLastDivider = true,
     this.title,
-    @Deprecated('Use onItemTap instead. Deprecated in 1.0.1; remove in 2.0.0.')
+    @Deprecated('Use onItemTap instead. Deprecated in 1.1.0; remove in 2.0.0.')
     TDrawerItemClickCallback? onItemClick,
     TDrawerItemTapCallback? onItemTap,
     this.child,
@@ -68,7 +68,7 @@ class TDrawer extends StatelessWidget {
   final TDrawerItemTapCallback? _onItemClick;
 
   /// 已废弃，此为兼容入口。请使用 [onItemTap]；将在 2.0.0 删除。
-  @Deprecated('Use onItemTap instead. Deprecated in 1.0.1; remove in 2.0.0.')
+  @Deprecated('Use onItemTap instead. Deprecated in 1.1.0; remove in 2.0.0.')
   TDrawerItemClickCallback? get onItemClick => _onItemClick;
 
   @override
