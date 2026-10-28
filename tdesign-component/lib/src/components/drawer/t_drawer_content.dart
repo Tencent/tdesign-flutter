@@ -11,7 +11,7 @@ typedef TDrawerItemTapCallback = void Function(int index, TDrawerItem item);
 
 /// 已废弃，此为兼容入口。请使用 [TDrawerItemTapCallback]；将在 2.0.0 删除。
 @Deprecated(
-  'Use TDrawerItemTapCallback instead. Deprecated in 1.0.1; remove in 2.0.0.',
+  'Use TDrawerItemTapCallback instead. Deprecated in 1.1.0; remove in 2.0.0.',
 )
 typedef TDrawerItemClickCallback = TDrawerItemTapCallback;
 

@@ -713,6 +713,22 @@ Widget migratedIndexes() {
 
 以下为 1.0.0 发布后开发分支的调整。仅在目标版本包含这些变化时适用，生效版本以正式更新日志为准。
 
+### 1.0.0 → 1.1.0 事件与主题配置
+
+1.1.0 候选保留旧回调入口，但新增公开 getter 会影响自定义 `implements` 的业务。使用下表中旧 getter 的实现需补齐对应新 getter；普通构造调用可继续使用旧参数，旧入口会产生弃用提示。新旧参数同时传入时，以非空新参数为准。
+
+- `TCheckboxGroup`：`onMaxSelected` → `onSelectionLimitExceeded`。
+- `TDrawer`：`onItemClick` → `onItemTap`。
+- `TNoticeBar`：`onPressed` → `onTargetTap`。
+- `TPopoverAnchor`、`TPopoverWidget`：`onLongTap` → `onLongPress`。
+- `TSteps`、`TStepsHorizontal`、`TStepsVertical`：`onChange` → `onStepTapped`。
+- `TTabBarItemConfig`：`allowMultipleTaps` → `notifyOnReselect`。
+- `TTabBarPopUpBtnConfig`：`onChanged` → `onSelected`。
+
+例如，旧 `TTabBarItemConfig` 实现可将 `notifyOnReselect` 转发到原有 `allowMultipleTaps`。如业务已有同名成员，还需确认其类型和语义与新契约一致。旧入口计划在 2.0.0 删除，迁移后仍需检查回调时机、受控值和交互。
+
+部分组件 ThemeData 新增配置或解析成员；自行 `implements` 组件 ThemeData 的业务需对照目标版本 API 检查编译和实际主题行为，不应将 Drawer、TabBar 的兼容修复外推到其他类型。
+
 ### 已有文字槽遗漏修复
 
 Avatar、Calendar 副标题、Collapse、Divider、Link、Progress、Table 及内部操作文字槽为 TText 补齐既有组件默认值；Drawer 标题继续保留已有 TD 段落设置。未设置样式的 TText 外观可能随组件字体或状态色修正；显式字段及内容内部更近的主题仍优先。原生 Text 的段落 reset/merge 边界不改变。

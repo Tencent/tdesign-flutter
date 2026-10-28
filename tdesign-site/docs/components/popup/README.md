@@ -32,7 +32,7 @@ isComponent: true
 
 ### 从 1.0.0 升级到 1.1.0 时，替换会话需要注意什么？
 
-Popup 和 `TPickerPopup` 的 `destroyOnClose` 默认为 `false`，关闭后仍保留内容 State，所属 Navigator 卸载时释放。
+在 1.0.0 中，Popup 关闭后始终释放内容 State。当前 1.1.0 候选中，Popup 和 `TPickerPopup` 的 `destroyOnClose` 默认为 `false`，关闭后仍保留内容 State，所属 Navigator 卸载时释放；设置为 `true` 时关闭后释放。
 
 - **复用原状态**：调用 `handle.open()`，沿用原配置。
 - **创建新会话**：推荐使用独立的 GlobalKey 和 Controller，避免与旧内容冲突。

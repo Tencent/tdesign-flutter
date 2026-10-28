@@ -45,6 +45,8 @@ Download link: [tdesign-flutter-example.apk](https://tdesign.gtimg.com/flutter/t
 
 ## 🚀 Quick Start
 
+Upgrading from 1.0.0 to the planned 1.1.0? Review the [upgrade notes](./tdesign-site/site/docs/migration-0.2.7-to-1.0.md#migration-after-1-0) for API and behavior changes.
+
 Upgrading from 0.2.7? Read the [1.0 migration guide (Chinese)](./tdesign-site/site/docs/migration-0.2.7-to-1.0.md) before changing the dependency. Version 1.0 contains breaking API and behavior changes.
 
 Requires Flutter ≥ 3.32.0 and Dart ≥ 3.8.0.

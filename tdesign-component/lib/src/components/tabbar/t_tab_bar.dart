@@ -169,7 +169,7 @@ class TTabBarItemConfig {
     this.popUpButtonConfig,
     this.onLongPress,
     @Deprecated(
-      'Use notifyOnReselect instead. Deprecated in 1.0.1; remove in 2.0.0.',
+      'Use notifyOnReselect instead. Deprecated in 1.1.0; remove in 2.0.0.',
     )
     bool allowMultipleTaps = false,
     bool? notifyOnReselect,
@@ -225,7 +225,7 @@ class TTabBarItemConfig {
 
   /// 已废弃，此为兼容入口。请使用 [notifyOnReselect]；将在 2.0.0 删除。
   @Deprecated(
-    'Use notifyOnReselect instead. Deprecated in 1.0.1; remove in 2.0.0.',
+    'Use notifyOnReselect instead. Deprecated in 1.1.0; remove in 2.0.0.',
   )
   bool get allowMultipleTaps => _allowMultipleTaps;
 
@@ -1134,7 +1134,7 @@ class TTabBarPopUpBtnConfig {
     required this.items,
 
     /// 已废弃，此为兼容入口。请使用 [onSelected]；将在 2.0.0 删除。
-    @Deprecated('Use onSelected instead. Deprecated in 1.0.1; remove in 2.0.0.')
+    @Deprecated('Use onSelected instead. Deprecated in 1.1.0; remove in 2.0.0.')
     ValueChanged<String>? onChanged,
     ValueChanged<String>? onSelected,
     this.popUpDialogConfig,
@@ -1171,7 +1171,7 @@ class TTabBarPopUpBtnConfig {
   final ValueChanged<String> _onChanged;
 
   /// 已废弃，此为兼容入口。请使用 [onSelected]；将在 2.0.0 删除。
-  @Deprecated('Use onSelected instead. Deprecated in 1.0.1; remove in 2.0.0.')
+  @Deprecated('Use onSelected instead. Deprecated in 1.1.0; remove in 2.0.0.')
   ValueChanged<String> get onChanged => _onChanged;
 
   /// 弹窗UI配置
