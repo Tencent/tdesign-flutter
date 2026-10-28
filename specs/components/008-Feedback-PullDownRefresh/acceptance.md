@@ -38,3 +38,11 @@
 - 整组验证环境、命令、指纹及本次补充回归结果统一记录在 [DropdownMenu 验收记录](../001-Feedback-DropdownMenu/acceptance.md#controller-binding-validation)，不以原候选结果替代新候选验证。
 
 中文 API 注释及生成文档已补充推荐用法与原有绑定规则；本轮文档、字体覆盖及静态分析结果见[整组验收](../001-Feedback-DropdownMenu/acceptance.md#controller-api-doc-validation)，不改变实现或既有绑定限制。
+
+## Header 静止态绘制回归
+
+- 本地候选以 PR #1209 的 `4fc609f3c1d4138f70722c401c58b9f7499fea8e` 为基础，生产文件 SHA-256 为 `06d4ab3bd1e15e14934cf6547cb722cb6f6d79060920e1a08d2daabf77f31d04`，测试文件 SHA-256 为 `99fb2d71728e64dd11b8f365347f1b4f09b4814bc940a4d43c9ae3efc2f52b96`。
+- macOS 本地 Flutter 3.32.0 和 3.47.8：分别离线解析依赖，执行 `flutter test --no-pub test/components/refresh/t_refresh_test.dart`，各 37 项通过；`flutter analyze --no-pub --fatal-infos` 均无问题。测试对比刷新前与复位后的像素，并确认 Header 高度为零；同文件的既有测试覆盖下拉、刷新及样式。
+- Flutter 3.32.0 下临时使用 PR 父提交的生产文件时，该像素断言失败；恢复 PR 实现后通过。测试文件已在 `tool/component_test_manifest.dart` 登记。
+- 未执行真实设备、同尺寸视觉对照或最终候选远端 CI；未单独验证下拉小偏移的视觉效果，相关待办见 [tasks.md](./tasks.md)。
+- Linux amd64 Flutter 3.32.0 容器使用离线缓存依赖，对当前候选运行 `flutter test --no-pub test/components/refresh/t_refresh_golden_test.dart`：三张既有基线分别有 101、162、101 个像素差异，均位于顶部 5 像素。相同容器与依赖中，仅还原 PR 父提交的生产文件后 3 项通过，表明差异由此修复引入。更新三张基线后，在同一环境不带更新参数复跑 Golden，3 项通过；组件测试 37 项通过。图片变更仍仅涉及上述顶部区域的透明度。容器离线解析使用了缓存的工具依赖版本，非远端 CI 结果。
