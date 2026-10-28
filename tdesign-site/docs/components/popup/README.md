@@ -13,7 +13,9 @@ isComponent: true
 
 ## FAQ
 
-### 从 1.0.0 升级到 1.0.1 后，蒙层配置需要如何适配？
+### 从 1.0.0 升级到 1.1.0 时，蒙层配置需要注意什么？
+
+以下 1.1.0 升级注意事项基于当前开发分支，兼容性调整仍在准备中；最终行为以正式版本和更新日志为准。
 
 - `TPopupOverlayConfig` 改为 `final`：已有继承、`implements` 及相关 mock 需改用直接构造或工厂组合。这是源码不兼容变更；依赖动态 getter 的配置需按业务状态重新创建。
 - 旧 `onClick` 构造参数和成员仍可用，但已废弃，推荐使用 `onTap`。非空 `onTap` 优先，否则使用 `onClick`，每次点击只通知一次。
@@ -28,7 +30,7 @@ isComponent: true
 
 <div id="popup-session-reuse" style="position: relative; top: -128px"></div>
 
-### 从 1.0.0 升级到 1.0.1 后，替换会话需要注意什么？
+### 从 1.0.0 升级到 1.1.0 时，替换会话需要注意什么？
 
 Popup 和 `TPickerPopup` 的 `destroyOnClose` 默认为 `false`，关闭后仍保留内容 State，所属 Navigator 卸载时释放。
 
