@@ -666,13 +666,7 @@ class TRangeSlider extends StatelessWidget {
   }
 }
 
-/// 指针交互结束后回收 [RangeSlider] 内部拇指焦点。
-///
-/// 较新的 Flutter 版本起（框架 PR #182185，上游缺陷 #189205），RangeSlider 在
-/// 指针按下时会给被选中的拇指申请焦点，而拇指持有焦点期间会持续满强度绘制
-/// overlay 光圈，导致点击 / 拖动结束后光圈一直残留，直到焦点被其他交互移走。
-/// 这里在指针抬起 / 取消 / 按住拖出滑块时释放滑块内部的拇指焦点，让点击光圈
-/// 随交互结束而消退；键盘 Tab 聚焦（不经过指针）不受影响，仍显示焦点光圈。
+/// 指针交互结束后回收 [RangeSlider] 内部拇指焦点，避免点击 / 拖动后光圈残留。
 class _RangeSliderMouseFocusCleanup extends StatefulWidget {
   const _RangeSliderMouseFocusCleanup({required this.child});
 
@@ -735,6 +729,7 @@ class _RangeSliderMouseFocusCleanupState
     );
   }
 }
+
 void _paintCapsuleSegments(
   Canvas canvas, {
   required Rect trackRect,
