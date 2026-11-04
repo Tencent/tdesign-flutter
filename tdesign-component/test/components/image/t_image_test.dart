@@ -19,7 +19,6 @@ void main() {
     home: Scaffold(body: Center(child: child)),
   );
 
-
   /// 需要真实走网络加载链路的测试：设置 mock 客户端并在测试体内复位。
   ///
   /// `debugNetworkImageHttpClientProvider` 是 painting debug 变量，框架在
@@ -48,10 +47,8 @@ void main() {
     stream.addListener(ImageStreamListener((_, __) {}));
   }
 
-  ImageCacheStatus statusOf(String url) => PaintingBinding
-      .instance
-      .imageCache
-      .statusForKey(NetworkImage(url));
+  ImageCacheStatus statusOf(String url) =>
+      PaintingBinding.instance.imageCache.statusForKey(NetworkImage(url));
 
   Matcher untrackedStatus() => isA<ImageCacheStatus>().having(
     (status) => status.untracked,
@@ -477,7 +474,9 @@ void main() {
 
   // ─── cacheMode 相关测试 ────────────────────────────────────────────────
 
-  networkTest('default cache mode keeps Flutter cache behavior', (tester) async {
+  networkTest('default cache mode keeps Flutter cache behavior', (
+    tester,
+  ) async {
     const url = 'https://example.com/default.png';
     await tester.pumpWidget(app(const TImage(src: url, width: 72, height: 72)));
     await tester.pumpAndSettle();
@@ -517,16 +516,8 @@ void main() {
     );
     await tester.pump();
     final fresh = statusOf(url);
-    expect(
-      fresh.keepAlive,
-      isFalse,
-      reason: '挂载时既有缓存条目应被清除',
-    );
-    expect(
-      fresh.tracked,
-      isTrue,
-      reason: '清除后组件重新拉取，新条目进入缓存追踪',
-    );
+    expect(fresh.keepAlive, isFalse, reason: '挂载时既有缓存条目应被清除');
+    expect(fresh.tracked, isTrue, reason: '清除后组件重新拉取，新条目进入缓存追踪');
 
     // 卸载后缓存条目被清除，不保留给后续复用。
     await tester.pumpWidget(app(const SizedBox.shrink()));
@@ -663,7 +654,6 @@ void main() {
     expect(resized.imageProvider, isA<NetworkImage>());
   });
 
-
   networkTest('disabled mode with cacheWidth/Height evicts cached entry', (
     tester,
   ) async {
@@ -686,5 +676,3 @@ void main() {
     expect(statusOf(url), untrackedStatus());
   });
 }
-
-

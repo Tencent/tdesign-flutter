@@ -23,7 +23,11 @@ class _OkHttpClient implements HttpClient {
   String? userAgent;
 
   @override
-  void addCredentials(Uri url, String realm, HttpClientCredentials credentials) {}
+  void addCredentials(
+    Uri url,
+    String realm,
+    HttpClientCredentials credentials,
+  ) {}
 
   @override
   void addProxyCredentials(
@@ -34,7 +38,11 @@ class _OkHttpClient implements HttpClient {
   ) {}
 
   @override
-  Future<ConnectionTask<Socket>> Function(Uri url, String? proxyHost, int? proxyPort)?
+  Future<ConnectionTask<Socket>> Function(
+    Uri url,
+    String? proxyHost,
+    int? proxyPort,
+  )?
   connectionFactory;
 
   @override
@@ -45,7 +53,8 @@ class _OkHttpClient implements HttpClient {
   authenticateProxy;
 
   @override
-  bool Function(X509Certificate cert, String host, int port)? badCertificateCallback;
+  bool Function(X509Certificate cert, String host, int port)?
+  badCertificateCallback;
 
   @override
   void Function(String line)? keyLog;
@@ -113,7 +122,8 @@ class _OkHttpClient implements HttpClient {
       Future<HttpClientRequest>.value(_OkHttpRequest(bytes));
 }
 
-class _OkHttpRequest implements HttpClientRequest {  _OkHttpRequest(this.bytes);
+class _OkHttpRequest implements HttpClientRequest {
+  _OkHttpRequest(this.bytes);
 
   final Uint8List bytes;
 
@@ -185,8 +195,7 @@ class _OkHttpRequest implements HttpClientRequest {  _OkHttpRequest(this.bytes);
   void writeln([Object? obj = '']) {}
 }
 
-class _OkHttpResponse extends Stream<List<int>>
-    implements HttpClientResponse {
+class _OkHttpResponse extends Stream<List<int>> implements HttpClientResponse {
   _OkHttpResponse(this.bytes);
 
   final Uint8List bytes;

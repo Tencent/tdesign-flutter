@@ -254,12 +254,8 @@ class TImage extends StatelessWidget {
       // ignore: omit_local_variable_types
       final ImageProvider<Object> provider =
           cacheWidth != null || cacheHeight != null
-              ? ResizeImage(
-                networkProvider,
-                width: cacheWidth,
-                height: cacheHeight,
-              )
-              : networkProvider;
+          ? ResizeImage(networkProvider, width: cacheWidth, height: cacheHeight)
+          : networkProvider;
       return Image(
         image: provider,
         width: width,
