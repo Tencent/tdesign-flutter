@@ -800,7 +800,8 @@ void main() {
 
       // 滚回顶部
       controller.jumpTo(0);
-      await tester.pump();
+      // 隐藏为淡出动画，需等待结束才真正移除。
+      await tester.pumpAndSettle();
       expect(find.byType(GestureDetector), findsNothing);
 
       controller.dispose();
@@ -831,7 +832,8 @@ void main() {
       expect(find.byType(GestureDetector), findsOneWidget);
 
       secondController.jumpTo(0);
-      await tester.pump();
+      // 隐藏为淡出动画，需等待结束才真正移除。
+      await tester.pumpAndSettle();
       expect(find.byType(GestureDetector), findsNothing);
 
       firstController.dispose();
