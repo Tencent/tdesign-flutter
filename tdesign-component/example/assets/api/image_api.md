@@ -10,6 +10,7 @@
 | --- | --- | --- | --- | --- |
 | alignment | AlignmentGeometry | Alignment.center | 图片对齐方式。 | 否 |
 | cacheHeight | int? | - | 解码缓存高度。 | 否 |
+| cacheMode | TImageCacheMode | TImageCacheMode.enabled | 网络图片内存缓存策略，默认 `TImageCacheMode.enabled`。 仅作用于网络图（http/https）；asset 与 `imageFile` 不受影响。 | 否 |
 | cacheWidth | int? | - | 解码缓存宽度。 | 否 |
 | errorBuilder | ImageErrorWidgetBuilder? | - | 图片错误 UI 构建器；非空时优先于 `errorWidget`。 不用于执行错误上报等副作用；错误事件使用 `onError`。 | 否 |
 | errorWidget | Widget? | - | 默认错误占位内容；`errorBuilder` 非空时由其接管错误渲染。 | 否 |
@@ -26,7 +27,6 @@
 | onLoad | VoidCallback? | - | 图片首帧加载成功后的回调。 每个图片来源生命周期只触发一次；动画图片的后续帧不重复触发。 | 否 |
 | onTap | GestureTapCallback? | - | 点击回调；为空时不创建点击行为。 | 否 |
 | repeat | ImageRepeat | ImageRepeat.noRepeat | 图片重复方式。 | 否 |
-| cacheMode | TImageCacheMode | TImageCacheMode.enabled | 网络图内存缓存策略；`disabled` 时不保留缓存，每次展示重新拉取。 | 否 |
 | semanticLabel | String? | - | 无障碍标签。 | 否 |
 | shape | TImageShape | TImageShape.square | 图片形状，默认为 `TImageShape.square`。 | 否 |
 | src | String? | - | 网络 URL 或 asset 路径。 为 null 时显示加载占位；空字符串显示失败占位。 | 否 |
@@ -55,8 +55,8 @@ Flutter 的 `ImageCache` 默认缓存全部网络图；该策略提供按图控�
 
 | 名称 | 类型 | 默认值 | 说明 | 必传 |
 | --- | --- | --- | --- | --- |
-| enabled | TImageCacheMode | - | 保留内存缓存（默认）。同一 URL 复用内存缓存，不主动清除缓存条目。 | - |
-| disabled | TImageCacheMode | - | 不保留内存缓存。每次来源生效前先清除该 URL 对应的内存缓存条目，保证每次展示都取最新数据；来源变更与组件销毁时同步清除，避免缓存被后续复用。 | - |
+| enabled | TImageCacheMode | - | 保留内存缓存（默认）。 与 Flutter `Image.network` 默认行为一致：同一 URL 复用内存缓存， 不主动清除缓存条目。 | - |
+| disabled | TImageCacheMode | - | 不保留内存缓存。 每次来源生效前先清除该 URL 对应的内存缓存条目，保证每次展示都取 最新数据；来源变更与组件销毁时同步清除，避免缓存被后续复用。 只影响内存缓存，不控制磁盘缓存与 HTTP 缓存头。 | - |
 
 
 ### TImageThemeData
