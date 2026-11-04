@@ -597,7 +597,7 @@ class TThemeData extends ThemeExtension<TThemeData> {
     TExtraThemeData? extraThemeData,
   }) {
     final copiedRefs = _copyMap<String>(refMap, null);
-    return TThemeData(
+    final result = TThemeData(
       name: name ?? this.name,
       colorMap: _copyMap<Color>(this.colorMap, colorMap, copiedRefs),
       fontMap: _copyMap<Font>(this.fontMap, fontMap, copiedRefs),
@@ -627,6 +627,24 @@ class TThemeData extends ThemeExtension<TThemeData> {
       refMap: copiedRefs,
       extraThemeData: extraThemeData ?? this.extraThemeData,
     );
+    // 保持与 lerp 一致的明暗配对语义：复制结果继续指向自身的明暗实例。
+    // 当原主题存在暗色实例时，让暗色实例也应用相同的覆盖（保持其自身 name），
+    // 避免 copyWith 后 dark 丢失或覆盖未同步，导致 TThemeBuilder.dark 回退到
+    // 未覆盖的 Token。
+    result.light = identical(light, this) ? result : light;
+    result.dark = dark?.copyWith(
+      colorMap: colorMap,
+      fontMap: fontMap,
+      fontMetricMap: fontMetricMap,
+      radiusMap: radiusMap,
+      fontFamilyMap: fontFamilyMap,
+      shadowMap: shadowMap,
+      insetShadowMap: insetShadowMap,
+      spacerMap: spacerMap,
+      sizeMap: sizeMap,
+      extraThemeData: extraThemeData,
+    );
+    return result;
   }
 
   /// 拷贝Map,防止内层
