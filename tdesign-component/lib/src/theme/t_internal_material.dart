@@ -132,15 +132,6 @@ class TInternalMaterialTheme {
   ) => [
     for (var i = 0; i < items.length; i++)
       switch (Theme.of(context).platform) {
-        TargetPlatform.android ||
-        TargetPlatform.fuchsia => TextSelectionToolbarTextButton(
-          onPressed: items[i].onPressed,
-          padding: TextSelectionToolbarTextButton.getPadding(i, items.length),
-          alignment: AlignmentDirectional.centerStart,
-          child: _TInternalMenuLabel(
-            AdaptiveTextSelectionToolbar.getButtonLabel(context, items[i]),
-          ),
-        ),
         TargetPlatform.linux ||
         TargetPlatform.windows => DesktopTextSelectionToolbarButton(
           onPressed: items[i].onPressed,
@@ -165,6 +156,16 @@ class TInternalMaterialTheme {
         TargetPlatform.macOS => _TInternalCupertinoMenuButton(
           onPressed: items[i].onPressed,
           label: AdaptiveTextSelectionToolbar.getButtonLabel(context, items[i]),
+        ),
+        // Material-style buttons cover android, fuchsia and any platform added
+        // after this switch was written, so the switch stays exhaustive.
+        _ => TextSelectionToolbarTextButton(
+          onPressed: items[i].onPressed,
+          padding: TextSelectionToolbarTextButton.getPadding(i, items.length),
+          alignment: AlignmentDirectional.centerStart,
+          child: _TInternalMenuLabel(
+            AdaptiveTextSelectionToolbar.getButtonLabel(context, items[i]),
+          ),
         ),
       },
   ];
@@ -949,10 +950,6 @@ class TInternalScrollBehavior extends MaterialScrollBehavior {
       return child;
     }
     switch (getPlatform(context)) {
-      case TargetPlatform.android:
-      case TargetPlatform.fuchsia:
-      case TargetPlatform.iOS:
-        return child;
       case TargetPlatform.linux:
       case TargetPlatform.macOS:
       case TargetPlatform.windows:
@@ -970,6 +967,10 @@ class TInternalScrollBehavior extends MaterialScrollBehavior {
           pressDuration: Duration.zero,
           child: child,
         );
+      default:
+        // android, fuchsia, iOS and any platform added after this switch was
+        // written keep the native scrollbar, so the switch stays exhaustive.
+        return child;
     }
   }
 }
