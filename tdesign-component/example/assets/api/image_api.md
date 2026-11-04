@@ -10,6 +10,7 @@
 | --- | --- | --- | --- | --- |
 | alignment | AlignmentGeometry | Alignment.center | 图片对齐方式。 | 否 |
 | cacheHeight | int? | - | 解码缓存高度。 | 否 |
+| cacheMode | TImageCacheMode | TImageCacheMode.enabled | 网络图片内存缓存策略，默认 `TImageCacheMode.enabled`。 仅作用于网络图（http/https）；asset 与 `imageFile` 不受影响。 | 否 |
 | cacheWidth | int? | - | 解码缓存宽度。 | 否 |
 | errorBuilder | ImageErrorWidgetBuilder? | - | 图片错误 UI 构建器；非空时优先于 `errorWidget`。 不用于执行错误上报等副作用；错误事件使用 `onError`。 | 否 |
 | errorWidget | Widget? | - | 默认错误占位内容；`errorBuilder` 非空时由其接管错误渲染。 | 否 |
