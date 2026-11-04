@@ -6,7 +6,7 @@ import 'dart:typed_data';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:tdesign_flutter/tdesign_flutter.dart';
 
-part 't_image_cache_mode_test.dart';
+part 't_image_cache_mode_part.dart';
 
 void main() {
   Widget app(Widget child) =>
