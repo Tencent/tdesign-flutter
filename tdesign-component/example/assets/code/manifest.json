@@ -376,6 +376,10 @@
           {
             "description": "无标题级联选择器",
             "assetKey": "cascader.CascaderAnyExample"
+          },
+          {
+            "description": "多选级联选择器",
+            "assetKey": "cascader.CascaderMultipleExample"
           }
         ]
       }
