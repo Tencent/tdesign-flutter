@@ -38,7 +38,6 @@ void main() {
     TMessageThemeData? messageTheme,
     Size mediaSize = const Size(375, 812),
     EdgeInsets mediaPadding = EdgeInsets.zero,
-    bool disableAnimations = false,
   }) {
     return MaterialApp(
       theme: messageTheme == null
@@ -46,13 +45,16 @@ void main() {
           : TThemeBuilder.light(
               TThemeData.defaultData(),
             ).mergeExtension(messageTheme),
-      home: MediaQuery(
-        data: MediaQueryData(
-          size: mediaSize,
-          padding: mediaPadding,
-          disableAnimations: disableAnimations,
-        ),
-        child: Scaffold(body: Stack(children: [child])),
+      home: Builder(
+        builder: (context) {
+          // 继承 MaterialApp 从 view 创建的 MediaQuery（含 accessibility 设置），
+          // 仅覆盖测试所需的 size 与 padding。
+          final media = MediaQuery.of(context);
+          return MediaQuery(
+            data: media.copyWith(size: mediaSize, padding: mediaPadding),
+            child: Scaffold(body: Stack(children: [child])),
+          );
+        },
       ),
     );
   }
@@ -384,6 +386,7 @@ void main() {
     });
 
     testWidgets('短文本不触发跑马灯动画', (tester) async {
+      // 使用超大屏幕宽度确保文本不溢出，不依赖 CI 字体渲染环境。
       await tester.pumpWidget(
         wrap(
           const TMessage(
@@ -391,6 +394,7 @@ void main() {
             duration: null,
             marquee: TMessageMarquee(duration: Duration(milliseconds: 200)),
           ),
+          mediaSize: const Size(2000, 812),
         ),
       );
       await tester.pump();
@@ -409,6 +413,13 @@ void main() {
 
     testWidgets('系统禁用动画时不触发跑马灯', (tester) async {
       const longText = '这是一段非常长的跑马灯消息内容，用来确保文本超过容器宽度从而触发滚动动画效果';
+      // 模拟系统"移除动画"设置，并在测试结束后清理。
+      tester.binding.platformDispatcher.accessibilityFeaturesTestValue =
+          const FakeAccessibilityFeatures(disableAnimations: true);
+      addTearDown(
+        tester.binding.platformDispatcher
+            .clearAccessibilityFeaturesTestValue,
+      );
       await tester.pumpWidget(
         wrap(
           const TMessage(
@@ -416,7 +427,6 @@ void main() {
             duration: null,
             marquee: TMessageMarquee(duration: Duration(milliseconds: 200)),
           ),
-          disableAnimations: true,
         ),
       );
       await tester.pump();
