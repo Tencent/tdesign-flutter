@@ -165,7 +165,7 @@ class TMaterialThemeBuilder {
     final base = ThemeData(
       extensions: [..._themeExtensions(extensionData)],
       colorScheme: colorScheme,
-      scaffoldBackgroundColor: colorScheme.surface,
+      scaffoldBackgroundColor: extensionData.bgColorPage,
       iconTheme: iconTheme,
       textTheme: textTheme,
       dividerTheme: dividerTheme,
