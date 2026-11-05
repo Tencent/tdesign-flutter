@@ -202,6 +202,20 @@ void main() {
       expect(td.extension<TThemeData>(), isNotNull);
     });
 
+    test('scaffoldBackgroundColor 使用 bgPageColor（亮/暗）', () {
+      final token = TThemeData.defaultData();
+      final light = TThemeBuilder.light(token);
+      final dark = TThemeBuilder.dark(token);
+
+      // 亮色：页面背景应为 bgPageColor（灰）而非 bgColorContainer（白）
+      expect(light.scaffoldBackgroundColor, token.bgColorPage);
+      expect(light.scaffoldBackgroundColor, isNot(token.bgColorContainer));
+
+      // 暗色：应为 dark 的 bgPageColor
+      expect(dark.scaffoldBackgroundColor, token.dark!.bgColorPage);
+      expect(dark.scaffoldBackgroundColor, isNot(token.dark!.bgColorContainer));
+    });
+
     test('ThemeData.lerp 插值 Token 投影的全部 Material 视觉字段', () {
       final token = TThemeData.defaultData();
       final light = TThemeBuilder.light(token);
@@ -314,7 +328,7 @@ void main() {
       expect(dark.brandColor.toARGB32(), 0xFF699EF5);
       expect(
         TThemeBuilder.dark(token).scaffoldBackgroundColor,
-        defaults.dark!.bgColorContainer,
+        defaults.dark!.bgColorPage,
       );
       expect(dark.bgColorPage, isNot(token.bgColorPage));
       expect(dark.textColorPrimary, isNot(token.textColorPrimary));
