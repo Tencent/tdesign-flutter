@@ -9,6 +9,7 @@ import '../../tool/demo_golden_coverage.dart';
 import '../../tool/regression_sharding.dart';
 import '../../tool/run_component_regression.dart';
 import '../../tool/run_visual_regression.dart';
+import '../../tool/source_glyph_scan.dart';
 
 void main() {
   test('visual shards partition globally deduplicated suites by component', () {
@@ -175,9 +176,9 @@ void main() {
               .listSync(recursive: true)
               .whereType<File>()
               .where((file) => file.path.endsWith('.dart'))) {
-        sourceGlyphs.addAll(
-          file.readAsStringSync().runes.where(_belongsInSharedCjkFont),
-        );
+        // 只看字符串字面量：注释和 dartdoc 不显示在界面上，
+        // 纯文档改动不应要求扩充字体或更新 Golden。
+        sourceGlyphs.addAll(collectDisplayedGlyphs(file.readAsStringSync()));
       }
     }
 
@@ -353,18 +354,6 @@ void main() {
 
 bool _isWhitespace(int rune) =>
     rune == 0x09 || rune == 0x0a || rune == 0x0d || rune == 0x20;
-
-bool _belongsInSharedCjkFont(int rune) =>
-    rune == 0x26 ||
-    rune == 0xb7 ||
-    rune == 0x2014 ||
-    rune == 0x2026 ||
-    rune == 0x2191 ||
-    rune == 0x2192 ||
-    (rune >= 0x3000 && rune <= 0x303f) ||
-    (rune >= 0x3400 && rune <= 0x4dbf) ||
-    (rune >= 0x4e00 && rune <= 0x9fff) ||
-    (rune >= 0xff00 && rune <= 0xffef);
 
 Set<int> _readCmapCodePoints(File font) {
   final data = ByteData.sublistView(font.readAsBytesSync());
