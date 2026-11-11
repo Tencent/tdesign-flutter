@@ -578,6 +578,7 @@ class TThemeData extends ThemeExtension<TThemeData> {
   /// ## 返回值
   /// 复制 Token 主题并合并传入的映射；未传入的映射值沿用当前配置。
   /// name 和 extraThemeData 为空时保留当前名称和扩展数据。
+  /// 覆盖仅应用于当前主题；配对主题保留原值，复制后重新关联。
   @override
   TThemeData copyWith({
     String? name,
@@ -596,8 +597,46 @@ class TThemeData extends ThemeExtension<TThemeData> {
     Map<String, double>? sizeMap,
     TExtraThemeData? extraThemeData,
   }) {
+    final result = _copyTokens(
+      name: name,
+      colorMap: colorMap,
+      fontMap: fontMap,
+      fontMetricMap: fontMetricMap,
+      radiusMap: radiusMap,
+      fontFamilyMap: fontFamilyMap,
+      shadowMap: shadowMap,
+      insetShadowMap: insetShadowMap,
+      spacerMap: spacerMap,
+      sizeMap: sizeMap,
+      extraThemeData: extraThemeData,
+    );
+    if (identical(light, this)) {
+      final pairedDark = dark?._copyTokens();
+      result.dark = pairedDark;
+      pairedDark?.light = result;
+    } else {
+      final pairedLight = light._copyTokens();
+      pairedLight.dark = result;
+      result.light = pairedLight;
+    }
+    return result;
+  }
+
+  TThemeData _copyTokens({
+    String? name,
+    Map<String, Color>? colorMap,
+    Map<String, Font>? fontMap,
+    Map<String, double>? fontMetricMap,
+    Map<String, double>? radiusMap,
+    Map<String, FontFamily>? fontFamilyMap,
+    Map<String, List<BoxShadow>>? shadowMap,
+    Map<String, BorderSide>? insetShadowMap,
+    Map<String, double>? spacerMap,
+    Map<String, double>? sizeMap,
+    TExtraThemeData? extraThemeData,
+  }) {
     final copiedRefs = _copyMap<String>(refMap, null);
-    final result = TThemeData(
+    return TThemeData(
       name: name ?? this.name,
       colorMap: _copyMap<Color>(this.colorMap, colorMap, copiedRefs),
       fontMap: _copyMap<Font>(this.fontMap, fontMap, copiedRefs),
@@ -627,24 +666,6 @@ class TThemeData extends ThemeExtension<TThemeData> {
       refMap: copiedRefs,
       extraThemeData: extraThemeData ?? this.extraThemeData,
     );
-    // 保持与 lerp 一致的明暗配对语义：复制结果继续指向自身的明暗实例。
-    // 当原主题存在暗色实例时，让暗色实例也应用相同的覆盖（保持其自身 name），
-    // 避免 copyWith 后 dark 丢失或覆盖未同步，导致 TThemeBuilder.dark 回退到
-    // 未覆盖的 Token。
-    result.light = identical(light, this) ? result : light;
-    result.dark = dark?.copyWith(
-      colorMap: colorMap,
-      fontMap: fontMap,
-      fontMetricMap: fontMetricMap,
-      radiusMap: radiusMap,
-      fontFamilyMap: fontFamilyMap,
-      shadowMap: shadowMap,
-      insetShadowMap: insetShadowMap,
-      spacerMap: spacerMap,
-      sizeMap: sizeMap,
-      extraThemeData: extraThemeData,
-    );
-    return result;
   }
 
   /// 拷贝Map,防止内层

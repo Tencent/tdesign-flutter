@@ -63,6 +63,7 @@
 ### TThemeData 实例操作
 
 - copyWith 和 lerp 返回 TThemeData，可直接访问 Token、继续复制或赋值给具体类型。
+- copyWith 的覆盖只应用于当前亮色或暗色实例；复制时保留另一模式的 Token 并重新关联明暗配对，不修改原主题。没有配对时保持无配对。
 - 移除 copyWithTThemeData 和 ofColor/ofFont/ofCorner/ofFontFamily/ofShadow；动态查询统一通过相应 Token Map。
 - parseThemeData 收为私有；公开 JSON 解析统一 fromJson。
 - 间距复制参数 marginMap 改为 spacerMap，与字段一致；省略或传 null 的 name 保留原名。
