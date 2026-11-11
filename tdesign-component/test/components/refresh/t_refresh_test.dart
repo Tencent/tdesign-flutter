@@ -1,6 +1,9 @@
 import 'dart:async';
+import 'dart:typed_data';
+import 'dart:ui' as ui;
 
 import 'package:easy_refresh/easy_refresh.dart';
+import 'package:flutter/rendering.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:tdesign_flutter/src/components/loading/t_circle_indicator.dart';
 import 'package:tdesign_flutter/tdesign_flutter.dart';
@@ -161,6 +164,48 @@ void main() {
       );
       await tester.pump(const Duration(seconds: 1));
       expect(states, contains(TPullDownRefreshState.inactive));
+    });
+
+    testWidgets('刷新复位后 Header 不向页面顶部绘制', (tester) async {
+      final controller = TPullDownRefreshController();
+      final boundaryKey = GlobalKey();
+      await tester.pumpWidget(
+        wrap(
+          RepaintBoundary(
+            key: boundaryKey,
+            child: SizedBox(
+              height: 300,
+              child: TPullDownRefresh(
+                controller: controller,
+                onRefresh: () async {},
+                child: ListView(children: const [SizedBox(height: 300)]),
+              ),
+            ),
+          ),
+        ),
+      );
+
+      Future<Uint8List> pixels() async {
+        final boundary =
+            boundaryKey.currentContext!.findRenderObject()!
+                as RenderRepaintBoundary;
+        final image = await boundary.toImage(pixelRatio: 1);
+        final data = await image.toByteData(format: ui.ImageByteFormat.rawRgba);
+        image.dispose();
+        return data!.buffer.asUint8List();
+      }
+
+      final before = await tester.runAsync(pixels);
+      final refresh = controller.refresh();
+      await tester.pumpAndSettle(const Duration(seconds: 3));
+      await refresh;
+      expect(
+        tester
+            .getSize(find.byKey(const ValueKey('t-pull-down-refresh-header')))
+            .height,
+        0,
+      );
+      expect(await tester.runAsync(pixels), orderedEquals(before!));
     });
 
     testWidgets('默认 refreshTimeout 为 3 秒', (tester) async {

@@ -128,3 +128,7 @@ ActionSheet 当前 Demo 以自定义业务场景取代了官方小程序的公�
 ## Popup 关闭保留的间接影响
 
 showList、showGrid 和 showGridSections 使用 Popup 默认 false 配置，随 Popup 关闭保留修复，内容 State 在关闭后保留，同句柄 open 可重开，所属 Navigator 卸载时释放；直接使用独立面板不涉及该会话缓存。三个入口未提供 destroyOnClose，不能直接配置 true。参数限制与通用资源风险在本站 ActionSheet FAQ 说明，并精准链接 Popup FAQ；完整生命周期风险见 [Popup Spec](../018-Feedback-Popup/spec.md#faq-展示与-actionsheet-间接影响)。本轮只补文档，不修改入口、默认值、回调或绑定规则。
+
+## 底部安全区
+
+内部列表的底部安全区由 `useSafeArea` 决定，不依赖 `showCancel`。命令式入口继续由 Popup 统一避让，内部列表关闭自身避让，避免重复留白；不改变公开入口默认值。

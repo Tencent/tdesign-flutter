@@ -24,6 +24,23 @@ void main() {
   }
 
   for (final mode in [ThemeMode.light, ThemeMode.dark]) {
+    testWidgets('picker ${mode.name} bottom safe area opened golden', (
+      tester,
+    ) async {
+      tester.view.padding = const FakeViewPadding(bottom: 34);
+      addTearDown(tester.view.resetPadding);
+      await pumpDemoPageAtPhoneViewport(tester, pickerDemoPageTestSpec, mode);
+      final trigger = find.byKey(const ValueKey('picker-city-trigger'));
+      await tester.ensureVisible(trigger);
+      await tester.tap(trigger);
+      await tester.pumpAndSettle();
+      await expectLater(
+        find.byType(Overlay),
+        matchesGoldenFile('goldens/picker_safe_area_${mode.name}.png'),
+      );
+      await disposeDemoPage(tester);
+    }, tags: 'golden');
+
     testWidgets('picker linked changes ${mode.name} golden', (tester) async {
       await pumpDemoPageAtPhoneViewport(tester, pickerDemoPageTestSpec, mode);
       final trigger = find.byKey(const ValueKey('picker-area-trigger'));
@@ -75,9 +92,7 @@ void main() {
         expect(tester.takeException(), isNull);
         await expectLater(
           find.byType(Overlay),
-          matchesGoldenFile(
-            'goldens/picker_${id}_opened_${mode.name}.png',
-          ),
+          matchesGoldenFile('goldens/picker_${id}_opened_${mode.name}.png'),
         );
         await disposeDemoPage(tester);
       }, tags: 'golden');

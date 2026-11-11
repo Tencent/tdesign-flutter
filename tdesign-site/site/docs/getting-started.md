@@ -28,10 +28,10 @@ flutterExample: getting-started
 dependencies:
   flutter:
     sdk: flutter
-  tdesign_flutter: ^1.0.0
+  tdesign_flutter: ^1.1.0
 ```
 
-`^1.0.0` 允许兼容的 1.x 更新。应用应提交依赖锁文件，升级后回归关键业务页面。
+`^1.1.0` 允许兼容的 1.x 更新。应用应提交依赖锁文件，升级后回归关键业务页面。
 
 安装依赖：
 

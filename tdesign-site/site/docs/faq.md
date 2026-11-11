@@ -44,6 +44,10 @@ TD内置外观使用全局Token、组件Theme及公开实例配置。Material的
 
 使用 `textAlign`、外部Center/Align以及 `style`、`strutStyle`、`textHeightBehavior`；不再使用旧版字体padding补偿。见[Text](/flutter/components/text)。
 
+## 弹层如何避让安全区？
+
+`TPopup` 和 `TPickerPopup` 默认不避让安全区。设置 `useSafeArea: true` 会移动整个面板，面板背景也随之离开屏幕边缘；如需背景贴边，可保持默认配置，在内容中使用 `SafeArea` 避让需要的边。避免外层弹层与内部组件重复处理同一边的安全区；`TActionSheet` 命令式入口默认由弹层负责避让。请在目标设备上验证安全区是否符合预期。
+
 ## 如何反馈问题或申请组件能力？
 
 先查看当前组件API和示例，确认问题后在[GitHub Issues](https://github.com/Tencent/tdesign-flutter/issues)提供组件版本、Flutter版本、运行平台、最小复现及预期结果。提交修复前阅读[贡献指南](/flutter/develop)。

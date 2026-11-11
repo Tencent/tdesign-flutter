@@ -113,3 +113,7 @@ TPickerThemeData 的 height 必须为有限正数、itemCount 必须大于零（
 ## destroyOnClose 关闭生命周期
 
 沿用 Popup 的关闭销毁策略，默认 false；true 关闭后释放，false 同一句柄在同一 Navigator 内 open 复用真实 State，所属 Navigator 卸载时自动清理。切换 Navigator 或重新 show 创建新 State。API 和 Controller 规则不变；默认 false 的释放时机改变、旧 true 的遮挡规则改变及长期保留风险见 [Popup Spec](../018-Feedback-Popup/spec.md#destroyonclose-关闭销毁修复独立交付)。Drawer 保持其 1.0.0 一次性关闭释放规则，不适用上述保留策略。
+
+## 示例的安全区职责
+
+公开选择器示例显式使用 `TPickerPopup.show(useSafeArea: true)`，让整个面板避让底部系统区域；保留标准头部与滚轮高度。`TPickerPopup` 的公开默认值仍为 false，业务可选择背景贴边并仅在内容内部处理安全区。复用已有几何测试覆盖五个示例入口，并仅增加明暗两张代表性安全区 Golden。

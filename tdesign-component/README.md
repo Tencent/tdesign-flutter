@@ -51,7 +51,7 @@ Upgrading from 0.2.7? Read the [1.0 migration guide (Chinese)](https://tdesign.t
 
 Requires Flutter ≥ 3.32.0 and Dart ≥ 3.8.0.
 
-Add `tdesign_flutter: ^1.0.0` to `pubspec.yaml` and run `flutter pub get`. See [Getting started](https://tdesign.tencent.com/flutter/getting-started) for the complete setup.
+Add `tdesign_flutter: ^1.1.0` to `pubspec.yaml` and run `flutter pub get`. See [Getting started](https://tdesign.tencent.com/flutter/getting-started) for the complete setup.
 
 ### Minimal Import
 

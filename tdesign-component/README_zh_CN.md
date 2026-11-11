@@ -51,7 +51,7 @@
 
 要求 Flutter ≥ 3.32.0、Dart ≥ 3.8.0。
 
-在 `pubspec.yaml` 中添加 `tdesign_flutter: ^1.0.0`，运行 `flutter pub get`。完整接入步骤见[快速开始](https://tdesign.tencent.com/flutter/getting-started)。
+在 `pubspec.yaml` 中添加 `tdesign_flutter: ^1.1.0`，运行 `flutter pub get`。完整接入步骤见[快速开始](https://tdesign.tencent.com/flutter/getting-started)。
 
 ### 最小导入
 

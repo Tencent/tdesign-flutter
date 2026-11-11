@@ -30,7 +30,7 @@ dependencies:
   flutter_localizations:
     sdk: flutter
   intl: any
-  tdesign_flutter: ^1.0.0
+  tdesign_flutter: ^1.1.0
 
 flutter:
   generate: true

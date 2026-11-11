@@ -77,6 +77,14 @@ const componentTestManifests = <ComponentTestManifest>[
     exampleTests: ['test/action_sheet/action_sheet_page_test.dart'],
     visualTests: [
       VisualTestManifest(
+        name: 'ActionSheet safe area',
+        workingDirectory: '.',
+        testFiles: [
+          'test/components/action_sheet/t_action_sheet_safe_area_golden_test.dart',
+        ],
+        kind: VisualTestKind.component,
+      ),
+      VisualTestManifest(
         name: 'ActionSheet Demo',
         workingDirectory: 'example',
         testFiles: ['test/action_sheet/action_sheet_page_golden_test.dart'],
