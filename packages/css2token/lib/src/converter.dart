@@ -97,6 +97,26 @@ const _radii = <String, String>{
   'radiusCircle': '--td-radius-circle',
 };
 
+/// Web 七级圆角刻度到 Flutter 六级刻度的平移映射。
+///
+/// tdesign-common/style/web 的刻度是 small 2 / default 3 / medium 6 /
+/// large 9 / extraLarge 12，Flutter 的 TRadius 没有 medium，
+/// small 3 / default 6 / large 9 / extraLarge 12 相当于 web 刻度整体上一级。
+/// 不翻译时生成器导出的 default 会把 radiusDefault 从 6 压到 3，
+/// 六像素的 medium（Flutter 眼中的 default）被直接丢弃。
+const _webRadii = <String, String>{
+  'radiusSmall': '--td-radius-default',
+  'radiusDefault': '--td-radius-medium',
+  'radiusLarge': '--td-radius-large',
+  'radiusExtraLarge': '--td-radius-extraLarge',
+  'radiusRound': '--td-radius-round',
+  'radiusCircle': '--td-radius-circle',
+};
+
+/// web 主题带 medium，mobile 主题和 Flutter 自身刻度都没有这一级。
+bool _usesWebRadiusScale(Map<String, String> variables) =>
+    variables.containsKey('--td-radius-medium');
+
 const _shadows = <String, String>{
   'shadow1': '--td-shadow-1',
   'shadow2': '--td-shadow-2',
@@ -418,8 +438,9 @@ FlutterThemeTokens parseCssToFlutterTokens(String css, {String? baselineCss}) {
     }
     if (fields.isNotEmpty) font[spec.name] = fields;
   }
+  final radiusTokens = _usesWebRadiusScale(variables) ? _webRadii : _radii;
   final radius = <String, Object>{};
-  for (final entry in _radii.entries) {
+  for (final entry in radiusTokens.entries) {
     if (!resolver.changed(entry.value)) continue;
     final raw = resolver.value(entry.value);
     final length = resolver.length(entry.value);
