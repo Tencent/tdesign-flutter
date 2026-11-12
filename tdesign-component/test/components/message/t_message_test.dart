@@ -343,6 +343,19 @@ void main() {
   });
 
   group('TMessage 跑马灯', () {
+    // 精确定位 marquee 的 AnimatedBuilder（位于 ClipRect 之下），
+    // 避免误匹配 Scaffold 内部 floatingActionButton 的 AnimatedBuilder。
+    Finder marqueeBuilder() {
+      return find.descendant(
+        of: find.byType(ClipRect),
+        matching: find.byWidgetPredicate(
+          (widget) =>
+              widget is AnimatedBuilder &&
+              widget.listenable is AnimationController,
+        ),
+      );
+    }
+
     testWidgets('单次、循环和延迟配置均可启动', (tester) async {
       // 使用足够长的文本确保溢出，触发 marquee 滚动。
       const longText = '这是一段非常长的跑马灯消息内容，用来确保文本宽度超过容器宽度从而触发滚动动画效果';
@@ -357,7 +370,7 @@ void main() {
       );
       await tester.pump();
       await tester.pump(const Duration(milliseconds: 50));
-      expect(find.byType(AnimatedBuilder), findsWidgets);
+      expect(marqueeBuilder(), findsWidgets);
 
       await tester.pumpWidget(
         wrap(
@@ -374,14 +387,7 @@ void main() {
       );
       await tester.pump(const Duration(milliseconds: 50));
       await tester.pump(const Duration(milliseconds: 50));
-      expect(
-        find.byWidgetPredicate(
-          (widget) =>
-              widget is AnimatedBuilder &&
-              widget.listenable is AnimationController,
-        ),
-        findsWidgets,
-      );
+      expect(marqueeBuilder(), findsWidgets);
       await tester.pumpWidget(wrap(const SizedBox.shrink()));
     });
 
@@ -399,15 +405,8 @@ void main() {
       );
       await tester.pump();
       await tester.pump(const Duration(milliseconds: 50));
-      // 文本不溢出：不应渲染 AnimatedBuilder。
-      expect(
-        find.byWidgetPredicate(
-          (widget) =>
-              widget is AnimatedBuilder &&
-              widget.listenable is AnimationController,
-        ),
-        findsNothing,
-      );
+      // 文本不溢出：不应渲染 marquee 的 AnimatedBuilder。
+      expect(marqueeBuilder(), findsNothing);
       await tester.pumpWidget(wrap(const SizedBox.shrink()));
     });
 
@@ -431,14 +430,7 @@ void main() {
       );
       await tester.pump();
       await tester.pump(const Duration(milliseconds: 50));
-      expect(
-        find.byWidgetPredicate(
-          (widget) =>
-              widget is AnimatedBuilder &&
-              widget.listenable is AnimationController,
-        ),
-        findsNothing,
-      );
+      expect(marqueeBuilder(), findsNothing);
       await tester.pumpWidget(wrap(const SizedBox.shrink()));
     });
 
