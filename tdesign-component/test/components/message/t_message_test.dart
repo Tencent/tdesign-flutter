@@ -407,6 +407,10 @@ void main() {
       await tester.pump(const Duration(milliseconds: 50));
       // 文本不溢出：不应渲染 marquee 的 AnimatedBuilder。
       expect(marqueeBuilder(), findsNothing);
+      // 只观察消息文字，避免把进入动画误认为跑马灯。
+      final before = tester.getTopLeft(find.text('短文本')).dx;
+      await tester.pump(const Duration(milliseconds: 100));
+      expect(tester.getTopLeft(find.text('短文本')).dx, before);
       await tester.pumpWidget(wrap(const SizedBox.shrink()));
     });
 
@@ -416,8 +420,7 @@ void main() {
       tester.binding.platformDispatcher.accessibilityFeaturesTestValue =
           const FakeAccessibilityFeatures(disableAnimations: true);
       addTearDown(
-        tester.binding.platformDispatcher
-            .clearAccessibilityFeaturesTestValue,
+        tester.binding.platformDispatcher.clearAccessibilityFeaturesTestValue,
       );
       await tester.pumpWidget(
         wrap(
@@ -431,6 +434,87 @@ void main() {
       await tester.pump();
       await tester.pump(const Duration(milliseconds: 50));
       expect(marqueeBuilder(), findsNothing);
+      final before = tester.getTopLeft(find.text(longText)).dx;
+      await tester.pump(const Duration(milliseconds: 100));
+      expect(tester.getTopLeft(find.text(longText)).dx, before);
+      expect(
+        tester.widget<Text>(find.text(longText)).overflow,
+        TextOverflow.ellipsis,
+      );
+      await tester.pumpWidget(wrap(const SizedBox.shrink()));
+    });
+
+    testWidgets('内容和实际宽度变化时重新判断并重新等待延迟', (tester) async {
+      const shortText = '短';
+      const longText = '这是需要滚动的长文字，用来验证内容和可用宽度变化后延迟与动画是否正确更新。';
+      const config = TMessageMarquee(
+        duration: Duration(milliseconds: 400),
+        delay: Duration(milliseconds: 100),
+        repeat: true,
+      );
+      Widget message(String text, Size size) => wrap(
+        TMessage(content: text, duration: null, marquee: config),
+        mediaSize: size,
+      );
+      await tester.pumpWidget(message(shortText, const Size(375, 812)));
+      await tester.pump(const Duration(milliseconds: 250));
+      await tester.pumpWidget(message(longText, const Size(375, 812)));
+      await tester.pump();
+      final start = tester.getTopLeft(find.text(longText)).dx;
+      await tester.pump(const Duration(milliseconds: 50));
+      expect(tester.getTopLeft(find.text(longText)).dx, start);
+      await tester.pump(const Duration(milliseconds: 100));
+      await tester.pump(const Duration(milliseconds: 100));
+      expect(tester.getTopLeft(find.text(longText)).dx, lessThan(start));
+      await tester.pumpWidget(message(longText, const Size(2000, 812)));
+      await tester.pump();
+      final wide = tester.getTopLeft(find.text(longText)).dx;
+      await tester.pump(const Duration(milliseconds: 200));
+      expect(tester.getTopLeft(find.text(longText)).dx, wide);
+      await tester.pumpWidget(message(longText, const Size(375, 812)));
+      await tester.pump();
+      final restart = tester.getTopLeft(find.text(longText)).dx;
+      await tester.pump(const Duration(milliseconds: 50));
+      expect(tester.getTopLeft(find.text(longText)).dx, restart);
+      await tester.pump(const Duration(milliseconds: 100));
+      await tester.pump(const Duration(milliseconds: 100));
+      expect(tester.getTopLeft(find.text(longText)).dx, lessThan(restart));
+      await tester.pumpWidget(wrap(const SizedBox.shrink()));
+    });
+
+    testWidgets('动画开关改变时停止、省略并重新启动', (tester) async {
+      const longText = '这是一条用于验证系统动画设置动态变化的长消息文本，确保文字超过可用宽度并开始滚动。';
+      const message = TMessage(
+        content: longText,
+        duration: null,
+        marquee: TMessageMarquee(
+          duration: Duration(milliseconds: 400),
+          repeat: true,
+        ),
+      );
+      await tester.pumpWidget(wrap(message));
+      await tester.pump();
+      await tester.pump(const Duration(milliseconds: 200));
+      tester.binding.platformDispatcher.accessibilityFeaturesTestValue =
+          const FakeAccessibilityFeatures(disableAnimations: true);
+      addTearDown(
+        tester.binding.platformDispatcher.clearAccessibilityFeaturesTestValue,
+      );
+      await tester.pumpWidget(wrap(message));
+      await tester.pump();
+      expect(
+        tester.widget<Text>(find.text(longText)).overflow,
+        TextOverflow.ellipsis,
+      );
+      final stopped = tester.getTopLeft(find.text(longText)).dx;
+      await tester.pump(const Duration(milliseconds: 200));
+      expect(tester.getTopLeft(find.text(longText)).dx, stopped);
+      tester.binding.platformDispatcher.clearAccessibilityFeaturesTestValue();
+      await tester.pumpWidget(wrap(message));
+      await tester.pump();
+      final resumed = tester.getTopLeft(find.text(longText)).dx;
+      await tester.pump(const Duration(milliseconds: 200));
+      expect(tester.getTopLeft(find.text(longText)).dx, lessThan(resumed));
       await tester.pumpWidget(wrap(const SizedBox.shrink()));
     });
 
@@ -522,6 +606,32 @@ void main() {
       // - action 间距与宽度 40 - 关闭按钮间距与宽度 30 = 211。
       expect(clipWidth, 211);
       expect(tester.takeException(), isNull);
+      await tester.pumpWidget(wrap(const SizedBox.shrink()));
+    });
+
+    testWidgets('非循环滚动期间文字不移出可视区域', (tester) async {
+      const longText = '这是一条用于验证非循环跑马灯在整个动画过程中都保持文字可见的足够长消息。';
+      await tester.pumpWidget(
+        wrap(
+          const TMessage(
+            content: longText,
+            duration: null,
+            marquee: TMessageMarquee(duration: Duration(milliseconds: 400)),
+          ),
+        ),
+      );
+      await tester.pump();
+      final text = find.text(longText);
+      final clip = find
+          .ancestor(of: text, matching: find.byType(ClipRect))
+          .first;
+      final start = tester.getTopLeft(text).dx;
+      for (var i = 0; i < 8; i++) {
+        await tester.pump(const Duration(milliseconds: 100));
+        expect(tester.getRect(text).overlaps(tester.getRect(clip)), isTrue);
+      }
+      await tester.pump(const Duration(milliseconds: 100));
+      expect(tester.getTopLeft(text).dx, closeTo(start, 0.01));
       await tester.pumpWidget(wrap(const SizedBox.shrink()));
     });
 
