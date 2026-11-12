@@ -163,7 +163,7 @@ void main() {
             options: TPopupOptions(
               placement: TPopupPlacement.bottom,
               height: 100,
-              overlay: TPopupOverlayConfig(closeOnClick: false, onClick: () {}),
+              overlay: TPopupOverlayConfig(closeOnClick: false, onTap: () {}),
               child: const SizedBox(height: 60),
             ),
           );
@@ -866,7 +866,7 @@ void main() {
             options: TPopupOptions(
               placement: TPopupPlacement.bottom,
               height: 100,
-              overlay: TPopupOverlayConfig(onClick: () => overlayClick++),
+              overlay: TPopupOverlayConfig(onTap: () => overlayClick++),
               child: const SizedBox(height: 60),
             ),
           );

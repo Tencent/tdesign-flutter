@@ -1,0 +1,151 @@
+{
+  "date": "2026-10-27",
+  "base_pr_head": "f2472da21bfa6f9cc3044594b1e9daa93a797f61",
+  "source_inventory_algorithm": "SHA-256 of sorted-key JSON path/hash map; covers changed component sources, tests, generated assets, fonts and Golden images; specs excluded to avoid self-reference",
+  "source_inventory_fingerprint": "fa8eac29a79fd5521d5eb2d394e36c0edd13372bf0edef6161f06557f28961ee",
+  "source_inventory": {
+    "tdesign-component/example/assets/api/slider_api.md": "6a85e61ac2d9c74fd1a0bf4dc8b57cfd6343f75a652522d23c3a17ff9dc6de6c",
+    "tdesign-component/example/assets/code/slider.SliderVerticalExample.txt": "3af924c91c0be781617b6fa1af045573357f4b69a9be5488508d6aaa02a1c89a",
+    "tdesign-component/example/lib/page/slider/slider_vertical_example.dart": "0a529c286110c4f0c36b1e4caad877801eb2823a28e7edca33fd46cc1a096a7f",
+    "tdesign-component/example/test/fonts/README.md": "ba03de675533fcc11be8bfbadec57ece83d2543dff6669a9c8667a4cda7e80b9",
+    "tdesign-component/example/test/fonts/TDesignGoldenCJK-Regular.otf": "c22bfd8a9f169d5807298a2df3fd5560ddaaa32079199c2664bf000291fc0197",
+    "tdesign-component/example/test/fonts/component_demo_glyphs.txt": "43b8c9e4ac7d1826948224a193dc9bcdc1059ea0dd394d0813685bd6e15321d2",
+    "tdesign-component/example/test/slider/goldens/slider_changed_dark.png": "96f7233e21f6bcb5232bfc5faa867bfdf7c5bbdff2d729c411846c7b7ecc6682",
+    "tdesign-component/example/test/slider/goldens/slider_changed_light.png": "211ecbbd8e4da9c9b35e3a464f55b527da7f98d697873af9226e811399af25eb",
+    "tdesign-component/example/test/slider/goldens/slider_constraints_0_dark.png": "a679870e9f4c493e3cd4c43949a221184e33bb7ce27badf2899b9ad8c91c83ec",
+    "tdesign-component/example/test/slider/goldens/slider_constraints_0_light.png": "3479d8c3e53d4619444b83c7ec2a1cf1477de05c83fe64d6cb1b653544f04c6f",
+    "tdesign-component/example/test/slider/goldens/slider_constraints_100_dark.png": "dbed672ac26884bdace3e1197a25af695d0bb04263218ad7e782307c1e2b4a47",
+    "tdesign-component/example/test/slider/goldens/slider_constraints_100_light.png": "d6ccf9a02b05a058eab9c345d2a66404b140ed7fbce4bfac4d13b11182763a90",
+    "tdesign-component/example/test/slider/goldens/slider_dragged_dark.png": "96f7233e21f6bcb5232bfc5faa867bfdf7c5bbdff2d729c411846c7b7ecc6682",
+    "tdesign-component/example/test/slider/goldens/slider_dragged_light.png": "211ecbbd8e4da9c9b35e3a464f55b527da7f98d697873af9226e811399af25eb",
+    "tdesign-component/example/test/slider/goldens/slider_endpoint_0_dark.png": "361027258654b3252ca38bb2d6237a393f15cb28be6bf3e43d06b027398e78fe",
+    "tdesign-component/example/test/slider/goldens/slider_endpoint_0_light.png": "25ce717e1215bc02119554f3fc248c71c3387798a561b62109a9a17e7dcb2170",
+    "tdesign-component/example/test/slider/goldens/slider_endpoint_100_dark.png": "e475ecfe340340147be844b50b8d0bc42f9ae1137b0c9cffcf8cc9c4042d1870",
+    "tdesign-component/example/test/slider/goldens/slider_endpoint_100_light.png": "f75ea46762c411e37c82ad26ad4340381c354e5dcb467c37c7b81ea6a311ddc2",
+    "tdesign-component/example/test/slider/goldens/slider_geometry_24_ltr_0_dark.png": "ef5cbd06146357e1685158f431f56a56f0bf4c50db84b1a163c0bfec2aebcf5f",
+    "tdesign-component/example/test/slider/goldens/slider_geometry_24_ltr_0_light.png": "eaad689941d60bb0dd8be09b3b09ff1a0f041d9748ed5d05b617fc6aac78a293",
+    "tdesign-component/example/test/slider/goldens/slider_geometry_24_ltr_100_dark.png": "3605c8a2f0a08e24de552f31b3ee76e47d6e4dc3024ac97996321d4e38d8da33",
+    "tdesign-component/example/test/slider/goldens/slider_geometry_24_ltr_100_light.png": "30b77fc74a4f69a1bd3b951c348decd9fa27de69819b5c68905df06dffa3bbb4",
+    "tdesign-component/example/test/slider/goldens/slider_geometry_24_rtl_0_dark.png": "f89819bd92e52afbe4a510c4b6850c0f8513ac07a3a4f67d2cfe0a8355144a86",
+    "tdesign-component/example/test/slider/goldens/slider_geometry_24_rtl_0_light.png": "e614b5fcfbe33975c041d0435a17fc1195f6c31478a0313cdff633754e4b6f90",
+    "tdesign-component/example/test/slider/goldens/slider_geometry_24_rtl_100_dark.png": "c480dacbe72e5509bc6d9ff4375d4dbcb50a95f36252c15cceb92c234be23121",
+    "tdesign-component/example/test/slider/goldens/slider_geometry_24_rtl_100_light.png": "b1cf18d8c61bfcb67326ab0f2f4a7d2c9833caa1e31fd26caa7b299611ce4983",
+    "tdesign-component/example/test/slider/goldens/slider_geometry_8_ltr_0_dark.png": "522d95dd7b0a7b7f66d06670c5424d21cfab50ddffe05685797a97147abb947b",
+    "tdesign-component/example/test/slider/goldens/slider_geometry_8_ltr_0_light.png": "49104fde8433077f99c534574e59e1b6d274903322bc4cec37aa65b507eb8b63",
+    "tdesign-component/example/test/slider/goldens/slider_geometry_8_ltr_100_dark.png": "8a90bd48ab559433d8e54a7d60d746fd8324a110cca37c6800cc354921d1fdbb",
+    "tdesign-component/example/test/slider/goldens/slider_geometry_8_ltr_100_light.png": "42fa728d26b59c215264e7ee7ac8f7b0309fd8c61710343f41660fa467a00c58",
+    "tdesign-component/example/test/slider/goldens/slider_geometry_8_rtl_0_dark.png": "06bca94d998dd1b6caa1587b06cae7f6c6f5df78dfe4721a7fab604286bc880b",
+    "tdesign-component/example/test/slider/goldens/slider_geometry_8_rtl_0_light.png": "5e979abc6ac4582f680bf06fb1376032eea2a9b5f60e20d7ee5dfa6b4dab6e1e",
+    "tdesign-component/example/test/slider/goldens/slider_geometry_8_rtl_100_dark.png": "0d56b432d52ec0a61e61261a883b18a49c92c8321976ed085c0d7e17a2224093",
+    "tdesign-component/example/test/slider/goldens/slider_geometry_8_rtl_100_light.png": "f3a3d76f58023b011990716dc818575edd418e2e364a790c93550466854d93dc",
+    "tdesign-component/example/test/slider/goldens/slider_geometry_matrix_dark.png": "4e684b224d6c32eb5f58e48b049af21a702eaccd017df73bcb6e9337fa371ec1",
+    "tdesign-component/example/test/slider/goldens/slider_geometry_matrix_light.png": "c826fdfdcf3586cbb4701407218a794d7cbad36f048b81796613169ebb33f9e0",
+    "tdesign-component/example/test/slider/goldens/slider_page_dark.png": "c8b9b468af693072e65424f88fb904a55148e4aa52d893020ce2a26534433b73",
+    "tdesign-component/example/test/slider/goldens/slider_page_light.png": "0c0dc340aa5c695469154679202084bff29d8576ccb4baac15024de1e0a8d133",
+    "tdesign-component/example/test/slider/slider_constraints_fixture.dart": "6a39ce409f53cbfbb3b4b1b10640bd61bfbef7816640a83da3e940625b91689d",
+    "tdesign-component/example/test/slider/slider_demo_test.dart": "267851f8048e872b77db5afdec3b6a3580d6309bbda167debfc1f4d6717842d0",
+    "tdesign-component/example/test/slider/slider_dragged_golden_test.dart": "44899203f7a2209d58f0503caa721bcf8b284d68f85dc508de34d4e83a050bcb",
+    "tdesign-component/example/test/slider/slider_endpoint_test_utils.dart": "691243967d481fcfb32c42a08c786fac3af9241da2eb046d82d18b2ee35ba886",
+    "tdesign-component/example/test/slider/slider_geometry_golden_test.dart": "29acab32495abdb5d840e89a526f449d1283e604b6813dc0471902fdcb0ad171",
+    "tdesign-component/lib/src/components/slider/t_slider.dart": "14ead0b2ee7b5cfed8ca3410aa8b1b981d9dedb0be60df610240bf37cf6fc0b4",
+    "tdesign-component/lib/src/components/slider/t_slider_geometry.dart": "45152312f745694183b137f1b43ab15385460507e7ae662769e181fea0d75601",
+    "tdesign-component/lib/src/components/slider/t_slider_theme.dart": "9aa619a8c00acd85b6924d3e05776c20a27a4f7c20164291e6b756b89fde48f1",
+    "tdesign-component/test/components/slider/goldens/t_slider_material.png": "95c967976172cf8872f34aa623837c5161e244b65e460ab0bddc77b9bf215729",
+    "tdesign-component/test/components/slider/t_slider_constraints_test.dart": "55ada5541315bbf9b303a9564b8b9eb467234b6ae8a34f0cd9eef2a9173d289a",
+    "tdesign-component/test/components/slider/t_slider_geometry_test.dart": "e2cbc1d0813d2c32c48e79a0124bf6d2fe4f69abaeffbe569be9a5a9ac019afa",
+    "tdesign-component/test/components/slider/t_slider_test.dart": "0cd2168d6470b8c752e57ae45af8265255a6773721aa6e94aa993d2a10191953",
+    "tdesign-component/tool/component_test_manifest.dart": "575b4b7707fc95241d44059c9c7883e0e620a7cf9f27283a1b4ee25805008b8f"
+  },
+  "environments": [
+    {
+      "flutter": "3.32.0",
+      "platform": "Linux x86_64"
+    },
+    {
+      "flutter": "3.47.8",
+      "platform": "macOS arm64"
+    }
+  ],
+  "local_validation": {
+    "component": 86,
+    "demo": 17,
+    "tooling": 179,
+    "analysis": "zero diagnostics component + example",
+    "coverage": "675/692 = 97.54%"
+  },
+  "visual_validation": {
+    "demo_module_flag": false,
+    "demo": 34,
+    "component": 1,
+    "updates_this_batch": 0,
+    "comparator": "exact, unchanged"
+  },
+  "test_entrypoints": {
+    "component": [
+      "test/components/slider/t_slider_test.dart",
+      "test/components/slider/t_slider_geometry_test.dart",
+      "test/components/slider/t_slider_constraints_test.dart"
+    ],
+    "demo": [
+      "example/test/slider/slider_demo_test.dart"
+    ],
+    "demo_golden": [
+      "example/test/slider/slider_demo_golden_test.dart",
+      "example/test/slider/slider_dragged_golden_test.dart",
+      "example/test/slider/slider_geometry_golden_test.dart"
+    ],
+    "component_golden": [
+      "test/components/slider/t_slider_golden_test.dart"
+    ],
+    "tooling": "test/tool"
+  },
+  "commands": {
+    "component": "flutter test --no-pub test/components/slider/t_slider_test.dart test/components/slider/t_slider_geometry_test.dart test/components/slider/t_slider_constraints_test.dart --coverage --exclude-tags golden --reporter expanded",
+    "coverage": "dart run tool/check_component_coverage.dart slider",
+    "demo_from_example": "flutter test --no-pub --dart-define=TDESIGN_DEMO_TEST_MODULES=false test/slider/slider_demo_test.dart --reporter expanded",
+    "analysis_component_and_example": "flutter analyze --no-pub --fatal-infos",
+    "tools": "flutter test --no-pub test/tool --reporter expanded",
+    "golden_from_example_linux_332": "flutter test --no-pub --dart-define=TDESIGN_DEMO_TEST_MODULES=false test/slider/slider_demo_golden_test.dart test/slider/slider_dragged_golden_test.dart test/slider/slider_geometry_golden_test.dart --reporter expanded",
+    "component_golden_linux_332": "flutter test --no-pub test/components/slider/t_slider_golden_test.dart --reporter expanded",
+    "generated_snippets": "dart run tool/generate_example_code.dart --check",
+    "generated_snippet_analysis": "dart run tool/check_demo_snippets.dart",
+    "generated_api": "node tool/generate_api.mjs --check"
+  },
+  "generated_artifacts": {
+    "api_documents_checked": 57,
+    "snippets_analyzed": 370
+  },
+  "reference": {
+    "miniprogram_sha": "a2aeed69163b6da423c99b66ff780c10043a4553",
+    "miniprogram_runtime": "WeChat DevTools WebView",
+    "develop_sha": "ca555ca40a8a317bb0e3eb521a844d54b4832eee"
+  },
+  "behavior": {
+    "normal_continuous_minimum_center_separation_px": 8,
+    "constrained_separation": "min(8 * geometry scale, controlled normalized span * thumb travel)",
+    "coincident_discrete_and_controlled_inputs": "pre-existing support retained",
+    "new_public_api": false,
+    "sdk_version_branches": false,
+    "range_callback_numeric_clamping": false
+  },
+  "default_runtime_comparison": {
+    "states": "default theme, horizontal and vertical, 0/100, light/dark",
+    "interactive_controls_per_state": 15,
+    "changed_pixels_vs_approved_pre_rollback_style": [
+      0,
+      0,
+      0,
+      0
+    ],
+    "max_vertical_label_endpoint_error_px": 0,
+    "minimum_thumb_body_clearance_px": 0.5,
+    "develop_differences": "intended endpoint/label corrections and vertical visible track 168px -> 200px; not pixel equivalence to develop"
+  },
+  "remote_ci": "not included in local acceptance; inspect checks on pushed SHA",
+  "unverified": [
+    "remote CI",
+    "physical device",
+    "Skyline",
+    "platform builds"
+  ]
+}

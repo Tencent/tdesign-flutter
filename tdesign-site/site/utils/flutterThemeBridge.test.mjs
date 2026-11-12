@@ -67,3 +67,33 @@ test('all-component Flutter audit uses the current completed controller baseline
   ), 'utf8'));
   assert.deepEqual(fixture, baseline);
 });
+
+// Both guide and component previews use this load notification lifecycle.
+test('shared Flutter preview announces mount and reload, then cleans up', async () => {
+  const { setupFlutterPreviewReadyListener } = await import('./flutterPreviewReady.mjs');
+  const iframe = new EventTarget();
+  iframe.contentWindow = {};
+  const target = new EventTarget();
+  const received = [];
+  target.addEventListener('flutter-demo-ready', (event) => received.push(event.detail.iframe));
+  const dispose = setupFlutterPreviewReadyListener(iframe, target);
+  assert.deepEqual(received, [iframe]);
+  iframe.dispatchEvent(new Event('load'));
+  assert.deepEqual(received, [iframe, iframe]);
+  dispose();
+  iframe.dispatchEvent(new Event('load'));
+  assert.deepEqual(received, [iframe, iframe]);
+});
+
+test('shared Flutter preview waits for load when no window exists yet', async () => {
+  const { setupFlutterPreviewReadyListener } = await import('./flutterPreviewReady.mjs');
+  const iframe = new EventTarget();
+  const target = new EventTarget();
+  let count = 0;
+  target.addEventListener('flutter-demo-ready', () => count += 1);
+  const dispose = setupFlutterPreviewReadyListener(iframe, target);
+  assert.equal(count, 0);
+  iframe.dispatchEvent(new Event('load'));
+  assert.equal(count, 1);
+  dispose();
+});

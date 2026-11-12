@@ -1,0 +1,63 @@
+# 复用已准备的 Demo 资源，构建指定 Flutter 版本的 release APK 并上传。
+name: Reusable / Build APK
+
+on:
+  workflow_call:
+    inputs:
+      flutter-version:
+        required: true
+        type: string
+      version:
+        required: true
+        type: string
+      build-number:
+        required: true
+        type: string
+
+permissions:
+  contents: read
+
+jobs:
+  apk:
+    name: Release APK
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: flutter-actions/setup-flutter@v4
+        with:
+          version: ${{ inputs.flutter-version }}
+          channel: stable
+          cache: true
+          cache-sdk: true
+      - name: Set up Java and Gradle dependency cache
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+          cache: gradle
+          cache-dependency-path: |
+            tdesign-component/example/android/**/*.gradle
+            tdesign-component/example/android/gradle.properties
+            tdesign-component/example/android/gradle/wrapper/gradle-wrapper.properties
+      - name: Download prepared resources
+        uses: actions/download-artifact@v4
+        with:
+          name: demo-assets
+          path: tdesign-component/example/assets
+      # 保留默认依赖与插件准备，避免 3.32.0 使用 --no-pub 时注册代码不一致。
+      - name: Build release APK
+        working-directory: tdesign-component/example
+        env:
+          DEMO_VERSION: ${{ inputs.version }}
+          DEMO_BUILD_NUMBER: ${{ inputs.build-number }}
+        run: |
+          flutter build apk --release
+          mv build/app/outputs/flutter-apk/app-release.apk "build/app/outputs/flutter-apk/tdesign-flutter-${DEMO_VERSION}-${DEMO_BUILD_NUMBER}.apk"
+      - name: Upload APK
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ inputs.flutter-version == '3.32.0' && 'tdesign-flutter-apk' || 'tdesign-flutter-apk-latest' }}
+          path: tdesign-component/example/build/app/outputs/flutter-apk/tdesign-flutter-*.apk
+          if-no-files-found: error
+          compression-level: 0
+          retention-days: 5

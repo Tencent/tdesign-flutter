@@ -6,6 +6,7 @@ import '../../theme/t_internal_material.dart';
 import '../../theme/t_radius.dart';
 import '../../theme/t_theme.dart';
 import '../text/t_text_resolve.dart';
+import '../text/t_text_style_scope.dart';
 import 't_avatar_defaults.dart';
 import 't_avatar_theme_data.dart';
 import 't_avatar_types.dart';
@@ -81,7 +82,7 @@ class TAvatar extends StatelessWidget {
             fit: StackFit.expand,
             children: [
               Center(
-                child: DefaultTextStyle.merge(
+                child: TTextStyleScope(
                   style: TTextResolve.resolve(
                     context: context,
                     style: resolvedTextStyle,

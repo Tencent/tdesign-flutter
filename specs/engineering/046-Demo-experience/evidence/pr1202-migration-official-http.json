@@ -1,0 +1,492 @@
+{
+  "checkedAt": "2026-10-26T11:19:34.575923+00:00",
+  "results": [
+    {
+      "url": "https://tdesign.tencent.com/flutter/changelog",
+      "status": 200,
+      "finalUrl": "https://tdesign.tencent.com/flutter/changelog",
+      "contentType": "text/html; charset=utf-8",
+      "bytes": 804,
+      "ok": true
+    },
+    {
+      "url": "https://tdesign.tencent.com/flutter/components/action-sheet?tab=api",
+      "status": 200,
+      "finalUrl": "https://tdesign.tencent.com/flutter/components/action-sheet?tab=api",
+      "contentType": "text/html; charset=utf-8",
+      "bytes": 804,
+      "ok": true
+    },
+    {
+      "url": "https://tdesign.tencent.com/flutter/components/avatar?tab=api",
+      "status": 200,
+      "finalUrl": "https://tdesign.tencent.com/flutter/components/avatar?tab=api",
+      "contentType": "text/html; charset=utf-8",
+      "bytes": 804,
+      "ok": true
+    },
+    {
+      "url": "https://tdesign.tencent.com/flutter/components/back-top?tab=api",
+      "status": 200,
+      "finalUrl": "https://tdesign.tencent.com/flutter/components/back-top?tab=api",
+      "contentType": "text/html; charset=utf-8",
+      "bytes": 804,
+      "ok": true
+    },
+    {
+      "url": "https://tdesign.tencent.com/flutter/components/badge?tab=api",
+      "status": 200,
+      "finalUrl": "https://tdesign.tencent.com/flutter/components/badge?tab=api",
+      "contentType": "text/html; charset=utf-8",
+      "bytes": 804,
+      "ok": true
+    },
+    {
+      "url": "https://tdesign.tencent.com/flutter/components/button?tab=api",
+      "status": 200,
+      "finalUrl": "https://tdesign.tencent.com/flutter/components/button?tab=api",
+      "contentType": "text/html; charset=utf-8",
+      "bytes": 804,
+      "ok": true
+    },
+    {
+      "url": "https://tdesign.tencent.com/flutter/components/calendar?tab=api",
+      "status": 200,
+      "finalUrl": "https://tdesign.tencent.com/flutter/components/calendar?tab=api",
+      "contentType": "text/html; charset=utf-8",
+      "bytes": 804,
+      "ok": true
+    },
+    {
+      "url": "https://tdesign.tencent.com/flutter/components/cascader?tab=api",
+      "status": 200,
+      "finalUrl": "https://tdesign.tencent.com/flutter/components/cascader?tab=api",
+      "contentType": "text/html; charset=utf-8",
+      "bytes": 804,
+      "ok": true
+    },
+    {
+      "url": "https://tdesign.tencent.com/flutter/components/cell?tab=api",
+      "status": 200,
+      "finalUrl": "https://tdesign.tencent.com/flutter/components/cell?tab=api",
+      "contentType": "text/html; charset=utf-8",
+      "bytes": 804,
+      "ok": true
+    },
+    {
+      "url": "https://tdesign.tencent.com/flutter/components/checkbox?tab=api",
+      "status": 200,
+      "finalUrl": "https://tdesign.tencent.com/flutter/components/checkbox?tab=api",
+      "contentType": "text/html; charset=utf-8",
+      "bytes": 804,
+      "ok": true
+    },
+    {
+      "url": "https://tdesign.tencent.com/flutter/components/collapse?tab=api",
+      "status": 200,
+      "finalUrl": "https://tdesign.tencent.com/flutter/components/collapse?tab=api",
+      "contentType": "text/html; charset=utf-8",
+      "bytes": 804,
+      "ok": true
+    },
+    {
+      "url": "https://tdesign.tencent.com/flutter/components/date-time-picker?tab=api",
+      "status": 200,
+      "finalUrl": "https://tdesign.tencent.com/flutter/components/date-time-picker?tab=api",
+      "contentType": "text/html; charset=utf-8",
+      "bytes": 804,
+      "ok": true
+    },
+    {
+      "url": "https://tdesign.tencent.com/flutter/components/dialog?tab=api",
+      "status": 200,
+      "finalUrl": "https://tdesign.tencent.com/flutter/components/dialog?tab=api",
+      "contentType": "text/html; charset=utf-8",
+      "bytes": 804,
+      "ok": true
+    },
+    {
+      "url": "https://tdesign.tencent.com/flutter/components/divider?tab=api",
+      "status": 200,
+      "finalUrl": "https://tdesign.tencent.com/flutter/components/divider?tab=api",
+      "contentType": "text/html; charset=utf-8",
+      "bytes": 804,
+      "ok": true
+    },
+    {
+      "url": "https://tdesign.tencent.com/flutter/components/drawer?tab=api",
+      "status": 200,
+      "finalUrl": "https://tdesign.tencent.com/flutter/components/drawer?tab=api",
+      "contentType": "text/html; charset=utf-8",
+      "bytes": 804,
+      "ok": true
+    },
+    {
+      "url": "https://tdesign.tencent.com/flutter/components/dropdown-menu?tab=api",
+      "status": 200,
+      "finalUrl": "https://tdesign.tencent.com/flutter/components/dropdown-menu?tab=api",
+      "contentType": "text/html; charset=utf-8",
+      "bytes": 804,
+      "ok": true
+    },
+    {
+      "url": "https://tdesign.tencent.com/flutter/components/empty?tab=api",
+      "status": 200,
+      "finalUrl": "https://tdesign.tencent.com/flutter/components/empty?tab=api",
+      "contentType": "text/html; charset=utf-8",
+      "bytes": 804,
+      "ok": true
+    },
+    {
+      "url": "https://tdesign.tencent.com/flutter/components/fab?tab=api",
+      "status": 200,
+      "finalUrl": "https://tdesign.tencent.com/flutter/components/fab?tab=api",
+      "contentType": "text/html; charset=utf-8",
+      "bytes": 804,
+      "ok": true
+    },
+    {
+      "url": "https://tdesign.tencent.com/flutter/components/footer?tab=api",
+      "status": 200,
+      "finalUrl": "https://tdesign.tencent.com/flutter/components/footer?tab=api",
+      "contentType": "text/html; charset=utf-8",
+      "bytes": 804,
+      "ok": true
+    },
+    {
+      "url": "https://tdesign.tencent.com/flutter/components/form?tab=api",
+      "status": 200,
+      "finalUrl": "https://tdesign.tencent.com/flutter/components/form?tab=api",
+      "contentType": "text/html; charset=utf-8",
+      "bytes": 804,
+      "ok": true
+    },
+    {
+      "url": "https://tdesign.tencent.com/flutter/components/icon?tab=api",
+      "status": 200,
+      "finalUrl": "https://tdesign.tencent.com/flutter/components/icon?tab=api",
+      "contentType": "text/html; charset=utf-8",
+      "bytes": 804,
+      "ok": true
+    },
+    {
+      "url": "https://tdesign.tencent.com/flutter/components/image-viewer?tab=api",
+      "status": 200,
+      "finalUrl": "https://tdesign.tencent.com/flutter/components/image-viewer?tab=api",
+      "contentType": "text/html; charset=utf-8",
+      "bytes": 804,
+      "ok": true
+    },
+    {
+      "url": "https://tdesign.tencent.com/flutter/components/image?tab=api",
+      "status": 200,
+      "finalUrl": "https://tdesign.tencent.com/flutter/components/image?tab=api",
+      "contentType": "text/html; charset=utf-8",
+      "bytes": 804,
+      "ok": true
+    },
+    {
+      "url": "https://tdesign.tencent.com/flutter/components/indexes?tab=api",
+      "status": 200,
+      "finalUrl": "https://tdesign.tencent.com/flutter/components/indexes?tab=api",
+      "contentType": "text/html; charset=utf-8",
+      "bytes": 804,
+      "ok": true
+    },
+    {
+      "url": "https://tdesign.tencent.com/flutter/components/input?tab=api",
+      "status": 200,
+      "finalUrl": "https://tdesign.tencent.com/flutter/components/input?tab=api",
+      "contentType": "text/html; charset=utf-8",
+      "bytes": 804,
+      "ok": true
+    },
+    {
+      "url": "https://tdesign.tencent.com/flutter/components/link?tab=api",
+      "status": 200,
+      "finalUrl": "https://tdesign.tencent.com/flutter/components/link?tab=api",
+      "contentType": "text/html; charset=utf-8",
+      "bytes": 804,
+      "ok": true
+    },
+    {
+      "url": "https://tdesign.tencent.com/flutter/components/loading?tab=api",
+      "status": 200,
+      "finalUrl": "https://tdesign.tencent.com/flutter/components/loading?tab=api",
+      "contentType": "text/html; charset=utf-8",
+      "bytes": 804,
+      "ok": true
+    },
+    {
+      "url": "https://tdesign.tencent.com/flutter/components/message?tab=api",
+      "status": 200,
+      "finalUrl": "https://tdesign.tencent.com/flutter/components/message?tab=api",
+      "contentType": "text/html; charset=utf-8",
+      "bytes": 804,
+      "ok": true
+    },
+    {
+      "url": "https://tdesign.tencent.com/flutter/components/navbar?tab=api",
+      "status": 200,
+      "finalUrl": "https://tdesign.tencent.com/flutter/components/navbar?tab=api",
+      "contentType": "text/html; charset=utf-8",
+      "bytes": 804,
+      "ok": true
+    },
+    {
+      "url": "https://tdesign.tencent.com/flutter/components/notice-bar?tab=api",
+      "status": 200,
+      "finalUrl": "https://tdesign.tencent.com/flutter/components/notice-bar?tab=api",
+      "contentType": "text/html; charset=utf-8",
+      "bytes": 804,
+      "ok": true
+    },
+    {
+      "url": "https://tdesign.tencent.com/flutter/components/picker?tab=api",
+      "status": 200,
+      "finalUrl": "https://tdesign.tencent.com/flutter/components/picker?tab=api",
+      "contentType": "text/html; charset=utf-8",
+      "bytes": 804,
+      "ok": true
+    },
+    {
+      "url": "https://tdesign.tencent.com/flutter/components/popover?tab=api",
+      "status": 200,
+      "finalUrl": "https://tdesign.tencent.com/flutter/components/popover?tab=api",
+      "contentType": "text/html; charset=utf-8",
+      "bytes": 804,
+      "ok": true
+    },
+    {
+      "url": "https://tdesign.tencent.com/flutter/components/popup?tab=api",
+      "status": 200,
+      "finalUrl": "https://tdesign.tencent.com/flutter/components/popup?tab=api",
+      "contentType": "text/html; charset=utf-8",
+      "bytes": 804,
+      "ok": true
+    },
+    {
+      "url": "https://tdesign.tencent.com/flutter/components/progress?tab=api",
+      "status": 200,
+      "finalUrl": "https://tdesign.tencent.com/flutter/components/progress?tab=api",
+      "contentType": "text/html; charset=utf-8",
+      "bytes": 804,
+      "ok": true
+    },
+    {
+      "url": "https://tdesign.tencent.com/flutter/components/pull-down-refresh?tab=api",
+      "status": 200,
+      "finalUrl": "https://tdesign.tencent.com/flutter/components/pull-down-refresh?tab=api",
+      "contentType": "text/html; charset=utf-8",
+      "bytes": 804,
+      "ok": true
+    },
+    {
+      "url": "https://tdesign.tencent.com/flutter/components/radio?tab=api",
+      "status": 200,
+      "finalUrl": "https://tdesign.tencent.com/flutter/components/radio?tab=api",
+      "contentType": "text/html; charset=utf-8",
+      "bytes": 804,
+      "ok": true
+    },
+    {
+      "url": "https://tdesign.tencent.com/flutter/components/rate?tab=api",
+      "status": 200,
+      "finalUrl": "https://tdesign.tencent.com/flutter/components/rate?tab=api",
+      "contentType": "text/html; charset=utf-8",
+      "bytes": 804,
+      "ok": true
+    },
+    {
+      "url": "https://tdesign.tencent.com/flutter/components/result?tab=api",
+      "status": 200,
+      "finalUrl": "https://tdesign.tencent.com/flutter/components/result?tab=api",
+      "contentType": "text/html; charset=utf-8",
+      "bytes": 804,
+      "ok": true
+    },
+    {
+      "url": "https://tdesign.tencent.com/flutter/components/search?tab=api",
+      "status": 200,
+      "finalUrl": "https://tdesign.tencent.com/flutter/components/search?tab=api",
+      "contentType": "text/html; charset=utf-8",
+      "bytes": 804,
+      "ok": true
+    },
+    {
+      "url": "https://tdesign.tencent.com/flutter/components/side-bar?tab=api",
+      "status": 200,
+      "finalUrl": "https://tdesign.tencent.com/flutter/components/side-bar?tab=api",
+      "contentType": "text/html; charset=utf-8",
+      "bytes": 804,
+      "ok": true
+    },
+    {
+      "url": "https://tdesign.tencent.com/flutter/components/skeleton?tab=api",
+      "status": 200,
+      "finalUrl": "https://tdesign.tencent.com/flutter/components/skeleton?tab=api",
+      "contentType": "text/html; charset=utf-8",
+      "bytes": 804,
+      "ok": true
+    },
+    {
+      "url": "https://tdesign.tencent.com/flutter/components/slider?tab=api",
+      "status": 200,
+      "finalUrl": "https://tdesign.tencent.com/flutter/components/slider?tab=api",
+      "contentType": "text/html; charset=utf-8",
+      "bytes": 804,
+      "ok": true
+    },
+    {
+      "url": "https://tdesign.tencent.com/flutter/components/stepper?tab=api",
+      "status": 200,
+      "finalUrl": "https://tdesign.tencent.com/flutter/components/stepper?tab=api",
+      "contentType": "text/html; charset=utf-8",
+      "bytes": 804,
+      "ok": true
+    },
+    {
+      "url": "https://tdesign.tencent.com/flutter/components/steps?tab=api",
+      "status": 200,
+      "finalUrl": "https://tdesign.tencent.com/flutter/components/steps?tab=api",
+      "contentType": "text/html; charset=utf-8",
+      "bytes": 804,
+      "ok": true
+    },
+    {
+      "url": "https://tdesign.tencent.com/flutter/components/swipe-cell?tab=api",
+      "status": 200,
+      "finalUrl": "https://tdesign.tencent.com/flutter/components/swipe-cell?tab=api",
+      "contentType": "text/html; charset=utf-8",
+      "bytes": 804,
+      "ok": true
+    },
+    {
+      "url": "https://tdesign.tencent.com/flutter/components/swiper?tab=api",
+      "status": 200,
+      "finalUrl": "https://tdesign.tencent.com/flutter/components/swiper?tab=api",
+      "contentType": "text/html; charset=utf-8",
+      "bytes": 804,
+      "ok": true
+    },
+    {
+      "url": "https://tdesign.tencent.com/flutter/components/switch?tab=api",
+      "status": 200,
+      "finalUrl": "https://tdesign.tencent.com/flutter/components/switch?tab=api",
+      "contentType": "text/html; charset=utf-8",
+      "bytes": 804,
+      "ok": true
+    },
+    {
+      "url": "https://tdesign.tencent.com/flutter/components/tab-bar?tab=api",
+      "status": 200,
+      "finalUrl": "https://tdesign.tencent.com/flutter/components/tab-bar?tab=api",
+      "contentType": "text/html; charset=utf-8",
+      "bytes": 804,
+      "ok": true
+    },
+    {
+      "url": "https://tdesign.tencent.com/flutter/components/table?tab=api",
+      "status": 200,
+      "finalUrl": "https://tdesign.tencent.com/flutter/components/table?tab=api",
+      "contentType": "text/html; charset=utf-8",
+      "bytes": 804,
+      "ok": true
+    },
+    {
+      "url": "https://tdesign.tencent.com/flutter/components/tabs?tab=api",
+      "status": 200,
+      "finalUrl": "https://tdesign.tencent.com/flutter/components/tabs?tab=api",
+      "contentType": "text/html; charset=utf-8",
+      "bytes": 804,
+      "ok": true
+    },
+    {
+      "url": "https://tdesign.tencent.com/flutter/components/tag?tab=api",
+      "status": 200,
+      "finalUrl": "https://tdesign.tencent.com/flutter/components/tag?tab=api",
+      "contentType": "text/html; charset=utf-8",
+      "bytes": 804,
+      "ok": true
+    },
+    {
+      "url": "https://tdesign.tencent.com/flutter/components/text?tab=api",
+      "ok": true,
+      "error": "HTTP Error 423: Locked",
+      "status": 200,
+      "finalUrl": "https://tdesign.tencent.com/flutter/components/text?tab=api",
+      "contentType": "text/html; charset=utf-8",
+      "bytes": 804,
+      "retryAt": "2026-10-26T11:22:58.924762+00:00",
+      "initialAttempt": {
+        "url": "https://tdesign.tencent.com/flutter/components/text?tab=api",
+        "ok": false,
+        "error": "HTTP Error 423: Locked"
+      }
+    },
+    {
+      "url": "https://tdesign.tencent.com/flutter/components/textarea?tab=api",
+      "status": 200,
+      "finalUrl": "https://tdesign.tencent.com/flutter/components/textarea?tab=api",
+      "contentType": "text/html; charset=utf-8",
+      "bytes": 804,
+      "ok": true
+    },
+    {
+      "url": "https://tdesign.tencent.com/flutter/components/theme?tab=api",
+      "status": 200,
+      "finalUrl": "https://tdesign.tencent.com/flutter/components/theme?tab=api",
+      "contentType": "text/html; charset=utf-8",
+      "bytes": 804,
+      "ok": true
+    },
+    {
+      "url": "https://tdesign.tencent.com/flutter/components/time-counter?tab=api",
+      "status": 200,
+      "finalUrl": "https://tdesign.tencent.com/flutter/components/time-counter?tab=api",
+      "contentType": "text/html; charset=utf-8",
+      "bytes": 804,
+      "ok": true
+    },
+    {
+      "url": "https://tdesign.tencent.com/flutter/components/toast?tab=api",
+      "status": 200,
+      "finalUrl": "https://tdesign.tencent.com/flutter/components/toast?tab=api",
+      "contentType": "text/html; charset=utf-8",
+      "bytes": 804,
+      "ok": true
+    },
+    {
+      "url": "https://tdesign.tencent.com/flutter/components/tree-select?tab=api",
+      "status": 200,
+      "finalUrl": "https://tdesign.tencent.com/flutter/components/tree-select?tab=api",
+      "contentType": "text/html; charset=utf-8",
+      "bytes": 804,
+      "ok": true
+    },
+    {
+      "url": "https://tdesign.tencent.com/flutter/components/upload?tab=api",
+      "status": 200,
+      "finalUrl": "https://tdesign.tencent.com/flutter/components/upload?tab=api",
+      "contentType": "text/html; charset=utf-8",
+      "bytes": 804,
+      "ok": true
+    },
+    {
+      "url": "https://tdesign.tencent.com/flutter/custom-theme",
+      "status": 200,
+      "finalUrl": "https://tdesign.tencent.com/flutter/custom-theme",
+      "contentType": "text/html; charset=utf-8",
+      "bytes": 804,
+      "ok": true
+    },
+    {
+      "url": "https://tdesign.tencent.com/flutter/getting-started",
+      "status": 200,
+      "finalUrl": "https://tdesign.tencent.com/flutter/getting-started",
+      "contentType": "text/html; charset=utf-8",
+      "bytes": 804,
+      "ok": true
+    }
+  ]
+}

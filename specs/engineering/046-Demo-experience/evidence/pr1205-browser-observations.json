@@ -1,0 +1,153 @@
+{
+  "source": "2695c64d96cc5fb0dd65f03731c158ec87b48f75",
+  "preview": "https://preview-pr-1205-40282829021-1-tdesign-flutter.surge.sh",
+  "checks": [
+    {
+      "name": "group-anchor",
+      "state": {
+        "groups": [
+          {
+            "open": false,
+            "summary": "主题与全局配置",
+            "top": 44
+          },
+          {
+            "open": true,
+            "summary": "按钮、文字与基础组件",
+            "top": 80
+          },
+          {
+            "open": false,
+            "summary": "页面导航与页签",
+            "top": 718
+          },
+          {
+            "open": false,
+            "summary": "表单、输入与选择",
+            "top": 754
+          },
+          {
+            "open": false,
+            "summary": "内容与数据展示",
+            "top": 790
+          },
+          {
+            "open": false,
+            "summary": "浮层、提示与交互反馈",
+            "top": 826
+          },
+          {
+            "open": false,
+            "summary": "展开0.2.7旧类型名称对照表（388项）",
+            "top": 15217
+          }
+        ],
+        "url": "https://preview-pr-1205-40282829021-1-tdesign-flutter.surge.sh/flutter/migration-1-0#migration-group-basic",
+        "y": 2321
+      }
+    },
+    {
+      "name": "inside-anchor",
+      "state": {
+        "anchorTop": 80,
+        "open": true,
+        "url": "https://preview-pr-1205-40282829021-1-tdesign-flutter.surge.sh/flutter/migration-1-0#migration-component-icon",
+        "y": 2640
+      }
+    },
+    {
+      "name": "entry-A-before",
+      "state": {
+        "folds": [
+          true,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false
+        ],
+        "url": "https://preview-pr-1205-40282829021-1-tdesign-flutter.surge.sh/flutter/migration-1-0#migration-component-icon",
+        "y": 2165
+      }
+    },
+    {
+      "name": "repeated-url-A-before",
+      "state": {
+        "folds": [
+          false,
+          true,
+          false,
+          false,
+          false,
+          false,
+          false
+        ],
+        "url": "https://preview-pr-1205-40282829021-1-tdesign-flutter.surge.sh/flutter/migration-1-0",
+        "y": 2051
+      }
+    },
+    {
+      "name": "repeated-url-B-before",
+      "state": {
+        "folds": [
+          false,
+          false,
+          false,
+          true,
+          false,
+          false,
+          false
+        ],
+        "url": "https://preview-pr-1205-40282829021-1-tdesign-flutter.surge.sh/flutter/migration-1-0",
+        "y": 2123
+      }
+    },
+    {
+      "name": "repeated-url-A-restored",
+      "state": {
+        "folds": [
+          false,
+          true,
+          false,
+          false,
+          false,
+          false,
+          false
+        ],
+        "url": "https://preview-pr-1205-40282829021-1-tdesign-flutter.surge.sh/flutter/migration-1-0",
+        "y": 2051
+      },
+      "pass": true
+    },
+    {
+      "name": "repeated-url-B-restored",
+      "state": {
+        "folds": [
+          false,
+          false,
+          false,
+          true,
+          false,
+          false,
+          false
+        ],
+        "url": "https://preview-pr-1205-40282829021-1-tdesign-flutter.surge.sh/flutter/migration-1-0",
+        "y": 2123
+      },
+      "pass": true
+    }
+  ],
+  "date": "2026-10-26",
+  "environment": "macOS / Codex in-app Chromium browser",
+  "build_run": 40282224119,
+  "deploy_run": 40282829021,
+  "scope": "Browser runtime; no mobile-device claim. This follow-up changes evidence only.",
+  "removedScreenshotHashes": {
+    "navigation-group-anchor.png": "39694c6ceb4fba26649369e0a465409664b3f74ab4924fcd2bc5f1f3b19be82f",
+    "navigation-inside-anchor.png": "e9e1ea1df670d101ed19a71dbff10bd222851ae64860e4d9d8a602b5460e0025",
+    "navigation-history-back-A.png": "084ce9b1129db82403deed96161e8a48818e51d1b626ee71143a7d79c7c93a0c",
+    "navigation-history-forward-B.png": "ca6e91944f2bada2bf2266ec1498df64bd4f9ddee6c5ef51bc4eb18f1532c077"
+  },
+  "attachmentRetentionNote": "Non-component screenshots removed from Spec; hashes identify historical attachments only. Runtime observations and original source/environment/date are unchanged."
+}

@@ -12,6 +12,7 @@
 
 <script>
 import siteConfig from './site.config';
+import { documentNavigation } from './utils/documentAnchor.mjs';
 import controllerBaseline, { controllerExtraDefaults } from 'virtual:flutter-controller-baseline';
 import '@tdesign/theme-generator';
 import {
@@ -67,7 +68,6 @@ export default defineComponent({
       if (this.$route.path === detail) return;
       this.loaded = false;
       this.$router.push({ path: detail });
-      window.scrollTo(0, 0);
     };
     this.$refs.tdDocSearch.docsearchInfo = { indexName: 'tdesign_doc_flutter' };
 
@@ -118,9 +118,16 @@ export default defineComponent({
 
   methods: {
     contentLoaded(callback) {
+      const path = this.$route.path;
       requestAnimationFrame(() => {
+        if (this.$route.path !== path) return;
         this.loaded = true;
         callback();
+        this.$nextTick(() => {
+          if (this.$route.path === path) {
+            documentNavigation.ready(this.$route.fullPath);
+          }
+        });
       });
     },
     observeThemeStyle(styleId, themePart) {

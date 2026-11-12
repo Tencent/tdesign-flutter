@@ -13,7 +13,8 @@
 | footer | Widget? | - | 抽屉的底部 | 否 |
 | items | List&lt;TDrawerItem&gt;? | - | 抽屉里的列表项 | 否 |
 | key | Key? | - | 组件标识，用于区分或保留组件状态。 | 否 |
-| onItemClick | TDrawerItemClickCallback? | - | 点击抽屉里的列表项触发 | 否 |
+| onItemClick | TDrawerItemClickCallback? | - | 已废弃，此为兼容入口。请使用 `onItemTap`；将在 2.0.0 删除。 | 否 |
+| onItemTap | TDrawerItemTapCallback? | - | 点击抽屉里的列表项触发。 与旧参数同时提供时优先使用本参数。 | 否 |
 | showDivider | bool | true | 是否显示菜单项分隔线，默认 true。 | 否 |
 | showLastDivider | bool | true | 是否显示最后一行分隔线，默认 true。 | 否 |
 | title | Widget? | - | 抽屉的标题组件 | 否 |
@@ -48,7 +49,7 @@
 
 | 名称 | 类型 | 默认值 | 说明 | 必传 |
 | --- | --- | --- | --- | --- |
-| content | Widget? | - | 自定义菜单项正文，优先于 `title`；仍与 `icon`、菜单项间距和分隔线组合。 | 否 |
+| content | Widget? | - | 自定义菜单项正文，优先于 `title`；仍与 `icon`、菜单项间距和分隔线组合。 整个子树的 Text/TText 使用菜单正文默认字体和颜色；布局包装不切断传递。 显式文字样式和内容内部更近的 TD 文字主题优先；自定义内容自行控制换行。 | 否 |
 | icon | Widget? | - | 每列图标 | 否 |
 | title | String? | - | 每列标题 | 否 |
 
@@ -75,7 +76,7 @@
 | onOverlayClick | VoidCallback? | - | 在蒙层被点击时触发，不受是否自动关闭影响。 | 否 |
 | topInset | double? | - | 设置抽屉相对屏幕顶部的可选偏移，默认 0，必须大于或等于 0。 | 否 |
 | useSafeArea | bool | true | 控制浮层是否避让系统安全区域，默认 true。 | 否 |
-| destroyOnClose | bool | false | 默认 false；为 true 时路由 maintainState 为 false， 被其他不透明路由覆盖时可释放内容 State。关闭路由后内容始终会释放。 | 否 |
+| destroyOnClose | bool | false | 沿用 1.0.0 的遮挡规则，默认 false：false 时保留被不透明路由遮挡的内容 State，true 时允许释放。 两种取值均在关闭完成后销毁内容；不提供关闭后重开复用。 | 否 |
 | onClose | VoidCallback? | - | 在抽屉浮层关闭后触发。 | 否 |
 
 
@@ -98,6 +99,15 @@
 
 
 ### TDrawerItemClickCallback
+
+#### 类型定义
+
+| 名称 | 类型 | 默认值 | 说明 | 必传 |
+| --- | --- | --- | --- | --- |
+| TDrawerItemClickCallback | TDrawerItemTapCallback | - | 已废弃，此为兼容入口。请使用 `TDrawerItemTapCallback`；将在 2.0.0 删除。 | - |
+
+
+### TDrawerItemTapCallback
 
 点击抽屉列表项时的回调。
 

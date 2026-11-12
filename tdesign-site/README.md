@@ -1,6 +1,6 @@
 # TDesign Flutter 文档站点开发
 
-组件使用方法见[快速开始](./site/docs/getting-started.md)，开发贡献规则见[仓库贡献指南](../CONTRIBUTING.md)。本文件只维护站点运行方式。
+组件使用方法见[快速开始](site/docs/getting-started.md)，开发贡献规则见[仓库贡献指南](../CONTRIBUTING.md)。本文件只维护站点运行方式。
 
 ## 安装
 
@@ -31,10 +31,12 @@ pnpm install --frozen-lockfile
 {{ flutter-api table }}
 ```
 
-`pnpm test:example-code` 验证全部57份组件文档及对应资产；组件页禁止手写代码块、API参数表和迁移正文。迁移摘要的后续接入见[设计方案](../specs/061-migration-documentation-design/plan.md)。
+`pnpm test:example-code` 验证全部57份组件文档及对应资产；组件页禁止手写代码块、API参数表和迁移正文。迁移摘要的后续接入见[设计方案](site/docs/migration-0.2.7-to-1.0.md)。
 
-主题与国际化示例维护在 `tdesign-component/example/lib/documentation_examples.dart`，指南中的标记片段从该源码提取；修改代码后由现有Theme功能测试验证。迁移示例继续来自独立消费夹具。
+入门应用维护在 `tdesign-component/example/lib/documentation_quick_start.dart`；主题与国际化示例维护在 `tdesign-component/example/lib/documentation_examples.dart`，指南中的标记片段从该源码提取；修改代码后由文档示例和 Theme 功能测试验证。主题资源 JSON 与资源代理翻译同步生成。迁移示例维护在 `tdesign-component/example/lib/migration_examples.dart`，站点指南从该源码提取片段；独立消费验证维护在仓库级 `test/migration_consumer/`，运行时复制同一示例源码，从仓库根目录执行 `bash scripts/run-tooling-checks.sh migration` 验证；不属于组件运行源码。
 
 包内README和迁移副本统一执行 `node ../scripts/sync-readme.mjs` 生成，或加 `--check` 只读检查。`script/copy-readme.js` 仅保留兼容入口。
 
 更新日志保留现有发布工具入口，不在文档构建时生成或覆盖；版本发布步骤见[PUBLISH.md](../PUBLISH.md)。
+
+文档锚点与浏览器历史恢复测试通过 `pnpm test:theme` 执行。

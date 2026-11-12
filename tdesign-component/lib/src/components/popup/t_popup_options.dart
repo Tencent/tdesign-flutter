@@ -225,7 +225,9 @@ class TPopupOptions {
   TPopupOverlayConfig get overlayConfig =>
       overlay ?? const TPopupOverlayConfig();
 
-  /// 为 true 时，被其他不透明路由覆盖可释放内容状态；关闭后始终释放，再次打开创建新状态。
+  /// 关闭后是否销毁内容 State，默认 false。
+  /// true 时关闭后释放；false 时同一句柄在同一 Navigator 内再次打开复用 State，所属 Navigator 卸载时释放。
+  /// 关闭后保留的内容可能长期占用资源，即使业务未保存返回句柄。
   final bool destroyOnClose;
 
   /// 打开/关闭动画时长；未指定时使用 240ms。

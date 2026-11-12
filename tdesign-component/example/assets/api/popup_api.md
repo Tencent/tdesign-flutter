@@ -9,7 +9,9 @@
 位置参数：`context`
 
 
-每次调用打开独立浮层，可叠加展示；参数与方向不匹配时抛出 `FlutterError`。
+创建独立会话并立即显示，返回 `TPopupHandle`，无需再调用 `TPopupHandle.open`。
+
+重开原会话使用返回句柄的 `TPopupHandle.open`；更换配置需重新调用本方法。多次调用可叠加展示，不会自动关闭旧会话；参数与方向不匹配时抛出 `FlutterError`。
 
 | 名称 | 类型 | 默认值 | 说明 | 必传 |
 | --- | --- | --- | --- | --- |
@@ -81,7 +83,7 @@
 | backgroundColor | Color? | - | 内容区背景色，默认主题容器色。 | 否 |
 | child | Widget | - | 面板内容，占用面板内可用空间；底部有头部时占用剩余高度。长内容需自行使用滚动组件。 | 是 |
 | closeBuilder | TPopupSlotBuilder? | - | 居中面板外下方关闭区，不计入 `height`，与间距一起占用额外高度；未指定时不显示，按钮由 builder 提供。 | 否 |
-| destroyOnClose | bool | false | 为 true 时，被其他不透明路由覆盖可释放内容状态；关闭后始终释放，再次打开创建新状态。 | 否 |
+| destroyOnClose | bool | false | 关闭后是否销毁内容 State，默认 false。 true 时关闭后释放；false 时同一句柄在同一 Navigator 内再次打开复用 State，所属 Navigator 卸载时释放。 关闭后保留的内容可能长期占用资源，即使业务未保存返回句柄。 | 否 |
 | headerBuilder | TPopupHeaderBuilder? | - | 底部头部，占用 `height` 内的空间；未指定时不显示，可用 `TPopupHeader` 组合标题与操作按钮。 | 否 |
 | height | double? | - | 面板高度，受可用高度约束；底部包含头部，居中不包含面板外关闭区。未传时取方向对应的 Popup 主题值，再回退到 240；仅顶部/底部/居中支持。 | 否 |
 | inset | TPopupInset? | - | 交叉轴留白；须使用当前方向的 Inset 类型，居中不支持。 | 否 |
@@ -108,7 +110,7 @@
 | radius | double? | - | 顶部/底部/居中默认取主题大圆角，左侧/右侧默认无圆角；显式值或 `TPopupThemeData.panelRadius` 可覆盖。 | 否 |
 | backgroundColor | Color? | - | 内容区背景色，默认主题容器色。 | 否 |
 | overlay | TPopupOverlayConfig? | - | 蒙层配置；未指定时显示蒙层、拦截背景交互并支持点击关闭。 | 否 |
-| destroyOnClose | bool | false | 为 true 时，被其他不透明路由覆盖可释放内容状态；关闭后始终释放，再次打开创建新状态。 | 否 |
+| destroyOnClose | bool | false | 关闭后是否销毁内容 State，默认 false。 true 时关闭后释放；false 时同一句柄在同一 Navigator 内再次打开复用 State，所属 Navigator 卸载时释放。 关闭后保留的内容可能长期占用资源，即使业务未保存返回句柄。 | 否 |
 | animationDuration | Duration? | - | 打开/关闭动画时长；未指定时使用 240ms。 | 否 |
 | onOpened | VoidCallback? | - | 打开动画结束后触发。 | 否 |
 | onClosed | VoidCallback? | - | 关闭动画结束后触发；非栈顶浮层直接移除时在路由释放时触发。关闭完成前重新 `TPopupHandle.open`，旧周期不触发。 | 否 |
@@ -129,7 +131,7 @@
 | radius | double? | - | 顶部/底部/居中默认取主题大圆角，左侧/右侧默认无圆角；显式值或 `TPopupThemeData.panelRadius` 可覆盖。 | 否 |
 | backgroundColor | Color? | - | 内容区背景色，默认主题容器色。 | 否 |
 | overlay | TPopupOverlayConfig? | - | 蒙层配置；未指定时显示蒙层、拦截背景交互并支持点击关闭。 | 否 |
-| destroyOnClose | bool | false | 为 true 时，被其他不透明路由覆盖可释放内容状态；关闭后始终释放，再次打开创建新状态。 | 否 |
+| destroyOnClose | bool | false | 关闭后是否销毁内容 State，默认 false。 true 时关闭后释放；false 时同一句柄在同一 Navigator 内再次打开复用 State，所属 Navigator 卸载时释放。 关闭后保留的内容可能长期占用资源，即使业务未保存返回句柄。 | 否 |
 | animationDuration | Duration? | - | 打开/关闭动画时长；未指定时使用 240ms。 | 否 |
 | onOpened | VoidCallback? | - | 打开动画结束后触发。 | 否 |
 | onClosed | VoidCallback? | - | 关闭动画结束后触发；非栈顶浮层直接移除时在路由释放时触发。关闭完成前重新 `TPopupHandle.open`，旧周期不触发。 | 否 |
@@ -149,7 +151,7 @@
 | radius | double? | - | 顶部/底部/居中默认取主题大圆角，左侧/右侧默认无圆角；显式值或 `TPopupThemeData.panelRadius` 可覆盖。 | 否 |
 | backgroundColor | Color? | - | 内容区背景色，默认主题容器色。 | 否 |
 | overlay | TPopupOverlayConfig? | - | 蒙层配置；未指定时显示蒙层、拦截背景交互并支持点击关闭。 | 否 |
-| destroyOnClose | bool | false | 为 true 时，被其他不透明路由覆盖可释放内容状态；关闭后始终释放，再次打开创建新状态。 | 否 |
+| destroyOnClose | bool | false | 关闭后是否销毁内容 State，默认 false。 true 时关闭后释放；false 时同一句柄在同一 Navigator 内再次打开复用 State，所属 Navigator 卸载时释放。 关闭后保留的内容可能长期占用资源，即使业务未保存返回句柄。 | 否 |
 | animationDuration | Duration? | - | 打开/关闭动画时长；未指定时使用 240ms。 | 否 |
 | onOpened | VoidCallback? | - | 打开动画结束后触发。 | 否 |
 | onClosed | VoidCallback? | - | 关闭动画结束后触发；非栈顶浮层直接移除时在路由释放时触发。关闭完成前重新 `TPopupHandle.open`，旧周期不触发。 | 否 |
@@ -169,7 +171,7 @@
 | radius | double? | - | 顶部/底部/居中默认取主题大圆角，左侧/右侧默认无圆角；显式值或 `TPopupThemeData.panelRadius` 可覆盖。 | 否 |
 | backgroundColor | Color? | - | 内容区背景色，默认主题容器色。 | 否 |
 | overlay | TPopupOverlayConfig? | - | 蒙层配置；未指定时显示蒙层、拦截背景交互并支持点击关闭。 | 否 |
-| destroyOnClose | bool | false | 为 true 时，被其他不透明路由覆盖可释放内容状态；关闭后始终释放，再次打开创建新状态。 | 否 |
+| destroyOnClose | bool | false | 关闭后是否销毁内容 State，默认 false。 true 时关闭后释放；false 时同一句柄在同一 Navigator 内再次打开复用 State，所属 Navigator 卸载时释放。 关闭后保留的内容可能长期占用资源，即使业务未保存返回句柄。 | 否 |
 | animationDuration | Duration? | - | 打开/关闭动画时长；未指定时使用 240ms。 | 否 |
 | onOpened | VoidCallback? | - | 打开动画结束后触发。 | 否 |
 | onClosed | VoidCallback? | - | 关闭动画结束后触发；非栈顶浮层直接移除时在路由释放时触发。关闭完成前重新 `TPopupHandle.open`，旧周期不触发。 | 否 |
@@ -189,7 +191,7 @@
 | radius | double? | - | 顶部/底部/居中默认取主题大圆角，左侧/右侧默认无圆角；显式值或 `TPopupThemeData.panelRadius` 可覆盖。 | 否 |
 | backgroundColor | Color? | - | 内容区背景色，默认主题容器色。 | 否 |
 | overlay | TPopupOverlayConfig? | - | 蒙层配置；未指定时显示蒙层、拦截背景交互并支持点击关闭。 | 否 |
-| destroyOnClose | bool | false | 为 true 时，被其他不透明路由覆盖可释放内容状态；关闭后始终释放，再次打开创建新状态。 | 否 |
+| destroyOnClose | bool | false | 关闭后是否销毁内容 State，默认 false。 true 时关闭后释放；false 时同一句柄在同一 Navigator 内再次打开复用 State，所属 Navigator 卸载时释放。 关闭后保留的内容可能长期占用资源，即使业务未保存返回句柄。 | 否 |
 | animationDuration | Duration? | - | 打开/关闭动画时长；未指定时使用 240ms。 | 否 |
 | onOpened | VoidCallback? | - | 打开动画结束后触发。 | 否 |
 | onClosed | VoidCallback? | - | 关闭动画结束后触发；非栈顶浮层直接移除时在路由释放时触发。关闭完成前重新 `TPopupHandle.open`，旧周期不触发。 | 否 |
@@ -311,7 +313,12 @@
 位置参数：`context`
 
 
-打开或重新打开浮层。
+使用创建句柄时的 `options` 打开或重新打开浮层。
+
+不更新配置或创建独立会话；更换配置请调用 `TPopup.show`。
+
+destroyOnClose 为 false 时，同一 Navigator 内复用保留的内容 State；
+切换 Navigator 时创建新 State。每次 TPopup.show 创建独立会话。
 
 <!-- api-table: details -->
 | 名称 | 类型 | 默认值 | 说明 | 必传 |
@@ -348,7 +355,8 @@
 | --- | --- | --- | --- | --- |
 | closeOnClick | bool? | - | 点击蒙层是否关闭；仅显示蒙层且拦截交互时生效，未指定时为 true。 | 否 |
 | color | Color? | - | 蒙层颜色（含透明度）；未指定时取 `TPopupThemeData.barrierColor`，再回退到 black54。 | 否 |
-| onClick | VoidCallback? | - | 蒙层点击回调；仅显示蒙层且拦截交互时触发，是否关闭由 `closeOnClick` 决定。 | 否 |
+| onClick | VoidCallback? | - | 已废弃，此为兼容入口。请使用 `onTap`；返回实际生效的回调。 | 否 |
+| onTap | VoidCallback? | - | 蒙层点击回调；非空时优先于 `onClick`，仅显示蒙层且拦截交互时触发，是否关闭由 `closeOnClick` 决定。 | 否 |
 | preventTap | bool | true | 是否拦截背景交互。 | 否 |
 | showOverlay | bool | true | 是否显示可见蒙层。 | 否 |
 

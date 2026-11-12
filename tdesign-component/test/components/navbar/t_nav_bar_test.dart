@@ -1,11 +1,14 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:tdesign_flutter/tdesign_flutter.dart';
 
+import '../../helpers/button_navbar_text_slots.dart';
+
 /// TNavBar Widget 测试
 ///
 /// 覆盖：默认渲染、title/centerTitle、leading/actions、useDefaultBack/onBack、
 /// ThemeData 注入、禁用 callback、TNavBarItem、TNavBarBorder。
 void main() {
+  registerNavBarTextSlotTests();
   TextStyle effectiveTextStyle(WidgetTester tester, String text) {
     final finder = find.text(text);
     final textWidget = tester.widget<Text>(finder);

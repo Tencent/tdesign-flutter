@@ -1,0 +1,18 @@
+{
+  "green": {"color": {
+    "brandColor": "#16875D", "brandColorLight": "#E5F5ED",
+    "brandColorFocus": "#C5E8D6", "brandColorActive": "#106B49",
+    "brandColorDisabled": "#A6D6BF", "bgColorPage": "#EFF7F2",
+    "bgColorContainer": "#FFFFFF", "textColorPrimary": "#183C2C",
+    "textColorSecondary": "#526E60", "componentBorder": "#A8CDBA",
+    "componentStroke": "#D4E8DD"
+  }},
+  "greenDark": {"color": {
+    "brandColor": "#56C08D", "brandColorLight": "#183D2D",
+    "brandColorFocus": "#24543D", "brandColorActive": "#78D4A6",
+    "brandColorDisabled": "#315B45", "bgColorPage": "#101F18",
+    "bgColorContainer": "#192E23", "textColorPrimary": "#E2F3E9",
+    "textColorSecondary": "#A5C6B3", "componentBorder": "#537A64",
+    "componentStroke": "#304C3D", "textColorAnti": "#102B1B"
+  }}
+}

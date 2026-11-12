@@ -6,10 +6,97 @@ import 'package:flutter_test/flutter_test.dart';
 
 import '../../tool/component_test_manifest.dart';
 import '../../tool/demo_golden_coverage.dart';
+import '../../tool/regression_sharding.dart';
 import '../../tool/run_component_regression.dart';
 import '../../tool/run_visual_regression.dart';
 
 void main() {
+  test('visual shards partition globally deduplicated suites by component', () {
+    final complete = visualSuitesForShard(null);
+    final first = visualSuitesForShard(1);
+    final second = visualSuitesForShard(2);
+    Set<String> keys(List<VisualTestSuite> suites) =>
+        suites.map((s) => s.executionKey).toSet();
+    expect(keys(complete), visualTestSuites.map((s) => s.executionKey).toSet());
+    expect(keys(first).intersection(keys(second)), isEmpty);
+    expect(keys(first).union(keys(second)), keys(complete));
+    expect(complete.length, keys(complete).length);
+    final owners = <String, int>{};
+    for (final group in [first, second]) {
+      expect(group, orderedEquals(complete.where(group.contains)));
+      for (final suite in group) {
+        final index = identical(group, first) ? 1 : 2;
+        expect(owners.putIfAbsent(suite.component, () => index), index);
+      }
+    }
+    for (final suite in [...first, ...second]) {
+      final expectedGroup = regressionShardForComponent(suite.component);
+      expect(first.contains(suite) ? 1 : 2, expectedGroup);
+      expect(
+        componentSuitesForShard(
+          expectedGroup,
+        ).any((c) => c.name == suite.component),
+        isTrue,
+      );
+    }
+    expect(() => visualSuitesForShard(3), throwsArgumentError);
+  });
+
+  test(
+    'a shared visual suite belongs only to its first declaration across shards',
+    () {
+      const shared = VisualTestManifest(
+        name: 'shared',
+        workingDirectory: '.',
+        testFiles: ['test/shared.dart'],
+      );
+      const first = VisualTestSuite('a', shared);
+      const duplicate = VisualTestSuite('b', shared);
+      const own = VisualTestSuite(
+        'b',
+        VisualTestManifest(
+          name: 'own',
+          workingDirectory: '.',
+          testFiles: ['test/own.dart'],
+        ),
+      );
+      // 重复声明故意放在另一组，确保验证的是跨组去重。
+      expect(
+        regressionShardForComponent(first.component),
+        isNot(regressionShardForComponent(duplicate.component)),
+      );
+      final candidates = [first, duplicate, own];
+      final full = visualSuitesForShard(null, suites: candidates);
+      expect(full, [first, own]);
+      final combined = [
+        ...visualSuitesForShard(1, suites: candidates),
+        ...visualSuitesForShard(2, suites: candidates),
+      ];
+      expect(combined, unorderedEquals(full));
+      expect(
+        combined
+            .where((suite) => suite.executionKey == first.executionKey)
+            .single,
+        same(first),
+      );
+      expect(visualSuitesForShard(1, suites: []), isEmpty);
+    },
+  );
+
+  test('Dialog Popup consumer is scheduled under its owning component', () {
+    final suite = visualTestSuites.singleWhere(
+      (suite) => suite.name == 'Dialog Popup Consumer',
+    );
+    expect(suite.component, 'dialog');
+    expect(suite.testFiles, [
+      'test/components/theme/t_popup_consumers_golden_test.dart',
+    ]);
+    expect(suite.arguments, [
+      '--plain-name',
+      'dialog keeps the shared Popup visual contract',
+    ]);
+  });
+
   test('every configured visual regression test file exists', () {
     for (final suite in visualTestSuites) {
       for (final testFile in suite.testFiles) {

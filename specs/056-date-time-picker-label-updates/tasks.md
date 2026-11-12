@@ -1,6 +1,0 @@
-- [x] 根因修复与恢复原Demo调用
-- [x] 组件级回归补齐
-- [x] 双版本/analyze/95%覆盖率与生成文档
-- [x] Golden与同调用方式截图差异验证
-- [x] 最终本地review
-- [x] Android profile真实手势对照及取消/确认

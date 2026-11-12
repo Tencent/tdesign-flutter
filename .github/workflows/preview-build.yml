@@ -10,7 +10,21 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
+  # 先准备共享资源，再并行构建 APK 和预览站点。
+  prepare-demo:
+    uses: ./.github/workflows/prepare-demo.yml
+
+  # 最低支持版本的 APK 同时用于兼容验证与 PR 下载。
+  apk:
+    needs: prepare-demo
+    uses: ./.github/workflows/build-apk.yml
+    with:
+      flutter-version: '3.32.0'
+      version: ${{ needs.prepare-demo.outputs.version }}
+      build-number: ${{ needs.prepare-demo.outputs.build-number }}
+
   tdesign-flutter-site:
+    needs: prepare-demo
     runs-on: ubuntu-latest
     permissions:
       contents: read
@@ -19,33 +33,6 @@ jobs:
         with:
           submodules: recursive
           persist-credentials: false
-
-      - name: Prepare preview metadata
-        id: version
-        shell: bash
-        run: |
-          set -euo pipefail
-          VERSION=$(awk '$1 == "version:" { print $2; exit }' tdesign-component/pubspec.yaml)
-          {
-            echo "PR_NUMBER=${{ github.event.pull_request.number }}"
-            echo "VERSION=$VERSION"
-            echo "BUILD_NUMBER=${{ github.run_number }}"
-          } > build-env.txt
-
-          if [[ ! "$VERSION" =~ ^[0-9]+\.[0-9]+\.[0-9]+(-[0-9A-Za-z.-]+)?(\+[0-9A-Za-z.-]+)?$ ]]; then
-            echo "::error::Invalid package version: $VERSION"
-            exit 1
-          fi
-          echo "version=$VERSION" >> "$GITHUB_OUTPUT"
-
-      - name: Upload preview metadata
-        if: always()
-        uses: actions/upload-artifact@v4
-        with:
-          name: build-env
-          path: build-env.txt
-          if-no-files-found: error
-          retention-days: 5
 
       - name: Install pnpm
         uses: pnpm/action-setup@v6
@@ -66,16 +53,11 @@ jobs:
           channel: stable
           cache: true
 
-      - name: Get component dependencies
-        working-directory: ./tdesign-component
-        run: flutter pub get
-
-      - name: Check Flutter component contracts
-        working-directory: .
-        run: node scripts/check-flutter-component-contracts.mjs
-
-      - name: Update Demo build metadata
-        run: dart tdesign-component/tool/write_demo_build_info.dart
+      - name: Download prepared resources
+        uses: actions/download-artifact@v4
+        with:
+          name: demo-assets
+          path: tdesign-component/example/assets
 
       - name: Build site
         working-directory: ./tdesign-site
@@ -114,27 +96,4 @@ jobs:
           name: tdesign-flutter-web
           path: ${{ github.workspace }}/tdesign-flutter-web
           if-no-files-found: error
-          retention-days: 5
-
-      - name: Build Flutter APK
-        working-directory: ./tdesign-component/example
-        run: flutter build apk -t ./lib/main.dart --release
-
-      - name: rename apk
-        working-directory: ./tdesign-component/example
-        env:
-          VERSION: ${{ steps.version.outputs.version }}
-        run: |
-          set -euo pipefail
-          APK_OUTPUT_DIR="$PWD/build/app/outputs/flutter-apk"
-          APK_PATH="$APK_OUTPUT_DIR/tdesign-flutter-${VERSION}-${GITHUB_RUN_NUMBER}.apk"
-          mv "$APK_OUTPUT_DIR/app-release.apk" "$APK_PATH"
-
-      - name: Upload APK artifact
-        uses: actions/upload-artifact@v4
-        with:
-          name: tdesign-flutter-apk
-          path: ${{ github.workspace }}/tdesign-component/example/build/app/outputs/flutter-apk/tdesign-flutter-*.apk
-          if-no-files-found: error
-          compression-level: 0
           retention-days: 5

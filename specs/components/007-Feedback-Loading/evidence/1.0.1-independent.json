@@ -1,0 +1,171 @@
+{
+  "base": "071efaba0111d868efe0b6a7ce55f6f784069a62",
+  "branch": "rss1102/fix/overlay-lifecycle-1.0.1",
+  "code_test_api_files": [
+    "tdesign-component/example/assets/api/loading_api.md",
+    "tdesign-component/lib/src/components/loading/t_loading_controller.dart",
+    "tdesign-component/lib/src/components/message/t_message.dart",
+    "tdesign-component/lib/src/components/toast/t_toast.dart",
+    "tdesign-component/test/components/loading/t_loading_test.dart",
+    "tdesign-component/test/components/message/t_message_test.dart",
+    "tdesign-component/test/components/toast/t_toast_test.dart"
+  ],
+  "code_test_api_path_nul_bytes_sha256": "bc364580756e64147fee5ba3c17526eba31affd85f790bdea5cca226e6459bca",
+  "code_test_api_binary_diff_sha256": "d9f3c2b9a5612dee54ec322249bb4d11040a6e9b146550bdb97586bb675c776b",
+  "low_high_inputs_identical": true,
+  "verification": {
+    "low": {
+      "sdk": "Flutter 3.32.0 • channel stable • https://github.com/flutter/flutter.git\nFramework • revision be698c48a6 (1 year, 5 months ago) • 2025-05-19 12:59:14 -0700\nEngine • revision 1881800949 (1 year, 5 months ago) • 2025-05-19 10:54:07 -0700\nTools • Dart 3.8.0 • DevTools 2.45.1",
+      "scope": {
+        "components": [
+          "loading",
+          "message",
+          "toast"
+        ],
+        "component_tests": [
+          "test/components/loading/t_activity_indicator_test.dart",
+          "test/components/loading/t_circle_indicator_test.dart",
+          "test/components/loading/t_loading_test.dart",
+          "test/components/message/t_message_test.dart",
+          "test/components/toast/t_toast_test.dart"
+        ],
+        "example_tests": [
+          "test/loading/loading_demo_test.dart",
+          "test/message/message_demo_test.dart",
+          "test/toast/toast_demo_test.dart",
+          "test/toast/toast_structure_test.dart"
+        ]
+      },
+      "component_tests_passed": 215,
+      "example_tests_passed": 19,
+      "runner_tests_passed": 30,
+      "analyze": "zero diagnostics",
+      "api_documents_checked": 57,
+      "snippets_check": "passed",
+      "coverage": {
+        "loading": {
+          "hit": 283,
+          "found": 287,
+          "percent": 98.61
+        },
+        "message": {
+          "hit": 273,
+          "found": 277,
+          "percent": 98.56
+        },
+        "toast": {
+          "hit": 287,
+          "found": 300,
+          "percent": 95.67
+        }
+      },
+      "dependency_lock_sha256": {
+        "tdesign-component/pubspec.lock": "7deb49a80a8288c84280257591090c14c5fa1db08f8aabad6233b51a8a6e4d92",
+        "tdesign-component/example/pubspec.lock": "696bf039762651eb175109f70e6cd4993e8cd40388b9ddc330005d1482a4e1c6"
+      },
+      "log_sha256": {
+        "analyze.log": "19c052825f49bd9e473fba7ba839b0a535fe33b6d8175314673521efa9387c07",
+        "api-check.log": "d54548d85915bb48efac738d8c72ce05d5a794e1171d27c95dd599c31e1e70ea",
+        "api-generate.log": "6a2a5e57c98b1d0b3205416bf3c520bd18ecf2e30509521bf665d146c411378e",
+        "components.log": "a0ffc15962060234a62e318191d91e268637a6e4cf2717dfb53534b8e370728e",
+        "coverage-loading.log": "f49622abc26dd2038b208591a65a9ca7a8e89c6aad5d8340cd1d072ebe5b0a48",
+        "coverage-message.log": "bbc401d0ec3c0ec93a4ea86712fc97d57af707136845185ebdb503c56f3b6e19",
+        "coverage-toast.log": "b7544a9d58834ad7b4103d4d585406921029098c4f13d516485cdb44a5d25962",
+        "examples.log": "6a101d2c9afd1a8ff34dd54b81fb38e831a6bad6bb0a3ecfe0eb3557fff9838b",
+        "pub-get-component.log": "0463a12f4fdbd1c3d4a2683c816c25e95c22d77ca8b3a6d54af873e3af3fda56",
+        "pub-get-example.log": "77894d05f73401bca14c0dc3be669cfd43d7ae8059b597f57efbacb6fb21e711",
+        "runners.log": "881ba02611bec414e316d0a7d4da9ec09a0bcbef21f9ce845b0898968e36dc04",
+        "sdk.log": "a1b002ef5662a6de7a8910e0c0fee594d1ebc7e335014dda114fe1658ea12a12",
+        "snippets.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    "high": {
+      "sdk": "Flutter 3.47.7 • channel stable • https://github.com/flutter/flutter.git\nFramework • revision abaf9c5237 (2 weeks ago) • 2026-10-08 09:51:21 -0700\nEngine • hash d8a2d6c768c334d53e16277f837970ffa1e2de81 (revision deb287481e) (15 days ago) • 2026-10-07 17:09:12.000Z\nTools • Dart 3.13.5 • DevTools 2.60.0",
+      "scope": {
+        "components": [
+          "loading",
+          "message",
+          "toast"
+        ],
+        "component_tests": [
+          "test/components/loading/t_activity_indicator_test.dart",
+          "test/components/loading/t_circle_indicator_test.dart",
+          "test/components/loading/t_loading_test.dart",
+          "test/components/message/t_message_test.dart",
+          "test/components/toast/t_toast_test.dart"
+        ],
+        "example_tests": [
+          "test/loading/loading_demo_test.dart",
+          "test/message/message_demo_test.dart",
+          "test/toast/toast_demo_test.dart",
+          "test/toast/toast_structure_test.dart"
+        ]
+      },
+      "component_tests_passed": 215,
+      "example_tests_passed": 19,
+      "runner_tests_passed": 30,
+      "analyze": "zero diagnostics",
+      "api_documents_checked": 57,
+      "snippets_check": "passed",
+      "coverage": {
+        "loading": {
+          "hit": 283,
+          "found": 287,
+          "percent": 98.61
+        },
+        "message": {
+          "hit": 272,
+          "found": 277,
+          "percent": 98.19
+        },
+        "toast": {
+          "hit": 287,
+          "found": 300,
+          "percent": 95.67
+        }
+      },
+      "dependency_lock_sha256": {
+        "tdesign-component/pubspec.lock": "f4fcd8d10e1ba7d89670e87509f87a6c0d359ceffd83dff9bf8ac58cc8ad59c2",
+        "tdesign-component/example/pubspec.lock": "2910a5cf161a20433ac683dbeaa348a85edaba7e6697cc9aba351519a16615a3"
+      },
+      "log_sha256": {
+        "analyze.log": "0cef003b5172aa18810bf5cca69a659d47e875214146f2f094a71658268bc73d",
+        "api-check.log": "dd716bdff2f41c878c8a5a580f0d8be8efd7158d534fd5f33dd81ebc2960840b",
+        "api-generate.log": "7cff2b7d7498b31097720ef5bc835d76d2db9975fc75d6ff434f9419eb00fca5",
+        "components.log": "0360fc579085d2397b7089c0ff7bbf6a1569354950a7976b717a3203d0145f13",
+        "coverage-loading.log": "51118dce46f6b5b44f70bdd57f54641abb185b31cc87e4651ab6ce90c14ff0ed",
+        "coverage-message.log": "b7780fb03aef67eebeb0e5500727bc8c8ca25cdc67abd70ef06dbcdd9dfdafe1",
+        "coverage-toast.log": "b7544a9d58834ad7b4103d4d585406921029098c4f13d516485cdb44a5d25962",
+        "examples.log": "79a62ba59ace42218ebc48dc1c8c8ba6c5fe1863cfcbe6485257e94c05ccfc92",
+        "pub-get-component.log": "5e3ba87de4b282d4f1dd3d66dfcb10442f72bf2c07015bf36f60e4bad8d21bb9",
+        "pub-get-example.log": "fac5535739136823d4bc8acf20263a212d189bcf2b14b634c4e65d1663b50572",
+        "runners.log": "8e74935a3454a9e0c2ad112d9091fd3383b4b3ca8fc3ad533c212a101429b98d",
+        "sdk.log": "7da1fa9f0d23102495171cfa222c8d31b4a60776c3c003858d35b8f3befe281d",
+        "snippets.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    }
+  },
+  "api_contract_review": [
+    {
+      "file": "tdesign-component/lib/src/components/message/t_message.dart",
+      "legacy_public_signatures_and_defaults": "unchanged",
+      "allowed_addition": null
+    },
+    {
+      "file": "tdesign-component/lib/src/components/toast/t_toast.dart",
+      "legacy_public_signatures_and_defaults": "unchanged",
+      "allowed_addition": null
+    },
+    {
+      "file": "tdesign-component/lib/src/components/loading/t_loading_controller.dart",
+      "legacy_public_signatures_and_defaults": "unchanged",
+      "allowed_addition": null
+    }
+  ],
+  "review": {
+    "result": "passed",
+    "blocking_findings": [],
+    "scope": "核对 Message 重复 dismiss 与回调次数、Loading 普通/遮挡后卸载且无后续 show/dismiss 的直接 dispose 断言、Toast 遮挡/State 重建及同 ID 新旧会话隔离。内容 Entry 的 maintainState 未改变，独立哨兵不接收交互；卸载后的微任务复核 owner，过期清理按实例身份隔离。公开签名、原默认值、匿名替换及全局唯一规则保留。"
+  },
+  "visual": "Nonvisual logic/callback/lifecycle changes. No Golden update or device validation. No remote CI."
+}

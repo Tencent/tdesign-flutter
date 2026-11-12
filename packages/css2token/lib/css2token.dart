@@ -4,4 +4,5 @@
 library;
 
 export 'src/converter.dart';
+export 'src/generator_export.dart';
 export 'src/models.dart';

@@ -8,7 +8,7 @@
 
 | 名称 | 类型 | 默认值 | 说明 | 必传 |
 | --- | --- | --- | --- | --- |
-| itemBuilder | TPickerItemBuilder? | - | 自定义选项构建器。 | 否 |
+| itemBuilder | TPickerItemBuilder? | - | 自定义选项构建器。 内容子树默认使用当前选中、未选中或禁用选项的文字样式，布局包装不影响继承。 显式文字样式和内容内部更近的局部文字主题优先。 不强制行数或省略；内容须适配滚轮项高度，自定义高度职责保持不变。 | 否 |
 | items | TPickerItems | - | 不可变数据源；更新选项时创建新的数据源与列表，不原地修改。 | 是 |
 | key | Key? | - | 组件标识，用于区分或保留组件状态。 | 否 |
 | onChanged | ValueChanged&lt;TPickerValue&gt;? | - | 值变化回调；为 null 时禁用。 | 否 |
@@ -47,7 +47,7 @@ Picker 专用弹层入口。
 | radius | double? | - | 顶部圆角；null 时使用 Popup 主题或 TDesign 默认值。 | 否 |
 | backgroundColor | Color? | - | 面板背景色；null 时使用 Popup 主题或容器色。 | 否 |
 | overlay | TPopupOverlayConfig? | - | 蒙层行为；null 时沿用 Popup 默认值。 | 否 |
-| destroyOnClose | bool | false | 默认 false；为 true 时路由被其他不透明路由覆盖可释放内容 State。 关闭路由后内容始终释放，再次打开会创建新 State。 | 否 |
+| destroyOnClose | bool | false | 关闭后是否销毁内容 State，默认 false。 false 时同一句柄在同一 Navigator 内再次打开复用 State，所属 Navigator 卸载时释放；true 时关闭后释放。 | 否 |
 | animationDuration | Duration? | - | 打开和关闭动画时长。 | 否 |
 | onOpened | VoidCallback? | - | 打开动画完成回调。 | 否 |
 | onClosed | VoidCallback? | - | 关闭动画完成回调。 | 否 |

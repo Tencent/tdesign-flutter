@@ -297,6 +297,38 @@ void main() {
     expect(find.byType(TActionSheetList<int>), findsOneWidget);
   });
 
+  testWidgets('底部安全区与取消按钮是否显示无关', (tester) async {
+    Future<double> height({
+      required bool showCancel,
+      required bool safe,
+    }) async {
+      await tester.pumpWidget(
+        wrap(
+          MediaQuery(
+            data: const MediaQueryData(
+              size: Size(800, 600),
+              padding: EdgeInsets.only(bottom: 34),
+            ),
+            child: Center(
+              child: TActionSheetList(
+                showCancel: showCancel,
+                useSafeArea: safe,
+                items: baseItems(),
+              ),
+            ),
+          ),
+        ),
+      );
+      return tester.getSize(find.byType(TActionSheetList<int>)).height;
+    }
+
+    for (final showCancel in [false, true]) {
+      final withoutSafeArea = await height(showCancel: showCancel, safe: false);
+      final withSafeArea = await height(showCancel: showCancel, safe: true);
+      expect(withSafeArea - withoutSafeArea, 34);
+    }
+  });
+
   testWidgets('点击取消按钮触发 onCancel', (tester) async {
     var cancelled = false;
     await tester.pumpWidget(

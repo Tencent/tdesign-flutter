@@ -10,7 +10,7 @@
 | --- | --- | --- | --- | --- |
 | autovalidateMode | AutovalidateMode? | - | 自动校验时机。 未传时，首次 `TFormController.submit` 校验失败后会切换为 `AutovalidateMode.onUserInteraction`；显式传入时完全遵循 Flutter `Form` 的校验语义。 | 否 |
 | child | Widget | - | 表单内容。 | 是 |
-| controller | TFormController? | - | 表单控制器。 | 否 |
+| controller | TFormController? | - | 表单控制器。 建议独立表单分别使用 Controller；绑定规则见 `TFormController`。 | 否 |
 | key | Key? | - | 组件标识，用于区分或保留组件状态。 | 否 |
 | onChanged | VoidCallback? | - | 用户通过 `TFormField` 提交字段值变化时触发。 回调执行时 `TFormController.values` 已包含本次变化。仅同步外部受控值、 清除校验状态或外部错误时不会触发。 | 否 |
 | onSubmit | ValueChanged&lt;Map&lt;String, Object?&gt;&gt;? | - | 校验通过后触发，参数为各 `TFormField` 注册的字段值。 | 否 |
@@ -102,6 +102,10 @@
 ### TFormController
 
 命令式触发表单提交、校验和重置。
+
+同一 Controller 同时绑定多个表单时，断言开启会报错；断言关闭时保留后绑定覆盖，
+命令作用于最后绑定的表单，不提供同时控制多个表单的能力。
+当前绑定表单卸载后，不会自动恢复此前的绑定。
 
 #### 构造方法
 

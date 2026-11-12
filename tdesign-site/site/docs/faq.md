@@ -6,7 +6,7 @@ spline: explain
 
 ## 使用哪个版本和 Flutter SDK？
 
-1.0项目使用 `tdesign_flutter: ^1.0.0`，要求 Flutter ≥3.32.0、Dart ≥3.8.0。Android/iOS最低系统版本还取决于实际解析的Flutter和平台插件，应在目标宿主构建验证。完整步骤见[快速开始](./getting-started.md)。
+新项目可使用 `tdesign_flutter: ^1.1.0`。已有项目应根据依赖约束和锁文件确认实际版本。要求 Flutter ≥3.32.0、Dart ≥3.8.0。Android/iOS最低系统版本还取决于实际解析的Flutter和平台插件，应在目标宿主构建验证。完整步骤见[快速开始](./getting-started.md)。
 
 ## 从0.2.7升级，只替换TD前缀是否足够？
 
@@ -26,11 +26,11 @@ TD内置外观使用全局Token、组件Theme及公开实例配置。Material的
 
 ## 输入内容为什么被过滤？如何调整高度？
 
-按所需规则配置Flutter的输入格式化器。`FilteringTextInputFormatter`执行文本过滤，复杂的整段输入校验应按输入法组合区和实际业务规则处理。输入框布局、内容间距和文字高度应通过当前组件API、Theme和合理的外部约束配置，不能假设给外层设置高度就会让内部全部等比缩放。参见[Input](/flutter/components/input)和[Textarea](/flutter/components/textarea)。
+按所需规则配置Flutter的输入格式化器。`FilteringTextInputFormatter.allow` 保留新编辑值中匹配的片段，过滤其余内容；不要使用 `^`、`$` 校验整个输入值。需要接受或拒绝完整编辑值时，使用 `TextInputFormatter.withFunction`，并按输入法组合区和实际业务规则处理。输入框布局、内容间距和文字高度应通过当前组件API、Theme和合理的外部约束配置，不能假设给外层设置高度就会让内部全部等比缩放。参见[Input](/flutter/components/input)和[Textarea](/flutter/components/textarea)。
 
 ## Toast应该使用哪个context？加载提示如何关闭？
 
-使用目标Navigator和Theme子树中的有效context，避免缓存已经卸载的页面context或用全局context绕过局部主题。持续加载需要显式 `Duration.zero` 并在业务结束后关闭；具体句柄和关闭方式见[Toast](/flutter/components/toast)及迁移指南。
+使用目标 Navigator 和 Theme 子树中仍处于挂载状态、能够访问 Overlay 的 context；异步操作后先检查 `context.mounted`。避免长期缓存页面 context 或用全局 context 绕过局部主题。持续加载需要显式 `Duration.zero` 并在业务结束后关闭；具体句柄和关闭方式见[Toast](/flutter/components/toast)及迁移指南。
 
 ## 图片是否有独立缓存配置？
 
@@ -43,6 +43,10 @@ TD内置外观使用全局Token、组件Theme及公开实例配置。Material的
 ## 如何调整文字居中与行高？
 
 使用 `textAlign`、外部Center/Align以及 `style`、`strutStyle`、`textHeightBehavior`；不再使用旧版字体padding补偿。见[Text](/flutter/components/text)。
+
+## 弹层如何避让安全区？
+
+`TPopup` 和 `TPickerPopup` 默认不避让安全区。设置 `useSafeArea: true` 会移动整个面板，面板背景也随之离开屏幕边缘；如需背景贴边，可保持默认配置，在内容中使用 `SafeArea` 避让需要的边。避免外层弹层与内部组件重复处理同一边的安全区；`TActionSheet` 命令式入口默认由弹层负责避让。请在目标设备上验证安全区是否符合预期。
 
 ## 如何反馈问题或申请组件能力？
 

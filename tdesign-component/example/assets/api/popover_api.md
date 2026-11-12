@@ -17,7 +17,7 @@
 | 名称 | 类型 | 默认值 | 说明 | 必传 |
 | --- | --- | --- | --- | --- |
 | context | BuildContext | - | 触发元素的上下文，用于计算气泡锚点位置。 | 是 |
-| content | Widget | - | 气泡内容。 直接传入未设置样式的 `Text` 时使用气泡默认文字样式；组合内容应自行定义 子组件样式和布局。 | 是 |
+| content | Widget | - | 气泡内容。 为整个内容子树的 Text/TText 提供气泡默认文字样式；Row、Padding 等布局 包装不会切断传递。显式文字样式和内容内部更近的 TD 文字主题优先。 组合内容仍自行管理布局；需要独立外观时应显式配置文字样式或局部主题。 | 是 |
 | colorPreset | TPopoverColorPreset | TPopoverColorPreset.defaultTheme | 气泡预设配色。 | 否 |
 | closeOnClickOutside | bool | true | 点击气泡外部区域时是否关闭弹层。 外部目标仍会接收该次点击，因此可在单次点击中从一个气泡切换到另一个气泡。 | 否 |
 | closeOnScroll | bool | true | 页面滚动时是否关闭弹层。 默认为 true，避免触发元素移动后气泡停留在旧坐标。 | 否 |
@@ -26,7 +26,8 @@
 | width | double? | - | 内容外框宽度（包含 padding）。 未设置时按 `content` 的实际布局宽度确定，并受组件主题尺寸约束。 | 否 |
 | height | double? | - | 内容外框高度（包含 padding）。 未设置时按 `content` 的实际布局高度确定，并受组件主题尺寸约束。 | 否 |
 | onTap | VoidCallback? | - | 点击气泡内容时触发。 | 否 |
-| onLongTap | VoidCallback? | - | 长按气泡内容时触发。 | 否 |
+| onLongTap | VoidCallback? | - | 已废弃，此为兼容入口。请使用 onLongPress；将在 2.0.0 删除。 | 否 |
+| onLongPress | VoidCallback? | - | 长按气泡内容时触发，与旧参数同时提供时本参数优先。 | 否 |
 
 
 ###### 返回值
@@ -65,7 +66,8 @@
 | height | double? | - | 内容外框高度（包含 padding）。 | 否 |
 | key | Key? | - | 组件标识，用于区分或保留组件状态。 | 否 |
 | onClose | VoidCallback? | - | 气泡通过任意路径关闭后触发。 | 否 |
-| onLongTap | VoidCallback? | - | 长按气泡内容时触发。 | 否 |
+| onLongPress | VoidCallback? | - | 长按气泡内容时触发。 与旧参数同时提供时优先使用本参数。 | 否 |
+| onLongTap | VoidCallback? | - | 已废弃，此为兼容入口。请使用 `onLongPress`；将在 2.0.0 删除。 | 否 |
 | onOpen | VoidCallback? | - | 气泡展开后触发。 | 否 |
 | onTap | VoidCallback? | - | 点击气泡内容时触发。 | 否 |
 | placement | TPopoverPlacement | TPopoverPlacement.top | 浮层出现位置。 | 否 |

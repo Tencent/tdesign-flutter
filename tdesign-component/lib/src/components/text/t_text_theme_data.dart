@@ -2,10 +2,12 @@ import 'dart:ui' as ui show TextHeightBehavior;
 
 import 'package:flutter/material.dart';
 
-/// TText 子树的组件默认值。
+/// TText 子树的通用默认值，不是强制覆盖所有文字的最终样式。
 ///
 /// 仅在对应实例参数未指定时生效；实例字体预设和段落参数
-/// 优先于这里的默认值。外部 Flutter [DefaultTextStyle] 不会自动覆盖 TDesign 文字。
+/// 优先于这里的默认值。Button.child、NavBar.title 等已适配文字槽可覆盖外层
+/// 默认值中的同名字段；未覆盖字段保留，内容内部更近的 TD 文字主题可再次定制。
+/// 外部 Flutter [DefaultTextStyle] 不会自动覆盖 TDesign 文字。
 ///
 /// {@category ComponentTheme}
 class TTextThemeData extends ThemeExtension<TTextThemeData> {
@@ -18,6 +20,7 @@ class TTextThemeData extends ThemeExtension<TTextThemeData> {
 
   /// 子树的完整文字样式；字号、行高和字重也由本字段统一设置。
   /// TText 实例的显式字体参数仍优先于本默认值。
+  /// 放在组件外层时是通用默认，不能强制覆盖组件文字槽的同名默认字段。
   final TextStyle? textStyle;
 
   /// 子树的段落支柱样式默认值；实例 `TText.strutStyle` 优先。

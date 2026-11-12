@@ -8,7 +8,7 @@
 
 | 名称 | 类型 | 默认值 | 说明 | 必传 |
 | --- | --- | --- | --- | --- |
-| divisions | int? | - | 离散刻度数；null 表示连续。 非 null 时必须大于 0。 | 否 |
+| divisions | int? | - | 离散刻度数；null 表示连续。 非 null 时必须大于 0；输入值吸附到最近刻度，显示数值使用吸附后的值。 | 否 |
 | key | Key? | - | 组件标识，用于区分或保留组件状态。 | 否 |
 | max | double | 1 | 最大值。 必须大于 min。 | 否 |
 | min | double | 0 | 最小值。 max 必须大于 min。 | 否 |
@@ -33,7 +33,7 @@
 
 | 名称 | 类型 | 默认值 | 说明 | 必传 |
 | --- | --- | --- | --- | --- |
-| divisions | int? | - | 离散刻度数；null 表示连续。 非 null 时必须大于 0。 | 否 |
+| divisions | int? | - | 离散刻度数；null 表示连续。 非 null 时必须大于 0；输入值吸附到最近刻度，显示数值使用吸附后的值。 | 否 |
 | key | Key? | - | 组件标识，用于区分或保留组件状态。 | 否 |
 | max | double | 1 | 最大值。 必须大于 min。 | 否 |
 | min | double | 0 | 最小值。 max 必须大于 min。 | 否 |
@@ -44,19 +44,19 @@
 | showScaleValue | bool | false | 是否显示刻度值；开启时必须提供 `divisions`。 | 否 |
 | showThumbValue | bool | false | 是否持续显示拇指上方数值。 | 否 |
 | thumbFormatter | TSliderThumbFormatter? | - | 拇指上方数值格式化回调。 | 否 |
-| value | RangeValues | - | 受控范围值；两端值应处于 min 与 max 指定的范围内，父组件需回传新值。 | 是 |
+| value | RangeValues | - | 受控范围值；两端值应处于 min 与 max 指定的范围内，父组件需回传新值。 连续拖动在正常尺寸下保留 8 逻辑像素最小中心间距；空间不足时随几何缩小，且不超过当前区间行程。 离散同刻度、直接传入的相等端点仍受支持。 | 是 |
 | variant | TSliderVariant | TSliderVariant.normal | 滑块视觉结构，默认使用标准细轨道。 | 否 |
 
 
 ### TSliderVariant
 
-Slider visual structure.
+滑块视觉结构。
 #### 枚举值
 
 | 名称 | 类型 | 默认值 | 说明 | 必传 |
 | --- | --- | --- | --- | --- |
-| normal | TSliderVariant | - | Standard thin track. | - |
-| capsule | TSliderVariant | - | Capsule track with a 3px inset active segment and 20px thumbs. | - |
+| normal | TSliderVariant | - | 标准细轨道。 | - |
+| capsule | TSliderVariant | - | 胶囊轨道，默认激活区四周内缩 3px，20px thumb 沿轨道方向两端各留 3px，默认横截面两侧各留 2px。 空间充足时轨道高度至少为 24px；厚度受横轴约束，行程不足时按比例缩小。 | - |
 
 
 ### TSliderThumbFormatter
@@ -101,6 +101,6 @@ TSlider 与 TRangeSlider 共用的组件级 ThemeExtension。
 | overlayColor | Color? | - | 交互反馈颜色；为空时使用品牌色的透明层。 | 否 |
 | thumbBorderColor | Color? | - | 滑块描边颜色；为空时使用全局灰阶色。 | 否 |
 | thumbColor | Color? | - | 滑块填充颜色；为空时使用全局反色文字色。 | 否 |
-| trackHeight | double? | - | 普通轨道粗细；胶囊形态仍使用其内置规格。 null 时为 4 逻辑像素。 | 否 |
+| trackHeight | double? | - | 普通轨道粗细；胶囊形态仍使用其内置规格。 null 时为 4 逻辑像素；非有限或负值按 0 处理；实际厚度不超过可用横轴空间。 | 否 |
 | valueIndicatorColor | Color? | - | 数值提示背景颜色；为空时使用全局品牌色。 | 否 |
 | valueIndicatorTextColor | Color? | - | 数值提示文字颜色；为空时使用全局主要文字色。 | 否 |

@@ -1,3 +1,6 @@
+import 'dart:async';
+
+import 'package:flutter/foundation.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:tdesign_flutter/src/components/loading/t_activity_indicator.dart';
 import 'package:tdesign_flutter/src/components/loading/t_circle_indicator.dart';
@@ -9,6 +12,214 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 /// Tier1 组件：覆盖 Theme 子树 mergeExtension(TLoadingThemeData)。
 /// 覆盖自定义 size、icon 三种、text、axis 方向。
 void main() {
+  for (final painted in [false, true]) {
+    for (final obscured in [false, true]) {
+      testWidgets(
+        'Loading entries automatically dispose painted=$painted obscured=$obscured',
+        (tester) async {
+          // Teardown isolates failures; disposal assertions precede any cleanup command.
+          addTearDown(TLoadingController.dismiss);
+          late BuildContext anchor;
+          await tester.pumpWidget(
+            MaterialApp(
+              home: Builder(
+                builder: (context) {
+                  anchor = context;
+                  return const SizedBox();
+                },
+              ),
+            ),
+          );
+          final entries = <OverlayEntry>[];
+          final disposals = Map<OverlayEntry, int>.identity();
+          var capture = true;
+          void record(ObjectEvent event) {
+            final object = event.object;
+            if (object is! OverlayEntry) {
+              return;
+            }
+            if (event is ObjectCreated && capture) {
+              entries.add(object);
+            } else if (event is ObjectDisposed && entries.contains(object)) {
+              disposals.update(object, (count) => count + 1, ifAbsent: () => 1);
+            }
+          }
+
+          FlutterMemoryAllocations.instance.addListener(record);
+          addTearDown(
+            () => FlutterMemoryAllocations.instance.removeListener(record),
+          );
+          TLoadingController.show(anchor, child: const Text('owned loading'));
+          capture = false;
+          expect(entries, isNotEmpty);
+          if (painted) {
+            await tester.pump();
+          }
+          OverlayEntry? cover;
+          if (obscured) {
+            cover = OverlayEntry(
+              opaque: true,
+              builder: (_) => const ColoredBox(color: Colors.white),
+            );
+            Overlay.of(anchor).insert(cover);
+            await tester.pump();
+            expect(find.text('owned loading'), findsNothing);
+          }
+          await tester.pumpWidget(const SizedBox());
+          await tester.pump();
+          // Observe disposal directly, before any subsequent show/dismiss can mask a leak.
+          for (final entry in entries) {
+            expect(
+              disposals[entry],
+              1,
+              reason:
+                  'Every owned Entry must be disposed exactly once without another command.',
+            );
+          }
+          await tester.pump();
+          for (final entry in entries) {
+            expect(disposals[entry], 1);
+          }
+          cover?.remove();
+          cover?.dispose();
+          expect(tester.takeException(), isNull);
+        },
+      );
+    }
+  }
+
+  testWidgets('Loading observer does not retain obscured content State', (
+    tester,
+  ) async {
+    // Teardown isolates failures; disposal assertions precede any cleanup command.
+    addTearDown(TLoadingController.dismiss);
+    late BuildContext anchor;
+    var mounts = 0;
+    var disposals = 0;
+    await tester.pumpWidget(
+      MaterialApp(
+        home: Builder(
+          builder: (context) {
+            anchor = context;
+            return const SizedBox();
+          },
+        ),
+      ),
+    );
+    TLoadingController.show(
+      anchor,
+      child: _LoadingLifecycleProbe(
+        onMount: () => mounts++,
+        onDispose: () => disposals++,
+      ),
+    );
+    await tester.pump();
+    expect(mounts, 1);
+    final cover = OverlayEntry(
+      opaque: true,
+      builder: (_) => const ColoredBox(color: Colors.white),
+    );
+    Overlay.of(anchor).insert(cover);
+    await tester.pump();
+    expect(disposals, 1);
+    TLoadingController.show(anchor, child: const Text('ignored replacement'));
+    cover.remove();
+    cover.dispose();
+    await tester.pump();
+    expect(mounts, 2);
+    expect(find.text('loading lifecycle'), findsOneWidget);
+    expect(find.text('ignored replacement'), findsNothing);
+    await tester.pumpWidget(const SizedBox());
+    await tester.pump();
+    expect(disposals, 2);
+    expect(tester.takeException(), isNull);
+  });
+
+  testWidgets('Loading dead owner cleanup cannot clear a new session', (
+    tester,
+  ) async {
+    // Teardown isolates failures; disposal assertions precede any cleanup command.
+    addTearDown(TLoadingController.dismiss);
+    late BuildContext outer;
+    late BuildContext inner;
+    var showInner = true;
+    late StateSetter update;
+    await tester.pumpWidget(
+      MaterialApp(
+        home: Builder(
+          builder: (context) {
+            outer = context;
+            return StatefulBuilder(
+              builder: (context, setState) {
+                update = setState;
+                return showInner
+                    ? Overlay(
+                        initialEntries: [
+                          OverlayEntry(
+                            builder: (context) {
+                              inner = context;
+                              return const SizedBox();
+                            },
+                          ),
+                        ],
+                      )
+                    : const SizedBox();
+              },
+            );
+          },
+        ),
+      ),
+    );
+    TLoadingController.show(
+      inner,
+      child: _LoadingLifecycleProbe(
+        onMount: () {},
+        onDispose: () => scheduleMicrotask(() {
+          TLoadingController.show(
+            outer,
+            child: const Text('new owner loading'),
+          );
+        }),
+      ),
+    );
+    await tester.pump();
+    update(() => showInner = false);
+    await tester.pump();
+    await tester.pump();
+    expect(find.text('new owner loading'), findsOneWidget);
+    TLoadingController.show(outer, child: const Text('must be ignored'));
+    await tester.pump();
+    expect(find.text('new owner loading'), findsOneWidget);
+    expect(find.text('must be ignored'), findsNothing);
+    TLoadingController.dismiss();
+    await tester.pump();
+    expect(tester.takeException(), isNull);
+  });
+
+  testWidgets('unpainted Loading session releases and can be reused', (
+    tester,
+  ) async {
+    late BuildContext anchor;
+    Widget host() => MaterialApp(
+      home: Builder(
+        builder: (context) {
+          anchor = context;
+          return const SizedBox();
+        },
+      ),
+    );
+    await tester.pumpWidget(host());
+    TLoadingController.show(anchor, child: const Text('pending loading'));
+    await tester.pumpWidget(const SizedBox());
+    TLoadingController.dismiss();
+    await tester.pumpWidget(host());
+    TLoadingController.show(anchor, child: const Text('new loading'));
+    await tester.pump();
+    expect(find.text('new loading'), findsOneWidget);
+    TLoadingController.dismiss();
+    await tester.pump();
+  });
+
   Widget wrapWithTheme(Widget child, {TLoadingThemeData? loadingTheme}) {
     var theme = TThemeBuilder.light(TThemeData.defaultData());
     if (loadingTheme != null) {
@@ -298,6 +509,129 @@ void main() {
   // TLoadingController
   // ============================================================
   group('TLoadingController', () {
+    testWidgets('所属 Overlay 卸载后可在新 Overlay 展示，无需主动 dismiss', (tester) async {
+      late BuildContext current;
+      Widget app() => wrapWithTheme(
+        Builder(
+          builder: (context) {
+            current = context;
+            return const SizedBox();
+          },
+        ),
+      );
+      await tester.pumpWidget(app());
+      TLoadingController.show(current, text: '旧加载');
+      await tester.pump();
+      expect(find.text('旧加载'), findsOneWidget);
+      await tester.pumpWidget(const SizedBox.shrink());
+      await tester.pumpWidget(app());
+      TLoadingController.show(current, text: '新加载');
+      await tester.pump();
+      expect(find.text('新加载'), findsOneWidget);
+      TLoadingController.dismiss();
+      TLoadingController.dismiss();
+      await tester.pump();
+      expect(tester.takeException(), isNull);
+    });
+
+    testWidgets('首次绘制前 Overlay 卸载不阻塞新展示', (tester) async {
+      late BuildContext current;
+      Widget app() => wrapWithTheme(
+        Builder(
+          builder: (context) {
+            current = context;
+            return const SizedBox();
+          },
+        ),
+      );
+      await tester.pumpWidget(app());
+      TLoadingController.show(current, text: '未绘制');
+      await tester.pumpWidget(const SizedBox.shrink());
+      await tester.pumpWidget(app());
+      TLoadingController.show(current, text: '已恢复');
+      await tester.pump();
+      expect(find.text('已恢复'), findsOneWidget);
+      TLoadingController.dismiss();
+      await tester.pump();
+    });
+
+    testWidgets('旧 Entry 延迟卸载不会清除新展示', (tester) async {
+      late BuildContext current;
+      await tester.pumpWidget(
+        wrapWithTheme(
+          Builder(
+            builder: (context) {
+              current = context;
+              return const SizedBox();
+            },
+          ),
+        ),
+      );
+      TLoadingController.show(current, text: '第一次');
+      await tester.pump();
+      TLoadingController.dismiss();
+      TLoadingController.show(current, text: '第二次');
+      await tester.pump();
+      TLoadingController.show(current, text: '不能替换');
+      await tester.pump();
+      expect(find.text('第二次'), findsOneWidget);
+      expect(find.text('不能替换'), findsNothing);
+      TLoadingController.dismiss();
+      await tester.pump();
+    });
+
+    testWidgets('普通页面离开但根 Overlay 尚存时保持全局加载', (tester) async {
+      late BuildContext current;
+      await tester.pumpWidget(
+        wrapWithTheme(
+          Builder(
+            builder: (context) {
+              current = context;
+              return const SizedBox();
+            },
+          ),
+        ),
+      );
+      TLoadingController.show(current, text: '全局任务');
+      await tester.pump();
+      await tester.pumpWidget(wrapWithTheme(const Text('新的页面')));
+      expect(find.text('全局任务'), findsOneWidget);
+      TLoadingController.dismiss();
+      await tester.pump();
+    });
+
+    testWidgets('不透明覆盖层遮挡不视为所属 Overlay 卸载', (tester) async {
+      late BuildContext current;
+      await tester.pumpWidget(
+        wrapWithTheme(
+          Builder(
+            builder: (context) {
+              current = context;
+              return const SizedBox();
+            },
+          ),
+        ),
+      );
+      TLoadingController.show(current, text: '保留加载');
+      await tester.pump();
+      final cover = OverlayEntry(
+        opaque: true,
+        builder: (context) =>
+            const ColoredBox(color: Colors.white, child: Text('覆盖层')),
+      );
+      Overlay.of(current).insert(cover);
+      await tester.pump();
+      expect(find.text('保留加载'), findsNothing);
+      TLoadingController.show(current, text: '不能替换');
+      cover.remove();
+      cover.dispose();
+      await tester.pump();
+      expect(find.text('保留加载'), findsOneWidget);
+      expect(find.text('不能替换'), findsNothing);
+      TLoadingController.dismiss();
+      await tester.pump();
+    });
+
     testWidgets('缺少 Overlay 时不污染后续显示状态', (tester) async {
       late BuildContext bareContext;
       await tester.pumpWidget(
@@ -691,4 +1025,32 @@ Finder _loadingTextFinder(String data) {
   return find.byWidgetPredicate(
     (widget) => widget is TText && widget.data == data,
   );
+}
+
+class _LoadingLifecycleProbe extends StatefulWidget {
+  const _LoadingLifecycleProbe({
+    required this.onMount,
+    required this.onDispose,
+  });
+  final VoidCallback onMount;
+  final VoidCallback onDispose;
+  @override
+  State<_LoadingLifecycleProbe> createState() => _LoadingLifecycleProbeState();
+}
+
+class _LoadingLifecycleProbeState extends State<_LoadingLifecycleProbe> {
+  @override
+  void initState() {
+    super.initState();
+    widget.onMount();
+  }
+
+  @override
+  void dispose() {
+    widget.onDispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) => const Text('loading lifecycle');
 }

@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'component_test_manifest.dart';
+import 'regression_sharding.dart';
 
 class VisualTestSuite {
   const VisualTestSuite(this.component, this.manifest);
@@ -24,6 +25,26 @@ final visualTestSuites = [
       VisualTestSuite(component.name, visualTest),
 ];
 
+/// 先全局去重，共享套件归首个声明组件，再按组件整体分组。
+List<VisualTestSuite> visualSuitesForShard(
+  int? shard, {
+  Iterable<VisualTestSuite>? suites,
+}) {
+  if (shard != null && shard != 1 && shard != 2) {
+    throw ArgumentError.value(shard, 'shard', 'Expected 1 or 2.');
+  }
+  final unique = <String, VisualTestSuite>{};
+  for (final suite in suites ?? visualTestSuites) {
+    unique.putIfAbsent(suite.executionKey, () => suite);
+  }
+  if (shard == null) {
+    return unique.values.toList();
+  }
+  return unique.values
+      .where((suite) => regressionShardForComponent(suite.component) == shard)
+      .toList();
+}
+
 List<String> visualTestArguments(
   VisualTestSuite suite, {
   bool updateGoldens = false,
@@ -37,15 +58,13 @@ List<String> visualTestArguments(
   if (updateGoldens) '--update-goldens',
 ];
 
-Future<int> runVisualRegression({bool updateGoldens = false}) async {
+Future<int> runVisualRegression({
+  bool updateGoldens = false,
+  int? shard,
+}) async {
   final failedSuites = <String>[];
-  final executedSuites = <String>{};
 
-  for (final suite in visualTestSuites) {
-    if (!executedSuites.add(suite.executionKey)) {
-      stdout.writeln('\n=== ${suite.name} (shared suite already executed) ===');
-      continue;
-    }
+  for (final suite in visualSuitesForShard(shard)) {
     stdout.writeln('\n=== ${suite.name} ===');
     final process = await Process.start(
       'flutter',
@@ -68,12 +87,14 @@ Future<int> runVisualRegression({bool updateGoldens = false}) async {
 }
 
 Future<void> main(List<String> arguments) async {
-  final unsupported = arguments.where(
-    (argument) => argument != '--update-goldens',
-  );
-  if (unsupported.isNotEmpty) {
+  final int? shard;
+  try {
+    shard = parseRegressionShard(
+      arguments.where((argument) => argument != '--update-goldens').toList(),
+    );
+  } on FormatException {
     stderr.writeln(
-      'Usage: dart run tool/run_visual_regression.dart [--update-goldens]',
+      'Usage: dart run tool/run_visual_regression.dart [--shard=1|--shard=2] [--update-goldens]',
     );
     exitCode = 64;
     return;
@@ -84,5 +105,8 @@ Future<void> main(List<String> arguments) async {
       'Golden update mode enabled; use only in Linux Flutter 3.32.0.',
     );
   }
-  exitCode = await runVisualRegression(updateGoldens: updateGoldens);
+  exitCode = await runVisualRegression(
+    updateGoldens: updateGoldens,
+    shard: shard,
+  );
 }

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../config.dart';
+import '../documentation_quick_start.dart';
 import '../documentation_theme_demo.dart';
 import '../setting.dart';
 import 'api_widget.dart';
@@ -21,6 +22,11 @@ class TExampleRoute {
         pageModelList[model.name] = model;
       });
     });
+    pageModelList['getting-started'] = ExamplePageModel(
+      text: '快速开始',
+      name: 'getting-started',
+      pageBuilder: (_, __) => const CounterPage(),
+    );
     pageModelList['custom-theme'] = ExamplePageModel(
       text: '自定义主题',
       name: 'custom-theme',

@@ -7,7 +7,13 @@ part of 't_drawer.dart';
 ///
 /// ## 返回值
 /// 无返回值。
-typedef TDrawerItemClickCallback = void Function(int index, TDrawerItem item);
+typedef TDrawerItemTapCallback = void Function(int index, TDrawerItem item);
+
+/// 已废弃，此为兼容入口。请使用 [TDrawerItemTapCallback]；将在 2.0.0 删除。
+@Deprecated(
+  'Use TDrawerItemTapCallback instead. Deprecated in 1.1.0; remove in 2.0.0.',
+)
+typedef TDrawerItemClickCallback = TDrawerItemTapCallback;
 
 /// `TDrawer` 的内部内容布局。
 class _TDrawerContent extends StatelessWidget {
@@ -16,7 +22,7 @@ class _TDrawerContent extends StatelessWidget {
     this.items,
     this.child,
     this.title,
-    this.onItemClick,
+    this.onItemTap,
     this.enableFeedback = true,
     this.showDivider = true,
     this.showLastDivider = true,
@@ -35,7 +41,7 @@ class _TDrawerContent extends StatelessWidget {
   final Widget? title;
 
   /// 点击抽屉里的列表项触发
-  final TDrawerItemClickCallback? onItemClick;
+  final TDrawerItemTapCallback? onItemTap;
 
   /// 宽度；优先级高于 ThemeData，默认使用 280。
 
@@ -79,12 +85,11 @@ class _TDrawerContent extends StatelessWidget {
                     ),
                 child: Align(
                   alignment: AlignmentDirectional.centerStart,
-                  child: Theme(
-                    data: Theme.of(context).mergeExtension(
-                      TTextThemeData(
-                        textStyle: _titleTextStyle(context, drawerTheme),
-                      ),
-                    ),
+                  // Preserve inherited TD paragraph settings along with the title style.
+                  child: TTextStyleScope(
+                    style: _titleTextStyle(context, drawerTheme),
+                    // Keep native paragraph defaults; only TD theme settings
+                    // were accidentally discarded by the former Theme replacement.
                     child: DefaultTextStyle(
                       style: TTextResolve.resolve(
                         context: context,
@@ -104,9 +109,9 @@ class _TDrawerContent extends StatelessWidget {
                     final item = items![index];
                     return _DrawerMenuItem(
                       item: item,
-                      onTap: onItemClick == null
+                      onTap: onItemTap == null
                           ? null
-                          : () => onItemClick!(index, item),
+                          : () => onItemTap!(index, item),
                       enableFeedback: enableFeedback,
                       textStyle: _itemTextStyle(context, drawerTheme),
                       backgroundColor:
@@ -268,16 +273,20 @@ class _DrawerMenuItemState extends State<_DrawerMenuItem> {
             SizedBox(width: widget.iconGap),
           ],
           Expanded(
-            child:
-                widget.item.content ??
-                (widget.item.title == null
-                    ? const SizedBox.shrink()
-                    : TTextStyled(
-                        widget.item.title!,
-                        style: widget.textStyle,
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
-                      )),
+            child: widget.item.content != null
+                ? TTextStyleScope(
+                    // A layout wrapper does not change menu text defaults.
+                    style: widget.textStyle,
+                    child: widget.item.content!,
+                  )
+                : (widget.item.title == null
+                      ? const SizedBox.shrink()
+                      : TTextStyled(
+                          widget.item.title!,
+                          style: widget.textStyle,
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                        )),
           ),
         ],
       ),
@@ -329,5 +338,8 @@ class TDrawerItem {
   final Widget? icon;
 
   /// 自定义菜单项正文，优先于 [title]；仍与 [icon]、菜单项间距和分隔线组合。
+  ///
+  /// 整个子树的 Text/TText 使用菜单正文默认字体和颜色；布局包装不切断传递。
+  /// 显式文字样式和内容内部更近的 TD 文字主题优先；自定义内容自行控制换行。
   final Widget? content;
 }

@@ -17,7 +17,8 @@ import 't_swiper_types.dart';
 ///
 /// 使用 [jumpTo]、[animateTo]、[next] 和 [previous] 发起切换，通过 [index]
 /// 或监听 Controller 获取当前业务索引。一个 Controller 同时只能附加一个
-/// [TSwiper]，由调用方创建的实例也由调用方负责释放。
+/// [TSwiper]，重复绑定其他实例会抛出 [StateError]。
+/// 由调用方创建的实例也由调用方负责释放。
 class TSwiperController extends ChangeNotifier {
   TSwiperController({this.initialIndex = 0}) : _index = initialIndex {
     if (initialIndex < 0) {
@@ -178,6 +179,7 @@ class TSwiper extends StatefulWidget {
   final int? itemCount;
 
   /// 外部控制器；未提供时组件会创建并自行释放内部控制器。
+  /// 建议独立轮播分别使用 Controller；绑定规则见 [TSwiperController]。
   final TSwiperController? controller;
 
   /// 当前实际展示页发生变化时触发。
@@ -375,7 +377,7 @@ class _TSwiperState extends State<TSwiper> with WidgetsBindingObserver {
         'must be positive',
       );
     }
-    if (!identical(oldWidget.controller, widget.controller)) {
+    if (!identical(_ownsController ? null : _controller, widget.controller)) {
       if (widget.controller?.hasClients ?? false) {
         throw StateError('TSwiperController can only control one TSwiper.');
       }

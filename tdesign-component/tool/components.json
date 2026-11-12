@@ -129,7 +129,8 @@
           "TDrawerPlacement",
           "TDrawerThemeData",
           "TDrawerItem",
-          "TDrawerItemClickCallback"
+          "TDrawerItemClickCallback",
+          "TDrawerItemTapCallback"
         ],
         "getComments": true,
         "functions": [

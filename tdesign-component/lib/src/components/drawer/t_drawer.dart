@@ -7,8 +7,8 @@ import '../../theme/t_sizes.dart';
 import '../../theme/t_theme.dart';
 import '../popup/t_popup.dart';
 import '../text/t_text_resolve.dart';
+import '../text/t_text_style_scope.dart';
 import '../text/t_text_styled.dart';
-import '../text/t_text_theme_data.dart';
 import 't_drawer_theme_data.dart';
 
 part 't_drawer_content.dart';
@@ -31,9 +31,12 @@ class TDrawer extends StatelessWidget {
     this.enableFeedback = true,
     this.showLastDivider = true,
     this.title,
-    this.onItemClick,
+    @Deprecated('Use onItemTap instead. Deprecated in 1.1.0; remove in 2.0.0.')
+    TDrawerItemClickCallback? onItemClick,
+    TDrawerItemTapCallback? onItemTap,
     this.child,
-  });
+  }) : _onItemTap = onItemTap,
+       _onItemClick = onItemTap ?? onItemClick;
 
   /// 是否显示菜单项分隔线，默认 true。
   final bool showDivider;
@@ -56,8 +59,17 @@ class TDrawer extends StatelessWidget {
   /// 抽屉的标题组件
   final Widget? title;
 
-  /// 点击抽屉里的列表项触发
-  final TDrawerItemClickCallback? onItemClick;
+  /// 点击抽屉里的列表项触发。
+  /// 与旧参数同时提供时优先使用本参数。
+  // ignore: deprecated_member_use_from_same_package
+  TDrawerItemTapCallback? get onItemTap => _onItemTap ?? onItemClick;
+
+  final TDrawerItemTapCallback? _onItemTap;
+  final TDrawerItemTapCallback? _onItemClick;
+
+  /// 已废弃，此为兼容入口。请使用 [onItemTap]；将在 2.0.0 删除。
+  @Deprecated('Use onItemTap instead. Deprecated in 1.1.0; remove in 2.0.0.')
+  TDrawerItemClickCallback? get onItemClick => _onItemClick;
 
   @override
   Widget build(BuildContext context) {
@@ -69,7 +81,7 @@ class TDrawer extends StatelessWidget {
       showLastDivider: showLastDivider,
       child: child,
       title: title,
-      onItemClick: onItemClick,
+      onItemTap: onItemTap,
     );
   }
 }
@@ -84,8 +96,8 @@ class TDrawer extends StatelessWidget {
 /// [onOverlayClick] 在蒙层被点击时触发，不受是否自动关闭影响。
 /// [topInset] 设置抽屉相对屏幕顶部的可选偏移，默认 0，必须大于或等于 0。
 /// [useSafeArea] 控制浮层是否避让系统安全区域，默认 true。
-/// [destroyOnClose] 默认 false；为 true 时路由 maintainState 为 false，
-/// 被其他不透明路由覆盖时可释放内容 State。关闭路由后内容始终会释放。
+/// [destroyOnClose] 沿用 1.0.0 的遮挡规则，默认 false：false 时保留被不透明路由遮挡的内容 State，true 时允许释放。
+/// 两种取值均在关闭完成后销毁内容；不提供关闭后重开复用。
 /// [onClose] 在抽屉浮层关闭后触发。
 ///
 /// 返回的 [TDrawerHandle] 可用于查询显示状态或主动关闭抽屉。
@@ -114,7 +126,7 @@ TDrawerHandle showTDrawer(
   final popupInset = placement == TDrawerPlacement.right
       ? TPopupRightInset(top: topInset ?? 0)
       : TPopupLeftInset(top: topInset ?? 0);
-  final handle = TPopup.show(
+  final handle = showDrawerPopupInternal(
     context,
     options: TPopupOptions(
       placement: popupPlacement,
@@ -124,7 +136,7 @@ TDrawerHandle showTDrawer(
         showOverlay: showOverlay,
         closeOnClick: closeOnOverlayClick,
         color: showOverlay ? null : Colors.transparent,
-        onClick: onOverlayClick,
+        onTap: onOverlayClick,
       ),
       destroyOnClose: destroyOnClose,
       useSafeArea: useSafeArea,

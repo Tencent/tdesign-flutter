@@ -20,6 +20,7 @@ class TForm extends StatefulWidget {
   final Widget child;
 
   /// 表单控制器。
+  /// 建议独立表单分别使用 Controller；绑定规则见 [TFormController]。
   final TFormController? controller;
 
   /// 自动校验时机。
@@ -47,6 +48,7 @@ class TForm extends StatefulWidget {
 
 /// [TForm] 的公开状态。
 class TFormState extends State<TForm> {
+  TFormController? _boundController;
   final _formKey = GlobalKey<FormState>();
   final Map<String, Object?> _values = {};
   final Map<String, Object> _fieldOwners = {};
@@ -237,20 +239,22 @@ class TFormState extends State<TForm> {
   void initState() {
     super.initState();
     widget.controller?._attach(this);
+    _boundController = widget.controller;
   }
 
   @override
   void didUpdateWidget(covariant TForm oldWidget) {
     super.didUpdateWidget(oldWidget);
-    if (oldWidget.controller != widget.controller) {
-      oldWidget.controller?._detach(this);
+    if (!identical(_boundController, widget.controller)) {
       widget.controller?._attach(this);
+      _boundController?._detach(this);
+      _boundController = widget.controller;
     }
   }
 
   @override
   void dispose() {
-    widget.controller?._detach(this);
+    _boundController?._detach(this);
     super.dispose();
   }
 
@@ -276,6 +280,10 @@ class TFormState extends State<TForm> {
 }
 
 /// 命令式触发表单提交、校验和重置。
+///
+/// 同一 Controller 同时绑定多个表单时，断言开启会报错；断言关闭时保留后绑定覆盖，
+/// 命令作用于最后绑定的表单，不提供同时控制多个表单的能力。
+/// 当前绑定表单卸载后，不会自动恢复此前的绑定。
 class TFormController {
   TFormState? _state;
 

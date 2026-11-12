@@ -5,6 +5,8 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:tdesign_flutter/src/theme/t_internal_material.dart';
 import 'package:tdesign_flutter/tdesign_flutter.dart';
 
+import '../../helpers/custom_content_theme_scene.dart';
+
 void main() {
   messagePickerBoundaryGoldens();
   swiperControlStyleGoldens();
@@ -58,75 +60,7 @@ void main() {
     tester.view.physicalSize = const Size(760, 420);
     tester.view.devicePixelRatio = 1;
     addTearDown(tester.view.resetPhysicalSize);
-    await tester.pumpWidget(
-      MaterialApp(
-        home: Scaffold(
-          body: RepaintBoundary(
-            key: const Key('custom-content-scene'),
-            child: ColoredBox(
-              color: Colors.white,
-              child: Row(
-                children: [
-                  for (final m3 in [false, true])
-                    Expanded(
-                      child: Theme(
-                        data: ThemeData(
-                          useMaterial3: m3,
-                          iconTheme: const IconThemeData(
-                            color: Colors.green,
-                            size: 64,
-                          ),
-                          textTheme: const TextTheme(
-                            bodyMedium: TextStyle(
-                              fontFamily: 'Roboto',
-                              fontSize: 28,
-                              color: Colors.purple,
-                            ),
-                          ),
-                          extensions: [TThemeData.defaultData()],
-                        ),
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Text(
-                              m3 ? 'Material 3' : 'Material 2',
-                              style: const TextStyle(
-                                fontFamily: 'Roboto',
-                                fontSize: 14,
-                                color: Colors.black,
-                              ),
-                            ),
-                            const SizedBox(height: 16),
-                            TDialog(
-                              content: Column(
-                                mainAxisSize: MainAxisSize.min,
-                                children: [
-                                  const Icon(TIcons.home),
-                                  Builder(
-                                    builder: (context) => Text(
-                                      'Custom content',
-                                      style: Theme.of(
-                                        context,
-                                      ).textTheme.bodyMedium,
-                                    ),
-                                  ),
-                                  const SizedBox(height: 16),
-                                  const TIcon(TIcons.home),
-                                  const TText('TD built-in style'),
-                                ],
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
-                ],
-              ),
-            ),
-          ),
-        ),
-      ),
-    );
+    await tester.pumpWidget(const CustomContentThemeScene());
     await tester.pump(const Duration(milliseconds: 400));
     await expectLater(
       find.byKey(const Key('custom-content-scene')),

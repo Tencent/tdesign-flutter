@@ -148,7 +148,7 @@ t 为 0 或 1 时返回对应端点；目标为空时返回当前主题。
 
 | 名称 | 类型 | 默认值 | 说明 | 必传 |
 | --- | --- | --- | --- | --- |
-| map | Map&lt;String, dynamic&gt; | - | 字体 JSON 配置，包含 size、lineHeight 和可选的 fontWeight（1 至 9，默认 4）。 | 是 |
+| map | Map&lt;String, dynamic&gt; | - | 字体 JSON 配置。size 为正、lineHeight 为非负的有限整数或小数，保留精度； fontWeight 为 1 至 9 的整数，默认 4。非法配置抛出 FormatException。 | 是 |
 
 
 #### 属性
@@ -591,7 +591,7 @@ TD ThemeExtension 与 Token，不反向继承外部 Material/M2/M3 样式配置�
 | enabled | bool | true | 是否允许交互，默认 true；还需要 `onTap` 非空。 | 否 |
 | key | Key? | - | 组件标识，用于区分或保留组件状态。 | 否 |
 | mergeIconTheme | IconThemeData? | - | 为子树 `Icon` 提供默认样式。 | 否 |
-| mergeTextStyle | TextStyle? | - | 为子树 `Text` 提供默认样式（merge 语义，子控件已有样式优先）。 | 否 |
+| mergeTextStyle | TextStyle? | - | 为子树 Text/TText 提供默认样式（merge 语义，子控件已有样式优先）。 | 否 |
 | onTap | VoidCallback? | - | 点击回调；为空时不响应点击或显示按压反馈。 | 否 |
 | padding | EdgeInsetsGeometry? | - | 内容内边距；为空时使用全局 spacer 水平间距和 spacer1 垂直间距。 | 否 |
 | pressDuration | Duration | kToolbarPressDuration | 按压透明度动画时长，默认 100ms。 | 否 |

@@ -4,10 +4,104 @@ import 'package:flutter_test/flutter_test.dart';
 
 import '../../tool/check_component_coverage.dart';
 import '../../tool/component_test_manifest.dart';
+import '../../tool/regression_sharding.dart';
 import '../../tool/run_component_regression.dart';
 import '../../tool/run_example_regression.dart';
 
 void main() {
+  Set<String> testFiles(String directory) => Directory(directory)
+      .listSync(recursive: true)
+      .whereType<File>()
+      .where((file) => file.path.endsWith('_test.dart'))
+      .map((file) => file.path.replaceAll('\\', '/'))
+      .toSet();
+
+  test('all component and tooling test files have a CI execution path', () {
+    final registered = <String>{
+      for (final component in componentTestManifests)
+        ...component.componentTests,
+      for (final component in componentTestManifests)
+        for (final visual in component.visualTests)
+          if (visual.workingDirectory == '.') ...visual.testFiles,
+      // The shared tooling entry executes the complete directory.
+      ...testFiles('test/tool'),
+    };
+    expect(registered, testFiles('test'));
+  });
+
+  test('all example test files have a functional or visual execution path', () {
+    final registered = <String>{
+      ...sharedExampleTests,
+      for (final component in componentTestManifests) ...component.exampleTests,
+      for (final component in componentTestManifests)
+        for (final visual in component.visualTests)
+          if (visual.workingDirectory == 'example') ...visual.testFiles,
+    };
+    expect(
+      registered.map((file) => 'example/$file').toSet(),
+      testFiles('example/test'),
+    );
+  });
+
+  test('fixed component groups do not change with ordering or new entries', () {
+    const expected = {'a': 2, 'b': 1, 'avatar': 2, 'theme': 2};
+    Map<String, int> groups(Iterable<String> names) => {
+      for (final name in names) name: regressionShardForComponent(name),
+    };
+    expect(groups(expected.keys), expected);
+    expect(groups(expected.keys.toList().reversed), expected);
+    final extended = groups([...expected.keys, 'new_component']);
+    for (final name in expected.keys) {
+      expect(extended[name], expected[name]);
+    }
+    expect(extended['new_component'], isIn([1, 2]));
+  });
+
+  test(
+    'shard CLI keeps full execution by default and rejects invalid flags',
+    () {
+      expect(parseRegressionShard([]), isNull);
+      expect(parseRegressionShard(['--shard=1']), 1);
+      expect(parseRegressionShard(['--shard=2']), 2);
+      for (final args in [
+        ['--shard=0'],
+        ['--shard=3'],
+        ['--shard=01'],
+        ['--shard='],
+        ['--unknown'],
+        ['--shard=1', '--shard=2'],
+        ['--shard=1', '--shard=1'],
+      ]) {
+        expect(() => parseRegressionShard(args), throwsFormatException);
+      }
+      expect(() => componentSuitesForShard(0), throwsArgumentError);
+    },
+  );
+
+  test(
+    'component shards partition the manifest without changing coverage scope',
+    () {
+      final first = componentSuitesForShard(1);
+      final second = componentSuitesForShard(2);
+      final names = componentTestSuites.map((suite) => suite.name).toSet();
+      final firstNames = first.map((suite) => suite.name).toSet();
+      final secondNames = second.map((suite) => suite.name).toSet();
+      expect(firstNames.intersection(secondNames), isEmpty);
+      expect(firstNames.union(secondNames), names);
+      expect(componentSuitesForShard(null), same(componentTestSuites));
+      for (final group in [first, second]) {
+        expect(group, orderedEquals(componentTestSuites.where(group.contains)));
+        for (final suite in group) {
+          expect(componentTargets[suite.name], suite.coverageTargets);
+        }
+      }
+      for (final suite in [...first, ...second]) {
+        final group = firstNames.contains(suite.name) ? 1 : 2;
+        expect(regressionShardForComponent(suite.name), group);
+      }
+    },
+  );
+
   test('regression suites and coverage targets stay in sync', () {
     final suiteComponents = componentTestSuites
         .map((suite) => suite.name)

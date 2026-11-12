@@ -1,4 +1,10 @@
 {
+  "uploading": "Uploading",
+  "uploadSelect": "Select files",
+  "uploadPending": "Pending upload",
+  "uploadFailed": "Upload failed",
+  "uploadRetry": "Retry upload",
+  "uploadSuccess": "Upload successful",
   "components": "TD Flutter Components",
   "setting": "Setting",
   "about": "AboutUs",

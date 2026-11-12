@@ -34,10 +34,11 @@
 
 | 名称 | 类型 | 默认值 | 说明 | 必传 |
 | --- | --- | --- | --- | --- |
-| allowMultipleTaps | bool | false | 是否允许重复点击当前选中项时再次调用 `onTap`，默认为 false。 该字段不影响点击未选中项，也不会让 `TTabBar.onChanged` 重复通知当前值。 | 否 |
+| allowMultipleTaps | bool | false | 已废弃，此为兼容入口。请使用 `notifyOnReselect`；将在 2.0.0 删除。 | 否 |
 | badge | TBadgeConfig? | - | 展示在标签内容右上角的徽标；为空时不显示。 徽标内容和样式由 `TBadgeConfig` 描述，`TBadgeConfig.offset` 可用于逐项 调整默认位置。纯文本项未设置实例 offset 时使用 TabBar 的 文本徽标默认位置；纯图标项与上下排列的图文项以图标作为锚点， 左右排列的图文项以整组图文作为锚点，均使用徽标的默认右上角位置。 显式 offset 优先于组件默认值，不读取 Material BadgeTheme。 TabBar 自己拥有徽标锚点与点击区域；点击行为通过 `onTap` 配置。调用方 已经拥有目标 Widget 时，应直接使用 `TBadge` 包装该 Widget。 | 否 |
+| notifyOnReselect | bool? | - | 是否允许重复点击当前选中项时再次调用 `onTap`，默认为 false。 该字段不影响点击未选中项，也不会让 `TTabBar.onChanged` 重复通知当前值。 与旧参数同时提供时优先使用本参数。 | 否 |
 | onLongPress | GestureLongPressCallback? | - | 长按事件 | 否 |
-| onTap | GestureTapCallback? | - | 标签项被选中时的附加点击回调。 点击未选中项时，在 `TTabBar.onChanged` 之前调用；重复点击当前选中项时， 仅当 `allowMultipleTaps` 为 true 才调用。整栏禁用时不会调用。 | 否 |
+| onTap | GestureTapCallback? | - | 标签项被选中时的附加点击回调。 点击未选中项时，在 `TTabBar.onChanged` 之前调用；重复点击当前选中项时， 仅当 `notifyOnReselect` 为 true 才调用。整栏禁用时不会调用。 | 否 |
 | popUpButtonConfig | TTabBarPopUpBtnConfig? | - | 弹窗配置 | 否 |
 | selectedIcon | Widget? | - | 选中时图标。未指定尺寸的 Icon 默认使用 TabBar 的 20px 图标尺寸； Icon 自身显式指定的尺寸优先。 | 否 |
 | selectTabTextStyle | TextStyle? | - | 选中时的文字样式，按字段覆盖继承主题与内置默认值。 | 否 |
@@ -57,7 +58,8 @@
 | 名称 | 类型 | 默认值 | 说明 | 必传 |
 | --- | --- | --- | --- | --- |
 | items | List&lt;TTabBarMenuItem&gt; | - | 选项list | 是 |
-| onChanged | ValueChanged&lt;String&gt; | - | 统一在 onChanged 中处理各item点击事件 | 是 |
+| onChanged | ValueChanged&lt;String&gt;? | - | 已废弃，此为兼容入口。请使用 `onSelected`；将在 2.0.0 删除。 | 否 |
+| onSelected | ValueChanged&lt;String&gt;? | - | 选择菜单项时同步触发，包含重复选择；不改变主标签值。 自动关闭菜单前通知。 须提供本参数或旧参数 `onChanged`，同时提供时本参数优先。 | 否 |
 | popUpDialogConfig | TTabBarPopUpShapeConfig? | - | 弹窗UI配置 | 否 |
 
 
@@ -74,7 +76,7 @@
 | arrowHeight | double? | - | 箭头高度 默认8 | 否 |
 | arrowWidth | double? | - | 箭头宽度 默认13.5 | 否 |
 | backgroundColor | Color? | - | 弹窗背景颜色 | 否 |
-| popUpItemHeight | double? | - | 单个选项高度；所有选项等高。未设置时至少 48，可随内置文字增长。 显式数值保持固定；构造后的默认公开值仍为 48。 | 否 |
+| popUpItemHeight | double? | - | 单个选项高度；所有选项等高。未设置时至少 48，可随内置文字或自定义内容增长。 自适应菜单超过视口时可纵向滚动。 显式数值保持固定；构造后的默认公开值仍为 48。 | 否 |
 | popUpWidth | double? | - | 弹窗宽度。 不设置时使用 `max(107, 标签项宽度 - 20)`；显式设置时覆盖该默认值。 | 否 |
 | radius | double? | - | 弹层面板圆角。 不设置时使用当前 TDesign 主题的 `radiusDefault`（默认 6 逻辑像素）； 显式设置时覆盖主题默认值。 | 否 |
 
@@ -90,7 +92,7 @@
 | 名称 | 类型 | 默认值 | 说明 | 必传 |
 | --- | --- | --- | --- | --- |
 | alignment | AlignmentGeometry | AlignmentDirectional.center | 对齐方式 | 否 |
-| itemWidget | Widget? | - | 选项widget | 否 |
+| itemWidget | Widget? | - | 自定义选项内容；优先于 value 的内置文案。 子树默认使用菜单文案样式；显式文字样式和内部更近的局部主题优先。 不强制行数或省略。未设置 popUpItemHeight 时参与等高自适应， 显式高度保持固定；内容仍须遵守有限宽度等布局约束。 | 否 |
 | key | Key? | - | 组件标识，用于区分或保留组件状态。 | 否 |
 | value | String | - | 选项值 | 是 |
 

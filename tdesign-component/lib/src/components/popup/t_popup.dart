@@ -12,6 +12,9 @@ import 'dart:async';
 import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart'
+    show RenderConstrainedBox, SemanticsConfiguration;
+import 'package:meta/meta.dart' show internal;
 
 import '../../theme/t_colors.dart';
 import '../../theme/t_fonts.dart';
@@ -26,6 +29,7 @@ part '_popup_center_close.dart';
 part '_popup_header.dart';
 part '_popup_layout.dart';
 part '_popup_route.dart';
+part '_popup_retention.dart';
 part '_popup_shell.dart';
 part '_popup_tracker.dart';
 part 't_popup_handle.dart';
@@ -37,7 +41,9 @@ final class TPopup {
   // 私有构造器：工具类仅暴露静态方法，无外部调用，标记为覆盖率例外（不可达死代码）。
   const TPopup._(); // coverage:ignore-line
 
-  /// 每次调用打开独立浮层，可叠加展示；参数与方向不匹配时抛出 [FlutterError]。
+  /// 创建独立会话并立即显示，返回 [TPopupHandle]，无需再调用 [TPopupHandle.open]。
+  ///
+  /// 重开原会话使用返回句柄的 [TPopupHandle.open]；更换配置需重新调用本方法。多次调用可叠加展示，不会自动关闭旧会话；参数与方向不匹配时抛出 [FlutterError]。
   ///
   /// [context] 用于查找 [Navigator] 并获取局部主题。
   ///
@@ -55,6 +61,19 @@ final class TPopup {
     required TPopupOptions options,
     BuildContext? navigatorContext,
     bool useRootNavigator = false,
+  }) => _show(
+    context,
+    options: options,
+    navigatorContext: navigatorContext,
+    useRootNavigator: useRootNavigator,
+  );
+
+  static TPopupHandle _show(
+    BuildContext context, {
+    required TPopupOptions options,
+    BuildContext? navigatorContext,
+    bool useRootNavigator = false,
+    bool reusable = true,
   }) {
     final navContext = navigatorContext ?? context;
     final theme = Theme.of(context).extension<TPopupThemeData>();
@@ -79,6 +98,7 @@ final class TPopup {
     );
     final handle = TPopupHandle._(
       options: resolvedOptions,
+      reusable: reusable,
       navigatorContext: navigatorContext,
       useRootNavigator: useRootNavigator,
       themeContext: context,
@@ -107,7 +127,14 @@ final class TPopup {
       color: overlay.color ?? themeColor,
       preventTap: overlay.preventTap,
       closeOnClick: overlay.closeOnClick,
-      onClick: overlay.onClick,
+      onTap: overlay.onTap,
     );
   }
 }
+
+// Package-internal bridge; excluded from tdesign_flutter.dart's public exports.
+@internal
+TPopupHandle showDrawerPopupInternal(
+  BuildContext context, {
+  required TPopupOptions options,
+}) => TPopup._show(context, options: options, reusable: false);

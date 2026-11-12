@@ -13,6 +13,7 @@ import '../../theme/t_sizes.dart';
 import '../../theme/t_theme.dart';
 import '../../util/context_extension.dart';
 import '../loading/t_circle_indicator.dart';
+import '../text/t_text_style_scope.dart';
 import '../text/t_text_styled.dart';
 import 't_toast_theme_data.dart';
 
@@ -70,19 +71,32 @@ class TOverlayConfig {
 /// Toast实例管理类
 class _ToastInstance {
   final OverlayEntry overlayEntry;
+  final OverlayEntry lifecycleEntry;
   final Timer? timer;
   Timer? disposeTimer;
   bool showing = true;
   bool removed = false;
 
-  _ToastInstance({required this.overlayEntry, this.timer});
+  _ToastInstance({
+    required this.overlayEntry,
+    required this.lifecycleEntry,
+    this.timer,
+  });
+
+  VoidCallback? entryListener;
 
   void _removeEntry() {
     if (removed) {
       return;
     }
+    final listener = entryListener;
+    if (listener != null) {
+      lifecycleEntry.removeListener(listener);
+    }
     overlayEntry.remove();
     overlayEntry.dispose();
+    lifecycleEntry.remove();
+    lifecycleEntry.dispose();
     removed = true;
   }
 
@@ -135,7 +149,10 @@ class TToast {
     /// Toast 展示位置。
     TToastPlacement placement = TToastPlacement.middle,
 
-    /// 自定义内容；传入后优先展示。
+    /// 自定义文案内容；传入后优先展示。
+    ///
+    /// Text/TText 子树接入 Toast 默认字体和颜色，布局包装不切断传递。
+    /// 显式样式及内部更近的 TD 文字主题优先；自定义内容自行控制换行和布局。
     Widget? customWidget,
 
     /// Toast 背景色。
@@ -430,6 +447,9 @@ class TToast {
     TToastPlacement placement = TToastPlacement.middle,
 
     /// 自定义加载文案区域；传入后替换 text 对应内容，加载指示器仍显示。
+    ///
+    /// Text/TText 子树接入加载文案默认字体和颜色，布局包装不切断传递。
+    /// 显式样式及内部更近的 TD 文字主题优先；不强加内置文案的单行限制。
     Widget? customWidget,
 
     /// Toast 背景色。
@@ -592,7 +612,13 @@ class TToast {
       );
     }
 
-    overlayState.insert(overlayEntry);
+    // An inert entry observes the owner even when an opaque Entry hides content.
+    // Keep the content Entry's existing State, layout and interaction behavior.
+    final lifecycleEntry = OverlayEntry(
+      maintainState: true,
+      builder: (_) => const SizedBox.shrink(),
+    );
+    overlayState.insertAll([lifecycleEntry, overlayEntry]);
 
     Timer? timer;
 
@@ -607,10 +633,29 @@ class TToast {
       });
     }
 
-    _toastInstances[toastId] = _ToastInstance(
+    final instance = _ToastInstance(
       overlayEntry: overlayEntry,
+      lifecycleEntry: lifecycleEntry,
       timer: timer,
     );
+    _toastInstances[toastId] = instance;
+    void releaseUnmounted() {
+      // Entry 卸载通知发生时祖先 Overlay 可能尚未完成 unmount；
+      // 等本轮卸载完成后再判断 owner，并避开 ChangeNotifier 通知栈。
+      scheduleMicrotask(() {
+        if (overlayState.mounted || instance.removed) {
+          return;
+        }
+        if (identical(_toastInstances[toastId], instance)) {
+          _toastInstances.remove(toastId);
+        }
+        instance.cancel();
+      });
+    }
+
+    instance.entryListener = releaseUnmounted;
+    lifecycleEntry.addListener(releaseUnmounted);
+    WidgetsBinding.instance.addPostFrameCallback((_) => releaseUnmounted());
   }
 }
 
@@ -771,6 +816,14 @@ class _TToastLoading extends StatelessWidget {
                 const TToastThemeData())
             .merge(config);
     final maxWidth = math.max(102.0, toastTheme.maxWidth ?? 185.0);
+    final defaultLabel = TTextStyled(
+      text ?? context.resource.loadingWithPoint,
+      font: toastTheme.textStyle != null ? null : theme.fontBodyMedium,
+      style: toastTheme.textStyle,
+      maxLines: 1,
+      overflow: TextOverflow.ellipsis,
+      textColor: toastTheme.textStyle?.color ?? theme.textColorAnti,
+    );
     return ConstrainedBox(
       constraints: BoxConstraints(
         minWidth: 102,
@@ -797,17 +850,12 @@ class _TToastLoading extends StatelessWidget {
               lineWidth: 4,
             ),
             const SizedBox(height: 8),
-            customWidget ??
-                TTextStyled(
-                  text ?? context.resource.loadingWithPoint,
-                  font: toastTheme.textStyle != null
-                      ? null
-                      : theme.fontBodyMedium,
-                  style: toastTheme.textStyle,
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
-                  textColor: toastTheme.textStyle?.color ?? theme.textColorAnti,
-                ),
+            customWidget == null
+                ? defaultLabel
+                : TTextStyleScope(
+                    style: defaultLabel.getTextStyle(context),
+                    child: customWidget!,
+                  ),
           ],
         ),
       ),
@@ -871,6 +919,14 @@ class _TTextToast extends StatelessWidget {
         (Theme.of(context).extension<TToastThemeData>() ??
                 const TToastThemeData())
             .merge(config);
+    final defaultLabel = TTextStyled(
+      text ?? '',
+      font: toastTheme.textStyle != null ? null : theme.fontBodyMedium,
+      style: toastTheme.textStyle,
+      maxLines: maxLines ?? 3,
+      overflow: TextOverflow.ellipsis,
+      textColor: toastTheme.textStyle?.color ?? theme.textColorAnti,
+    );
     return ConstrainedBox(
       constraints:
           constraints ?? BoxConstraints(maxWidth: toastTheme.maxWidth ?? 185),
@@ -884,16 +940,13 @@ class _TTextToast extends StatelessWidget {
             toastTheme.borderRadius ?? theme.radiusDefault,
           ),
         ),
-        child:
-            customWidget ??
-            TTextStyled(
-              text ?? '',
-              font: toastTheme.textStyle != null ? null : theme.fontBodyMedium,
-              style: toastTheme.textStyle,
-              maxLines: maxLines ?? 3,
-              overflow: TextOverflow.ellipsis,
-              textColor: toastTheme.textStyle?.color ?? theme.textColorAnti,
-            ),
+        child: customWidget == null
+            ? defaultLabel
+            : TTextStyleScope(
+                // Share typography, while custom content keeps its own layout.
+                style: defaultLabel.getTextStyle(context),
+                child: customWidget!,
+              ),
       ),
     );
   }

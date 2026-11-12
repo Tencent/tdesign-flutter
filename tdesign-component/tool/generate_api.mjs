@@ -25,8 +25,12 @@ if (manifest.schemaVersion !== 1 || !Array.isArray(manifest.components)) {
 const checkDir = check && !dryRun ? mkdtempSync(resolve(tmpdir(), 'tdesign-api-check-')) : null;
 const generationDir = checkDir ? `${checkDir}${sep}` : outputDir;
 const stale = [];
+const tasks = [];
 try {
   for (const component of manifest.components) {
+    if (!['file', 'folder'].includes(component.source.type)) {
+      throw new Error(`${component.slug}: source.type must be file or folder`);
+    }
     const sourcePath = resolve(componentRoot, component.source.path);
     if (!existsSync(sourcePath)) {
       throw new Error(`${component.slug}: missing ${component.source.type} ${sourcePath}`);
@@ -69,14 +73,28 @@ try {
       continue;
     }
 
-    const result = spawnSync('dart', args, {
+    tasks.push({
+      slug: component.slug,
+      sourcePath,
+      sourceType: component.source.type,
+      names: declarationNames,
+      getComments: component.api.getComments === true,
+      output: generationDir,
+    });
+  }
+  // 同一进程顺序复用原生成器，避免为每个组件重复启动 Dart / 加载分析器。
+  if (!dryRun) {
+    const result = spawnSync('dart', ['run', resolve(toolDir, 'generate_api_batch.dart')], {
       cwd: componentRoot,
-      stdio: 'inherit',
+      input: JSON.stringify(tasks),
+      stdio: ['pipe', 'inherit', 'inherit'],
     });
     if (result.status !== 0) {
-      throw new Error(`${component.slug}: API generation failed (${result.status ?? 'spawn error'})`);
+      throw new Error(`API generation failed (${result.status ?? 'spawn error'})`);
     }
-    if (checkDir) {
+  }
+  if (checkDir) {
+    for (const component of manifest.components) {
       const name = `${component.slug}_api.md`;
       const committed = resolve(outputDir, name);
       const generated = resolve(checkDir, name);

@@ -100,7 +100,7 @@
 | duration | Duration | const Duration(milliseconds: 2000) | 自动关闭时长，默认 2000ms；零或负时长不自动关闭，请调用 dismissToast 或 dismissAll。 | 否 |
 | overlay | TOverlayConfig? | - | 蒙层行为配置（可见遮罩、拦截点击等）。 | 否 |
 | placement | TToastPlacement | TToastPlacement.middle | Toast 展示位置。 | 否 |
-| customWidget | Widget? | - | 自定义加载文案区域；传入后替换 text 对应内容，加载指示器仍显示。 | 否 |
+| customWidget | Widget? | - | 自定义加载文案区域；传入后替换 text 对应内容，加载指示器仍显示。 Text/TText 子树接入加载文案默认字体和颜色，布局包装不切断传递。 显式样式及内部更近的 TD 文字主题优先；不强加内置文案的单行限制。 | 否 |
 | backgroundColor | Color? | - | Toast 背景色。 | 否 |
 | textStyle | TextStyle? | - | Toast 文案样式。 | 否 |
 | iconSize | double? | - | 加载图标尺寸。 | 否 |
@@ -184,7 +184,7 @@
 | constraints | BoxConstraints? | - | Toast 内容约束。 | 否 |
 | overlay | TOverlayConfig? | - | 蒙层行为配置（可见遮罩、拦截点击等）。 | 否 |
 | placement | TToastPlacement | TToastPlacement.middle | Toast 展示位置。 | 否 |
-| customWidget | Widget? | - | 自定义内容；传入后优先展示。 | 否 |
+| customWidget | Widget? | - | 自定义文案内容；传入后优先展示。 Text/TText 子树接入 Toast 默认字体和颜色，布局包装不切断传递。 显式样式及内部更近的 TD 文字主题优先；自定义内容自行控制换行和布局。 | 否 |
 | backgroundColor | Color? | - | Toast 背景色。 | 否 |
 | textStyle | TextStyle? | - | Toast 文案样式。 | 否 |
 | toastId | String? | - | 指定实例 ID；不传时共用固定匿名 ID toast_anonymous，后一次展示替换前一次。 | 否 |

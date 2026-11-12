@@ -6,6 +6,86 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 /// 覆盖：默认渲染、shape 形态、showText、visibilityOffset 显隐、onPressed 回调/禁用、
 /// 回顶动画防抖、ThemeData 子树注入、品牌主题、tooltip。
 void main() {
+  for (final replace in [false, true]) {
+    testWidgets(
+      'legacy callback changes binding after success: replace=$replace',
+      (tester) async {
+        final controller = ScrollController(initialScrollOffset: 500);
+        addTearDown(controller.dispose);
+        ScrollPosition? original;
+        ScrollPositionWithSingleContext? replacement;
+        final events = <String>[];
+        await tester.pumpWidget(
+          MaterialApp(
+            home: Scaffold(
+              body: Stack(
+                children: [
+                  ListView(
+                    controller: controller,
+                    children: const [SizedBox(height: 4000)],
+                  ),
+                  Positioned(
+                    right: 10,
+                    bottom: 10,
+                    child: TBackTop(
+                      controller: controller,
+                      visibilityOffset: 0,
+                      onPressed: () {
+                        events.add('pressed');
+                        original = controller.position;
+                        expect(original!.pixels, original!.minScrollExtent);
+                        controller.detach(original!);
+                        if (replace) {
+                          replacement = ScrollPositionWithSingleContext(
+                            physics: const ClampingScrollPhysics(),
+                            context: original!.context,
+                            initialPixels: 0,
+                          );
+                          replacement!.applyViewportDimension(
+                            original!.viewportDimension,
+                          );
+                          replacement!.applyContentDimensions(
+                            original!.minScrollExtent,
+                            original!.maxScrollExtent,
+                          );
+                          controller.attach(replacement!);
+                        }
+                      },
+                      onCompleted: () => events.add('completed'),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        );
+        try {
+          await tester.pump();
+          await tester.tap(find.byType(TBackTop));
+          expect(events, isEmpty);
+          await tester.pumpAndSettle();
+          if (replace) {
+            expect(controller.offset, 0);
+            expect(controller.position, same(replacement));
+          } else {
+            expect(controller.hasClients, isFalse);
+          }
+          expect(events, ['pressed']);
+          expect(tester.takeException(), isNull);
+        } finally {
+          if (replacement != null) {
+            controller.detach(replacement!);
+            replacement!.dispose();
+          }
+          if (original != null) {
+            controller.attach(original!);
+          }
+          await tester.pumpWidget(const SizedBox());
+        }
+      },
+    );
+  }
+
   testWidgets('默认图标22，独立于无匹配全局size，组件覆盖优先', (tester) async {
     Future<void> pump(TThemeData token, [TBackTopThemeData? component]) =>
         tester.pumpWidget(
@@ -75,6 +155,383 @@ void main() {
         ],
       ),
     );
+  }
+
+  group('1.0.1 completion compatibility', () {
+    testWidgets('legacy callback without controller stays immediate', (
+      tester,
+    ) async {
+      final events = <String>[];
+      await tester.pumpWidget(
+        wrapWithTheme(
+          TBackTop(
+            onPressed: () => events.add('pressed'),
+            onCompleted: () => events.add('completed'),
+          ),
+        ),
+      );
+      await tester.tap(find.byType(TBackTop));
+      expect(events, ['pressed']);
+    });
+
+    testWidgets('completion alone does not enable the button', (tester) async {
+      var completed = 0;
+      await tester.pumpWidget(
+        wrapWithTheme(TBackTop(onCompleted: () => completed++)),
+      );
+      expect(
+        tester
+            .widget<GestureDetector>(
+              find.descendant(
+                of: find.byType(TBackTop),
+                matching: find.byType(GestureDetector),
+              ),
+            )
+            .onTap,
+        isNull,
+      );
+      await tester.tap(find.byType(TBackTop));
+      expect(completed, 0);
+    });
+
+    for (final scenario in [
+      'success',
+      'interrupted',
+      'replaced',
+      'detached',
+      'disposed',
+      'already top',
+    ]) {
+      testWidgets('completion guards: $scenario', (tester) async {
+        final controller = ScrollController(initialScrollOffset: 500);
+        final other = ScrollController();
+        addTearDown(controller.dispose);
+        addTearDown(other.dispose);
+        final events = <String>[];
+        var current = controller;
+        var showBackTop = true;
+        var showList = true;
+        late StateSetter rebuild;
+        await tester.pumpWidget(
+          MaterialApp(
+            home: StatefulBuilder(
+              builder: (context, setState) {
+                rebuild = setState;
+                return Scaffold(
+                  body: Stack(
+                    children: [
+                      if (showList)
+                        ListView(
+                          controller: current,
+                          children: const [SizedBox(height: 4000)],
+                        ),
+                      if (showBackTop)
+                        Positioned(
+                          right: 16,
+                          bottom: 32,
+                          child: TBackTop(
+                            controller: current,
+                            visibilityOffset: 0,
+                            onPressed: () {
+                              events.add('pressed');
+                            },
+                            onCompleted: () => events.add('completed'),
+                          ),
+                        ),
+                    ],
+                  ),
+                );
+              },
+            ),
+          ),
+        );
+        await tester.pump();
+        if (scenario == 'already top') {
+          controller.jumpTo(0);
+          await tester.pump();
+        }
+        await tester.tap(find.byType(TBackTop));
+        expect(
+          events,
+          scenario == 'already top' ? ['pressed', 'completed'] : isEmpty,
+        );
+        await tester.pump();
+        await tester.pump(const Duration(milliseconds: 100));
+        // Repeated activation is ignored while the operation is in progress.
+        if (scenario != 'already top') {
+          await tester.tap(find.byType(TBackTop));
+        }
+        if (scenario == 'interrupted') {
+          controller.jumpTo(300);
+        } else if (scenario == 'replaced') {
+          rebuild(() => current = other);
+          await tester.pump();
+        } else if (scenario == 'detached') {
+          rebuild(() => showList = false);
+          await tester.pump();
+        } else if (scenario == 'disposed') {
+          rebuild(() => showBackTop = false);
+          await tester.pump();
+        }
+        await tester.pumpAndSettle();
+        expect(
+          events,
+          scenario == 'disposed'
+              ? isEmpty
+              : scenario == 'success' || scenario == 'already top'
+              ? ['pressed', 'completed']
+              : ['pressed'],
+        );
+        expect(tester.takeException(), isNull);
+        await tester.pumpWidget(const SizedBox.shrink());
+      });
+    }
+  });
+
+  for (final interrupted in [false, true]) {
+    testWidgets(
+      'success is determined before legacy callback effects: interrupted=$interrupted',
+      (tester) async {
+        final controller = ScrollController(initialScrollOffset: 500);
+        addTearDown(controller.dispose);
+        var pressed = 0;
+        var completed = 0;
+        await tester.pumpWidget(
+          MaterialApp(
+            home: Scaffold(
+              body: Stack(
+                children: [
+                  ListView(
+                    controller: controller,
+                    children: const [SizedBox(height: 4000)],
+                  ),
+                  Positioned(
+                    right: 10,
+                    bottom: 10,
+                    child: TBackTop(
+                      controller: controller,
+                      visibilityOffset: 0,
+                      onPressed: () {
+                        pressed++;
+                        controller.jumpTo(interrupted ? 0 : 200);
+                      },
+                      onCompleted: () => completed++,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        );
+        await tester.pump();
+        await tester.tap(find.byType(TBackTop));
+        expect(pressed, 0);
+        await tester.pump();
+        await tester.pump(const Duration(milliseconds: 100));
+        if (interrupted) {
+          controller.jumpTo(300);
+        }
+        await tester.pumpAndSettle();
+        expect(pressed, 1);
+        expect(completed, interrupted ? 0 : 1);
+        await tester.pumpWidget(const SizedBox());
+      },
+    );
+  }
+
+  testWidgets(
+    'cross-frame restore of the original position permits completion',
+    (tester) async {
+      final first = ScrollController(initialScrollOffset: 500);
+      final second = ScrollController();
+      addTearDown(first.dispose);
+      addTearDown(second.dispose);
+      var listController = first;
+      var completed = 0;
+      late StateSetter update;
+      await tester.pumpWidget(
+        MaterialApp(
+          home: StatefulBuilder(
+            builder: (context, setState) {
+              update = setState;
+              return Scaffold(
+                body: Stack(
+                  children: [
+                    ListView(
+                      controller: listController,
+                      children: const [SizedBox(height: 4000)],
+                    ),
+                    Positioned(
+                      right: 10,
+                      bottom: 10,
+                      child: TBackTop(
+                        controller: first,
+                        visibilityOffset: 0,
+                        onCompleted: () => completed++,
+                      ),
+                    ),
+                  ],
+                ),
+              );
+            },
+          ),
+        ),
+      );
+      await tester.pump();
+      final originalPosition = first.position;
+      await tester.tap(find.byType(TBackTop));
+      await tester.pump();
+      await tester.pump(const Duration(milliseconds: 100));
+      update(() => listController = second);
+      await tester.pump();
+      expect(first.hasClients, isFalse);
+      expect(second.position, same(originalPosition));
+      await tester.pump(const Duration(milliseconds: 100));
+      update(() => listController = first);
+      await tester.pump();
+      expect(first.position, same(originalPosition));
+      await tester.pumpAndSettle();
+      expect(first.offset, 0);
+      expect(completed, 1);
+      await tester.pumpWidget(const SizedBox());
+    },
+  );
+
+  testWidgets('same-frame detach and reattach permits one ordered completion', (
+    tester,
+  ) async {
+    final controller = ScrollController(initialScrollOffset: 500);
+    addTearDown(controller.dispose);
+    final events = <String>[];
+    await tester.pumpWidget(
+      MaterialApp(
+        home: Scaffold(
+          body: Stack(
+            children: [
+              ListView(
+                controller: controller,
+                children: const [SizedBox(height: 4000)],
+              ),
+              Positioned(
+                right: 10,
+                bottom: 10,
+                child: TBackTop(
+                  controller: controller,
+                  visibilityOffset: 0,
+                  onPressed: () => events.add('pressed'),
+                  onCompleted: () => events.add('completed'),
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+    await tester.pump();
+    await tester.tap(find.byType(TBackTop));
+    expect(events, isEmpty);
+    await tester.pump();
+    await tester.pump(const Duration(milliseconds: 100));
+    final position = controller.position;
+    controller.detach(position);
+    expect(controller.hasClients, isFalse);
+    controller.attach(position);
+    expect(controller.position, same(position));
+    expect(events, isEmpty);
+    await tester.pumpAndSettle();
+    expect(controller.offset, 0);
+    expect(events, ['pressed', 'completed']);
+    await tester.pumpWidget(const SizedBox());
+  });
+
+  for (final scenario in [
+    'BackTop controller restored',
+    'unbound at completion',
+    'position replaced',
+  ]) {
+    testWidgets('completion-time identity: $scenario', (tester) async {
+      final first = ScrollController();
+      final second = ScrollController();
+      addTearDown(first.dispose);
+      addTearDown(second.dispose);
+      var listController = first;
+      var backtopController = first;
+      var listVersion = 0;
+      final events = <String>[];
+      late StateSetter update;
+      await tester.pumpWidget(
+        MaterialApp(
+          home: StatefulBuilder(
+            builder: (context, setState) {
+              update = setState;
+              return Scaffold(
+                body: Stack(
+                  children: [
+                    ListView(
+                      key: ValueKey(listVersion),
+                      controller: listController,
+                      children: const [SizedBox(height: 4000)],
+                    ),
+                    Positioned(
+                      right: 10,
+                      bottom: 10,
+                      child: TBackTop(
+                        controller: backtopController,
+                        visibilityOffset: 0,
+                        onPressed: () => events.add('pressed'),
+                        onCompleted: () => events.add('completed'),
+                      ),
+                    ),
+                  ],
+                ),
+              );
+            },
+          ),
+        ),
+      );
+      await tester.pump();
+      first.jumpTo(500);
+      await tester.pump();
+      final original = first.position;
+      await tester.tap(find.byType(TBackTop));
+      expect(events, isEmpty);
+      await tester.pump();
+      await tester.pump(const Duration(milliseconds: 100));
+      if (scenario == 'BackTop controller restored') {
+        update(() => backtopController = second);
+        await tester.pump();
+        await tester.pump(const Duration(milliseconds: 100));
+        update(() => backtopController = first);
+        await tester.pump();
+        expect(first.position, same(original));
+        expect(events, isEmpty);
+      } else if (scenario == 'unbound at completion') {
+        update(() => listController = second);
+        await tester.pump();
+        expect(first.hasClients, isFalse);
+        expect(second.position, same(original));
+        expect(events, isEmpty);
+      } else {
+        update(() => listVersion++);
+        await tester.pump();
+        expect(first.position, isNot(same(original)));
+        expect(first.positions.contains(original), isFalse);
+        expect(first.offset, 0);
+      }
+      await tester.pumpAndSettle();
+      expect(
+        events,
+        scenario == 'BackTop controller restored'
+            ? ['pressed', 'completed']
+            : ['pressed'],
+      );
+      if (scenario == 'unbound at completion') {
+        expect(second.offset, 0);
+        expect(first.hasClients, isFalse);
+      }
+      expect(tester.takeException(), isNull);
+      await tester.pumpWidget(const SizedBox());
+    });
   }
 
   group('TBackTop 基础渲染', () {

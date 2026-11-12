@@ -1,0 +1,74 @@
+# Cascader 设计说明
+
+## 背景与目标
+
+以下保留设计形成时的问题与依据；已修复的问题不表示当前代码仍有同一缺陷。
+
+级联值、选项结构和展示路径需要在公开 Demo 与真实受控行为之间一致。
+
+Flutter Cascader 的公开 Demo 原先以常规能力分组，未覆盖小程序公开页面的类型与进阶实例，也没有明确说明 typed option、搜索与弹层的 Flutter 所有权边界。首轮对齐后又发现所有场景都被 Demo 改成确认式提交、次级标题以路径长度猜测内部层级、打开状态缺少 Golden，组件还会继承 Material 控件的隐式布局与图标默认值。
+
+## 范围与非目标
+
+### 目标
+
+- 按 Figma 移动端展示 `28591:36801` 的顺序覆盖垂直、垂直带字母定位、水平、水平带字母定位、带标题和无标题六个入口。
+- 以 Figma `24386:5246` 的 step/tab、1-4 层、subtitle 和 close-btn 变体作为唯一可见结构基线；小程序仅辅助确认组件 token，不决定 Flutter 公开 Demo 的增删。
+- 保持 `TCascader` 为严格受控的平铺层级面板；Popup、搜索输入、提交策略和原始数据映射由 Flutter Widget 组合完成。
+- 由组件内部活动层级选择次级标题，不公开第二套层级状态源。
+- 补齐 Demo 结构、交互、打开状态 light/dark Golden 与组件回归证据。
+
+### 不涉及
+
+- 不复制小程序的 `visible`、`title`、`closeBtn`、`defaultValue`、`keys`、`filterable` 等弹层或动态对象参数。
+- 不改变 `TCascaderVariant.tab` 的既有默认值，避免无必要的 breaking change；公开基础实例显式使用 step。
+- 不增加 `initialValue`、Controller 或公开 `activeLevel`。
+
+## 最终方案与行为契约
+
+- `value + onChanged` 构成严格受控路径；`onChanged == null` 是整体禁用入口。
+- 分支点击只发出候选路径；父级尚未回写或拒绝候选值时，面板不提前切换层级。
+- `variant` 唯一表达 step / tab 导航形态。
+- `subtitles` 是按内部活动层级读取的不可变内容配置，不让调用方控制活动层级。
+- 原始字段映射在创建 `TCascaderOption` 的边界完成。
+- 六个入口都以四级受控值展示，选中末级后提交并关闭；Popup 高度固定为设计稿 580dp。
+- `TCascaderOption.children` 按 Flutter Widget 不可变配置约定使用；数据变化时替换 option/list，不支持原地变更。
+- 选项列表由组件固定为零 padding，不继承宿主 `MediaQuery` 安全区；弹层边界由组合层负责。
+- 导航与选项支持 Flutter 焦点遍历，并通过 Enter / Space 激活；禁用项不进入激活路径。
+- step 高度 44、圆点 8、箭头 22、次级标题顶部间距 20 和左右间距 16
+  来源于小程序组件样式及设计矩阵；选项文案对应小程序 Radio 的
+  `@font-body-large`，step 与次级标题对应 `@font-body-medium`，颜色和分隔线
+  继续使用 TDesign 语义 Token。
+- 平铺面板高度继续使用 Flutter 既有默认值 360；小程序 `78vh` 属于弹层内容高度，
+  由 Flutter 的 Popup 组合层根据视口决定，不下沉为 TCascader 默认值。
+- 主题优先级为组件 Theme > 显式局部/Material Theme > TDesign Token；
+  Material 自动注入的 `DefaultTextStyle` 不得被当成调用方显式覆盖。
+- TSearchBar 自身提供 TextField 所需的 Material 渲染上下文，使其无需 Demo 额外包装，
+  同时不向 Popup 的其他子组件注入 Material 默认视觉。
+- 触发 Cell 的地址值使用标准 `TCell.note` 槽位；标题与长 note 的宽度分配由
+  `TCell` 通用布局负责，Demo 不得改用 `trailing` 或局部文字样式规避截断。
+
+## 关键决策与取舍
+
+| 决策 | 理由与取舍 |
+| --- | --- |
+| 采用的方案 | 数据路径与业务选中值分开表达，父级传入值为准，扩展使用现有 Widget 能力。 |
+| 保留的边界与代价 | 默认箭头、间距和状态色由组件负责，不在 Demo 中补画。 |
+
+## 兼容性与迁移
+
+- 分支点击从“先在组件内部推进层级，再通知调用方”调整为“调用方回写 `value` 后推进”，
+  修正了受控值被拒绝时 UI 仍变化的问题。依赖旧即时推进行为的调用方需要在
+  `onChanged` 中接收并回写候选路径，因此属于默认交互行为的 breaking change。
+- `variant` 仍默认 `TCascaderVariant.tab`，平铺面板仍默认高 360，未改变既有默认值。
+
+## 验收标准
+
+- 页面仅出现「组件类型 / 组件样式」两组六个触发实例，顺序、文案和回显值与 Figma `28591:36801` 一致。
+- step、tab、四级初始路径、活动层级次级标题、有/无标题和末级自动完成均有功能断言。
+- “查看代码”展示真实 `TPopup + TCascader` 状态组合，不引用未展示的私有核心方法。
+- 组件测试、Demo 功能测试、打开与关闭状态 light/dark Golden、覆盖率和双版本 analyze 通过。
+
+验收标准描述应满足的行为，不表示已执行或通过；执行范围与证据见 [acceptance.md](./acceptance.md)，剩余事项只在 [tasks.md](./tasks.md) 维护。
+
+跨组件配置职责见 [Theme 契约](../../engineering/048-Theme-configuration-contracts/spec.md)，视觉方法见 [Golden 规范](../../engineering/044-Testing-golden-regression/spec.md)。

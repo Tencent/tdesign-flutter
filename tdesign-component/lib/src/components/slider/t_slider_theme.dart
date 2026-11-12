@@ -49,7 +49,7 @@ class TSliderThemeData extends ThemeExtension<TSliderThemeData> {
   final Color? valueIndicatorTextColor;
 
   /// 普通轨道粗细；胶囊形态仍使用其内置规格。
-  /// null 时为 4 逻辑像素。
+  /// null 时为 4 逻辑像素；非有限或负值按 0 处理；实际厚度不超过可用横轴空间。
   final double? trackHeight;
 
   /// 滑块外层装饰。

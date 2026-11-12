@@ -1,0 +1,222 @@
+{
+  "base": "071efaba0111d868efe0b6a7ce55f6f784069a62",
+  "branch": "rss1102/fix/controller-binding-1.0.1",
+  "code_test_api_files": [
+    "tdesign-component/lib/src/components/dropdown_menu/t_dropdown_menu.dart",
+    "tdesign-component/lib/src/components/form/t_form.dart",
+    "tdesign-component/lib/src/components/refresh/t_pull_down_refresh.dart",
+    "tdesign-component/lib/src/components/swipe_cell/t_swipe_cell.dart",
+    "tdesign-component/lib/src/components/swiper/t_swiper.dart",
+    "tdesign-component/test/components/dropdown_menu/t_dropdown_menu_test.dart",
+    "tdesign-component/test/components/form/t_form_test.dart",
+    "tdesign-component/test/components/refresh/t_refresh_test.dart",
+    "tdesign-component/test/components/swipe_cell/t_swipe_cell_test.dart",
+    "tdesign-component/test/components/swiper/t_swiper_test.dart"
+  ],
+  "code_test_api_path_nul_bytes_sha256": "cbbf663ebc674673faa77aafc8868e5066aecdadee381535284a5940a04454dd",
+  "code_test_api_binary_diff_sha256": "ea96731c464a99f712e3c8935fc6af1fcdf7b04eae8b4f1277e1b31df1ac4b11",
+  "low_high_inputs_identical": true,
+  "verification": {
+    "low": {
+      "sdk": "Flutter 3.32.0 • channel stable • https://github.com/flutter/flutter.git\nFramework • revision be698c48a6 (1 year, 5 months ago) • 2025-05-19 12:59:14 -0700\nEngine • revision 1881800949 (1 year, 5 months ago) • 2025-05-19 10:54:07 -0700\nTools • Dart 3.8.0 • DevTools 2.45.1",
+      "scope": {
+        "components": [
+          "dropdown_menu",
+          "form",
+          "refresh",
+          "swipe_cell",
+          "swiper"
+        ],
+        "component_tests": [
+          "test/components/dropdown_menu/t_dropdown_item_test.dart",
+          "test/components/dropdown_menu/t_dropdown_menu_test.dart",
+          "test/components/form/t_form_test.dart",
+          "test/components/refresh/t_refresh_test.dart",
+          "test/components/swipe_cell/t_swipe_cell_auto_extent_test.dart",
+          "test/components/swipe_cell/t_swipe_cell_inherited_test.dart",
+          "test/components/swipe_cell/t_swipe_cell_test.dart",
+          "test/components/swiper/t_swiper_test.dart"
+        ],
+        "example_tests": [
+          "test/dropdown_menu/dropdown_menu_page_test.dart",
+          "test/form/form_demo_test.dart",
+          "test/refresh/pull_down_refresh_demo_test.dart",
+          "test/refresh/pull_down_refresh_page_test.dart",
+          "test/swipe_cell/swipe_cell_demo_test.dart",
+          "test/swiper/swiper_page_test.dart"
+        ]
+      },
+      "component_tests_passed": 286,
+      "example_tests_passed": 37,
+      "runner_tests_passed": 30,
+      "analyze": "zero diagnostics",
+      "api_documents_checked": 57,
+      "snippets_check": "passed",
+      "coverage": {
+        "dropdown_menu": {
+          "hit": 1014,
+          "found": 1022,
+          "percent": 99.22
+        },
+        "form": {
+          "hit": 384,
+          "found": 389,
+          "percent": 98.71
+        },
+        "refresh": {
+          "hit": 215,
+          "found": 224,
+          "percent": 95.98
+        },
+        "swipe_cell": {
+          "hit": 304,
+          "found": 315,
+          "percent": 96.51
+        },
+        "swiper": {
+          "hit": 534,
+          "found": 550,
+          "percent": 97.09
+        }
+      },
+      "dependency_lock_sha256": {
+        "tdesign-component/pubspec.lock": "7deb49a80a8288c84280257591090c14c5fa1db08f8aabad6233b51a8a6e4d92",
+        "tdesign-component/example/pubspec.lock": "696bf039762651eb175109f70e6cd4993e8cd40388b9ddc330005d1482a4e1c6"
+      },
+      "log_sha256": {
+        "analyze.log": "2050b92e3f59ed0d5b727a1b37efe0180748a03fb6dc28ab59f65278627d8f15",
+        "api-check.log": "bc2ba5383f2d4a9225fc49aa5d53c89851b54ad3f643133239668bd6504f701c",
+        "api-generate.log": "04e7ca090e13eacd8501e6d236780ffb5a2e3dcf220a61398d8c81e21d3d2519",
+        "components.log": "f0040dd37d1c6f45d42920d10f0aca1c02351b5066749d6760f5138149e344e5",
+        "coverage-dropdown_menu.log": "4cd9b92434f12e52526e69c47221deb8b2de9dfe1424878d449c039bbd2eda33",
+        "coverage-form.log": "1aab15da88f2dac121c6899180aaaf7baa1e36d16fc70c098bea31b6f6cda46e",
+        "coverage-refresh.log": "8fc67904f4deb8a4dd185e6421b5b1cbe14914a399313a285f6bb709e6343eb9",
+        "coverage-swipe_cell.log": "21aecef0a49f6d6cf1048d79951fe2dcaace76a08b4220622a51b85b0ee3cc0f",
+        "coverage-swiper.log": "3af2c7b3ceb9a0bfc455b965e84ce02eca689f58b7378d44e2b38b4335d848b4",
+        "examples.log": "051045c1153bf53ca6c86d20f721d7699b05cee543ec88acbef3b06c144086e8",
+        "pub-get-component.log": "0463a12f4fdbd1c3d4a2683c816c25e95c22d77ca8b3a6d54af873e3af3fda56",
+        "pub-get-example.log": "77894d05f73401bca14c0dc3be669cfd43d7ae8059b597f57efbacb6fb21e711",
+        "runners.log": "1561e841aa77f5236e34b1b7f690a9a03376b263b66a510ccf21a8c651e3b673",
+        "sdk.log": "a1b002ef5662a6de7a8910e0c0fee594d1ebc7e335014dda114fe1658ea12a12",
+        "snippets.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    "high": {
+      "sdk": "Flutter 3.47.7 • channel stable • https://github.com/flutter/flutter.git\nFramework • revision abaf9c5237 (2 weeks ago) • 2026-10-08 09:51:21 -0700\nEngine • hash d8a2d6c768c334d53e16277f837970ffa1e2de81 (revision deb287481e) (15 days ago) • 2026-10-07 17:09:12.000Z\nTools • Dart 3.13.5 • DevTools 2.60.0",
+      "scope": {
+        "components": [
+          "dropdown_menu",
+          "form",
+          "refresh",
+          "swipe_cell",
+          "swiper"
+        ],
+        "component_tests": [
+          "test/components/dropdown_menu/t_dropdown_item_test.dart",
+          "test/components/dropdown_menu/t_dropdown_menu_test.dart",
+          "test/components/form/t_form_test.dart",
+          "test/components/refresh/t_refresh_test.dart",
+          "test/components/swipe_cell/t_swipe_cell_auto_extent_test.dart",
+          "test/components/swipe_cell/t_swipe_cell_inherited_test.dart",
+          "test/components/swipe_cell/t_swipe_cell_test.dart",
+          "test/components/swiper/t_swiper_test.dart"
+        ],
+        "example_tests": [
+          "test/dropdown_menu/dropdown_menu_page_test.dart",
+          "test/form/form_demo_test.dart",
+          "test/refresh/pull_down_refresh_demo_test.dart",
+          "test/refresh/pull_down_refresh_page_test.dart",
+          "test/swipe_cell/swipe_cell_demo_test.dart",
+          "test/swiper/swiper_page_test.dart"
+        ]
+      },
+      "component_tests_passed": 286,
+      "example_tests_passed": 37,
+      "runner_tests_passed": 30,
+      "analyze": "zero diagnostics",
+      "api_documents_checked": 57,
+      "snippets_check": "passed",
+      "coverage": {
+        "dropdown_menu": {
+          "hit": 1014,
+          "found": 1022,
+          "percent": 99.22
+        },
+        "form": {
+          "hit": 384,
+          "found": 389,
+          "percent": 98.71
+        },
+        "refresh": {
+          "hit": 215,
+          "found": 224,
+          "percent": 95.98
+        },
+        "swipe_cell": {
+          "hit": 304,
+          "found": 315,
+          "percent": 96.51
+        },
+        "swiper": {
+          "hit": 534,
+          "found": 550,
+          "percent": 97.09
+        }
+      },
+      "dependency_lock_sha256": {
+        "tdesign-component/pubspec.lock": "f4fcd8d10e1ba7d89670e87509f87a6c0d359ceffd83dff9bf8ac58cc8ad59c2",
+        "tdesign-component/example/pubspec.lock": "2910a5cf161a20433ac683dbeaa348a85edaba7e6697cc9aba351519a16615a3"
+      },
+      "log_sha256": {
+        "analyze.log": "1eddadeffbdbfcb9068bbba271e5b2c08b1804bf8001ab6cd7110a7050d56ec7",
+        "api-check.log": "408798b7c07c0897aa3bc6944f0e8e72bf2599a999d4407226ba72c0285a5973",
+        "api-generate.log": "ba3b81fbfa6e0b54ab26bc3b1320f74b8fc2c79248fcf8102f62b5c96d8c294c",
+        "components.log": "37fec69c2ae1e44cb3f89dbf275f2e277cf5c4d872e2d703816f31e78c969ea3",
+        "coverage-dropdown_menu.log": "4cd9b92434f12e52526e69c47221deb8b2de9dfe1424878d449c039bbd2eda33",
+        "coverage-form.log": "1aab15da88f2dac121c6899180aaaf7baa1e36d16fc70c098bea31b6f6cda46e",
+        "coverage-refresh.log": "8fc67904f4deb8a4dd185e6421b5b1cbe14914a399313a285f6bb709e6343eb9",
+        "coverage-swipe_cell.log": "21aecef0a49f6d6cf1048d79951fe2dcaace76a08b4220622a51b85b0ee3cc0f",
+        "coverage-swiper.log": "3af2c7b3ceb9a0bfc455b965e84ce02eca689f58b7378d44e2b38b4335d848b4",
+        "examples.log": "a47a97267cd65d50d640865de10471bfcf50512cfe75a7c2588c1ee38da2f352",
+        "pub-get-component.log": "5e3ba87de4b282d4f1dd3d66dfcb10442f72bf2c07015bf36f60e4bad8d21bb9",
+        "pub-get-example.log": "fac5535739136823d4bc8acf20263a212d189bcf2b14b634c4e65d1663b50572",
+        "runners.log": "e83a296f31917e76cd374f0668a67f8b7be256448bb96552ce1ef3d7eeed20ce",
+        "sdk.log": "7da1fa9f0d23102495171cfa222c8d31b4a60776c3c003858d35b8f3befe281d",
+        "snippets.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    }
+  },
+  "api_contract_review": [
+    {
+      "file": "tdesign-component/lib/src/components/refresh/t_pull_down_refresh.dart",
+      "legacy_public_signatures_and_defaults": "unchanged",
+      "allowed_addition": null
+    },
+    {
+      "file": "tdesign-component/lib/src/components/swipe_cell/t_swipe_cell.dart",
+      "legacy_public_signatures_and_defaults": "unchanged",
+      "allowed_addition": null
+    },
+    {
+      "file": "tdesign-component/lib/src/components/form/t_form.dart",
+      "legacy_public_signatures_and_defaults": "unchanged",
+      "allowed_addition": null
+    },
+    {
+      "file": "tdesign-component/lib/src/components/swiper/t_swiper.dart",
+      "legacy_public_signatures_and_defaults": "unchanged",
+      "allowed_addition": null
+    },
+    {
+      "file": "tdesign-component/lib/src/components/dropdown_menu/t_dropdown_menu.dart",
+      "legacy_public_signatures_and_defaults": "unchanged",
+      "allowed_addition": null
+    }
+  ],
+  "review": {
+    "result": "passed",
+    "blocking_findings": [],
+    "scope": "核对 Form/SwipeCell 先校验新绑定再释放旧绑定，替换失败及重复无效替换后保留实际绑定，卸载按实际对象清理。Swiper 保留 StateError 和单目标限制，Refresh/Dropdown 保留后绑定覆盖规则，旧 owner 不清理新 owner。未新增绑定限制或改变异常类型；既有 bind/unbind 签名保留。"
+  },
+  "visual": "Nonvisual logic/callback/lifecycle changes. No Golden update or device validation. No remote CI."
+}

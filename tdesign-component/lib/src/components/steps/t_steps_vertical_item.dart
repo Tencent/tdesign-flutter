@@ -8,6 +8,7 @@ import '../../theme/t_fonts.dart';
 import '../../theme/t_internal_material.dart';
 import '../../theme/t_theme.dart';
 import '../text/t_text_resolve.dart';
+import '../text/t_text_style_scope.dart';
 import '../text/t_text_styled.dart';
 import 't_steps.dart';
 import 't_steps_mode.dart';
@@ -198,6 +199,17 @@ class TStepsVerticalItem extends StatelessWidget {
       iconWidgetDecoration = simpleDecoration;
     }
 
+    final titleStyle = TTextResolve.resolve(
+      context: context,
+      defaults: TextStyle(
+        fontWeight: (activeIndex == index && mode != TStepsMode.display)
+            ? FontWeight.w600
+            : FontWeight.w400,
+        color: stepsTitleColor,
+        fontSize: theme.fontBodyMedium?.size ?? 14,
+        height: 1.2,
+      ),
+    );
     final content = Container(
       margin: const EdgeInsets.only(bottom: 8),
       child: IntrinsicHeight(
@@ -247,30 +259,19 @@ class TStepsVerticalItem extends StatelessWidget {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Expanded(
-                            child:
-                                data.customTitle ??
-                                (data.title != null && data.title!.isNotEmpty
-                                    ? TTextStyled(
-                                        data.title!,
-                                        style: TTextResolve.resolve(
-                                          context: context,
-                                          defaults: TextStyle(
-                                            fontWeight:
-                                                (activeIndex == index &&
-                                                    mode != TStepsMode.display)
-                                                ? FontWeight.w600
-                                                : FontWeight.w400,
-                                            color: stepsTitleColor,
-                                            fontSize:
-                                                theme.fontBodyMedium?.size ??
-                                                14,
-                                            height: 1.2,
-                                          ),
-                                        ),
-                                        softWrap: true,
-                                        overflow: TextOverflow.visible,
-                                      )
-                                    : const SizedBox.shrink()),
+                            child: data.customTitle != null
+                                ? TTextStyleScope(
+                                    style: titleStyle,
+                                    child: data.customTitle!,
+                                  )
+                                : (data.title != null && data.title!.isNotEmpty
+                                      ? TTextStyled(
+                                          data.title!,
+                                          style: titleStyle,
+                                          softWrap: true,
+                                          overflow: TextOverflow.visible,
+                                        )
+                                      : const SizedBox.shrink()),
                           ),
                           if (mode == TStepsMode.selectable)
                             TInternalIcon(
@@ -315,24 +316,22 @@ class TStepsVerticalItem extends StatelessWidget {
   }
 
   Widget _buildContentWidget(BuildContext context) {
+    final contentStyle = TTextResolve.resolve(
+      context: context,
+      defaults: TextStyle(
+        fontWeight: FontWeight.w400,
+        color: context.tTheme.textColorPlaceholder,
+        fontSize: context.tTheme.fontBodySmall?.size ?? 12,
+      ),
+    );
     return Column(
       mainAxisAlignment: MainAxisAlignment.start,
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         if (data.customContent != null)
-          data.customContent!
+          TTextStyleScope(style: contentStyle, child: data.customContent!)
         else if (data.content != null && data.content!.isNotEmpty)
-          TTextStyled(
-            data.content!,
-            style: TTextResolve.resolve(
-              context: context,
-              defaults: TextStyle(
-                fontWeight: FontWeight.w400,
-                color: context.tTheme.textColorPlaceholder,
-                fontSize: context.tTheme.fontBodySmall?.size ?? 12,
-              ),
-            ),
-          ),
+          TTextStyled(data.content!, style: contentStyle),
       ],
     );
   }

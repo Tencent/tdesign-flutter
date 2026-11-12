@@ -11,6 +11,13 @@ import 't_text_resolve.dart';
 import 't_text_theme_data.dart';
 
 class TText extends StatelessWidget {
+  /// TDesign 文字：普通位置用正文默认值，组件文字槽用组件默认值，显式样式优先。
+  ///
+  /// 未指定字段从最近的 TTextThemeData 获取，仍未配置时回退 TD 正文 Token。
+  /// Button.child、NavBar.title 等已适配文字槽提供各自的默认字体与颜色；
+  /// 实例 [style]、[font] 继续优先，内容内部更近的 TD 文字主题也可局部定制。
+  /// 外层 DefaultTextStyle.style 或 Material TextTheme 不自动控制字体和颜色；
+  /// MediaQuery 缩放、方向及已有段落环境行为保持。
   const TText(
     String this.data, {
     this.font,
@@ -31,7 +38,7 @@ class TText extends StatelessWidget {
     super.key,
   }) : textSpan = null;
 
-  /// 创建 TDesign 富文本。
+  /// 创建 TDesign 富文本，默认样式与 [TText] 构造方法遵循相同规则。
   const TText.rich(
     InlineSpan this.textSpan, {
     this.font,
@@ -55,7 +62,9 @@ class TText extends StatelessWidget {
   /// TDesign 字体 Token 预设，包含字号、行高和字重；[style] 的显式字段优先。
   final Font? font;
 
-  /// 当前实例的完整文字样式；仅覆盖显式字段，优先于 [font] 和子树组件 Theme。
+  /// 当前实例的文字样式；通常仅覆盖显式字段，优先于 [font] 和最近 TD 文字默认值。
+  /// 未指定字段继续使用所在位置的默认；空样式不会切换继承规则。
+  /// 显式 TextStyle(inherit: false) 沿用 Flutter 的整体替换语义。
   final TextStyle? style;
 
   /// 文本内容。

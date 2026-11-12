@@ -15,7 +15,7 @@
 | autoplayInterval | Duration | const Duration(seconds: 3) | 自动播放每次页面稳定后重新等待的完整间隔，必须大于零。 | 否 |
 | children | List&lt;Widget&gt;? | - | 静态页面列表；与 `itemBuilder` 二选一，且不能为空。 | 否 |
 | clipBehavior | Clip | Clip.hardEdge | 页面内容超出轮播边界时的裁剪方式。 | 否 |
-| controller | TSwiperController? | - | 外部控制器；未提供时组件会创建并自行释放内部控制器。 | 否 |
+| controller | TSwiperController? | - | 外部控制器；未提供时组件会创建并自行释放内部控制器。 建议独立轮播分别使用 Controller；绑定规则见 `TSwiperController`。 | 否 |
 | dragStartBehavior | DragStartBehavior | DragStartBehavior.start | 拖拽手势开始时的坐标解析方式。 | 否 |
 | itemBuilder | IndexedWidgetBuilder? | - | 按需构建页面；使用时必须同时提供正数 `itemCount`。 | 否 |
 | itemCount | int? | - | `itemBuilder` 模式下的页面数量。 | 否 |
@@ -42,7 +42,8 @@
 
 使用 `jumpTo`、`animateTo`、`next` 和 `previous` 发起切换，通过 `index`
 或监听 Controller 获取当前业务索引。一个 Controller 同时只能附加一个
-`TSwiper`，由调用方创建的实例也由调用方负责释放。
+`TSwiper`，重复绑定其他实例会抛出 `StateError`。
+由调用方创建的实例也由调用方负责释放。
 
 #### 构造方法
 

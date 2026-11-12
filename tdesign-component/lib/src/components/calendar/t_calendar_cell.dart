@@ -4,6 +4,7 @@ import '../../theme/t_colors.dart';
 import '../../theme/t_theme.dart';
 import '../../util/iterable_ext.dart';
 import '../text/t_text_resolve.dart';
+import '../text/t_text_style_scope.dart';
 import '../text/t_text_styled.dart';
 import 't_calendar_style.dart';
 import 't_calendar_types.dart';
@@ -273,7 +274,7 @@ class _TCalendarCellState extends State<TCalendarCell> {
     if (subtitle == null) {
       return null;
     }
-    return DefaultTextStyle.merge(
+    return TTextStyleScope(
       style: TTextResolve.resolve(
         context: context,
         style: cellStyle.subtitleStyle,
