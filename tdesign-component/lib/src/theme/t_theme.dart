@@ -611,7 +611,19 @@ class TThemeData extends ThemeExtension<TThemeData> {
       extraThemeData: extraThemeData,
     );
     if (identical(light, this)) {
-      final pairedDark = dark?._copyTokens();
+      // 配对暗色主题应用同一份覆盖，否则 copyWith 之后 buildDark 读到的
+      // 仍是未覆盖的旧 Token，暗色下的 Token 覆盖会静默失效。
+      final pairedDark = dark?.copyWith(
+        colorMap: colorMap,
+        fontMap: fontMap,
+        fontMetricMap: fontMetricMap,
+        radiusMap: radiusMap,
+        fontFamilyMap: fontFamilyMap,
+        shadowMap: shadowMap,
+        insetShadowMap: insetShadowMap,
+        spacerMap: spacerMap,
+        sizeMap: sizeMap,
+      );
       result.dark = pairedDark;
       pairedDark?.light = result;
     } else {

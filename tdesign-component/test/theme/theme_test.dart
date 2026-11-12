@@ -133,10 +133,14 @@ void main() {
       expect(custom.light, same(custom));
       expect(custom.dark!.light, same(custom));
       expect(custom.dark, isNot(same(dark)));
-      expect(custom.dark!.size8, dark.size8);
+      // 配对主题同样应用本次覆盖：copyWith 的目标是复制后明暗都可用，
+      // 若暗色保留旧 Token，TThemeBuilder.dark 会静默读到未覆盖的值
+      // （badge / slider 的 radiusMap、sizeMap 覆盖即依赖这一点）。
+      expect(custom.dark!.size8, 28);
       expect(
+        // 暗色构建走配对后的暗色实例，同样带着本次 colorMap 覆盖。
         TThemeBuilder.dark(custom).colorScheme.surface,
-        dark.bgColorContainer,
+        Colors.white,
       );
       expect(token.dark, same(dark));
       expect(dark.light, same(token));
@@ -153,10 +157,11 @@ void main() {
         TThemeBuilder.dark(customDark.light).colorScheme.surface,
         Colors.black,
       );
-      expect(custom.dark!.size8, dark.size8);
+      expect(custom.dark!.size8, 28);
       final again = customDark.light.copyWith(sizeMap: {'size8': 31});
       expect(again.dark!.light, same(again));
-      expect(again.dark!.size8, 33);
+      // 链式 copyWith 同样把覆盖同步给配对主题，因此这里跟随 31 而非旧值 33。
+      expect(again.dark!.size8, 31);
     });
 
     test('暗色插值结果复制后仍可通过亮色实例访问', () {
