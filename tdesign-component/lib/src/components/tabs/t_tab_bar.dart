@@ -63,6 +63,7 @@ class TTabsBar extends StatelessWidget {
     return Container(
       // Custom content keeps the original bounded toolbar slot; only owned labels grow.
       height: tabs.any((tab) => tab.child != null) ? 48 : null,
+      width: double.infinity,
       constraints: const BoxConstraints(minHeight: 48),
       decoration: variant == TTabsBarVariant.card
           ? BoxDecoration(color: backgroundColor)
