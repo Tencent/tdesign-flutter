@@ -28,17 +28,26 @@ Flutter Cascader 的公开 Demo 原先以常规能力分组，未覆盖小程序
 
 - `value + onChanged` 构成严格受控路径；`onChanged == null` 是整体禁用入口。
 - 分支点击只发出候选路径；父级尚未回写或拒绝候选值时，面板不提前切换层级。
+- 多选由 `multiple + multipleValue + onMultipleChanged` 三参表达，与 Web 端
+  Cascader 的 multiple 语义对齐：开启后叶子选项渲染勾选指示并切换勾选，
+  不推进、不关闭；`value` 仍单独驱动层级导航，两条受控链互不干扰。
+  单选默认行为完全不变；`multiple == false` 时传入的 `multipleValue`
+  不产生任何视觉与交互影响。
 - `variant` 唯一表达 step / tab 导航形态。
 - `subtitles` 是按内部活动层级读取的不可变内容配置，不让调用方控制活动层级。
 - 原始字段映射在创建 `TCascaderOption` 的边界完成。
 - 六个入口都以四级受控值展示，选中末级后提交并关闭；Popup 高度固定为设计稿 580dp。
+  多选示例以三级数据展示叶子勾选与跨分支累积选择，Popup 组合方式与单选一致。
 - `TCascaderOption.children` 按 Flutter Widget 不可变配置约定使用；数据变化时替换 option/list，不支持原地变更。
 - 选项列表由组件固定为零 padding，不继承宿主 `MediaQuery` 安全区；弹层边界由组合层负责。
 - 导航与选项支持 Flutter 焦点遍历，并通过 Enter / Space 激活；禁用项不进入激活路径。
+  多选叶子在 `onMultipleChanged == null` 时保持可导航但不可勾选。
 - step 高度 44、圆点 8、箭头 22、次级标题顶部间距 20 和左右间距 16
   来源于小程序组件样式及设计矩阵；选项文案对应小程序 Radio 的
   `@font-body-large`，step 与次级标题对应 `@font-body-medium`，颜色和分隔线
-  继续使用 TDesign 语义 Token。
+  继续使用 TDesign 语义 Token。多选叶子勾选指示复用 Checkbox 语义图标
+  （选中 `check_circle_filled`、未选中 `circle`，禁用态使用 `brandColorDisabled`），
+  尺寸 22 与导航箭头一致。
 - 平铺面板高度继续使用 Flutter 既有默认值 360；小程序 `78vh` 属于弹层内容高度，
   由 Flutter 的 Popup 组合层根据视口决定，不下沉为 TCascader 默认值。
 - 主题优先级为组件 Theme > 显式局部/Material Theme > TDesign Token；

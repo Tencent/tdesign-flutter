@@ -337,6 +337,254 @@ void main() {
         disabledStyle.color,
       );
     });
+
+    testWidgets('multiple leaf toggle emits full path set (#612)', (
+      tester,
+    ) async {
+      var value = <Object?>['gd', 'sz'];
+      var multipleValue = <List<Object?>>[];
+      await tester.pumpWidget(
+        wrap(
+          StatefulBuilder(
+            builder: (context, setState) => TCascader(
+              options: options,
+              value: value,
+              onChanged: (next) => setState(() => value = next),
+              multiple: true,
+              multipleValue: multipleValue,
+              onMultipleChanged: (next) =>
+                  setState(() => multipleValue = next),
+            ),
+          ),
+        ),
+      );
+
+      // 叶子层：勾选 Nanshan。
+      await tester.tap(find.byKey(const ValueKey('cascader-ns')));
+      await tester.pump();
+      expect(multipleValue, [
+        ['gd', 'sz', 'ns'],
+      ]);
+
+      // 勾选另一叶子 Guangzhou：先退回第一层再进入。
+      value = const ['gd'];
+      await tester.pumpWidget(const SizedBox());
+      await tester.pumpWidget(
+        wrap(
+          StatefulBuilder(
+            builder: (context, setState) => TCascader(
+              options: options,
+              value: value,
+              onChanged: (next) => setState(() => value = next),
+              multiple: true,
+              multipleValue: multipleValue,
+              onMultipleChanged: (next) =>
+                  setState(() => multipleValue = next),
+            ),
+          ),
+        ),
+      );
+      await tester.tap(find.byKey(const ValueKey('cascader-gz')));
+      await tester.pump();
+      expect(multipleValue, [
+        ['gd', 'sz', 'ns'],
+        ['gd', 'gz'],
+      ]);
+      expect(value, const ['gd'], reason: '多选叶子点击不得推进单选路径');
+    });
+
+    testWidgets('multiple checked leaf can be unchecked by tapping again', (
+      tester,
+    ) async {
+      var value = <Object?>['gd', 'sz'];
+      var multipleValue = <List<Object?>>[
+        ['gd', 'sz', 'ns'],
+      ];
+      await tester.pumpWidget(
+        wrap(
+          StatefulBuilder(
+            builder: (context, setState) => TCascader(
+              options: options,
+              value: value,
+              onChanged: (next) => setState(() => value = next),
+              multiple: true,
+              multipleValue: multipleValue,
+              onMultipleChanged: (next) =>
+                  setState(() => multipleValue = next),
+            ),
+          ),
+        ),
+      );
+
+      final nsTile = find.byKey(const ValueKey('cascader-ns'));
+      expect(
+        find.descendant(
+          of: nsTile,
+          matching: find.byIcon(TIcons.check_circle_filled),
+        ),
+        findsOneWidget,
+      );
+
+      await tester.tap(nsTile);
+      await tester.pump();
+      expect(multipleValue, isEmpty);
+      expect(
+        find.descendant(
+          of: nsTile,
+          matching: find.byIcon(TIcons.check_circle_filled),
+        ),
+        findsNothing,
+      );
+      expect(
+        find.descendant(
+          of: nsTile,
+          matching: find.byIcon(TIcons.circle),
+        ),
+        findsOneWidget,
+      );
+    });
+
+    testWidgets('multiple without callback keeps navigation but no toggling', (
+      tester,
+    ) async {
+      var value = <Object?>['gd', 'sz'];
+      await tester.pumpWidget(
+        wrap(
+          StatefulBuilder(
+            builder: (context, setState) => TCascader(
+              options: options,
+              value: value,
+              onChanged: (next) => setState(() => value = next),
+              multiple: true,
+            ),
+          ),
+        ),
+      );
+
+      final nsTile = find.byKey(const ValueKey('cascader-ns'));
+      expect(
+        find.descendant(
+          of: nsTile,
+          matching: find.byIcon(TIcons.circle),
+        ),
+        findsOneWidget,
+      );
+      await tester.tap(nsTile);
+      await tester.pump();
+      // 无回调：点击被禁用，不发出任何变更。
+      expect(value, const ['gd', 'sz']);
+    });
+
+    testWidgets('multiple disabled leaf shows disabled indicator', (
+      tester,
+    ) async {
+      await tester.pumpWidget(
+        wrap(
+          TCascader(
+            options: options,
+            value: const ['gd', 'sz'],
+            onChanged: (_) {},
+            multiple: true,
+            multipleValue: const [],
+            onMultipleChanged: (_) {},
+          ),
+        ),
+      );
+
+      final ftTile = find.byKey(const ValueKey('cascader-ft'));
+      expect(
+        find.descendant(of: ftTile, matching: find.byIcon(TIcons.circle)),
+        findsOneWidget,
+        reason: '未勾选叶子显示空心圆',
+      );
+      final indicator = tester.widget<Icon>(
+        find.descendant(of: ftTile, matching: find.byType(Icon)),
+      );
+      expect(
+        indicator.color,
+        TThemeData.defaultData().brandColorDisabled,
+        reason: '禁用叶子图标使用禁用色而非默认描边色',
+      );
+      expect(
+        find.descendant(
+          of: ftTile,
+          matching: find.byIcon(TIcons.check_circle_filled),
+        ),
+        findsNothing,
+      );
+      // 正常叶子未勾选时使用默认描边色。
+      final nsIcon = tester.widget<Icon>(
+        find.descendant(
+          of: find.byKey(const ValueKey('cascader-ns')),
+          matching: find.byType(Icon),
+        ),
+      );
+      expect(nsIcon.color, TThemeData.defaultData().componentBorder);
+    });
+
+    testWidgets('single select behavior is unchanged when multiple is false', (
+      tester,
+    ) async {
+      var value = <Object?>[];
+      var multipleCalls = 0;
+      await tester.pumpWidget(
+        wrap(
+          StatefulBuilder(
+            builder: (context, setState) => TCascader(
+              options: options,
+              value: value,
+              onChanged: (next) => setState(() => value = next),
+              multipleValue: const [
+                ['gd', 'sz', 'ns'],
+              ],
+              onMultipleChanged: (_) => multipleCalls++,
+            ),
+          ),
+        ),
+      );
+
+      await tester.tap(find.byKey(const ValueKey('cascader-gd')));
+      await tester.pump();
+      expect(value, ['gd']);
+      expect(multipleCalls, 0, reason: '单选模式不得触发多选回调');
+      // 回写后组件推进到第二层，单选分支推进行为不变。
+      await tester.pumpWidget(const SizedBox());
+      await tester.pumpWidget(
+        wrap(
+          StatefulBuilder(
+            builder: (context, setState) => TCascader(
+              options: options,
+              value: value,
+              onChanged: (next) => setState(() => value = next),
+              multipleValue: const [
+                ['gd', 'sz', 'ns'],
+              ],
+              onMultipleChanged: (_) => multipleCalls++,
+            ),
+          ),
+        ),
+      );
+      expect(find.text('Shenzhen'), findsOneWidget);
+      expect(
+        find.descendant(
+          of: find.byKey(const ValueKey('cascader-sz')),
+          matching: find.byIcon(TIcons.chevron_right),
+        ),
+        findsOneWidget,
+        reason: '单选二级分支保持推进箭头',
+      );
+      // 已传 multipleValue 不产生任何视觉勾选：单选模式下多选状态被忽略。
+      expect(
+        find.byIcon(TIcons.check_circle_filled),
+        findsNothing,
+        reason: '单选模式不渲染多选指示器',
+      );
+      expect(
+        find.byIcon(TIcons.circle),
+        findsNothing,
+        reason: '单选模式不渲染多选空心圆',
+      );
+    });
   });
 
   group('TCascader variants and theme', () {
