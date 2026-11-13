@@ -45,9 +45,16 @@ void main() {
           : TThemeBuilder.light(
               TThemeData.defaultData(),
             ).mergeExtension(messageTheme),
-      home: MediaQuery(
-        data: MediaQueryData(size: mediaSize, padding: mediaPadding),
-        child: Scaffold(body: Stack(children: [child])),
+      home: Builder(
+        builder: (context) {
+          // 继承 MaterialApp 从 view 创建的 MediaQuery（含 accessibility 设置），
+          // 仅覆盖测试所需的 size 与 padding。
+          final media = MediaQuery.of(context);
+          return MediaQuery(
+            data: media.copyWith(size: mediaSize, padding: mediaPadding),
+            child: Scaffold(body: Stack(children: [child])),
+          );
+        },
       ),
     );
   }
@@ -336,11 +343,26 @@ void main() {
   });
 
   group('TMessage 跑马灯', () {
+    // 精确定位 marquee 的 AnimatedBuilder（位于 ClipRect 之下），
+    // 避免误匹配 Scaffold 内部 floatingActionButton 的 AnimatedBuilder。
+    Finder marqueeBuilder() {
+      return find.descendant(
+        of: find.byType(ClipRect),
+        matching: find.byWidgetPredicate(
+          (widget) =>
+              widget is AnimatedBuilder &&
+              widget.listenable is AnimationController,
+        ),
+      );
+    }
+
     testWidgets('单次、循环和延迟配置均可启动', (tester) async {
+      // 使用足够长的文本确保溢出，触发 marquee 滚动。
+      const longText = '这是一段非常长的跑马灯消息内容，用来确保文本宽度超过容器宽度从而触发滚动动画效果';
       await tester.pumpWidget(
         wrap(
           const TMessage(
-            content: '单次跑马灯内容',
+            content: longText,
             duration: null,
             marquee: TMessageMarquee(duration: Duration(milliseconds: 200)),
           ),
@@ -348,12 +370,12 @@ void main() {
       );
       await tester.pump();
       await tester.pump(const Duration(milliseconds: 50));
-      expect(find.byType(AnimatedBuilder), findsWidgets);
+      expect(marqueeBuilder(), findsWidgets);
 
       await tester.pumpWidget(
         wrap(
           const TMessage(
-            content: '循环跑马灯内容',
+            content: longText,
             duration: null,
             marquee: TMessageMarquee(
               duration: Duration(milliseconds: 200),
@@ -365,14 +387,134 @@ void main() {
       );
       await tester.pump(const Duration(milliseconds: 50));
       await tester.pump(const Duration(milliseconds: 50));
-      expect(
-        find.byWidgetPredicate(
-          (widget) =>
-              widget is AnimatedBuilder &&
-              widget.listenable is AnimationController,
+      expect(marqueeBuilder(), findsWidgets);
+      await tester.pumpWidget(wrap(const SizedBox.shrink()));
+    });
+
+    testWidgets('短文本不触发跑马灯动画', (tester) async {
+      // 使用超大屏幕宽度确保文本不溢出，不依赖 CI 字体渲染环境。
+      await tester.pumpWidget(
+        wrap(
+          const TMessage(
+            content: '短文本',
+            duration: null,
+            marquee: TMessageMarquee(duration: Duration(milliseconds: 200)),
+          ),
+          mediaSize: const Size(2000, 812),
         ),
-        findsWidgets,
       );
+      await tester.pump();
+      await tester.pump(const Duration(milliseconds: 50));
+      // 文本不溢出：不应渲染 marquee 的 AnimatedBuilder。
+      expect(marqueeBuilder(), findsNothing);
+      // 只观察消息文字，避免把进入动画误认为跑马灯。
+      final before = tester.getTopLeft(find.text('短文本')).dx;
+      await tester.pump(const Duration(milliseconds: 100));
+      expect(tester.getTopLeft(find.text('短文本')).dx, before);
+      await tester.pumpWidget(wrap(const SizedBox.shrink()));
+    });
+
+    testWidgets('系统禁用动画时不触发跑马灯', (tester) async {
+      const longText = '这是一段非常长的跑马灯消息内容，用来确保文本超过容器宽度从而触发滚动动画效果';
+      // 模拟系统"移除动画"设置，并在测试结束后清理。
+      tester.binding.platformDispatcher.accessibilityFeaturesTestValue =
+          const FakeAccessibilityFeatures(disableAnimations: true);
+      addTearDown(
+        tester.binding.platformDispatcher.clearAccessibilityFeaturesTestValue,
+      );
+      await tester.pumpWidget(
+        wrap(
+          const TMessage(
+            content: longText,
+            duration: null,
+            marquee: TMessageMarquee(duration: Duration(milliseconds: 200)),
+          ),
+        ),
+      );
+      await tester.pump();
+      await tester.pump(const Duration(milliseconds: 50));
+      expect(marqueeBuilder(), findsNothing);
+      final before = tester.getTopLeft(find.text(longText)).dx;
+      await tester.pump(const Duration(milliseconds: 100));
+      expect(tester.getTopLeft(find.text(longText)).dx, before);
+      expect(
+        tester.widget<Text>(find.text(longText)).overflow,
+        TextOverflow.ellipsis,
+      );
+      await tester.pumpWidget(wrap(const SizedBox.shrink()));
+    });
+
+    testWidgets('内容和实际宽度变化时重新判断并重新等待延迟', (tester) async {
+      const shortText = '短';
+      const longText = '这是需要滚动的长文字，用来验证内容和可用宽度变化后延迟与动画是否正确更新。';
+      const config = TMessageMarquee(
+        duration: Duration(milliseconds: 400),
+        delay: Duration(milliseconds: 100),
+        repeat: true,
+      );
+      Widget message(String text, Size size) => wrap(
+        TMessage(content: text, duration: null, marquee: config),
+        mediaSize: size,
+      );
+      await tester.pumpWidget(message(shortText, const Size(375, 812)));
+      await tester.pump(const Duration(milliseconds: 250));
+      await tester.pumpWidget(message(longText, const Size(375, 812)));
+      await tester.pump();
+      final start = tester.getTopLeft(find.text(longText)).dx;
+      await tester.pump(const Duration(milliseconds: 50));
+      expect(tester.getTopLeft(find.text(longText)).dx, start);
+      await tester.pump(const Duration(milliseconds: 100));
+      await tester.pump(const Duration(milliseconds: 100));
+      expect(tester.getTopLeft(find.text(longText)).dx, lessThan(start));
+      await tester.pumpWidget(message(longText, const Size(2000, 812)));
+      await tester.pump();
+      final wide = tester.getTopLeft(find.text(longText)).dx;
+      await tester.pump(const Duration(milliseconds: 200));
+      expect(tester.getTopLeft(find.text(longText)).dx, wide);
+      await tester.pumpWidget(message(longText, const Size(375, 812)));
+      await tester.pump();
+      final restart = tester.getTopLeft(find.text(longText)).dx;
+      await tester.pump(const Duration(milliseconds: 50));
+      expect(tester.getTopLeft(find.text(longText)).dx, restart);
+      await tester.pump(const Duration(milliseconds: 100));
+      await tester.pump(const Duration(milliseconds: 100));
+      expect(tester.getTopLeft(find.text(longText)).dx, lessThan(restart));
+      await tester.pumpWidget(wrap(const SizedBox.shrink()));
+    });
+
+    testWidgets('动画开关改变时停止、省略并重新启动', (tester) async {
+      const longText = '这是一条用于验证系统动画设置动态变化的长消息文本，确保文字超过可用宽度并开始滚动。';
+      const message = TMessage(
+        content: longText,
+        duration: null,
+        marquee: TMessageMarquee(
+          duration: Duration(milliseconds: 400),
+          repeat: true,
+        ),
+      );
+      await tester.pumpWidget(wrap(message));
+      await tester.pump();
+      await tester.pump(const Duration(milliseconds: 200));
+      tester.binding.platformDispatcher.accessibilityFeaturesTestValue =
+          const FakeAccessibilityFeatures(disableAnimations: true);
+      addTearDown(
+        tester.binding.platformDispatcher.clearAccessibilityFeaturesTestValue,
+      );
+      await tester.pumpWidget(wrap(message));
+      await tester.pump();
+      expect(
+        tester.widget<Text>(find.text(longText)).overflow,
+        TextOverflow.ellipsis,
+      );
+      final stopped = tester.getTopLeft(find.text(longText)).dx;
+      await tester.pump(const Duration(milliseconds: 200));
+      expect(tester.getTopLeft(find.text(longText)).dx, stopped);
+      tester.binding.platformDispatcher.clearAccessibilityFeaturesTestValue();
+      await tester.pumpWidget(wrap(message));
+      await tester.pump();
+      final resumed = tester.getTopLeft(find.text(longText)).dx;
+      await tester.pump(const Duration(milliseconds: 200));
+      expect(tester.getTopLeft(find.text(longText)).dx, lessThan(resumed));
       await tester.pumpWidget(wrap(const SizedBox.shrink()));
     });
 
@@ -449,7 +591,7 @@ void main() {
       await tester.pumpWidget(
         wrap(
           const TMessage(
-            content: '这是一条需要滚动的长消息',
+            content: '这是一条需要滚动的超长消息内容，用于确保文本宽度超过分配到的容器宽度从而触发跑马灯滚动动画效果验证正确宽度计算',
             duration: null,
             marquee: TMessageMarquee(),
             action: SizedBox(width: actionWidth, child: Text('按钮')),
@@ -464,6 +606,74 @@ void main() {
       // - action 间距与宽度 40 - 关闭按钮间距与宽度 30 = 211。
       expect(clipWidth, 211);
       expect(tester.takeException(), isNull);
+      await tester.pumpWidget(wrap(const SizedBox.shrink()));
+    });
+
+    testWidgets('非循环滚动期间文字不移出可视区域', (tester) async {
+      const longText = '这是一条用于验证非循环跑马灯在整个动画过程中都保持文字可见的足够长消息。';
+      await tester.pumpWidget(
+        wrap(
+          const TMessage(
+            content: longText,
+            duration: null,
+            marquee: TMessageMarquee(duration: Duration(milliseconds: 400)),
+          ),
+        ),
+      );
+      await tester.pump();
+      final text = find.text(longText);
+      final clip = find
+          .ancestor(of: text, matching: find.byType(ClipRect))
+          .first;
+      final start = tester.getTopLeft(text).dx;
+      for (var i = 0; i < 8; i++) {
+        await tester.pump(const Duration(milliseconds: 100));
+        expect(tester.getRect(text).overlaps(tester.getRect(clip)), isTrue);
+      }
+      await tester.pump(const Duration(milliseconds: 100));
+      expect(tester.getTopLeft(text).dx, closeTo(start, 0.01));
+      await tester.pumpWidget(wrap(const SizedBox.shrink()));
+    });
+
+    testWidgets('非循环跑马灯完成后回到起始位置', (tester) async {
+      const longText = '这是一段非常长的跑马灯消息内容，用来确保文本宽度超过容器宽度从而触发滚动动画效果并验证完成后回到原位';
+      await tester.pumpWidget(
+        wrap(
+          const TMessage(
+            content: longText,
+            duration: null,
+            marquee: TMessageMarquee(duration: Duration(milliseconds: 200)),
+          ),
+        ),
+      );
+      await tester.pump();
+      // 等待动画启动。
+      await tester.pump(const Duration(milliseconds: 50));
+      // 动画进行中：文本应有非零偏移。
+      await tester.pump(const Duration(milliseconds: 100));
+      final midTransforms = tester
+          .widgetList<Transform>(find.byType(Transform))
+          .where(
+            (t) =>
+                t.transform.getTranslation().x != 0 ||
+                t.transform.getTranslation().y != 0,
+          )
+          .toList();
+      expect(midTransforms, isNotEmpty, reason: '动画进行中应有非零偏移');
+
+      // 等待正向动画完成 + 反向回到原位。
+      await tester.pump(const Duration(milliseconds: 200));
+      await tester.pump(const Duration(milliseconds: 200));
+      final endTransforms = tester
+          .widgetList<Transform>(find.byType(Transform))
+          .where(
+            (t) =>
+                t.transform.getTranslation().x != 0 ||
+                t.transform.getTranslation().y != 0,
+          )
+          .toList();
+      // 非循环动画结束后应回到起始位置（无非零偏移的 Transform）。
+      expect(endTransforms, isEmpty, reason: '动画完成后应回到零偏移');
       await tester.pumpWidget(wrap(const SizedBox.shrink()));
     });
   });

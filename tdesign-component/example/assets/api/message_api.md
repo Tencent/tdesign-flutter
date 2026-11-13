@@ -16,7 +16,7 @@
 | duration | Duration? | const Duration(seconds: 3) | 自动关闭时长；必须为正数，null 表示不自动关闭。 | 否 |
 | icon | Widget? | - | 自定义前置图标 | 否 |
 | key | Key? | - | 组件标识，用于区分或保留组件状态。 | 否 |
-| marquee | TMessageMarquee? | - | 跑马灯配置 | 否 |
+| marquee | TMessageMarquee? | - | 跑马灯配置；文字未溢出时保持静止，系统禁用动画时溢出文字以省略号展示。 | 否 |
 | offset | Offset? | - | 期望的屏幕绝对坐标。 未显式传入时，消息保留 16 逻辑像素水平外间距；`useSafeArea` 为 true 时， 显式坐标也会被约束在含该外间距的系统安全可视区域内。 | 否 |
 | onCloseButtonPressed | VoidCallback? | - | 点击关闭按钮时触发 | 否 |
 | onDismissed | VoidCallback? | - | 消息完成关闭、被句柄移除、被新消息替换或 Overlay 卸载时触发。 每次展示最多触发一次；直接构造的消息应放在 Stack 中，关闭后由父级移除组件。 | 否 |
@@ -46,7 +46,7 @@
 | action | Widget? | - | 消息尾部操作组件。 操作的外观与行为由组件自身负责，例如传入带 `VoidCallback` 的按钮或链接。 | 否 |
 | showCloseButton | bool | false | 是否显示关闭按钮 | 否 |
 | closeButton | Widget? | - | 自定义关闭按钮 | 否 |
-| marquee | TMessageMarquee? | - | 跑马灯配置 | 否 |
+| marquee | TMessageMarquee? | - | 跑马灯配置；文字未溢出时保持静止，系统禁用动画时溢出文字以省略号展示。 | 否 |
 | offset | Offset? | - | 期望的屏幕绝对坐标。 未显式传入时，消息保留 16 逻辑像素水平外间距；`useSafeArea` 为 true 时， 显式坐标也会被约束在含该外间距的系统安全可视区域内。 | 否 |
 | status | TMessageStatus | TMessageStatus.info | 消息语义状态 | 否 |
 | onCloseButtonPressed | VoidCallback? | - | 点击关闭按钮时触发 | 否 |
@@ -75,7 +75,7 @@
 | 名称 | 类型 | 默认值 | 说明 | 必传 |
 | --- | --- | --- | --- | --- |
 | delay | Duration | Duration.zero | 开始滚动前的延迟 | 否 |
-| duration | Duration | const Duration(seconds: 10) | 单次滚动时长 | 否 |
+| duration | Duration | const Duration(seconds: 10) | 单向滚动时长；非循环滚动返回起点时使用相同时长。 | 否 |
 | repeat | bool | false | 是否循环滚动 | 否 |
 
 
