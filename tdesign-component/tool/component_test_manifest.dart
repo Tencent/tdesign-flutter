@@ -164,6 +164,7 @@ const componentTestManifests = <ComponentTestManifest>[
       'test/components/button/t_button_theme_priority_test.dart',
       'test/components/button/t_button_theme_test.dart',
       'test/components/button/t_button_widget_test.dart',
+      'test/components/button/t_button_brand_contrast_test.dart',
     ],
     visualTests: [
       VisualTestManifest(
