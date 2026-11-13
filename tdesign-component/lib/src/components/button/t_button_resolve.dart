@@ -19,6 +19,17 @@ import 't_button_types.dart';
 class TButtonResolve {
   TButtonResolve._();
 
+  /// 填充色上的文字颜色。
+  ///
+  /// 固定用 textColorAnti（白）在浅色主色上读不清：主题生成器的黄色预设
+  /// #f3b814 上白字对比度只有 1.8:1。按填充色的相对亮度在深/浅文字之间选，
+  /// 保证对比度。
+  static Color _onColor(Color background, TThemeData tTheme) {
+    return background.computeLuminance() > 0.5
+        ? tTheme.textColorPrimary
+        : tTheme.textColorAnti;
+  }
+
   /// 解析最终的 [ButtonStyle]
   ///
   /// [variant] 按钮形态，决定 fill / outline / text / ghost 的基础样式链路。
@@ -213,10 +224,10 @@ class TButtonResolve {
     switch (scheme) {
       case TButtonColorPreset.primary:
         bg = tTheme.brandColor;
-        fg = tTheme.textColorAnti;
+        fg = _onColor(bg, tTheme);
       case TButtonColorPreset.danger:
         bg = tTheme.errorColor;
-        fg = tTheme.textColorAnti;
+        fg = _onColor(bg, tTheme);
       case TButtonColorPreset.light:
         bg = tTheme.brandColorLight;
         fg = tTheme.brandColor;
