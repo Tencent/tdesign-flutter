@@ -736,6 +736,39 @@ void main() {
   });
 
   group('TBackTop visibilityOffset 显隐控制', () {
+    testWidgets('显隐以 250ms 淡入淡出', (tester) async {
+      final controller = ScrollController();
+      await tester.pumpWidget(
+        wrapScrollable(
+          TBackTop(controller: controller, visibilityOffset: 100),
+          controller,
+        ),
+      );
+      await tester.pump();
+      controller.jumpTo(200);
+      await tester.pump();
+      final fade = find.descendant(
+        of: find.byType(TBackTop),
+        matching: find.byType(FadeTransition),
+      );
+      double opacity() => tester.widget<FadeTransition>(fade).opacity.value;
+      expect(opacity(), 0);
+      await tester.pump(const Duration(milliseconds: 125));
+      expect(opacity(), closeTo(0.5, 0.01));
+      await tester.pump(const Duration(milliseconds: 125));
+      expect(opacity(), 1);
+      controller.jumpTo(0);
+      await tester.pump();
+      await tester.pump(const Duration(milliseconds: 125));
+      expect(opacity(), closeTo(0.5, 0.01));
+      await tester.pump(const Duration(milliseconds: 125));
+      await tester.pump(const Duration(milliseconds: 1));
+      await tester.pump();
+      expect(fade, findsNothing);
+      await tester.pumpWidget(const SizedBox.shrink());
+      controller.dispose();
+    });
+
     testWidgets('未设置 visibilityOffset 时始终可见', (tester) async {
       await tester.pumpWidget(wrapWithTheme(const TBackTop()));
       expect(find.byType(TBackTop), findsOneWidget);

@@ -45,6 +45,7 @@
 - `shape` 只表达结构形态，非空默认 `circle`；`TBackTopThemeData` 不再保存默认 shape。
 - `colorPreset` 只表达同一结构下的浅色或深色预设，非空默认 `light`，Theme 不保存该选择器。
 - `visibilityOffset` 非空默认 `200`；绑定 `controller` 时偏移达到阈值才显示，未绑定时始终显示。Theme 不保存显隐阈值。
+- 绑定 `controller` 时，显隐切换采用 250ms 的 `easeInOut` 淡入淡出；淡出期间不响应点击，结束后移除按钮。系统减少动画设置生效时，时长遵循 Flutter 的无障碍行为。此动效为 Flutter 的交互设计，不是小程序显隐时长的对齐。
 - 有 `controller` 或 `onPressed` 任一动作来源时组件可点击；有已挂载的 `controller` 时先动画回顶，再调用一次 `onPressed`。动画过程中重复点击不重复完成。
 - 圆形固定为 48 方形；半圆形高度 40、最小宽度 38、横向内边距 8、内容间距 2；图标 20、边框 0.5，文字使用 10px/1.2/600 的 Mark 语义。
 - Light 使用容器背景、组件边框与主文本 Token；Dark 圆形使用 `grayColor13`，Dark 半圆使用 `grayColor14`，二者使用 `grayColor9` 边框与反色文本。
