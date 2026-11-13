@@ -49,31 +49,17 @@ jobs:
       # (FlutterPlugin.kt:715 Unresolved reference 'fileMode')，仓库默认值必须
       # 保持在 3.32.0 能构建的旧工具链上。这里只在构建 latest 时覆盖，
       # 两套工具链各跑各的版本，最低支持版本的验证范围不变。
-      - name: Override Gradle and AGP for Flutter latest
-        if: inputs.flutter-version != '3.32.0'
+      - name: Use Android toolchain for Flutter latest
+        if: inputs.flutter-version == 'latest'
         working-directory: tdesign-component/example/android
         run: |
-          python3 - <<'PY'
-          import re, pathlib, sys
+          set -euo pipefail
 
-          swaps = [
-              ('gradle/wrapper/gradle-wrapper.properties',
-               'gradle-8.14-bin.zip', 'gradle-9.3.1-bin.zip'),
-              ('settings.gradle',
-               '"com.android.application" version "8.11.1"',
-               '"com.android.application" version "9.1.1"'),
-          ]
-          for name, old, new in swaps:
-              path = pathlib.Path(name)
-              text = path.read_text(encoding='utf-8')
-              if old not in text:
-                  # 仓库默认值被改动时直接失败，避免静默构建出错误工具链。
-                  sys.exit(f'{name}: expected {old!r} not found')
-              path.write_text(text.replace(old, new), encoding='utf-8')
-              print(f'{name}: {old} -> {new}')
-          PY
-          grep -n 'distributionUrl' gradle/wrapper/gradle-wrapper.properties
-          grep -n 'com.android.application' settings.gradle
+          grep -Fq 'gradle-8.14-bin.zip' gradle/wrapper/gradle-wrapper.properties
+          grep -Fq '"com.android.application" version "8.11.1"' settings.gradle
+
+          sed -i 's/gradle-8\.14-bin\.zip/gradle-9.3.1-bin.zip/' gradle/wrapper/gradle-wrapper.properties
+          sed -i 's/"com.android.application" version "8\.11\.1"/"com.android.application" version "9.1.1"/' settings.gradle
       # 保留默认依赖与插件准备，避免 3.32.0 使用 --no-pub 时注册代码不一致。
       - name: Build release APK
         working-directory: tdesign-component/example
