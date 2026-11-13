@@ -108,6 +108,125 @@ void main() {
       expect(custom.radiusSmall, 3);
     });
 
+    test('copyWith 保留明暗配对实例，避免 dark 主题静默回退', () {
+      final token = TThemeData.defaultData();
+      expect(token.dark, isNotNull);
+
+      final custom = token.copyWith(
+        colorMap: {'brandColor': const Color(0xFFE34D59)},
+      );
+      expect(custom.dark, isNotNull);
+      expect(custom.light, same(custom));
+
+      // 覆盖后的主题构建暗色 ThemeData 时应使用暗色 Token 而非浅色 Token。
+      final darkTheme = TThemeBuilder.dark(custom);
+      expect(darkTheme.colorScheme.surface, token.dark!.bgColorContainer);
+    });
+
+    test('copyWith 仅修改当前主题并保持明暗配对', () {
+      final token = TThemeData.defaultData();
+      final dark = token.dark!;
+      final custom = token.copyWith(
+        colorMap: {'bgColorContainer': Colors.white},
+        sizeMap: {'size8': 28},
+      );
+      expect(custom.light, same(custom));
+      expect(custom.dark!.light, same(custom));
+      expect(custom.dark, isNot(same(dark)));
+      // 配对主题同样应用本次覆盖：copyWith 的目标是复制后明暗都可用，
+      // 若暗色保留旧 Token，TThemeBuilder.dark 会静默读到未覆盖的值
+      // （badge / slider 的 radiusMap、sizeMap 覆盖即依赖这一点）。
+      expect(custom.dark!.size8, 28);
+      expect(
+        // 暗色构建走配对后的暗色实例，同样带着本次 colorMap 覆盖。
+        TThemeBuilder.dark(custom).colorScheme.surface,
+        Colors.white,
+      );
+      expect(token.dark, same(dark));
+      expect(dark.light, same(token));
+
+      final customDark = custom.dark!.copyWith(
+        colorMap: {'bgColorContainer': Colors.black},
+        sizeMap: {'size8': 33},
+      );
+      expect(customDark.light.dark, same(customDark));
+      expect(customDark.light.size8, 28);
+      expect(customDark.size8, 33);
+      expect(TThemeBuilder.light(customDark).colorScheme.surface, Colors.white);
+      expect(
+        TThemeBuilder.dark(customDark.light).colorScheme.surface,
+        Colors.black,
+      );
+      expect(custom.dark!.size8, 28);
+      final again = customDark.light.copyWith(sizeMap: {'size8': 31});
+      expect(again.dark!.light, same(again));
+      // 链式 copyWith 同样把覆盖同步给配对主题，因此这里跟随 31 而非旧值 33。
+      expect(again.dark!.size8, 31);
+    });
+
+    test('暗色插值结果复制后仍可通过亮色实例访问', () {
+      final original = TThemeData.defaultData();
+      final first = original.dark!;
+      final second = first.copyWith(sizeMap: {'size8': 40});
+      final midway = first.lerp(second, 0.5);
+      final copy = midway.copyWith(sizeMap: {'size8': 33});
+      expect(copy.light.dark, same(copy));
+      expect(copy.light.dark!.size8, 33);
+      expect(first.light, same(original));
+    });
+
+    testWidgets('复制后的主题在实际明暗切换时使用各自配置', (tester) async {
+      final original = TThemeData.defaultData();
+      final light = original.copyWith(
+        colorMap: {'bgColorContainer': Colors.white},
+        sizeMap: {'size8': 28},
+      );
+      final dark = light.dark!.copyWith(
+        colorMap: {'bgColorContainer': Colors.black},
+        sizeMap: {'size8': 33},
+      );
+      final pair = dark.light;
+      final mode = ValueNotifier(ThemeMode.light);
+      addTearDown(mode.dispose);
+      await tester.pumpWidget(
+        ValueListenableBuilder<ThemeMode>(
+          valueListenable: mode,
+          builder: (_, value, __) => MaterialApp(
+            theme: TThemeBuilder.light(pair),
+            darkTheme: TThemeBuilder.dark(pair),
+            themeMode: value,
+            home: Scaffold(
+              body: Builder(
+                builder: (context) {
+                  final token = Theme.of(context).extension<TThemeData>()!;
+                  return Text(
+                    '${Theme.of(context).colorScheme.surface}:${token.size8}',
+                  );
+                },
+              ),
+            ),
+          ),
+        ),
+      );
+      expect(find.text('${Colors.white}:28.0'), findsOneWidget);
+      mode.value = ThemeMode.dark;
+      await tester.pumpAndSettle();
+      expect(find.text('${Colors.black}:33.0'), findsOneWidget);
+      mode.value = ThemeMode.light;
+      await tester.pumpAndSettle();
+      expect(find.text('${Colors.white}:28.0'), findsOneWidget);
+      expect(original.dark!.light, same(original));
+    });
+
+    test('copyWith 在没有暗色主题时保留无配对状态', () {
+      final single = TThemeData.fromJson('single', '{"single":{}}')!;
+      final copy = single.copyWith(sizeMap: {'size8': 28});
+      expect(copy.light, same(copy));
+      expect(copy.dark, isNull);
+      expect(copy.size8, 28);
+      expect(single.size8, isNot(28));
+    });
+
     test('TThemeBuilder.light/dark 返回完整 ThemeData', () {
       final token = TThemeData.defaultData();
       final lightTheme = TThemeBuilder.light(token);

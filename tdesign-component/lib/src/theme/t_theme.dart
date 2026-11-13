@@ -578,6 +578,7 @@ class TThemeData extends ThemeExtension<TThemeData> {
   /// ## 返回值
   /// 复制 Token 主题并合并传入的映射；未传入的映射值沿用当前配置。
   /// name 和 extraThemeData 为空时保留当前名称和扩展数据。
+  /// 覆盖仅应用于当前主题；配对主题保留原值，复制后重新关联。
   @override
   TThemeData copyWith({
     String? name,
@@ -593,6 +594,56 @@ class TThemeData extends ThemeExtension<TThemeData> {
     Map<String, double>? spacerMap,
 
     /// 尺寸刻度的增量映射；未提供时保留当前值。
+    Map<String, double>? sizeMap,
+    TExtraThemeData? extraThemeData,
+  }) {
+    final result = _copyTokens(
+      name: name,
+      colorMap: colorMap,
+      fontMap: fontMap,
+      fontMetricMap: fontMetricMap,
+      radiusMap: radiusMap,
+      fontFamilyMap: fontFamilyMap,
+      shadowMap: shadowMap,
+      insetShadowMap: insetShadowMap,
+      spacerMap: spacerMap,
+      sizeMap: sizeMap,
+      extraThemeData: extraThemeData,
+    );
+    if (identical(light, this)) {
+      // 配对暗色主题应用同一份覆盖，否则 copyWith 之后 buildDark 读到的
+      // 仍是未覆盖的旧 Token，暗色下的 Token 覆盖会静默失效。
+      final pairedDark = dark?.copyWith(
+        colorMap: colorMap,
+        fontMap: fontMap,
+        fontMetricMap: fontMetricMap,
+        radiusMap: radiusMap,
+        fontFamilyMap: fontFamilyMap,
+        shadowMap: shadowMap,
+        insetShadowMap: insetShadowMap,
+        spacerMap: spacerMap,
+        sizeMap: sizeMap,
+      );
+      result.dark = pairedDark;
+      pairedDark?.light = result;
+    } else {
+      final pairedLight = light._copyTokens();
+      pairedLight.dark = result;
+      result.light = pairedLight;
+    }
+    return result;
+  }
+
+  TThemeData _copyTokens({
+    String? name,
+    Map<String, Color>? colorMap,
+    Map<String, Font>? fontMap,
+    Map<String, double>? fontMetricMap,
+    Map<String, double>? radiusMap,
+    Map<String, FontFamily>? fontFamilyMap,
+    Map<String, List<BoxShadow>>? shadowMap,
+    Map<String, BorderSide>? insetShadowMap,
+    Map<String, double>? spacerMap,
     Map<String, double>? sizeMap,
     TExtraThemeData? extraThemeData,
   }) {

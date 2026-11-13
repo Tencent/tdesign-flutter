@@ -143,3 +143,10 @@ PR 拆分、重放、分支切换与重复推送记录已移除。影响最终�
 相对 1.0.0 的这两个 ThemeData 公共接口是兼容性修复，既有 implements 无需新增内部成员。直接调用 develop 新增 `@internal` 类方法的代码不在此兼容承诺内；本修复也不消除其他 PR 的独立 API / implements 风险。外部实现自行覆盖的 `lerp` / `copyWith` 仍由业务负责，本次不代理或重写业务规则。
 
 验证范围是 macOS 本地编译、Widget/工具/文档与布局断言；未执行 Android/iOS 真机、Web release 或 Linux Golden，不外推这些结果。绘制算法与基线未改，不在 macOS 生成或更新 Golden；本节不包含远端 CI 结果，提交 PR 后须按最新 head 另行核对。
+
+### TThemeData copyWith 明暗配对（本地候选）
+
+- 对照 Issue #1228：在 develop 基线还原生产源码后，保留新增回归时 `copyWith` 后 dark 为 null，测试失败；恢复本地候选后通过。
+- 亮色和暗色分别覆盖背景色与尺寸，验证原主题不变、复制后的双向配对、连续复制、无暗色配对及暗色插值后复制。`MaterialApp` 测试实际切换亮色、暗色再切回亮色，确认对应 ColorScheme 与 TThemeData 扩展值。
+- macOS 本地 Flutter 3.32.0 / 3.47.8：主题组件回归各 217 项通过，严格 analyze 无诊断；主题生产覆盖率分别为 882/909（97.03%）和 879/909（96.70%）。生产及测试 diff（相对 develop a057663d）SHA-256：`a066331f514a6599767de95bf61cd36bb5f19ebe261971d14e2bf30160b7ea5b`。
+- 本地候选尚未推送；最终提交的远端 CI、评审及真实设备视觉效果未验证。
