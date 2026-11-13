@@ -619,23 +619,25 @@ class TRangeSlider extends StatelessWidget {
     final decoration = Theme.of(
       context,
     ).extension<TSliderThemeData>()?.decoration;
-    final themedSlider = Theme(
-      data: TInternalMaterialTheme.resolve(context),
-      child: _SliderGeometryViewport(
-        layout: layout,
-        child: LayoutBuilder(
-          builder: (context, constraints) {
-            final metrics = layout.forConstraints(constraints);
-            return SliderTheme(
-              data: sliderTheme.copyWith(
-                minThumbSeparation: metrics.rangeSeparation(
-                  (effectiveStart - min) / (max - min),
-                  (effectiveEnd - min) / (max - min),
+    final themedSlider = _RangeSliderMouseFocusCleanup(
+      child: Theme(
+        data: TInternalMaterialTheme.resolve(context),
+        child: _SliderGeometryViewport(
+          layout: layout,
+          child: LayoutBuilder(
+            builder: (context, constraints) {
+              final metrics = layout.forConstraints(constraints);
+              return SliderTheme(
+                data: sliderTheme.copyWith(
+                  minThumbSeparation: metrics.rangeSeparation(
+                    (effectiveStart - min) / (max - min),
+                    (effectiveEnd - min) / (max - min),
+                  ),
                 ),
-              ),
-              child: slider,
-            );
-          },
+                child: slider,
+              );
+            },
+          ),
         ),
       ),
     );
@@ -661,6 +663,70 @@ class TRangeSlider extends StatelessWidget {
     return decoration == null
         ? content
         : DecoratedBox(decoration: decoration, child: content);
+  }
+}
+
+/// 指针交互结束后回收 [RangeSlider] 内部拇指焦点，避免点击 / 拖动后光圈残留。
+class _RangeSliderMouseFocusCleanup extends StatefulWidget {
+  const _RangeSliderMouseFocusCleanup({required this.child});
+
+  final Widget child;
+
+  @override
+  State<_RangeSliderMouseFocusCleanup> createState() =>
+      _RangeSliderMouseFocusCleanupState();
+}
+
+class _RangeSliderMouseFocusCleanupState
+    extends State<_RangeSliderMouseFocusCleanup> {
+  bool _pointerDown = false;
+
+  // 仅当当前焦点确实落在本滑块内部（框架给拇指申请的焦点）时才释放，
+  // 避免误清滑块外的其他焦点（如输入框）。
+  void _releaseThumbFocus() {
+    final focus = FocusManager.instance.primaryFocus;
+    final focusContext = focus?.context;
+    if (focus == null || focusContext == null || !focusContext.mounted) {
+      return;
+    }
+    final owner = focusContext
+        .findAncestorStateOfType<_RangeSliderMouseFocusCleanupState>();
+    if (identical(owner, this)) {
+      focus.unfocus();
+    }
+  }
+
+  void _handlePointerDown(PointerDownEvent event) {
+    _pointerDown = true;
+  }
+
+  void _handlePointerUp(PointerUpEvent event) {
+    _pointerDown = false;
+    _releaseThumbFocus();
+  }
+
+  void _handlePointerCancel(PointerCancelEvent event) {
+    _pointerDown = false;
+    _releaseThumbFocus();
+  }
+
+  void _handlePointerExit(PointerExitEvent event) {
+    // 按住拖出滑块时抬起事件不会落在滑块上，靠退出事件兜底释放；
+    // 无按键的普通划过不抢键盘焦点。
+    if (_pointerDown) {
+      _pointerDown = false;
+      _releaseThumbFocus();
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Listener(
+      onPointerDown: _handlePointerDown,
+      onPointerUp: _handlePointerUp,
+      onPointerCancel: _handlePointerCancel,
+      child: MouseRegion(onExit: _handlePointerExit, child: widget.child),
+    );
   }
 }
 
