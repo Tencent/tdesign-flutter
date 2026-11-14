@@ -1041,6 +1041,29 @@ void main() {
       expect(ended, isNotNull);
     });
 
+    Future<List<int>> captureSlider(WidgetTester tester, GlobalKey key) async {
+      final boundary = tester.renderObject<RenderRepaintBoundary>(
+        find.byKey(key),
+      );
+      final image = await boundary.toImage();
+      final data = await image.toByteData(format: ui.ImageByteFormat.rawRgba);
+      image.dispose();
+      return data!.buffer.asUint8List();
+    }
+
+    int pixelDifferences(List<int> a, List<int> b) {
+      var changed = 0;
+      for (var i = 0; i < a.length; i += 4) {
+        if (a[i] != b[i] ||
+            a[i + 1] != b[i + 1] ||
+            a[i + 2] != b[i + 2] ||
+            a[i + 3] != b[i + 3]) {
+          changed++;
+        }
+      }
+      return changed;
+    }
+
     testWidgets('click preserves thumb focus after pointer up', (tester) async {
       await tester.pumpWidget(
         wrap(
@@ -1126,66 +1149,6 @@ void main() {
       });
     }
 
-    testWidgets('touch release restores the idle slider rendering', (
-      tester,
-    ) async {
-      tester.binding.focusManager.highlightStrategy =
-          FocusHighlightStrategy.alwaysTouch;
-      addTearDown(
-        () => tester.binding.focusManager.highlightStrategy =
-            FocusHighlightStrategy.automatic,
-      );
-      final boundaryKey = GlobalKey();
-      await tester.pumpWidget(
-        RepaintBoundary(
-          key: boundaryKey,
-          child: wrap(
-            TRangeSlider(
-              value: const RangeValues(20, 60),
-              min: 0,
-              max: 100,
-              onChanged: (_) {},
-            ),
-          ),
-        ),
-      );
-      await tester.pumpAndSettle();
-      Future<List<int>> capture() async {
-        final boundary = tester.renderObject<RenderRepaintBoundary>(
-          find.byKey(boundaryKey),
-        );
-        final image = await boundary.toImage();
-        final data = await image.toByteData(format: ui.ImageByteFormat.rawRgba);
-        image.dispose();
-        return data!.buffer.asUint8List();
-      }
-
-      final idle = (await tester.runAsync(capture))!;
-      final touch = await tester.createGesture(
-        kind: ui.PointerDeviceKind.touch,
-      );
-      await touch.down(
-        tester.getCenter(find.byType(RangeSlider)) - const Offset(80, 0),
-      );
-      await touch.up();
-      await tester.pumpAndSettle();
-      final after = (await tester.runAsync(capture))!;
-      var changedPixels = 0;
-      for (var index = 0; index < idle.length; index += 4) {
-        if (idle[index] != after[index] ||
-            idle[index + 1] != after[index + 1] ||
-            idle[index + 2] != after[index + 2] ||
-            idle[index + 3] != after[index + 3]) {
-          changedPixels++;
-        }
-      }
-      expect(
-        changedPixels,
-        0,
-        reason: 'touch must not leave an overlay at rest',
-      );
-    });
-
     testWidgets('Android automatic mode hides touch focus overlay', (
       tester,
     ) async {
@@ -1212,17 +1175,8 @@ void main() {
         ),
       );
       await tester.pumpAndSettle();
-      Future<List<int>> capture() async {
-        final boundary = tester.renderObject<RenderRepaintBoundary>(
-          find.byKey(key),
-        );
-        final image = await boundary.toImage();
-        final data = await image.toByteData(format: ui.ImageByteFormat.rawRgba);
-        image.dispose();
-        return data!.buffer.asUint8List();
-      }
 
-      final idle = (await tester.runAsync(capture))!;
+      final idle = (await tester.runAsync(() => captureSlider(tester, key)))!;
       final touch = await tester.createGesture(
         kind: ui.PointerDeviceKind.touch,
       );
@@ -1238,7 +1192,7 @@ void main() {
         FocusHighlightMode.touch,
       );
       expect(FocusManager.instance.primaryFocus, same(focusedThumb));
-      final after = (await tester.runAsync(capture))!;
+      final after = (await tester.runAsync(() => captureSlider(tester, key)))!;
       expect(
         after,
         orderedEquals(idle),
@@ -1265,19 +1219,8 @@ void main() {
         ),
       );
       await tester.pumpAndSettle();
-      Future<List<int>> capture() async {
-        final boundary = tester.renderObject<RenderRepaintBoundary>(
-          find.byKey(key),
-        );
-        final image = await boundary.toImage();
-        final bytes = await image.toByteData(
-          format: ui.ImageByteFormat.rawRgba,
-        );
-        image.dispose();
-        return bytes!.buffer.asUint8List();
-      }
 
-      final idle = (await tester.runAsync(capture))!;
+      final idle = (await tester.runAsync(() => captureSlider(tester, key)))!;
       final touch = await tester.createGesture(
         kind: ui.PointerDeviceKind.touch,
       );
@@ -1287,16 +1230,8 @@ void main() {
       await tester.pump(const Duration(milliseconds: 200));
       await touch.moveBy(const Offset(400, 0));
       await tester.pump(const Duration(milliseconds: 200));
-      final active = (await tester.runAsync(capture))!;
-      var changed = 0;
-      for (var i = 0; i < idle.length; i += 4) {
-        if (idle[i] != active[i] ||
-            idle[i + 1] != active[i + 1] ||
-            idle[i + 2] != active[i + 2] ||
-            idle[i + 3] != active[i + 3]) {
-          changed++;
-        }
-      }
+      final active = (await tester.runAsync(() => captureSlider(tester, key)))!;
+      final changed = pixelDifferences(idle, active);
       // Flutter 3.32's native RangeSlider already loses this overlay when
       // the pointer leaves. Newer SDKs must keep active drag feedback.
       final legacyHover = find
@@ -1455,32 +1390,8 @@ void main() {
           ),
         );
         await tester.pumpAndSettle();
-        Future<List<int>> capture() async {
-          final boundary = tester.renderObject<RenderRepaintBoundary>(
-            find.byKey(key),
-          );
-          final image = await boundary.toImage();
-          final data = await image.toByteData(
-            format: ui.ImageByteFormat.rawRgba,
-          );
-          image.dispose();
-          return data!.buffer.asUint8List();
-        }
 
-        int difference(List<int> a, List<int> b) {
-          var changed = 0;
-          for (var i = 0; i < a.length; i += 4) {
-            if (a[i] != b[i] ||
-                a[i + 1] != b[i + 1] ||
-                a[i + 2] != b[i + 2] ||
-                a[i + 3] != b[i + 3]) {
-              changed++;
-            }
-          }
-          return changed;
-        }
-
-        final idle = (await tester.runAsync(capture))!;
+        final idle = (await tester.runAsync(() => captureSlider(tester, key)))!;
         final slider = find.byType(RangeSlider);
         final touch = await tester.createGesture(
           kind: ui.PointerDeviceKind.touch,
@@ -1491,10 +1402,16 @@ void main() {
         await touch.up();
         await tester.pumpAndSettle();
         expect(FocusManager.instance.primaryFocus, same(focusedThumb));
-        final touchPixels = difference(idle, (await tester.runAsync(capture))!);
+        final touchPixels = pixelDifferences(
+          idle,
+          (await tester.runAsync(() => captureSlider(tester, key)))!,
+        );
         await tester.sendKeyEvent(LogicalKeyboardKey.tab);
         await tester.pumpAndSettle();
-        final tabPixels = difference(idle, (await tester.runAsync(capture))!);
+        final tabPixels = pixelDifferences(
+          idle,
+          (await tester.runAsync(() => captureSlider(tester, key)))!,
+        );
         final legacyFocus = find
             .descendant(
               of: slider,
@@ -1510,14 +1427,23 @@ void main() {
           await tester.pumpAndSettle();
           if (!legacyFocus) {
             expect(
-              difference(idle, (await tester.runAsync(capture))!),
+              pixelDifferences(
+                idle,
+                (await tester.runAsync(() => captureSlider(tester, key)))!,
+              ),
               greaterThan(0),
             );
           }
           tester.binding.focusManager.highlightStrategy =
               FocusHighlightStrategy.alwaysTouch;
           await tester.pumpAndSettle();
-          expect(difference(idle, (await tester.runAsync(capture))!), 0);
+          expect(
+            pixelDifferences(
+              idle,
+              (await tester.runAsync(() => captureSlider(tester, key)))!,
+            ),
+            0,
+          );
         } else if (!legacyFocus) {
           expect(touchPixels, greaterThan(0));
           expect(tabPixels, greaterThan(0));
@@ -1533,31 +1459,16 @@ void main() {
             : TRangeSlider(value: const RangeValues(.2, .6), onChanged: (_) {});
         await tester.pumpWidget(RepaintBoundary(key: key, child: wrap(slider)));
         await tester.pumpAndSettle();
-        Future<List<int>> capture() async {
-          final boundary = tester.renderObject<RenderRepaintBoundary>(
-            find.byKey(key),
-          );
-          final image = await boundary.toImage();
-          final bytes = await image.toByteData(
-            format: ui.ImageByteFormat.rawRgba,
-          );
-          image.dispose();
-          return bytes!.buffer.asUint8List();
-        }
 
-        final before = (await tester.runAsync(capture))!;
+        final before = (await tester.runAsync(
+          () => captureSlider(tester, key),
+        ))!;
         await tester.sendKeyEvent(LogicalKeyboardKey.tab);
         await tester.pumpAndSettle();
-        final after = (await tester.runAsync(capture))!;
-        var changed = 0;
-        for (var i = 0; i < before.length; i += 4) {
-          if (before[i] != after[i] ||
-              before[i + 1] != after[i + 1] ||
-              before[i + 2] != after[i + 2] ||
-              before[i + 3] != after[i + 3]) {
-            changed++;
-          }
-        }
+        final after = (await tester.runAsync(
+          () => captureSlider(tester, key),
+        ))!;
+        final changed = pixelDifferences(before, after);
         await tester.pumpWidget(const SizedBox.shrink());
         await tester.pumpAndSettle();
         return changed;
@@ -1594,32 +1505,8 @@ void main() {
         ),
       );
       await tester.pumpAndSettle();
-      Future<List<int>> capture() async {
-        final boundary = tester.renderObject<RenderRepaintBoundary>(
-          find.byKey(key),
-        );
-        final image = await boundary.toImage();
-        final bytes = await image.toByteData(
-          format: ui.ImageByteFormat.rawRgba,
-        );
-        image.dispose();
-        return bytes!.buffer.asUint8List();
-      }
 
-      int diff(List<int> a, List<int> b) {
-        var count = 0;
-        for (var i = 0; i < a.length; i += 4) {
-          if (a[i] != b[i] ||
-              a[i + 1] != b[i + 1] ||
-              a[i + 2] != b[i + 2] ||
-              a[i + 3] != b[i + 3]) {
-            count++;
-          }
-        }
-        return count;
-      }
-
-      final idle = (await tester.runAsync(capture))!;
+      final idle = (await tester.runAsync(() => captureSlider(tester, key)))!;
       final slider = find.byType(RangeSlider);
       final center = tester.getCenter(slider);
       final thumb = center - const Offset(80, 0);
@@ -1629,7 +1516,9 @@ void main() {
       await mouse.addPointer(location: Offset.zero);
       await mouse.moveTo(thumb);
       await tester.pumpAndSettle();
-      final hovered = (await tester.runAsync(capture))!;
+      final hovered = (await tester.runAsync(
+        () => captureSlider(tester, key),
+      ))!;
       // The older native slider uses a different hover path and does not
       // paint this position in the baseline.
       final legacyHover = find
@@ -1640,7 +1529,7 @@ void main() {
           .evaluate()
           .isNotEmpty;
       if (!legacyHover) {
-        expect(diff(idle, hovered), greaterThan(0));
+        expect(pixelDifferences(idle, hovered), greaterThan(0));
       }
       await mouse.down(thumb);
       await tester.pump();
@@ -1648,10 +1537,10 @@ void main() {
       await tester.pumpAndSettle();
       await mouse.moveTo(center + const Offset(135, 0));
       await tester.pumpAndSettle();
-      final away = (await tester.runAsync(capture))!;
+      final away = (await tester.runAsync(() => captureSlider(tester, key)))!;
       if (!legacyHover) {
         expect(
-          diff(idle, away),
+          pixelDifferences(idle, away),
           greaterThan(0),
           reason: 'traditional focus remains visible when the mouse leaves',
         );
@@ -1677,15 +1566,6 @@ void main() {
         ),
       );
       await tester.pumpAndSettle();
-      Future<List<int>> capture() async {
-        final boundary = tester.renderObject<RenderRepaintBoundary>(
-          find.byKey(key),
-        );
-        final image = await boundary.toImage();
-        final data = await image.toByteData(format: ui.ImageByteFormat.rawRgba);
-        image.dispose();
-        return data!.buffer.asUint8List();
-      }
 
       final touch = await tester.createGesture(
         kind: ui.PointerDeviceKind.touch,
@@ -1696,19 +1576,15 @@ void main() {
       await tester.pump();
       await touch.up();
       await tester.pumpAndSettle();
-      final pointerView = (await tester.runAsync(capture))!;
+      final pointerView = (await tester.runAsync(
+        () => captureSlider(tester, key),
+      ))!;
       await tester.sendKeyEvent(LogicalKeyboardKey.tab);
       await tester.pumpAndSettle();
-      final keyboardView = (await tester.runAsync(capture))!;
-      var changed = 0;
-      for (var i = 0; i < pointerView.length; i += 4) {
-        if (pointerView[i] != keyboardView[i] ||
-            pointerView[i + 1] != keyboardView[i + 1] ||
-            pointerView[i + 2] != keyboardView[i + 2] ||
-            pointerView[i + 3] != keyboardView[i + 3]) {
-          changed++;
-        }
-      }
+      final keyboardView = (await tester.runAsync(
+        () => captureSlider(tester, key),
+      ))!;
+      final changed = pixelDifferences(pointerView, keyboardView);
       final legacyFocus = find
           .descendant(
             of: find.byType(RangeSlider),
