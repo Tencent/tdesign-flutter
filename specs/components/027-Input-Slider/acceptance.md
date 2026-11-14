@@ -57,3 +57,12 @@ Flutter 3.32.0 使用 Linux x86_64，3.47.8 使用 macOS arm64；自动 Golden �
 
 - PR head `804fac7da54be20e7d1a921d8606c408e643bfdf` 的 CI 暴露出 Swiper、Loading 示例和 Theme 组合场景中引用的 Slider 仍使用旧基线。与 develop 隔离复现并只替换 Slider 源码的对照确认差异由 Slider 修复引起；共享字体保持 PR 版本时换回旧 Slider 即通过。
 - 逐张检查并更新 Swiper 6 张、Loading 4 张及 Theme 1 张基线。图片尺寸不变，像素差异均在 Slider 区域；新图与该 CI 的实际渲染逐像素一致。Linux Flutter 3.32.0 使用默认精确比较器复验，不放宽容差；最终远端 CI 仍需按推送后的 head 单独核对。
+
+## 双滑块交互后光圈与焦点（PR #1211 本地复核）
+
+- 基线 `56d81e4ffcacd6099942e4c5a9d9f9e6c74503ec`；根据 Flutter `FocusHighlightMode` 区分触摸与传统焦点反馈，保留原生焦点和 Tab 遍历。传统模式下鼠标移开后仍可按框架策略保留焦点高亮。
+- 交互测试覆盖 Android 自动触摸模式、强制触摸/传统策略及运行中切换、鼠标/触摸拖动、取消、拖出、Tab 顺序和外部焦点；Flutter 3.32 的焦点高亮能力与其原生实现一致。
+- macOS：Flutter 3.32.0、3.47.8、3.50.0 的 Slider 与字形工具测试各 61 项通过，严格分析通过；3.32.0 和 3.50.0 的 Slider 完整组件回归各 104 项通过，生产覆盖率均为 97.65%。
+- Flutter 3.47.8：Android 真机通过系统注入触摸手势分别拖动两个游标，数值更新，松手后光圈消失且焦点保留；原生 RangeSlider 对照仍显示光圈。PC Chrome 网页通过自动化鼠标和键盘事件验证拖动、鼠标移开后的焦点高亮，以及从一个游标经另一个游标到后续按钮的 Tab 顺序。未验证原生桌面应用及无障碍设备。
+- 方向键调值在 Flutter 原生 RangeSlider 和修复前 TRangeSlider 中均未生效，本 PR 不宣称修复该既有问题。
+- Linux Flutter 3.32.0：最终候选的组件 Golden 1 项及 Demo Golden 6 项通过，未更新基线。最终远端 CI 尚未运行。
