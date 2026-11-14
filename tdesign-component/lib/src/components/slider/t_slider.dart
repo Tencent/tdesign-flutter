@@ -619,11 +619,11 @@ class TRangeSlider extends StatelessWidget {
     final decoration = Theme.of(
       context,
     ).extension<TSliderThemeData>()?.decoration;
-    final themedSlider = _RangeSliderFocusHighlight(
-      builder: (context, overlayShape) => Theme(
-        data: TInternalMaterialTheme.resolve(context),
-        child: _SliderGeometryViewport(
-          layout: layout,
+    final themedSlider = _SliderGeometryViewport(
+      layout: layout,
+      child: _RangeSliderFocusHighlight(
+        builder: (context, overlayShape) => Theme(
+          data: TInternalMaterialTheme.resolve(context),
           child: LayoutBuilder(
             builder: (context, constraints) {
               final metrics = layout.forConstraints(constraints);
@@ -667,7 +667,9 @@ class TRangeSlider extends StatelessWidget {
   }
 }
 
-// Preserve native focus and follow Flutter's focus-highlight policy.
+// TODO(compatibility): Re-evaluate this workaround once all supported Flutter
+// versions include the native fix and its behavior has been verified.
+// https://github.com/flutter/flutter/issues/189205
 class _RangeSliderFocusHighlight extends StatefulWidget {
   const _RangeSliderFocusHighlight({required this.builder});
 
