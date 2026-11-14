@@ -619,8 +619,8 @@ class TRangeSlider extends StatelessWidget {
     final decoration = Theme.of(
       context,
     ).extension<TSliderThemeData>()?.decoration;
-    final themedSlider = _RangeSliderMouseFocusCleanup(
-      child: Theme(
+    final themedSlider = _RangeSliderFocusHighlight(
+      builder: (context, overlayShape) => Theme(
         data: TInternalMaterialTheme.resolve(context),
         child: _SliderGeometryViewport(
           layout: layout,
@@ -629,6 +629,7 @@ class TRangeSlider extends StatelessWidget {
               final metrics = layout.forConstraints(constraints);
               return SliderTheme(
                 data: sliderTheme.copyWith(
+                  overlayShape: overlayShape,
                   minThumbSeparation: metrics.rangeSeparation(
                     (effectiveStart - min) / (max - min),
                     (effectiveEnd - min) / (max - min),
@@ -666,66 +667,108 @@ class TRangeSlider extends StatelessWidget {
   }
 }
 
-/// 指针交互结束后回收 [RangeSlider] 内部拇指焦点，避免点击 / 拖动后光圈残留。
-class _RangeSliderMouseFocusCleanup extends StatefulWidget {
-  const _RangeSliderMouseFocusCleanup({required this.child});
+// Preserve native focus and follow Flutter's focus-highlight policy.
+class _RangeSliderFocusHighlight extends StatefulWidget {
+  const _RangeSliderFocusHighlight({required this.builder});
 
-  final Widget child;
+  final Widget Function(BuildContext, SliderComponentShape) builder;
 
   @override
-  State<_RangeSliderMouseFocusCleanup> createState() =>
-      _RangeSliderMouseFocusCleanupState();
+  State<_RangeSliderFocusHighlight> createState() =>
+      _RangeSliderFocusHighlightState();
 }
 
-class _RangeSliderMouseFocusCleanupState
-    extends State<_RangeSliderMouseFocusCleanup> {
-  bool _pointerDown = false;
+class _RangeSliderFocusHighlightState
+    extends State<_RangeSliderFocusHighlight> {
+  final Set<int> _pressedPointers = {};
 
-  // 仅当当前焦点确实落在本滑块内部（框架给拇指申请的焦点）时才释放，
-  // 避免误清滑块外的其他焦点（如输入框）。
-  void _releaseThumbFocus() {
-    final focus = FocusManager.instance.primaryFocus;
-    final focusContext = focus?.context;
-    if (focus == null || focusContext == null || !focusContext.mounted) {
-      return;
-    }
-    final owner = focusContext
-        .findAncestorStateOfType<_RangeSliderMouseFocusCleanupState>();
-    if (identical(owner, this)) {
-      focus.unfocus();
+  @override
+  void initState() {
+    super.initState();
+    FocusManager.instance.addHighlightModeListener(_handleHighlightMode);
+  }
+
+  void _handleHighlightMode(FocusHighlightMode mode) {
+    if (mounted) {
+      setState(() {});
     }
   }
 
-  void _handlePointerDown(PointerDownEvent event) {
-    _pointerDown = true;
-  }
-
-  void _handlePointerUp(PointerUpEvent event) {
-    _pointerDown = false;
-    _releaseThumbFocus();
-  }
-
-  void _handlePointerCancel(PointerCancelEvent event) {
-    _pointerDown = false;
-    _releaseThumbFocus();
-  }
-
-  void _handlePointerExit(PointerExitEvent event) {
-    // 按住拖出滑块时抬起事件不会落在滑块上，靠退出事件兜底释放；
-    // 无按键的普通划过不抢键盘焦点。
-    if (_pointerDown) {
-      _pointerDown = false;
-      _releaseThumbFocus();
-    }
+  @override
+  void dispose() {
+    FocusManager.instance.removeHighlightModeListener(_handleHighlightMode);
+    super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
     return Listener(
-      onPointerDown: _handlePointerDown,
-      onPointerUp: _handlePointerUp,
-      onPointerCancel: _handlePointerCancel,
-      child: MouseRegion(onExit: _handlePointerExit, child: widget.child),
+      onPointerDown: (event) =>
+          setState(() => _pressedPointers.add(event.pointer)),
+      onPointerUp: (event) =>
+          setState(() => _pressedPointers.remove(event.pointer)),
+      onPointerCancel: (event) =>
+          setState(() => _pressedPointers.remove(event.pointer)),
+      child: widget.builder(
+        context,
+        _RangeSliderOverlayShape(
+          pointerActive: _pressedPointers.isNotEmpty,
+          showFocusHighlight:
+              FocusManager.instance.highlightMode ==
+              FocusHighlightMode.traditional,
+        ),
+      ),
+    );
+  }
+}
+
+class _RangeSliderOverlayShape extends SliderComponentShape {
+  const _RangeSliderOverlayShape({
+    required this.pointerActive,
+    required this.showFocusHighlight,
+  });
+
+  final bool pointerActive;
+  final bool showFocusHighlight;
+  static const _delegate = RoundSliderOverlayShape(
+    overlayRadius: SliderGeometry.hitRadius,
+  );
+
+  @override
+  Size getPreferredSize(bool isEnabled, bool isDiscrete) =>
+      _delegate.getPreferredSize(isEnabled, isDiscrete);
+
+  @override
+  void paint(
+    PaintingContext context,
+    Offset center, {
+    required Animation<double> activationAnimation,
+    required Animation<double> enableAnimation,
+    required bool isDiscrete,
+    required TextPainter labelPainter,
+    required RenderBox parentBox,
+    required SliderThemeData sliderTheme,
+    required TextDirection textDirection,
+    required double value,
+    required double textScaleFactor,
+    required Size sizeWithOverflow,
+  }) {
+    if (!pointerActive && !showFocusHighlight) {
+      return;
+    }
+    _delegate.paint(
+      context,
+      center,
+      activationAnimation: activationAnimation,
+      enableAnimation: enableAnimation,
+      isDiscrete: isDiscrete,
+      labelPainter: labelPainter,
+      parentBox: parentBox,
+      sliderTheme: sliderTheme,
+      textDirection: textDirection,
+      value: value,
+      textScaleFactor: textScaleFactor,
+      sizeWithOverflow: sizeWithOverflow,
     );
   }
 }
