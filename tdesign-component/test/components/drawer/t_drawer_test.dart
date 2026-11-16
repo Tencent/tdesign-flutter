@@ -835,7 +835,7 @@ void main() {
       expect(container.constraints?.maxWidth, 320);
     });
 
-    testWidgets('默认避让系统安全区', (tester) async {
+    testWidgets('默认全高展示，内容避让系统安全区（issue #1225）', (tester) async {
       await tester.pumpWidget(
         MediaQuery(
           data: const MediaQueryData(padding: EdgeInsets.only(top: 24)),
@@ -860,7 +860,53 @@ void main() {
 
       await tester.tap(find.text('打开'));
       await tester.pumpAndSettle();
-      expect(tester.getTopLeft(find.byType(TDrawer)).dy, 24);
+      // 面板全高：顶部不再被安全区下移，上下不再镂空
+      expect(tester.getTopLeft(find.byType(TDrawer)).dy, 0);
+      expect(
+        tester.getSize(find.byType(TDrawer)).height,
+        tester.view.physicalSize.height / tester.view.devicePixelRatio,
+      );
+    });
+
+    testWidgets('内容避让上下安全区（全面屏 home 指示条）', (tester) async {
+      tester.view.physicalSize = const Size(375, 812);
+      tester.view.devicePixelRatio = 1;
+      addTearDown(tester.view.resetPhysicalSize);
+      addTearDown(tester.view.resetDevicePixelRatio);
+      await tester.pumpWidget(
+        MediaQuery(
+          data: const MediaQueryData(
+            padding: EdgeInsets.only(top: 44, bottom: 34),
+          ),
+          child: MaterialApp(
+            theme: fullTheme(),
+            home: Scaffold(
+              body: Builder(
+                builder: (context) => TButton(
+                  child: const Text('打开'),
+                  onPressed: () {
+                    showTDrawer(
+                      context,
+                      drawer: const TDrawer(title: Text('标题'), items: []),
+                    );
+                  },
+                ),
+              ),
+            ),
+          ),
+        ),
+      );
+
+      await tester.tap(find.text('打开'));
+      await tester.pumpAndSettle();
+      // 面板仍是全高矩形
+      final panelRect = tester.getRect(find.byType(TDrawer));
+      expect(panelRect.top, 0);
+      expect(panelRect.bottom, 812);
+      // 内容从安全区之下开始
+      final titleRect = tester.getRect(find.text('标题'));
+      expect(titleRect.top, greaterThanOrEqualTo(44));
+      expect(titleRect.bottom, lessThanOrEqualTo(812 - 34));
     });
 
     testWidgets('展示层参数控制安全区与顶部偏移', (tester) async {
