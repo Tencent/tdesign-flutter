@@ -102,6 +102,9 @@ class TButtonResolve {
     final tokenTextStyle = TextStyle(
       fontSize: metrics.fontSize,
       height: metrics.fontHeight,
+      // height 会引入行高余量，默认 proportional 按字体 ascent/descent 分配，
+      // ascent 更大时文字视觉偏下；even 让余量上下均分，保证垂直居中（issue #1233）
+      leadingDistribution: TextLeadingDistribution.even,
       fontWeight: metrics.fontWeight,
       fontFamily: tTheme.fontFamily?.flutterFontFamily,
       fontFamilyFallback: tTheme.fontFamily?.flutterFontFamilyFallback,
