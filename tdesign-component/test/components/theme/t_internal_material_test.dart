@@ -1,3 +1,8 @@
+import 'dart:io';
+
+import 'package:analyzer/dart/analysis/utilities.dart';
+import 'package:analyzer/dart/ast/ast.dart';
+import 'package:analyzer/dart/ast/visitor.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:tdesign_flutter/src/theme/t_internal_material.dart';
@@ -6,6 +11,7 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 void main() {
   statefulNativeBehaviorTests();
   ownershipBoundaryTests();
+  platformSwitchExhaustivenessTests();
   testWidgets(
     'internal actions isolate Material styles and retain explicit styles and content',
     (tester) async {
@@ -864,4 +870,204 @@ void statefulNativeBehaviorTests() {
       );
     }
   }
+}
+
+/// [TargetPlatform] is merge-extensible: an SDK may add a value to the enum
+/// (the HarmonyOS Flutter fork adds TargetPlatform.ohos), and a switch that
+/// lists only the six published values stops compiling there. No CI image ships
+/// that toolchain, so the invariant is checked against the sources.
+List<String> nonExhaustivePlatformSwitches(
+  String source, {
+  required String path,
+}) {
+  final result = parseString(content: source);
+  final offenders = <String>[];
+  result.unit.accept(
+    _PlatformSwitchVisitor((node, discriminators, hasWildcard) {
+      if (hasWildcard || !discriminators.any(_mentionsTargetPlatform)) {
+        return;
+      }
+      final line = result.lineInfo.getLocation(node.offset).lineNumber;
+      offenders.add('$path:$line');
+    }),
+  );
+  return offenders;
+}
+
+/// A switch arm is a wildcard when it matches any value at all.
+bool _isWildcard(AstNode discriminator) => discriminator is WildcardPattern;
+
+/// Whether the arm names a member of [TargetPlatform].
+bool _mentionsTargetPlatform(AstNode discriminator) {
+  final probe = _TargetPlatformProbe();
+  discriminator.accept(probe);
+  return probe.found;
+}
+
+class _TargetPlatformProbe extends RecursiveAstVisitor<void> {
+  bool found = false;
+
+  @override
+  void visitSimpleIdentifier(SimpleIdentifier node) {
+    if (node.name == 'TargetPlatform') {
+      found = true;
+    }
+  }
+}
+
+/// Reports every switch statement and switch expression with its discriminators.
+class _PlatformSwitchVisitor extends RecursiveAstVisitor<void> {
+  _PlatformSwitchVisitor(this.onSwitch);
+
+  final void Function(
+    AstNode node,
+    List<AstNode> discriminators,
+    bool hasWildcard,
+  )
+  onSwitch;
+
+  @override
+  void visitSwitchStatement(SwitchStatement node) {
+    final discriminators = <AstNode>[];
+    var hasWildcard = false;
+    for (final member in node.members) {
+      if (member is SwitchDefault) {
+        hasWildcard = true;
+      } else if (member is SwitchPatternCase) {
+        discriminators.add(member.guardedPattern.pattern);
+        hasWildcard = hasWildcard || _isWildcard(member.guardedPattern.pattern);
+      } else if (member is SwitchCase) {
+        discriminators.add(member.expression);
+      }
+    }
+    onSwitch(node, discriminators, hasWildcard);
+    super.visitSwitchStatement(node);
+  }
+
+  @override
+  void visitSwitchExpression(SwitchExpression node) {
+    final discriminators = [
+      for (final switchCase in node.cases) switchCase.guardedPattern.pattern,
+    ];
+    onSwitch(node, discriminators, discriminators.any(_isWildcard));
+    super.visitSwitchExpression(node);
+  }
+}
+
+/// Guards the switches that a new [TargetPlatform] value would break.
+void platformSwitchExhaustivenessTests() {
+  group('TargetPlatform switch exhaustiveness', () {
+    test('flags a switch statement that only lists known platforms', () {
+      const source = '''
+void f(TargetPlatform platform) {
+  switch (platform) {
+    case TargetPlatform.android:
+      break;
+    case TargetPlatform.iOS:
+      break;
+  }
+}
+''';
+      expect(nonExhaustivePlatformSwitches(source, path: 'sample.dart'), [
+        'sample.dart:2',
+      ]);
+    });
+
+    test('accepts a switch statement with a default clause', () {
+      const source = '''
+void f(TargetPlatform platform) {
+  switch (platform) {
+    case TargetPlatform.iOS:
+      break;
+    default:
+      break;
+  }
+}
+''';
+      expect(
+        nonExhaustivePlatformSwitches(source, path: 'sample.dart'),
+        isEmpty,
+      );
+    });
+
+    test('accepts a switch statement with a wildcard pattern', () {
+      const source = '''
+void f(TargetPlatform platform) {
+  switch (platform) {
+    case TargetPlatform.iOS:
+      break;
+    case _:
+      break;
+  }
+}
+''';
+      expect(
+        nonExhaustivePlatformSwitches(source, path: 'sample.dart'),
+        isEmpty,
+      );
+    });
+
+    test('flags a switch expression that only lists known platforms', () {
+      const source = '''
+String f(TargetPlatform platform) => switch (platform) {
+  TargetPlatform.iOS => 'ios',
+  TargetPlatform.macOS => 'macos',
+};
+''';
+      expect(nonExhaustivePlatformSwitches(source, path: 'sample.dart'), [
+        'sample.dart:1',
+      ]);
+    });
+
+    test('accepts a switch expression with a wildcard arm', () {
+      const source = '''
+String f(TargetPlatform platform) => switch (platform) {
+  TargetPlatform.iOS => 'ios',
+  _ => 'other',
+};
+''';
+      expect(
+        nonExhaustivePlatformSwitches(source, path: 'sample.dart'),
+        isEmpty,
+      );
+    });
+
+    test('ignores switches that never name TargetPlatform', () {
+      const source = '''
+void f(String value) {
+  switch (value) {
+    case \'a\':
+      break;
+  }
+}
+''';
+      expect(
+        nonExhaustivePlatformSwitches(source, path: 'sample.dart'),
+        isEmpty,
+      );
+    });
+
+    test('every switch over TargetPlatform in lib/ ends in a wildcard', () {
+      final offenders = <String>[];
+      for (final entity in Directory('lib').listSync(recursive: true)) {
+        if (entity is! File || !entity.path.endsWith('.dart')) {
+          continue;
+        }
+        offenders.addAll(
+          nonExhaustivePlatformSwitches(
+            entity.readAsStringSync(),
+            path: entity.path,
+          ),
+        );
+      }
+      expect(
+        offenders,
+        isEmpty,
+        reason:
+            'A switch that lists only the published TargetPlatform values stops '
+            'compiling as soon as an SDK adds another one. Add a wildcard arm '
+            '(_ =>) or a default clause.',
+      );
+    });
+  });
 }
