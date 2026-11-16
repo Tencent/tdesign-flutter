@@ -163,6 +163,7 @@ const componentTestManifests = <ComponentTestManifest>[
       'test/components/button/t_button_text_layout_test.dart',
       'test/components/button/t_button_theme_priority_test.dart',
       'test/components/button/t_button_theme_test.dart',
+      'test/components/button/t_button_vertical_center_test.dart',
       'test/components/button/t_button_widget_test.dart',
     ],
     visualTests: [
