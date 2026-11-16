@@ -68,6 +68,6 @@
 
 用户圆角裁定后，Badge、SideBar、TabBar、ActionSheet的受影响页面单独进行双SDK复跑；其他页面沿用上次检查点，不把局部复跑称为重新执行全部57页。结果见radius-decision-acceptance.md。
 
-Cell/Table/Tabs本批增量仅复跑这3个详情页双模式，结果见three-results-<SDK>.json；其他页面沿用既有检查点，不宣称本批新跑57页。
+Cell/Table/Tabs本批增量仅复跑这3个详情页双模式，结果见[three-results.json](three-results.json)；其他页面沿用既有检查点，不宣称本批新跑57页。
 
 固定默认Token批次重新运行完整57页双模式，另将Badge、Swiper、TimeCounter的size加入正向契约；这些只是适用类别计数，独立属性证据见聚焦测试，不以全页变化替代属性依据。

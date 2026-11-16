@@ -33,6 +33,32 @@
 
 最终候选、双版本功能与视觉结果集中记录在 [Theme 文字槽验收](../../engineering/048-Theme-configuration-contracts/acceptance.md#自定义文字槽统一验收2026-10-22)，本组件不重复保存验证流水。既有设备及设计待办继续保留；本地结果不替代当前候选的远端 CI 或真机验证，截图不存 Spec。
 
+## API 兼容迁移候选
+
+基线 develop `3704434fd2adfb6988110bc760aaaa52a814581c`。本轮候选、双版本结果与未覆盖范围见[统一验收记录](../028-Navigation-TabBar/evidence/api-naming.md)。双版本验证及本地 Review 通过。
+
 ## 菜单回调路由修复独立交付
 
 基线 develop 3704434f，独立保留旧 API，候选验证结果见 [菜单回调验收](./evidence/menu-callback.md)。此前命名迁移分支的 96/286 项不作为本分支验收。
+
+
+## 同步 develop 058ac453 后的命名迁移候选
+
+合入 #1198/#1199/#1197 后，保留 TabBar 菜单修复与六组件兼容 API，Popup/Picker 实现和生成 API 与当前 develop 一致。两 SDK 各 1175 项相关组件/工具、129 项示例/API、严格分析、57 份 API/片段同步和八组件覆盖率门禁通过。站点 Node 35 项及映射检查通过；未执行全包/真机/Web release 或 macOS Golden。输入指纹、冲突取舍及精确范围见[当前验收](./evidence/api-naming.md#同步-develop-058ac453-后的验收)。新 head CI/Review 另核对，保留 implements 及弃用风险，不合并。
+
+
+## 分组件升级 FAQ 收口
+
+FAQ 仅保留 1.0.0 → 1.0.1 的不兼容风险及最小适配方法；普通废弃迁移、参数优先级和既有行为留在 API 文档。旧 ThemeData implements 无内部解析补成员要求，其他公开 getter、同名成员、手势/视觉及 Popup 生命周期风险保留。站点 35 项、57 份文档/360 份示例映射及 README 同步检查通过，七页已实看。更新日志未增改，生产实现与生成 API 哈希不变；范围、#1200 独立交付边界及未重跑项目见[收口验收](./evidence/api-naming.md#分组件升级-faq-收口验收)。远端结果以新 head 为准，不合并。
+
+## 同步 develop 9203d362
+
+已同步 #1200 的 ThemeData 兼容补修，保留命名迁移、FAQ 和原路由/生命周期修复；公开 getter 的旧 implements 适配风险仍存在，breaking 日志明确限定本次迁移涉及的类。合并后两 SDK 各1206项组件/工具、129项示例/API、严格分析、57份API和片段检查通过，八组件覆盖率超过95%，站点35项及映射通过。输入指纹和验证边界见[最新验收](./evidence/api-naming.md#同步-develop-9203d362-后的验收)，远端CI以推送后head为准，不合并。
+
+## 通用兼容说明归并（历史展示方案）
+
+implements 与同名成员说明归并到 #1196 的十类迁移表；五个组件 FAQ 仅保留特有升级问题，Checkbox 移除空 FAQ，Popup 契约说明不变。日志转向实际 PR 升级说明，不增加重复条目。站点35项、文档映射及README检查通过，逐页预览完成；源码/测试/API/CHANGELOG哈希未变。细节与未重跑范围见[归并验收](./evidence/api-naming.md#通用兼容说明归并)，不合并。
+
+## 撤出无关 FAQ
+
+五个新增 FAQ 已撤出，Popup FAQ 和 Popup Spec 恢复 develop 9203d362 原文；这些行为来源于其他已合入PR，不属于本次命名迁移。实现、API注释及所有组件文件哈希不变，PR中的七条API日志和implements升级说明原样保留。文档35项、57份文档/360份示例映射、README同步及diff检查通过；未重跑Flutter或Golden。范围与来源见[当前验收](./evidence/api-naming.md#撤出无关-faq)，远端CI按新head核对，暂不合并。

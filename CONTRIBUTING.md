@@ -186,7 +186,7 @@ CI 显示名按验证（`CI / …`）、生成维护（`Generated / …`）和�
 | 内容 | 唯一来源 | 使用与生成方式 |
 |---|---|---|
 | 项目介绍和最短示例 | 根README.md、README_zh_CN.md | 中英文分别维护，包内副本生成 |
-| 安装、主题（含明暗模式）、国际化、全局FAQ、迁移 | tdesign-site/site/docs/ | 站点直接读取，迁移另生成包内MIGRATION.md |
+| 安装、主题（含明暗模式）、国际化、全局FAQ、迁移 | tdesign-site/site/docs/ | 站点直接读取；包内 README 链接站点指南 |
 | 贡献规范 | 本文件 | 站点直接读取并适配页面元信息与相对链接 |
 | 站点开发方式 | [tdesign-site/README.md](tdesign-site/README.md) | 其他说明链接到此处 |
 | API | lib中的公开dartdoc注释 | 生成example/assets/api，站点和示例App共用 |

@@ -28,9 +28,9 @@ Figma 坐标已扣除 44px 状态栏。Flutter 坐标由 Widget 测试读取，�
 
 ## 像素差异
 
-仓库保留原始设计图与修改前后 Flutter 图；三栏及设计/前/后拼接图是生成器输出，不再重复存储。前后对照中的旧图只有 2863px 且场景不完整，其余区域补页面底色，不缩放旧内容。
+保留[原始设计图](table-figma.png)和本节历史测量结论。旧 Flutter 修改前后截图、重复分辨率导出及仅用于拼接展示的 Swift 脚本已清理，旧图和生成方法由对应 Git 历史追溯。
 
-归一化单图、50% 叠加图和红色差异单图属于可重新生成的中间产物，不继续存入仓库。从仓库根目录执行 `swift specs/components/044-DataDisplay-Table/generate_normalized_evidence.swift` 可按上述裁剪、阈值和原始图片重新生成全部对照及中间图；整理文档无需执行。布局锚点与差异统计保留在本测量，拼接展示需要时再生成。
+后续候选引用 [Table Demo Golden](../../../../tdesign-component/example/test/table/table_demo_golden_test.dart)、[交互 Golden](../../../../tdesign-component/example/test/table/table_interaction_golden_test.dart)及[基线目录](../../../../tdesign-component/example/test/table/goldens/)验证实际视觉变化；这些现行入口不用于重建下列旧像素统计，也不表示本次执行了 Golden。
 
 统计结果：
 
@@ -43,4 +43,4 @@ Figma 坐标已扣除 44px 状态栏。Flutter 坐标由 Widget 测试读取，�
 
 - 通过：场景数量与顺序、页面内容坐标、表格宽高、标题区间距、列布局、行高、固定列、滚动、斑马纹和边框。
 - 合理平台差异：Figma 的 iOS 状态栏/Home Indicator；Flutter Demo 的主题切换、API/代码入口；字体和图标光栅。
-- 像素比较以本测量和保留原图为准；本次清理未重新渲染，也未复验当前候选。
+- 上述像素统计只对应原测量与原图，不能套用现行基线重新解释；本次清理未重新渲染，也未复验当前候选。

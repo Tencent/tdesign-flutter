@@ -21,7 +21,7 @@
 
 组件执行：枚举test/components/{cell,table,tabs}中的非golden测试，加test/theme/component_token_ownership_test.dart及test/tool/{run_component_regression,run_visual_regression,check_component_coverage}_test.dart；flutter test参数--exclude-tags golden --coverage --reporter expanded。tool/check_component_coverage.dart分别过滤cell/table/tabs的生产源码，均通过既有95%门槛。
 
-页面执行：example目录设置TDESIGN_THEME_COMPONENT=cell,table,tabs，flutter test --dart-define=TDESIGN_DEMO_TEST_MODULES=false test/theme/all_component_web_theme_test.dart test/cell/cell_page_test.dart test/table/table_page_test.dart test/tabs/tabs_page_test.dart --exclude-tags golden --reporter expanded。每SDK含3页×2模式共6组主题记录，见three-results-<SDK>.json。覆盖率原始输出见three-coverage-<SDK>.txt。
+页面执行：example目录设置TDESIGN_THEME_COMPONENT=cell,table,tabs，flutter test --dart-define=TDESIGN_DEMO_TEST_MODULES=false test/theme/all_component_web_theme_test.dart test/cell/cell_page_test.dart test/table/table_page_test.dart test/tabs/tabs_page_test.dart --exclude-tags golden --reporter expanded。每SDK含3页×2模式共6组主题记录，见[three-results.json](three-results.json)。覆盖率原始输出见[three-coverage.txt](three-coverage.txt)。
 
 聚焦断言在明暗模式分别检查9/12/16默认、相关Token实时变化、无关档位隔离及Element保持；Table同时检查表头与数据，Cell/Table检查组件显式覆盖；Tabs确认外层显式padding7和minHeight32不随内框Token改写。共享测试沿用已登记文件，3个调度器自测通过。3份API用生成器生成并再次输出到临时目录逐字节比对通过。
 

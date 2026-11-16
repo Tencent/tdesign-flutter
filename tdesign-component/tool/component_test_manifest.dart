@@ -77,6 +77,14 @@ const componentTestManifests = <ComponentTestManifest>[
     exampleTests: ['test/action_sheet/action_sheet_page_test.dart'],
     visualTests: [
       VisualTestManifest(
+        name: 'ActionSheet safe area',
+        workingDirectory: '.',
+        testFiles: [
+          'test/components/action_sheet/t_action_sheet_safe_area_golden_test.dart',
+        ],
+        kind: VisualTestKind.component,
+      ),
+      VisualTestManifest(
         name: 'ActionSheet Demo',
         workingDirectory: 'example',
         testFiles: ['test/action_sheet/action_sheet_page_golden_test.dart'],
@@ -592,6 +600,7 @@ const componentTestManifests = <ComponentTestManifest>[
     coverageTargets: ['lib/src/components/tabbar/'],
     componentTests: [
       'test/components/tabbar/t_tab_bar_test.dart',
+      'test/components/tabbar/t_api_compatibility_test.dart',
       'test/components/tabbar/t_tab_bar_menu_callback_test.dart',
       'test/theme/theme_implements_compatibility_test.dart',
     ],
@@ -949,7 +958,11 @@ const componentTestManifests = <ComponentTestManifest>[
   ComponentTestManifest(
     name: 'slider',
     coverageTargets: ['lib/src/components/slider/'],
-    componentTests: ['test/components/slider/t_slider_test.dart'],
+    componentTests: [
+      'test/components/slider/t_slider_test.dart',
+      'test/components/slider/t_slider_geometry_test.dart',
+      'test/components/slider/t_slider_constraints_test.dart',
+    ],
     exampleTests: ['test/slider/slider_demo_test.dart'],
     visualTests: [
       VisualTestManifest(
@@ -963,7 +976,8 @@ const componentTestManifests = <ComponentTestManifest>[
         workingDirectory: 'example',
         testFiles: [
           'test/slider/slider_demo_golden_test.dart',
-          'test/slider/slider_dragged_golden_test.dart',
+          'test/slider/slider_endpoint_golden_test.dart',
+          'test/slider/slider_boundary_golden_test.dart',
         ],
       ),
     ],

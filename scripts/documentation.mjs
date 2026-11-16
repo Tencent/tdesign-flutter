@@ -4,7 +4,7 @@ import { fileURLToPath } from 'node:url';
 
 export const repositoryRoot = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 export const migrationSource = 'tdesign-site/site/docs/migration-0.2.7-to-1.0.md';
-const exampleSource = 'tdesign-component/tool/fixtures/token_migration/lib/migration_027_to_100_examples.dart';
+const exampleSource = 'tdesign-component/example/lib/migration_examples.dart';
 const github = 'https://github.com/Tencent/tdesign-flutter/blob/develop/';
 const site = 'https://tdesign.tencent.com/flutter/';
 
@@ -26,7 +26,6 @@ export function packageLinks(content) {
   return content.replace(/\]\(([^)]+)\)/g, (link, target) => {
     if (/^(?:[a-z][a-z0-9+.-]*:|#|\/)/i.test(target)) return link;
     const clean = target.replace(/^\.\//, '');
-    if (clean.split('#')[0] === migrationSource) return `](./MIGRATION.md${clean.includes('#') ? `#${clean.split('#')[1]}` : ''})`;
     if (/^README(?:_zh_CN)?\.md(?:#.*)?$/.test(clean)) return link;
     if (clean.startsWith('tdesign-site/site/docs/')) {
       const [file, fragment] = clean.slice('tdesign-site/site/docs/'.length).split('#');
@@ -103,8 +102,6 @@ export function syncDocuments({ root = repositoryRoot, check = false } = {}) {
   for (const source of ['README.md', 'README_zh_CN.md']) {
     outputs.set(`tdesign-component/${source}`, generatedDocument(source, packageLinks(read(source))));
   }
-  const portableGuide = guide.replace(/^---\r?\n[\s\S]*?\r?\n---\r?\n\s*/, '');
-  outputs.set('tdesign-component/MIGRATION.md', generatedDocument(migrationSource, guideLinks(portableGuide, { absolute: true })));
   const stale = [...outputs].filter(([file, expected]) => {
     try { return read(file) !== expected; } catch (error) {
       if (error.code === 'ENOENT') return true;

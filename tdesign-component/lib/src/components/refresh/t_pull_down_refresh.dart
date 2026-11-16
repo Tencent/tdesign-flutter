@@ -530,25 +530,29 @@ class _TPullDownRefreshHeader extends Header {
       text = texts.pullToRefresh;
     }
 
-    return SizedBox(
-      width: double.infinity,
-      height: state.offset,
-      child: Container(
-        alignment: Alignment.center,
-        key: const ValueKey('t-pull-down-refresh-header'),
-        height: _extent,
-        color: context.tTheme.bgColorContainer,
-        child: showLoading
-            ? Theme(
-                data: Theme.of(context).mergeExtension(refreshLoadingTheme),
-                child: TLoading(size: 25, text: text),
-              )
-            : TTextStyled(
-                text,
-                centerLeading: true,
-                font: context.tTheme.fontBodyMedium,
-                style: TextStyle(color: context.tTheme.textColorPlaceholder),
-              ),
+    // offset=0 时 SizedBox 高度被压成 0，内部居中的文字会向上溢出、被外层 ClipPath
+    // 裁出半截留在顶部。ClipRect 把内容限制在 offset 高度内，静止时自然不显示。
+    return ClipRect(
+      child: SizedBox(
+        width: double.infinity,
+        height: state.offset,
+        child: Container(
+          alignment: Alignment.center,
+          key: const ValueKey('t-pull-down-refresh-header'),
+          height: _extent,
+          color: context.tTheme.bgColorContainer,
+          child: showLoading
+              ? Theme(
+                  data: Theme.of(context).mergeExtension(refreshLoadingTheme),
+                  child: TLoading(size: 25, text: text),
+                )
+              : TTextStyled(
+                  text,
+                  centerLeading: true,
+                  font: context.tTheme.fontBodyMedium,
+                  style: TextStyle(color: context.tTheme.textColorPlaceholder),
+                ),
+        ),
       ),
     );
   }

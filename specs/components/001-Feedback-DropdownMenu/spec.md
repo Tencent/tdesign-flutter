@@ -155,7 +155,7 @@ DropdownMenu 已具备锚点、普通滚动跟随和自动方向能力，但边�
 
 ## 兼容性与迁移
 
-本次只整理设计记录，不据此新增 API、改变默认值或判断全部兼容。后续接口删除、类型收紧或默认行为变化按最终源码和迁移指南核对。
+历史设计记录整理不据此新增 API、改变默认值或判断全部兼容。本轮共享 Controller 隔离补丁仅修改私有实现，不改变公开签名、默认值和后绑定覆盖规则；后续接口删除、类型收紧或默认行为变化按最终源码和迁移指南核对。
 
 ## 验收标准
 
@@ -176,6 +176,40 @@ DropdownMenu 已具备锚点、普通滚动跟随和自动方向能力，但边�
 
 后绑定菜单已经打开时，旧组件卸载或更换 Controller 不关闭该面板、不清空其打开下标，后绑定菜单的关闭和重新打开命令仍有效。
 
-共享 Controller 的完整状态隔离不在本次修复范围，旧菜单更新 items 的历史串扰由 [Issue #1195](https://github.com/Tencent/tdesign-flutter/issues/1195) 单独跟踪。
+上述 #1191 绑定清理不包含共享打开状态隔离；旧菜单更新 items 的串扰由 [Issue #1195](https://github.com/Tencent/tdesign-flutter/issues/1195) 单独跟踪，后续修复契约见下节。
 
 Controller 不提供同时控制多个组件的能力，建议独立组件分别使用 Controller。为保持历史兼容，本版本保留本组件既有的重复绑定处理规则。本次不新增绑定限制，也不承诺多个菜单的完整状态隔离。
+
+
+<a id="shared-controller-state-isolation"></a>
+
+## 1.0.1 共享 Controller 状态与回调隔离（#1195 / #1203）
+
+### 背景与边界
+
+后绑定菜单 B 已打开时，旧菜单 A 的 items 更新原先仍消费共享 openIndex，进而自动关闭并清空 B 的状态。#1203 为共享状态写入增加 owner 校验，并限制 didUpdateWidget 仅消费当前 owner 的打开下标，方向合理，且无需新增公开 API。
+
+仅保护状态写入不足以隔离业务副作用：旧 trigger 回调仍可能对从未打开的 A 派发 onClosed；A 的打开动画进行中若 Controller 换绑到 B，旧动画结束仍可能派发 onOpened 并请求焦点。State 内的 operation epoch 不会因其他 State 绑定同一 Controller 自动改变，因此不能单独证明请求仍属于当前 owner。
+
+保留后绑定覆盖、单目标命令及卸载不恢复旧绑定的既有规则。不新增重复绑定异常，不把共享 Controller 扩展为同时控制多个菜单，也不在本事项中定义已打开面板向新 owner 的自动迁移。当前 owner 自身打开项禁用或删除时仍正常关闭。
+
+### 实现要求与取舍
+
+- 所有共享 openIndex 写入均核对 owner；旧菜单禁用或删除 items 不清空 B 的打开状态。
+- 旧 trigger 的 toggle/open/switch 入口不启动新操作；当前 owner 的普通交互保持有效。
+- 异步请求保存 Controller 身份，并在恢复后同时校验身份、owner、operation epoch 和适用的打开下标；切换到相同下标不能替代所有权判断。等待其他活动菜单关闭后也须复核请求是否已失效。
+- 延迟到下一帧的自动关闭与 Overlay 重建，在执行时重新检查 owner。
+- 旧关闭操作失去绑定后仍完成其本地 Overlay、切换缓存和活动菜单记录清理，但不清空新 owner 的状态、不派发 onClosed，也不恢复旧 trigger 的焦点。不能直接在关闭清理前增加一律返回的 owner 判断，以免留下旧浮层。
+- 打开或切换操作失去绑定后不派发 onOpened、不请求面板焦点；被打断请求的 Future 仍须完成。
+
+复用已有 owner 与 epoch，而不增加第二套公开状态或 Controller 参数。状态写入保护与业务副作用保护分别实施；避免为此更换 Overlay 架构或改变动画、主题和默认值。
+
+### 验收标准
+
+- A 禁用/删除 items 后，B 面板、openIndex 与回调计数保持正确，B 可以关闭再重新打开。
+- A 从未打开时，其保留的自定义 trigger 回调不能触发 A 的 onClosed，也不影响 B。
+- A 打开动画未完成便失去绑定，完成后不产生 A 的 onOpened。
+- A 关闭动画未完成便失去绑定，完成后旧面板移除、共享状态不被清空、不产生 A 的 onClosed，B 的后续命令可用。
+- 保留既有当前 owner 自动关闭、Controller 换绑/卸载、快速切换及 Future 完成回归；双 SDK 功能、严格分析与生产覆盖率按现行门禁执行。
+
+本节是行为要求；本地候选、执行结果和未验证范围见 [acceptance.md](./acceptance.md#shared-controller-validation)。不以版本章节名代表已合并或已排期发布。

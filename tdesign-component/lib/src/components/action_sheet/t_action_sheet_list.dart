@@ -149,6 +149,11 @@ class TActionSheetList<T> extends StatelessWidget {
             if (subtitle?.isNotEmpty ?? false) _buildDescription(context),
             Flexible(child: _buildOptionsList(context)),
             if (showCancel) _buildCancelButton(context),
+            if (useSafeArea)
+              Container(
+                color: context.tTheme.bgColorContainer,
+                height: MediaQuery.paddingOf(context).bottom,
+              ),
           ],
         ),
       ),
@@ -413,15 +418,6 @@ class TActionSheetList<T> extends StatelessWidget {
 
   /// 构建取消按钮
   Widget _buildCancelButton(BuildContext context) {
-    return Column(
-      children: [
-        buildCancelButton(context, false, cancelText, onCancel),
-        if (useSafeArea)
-          Container(
-            color: context.tTheme.bgColorContainer,
-            height: MediaQuery.of(context).padding.bottom,
-          ),
-      ],
-    );
+    return buildCancelButton(context, false, cancelText, onCancel);
   }
 }

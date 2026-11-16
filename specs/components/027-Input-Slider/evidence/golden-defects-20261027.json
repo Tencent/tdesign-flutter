@@ -1,0 +1,138 @@
+{
+  "base_commit": "a65182d898f534e5181841c17e1298962336fc30",
+  "local_only": true,
+  "candidate_fingerprint": "ed217c6ace1c1de01600a6b54c7268fd50e9eea92eb24fe301afa692e70e8a3f",
+  "candidate_files": {
+    "tdesign-component/example/test/slider/slider_demo_golden_test.dart": "c08a002c6dd90854906adde41e754565b5727ead976e968fd36cd7d057bb47ff",
+    "tdesign-component/example/test/slider/slider_endpoint_golden_test.dart": "04c1ba6b5e826e96748b29be52785b15b16206a379f7a480233406d8509e1ee3",
+    "tdesign-component/example/test/slider/slider_boundary_golden_test.dart": "c83d6a0d1e6450185ebaf9ec15261f8a38771675a31e61ecf98561f19a2ab933",
+    "tdesign-component/example/test/slider/slider_boundary_sources.dart": "aaf37eae9ba4e5c55d2b7e321ea37388c45235545215c102e9218f63c9e6729d",
+    "tdesign-component/example/test/slider/slider_golden_matrix.dart": "64740f4b129fa918b9117d40439390572c5a367267e8d6a1d364034f58434dab",
+    "tdesign-component/tool/component_test_manifest.dart": "840a0ff4be23c76b95bdb3578f120d6243a7327ac2d8b3b4a32dc626c745e643",
+    "tdesign-component/example/test/slider/goldens/slider_boundaries_dark.png": "7f7f7bd4d3f7fa0052e47d8dd304ff1192a28387bbcb01bd71407db1ba6bfe1f",
+    "tdesign-component/example/test/slider/goldens/slider_boundaries_light.png": "69b047a4948f404d1f7dd50ae9ea759ad5ffbe53c42486519dfaa67c50c0d7a2",
+    "tdesign-component/example/test/slider/goldens/slider_endpoints_dark.png": "b63bbc3bc397fbe0dc2ea7f19094b54be2a4e6f48754170e6639f01fe9115d8c",
+    "tdesign-component/example/test/slider/goldens/slider_endpoints_light.png": "453fd9cc6b27abba00401be05b191f3b210eb1c269010aef8b84c8b83b744405",
+    "tdesign-component/example/test/slider/goldens/slider_page_dark.png": "c8b9b468af693072e65424f88fb904a55148e4aa52d893020ce2a26534433b73",
+    "tdesign-component/example/test/slider/goldens/slider_page_light.png": "0c0dc340aa5c695469154679202084bff29d8576ccb4baac15024de1e0a8d133"
+  },
+  "unchanged_scopes": [
+    "tdesign-component/lib",
+    "tdesign-component/example/lib",
+    "tdesign-component/example/assets",
+    "tdesign-component/test/components",
+    "tdesign-component/example/test/fonts"
+  ],
+  "before": {
+    "demo_images": 16,
+    "demo_comparisons": 16,
+    "component_images": 1,
+    "component_comparisons": 1,
+    "demo_png_bytes": 1934223
+  },
+  "after": {
+    "demo_images": 6,
+    "demo_comparisons": 6,
+    "component_images": 1,
+    "component_comparisons": 1,
+    "demo_png_bytes": 501110
+  },
+  "coverage_roles": [
+    {
+      "role": "default page",
+      "baselines": [
+        "slider_page_light.png",
+        "slider_page_dark.png"
+      ],
+      "risk": "public grouping, initial values, colors, typography and disabled styles",
+      "cases": "18 public instances including 3 disabled controls",
+      "support": "slider_demo_test.dart: scenario order and parameters"
+    },
+    {
+      "role": "endpoints",
+      "baselines": [
+        "slider_endpoints_light.png",
+        "slider_endpoints_dark.png"
+      ],
+      "risk": "thumb/value/tick endpoint clipping, capsule inset and discrete gap alignment",
+      "cases": "18 regions per theme: ordinary/capsule, horizontal/vertical, single0/100 and full ranges, continuous/discrete",
+      "support": "slider_demo_test.dart endpoint alignment; component endpoint pixel and nonzero-range drag tests"
+    },
+    {
+      "role": "visual boundaries",
+      "baselines": [
+        "slider_boundaries_light.png",
+        "slider_boundaries_dark.png"
+      ],
+      "risk": "thick track near end, RTL, narrow discrete rendering, longitudinal/cross-axis thumb scaling, large thickness constraints",
+      "cases": "8 regions per theme",
+      "support": "component geometry/constraints suites and Demo constraint fixture"
+    },
+    {
+      "role": "functional-only boundaries",
+      "baselines": [],
+      "risk": "callback values/lifecycle, 8px range rule, sustained resize, zero size, parent scroll, keyboard, off-grid snapping, capsule minimum thickness, broad parameter combinations",
+      "cases": "existing86 component and17Demo tests retained without editing",
+      "support": "t_slider_constraints_test.dart, t_slider_geometry_test.dart, t_slider_test.dart, slider_demo_test.dart"
+    }
+  ],
+  "boundary_scene_ids": [
+    "near-edge",
+    "narrow-discrete",
+    "rtl-scale",
+    "rtl-capsule-scale",
+    "narrow-continuous",
+    "thin-cross-axis",
+    "large-normal",
+    "large-capsule"
+  ],
+  "selection_policy": "one visible failure mode per representative; broad combinations remain functional tests instead of complete visual products",
+  "visual_validation": {
+    "renderer": "Linux Flutter3.32.0",
+    "demo": 6,
+    "component": 1,
+    "updates": 1,
+    "new_baselines": 4,
+    "unchanged_default_baselines": 2,
+    "comparator": "default exact, tolerance unchanged",
+    "retained_regions_compared_to_prior_images": 52,
+    "changed_content_pixels": 0,
+    "matrix_render_scale": 1
+  },
+  "functional_validation": {
+    "each_sdk": [
+      "3.32.0 Linux x86_64",
+      "3.47.8 macOS arm64"
+    ],
+    "demo_each": 17,
+    "tooling_each": 179,
+    "strict_analysis": "component and example: zero diagnostics"
+  },
+  "component_regression": "86 test cases, coverage97.54% and production code unchanged from accepted base; not rerun this test-only batch",
+  "defect_reintroduction_checks": [
+    {
+      "mutation": "endpoint-inset",
+      "expected_failure": true,
+      "test": "slider endpoints matrix light",
+      "changed_pixels": 8584,
+      "diff_percent": 0.65,
+      "scope": "isolated temporary copy; delivery source unchanged"
+    },
+    {
+      "mutation": "cross-overflow",
+      "expected_failure": true,
+      "test": "slider boundaries matrix light",
+      "changed_pixels": 9234,
+      "diff_percent": 1.67,
+      "scope": "isolated temporary copy; delivery source unchanged"
+    }
+  ],
+  "committed": false,
+  "pushed": false,
+  "unverified": [
+    "remote CI for local delta",
+    "physical device",
+    "Skyline",
+    "platform builds"
+  ]
+}

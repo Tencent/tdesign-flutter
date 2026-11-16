@@ -57,7 +57,7 @@
 - `value` 是唯一选中状态；`onChanged == null` 时整栏只读并禁用交互。
 - `indicatorAnimation` 在 none、linear、elastic 间切换时始终与当前 value 对齐；动画中再次切换值从当前位置继续。
 - 每项 `onTap` 是选中变化时的附加动作；重复点击仅在
-  `allowMultipleTaps == true` 时调用。`needInkWell` 只改变水波纹视觉，一次手势
+  `notifyOnReselect == true`（兼容 `allowMultipleTaps`）时调用。`needInkWell` 只改变水波纹视觉，一次手势
   仍只进入一次选中与回调链路。
 - `itemStyle == label` 时选中项显示品牌浅色背景；`normal` 只改变前景色。
 - `style == capsule` 时标签栏具有 16px 外边距、圆角与顶部阴影，不显示顶部边线。
@@ -149,7 +149,7 @@
   局部 Row/Column 假装实现整栏方向。
 - 水波纹路径只由内部 `InkWell` 接收 tap，普通路径只由外层 `GestureDetector`
   接收 tap；新增一次手势只触发一次 item `onTap` 和一次 `onChanged` 的回归。
-- `onTap` 与 `allowMultipleTaps` dartdoc 明确选中变化、重复点击、禁用和通知边界。
+- `onTap` 与 `notifyOnReselect`（兼容 `allowMultipleTaps`）dartdoc 明确选中变化、重复点击、禁用和通知边界。
 - 撤回仅供 TabBar 使用的 `ExamplePage.navBarTitle`；页面壳继续使用既有单标题契约，
   不把页面展示差异扩散为共享 API。
 
@@ -195,8 +195,29 @@
 
 共 8 张新增 Golden，登记到 TabBar Demo 的现有视觉入口；功能与交互断言继续由组件测试承担。首次生成前核对实际渲染，生成只写上述新文件，随后不带更新参数复跑；已有基线保持不变。
 
+## 1.0.1 API 兼容迁移
+
+菜单 `onSelected` 替代 `onChanged`，须提供两者之一，保留选项值和重复选择通知。标签项 `notifyOnReselect` 替代 `allowMultipleTaps`，仅控制重复点击当前项时的 `onTap`，不使整栏 `onChanged` 重复通知；默认 false。
+
+新旧参数同时提供时，新参数优先，仅通知一次；没有新参数时保留旧公开 getter 的继承覆盖。旧入口及类型保留，标注推荐入口和 2.0.0 删除计划。旧 API、默认行为及 Controller 绑定规则不变。
+
+验收覆盖旧调用、继承覆盖、新参数优先级、空回调及实际交互。
+
 ## 菜单选择回调内路由操作修复
 
-普通及自定义菜单先同步通知旧 onChanged，再只清理原菜单路由。回调中已关闭、移除或替换原菜单时不再次返回；回调打开新页时，定向移除被覆盖的原菜单，不关闭新页。回调前保存 Route/Navigator，回调后不读取 context。普通关闭继续 pop 并保留动画；被覆盖菜单 removeRoute，Observer 收到 didRemove，不播放原菜单返回动画。异常传播不变，不增加 finally 关闭。
+普通及自定义菜单先同步通知 onSelected（未提供新回调时委派旧 onChanged），再只清理原菜单路由。回调中已关闭、移除或替换原菜单时不再次返回；回调打开新页时，定向移除被覆盖的原菜单，不关闭新页。回调前保存 Route/Navigator，回调后不读取 context。普通关闭继续 pop 并保留动画；被覆盖菜单 removeRoute，Observer 收到 didRemove，不播放原菜单返回动画。异常传播不变，不增加 finally 关闭。
 
-不新增或弃用 API，不包含 onSelected/notifyOnReselect 等命名迁移；默认值、回调时机和 Controller 绑定规则保持。正式 48 项矩阵覆盖两种菜单、根/嵌套 Navigator 与 12 类操作，包括先关闭再导航、清栈及直接替换，登记到既有 TabBar 组件 CI。
+该独立菜单修复本身不新增或弃用 API，命名迁移由上节另行记录；默认值、回调时机和 Controller 绑定规则保持。正式 48 项矩阵覆盖两种菜单、根/嵌套 Navigator 与 12 类操作，包括先关闭再导航、清栈及直接替换，登记到既有 TabBar 组件 CI。
+
+
+## 保留推荐 getter 的升级边界
+
+六组件命名迁移同时保留推荐构造参数和公开 getter，允许新名称传入、读取及继承覆盖；这是公开接口扩展，不宣称完全源码兼容。未提供新参数时仍通过旧 getter 分派，非空新参数优先（含 notifyOnReselect=false），null 回退旧入口；默认值、普通旧调用的回调时机与 Controller 绑定规则不因命名迁移改变。
+
+已有 implements 类须补齐新增 getter，不能依靠默认实现；已有子类的同名业务成员也可能与新增 getter 冲突：类型不兼容时报 invalid_override，类型兼容仍可能进入组件分派，需核对语义或重命名业务成员。旧入口保留并提示废弃，2.0.0 删除计划与严格诊断风险须一并披露。保留 getter 是有意的 API 设计选择，不能将其破坏性归因于同步 develop 或用户既有代码错误。
+
+新增公开 getter 的 implements 适配和子类同名成员冲突集中在 PR 升级说明中，列明十个受影响类、对应新成员及转发关系；七条 API 日志保留各自的适配提醒和旧入口 2.0.0 删除计划。普通调用、旧入口、API 注释及生成文档保持本次既定实现，不因文档范围整理而改变。
+
+本 PR 不新增手势或文字默认值 FAQ：NoticeBar 手势来自已合入的 #1192，Drawer/Popover/Steps/TabBar 自定义文字主要来自 #1184，Popover 测量还包含 #1182 的前置修复。Popup final 与生命周期分别来自 #1199 / #1197，Popup FAQ 和相关 Spec 沿用当前 develop 原文，不在本 PR 二次改写。各来源的既有 API 文档、测试和修复仍保留，不把撤出 FAQ 理解成撤销实现。
+
+Drawer/TabBar 旧 ThemeData implements 的内部解析问题已由 #1200 修复并同步，不增加业务补内部成员的要求；本次公开 getter 的 implements 风险仍独立存在。不新增全局 FAQ 或重复更新日志，不为本次命名迁移引入 base/final 限制。

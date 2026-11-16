@@ -1,0 +1,161 @@
+{
+  "sourceHead": "02dedb50d42bac0d76ec97f6cfa9890d7a27168d",
+  "siteTree": "bc92d56b4efd623552a52d6323c7405fd1a6bee5",
+  "siteComponents": "0.20.4",
+  "environment": {
+    "node": "24.15.0",
+    "flutter": "3.47.7",
+    "browser": "Codex in-app desktop browser",
+    "viewport": {
+      "width": 1280,
+      "height": 720
+    }
+  },
+  "theme": {
+    "initial": {
+      "device": "mobile",
+      "iframe": "http://127.0.0.1:19210/flutter/example/#button",
+      "mode": "dark",
+      "radius": "6px"
+    },
+    "adjusted": {
+      "device": "mobile",
+      "iframe": "http://127.0.0.1:19210/flutter/example/#button",
+      "mode": "dark",
+      "radius": "4px"
+    },
+    "reset": {
+      "device": "mobile",
+      "iframe": "http://127.0.0.1:19210/flutter/example/#button",
+      "mode": "dark",
+      "radius": "6px"
+    },
+    "light": {
+      "device": "mobile",
+      "iframe": "http://127.0.0.1:19210/flutter/example/#button",
+      "mode": "light",
+      "radius": "6px"
+    },
+    "dark": {
+      "device": "mobile",
+      "iframe": "http://127.0.0.1:19210/flutter/example/#button",
+      "mode": "dark",
+      "radius": "6px"
+    },
+    "divider": {
+      "device": "mobile",
+      "iframe": "http://127.0.0.1:19210/flutter/example/#divider",
+      "mode": "dark",
+      "radius": "6px"
+    },
+    "buttonReturn": {
+      "device": "mobile",
+      "iframe": "http://127.0.0.1:19210/flutter/example/#button",
+      "mode": "dark",
+      "radius": "6px"
+    }
+  },
+  "anchors": {
+    "initialAppendix": {
+      "anchorTop": 0,
+      "headingTop": 184,
+      "open": true
+    },
+    "repeatedHash": {
+      "open": true,
+      "top": 0,
+      "url": "http://127.0.0.1:19211/flutter/migration-1-0#migration-legacy-types"
+    },
+    "ordinary": {
+      "anchorTop": 0,
+      "contentTop": 123.5,
+      "text": "Icon 图标"
+    }
+  },
+  "history": {
+    "A": {
+      "folds": [
+        true
+      ],
+      "url": "http://127.0.0.1:19211/flutter/migration-1-0",
+      "y": 27966.5
+    },
+    "B": {
+      "folds": [
+        false
+      ],
+      "url": "http://127.0.0.1:19211/flutter/migration-1-0",
+      "y": 720
+    },
+    "backA": {
+      "folds": [
+        true
+      ],
+      "url": "http://127.0.0.1:19211/flutter/migration-1-0",
+      "y": 27966.5
+    },
+    "backB": {
+      "folds": [
+        false
+      ],
+      "url": "http://127.0.0.1:19211/flutter/migration-1-0",
+      "y": 720
+    },
+    "forwardB": {
+      "folds": [
+        false
+      ],
+      "url": "http://127.0.0.1:19211/flutter/migration-1-0",
+      "y": 720
+    },
+    "matches": {
+      "backA": true,
+      "backB": true,
+      "forwardB": true
+    }
+  },
+  "footer": {
+    "phoneDark": {
+      "footerTop": 245,
+      "footerWidth": 1004,
+      "height": 720,
+      "phoneBottom": 185,
+      "phoneTop": -484,
+      "width": 1280
+    },
+    "tocDark": {
+      "footerTop": 245,
+      "footerWidth": 1004,
+      "height": 720,
+      "tocBottom": 185,
+      "tocHeight": 336,
+      "tocTop": -151,
+      "width": 1280
+    },
+    "phoneLight": {
+      "footerTop": 245,
+      "footerWidth": 1004,
+      "mode": "light",
+      "phoneBottom": 185
+    },
+    "tocLight": {
+      "footerTop": 245,
+      "mode": "light",
+      "tocBottom": 185
+    }
+  },
+  "console": {
+    "initialFlutterDebugAssertion": {
+      "message": "TextPainter debugSize == size",
+      "source": "tdesign-component/example/lib/base/example_widget.dart:542",
+      "flutter": "3.47.7",
+      "reproducedAfterReload": false,
+      "reproducedStandalone": false,
+      "attribution": "unconfirmed"
+    },
+    "externalRequestsFailed": [
+      "https://tdesign-site-services.surge.sh/notice.json",
+      "https://tdesign-site-services.surge.sh/components-notice.json"
+    ]
+  }
+}

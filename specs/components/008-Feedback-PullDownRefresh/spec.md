@@ -193,7 +193,7 @@ class TPullDownRefreshTexts {
 - **Demo 矩阵标注**：「自定义提示语」「刷新超时」为小程序已有公开 props 的新增 API 演示（Demo 形态仅参考 Mobile Vue），不作为小程序现有公开 Demo 宣称。
 - **测试 / 覆盖率 / Golden**：补真实 `flutter test`，生产源码 LCOV LH/LF ≥95%；每个公开 Demo 补逐项 Widget 断言与 Golden/固定视口证据；真机/同尺寸像素对照保留为未完成人工项。
 - **P2 最小修复**：状态回调去重且避免 build 期同步回调；明确/处理异常传播；timeout 状态语义明确；英文文案 `Release to refresh`；清理站点无关标点 churn 与过时 easy_refresh import；补 child 滚动约束 dartdoc。
-- 默认渲染：`loadingBarHeight=50`、`maxBarHeight=80`、触发阈值=50，Header 为 TDesign 样式。
+- 默认渲染：`loadingBarHeight=50`、`maxBarHeight=80`、触发阈值=50，Header 为 TDesign 样式。静止且偏移为零时不在页面顶部绘制提示；下拉及复位时 Header 内容限制在当前可见高度内，正常状态文案与交互保持不变。
 - `onRefresh` 生效：下拉松手触发，完成后展示完成态并复位；`onRefresh == null` 时禁用刷新。
 - `texts` 覆盖四态文案，缺省回退 l10n；中文默认与官方 `loadingTexts` 一致。
 - `refreshTimeout` 默认 `3000ms`，超过时长未完成时上报一次 `timeout`、回到 `inactive` 并结束刷新；传入 `null` 关闭超时。

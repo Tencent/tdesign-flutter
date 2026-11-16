@@ -208,7 +208,8 @@
   "environment": "macOS / Codex in-app Chromium browser",
   "build_run": 40282176943,
   "deploy_run": 40282739968,
-  "screenshots": {
+  "scope": "Browser runtime; no mobile-device claim. This follow-up changes evidence only.",
+  "removedScreenshotHashes": {
     "guides-counter.png": "582c91b39b2b0892c033c28f7431ce72dcb5568c952f733415276daff4ceaee7",
     "guides-theme-light-reloaded.png": "15f2f53b92ade710ebce8e885903a358172bee84d8d26f237e72448a8b32143c",
     "guides-theme-dark-reloaded.png": "89027c7b94c205024050e38d77a02a175b2ee8e8edb909224b6356120140f523",
@@ -216,5 +217,5 @@
     "guides-locale-english.png": "cc708451ec7b3a364395707091421fd74723882bf0febe7597d362ec861e1d92",
     "guides-resource-theme.png": "77ef7898f14c8b52a1c3a08d785d97a1823deeed0d9cab416a0c9ec48c6d3de2"
   },
-  "scope": "Browser runtime; no mobile-device claim. This follow-up changes evidence only."
+  "attachmentRetentionNote": "Non-component screenshot attachments removed; historical hashes retained without changing runtime observations or source identity."
 }

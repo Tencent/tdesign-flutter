@@ -21,3 +21,16 @@
 使用仓库现行的 [组件功能回归](../../../../tdesign-component/tool/run_component_regression.dart) 和 [Golden 回归](../../../../tdesign-component/tool/run_visual_regression.dart)，按已登记范围核对实际组件行为。缺失消费证据须补真实 Widget/布局/绘制断言、设计裁定或设备验证；常规回归通过不自动关闭历史缺口。
 
 新结果记录最终候选、SDK、依赖、命令及适用环境；旧快照不原地覆盖成新候选通过，不再要求重建已退役的专项审计流水。
+
+## 相同内容附件合并
+
+下列历史输出经逐字节比对完全相同，各组只保留一份共享数据。不同 SDK、批次的候选、命令、环境和执行结果仍由对应 acceptance、指纹与矩阵记录；共享 payload 不合并执行身份，也不新增任何通过结论。冻结 JSON 中的原输出文件名仍是当时的来源元数据，可用下表找到同内容附件。
+
+| 保留数据 | 原输出名 | SHA-256 |
+| --- | --- | --- |
+| [three-results.json](design/three-results.json) | `three-results-3.32.0.json`、`three-results-3.47.7.json` | `d1d8fb1be49e386ba18fea80be6af7987a80feee33bcea7fe6f21a06c761b396` |
+| [radius-results.json](design/radius-results.json) | `radius-results-3.32.0.json`、`radius-results-3.47.7.json` | `818603a758c89963feae9085592fa14007d082cf904423cc2b73b659f6e6564a` |
+| [fixed-component-token-results.json](design/fixed-component-token-results.json) | `fixed-results-3.32.0.json`、`fixed-results-3.47.7.json`、`component-token-results-3.32.0.json`、`component-token-results-3.47.7.json` | `1a616429c9abb84afe93f758472b82fa4c92bde0371c496ae3e2a0cd2929e9bd` |
+| [baseline-results.json](design/baseline-results.json) | `results-3.32.0.json`、`results-3.47.7.json` | `48e6dc0feafde7b4d8a81f45ff48569adde0f8287978103a78e9a1d55df7664e` |
+| [three-coverage.txt](design/three-coverage.txt) | `three-coverage-3.32.0.txt`、`three-coverage-3.47.7.txt` | `4c9b877b9c51d49249aa8788332387ad53dcbeb942e4f5dd40ab3851507206ad` |
+| [design-results.json](design/design-results.json) | `design-results-3.32.0.json`、`design-results-3.47.7.json` | `a4c0d3ea254b9fe8b315983e43f8a4a30acf52c6c39838bf2a7dfdfe49eb7fe3` |

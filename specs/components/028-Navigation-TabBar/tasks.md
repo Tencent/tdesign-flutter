@@ -17,8 +17,20 @@
 
 组件范围和已验证边界见 acceptance.md；共享收口事项统一维护在 [Theme tasks](../../engineering/048-Theme-configuration-contracts/tasks.md#文字槽-review-收口)，不在各组件重复记录分支、推送与 CI 流程。上述既有设备、设计和 Review 待办不因此关闭。
 
+## API 兼容迁移
+
+- [x] 完成兼容层、示例和生成文档。
+- [x] 完成双版本回归及最终兼容性 Review。
+
 ## 菜单回调路由修复
 
 - [x] 实现原菜单定向关闭，登记 48 项正式回归。
 - [x] 完成独立候选双版本验收及本地 Review。
 - [ ] 提交后核对精确 head CI；暂不合并。
+
+
+## 同步 develop 058ac453
+
+- [x] 合并已上线的菜单回调、蒙层配置及生命周期实现，保留六组件命名兼容增量与两类 TabBar 测试登记。
+- [x] 双 SDK 回归、分析、文档/片段、覆盖率及本地 Review，更新验收记录。
+- [ ] 推送后核对最终 head 的 CI/Review，不合并。

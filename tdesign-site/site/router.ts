@@ -1,6 +1,7 @@
 import { RouteRecordRaw, createRouter, createWebHistory, RouterOptions } from 'vue-router';
 // @ts-ignore
 import siteConfig from './site.config';
+import { documentNavigation } from './utils/documentAnchor.mjs';
 
 const { docs } = siteConfig;
 
@@ -43,14 +44,15 @@ const routes: Array<RouteRecordRaw> = [
 const routerConfig: RouterOptions = {
   routes,
   history: createWebHistory('/'),
-  scrollBehavior(to) {
-    return to.hash ? { el: decodeURIComponent(to.hash) } : { top: 0 };
+  scrollBehavior(to, from, savedPosition) {
+    return documentNavigation.scroll(to, savedPosition);
   },
 };
 
 const router = createRouter(routerConfig);
 
 router.beforeEach((to, from, next) => {
+  documentNavigation.begin(to, from);
   // @ts-ignore
   if (typeof NProgress !== 'undefined') {
     // @ts-ignore

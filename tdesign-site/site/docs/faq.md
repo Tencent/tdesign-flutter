@@ -6,12 +6,11 @@ spline: explain
 
 ## 使用哪个版本和 Flutter SDK？
 
-1.0项目使用 `tdesign_flutter: ^1.0.0`，要求 Flutter ≥3.32.0、Dart ≥3.8.0。Android/iOS最低系统版本还取决于实际解析的Flutter和平台插件，应在目标宿主构建验证。完整步骤见[快速开始](./getting-started.md)。
+新项目可使用 `tdesign_flutter: ^1.1.0`。已有项目应根据依赖约束和锁文件确认实际版本。要求 Flutter ≥3.32.0、Dart ≥3.8.0。Android/iOS最低系统版本还取决于实际解析的Flutter和平台插件，应在目标宿主构建验证。完整步骤见[快速开始](./getting-started.md)。
 
 ## 从0.2.7升级，只替换TD前缀是否足够？
 
 不足够。构造参数、回调、受控值、主题配置和已移除能力均可能变化，尤其要区分顶部页签与底部导航。请先阅读[0.2.7 → 1.0迁移指南](./migration-0.2.7-to-1.0.md)。
-
 
 ## 为什么组件没有跟随Material主题变化？
 
@@ -44,6 +43,10 @@ TD内置外观使用全局Token、组件Theme及公开实例配置。Material的
 ## 如何调整文字居中与行高？
 
 使用 `textAlign`、外部Center/Align以及 `style`、`strutStyle`、`textHeightBehavior`；不再使用旧版字体padding补偿。见[Text](/flutter/components/text)。
+
+## 弹层如何避让安全区？
+
+`TPopup` 和 `TPickerPopup` 默认不避让安全区。设置 `useSafeArea: true` 会移动整个面板，面板背景也随之离开屏幕边缘；如需背景贴边，可保持默认配置，在内容中使用 `SafeArea` 避让需要的边。避免外层弹层与内部组件重复处理同一边的安全区；`TActionSheet` 命令式入口默认由弹层负责避让。请在目标设备上验证安全区是否符合预期。
 
 ## 如何反馈问题或申请组件能力？
 

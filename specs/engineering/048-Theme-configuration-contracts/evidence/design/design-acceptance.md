@@ -65,7 +65,7 @@
 基线、二进制diff及新增文件指纹见 [design-source-fingerprint.json](design-source-fingerprint.json)。源码和测试范围与本轮改动一致；仅Avatar阴影dartdoc回到既有描述发生在3.32组件功能测试之后，不改变运行代码，按仓库文档变更规则复用功能结果。SDK为本机已安装3.32.0、3.47.7；macOS/DPR1/中文，使用仓库Demo字体。未修改Golden基线。
 
 - 组件：对应SDK `flutter test`，包含27组件目录非golden文件、test/theme、test/components/theme、theme_acceptance_test，以及run_component_regression_test、run_visual_regression_test、check_component_coverage_test；参数 `--exclude-tags golden --coverage --reporter expanded`。工具自测仅校验清单/调度，不运行Golden。原始日志 `/tmp/tdesign-design-components-<version>.log`。
-- Example：`TDESIGN_THEME_REPORT=<output> flutter test --dart-define=TDESIGN_DEMO_TEST_MODULES=false test/theme/all_component_web_theme_test.dart test/web_theme_message_test.dart test/web_theme_listener_lifecycle_test.dart test/table/table_page_test.dart --reporter expanded`。完整机器结果 [3.32.0](design-results-3.32.0.json)、[3.47.7](design-results-3.47.7.json)。
+- Example：`TDESIGN_THEME_REPORT=<output> flutter test --dart-define=TDESIGN_DEMO_TEST_MODULES=false test/theme/all_component_web_theme_test.dart test/web_theme_message_test.dart test/web_theme_listener_lifecycle_test.dart test/table/table_page_test.dart --reporter expanded`。完整机器结果 [3.32.0](design-results.json)、[3.47.7](design-results.json)。
 - 覆盖率：`dart tool/check_component_coverage.dart <component> --lcov <path>`；完整路径/分子分母见design-coverage-3.32.0.txt、design-coverage-3.47.7.txt。
 - 分析：各SDK `flutter analyze --fatal-infos`；独立库 `dart test`；站点 `node --test utils/flutterThemeBridge.test.mjs`；生成器 `node tool/generate_api.mjs --check`；构建 `flutter build web --release --dart-define=TDESIGN_DEMO_TEST_MODULES=false`。
 
