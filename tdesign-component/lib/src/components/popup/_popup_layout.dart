@@ -75,9 +75,12 @@ class PopupLayout {
         final inset = this.inset is TPopupLeftInset
             ? this.inset as TPopupLeftInset
             : null;
+        // Full-height drawer (issue #1225): vertical safe area no longer
+        // participates; top/bottom come only from the explicit inset
+        // (kept numeric so the height stays bounded).
         return Positioned(
-          top: (inset?.top ?? 0) + safePadding.top,
-          bottom: (inset?.bottom ?? 0) + safePadding.bottom,
+          top: inset?.top ?? 0,
+          bottom: inset?.bottom ?? 0,
           left: safePadding.left,
           width: clampWidth(width ?? defaultDrawerWidth),
           child: child,
@@ -86,9 +89,10 @@ class PopupLayout {
         final inset = this.inset is TPopupRightInset
             ? this.inset as TPopupRightInset
             : null;
+        // Same as left: full-height rect, vertical only from explicit inset.
         return Positioned(
-          top: (inset?.top ?? 0) + safePadding.top,
-          bottom: (inset?.bottom ?? 0) + safePadding.bottom,
+          top: inset?.top ?? 0,
+          bottom: inset?.bottom ?? 0,
           right: safePadding.right,
           width: clampWidth(width ?? defaultDrawerWidth),
           child: child,
@@ -119,17 +123,13 @@ class PopupLayout {
       case TPopupPlacement.bottom:
         return EdgeInsets.only(bottom: mediaPadding.bottom);
       case TPopupPlacement.left:
-        return EdgeInsets.only(
-          left: mediaPadding.left,
-          top: mediaPadding.top,
-          bottom: mediaPadding.bottom,
-        );
+        // Full-height drawer per official design (issue #1225): skip
+        // vertical safe-area avoidance here; content handles it via
+        // SafeArea so the panel never shows hollow strips.
+        return EdgeInsets.only(left: mediaPadding.left);
       case TPopupPlacement.right:
-        return EdgeInsets.only(
-          right: mediaPadding.right,
-          top: mediaPadding.top,
-          bottom: mediaPadding.bottom,
-        );
+        // Same as left: full height, only the attached edge is avoided.
+        return EdgeInsets.only(right: mediaPadding.right);
       case TPopupPlacement.center:
         return mediaPadding;
     }

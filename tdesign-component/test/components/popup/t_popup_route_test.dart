@@ -402,7 +402,7 @@ void main() {
         expect(positioned.bottom, 0);
       });
 
-      testWidgets('left 避让侧栏与上下安全区', (tester) async {
+      testWidgets('left 避让附着侧安全区，上下仅保留 inset（issue #1225）', (tester) async {
         await openPopup(
           tester,
           mediaPadding: kPopupTestMediaPadding,
@@ -422,8 +422,9 @@ void main() {
 
         final positioned = findPopupPanelPositioned(tester);
         expect(positioned.left, 11);
-        expect(positioned.top, 30);
-        expect(positioned.bottom, 56);
+        // 全高面板：竖直安全区不再裁切，仅保留显式 inset
+        expect(positioned.top, 8);
+        expect(positioned.bottom, 12);
         expect(positioned.width, 280);
       });
 
@@ -450,7 +451,7 @@ void main() {
         expect(positioned.bottom, 0);
       });
 
-      testWidgets('right 避让侧栏与上下安全区', (tester) async {
+      testWidgets('right 避让附着侧安全区，上下仅保留 inset（issue #1225）', (tester) async {
         await openPopup(
           tester,
           mediaPadding: kPopupTestMediaPadding,
@@ -470,8 +471,9 @@ void main() {
 
         final positioned = findPopupPanelPositioned(tester);
         expect(positioned.right, 33);
-        expect(positioned.top, 27);
-        expect(positioned.bottom, 51);
+        // 全高面板：竖直安全区不再裁切，仅保留显式 inset
+        expect(positioned.top, 5);
+        expect(positioned.bottom, 7);
         expect(positioned.width, 260);
       });
 

@@ -226,7 +226,8 @@ void main() {
           kPopupTestMediaPadding,
           true,
         ),
-        const EdgeInsets.only(left: 11, top: 22, bottom: 44),
+        // issue #1225：左右抽屉全高，仅避让附着边横向安全区
+        const EdgeInsets.only(left: 11),
       );
       expect(
         PopupLayout.safePaddingFor(
@@ -234,7 +235,7 @@ void main() {
           kPopupTestMediaPadding,
           true,
         ),
-        const EdgeInsets.only(right: 33, top: 22, bottom: 44),
+        const EdgeInsets.only(right: 33),
       );
       expect(
         PopupLayout.safePaddingFor(
@@ -378,8 +379,9 @@ void main() {
         final positioned = tester.widget<Positioned>(find.byType(Positioned));
         expect(positioned.width, PopupLayout.defaultDrawerWidth);
         expect(positioned.left, 11);
-        expect(positioned.top, 22);
-        expect(positioned.bottom, 44);
+        // 面板全高：上下不再叠加安全区（22/44）
+        expect(positioned.top, 0);
+        expect(positioned.bottom, 0);
       });
 
       testWidgets('right 无 inset 时默认宽度 280 且仅避让安全区', (tester) async {
@@ -406,8 +408,9 @@ void main() {
         final positioned = tester.widget<Positioned>(find.byType(Positioned));
         expect(positioned.width, PopupLayout.defaultDrawerWidth);
         expect(positioned.right, 33);
-        expect(positioned.top, 22);
-        expect(positioned.bottom, 44);
+        // 面板全高：上下不再叠加安全区（22/44）
+        expect(positioned.top, 0);
+        expect(positioned.bottom, 0);
       });
 
       testWidgets('仅单侧安全区：bottom 不受 top padding 影响', (tester) async {
@@ -601,7 +604,7 @@ void main() {
       expect(positioned.height, PopupLayout.defaultEdgeHeight);
     });
 
-    testWidgets('left/right 应用 safePadding 时避让侧栏与上下安全区', (tester) async {
+    testWidgets('left/right 仅避让附着侧安全区，竖直方向只保留 inset（issue #1225）', (tester) async {
       const media = EdgeInsets.fromLTRB(11, 22, 33, 44);
       final leftSafePadding = PopupLayout.safePaddingFor(
         TPopupPlacement.left,
@@ -629,8 +632,9 @@ void main() {
       );
       var positioned = tester.widget<Positioned>(find.byType(Positioned));
       expect(positioned.left, 11);
-      expect(positioned.top, 30);
-      expect(positioned.bottom, 56);
+      // 竖直方向不再叠加安全区（22/44），仅保留显式 inset
+      expect(positioned.top, 8);
+      expect(positioned.bottom, 12);
       expect(positioned.width, 280);
 
       final rightSafePadding = PopupLayout.safePaddingFor(
@@ -659,8 +663,9 @@ void main() {
       );
       positioned = tester.widget<Positioned>(find.byType(Positioned));
       expect(positioned.right, 33);
-      expect(positioned.top, 27);
-      expect(positioned.bottom, 51);
+      // 竖直方向不再叠加安全区（22/44），仅保留显式 inset
+      expect(positioned.top, 5);
+      expect(positioned.bottom, 7);
       expect(positioned.width, 260);
     });
 
