@@ -44,6 +44,22 @@ jobs:
         with:
           name: demo-assets
           path: tdesign-component/example/assets
+      # Flutter latest 强制要求 Gradle >= 9.3.1 / AGP >= 9.1.1，但最低支持版本
+      # 3.32.0 自带的 Gradle 插件源码在该 Kotlin 级别下编不过
+      # (FlutterPlugin.kt:715 Unresolved reference 'fileMode')，仓库默认值必须
+      # 保持在 3.32.0 能构建的旧工具链上。这里只在构建 latest 时覆盖，
+      # 两套工具链各跑各的版本，最低支持版本的验证范围不变。
+      - name: Use Android toolchain for Flutter latest
+        if: inputs.flutter-version == 'latest'
+        working-directory: tdesign-component/example/android
+        run: |
+          set -euo pipefail
+
+          grep -Fq 'gradle-8.14-bin.zip' gradle/wrapper/gradle-wrapper.properties
+          grep -Fq '"com.android.application" version "8.11.1"' settings.gradle
+
+          sed -i 's/gradle-8\.14-bin\.zip/gradle-9.3.1-bin.zip/' gradle/wrapper/gradle-wrapper.properties
+          sed -i 's/"com.android.application" version "8\.11\.1"/"com.android.application" version "9.1.1"/' settings.gradle
       # 保留默认依赖与插件准备，避免 3.32.0 使用 --no-pub 时注册代码不一致。
       - name: Build release APK
         working-directory: tdesign-component/example
