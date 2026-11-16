@@ -1,7 +1,17 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:tdesign_flutter/src/components/calendar/t_calendar_cell.dart';
+import 'package:tdesign_flutter/src/components/popup/t_popup.dart'
+    show PopupShell;
 import 'package:tdesign_flutter/tdesign_flutter.dart';
 import 'package:tdesign_flutter_example/base/example_widget.dart';
+import 'package:tdesign_flutter_example/page/calendar/calendar_described_example.dart';
+import 'package:tdesign_flutter_example/page/calendar/calendar_double_described_example.dart';
+import 'package:tdesign_flutter_example/page/calendar/calendar_limited_example.dart';
+import 'package:tdesign_flutter_example/page/calendar/calendar_localized_example.dart';
+import 'package:tdesign_flutter_example/page/calendar/calendar_multiple_example.dart';
+import 'package:tdesign_flutter_example/page/calendar/calendar_range_example.dart';
+import 'package:tdesign_flutter_example/page/calendar/calendar_single_example.dart';
+import 'package:tdesign_flutter_example/page/calendar/calendar_switch_mode_example.dart';
 
 import '../demo_page_test_utils.dart';
 import 'calendar_demo_test_spec.dart';
@@ -9,6 +19,70 @@ import 'calendar_demo_test_spec.dart';
 void main() {
   configureCalendarDemoResources();
   registerDemoStructureTests(calendarDemoPageTestSpec);
+
+  final lifecycleCases = <(String, Widget, String)>[
+    ('single', const CalendarSingleExample(), 'calendar-single-trigger'),
+    ('multiple', const CalendarMultipleExample(), 'calendar-multiple-trigger'),
+    (
+      'described',
+      const CalendarDescribedExample(),
+      'calendar-single-description-trigger',
+    ),
+    (
+      'double described',
+      const CalendarDoubleDescribedExample(),
+      'calendar-double-description-trigger',
+    ),
+    ('switch', const CalendarSwitchModeExample(), 'calendar-switch-trigger'),
+    ('range', const CalendarRangeExample(), 'calendar-range-trigger'),
+    (
+      'localized',
+      const CalendarLocalizedExample(),
+      'calendar-localized-trigger',
+    ),
+    ('limited', const CalendarLimitedExample(), 'calendar-limited-trigger'),
+  ];
+  for (final (name, example, trigger) in lifecycleCases) {
+    for (final rebuildHeader in [true, false]) {
+      testWidgets(
+        'Calendar $name survives owner disposal: ${rebuildHeader ? 'rebuild' : 'confirm'}',
+        (tester) async {
+          final visible = ValueNotifier<bool>(true);
+          addTearDown(visible.dispose);
+          await tester.pumpWidget(
+            MaterialApp(
+              home: Scaffold(
+                body: ValueListenableBuilder<bool>(
+                  valueListenable: visible,
+                  builder: (_, shown, __) =>
+                      shown ? example : const SizedBox.shrink(),
+                ),
+              ),
+            ),
+          );
+          await tester.tap(find.byKey(ValueKey(trigger)));
+          await tester.pumpAndSettle();
+          visible.value = false;
+          await tester.pumpAndSettle();
+          if (rebuildHeader) {
+            final shell = find.byType(PopupShell);
+            expect(shell, findsOneWidget);
+            tester.element(shell).markNeedsBuild();
+            await tester.pump();
+            expect(tester.takeException(), isNull);
+          } else {
+            final confirm = find.text(name == 'localized' ? 'Confirm' : '确定');
+            expect(confirm, findsOneWidget);
+            await tester.tap(confirm);
+            await tester.pumpAndSettle();
+            expect(tester.takeException(), isNull);
+            expect(confirm, findsNothing);
+          }
+        },
+        tags: 'demo',
+      );
+    }
+  }
 
   testWidgets('Calendar 日期点击仅在确认后提交，关闭保留原值', (tester) async {
     await pumpDemoPageAtPhoneViewport(
@@ -47,6 +121,33 @@ void main() {
     await choose();
     await tester.tap(find.text('确定'));
     await tester.pumpAndSettle();
+    expect(
+      find.descendant(of: trigger, matching: find.text('2022-02-20')),
+      findsOneWidget,
+    );
+    await disposeDemoPage(tester);
+  }, tags: 'demo');
+
+  testWidgets('Calendar 翻页示例确认后提交新日期', (tester) async {
+    await pumpFullDemoPage(tester, calendarDemoPageTestSpec, ThemeMode.light);
+    final trigger = find.byKey(const ValueKey('calendar-switch-trigger'));
+    await tester.tap(trigger);
+    await tester.pumpAndSettle();
+    final day = find.byWidgetPredicate(
+      (widget) =>
+          widget is TCalendarCell && widget.cell?.date == DateTime(2022, 2, 20),
+    );
+    await tester.tap(day);
+    await tester.pumpAndSettle();
+    expect(
+      find.descendant(of: trigger, matching: find.text('2022-02-18')),
+      findsOneWidget,
+    );
+    await tester.tap(
+      find.descendant(of: find.byType(PopupShell), matching: find.text('确定')),
+    );
+    await tester.pumpAndSettle();
+    expect(find.byKey(const ValueKey('calendar-popup-panel')), findsNothing);
     expect(
       find.descendant(of: trigger, matching: find.text('2022-02-20')),
       findsOneWidget,

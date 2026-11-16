@@ -140,7 +140,9 @@ class _CalendarSwitchModeExampleState extends State<CalendarSwitchModeExample> {
                                     draft.length != 2)
                             ? null
                             : () {
-                                onConfirm(List<DateTime>.of(draft));
+                                if (mounted) {
+                                  onConfirm(List<DateTime>.of(draft));
+                                }
                                 popup.close();
                               },
                         child: Text(localized ? 'Confirm' : '确定'),
