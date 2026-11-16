@@ -30,7 +30,7 @@ class TMessageMarquee {
   /// 是否循环滚动
   final bool repeat;
 
-  /// 开始滚动前的延迟
+  /// 开始滚动前的延迟；重新满足滚动条件时再次等待。
   final Duration delay;
 }
 

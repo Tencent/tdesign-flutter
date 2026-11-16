@@ -74,7 +74,7 @@
 
 | 名称 | 类型 | 默认值 | 说明 | 必传 |
 | --- | --- | --- | --- | --- |
-| delay | Duration | Duration.zero | 开始滚动前的延迟 | 否 |
+| delay | Duration | Duration.zero | 开始滚动前的延迟；重新满足滚动条件时再次等待。 | 否 |
 | duration | Duration | const Duration(seconds: 10) | 单向滚动时长；非循环滚动返回起点时使用相同时长。 | 否 |
 | repeat | bool | false | 是否循环滚动 | 否 |
 
