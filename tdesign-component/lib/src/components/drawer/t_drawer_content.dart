@@ -180,7 +180,15 @@ class _TDrawerContent extends StatelessWidget {
           width: effectiveWidth,
           height: availableHeight,
           color: effectiveBackgroundColor,
-          child: content,
+          // Full-height panel (issue #1225): vertical safe-area avoidance
+          // is handled by content so the panel has no hollow strips.
+          child: SafeArea(
+            top: true,
+            bottom: true,
+            left: false,
+            right: false,
+            child: content,
+          ),
         );
       },
     );
