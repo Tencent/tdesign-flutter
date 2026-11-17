@@ -140,6 +140,8 @@ TDrawerHandle showTDrawer(
       ),
       destroyOnClose: destroyOnClose,
       useSafeArea: useSafeArea,
+      // 抽屉按全高铺满，垂直安全区由内容层的 SafeArea 处理（issue #1225）。
+      fullHeightSides: true,
       onClosed: onClose,
       child: drawer,
     ),

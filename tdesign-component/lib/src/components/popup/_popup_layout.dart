@@ -7,7 +7,7 @@ class PopupLayout {
     this.inset,
     this.width,
     this.height,
-    this.useSafeArea = false,
+    this.fullHeightSides = false,
   });
 
   final TPopupPlacement placement;
@@ -15,9 +15,9 @@ class PopupLayout {
   final double? width;
   final double? height;
 
-  /// 是否让浮层避让系统安全区。为 false 时 left / right 面板按全高铺满，
-  /// 垂直方向只由显式 inset 决定（issue #1225）。
-  final bool useSafeArea;
+  /// left / right 面板是否按全高铺满。为 true 时垂直方向只由显式 inset
+  /// 决定，不再叠加系统安全区（issue #1225）。
+  final bool fullHeightSides;
 
   /// top / bottom 未指定高度时的默认面板高度。
   static const double defaultEdgeHeight = 240;
@@ -85,13 +85,11 @@ class PopupLayout {
         final inset = this.inset is TPopupLeftInset
             ? this.inset as TPopupLeftInset
             : null;
-        // useSafeArea 为 false 时按全高铺满，垂直方向只由显式 inset 决定，
-        // 避免面板上下出现空白条（issue #1225）。
-        final verticalTop = useSafeArea ? safePadding.top : 0.0;
-        final verticalBottom = useSafeArea ? safePadding.bottom : 0.0;
+        // 垂直方向只由显式 inset 决定，safePadding 已按全高规则剔除上下
+        // 安全区，避免面板上下出现空白条（issue #1225）。
         return Positioned(
-          top: (inset?.top ?? 0) + verticalTop,
-          bottom: (inset?.bottom ?? 0) + verticalBottom,
+          top: (inset?.top ?? 0) + safePadding.top,
+          bottom: (inset?.bottom ?? 0) + safePadding.bottom,
           left: safePadding.left,
           width: clampWidth(width ?? defaultDrawerWidth),
           child: child,
@@ -100,12 +98,10 @@ class PopupLayout {
         final inset = this.inset is TPopupRightInset
             ? this.inset as TPopupRightInset
             : null;
-        // 与 left 一致：useSafeArea 为 false 时按全高铺满。
-        final verticalTop = useSafeArea ? safePadding.top : 0.0;
-        final verticalBottom = useSafeArea ? safePadding.bottom : 0.0;
+        // 与 left 一致。
         return Positioned(
-          top: (inset?.top ?? 0) + verticalTop,
-          bottom: (inset?.bottom ?? 0) + verticalBottom,
+          top: (inset?.top ?? 0) + safePadding.top,
+          bottom: (inset?.bottom ?? 0) + safePadding.bottom,
           right: safePadding.right,
           width: clampWidth(width ?? defaultDrawerWidth),
           child: child,
@@ -125,8 +121,9 @@ class PopupLayout {
   static EdgeInsets safePaddingFor(
     TPopupPlacement placement,
     EdgeInsets mediaPadding,
-    bool useSafeArea,
-  ) {
+    bool useSafeArea, {
+    bool fullHeightSides = true,
+  }) {
     if (!useSafeArea) {
       return EdgeInsets.zero;
     }
@@ -136,13 +133,22 @@ class PopupLayout {
       case TPopupPlacement.bottom:
         return EdgeInsets.only(bottom: mediaPadding.bottom);
       case TPopupPlacement.left:
-        // Full-height drawer per official design (issue #1225): skip
-        // vertical safe-area avoidance here; content handles it via
-        // SafeArea so the panel never shows hollow strips.
-        return EdgeInsets.only(left: mediaPadding.left);
+        // 全高抽屉只避让附着边，垂直方向交给内容层 SafeArea（issue #1225）。
+        return fullHeightSides
+            ? EdgeInsets.only(left: mediaPadding.left)
+            : EdgeInsets.only(
+                left: mediaPadding.left,
+                top: mediaPadding.top,
+                bottom: mediaPadding.bottom,
+              );
       case TPopupPlacement.right:
-        // Same as left: full height, only the attached edge is avoided.
-        return EdgeInsets.only(right: mediaPadding.right);
+        return fullHeightSides
+            ? EdgeInsets.only(right: mediaPadding.right)
+            : EdgeInsets.only(
+                right: mediaPadding.right,
+                top: mediaPadding.top,
+                bottom: mediaPadding.bottom,
+              );
       case TPopupPlacement.center:
         return mediaPadding;
     }

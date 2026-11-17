@@ -84,6 +84,7 @@
 | child | Widget | - | 面板内容，占用面板内可用空间；底部有头部时占用剩余高度。长内容需自行使用滚动组件。 | 是 |
 | closeBuilder | TPopupSlotBuilder? | - | 居中面板外下方关闭区，不计入 `height`，与间距一起占用额外高度；未指定时不显示，按钮由 builder 提供。 | 否 |
 | destroyOnClose | bool | false | 关闭后是否销毁内容 State，默认 false。 true 时关闭后释放；false 时同一句柄在同一 Navigator 内再次打开复用 State，所属 Navigator 卸载时释放。 关闭后保留的内容可能长期占用资源，即使业务未保存返回句柄。 | 否 |
+| fullHeightSides | bool | false | left / right 面板是否按全高铺满，垂直方向只由显式 inset 决定。 抽屉类浮层用它避免面板上下出现空白条（issue #1225）。 | 否 |
 | headerBuilder | TPopupHeaderBuilder? | - | 底部头部，占用 `height` 内的空间；未指定时不显示，可用 `TPopupHeader` 组合标题与操作按钮。 | 否 |
 | height | double? | - | 面板高度，受可用高度约束；底部包含头部，居中不包含面板外关闭区。未传时取方向对应的 Popup 主题值，再回退到 240；仅顶部/底部/居中支持。 | 否 |
 | inset | TPopupInset? | - | 交叉轴留白；须使用当前方向的 Inset 类型，居中不支持。 | 否 |
@@ -242,6 +243,7 @@
 | onClosed | Object? | _unset | 不传时保留原值；显式 null 清除本字段，非空值须为 VoidCallback。 | 否 |
 | onVisibleChange | Object? | _unset | 不传时保留原值；显式 null 清除本字段，非空值须为 TPopupVisibleChangeCallback。 | 否 |
 | useSafeArea | bool? | - | 非空值替换原配置；不传或 null 保留原值。 | 否 |
+| fullHeightSides | bool? | - | 非空值替换原配置；不传或 null 保留原值。 | 否 |
 
 
 ###### 返回值

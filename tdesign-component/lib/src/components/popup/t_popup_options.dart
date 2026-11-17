@@ -41,6 +41,7 @@ class TPopupOptions {
     this.onClosed,
     this.onVisibleChange,
     this.useSafeArea = false,
+    this.fullHeightSides = false,
   });
 
   /// 底部弹出配置。
@@ -251,6 +252,10 @@ class TPopupOptions {
   /// 避让安全区：顶部仅上边，底部仅下边，左侧避让左/上/下边，右侧避让右/上/下边，居中避让全部边；与 [inset] 叠加。仅内容需避让时可在 [child] 中使用 [SafeArea]。
   final bool useSafeArea;
 
+  /// left / right 面板是否按全高铺满，垂直方向只由显式 inset 决定。
+  /// 抽屉类浮层用它避免面板上下出现空白条（issue #1225）。
+  final bool fullHeightSides;
+
   /// 复制配置。
   ///
   /// ## 返回值
@@ -304,6 +309,9 @@ class TPopupOptions {
 
     /// 非空值替换原配置；不传或 null 保留原值。
     bool? useSafeArea,
+
+    /// 非空值替换原配置；不传或 null 保留原值。
+    bool? fullHeightSides,
   }) {
     return TPopupOptions(
       child: child ?? this.child,
@@ -342,6 +350,7 @@ class TPopupOptions {
           ? this.onVisibleChange
           : onVisibleChange as TPopupVisibleChangeCallback?,
       useSafeArea: useSafeArea ?? this.useSafeArea,
+      fullHeightSides: fullHeightSides ?? this.fullHeightSides,
     );
   }
 
