@@ -20,7 +20,13 @@ class TPullDownRefresh extends StatefulWidget {
   /// 必须为**有界且可滚动**的内容（如 `ListView` / `GridView` / `CustomScrollView`）。
   /// `SizedBox` 等只能提供尺寸约束，不能把静态内容变成可滚动内容；若内容自身不可滚动，
   /// 下拉 / 触底手势仍无法生效，应将内容放入可滚动容器。
-  final Widget child;
+  final Widget? child;
+
+  /// 自定义滚动内容构建器（与 [child] 互斥）。
+  ///
+  /// 签名对齐 EasyRefresh 的 builder 形式：回调提供 [ScrollPhysics]，在需要嵌套计算滚动距离等
+  /// 自定义物理的场景下，应把该 physics 交给自己的 ScrollView 使用（issue #1239）。
+  final Widget Function(BuildContext context, ScrollPhysics physics)? builder;
 
   /// 下拉触发刷新回调（对应官方 `refresh` 事件）。
   ///
@@ -103,13 +109,42 @@ class TPullDownRefresh extends StatefulWidget {
     double? maxBarHeight,
     this.successDuration = const Duration(milliseconds: 500),
     this.onStateChanged,
-  }) : loadingBarHeight = loadingBarHeight ?? 50,
+  })  : builder = null,
+        loadingBarHeight = loadingBarHeight ?? 50,
        maxBarHeight = maxBarHeight ?? 80,
        _adaptiveLoadingHeight = loadingBarHeight == null,
        _adaptiveMaxHeight = maxBarHeight == null,
        assert(lowerThreshold > 0),
        assert((loadingBarHeight ?? 50) > 0),
        assert((maxBarHeight ?? 80) >= (loadingBarHeight ?? 50));
+
+  /// 以自定义 builder 构造 [TPullDownRefresh]（issue #1239）。
+  ///
+  /// 回调提供 [ScrollPhysics]，需要嵌套计算滚动距离等自定义物理的场景，
+  /// 应把该 physics 交给自己的 ScrollView 使用，行为与 [EasyRefresh.builder] 一致。
+  const TPullDownRefresh.builder({
+    super.key,
+    required this.builder,
+    this.onRefresh,
+    this.onLoadMore,
+    this.lowerThreshold = 50,
+    this.controller,
+    this.texts,
+    this.refreshTimeout = const Duration(milliseconds: 3000),
+    double? loadingBarHeight,
+    double? maxBarHeight,
+    this.successDuration = const Duration(milliseconds: 500),
+    this.onStateChanged,
+  })  : child = null,
+        loadingBarHeight = loadingBarHeight ?? 50,
+        maxBarHeight = maxBarHeight ?? 80,
+        _adaptiveLoadingHeight = loadingBarHeight == null,
+        _adaptiveMaxHeight = maxBarHeight == null,
+        assert(builder != null),
+        assert(lowerThreshold > 0),
+        assert((loadingBarHeight ?? 50) > 0),
+        assert((maxBarHeight ?? 80) >= (loadingBarHeight ?? 50));
+
 
   final bool _adaptiveLoadingHeight;
   final bool _adaptiveMaxHeight;
@@ -174,6 +209,45 @@ class _TPullDownRefreshState extends State<TPullDownRefresh> {
     _unbindController(widget.controller);
     _easyController?.dispose();
     super.dispose();
+  }
+
+  /// 按配置分派：未传 [TPullDownRefresh.builder] 时走 [EasyRefresh] + child；
+  /// 传入 builder 时走 [EasyRefresh.builder] + childBuilder（issue #1239）。
+  Widget _buildEasyRefresh({
+    required TPullDownRefreshTexts texts,
+    required double headerHeight,
+    required double maxHeight,
+    required Footer? footer,
+  }) {
+    final commonHeader = _refreshEnabled
+        ? _TPullDownRefreshHeader(
+            extent: headerHeight,
+            triggerDistance: headerHeight,
+            maxOverOffset: maxHeight,
+            successDuration: widget.successDuration,
+            texts: texts,
+            onStateChanged: _handleStateChanged,
+          )
+        : null;
+    final builder = widget.builder;
+    if (builder != null) {
+      return EasyRefresh.builder(
+        controller: _easyController,
+        header: commonHeader,
+        footer: footer,
+        onRefresh: _refreshEnabled ? _handleRefresh : null,
+        onLoad: _loadMoreEnabled ? _handleLoadMore : null,
+        childBuilder: builder,
+      );
+    }
+    return EasyRefresh(
+      controller: _easyController,
+      header: commonHeader,
+      footer: footer,
+      onRefresh: _refreshEnabled ? _handleRefresh : null,
+      onLoad: _loadMoreEnabled ? _handleLoadMore : null,
+      child: widget.child,
+    );
   }
 
   /// 上报状态变化：去重 + 异步调度，避免 build 期同步回调与重复上报。
@@ -446,22 +520,11 @@ class _TPullDownRefreshState extends State<TPullDownRefresh> {
         final maxHeight = widget._adaptiveMaxHeight
             ? math.max(widget.maxBarHeight, headerHeight)
             : widget.maxBarHeight;
-        return EasyRefresh(
-          controller: _easyController,
-          header: _refreshEnabled
-              ? _TPullDownRefreshHeader(
-                  extent: headerHeight,
-                  triggerDistance: headerHeight,
-                  maxOverOffset: maxHeight,
-                  successDuration: widget.successDuration,
-                  texts: texts,
-                  onStateChanged: _handleStateChanged,
-                )
-              : null,
+        return _buildEasyRefresh(
+          texts: texts,
+          headerHeight: headerHeight,
+          maxHeight: maxHeight,
           footer: footer,
-          onRefresh: _refreshEnabled ? _handleRefresh : null,
-          onLoad: _loadMoreEnabled ? _handleLoadMore : null,
-          child: widget.child,
         );
       },
     );
