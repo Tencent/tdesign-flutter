@@ -91,6 +91,7 @@ const sidebarAnchorDemoTestSpec = DemoPageTestSpec(
   supplementalCjkFontFamily: 'TDesign SideBar Golden CJK',
   supplementalCjkFontPath: 'test/fonts/SideBarGoldenCJK-Regular.otf',
   precacheAssetImages: ['assets/img/empty.png'],
+  goldenDirectory: 'sidebar',
 );
 
 const sidebarTagDemoTestSpec = DemoPageTestSpec(
@@ -103,6 +104,7 @@ const sidebarTagDemoTestSpec = DemoPageTestSpec(
   supplementalCjkFontFamily: 'TDesign SideBar Golden CJK',
   supplementalCjkFontPath: 'test/fonts/SideBarGoldenCJK-Regular.otf',
   precacheAssetImages: ['assets/img/empty.png'],
+  goldenDirectory: 'sidebar',
 );
 
 const sidebarPaginationDemoTestSpec = DemoPageTestSpec(
@@ -115,6 +117,7 @@ const sidebarPaginationDemoTestSpec = DemoPageTestSpec(
   supplementalCjkFontFamily: 'TDesign SideBar Golden CJK',
   supplementalCjkFontPath: 'test/fonts/SideBarGoldenCJK-Regular.otf',
   precacheAssetImages: ['assets/img/empty.png'],
+  goldenDirectory: 'sidebar',
 );
 
 const sidebarIconDemoTestSpec = DemoPageTestSpec(
@@ -127,4 +130,5 @@ const sidebarIconDemoTestSpec = DemoPageTestSpec(
   supplementalCjkFontFamily: 'TDesign SideBar Golden CJK',
   supplementalCjkFontPath: 'test/fonts/SideBarGoldenCJK-Regular.otf',
   precacheAssetImages: ['assets/img/empty.png'],
+  goldenDirectory: 'sidebar',
 );
