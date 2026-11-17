@@ -3601,6 +3601,11 @@ void _sizeIconComponentTokenTests() {
               final token = TThemeData.defaultData().copyWith(
                 sizeMap: {'size8': 28, 'size7': 23},
               );
+              // #1236 之后 copyWith 仅更新当前主题；为让 light/dark 分支的
+              // size 期望一致，dark 配对主题也显式应用相同的 size 覆盖。
+              token.dark = token.dark?.copyWith(
+                sizeMap: {'size8': 28, 'size7': 23},
+              );
               var theme = brightness == Brightness.light
                   ? TThemeBuilder.light(token)
                   : TThemeBuilder.dark(token);
