@@ -86,7 +86,7 @@ class PopupLayout {
             ? this.inset as TPopupLeftInset
             : null;
         // useSafeArea 为 false 时按全高铺满，垂直方向只由显式 inset 决定，
-        // 避免面板上下出现镂空条（issue #1225）。
+        // 避免面板上下出现空白条（issue #1225）。
         final verticalTop = useSafeArea ? safePadding.top : 0.0;
         final verticalBottom = useSafeArea ? safePadding.bottom : 0.0;
         return Positioned(
