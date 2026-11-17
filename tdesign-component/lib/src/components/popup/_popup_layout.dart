@@ -2,12 +2,22 @@ part of 't_popup.dart';
 
 /// 按 [TPopupPlacement] 计算 [Positioned]；center 仅居中，尺寸由 [PopupShell] 约束。
 class PopupLayout {
-  PopupLayout({required this.placement, this.inset, this.width, this.height});
+  PopupLayout({
+    required this.placement,
+    this.inset,
+    this.width,
+    this.height,
+    this.useSafeArea = false,
+  });
 
   final TPopupPlacement placement;
   final TPopupInset? inset;
   final double? width;
   final double? height;
+
+  /// 是否让浮层避让系统安全区。为 false 时 left / right 面板按全高铺满，
+  /// 垂直方向只由显式 inset 决定（issue #1225）。
+  final bool useSafeArea;
 
   /// top / bottom 未指定高度时的默认面板高度。
   static const double defaultEdgeHeight = 240;
@@ -75,12 +85,13 @@ class PopupLayout {
         final inset = this.inset is TPopupLeftInset
             ? this.inset as TPopupLeftInset
             : null;
-        // Full-height drawer (issue #1225): vertical safe area no longer
-        // participates; top/bottom come only from the explicit inset
-        // (kept numeric so the height stays bounded).
+        // useSafeArea 为 false 时按全高铺满，垂直方向只由显式 inset 决定，
+        // 避免面板上下出现镂空条（issue #1225）。
+        final verticalTop = useSafeArea ? safePadding.top : 0.0;
+        final verticalBottom = useSafeArea ? safePadding.bottom : 0.0;
         return Positioned(
-          top: inset?.top ?? 0,
-          bottom: inset?.bottom ?? 0,
+          top: (inset?.top ?? 0) + verticalTop,
+          bottom: (inset?.bottom ?? 0) + verticalBottom,
           left: safePadding.left,
           width: clampWidth(width ?? defaultDrawerWidth),
           child: child,
@@ -89,10 +100,12 @@ class PopupLayout {
         final inset = this.inset is TPopupRightInset
             ? this.inset as TPopupRightInset
             : null;
-        // Same as left: full-height rect, vertical only from explicit inset.
+        // 与 left 一致：useSafeArea 为 false 时按全高铺满。
+        final verticalTop = useSafeArea ? safePadding.top : 0.0;
+        final verticalBottom = useSafeArea ? safePadding.bottom : 0.0;
         return Positioned(
-          top: inset?.top ?? 0,
-          bottom: inset?.bottom ?? 0,
+          top: (inset?.top ?? 0) + verticalTop,
+          bottom: (inset?.bottom ?? 0) + verticalBottom,
           right: safePadding.right,
           width: clampWidth(width ?? defaultDrawerWidth),
           child: child,

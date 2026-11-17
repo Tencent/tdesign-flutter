@@ -14,6 +14,7 @@ class _PopupNavigatorRoute<T> extends PopupRoute<T> {
          inset: options.inset,
          width: options.width,
          height: options.height,
+         useSafeArea: options.useSafeArea,
        ),
        super(traversalEdgeBehavior: TraversalEdgeBehavior.closedLoop);
 
@@ -127,6 +128,7 @@ class _PopupNavigatorRoute<T> extends PopupRoute<T> {
       inset: options.inset,
       width: options.width,
       height: options.height,
+      useSafeArea: options.useSafeArea,
     );
 
     final t = animation.status == AnimationStatus.reverse
