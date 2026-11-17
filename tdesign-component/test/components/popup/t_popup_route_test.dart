@@ -413,6 +413,7 @@ void main() {
                 width: 280,
                 inset: const TPopupLeftInset(top: 8, bottom: 12),
                 useSafeArea: true,
+                fullHeightSides: true,
                 child: const SizedBox(height: 120),
               ),
             );
@@ -462,6 +463,7 @@ void main() {
                 width: 260,
                 inset: const TPopupRightInset(top: 5, bottom: 7),
                 useSafeArea: true,
+                fullHeightSides: true,
                 child: const SizedBox(height: 120),
               ),
             );

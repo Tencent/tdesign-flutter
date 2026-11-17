@@ -152,6 +152,7 @@ class TPopupOptions {
     VoidCallback? onClosed,
     TPopupVisibleChangeCallback? onVisibleChange,
     bool useSafeArea = false,
+    bool fullHeightSides = false,
   }) => TPopupOptions(
     child: child,
     placement: TPopupPlacement.left,
@@ -166,6 +167,7 @@ class TPopupOptions {
     onClosed: onClosed,
     onVisibleChange: onVisibleChange,
     useSafeArea: useSafeArea,
+    fullHeightSides: fullHeightSides,
   );
 
   /// 右侧弹出配置。
@@ -182,6 +184,7 @@ class TPopupOptions {
     VoidCallback? onClosed,
     TPopupVisibleChangeCallback? onVisibleChange,
     bool useSafeArea = false,
+    bool fullHeightSides = false,
   }) => TPopupOptions(
     child: child,
     placement: TPopupPlacement.right,
@@ -196,6 +199,7 @@ class TPopupOptions {
     onClosed: onClosed,
     onVisibleChange: onVisibleChange,
     useSafeArea: useSafeArea,
+    fullHeightSides: fullHeightSides,
   );
 
   /// 面板内容，占用面板内可用空间；底部有头部时占用剩余高度。长内容需自行使用滚动组件。
@@ -386,6 +390,7 @@ class TPopupOptions {
       onClosed: onClosed,
       onVisibleChange: onVisibleChange,
       useSafeArea: useSafeArea,
+      fullHeightSides: fullHeightSides,
     );
   }
 

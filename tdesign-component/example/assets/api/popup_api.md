@@ -158,6 +158,7 @@
 | onClosed | VoidCallback? | - | 关闭动画结束后触发；非栈顶浮层直接移除时在路由释放时触发。关闭完成前重新 `TPopupHandle.open`，旧周期不触发。 | 否 |
 | onVisibleChange | TPopupVisibleChangeCallback? | - | 打开时同步触发 true，开始关闭时触发 false，均不等待动画结束；第二个参数为 `TPopupTrigger`。 | 否 |
 | useSafeArea | bool | false | 避让安全区：顶部仅上边，底部仅下边，左侧避让左/上/下边，右侧避让右/上/下边，居中避让全部边；与 `inset` 叠加。仅内容需避让时可在 `child` 中使用 `SafeArea`。 | 否 |
+| fullHeightSides | bool | false | left / right 面板是否按全高铺满，垂直方向只由显式 inset 决定。 抽屉类浮层用它避免面板上下出现空白条（issue #1225）。 | 否 |
 
 
 ##### TPopupOptions.right
@@ -178,6 +179,7 @@
 | onClosed | VoidCallback? | - | 关闭动画结束后触发；非栈顶浮层直接移除时在路由释放时触发。关闭完成前重新 `TPopupHandle.open`，旧周期不触发。 | 否 |
 | onVisibleChange | TPopupVisibleChangeCallback? | - | 打开时同步触发 true，开始关闭时触发 false，均不等待动画结束；第二个参数为 `TPopupTrigger`。 | 否 |
 | useSafeArea | bool | false | 避让安全区：顶部仅上边，底部仅下边，左侧避让左/上/下边，右侧避让右/上/下边，居中避让全部边；与 `inset` 叠加。仅内容需避让时可在 `child` 中使用 `SafeArea`。 | 否 |
+| fullHeightSides | bool | false | left / right 面板是否按全高铺满，垂直方向只由显式 inset 决定。 抽屉类浮层用它避免面板上下出现空白条（issue #1225）。 | 否 |
 
 
 ##### TPopupOptions.top

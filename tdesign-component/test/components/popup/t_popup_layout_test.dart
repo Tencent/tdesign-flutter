@@ -226,8 +226,7 @@ void main() {
           kPopupTestMediaPadding,
           true,
         ),
-        // issue #1225：左右抽屉全高，仅避让附着边横向安全区
-        const EdgeInsets.only(left: 11),
+        const EdgeInsets.only(left: 11, top: 22, bottom: 44),
       );
       expect(
         PopupLayout.safePaddingFor(
@@ -235,7 +234,7 @@ void main() {
           kPopupTestMediaPadding,
           true,
         ),
-        const EdgeInsets.only(right: 33),
+        const EdgeInsets.only(right: 33, top: 22, bottom: 44),
       );
       expect(
         PopupLayout.safePaddingFor(
@@ -356,7 +355,10 @@ void main() {
       });
 
       testWidgets('left 无 inset 时默认宽度 280 且仅避让安全区', (tester) async {
-        final layout = PopupLayout(placement: TPopupPlacement.left);
+        final layout = PopupLayout(
+          placement: TPopupPlacement.left,
+          fullHeightSides: true,
+        );
         final safePadding = PopupLayout.safePaddingFor(
           TPopupPlacement.left,
           kPopupTestMediaPadding,
@@ -385,7 +387,10 @@ void main() {
       });
 
       testWidgets('right 无 inset 时默认宽度 280 且仅避让安全区', (tester) async {
-        final layout = PopupLayout(placement: TPopupPlacement.right);
+        final layout = PopupLayout(
+          placement: TPopupPlacement.right,
+          fullHeightSides: true,
+        );
         final safePadding = PopupLayout.safePaddingFor(
           TPopupPlacement.right,
           kPopupTestMediaPadding,
@@ -615,6 +620,7 @@ void main() {
         placement: TPopupPlacement.left,
         inset: const TPopupLeftInset(top: 8, bottom: 12),
         width: 280,
+        fullHeightSides: true,
       );
       await tester.pumpWidget(
         MaterialApp(
@@ -646,6 +652,7 @@ void main() {
         placement: TPopupPlacement.right,
         inset: const TPopupRightInset(top: 5, bottom: 7),
         width: 260,
+        fullHeightSides: true,
       );
       await tester.pumpWidget(
         MaterialApp(

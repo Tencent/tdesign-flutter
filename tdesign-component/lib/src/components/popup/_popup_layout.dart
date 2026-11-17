@@ -85,11 +85,13 @@ class PopupLayout {
         final inset = this.inset is TPopupLeftInset
             ? this.inset as TPopupLeftInset
             : null;
-        // 垂直方向只由显式 inset 决定，safePadding 已按全高规则剔除上下
-        // 安全区，避免面板上下出现空白条（issue #1225）。
+        // fullHeightSides 为 true 时按全高铺满，垂直方向只由显式 inset
+        // 决定，避免面板上下出现空白条（issue #1225）。
+        final verticalTop = fullHeightSides ? 0.0 : safePadding.top;
+        final verticalBottom = fullHeightSides ? 0.0 : safePadding.bottom;
         return Positioned(
-          top: (inset?.top ?? 0) + safePadding.top,
-          bottom: (inset?.bottom ?? 0) + safePadding.bottom,
+          top: (inset?.top ?? 0) + verticalTop,
+          bottom: (inset?.bottom ?? 0) + verticalBottom,
           left: safePadding.left,
           width: clampWidth(width ?? defaultDrawerWidth),
           child: child,
@@ -99,9 +101,11 @@ class PopupLayout {
             ? this.inset as TPopupRightInset
             : null;
         // 与 left 一致。
+        final verticalTop = fullHeightSides ? 0.0 : safePadding.top;
+        final verticalBottom = fullHeightSides ? 0.0 : safePadding.bottom;
         return Positioned(
-          top: (inset?.top ?? 0) + safePadding.top,
-          bottom: (inset?.bottom ?? 0) + safePadding.bottom,
+          top: (inset?.top ?? 0) + verticalTop,
+          bottom: (inset?.bottom ?? 0) + verticalBottom,
           right: safePadding.right,
           width: clampWidth(width ?? defaultDrawerWidth),
           child: child,
@@ -121,9 +125,8 @@ class PopupLayout {
   static EdgeInsets safePaddingFor(
     TPopupPlacement placement,
     EdgeInsets mediaPadding,
-    bool useSafeArea, {
-    bool fullHeightSides = true,
-  }) {
+    bool useSafeArea,
+  ) {
     if (!useSafeArea) {
       return EdgeInsets.zero;
     }
@@ -133,22 +136,17 @@ class PopupLayout {
       case TPopupPlacement.bottom:
         return EdgeInsets.only(bottom: mediaPadding.bottom);
       case TPopupPlacement.left:
-        // 全高抽屉只避让附着边，垂直方向交给内容层 SafeArea（issue #1225）。
-        return fullHeightSides
-            ? EdgeInsets.only(left: mediaPadding.left)
-            : EdgeInsets.only(
-                left: mediaPadding.left,
-                top: mediaPadding.top,
-                bottom: mediaPadding.bottom,
-              );
+        return EdgeInsets.only(
+          left: mediaPadding.left,
+          top: mediaPadding.top,
+          bottom: mediaPadding.bottom,
+        );
       case TPopupPlacement.right:
-        return fullHeightSides
-            ? EdgeInsets.only(right: mediaPadding.right)
-            : EdgeInsets.only(
-                right: mediaPadding.right,
-                top: mediaPadding.top,
-                bottom: mediaPadding.bottom,
-              );
+        return EdgeInsets.only(
+          right: mediaPadding.right,
+          top: mediaPadding.top,
+          bottom: mediaPadding.bottom,
+        );
       case TPopupPlacement.center:
         return mediaPadding;
     }
