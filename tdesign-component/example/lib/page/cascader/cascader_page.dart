@@ -7,6 +7,7 @@ import 'cascader_any_example.dart';
 import 'cascader_base_example.dart';
 import 'cascader_initial_example.dart';
 import 'cascader_keys_example.dart';
+import 'cascader_multiple_example.dart';
 import 'cascader_subtitle_example.dart';
 import 'cascader_tab_example.dart';
 
@@ -70,6 +71,12 @@ class _TCascaderPageState extends State<TCascaderPage> {
               methodName: 'CascaderAnyExample',
               compactStyle: const CompactExampleStyle(contentSpacing: 8),
               builder: (_) => const CascaderAnyExample(),
+            ),
+            ExampleItem(
+              desc: '多选级联选择器',
+              methodName: 'CascaderMultipleExample',
+              compactStyle: const CompactExampleStyle(contentSpacing: 8),
+              builder: (_) => const CascaderMultipleExample(),
             ),
           ],
         ),
