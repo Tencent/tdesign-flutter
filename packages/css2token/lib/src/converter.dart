@@ -97,6 +97,22 @@ const _radii = <String, String>{
   'radiusCircle': '--td-radius-circle',
 };
 
+// The theme generator exports the web radius scale, which carries one more
+// tier than Flutter: web has small/default/medium/large/extraLarge, Flutter
+// has small/default/large/extraLarge. Mapping by name would hand Flutter a
+// 3px radiusDefault (web's default tier) and drop the 6px medium tier,
+// so a web-scale export is shifted onto the Flutter names instead. A
+// mobile-scale export has no medium tier and keeps the one-to-one mapping.
+// (issue #1231)
+const _webRadii = <String, String>{
+  'radiusSmall': '--td-radius-default',
+  'radiusDefault': '--td-radius-medium',
+  'radiusLarge': '--td-radius-large',
+  'radiusExtraLarge': '--td-radius-extraLarge',
+  'radiusRound': '--td-radius-round',
+  'radiusCircle': '--td-radius-circle',
+};
+
 const _shadows = <String, String>{
   'shadow1': '--td-shadow-1',
   'shadow2': '--td-shadow-2',
@@ -419,7 +435,10 @@ FlutterThemeTokens parseCssToFlutterTokens(String css, {String? baselineCss}) {
     if (fields.isNotEmpty) font[spec.name] = fields;
   }
   final radius = <String, Object>{};
-  for (final entry in _radii.entries) {
+  // Only a web-scale export defines --td-radius-medium.
+  final radiusSources =
+      resolver.value('--td-radius-medium') == null ? _radii : _webRadii;
+  for (final entry in radiusSources.entries) {
     if (!resolver.changed(entry.value)) continue;
     final raw = resolver.value(entry.value);
     final length = resolver.length(entry.value);
