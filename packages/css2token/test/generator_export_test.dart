@@ -50,4 +50,56 @@ void main() {
       expect(() => splitGeneratorCss(css), throwsFormatException);
     });
   }
+
+
+  test('a web radius scale keeps the Flutter tiers (issue #1231)', () {
+    // The theme generator exports the web scale: seven steps, including the
+    // medium tier Flutter does not have. Mapping by name would give Flutter a
+    // 3px radiusDefault and drop the 6px medium tier entirely.
+    final parts = splitGeneratorCss('''
+:root, :root[theme-mode="light"] {
+  --td-radius-small: 2px;
+  --td-radius-default: 3px;
+  --td-radius-medium: 6px;
+  --td-radius-large: 9px;
+  --td-radius-extraLarge: 12px;
+  --td-radius-round: 999px;
+  --td-radius-circle: 50%;
+}
+:root.dark, :root[theme-mode='dark'] {
+  --td-radius-small: 2px;
+  --td-radius-default: 3px;
+  --td-radius-medium: 6px;
+  --td-radius-large: 9px;
+  --td-radius-extraLarge: 12px;
+  --td-radius-round: 999px;
+  --td-radius-circle: 50%;
+}
+''');
+    final tokens =
+        cssToFlutterTokens(lightCss: parts.light, darkCss: parts.dark);
+    expect(tokens.light.radius['radiusSmall'], 3);
+    expect(tokens.light.radius['radiusDefault'], 6);
+    expect(tokens.light.radius['radiusLarge'], 9);
+    expect(tokens.light.radius['radiusExtraLarge'], 12);
+  });
+
+  test('a mobile radius scale keeps the one-to-one mapping', () {
+    // No medium tier means the export already speaks Flutter's scale, so the
+    // names line up and nothing is shifted.
+    final parts = splitGeneratorCss('''
+:root, :root[theme-mode="light"] {
+  --td-radius-small: 4px;
+  --td-radius-default: 8px;
+}
+:root.dark, :root[theme-mode='dark'] {
+  --td-radius-small: 4px;
+  --td-radius-default: 8px;
+}
+''');
+    final tokens =
+        cssToFlutterTokens(lightCss: parts.light, darkCss: parts.dark);
+    expect(tokens.light.radius['radiusSmall'], 4);
+    expect(tokens.light.radius['radiusDefault'], 8);
+  });
 }
