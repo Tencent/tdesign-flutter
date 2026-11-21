@@ -21,6 +21,25 @@ enum TImageShape {
   circle,
 }
 
+/// 网络图片内存缓存策略。
+///
+/// Flutter 的 `ImageCache` 默认缓存全部网络图；该策略提供按图控制内存缓存
+/// 的开关，不涉及磁盘缓存或 HTTP 缓存头。
+enum TImageCacheMode {
+  /// 保留内存缓存（默认）。
+  ///
+  /// 与 Flutter `Image.network` 默认行为一致：同一 URL 复用内存缓存，
+  /// 不主动清除缓存条目。
+  enabled,
+
+  /// 不保留内存缓存。
+  ///
+  /// 每次来源生效前先清除该 URL 对应的内存缓存条目，保证每次展示都取
+  /// 最新数据；来源变更与组件销毁时同步清除，避免缓存被后续复用。
+  /// 只影响内存缓存，不控制磁盘缓存与 HTTP 缓存头。
+  disabled,
+}
+
 class TImage extends StatelessWidget {
   const TImage({
     super.key,
@@ -41,6 +60,7 @@ class TImage extends StatelessWidget {
     this.excludeFromSemantics = false,
     this.cacheWidth,
     this.cacheHeight,
+    this.cacheMode = TImageCacheMode.enabled,
     this.filterQuality = FilterQuality.low,
     this.alignment = Alignment.center,
     this.repeat = ImageRepeat.noRepeat,
@@ -113,6 +133,11 @@ class TImage extends StatelessWidget {
   /// 解码缓存高度。
   final int? cacheHeight;
 
+  /// 网络图片内存缓存策略，默认 [TImageCacheMode.enabled]。
+  ///
+  /// 仅作用于网络图（http/https）；asset 与 [imageFile] 不受影响。
+  final TImageCacheMode cacheMode;
+
   /// 图片滤镜质量。
   final FilterQuality filterQuality;
 
@@ -124,6 +149,14 @@ class TImage extends StatelessWidget {
 
   /// 点击回调；为空时不创建点击行为。
   final GestureTapCallback? onTap;
+
+  /// 判断 [value] 是否为网络图地址（http/https）。
+  static bool _isNetworkUrl(String value) {
+    final uri = Uri.tryParse(value);
+    return uri != null &&
+        (uri.scheme.toLowerCase() == 'http' ||
+            uri.scheme.toLowerCase() == 'https');
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -215,14 +248,16 @@ class TImage extends StatelessWidget {
         StackTrace.empty,
       );
     }
-    final uri = Uri.tryParse(value);
-    final isNetwork =
-        uri != null &&
-        (uri.scheme.toLowerCase() == 'http' ||
-            uri.scheme.toLowerCase() == 'https');
-    if (isNetwork) {
-      return Image.network(
-        value,
+    if (TImage._isNetworkUrl(value)) {
+      final networkProvider = NetworkImage(value);
+      // 显式声明类型：三元两分支推断结果为 Object，无法赋给 Image.image。
+      // ignore: omit_local_variable_types
+      final ImageProvider<Object> provider =
+          cacheWidth != null || cacheHeight != null
+          ? ResizeImage(networkProvider, width: cacheWidth, height: cacheHeight)
+          : networkProvider;
+      return Image(
+        image: provider,
         width: width,
         height: height,
         fit: fit,
@@ -254,8 +289,6 @@ class TImage extends StatelessWidget {
         gaplessPlayback: gaplessPlayback,
         filterQuality: filterQuality,
         isAntiAlias: isAntiAlias,
-        cacheWidth: cacheWidth,
-        cacheHeight: cacheHeight,
       );
     }
 
@@ -332,11 +365,33 @@ class _TImageLifecycleState extends State<_TImageLifecycle> {
   var _terminalEventObserved = false;
 
   @override
+  void initState() {
+    super.initState();
+    _evictIfDisabled(widget.image);
+  }
+
+  @override
   void didUpdateWidget(covariant _TImageLifecycle oldWidget) {
     super.didUpdateWidget(oldWidget);
-    if (_sourceIdentity(oldWidget.image) != _sourceIdentity(widget.image)) {
+    final oldImage = oldWidget.image;
+    final newImage = widget.image;
+    if (_sourceIdentity(oldImage) != _sourceIdentity(newImage)) {
+      _evictIfDisabled(oldImage);
       _generation++;
       _terminalEventObserved = false;
+    }
+  }
+
+  @override
+  void dispose() {
+    _evictIfDisabled(widget.image);
+    super.dispose();
+  }
+
+  /// 不保留缓存策略的清除入口：仅作用于 disabled 模式的网络图。
+  void _evictIfDisabled(TImage image) {
+    if (image.cacheMode == TImageCacheMode.disabled) {
+      _evictCache(image);
     }
   }
 
@@ -421,5 +476,33 @@ class _TImageLifecycleState extends State<_TImageLifecycle> {
       return ('src', image.src, image.cacheWidth, image.cacheHeight);
     }
     return null;
+  }
+
+  /// 清除网络来源对应的内存缓存条目；非网络图不处理。
+  ///
+  /// 返回是否实际清除了缓存条目。`ResizeImage` 的缓存键是其 `obtainKey`
+  /// 生成的内部键（`NetworkImage.obtainKey` 返回 `SynchronousFuture`，
+  /// 可同步取值），需按原参数重建后取键清除，不能用 provider 实例直接查。
+  bool _evictCache(TImage image) {
+    final src = image.src;
+    if (src == null || !TImage._isNetworkUrl(src)) {
+      return false;
+    }
+    final cache = PaintingBinding.instance.imageCache;
+    var evicted = cache.evict(NetworkImage(src));
+    if (image.cacheWidth != null || image.cacheHeight != null) {
+      final resized = ResizeImage(
+        NetworkImage(src),
+        width: image.cacheWidth,
+        height: image.cacheHeight,
+      );
+      final keyFuture = resized.obtainKey(const ImageConfiguration());
+      ResizeImageKey? key;
+      keyFuture.then((value) => key = value);
+      if (key != null) {
+        evicted = cache.evict(key!) || evicted;
+      }
+    }
+    return evicted;
   }
 }
