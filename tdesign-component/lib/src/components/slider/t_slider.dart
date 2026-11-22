@@ -681,60 +681,126 @@ class _RangeSliderFocusHighlight extends StatefulWidget {
 }
 
 class _RangeSliderFocusHighlightState
-    extends State<_RangeSliderFocusHighlight> {
+    extends State<_RangeSliderFocusHighlight> with WidgetsBindingObserver {
   final Set<int> _pressedPointers = {};
+  late final ValueNotifier<_RangeSliderOverlayVisual> _overlayVisual;
+  late final _RangeSliderOverlayShape _overlayShape;
 
   @override
   void initState() {
     super.initState();
+    _overlayVisual = ValueNotifier(
+      _RangeSliderOverlayVisual(
+        pointerActive: false,
+        showFocusHighlight:
+            FocusManager.instance.highlightMode ==
+            FocusHighlightMode.traditional,
+      ),
+    );
+    _overlayShape = _RangeSliderOverlayShape(_overlayVisual);
+    WidgetsBinding.instance.addObserver(this);
     FocusManager.instance.addHighlightModeListener(_handleHighlightMode);
   }
 
-  void _handleHighlightMode(FocusHighlightMode mode) {
-    if (mounted) {
-      setState(() {});
+  void _updateOverlayVisual() {
+    _overlayVisual.value = _RangeSliderOverlayVisual(
+      pointerActive: _pressedPointers.isNotEmpty,
+      showFocusHighlight:
+          FocusManager.instance.highlightMode ==
+          FocusHighlightMode.traditional,
+    );
+  }
+
+  void _handleHighlightMode(FocusHighlightMode mode) => _updateOverlayVisual();
+
+  void _handlePointerDown(PointerDownEvent event) {
+    _pressedPointers.add(event.pointer);
+    _updateOverlayVisual();
+  }
+
+  void _handlePointerUp(PointerUpEvent event) {
+    _pressedPointers.remove(event.pointer);
+    _updateOverlayVisual();
+  }
+
+  void _handlePointerCancel(PointerCancelEvent event) {
+    _pressedPointers.remove(event.pointer);
+    _updateOverlayVisual();
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    if (state == AppLifecycleState.inactive ||
+        state == AppLifecycleState.paused ||
+        state == AppLifecycleState.detached) {
+      // A pointer-up may never arrive when the app loses focus; drop the
+      // pressed state so the overlay cannot stay visible indefinitely.
+      _pressedPointers.clear();
+      _updateOverlayVisual();
     }
   }
 
   @override
   void dispose() {
     FocusManager.instance.removeHighlightModeListener(_handleHighlightMode);
+    WidgetsBinding.instance.removeObserver(this);
+    _overlayShape.dispose();
+    _overlayVisual.dispose();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
     return Listener(
-      onPointerDown: (event) =>
-          setState(() => _pressedPointers.add(event.pointer)),
-      onPointerUp: (event) =>
-          setState(() => _pressedPointers.remove(event.pointer)),
-      onPointerCancel: (event) =>
-          setState(() => _pressedPointers.remove(event.pointer)),
-      child: widget.builder(
-        context,
-        _RangeSliderOverlayShape(
-          pointerActive: _pressedPointers.isNotEmpty,
-          showFocusHighlight:
-              FocusManager.instance.highlightMode ==
-              FocusHighlightMode.traditional,
-        ),
-      ),
+      onPointerDown: _handlePointerDown,
+      onPointerUp: _handlePointerUp,
+      onPointerCancel: _handlePointerCancel,
+      child: widget.builder(context, _overlayShape),
     );
   }
 }
 
-class _RangeSliderOverlayShape extends SliderComponentShape {
-  const _RangeSliderOverlayShape({
+class _RangeSliderOverlayVisual {
+  const _RangeSliderOverlayVisual({
     required this.pointerActive,
     required this.showFocusHighlight,
   });
 
   final bool pointerActive;
   final bool showFocusHighlight;
+}
+
+class _RangeSliderOverlayShape extends SliderComponentShape {
+  _RangeSliderOverlayShape(this._visual);
+
+  final ValueNotifier<_RangeSliderOverlayVisual> _visual;
+  RenderBox? _parentBox;
+  VoidCallback? _visualListener;
+
   static const _delegate = RoundSliderOverlayShape(
     overlayRadius: SliderGeometry.hitRadius,
   );
+
+  void _attach(RenderBox parentBox) {
+    if (identical(_parentBox, parentBox)) {
+      return;
+    }
+    _detach();
+    _parentBox = parentBox;
+    _visualListener = parentBox.markNeedsPaint;
+    _visual.addListener(_visualListener!);
+  }
+
+  void _detach() {
+    final listener = _visualListener;
+    if (listener != null) {
+      _visual.removeListener(listener);
+      _visualListener = null;
+    }
+    _parentBox = null;
+  }
+
+  void dispose() => _detach();
 
   @override
   Size getPreferredSize(bool isEnabled, bool isDiscrete) =>
@@ -755,7 +821,9 @@ class _RangeSliderOverlayShape extends SliderComponentShape {
     required double textScaleFactor,
     required Size sizeWithOverflow,
   }) {
-    if (!pointerActive && !showFocusHighlight) {
+    _attach(parentBox);
+    final visual = _visual.value;
+    if (!visual.pointerActive && !visual.showFocusHighlight) {
       return;
     }
     _delegate.paint(

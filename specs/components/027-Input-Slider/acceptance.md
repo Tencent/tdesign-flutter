@@ -68,3 +68,8 @@ Flutter 3.32.0 使用 Linux x86_64，3.47.8 使用 macOS arm64；自动 Golden �
 - Linux Flutter 3.32.0：最终候选的组件 Golden 1 项及 Demo Golden 6 项通过，未更新基线。最终远端 CI 尚未运行。
 - 精简测试并调整兼容包装位置后，Flutter 3.32.0、3.47.8 和 3.50.0 的 Slider 组件回归各 103 项通过；3.32.0 和 3.50.0 严格静态分析通过。3.47.8 的 dry baseline 用例在调整前失败、调整后通过；已有用例覆盖基础尺寸和无文字标签时的基线查询。
 - 本次包装位置调整后未重新运行 Golden 或设备演示；远端 CI 仅能验证推送后的提交。
+
+## 光圈兼容层内部优化
+
+- 指针按下状态改由 `ValueNotifier` 驱动 overlay 局部重绘，pointer 事件不再重建 Slider 子树；同时监听 `AppLifecycleState.inactive/paused/detached`，应用失焦时清空未结束的按下指针，避免光圈无法消退。公开 API 与行为契约不变。
+- 本地验证（Flutter 3.50.0）：Slider 组件测试 47 项通过（含新增生命周期兜底用例），修改文件静态分析无问题；Chrome 网页复验鼠标 hover/按下/松手/移开及触摸点击前后的像素表现与优化前一致。

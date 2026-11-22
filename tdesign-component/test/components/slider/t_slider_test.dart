@@ -1201,6 +1201,59 @@ void main() {
       debugDefaultTargetPlatformOverride = null;
     });
 
+    testWidgets('app lifecycle clears pressed pointer and hides overlay', (
+      tester,
+    ) async {
+      tester.binding.focusManager.highlightStrategy =
+          FocusHighlightStrategy.alwaysTouch;
+      addTearDown(() {
+        tester.binding.focusManager.highlightStrategy =
+            FocusHighlightStrategy.automatic;
+        tester.binding.handleAppLifecycleStateChanged(AppLifecycleState.resumed);
+      });
+      final key = GlobalKey();
+      await tester.pumpWidget(
+        RepaintBoundary(
+          key: key,
+          child: wrap(
+            TRangeSlider(
+              value: const RangeValues(20, 60),
+              min: 0,
+              max: 100,
+              onChanged: (_) {},
+            ),
+          ),
+        ),
+      );
+      await tester.pumpAndSettle();
+      final idle = (await tester.runAsync(() => captureSlider(tester, key)))!;
+
+      final touch = await tester.createGesture(
+        kind: ui.PointerDeviceKind.touch,
+      );
+      await touch.down(
+        tester.getCenter(find.byType(RangeSlider)) - const Offset(80, 0),
+      );
+      await tester.pump();
+      final pressed = (await tester.runAsync(() => captureSlider(tester, key)))!;
+      expect(
+        pixelDifferences(idle, pressed),
+        greaterThan(0),
+        reason: 'pressed thumb must paint the overlay',
+      );
+
+      tester.binding.handleAppLifecycleStateChanged(AppLifecycleState.paused);
+      await tester.pump();
+      final after = (await tester.runAsync(() => captureSlider(tester, key)))!;
+      expect(
+        after,
+        orderedEquals(idle),
+        reason: 'lifecycle pause must drop pressed state and hide overlay',
+      );
+      await touch.up();
+      await touch.removePointer();
+    });
+
     testWidgets('touch drag keeps pressed feedback outside the slider', (
       tester,
     ) async {
