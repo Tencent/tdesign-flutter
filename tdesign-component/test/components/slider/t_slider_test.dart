@@ -1242,13 +1242,19 @@ void main() {
         reason: 'pressed thumb must paint the overlay',
       );
 
-      tester.binding.handleAppLifecycleStateChanged(AppLifecycleState.paused);
+      // Flutter 3.32's test binding suspends frame pumping in the paused
+      // state. `inactive` exercises the same observer path while keeping the
+      // scheduler alive; restore `resumed` before pumping for the same reason.
+      tester.binding.handleAppLifecycleStateChanged(
+        AppLifecycleState.inactive,
+      );
+      tester.binding.handleAppLifecycleStateChanged(AppLifecycleState.resumed);
       await tester.pump();
       final after = (await tester.runAsync(() => captureSlider(tester, key)))!;
       expect(
         after,
         orderedEquals(idle),
-        reason: 'lifecycle pause must drop pressed state and hide overlay',
+        reason: 'lifecycle change must drop pressed state and hide overlay',
       );
       await touch.up();
       await touch.removePointer();
