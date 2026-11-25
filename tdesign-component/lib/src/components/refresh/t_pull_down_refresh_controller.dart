@@ -6,6 +6,9 @@ import 'package:meta/meta.dart';
 /// 返回的 Future 会在本次刷新成功、回调失败或超时复位后完成；它不返回业务结果。
 /// 回调异常仍由 `TPullDownRefresh` 通过 `FlutterError.reportError` 上报。
 ///
+/// 重复绑定保留既有的后绑定覆盖行为，[refresh] 只作用于最后绑定的组件，
+/// 不提供同时刷新多个组件的能力。当前绑定组件卸载后，不会自动恢复此前的绑定。
+///
 /// ## 生命周期（所有权）
 ///
 /// 刷新资源由 `TPullDownRefresh` 随挂载和卸载管理；本控制器不拥有

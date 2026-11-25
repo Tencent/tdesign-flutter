@@ -1,0 +1,5153 @@
+{
+  "checkedAt": "2026-10-26T11:39:28.574Z",
+  "baseHead": "4b262697e557849676cc9698ee8b4c47b6044260",
+  "baseUrl": "http://127.0.0.1:19127/flutter/migration-1-0",
+  "searchRemoved": true,
+  "bodyH1": 0,
+  "renderedLinks": 557,
+  "notes": [
+    "Full activation audit before removing the duplicate zero-width H1 permalink covered 558 links.",
+    "Final inventory contains 557 links, with no new destinations; the original H1 fragment remains as a compatibility anchor.",
+    "Final group expansion and detail navigation were rechecked after title adaptation.",
+    "Official URLs unchanged; prior official resource failures remain separately recorded."
+  ],
+  "newTargets": [],
+  "finalGroup": {
+    "open": true,
+    "top": 80
+  },
+  "finalExample": {
+    "hash": "#migration-button",
+    "top": 80
+  },
+  "anchors": [
+    {
+      "href": "#升级顺序",
+      "index": 0,
+      "text": "升级顺序",
+      "hash": "#%E5%8D%87%E7%BA%A7%E9%A1%BA%E5%BA%8F",
+      "top": 120,
+      "ok": true
+    },
+    {
+      "href": "#按组件查找迁移方式",
+      "index": 1,
+      "text": "按组件查找迁移方式",
+      "hash": "#%E6%8C%89%E7%BB%84%E4%BB%B6%E6%9F%A5%E6%89%BE%E8%BF%81%E7%A7%BB%E6%96%B9%E5%BC%8F",
+      "top": 120,
+      "ok": true
+    },
+    {
+      "href": "#主题、文字与样式",
+      "index": 2,
+      "text": "主题、文字与样式",
+      "hash": "#%E4%B8%BB%E9%A2%98%E3%80%81%E6%96%87%E5%AD%97%E4%B8%8E%E6%A0%B7%E5%BC%8F",
+      "top": 120,
+      "ok": true
+    },
+    {
+      "href": "#主题与文字：1-0写法与注意事项",
+      "index": 3,
+      "text": "主题与文字：1.0写法与注意事项",
+      "hash": "#%E4%B8%BB%E9%A2%98%E4%B8%8E%E6%96%87%E5%AD%97%EF%BC%9A1-0%E5%86%99%E6%B3%95%E4%B8%8E%E6%B3%A8%E6%84%8F%E4%BA%8B%E9%A1%B9",
+      "top": 120,
+      "ok": true
+    },
+    {
+      "href": "#主题与文字：迁移后怎样确认",
+      "index": 4,
+      "text": "主题与文字：迁移后怎样确认",
+      "hash": "#%E4%B8%BB%E9%A2%98%E4%B8%8E%E6%96%87%E5%AD%97%EF%BC%9A%E8%BF%81%E7%A7%BB%E5%90%8E%E6%80%8E%E6%A0%B7%E7%A1%AE%E8%AE%A4",
+      "top": 120,
+      "ok": true
+    },
+    {
+      "href": "#按钮与禁用语义",
+      "index": 5,
+      "text": "按钮与禁用语义",
+      "hash": "#%E6%8C%89%E9%92%AE%E4%B8%8E%E7%A6%81%E7%94%A8%E8%AF%AD%E4%B9%89",
+      "top": 120,
+      "ok": true
+    },
+    {
+      "href": "#按钮：1-0写法与注意事项",
+      "index": 6,
+      "text": "按钮：1.0写法与注意事项",
+      "hash": "#%E6%8C%89%E9%92%AE%EF%BC%9A1-0%E5%86%99%E6%B3%95%E4%B8%8E%E6%B3%A8%E6%84%8F%E4%BA%8B%E9%A1%B9",
+      "top": 120,
+      "ok": true
+    },
+    {
+      "href": "#按钮：迁移后怎样确认",
+      "index": 7,
+      "text": "按钮：迁移后怎样确认",
+      "hash": "#%E6%8C%89%E9%92%AE%EF%BC%9A%E8%BF%81%E7%A7%BB%E5%90%8E%E6%80%8E%E6%A0%B7%E7%A1%AE%E8%AE%A4",
+      "top": 120,
+      "ok": true
+    },
+    {
+      "href": "#受控值、输入与选择",
+      "index": 8,
+      "text": "受控值、输入与选择",
+      "hash": "#%E5%8F%97%E6%8E%A7%E5%80%BC%E3%80%81%E8%BE%93%E5%85%A5%E4%B8%8E%E9%80%89%E6%8B%A9",
+      "top": 120,
+      "ok": true
+    },
+    {
+      "href": "#受控值：1-0写法与注意事项",
+      "index": 9,
+      "text": "受控值：1.0写法与注意事项",
+      "hash": "#%E5%8F%97%E6%8E%A7%E5%80%BC%EF%BC%9A1-0%E5%86%99%E6%B3%95%E4%B8%8E%E6%B3%A8%E6%84%8F%E4%BA%8B%E9%A1%B9",
+      "top": 120,
+      "ok": true
+    },
+    {
+      "href": "#受控值：迁移后怎样确认",
+      "index": 10,
+      "text": "受控值：迁移后怎样确认",
+      "hash": "#%E5%8F%97%E6%8E%A7%E5%80%BC%EF%BC%9A%E8%BF%81%E7%A7%BB%E5%90%8E%E6%80%8E%E6%A0%B7%E7%A1%AE%E8%AE%A4",
+      "top": 120,
+      "ok": true
+    },
+    {
+      "href": "#表单改为字段树",
+      "index": 11,
+      "text": "表单改为字段树",
+      "hash": "#%E8%A1%A8%E5%8D%95%E6%94%B9%E4%B8%BA%E5%AD%97%E6%AE%B5%E6%A0%91",
+      "top": 120,
+      "ok": true
+    },
+    {
+      "href": "#表单：1-0写法与注意事项",
+      "index": 12,
+      "text": "表单：1.0写法与注意事项",
+      "hash": "#%E8%A1%A8%E5%8D%95%EF%BC%9A1-0%E5%86%99%E6%B3%95%E4%B8%8E%E6%B3%A8%E6%84%8F%E4%BA%8B%E9%A1%B9",
+      "top": 120,
+      "ok": true
+    },
+    {
+      "href": "#表单：迁移后怎样确认",
+      "index": 13,
+      "text": "表单：迁移后怎样确认",
+      "hash": "#%E8%A1%A8%E5%8D%95%EF%BC%9A%E8%BF%81%E7%A7%BB%E5%90%8E%E6%80%8E%E6%A0%B7%E7%A1%AE%E8%AE%A4",
+      "top": 120,
+      "ok": true
+    },
+    {
+      "href": "#picker、日期与浮层确认分离",
+      "index": 14,
+      "text": "Picker、日期与浮层确认分离",
+      "hash": "#picker%E3%80%81%E6%97%A5%E6%9C%9F%E4%B8%8E%E6%B5%AE%E5%B1%82%E7%A1%AE%E8%AE%A4%E5%88%86%E7%A6%BB",
+      "top": 120,
+      "ok": true
+    },
+    {
+      "href": "#picker-与日期：1-0写法与注意事项",
+      "index": 15,
+      "text": "Picker 与日期：1.0写法与注意事项",
+      "hash": "#picker-%E4%B8%8E%E6%97%A5%E6%9C%9F%EF%BC%9A1-0%E5%86%99%E6%B3%95%E4%B8%8E%E6%B3%A8%E6%84%8F%E4%BA%8B%E9%A1%B9",
+      "top": 120,
+      "ok": true
+    },
+    {
+      "href": "#picker-与日期：迁移后怎样确认",
+      "index": 16,
+      "text": "Picker 与日期：迁移后怎样确认",
+      "hash": "#picker-%E4%B8%8E%E6%97%A5%E6%9C%9F%EF%BC%9A%E8%BF%81%E7%A7%BB%E5%90%8E%E6%80%8E%E6%A0%B7%E7%A1%AE%E8%AE%A4",
+      "top": 120,
+      "ok": true
+    },
+    {
+      "href": "#popup、dialog、toast",
+      "index": 17,
+      "text": "Popup、Dialog、Toast",
+      "hash": "#popup%E3%80%81dialog%E3%80%81toast",
+      "top": 120,
+      "ok": true
+    },
+    {
+      "href": "#浮层与提示：1-0写法与注意事项",
+      "index": 18,
+      "text": "浮层与提示：1.0写法与注意事项",
+      "hash": "#%E6%B5%AE%E5%B1%82%E4%B8%8E%E6%8F%90%E7%A4%BA%EF%BC%9A1-0%E5%86%99%E6%B3%95%E4%B8%8E%E6%B3%A8%E6%84%8F%E4%BA%8B%E9%A1%B9",
+      "top": 120,
+      "ok": true
+    },
+    {
+      "href": "#浮层与提示：迁移后怎样确认",
+      "index": 19,
+      "text": "浮层与提示：迁移后怎样确认",
+      "hash": "#%E6%B5%AE%E5%B1%82%E4%B8%8E%E6%8F%90%E7%A4%BA%EF%BC%9A%E8%BF%81%E7%A7%BB%E5%90%8E%E6%80%8E%E6%A0%B7%E7%A1%AE%E8%AE%A4",
+      "top": 120,
+      "ok": true
+    },
+    {
+      "href": "#upload-与平台依赖",
+      "index": 20,
+      "text": "Upload 与平台依赖",
+      "hash": "#upload-%E4%B8%8E%E5%B9%B3%E5%8F%B0%E4%BE%9D%E8%B5%96",
+      "top": 120,
+      "ok": true
+    },
+    {
+      "href": "#旧参数和业务职责如何调整",
+      "index": 21,
+      "text": "旧参数和业务职责如何调整",
+      "hash": "#%E6%97%A7%E5%8F%82%E6%95%B0%E5%92%8C%E4%B8%9A%E5%8A%A1%E8%81%8C%E8%B4%A3%E5%A6%82%E4%BD%95%E8%B0%83%E6%95%B4",
+      "top": 120,
+      "ok": true
+    },
+    {
+      "href": "#upload：1-0写法与注意事项",
+      "index": 22,
+      "text": "Upload：1.0写法与注意事项",
+      "hash": "#upload%EF%BC%9A1-0%E5%86%99%E6%B3%95%E4%B8%8E%E6%B3%A8%E6%84%8F%E4%BA%8B%E9%A1%B9",
+      "top": 120,
+      "ok": true
+    },
+    {
+      "href": "#upload：迁移后怎样确认",
+      "index": 23,
+      "text": "Upload：迁移后怎样确认",
+      "hash": "#upload%EF%BC%9A%E8%BF%81%E7%A7%BB%E5%90%8E%E6%80%8E%E6%A0%B7%E7%A1%AE%E8%AE%A4",
+      "top": 120,
+      "ok": true
+    },
+    {
+      "href": "#两种-tabbar-与-swiper",
+      "index": 24,
+      "text": "两种 TabBar 与 Swiper",
+      "hash": "#%E4%B8%A4%E7%A7%8D-tabbar-%E4%B8%8E-swiper",
+      "top": 120,
+      "ok": true
+    },
+    {
+      "href": "#页签与轮播：1-0写法与注意事项",
+      "index": 25,
+      "text": "页签与轮播：1.0写法与注意事项",
+      "hash": "#%E9%A1%B5%E7%AD%BE%E4%B8%8E%E8%BD%AE%E6%92%AD%EF%BC%9A1-0%E5%86%99%E6%B3%95%E4%B8%8E%E6%B3%A8%E6%84%8F%E4%BA%8B%E9%A1%B9",
+      "top": 120,
+      "ok": true
+    },
+    {
+      "href": "#页签与轮播：迁移后怎样确认",
+      "index": 26,
+      "text": "页签与轮播：迁移后怎样确认",
+      "hash": "#%E9%A1%B5%E7%AD%BE%E4%B8%8E%E8%BD%AE%E6%92%AD%EF%BC%9A%E8%BF%81%E7%A7%BB%E5%90%8E%E6%80%8E%E6%A0%B7%E7%A1%AE%E8%AE%A4",
+      "top": 120,
+      "ok": true
+    },
+    {
+      "href": "#找不到旧类型时怎样处理",
+      "index": 27,
+      "text": "找不到旧类型时怎样处理",
+      "hash": "#%E6%89%BE%E4%B8%8D%E5%88%B0%E6%97%A7%E7%B1%BB%E5%9E%8B%E6%97%B6%E6%80%8E%E6%A0%B7%E5%A4%84%E7%90%86",
+      "top": 120,
+      "ok": true
+    },
+    {
+      "href": "#枚举值不能只替换前缀",
+      "index": 28,
+      "text": "枚举值不能只替换前缀",
+      "hash": "#%E6%9E%9A%E4%B8%BE%E5%80%BC%E4%B8%8D%E8%83%BD%E5%8F%AA%E6%9B%BF%E6%8D%A2%E5%89%8D%E7%BC%80",
+      "top": 120,
+      "ok": true
+    },
+    {
+      "href": "#编译通过后仍要检查",
+      "index": 29,
+      "text": "编译通过后仍要检查",
+      "hash": "#%E7%BC%96%E8%AF%91%E9%80%9A%E8%BF%87%E5%90%8E%E4%BB%8D%E8%A6%81%E6%A3%80%E6%9F%A5",
+      "top": 120,
+      "ok": true
+    },
+    {
+      "href": "#_1-0-0-之后的升级注意",
+      "index": 30,
+      "text": "1.0.0 之后的升级注意",
+      "hash": "#_1-0-0-%E4%B9%8B%E5%90%8E%E7%9A%84%E5%8D%87%E7%BA%A7%E6%B3%A8%E6%84%8F",
+      "top": 120,
+      "ok": true
+    },
+    {
+      "href": "#已有文字槽遗漏修复",
+      "index": 31,
+      "text": "已有文字槽遗漏修复",
+      "hash": "#%E5%B7%B2%E6%9C%89%E6%96%87%E5%AD%97%E6%A7%BD%E9%81%97%E6%BC%8F%E4%BF%AE%E5%A4%8D",
+      "top": 120,
+      "ok": true
+    },
+    {
+      "href": "#自定义文字槽默认值统一",
+      "index": 32,
+      "text": "自定义文字槽默认值统一",
+      "hash": "#%E8%87%AA%E5%AE%9A%E4%B9%89%E6%96%87%E5%AD%97%E6%A7%BD%E9%BB%98%E8%AE%A4%E5%80%BC%E7%BB%9F%E4%B8%80",
+      "top": 120,
+      "ok": true
+    },
+    {
+      "href": "#popup-配置与关闭生命周期",
+      "index": 33,
+      "text": "Popup 配置与关闭生命周期",
+      "hash": "#popup-%E9%85%8D%E7%BD%AE%E4%B8%8E%E5%85%B3%E9%97%AD%E7%94%9F%E5%91%BD%E5%91%A8%E6%9C%9F",
+      "top": 120,
+      "ok": true
+    },
+    {
+      "href": "#附录：按旧类型名称查找",
+      "index": 34,
+      "text": "附录：按旧类型名称查找",
+      "hash": "#%E9%99%84%E5%BD%95%EF%BC%9A%E6%8C%89%E6%97%A7%E7%B1%BB%E5%9E%8B%E5%90%8D%E7%A7%B0%E6%9F%A5%E6%89%BE",
+      "top": 120,
+      "ok": true
+    },
+    {
+      "href": "#migration-after-1-0",
+      "index": 37,
+      "text": "1.0.0 之后的升级注意",
+      "hash": "#migration-after-1-0",
+      "top": 80,
+      "ok": true
+    },
+    {
+      "href": "#migration-legacy-types",
+      "index": 41,
+      "text": "旧类型名称对照",
+      "hash": "#migration-legacy-types",
+      "top": 80,
+      "ok": true
+    },
+    {
+      "href": "#migration-group-global",
+      "index": 42,
+      "text": "主题与全局配置",
+      "hash": "#migration-group-global",
+      "top": 80,
+      "ok": true
+    },
+    {
+      "href": "#migration-group-basic",
+      "index": 43,
+      "text": "按钮、文字与基础组件",
+      "hash": "#migration-group-basic",
+      "top": 80,
+      "ok": true
+    },
+    {
+      "href": "#migration-group-navigation",
+      "index": 44,
+      "text": "页面导航与页签",
+      "hash": "#migration-group-navigation",
+      "top": 80,
+      "ok": true
+    },
+    {
+      "href": "#migration-group-input",
+      "index": 45,
+      "text": "表单、输入与选择",
+      "hash": "#migration-group-input",
+      "top": 80,
+      "ok": true
+    },
+    {
+      "href": "#migration-group-display",
+      "index": 46,
+      "text": "内容与数据展示",
+      "hash": "#migration-group-display",
+      "top": 80,
+      "ok": true
+    },
+    {
+      "href": "#migration-group-feedback",
+      "index": 47,
+      "text": "浮层、提示与交互反馈",
+      "hash": "#migration-group-feedback",
+      "top": 80,
+      "ok": true
+    },
+    {
+      "href": "#migration-theme",
+      "index": 49,
+      "text": "具体改法",
+      "hash": "#migration-theme",
+      "top": 80,
+      "ok": true
+    },
+    {
+      "href": "#migration-button",
+      "index": 51,
+      "text": "具体改法",
+      "hash": "#migration-button",
+      "top": 80,
+      "ok": true
+    },
+    {
+      "href": "#migration-theme",
+      "index": 57,
+      "text": "具体改法",
+      "hash": "#migration-theme",
+      "top": 80,
+      "ok": true
+    },
+    {
+      "href": "#migration-tabs",
+      "index": 65,
+      "text": "具体改法",
+      "hash": "#migration-tabs",
+      "top": 80,
+      "ok": true
+    },
+    {
+      "href": "#migration-tabs",
+      "index": 67,
+      "text": "具体改法",
+      "hash": "#migration-tabs",
+      "top": 80,
+      "ok": true
+    },
+    {
+      "href": "#migration-picker",
+      "index": 69,
+      "text": "具体改法",
+      "hash": "#migration-picker",
+      "top": 80,
+      "ok": true
+    },
+    {
+      "href": "#migration-controlled",
+      "index": 72,
+      "text": "具体改法",
+      "hash": "#migration-controlled",
+      "top": 80,
+      "ok": true
+    },
+    {
+      "href": "#migration-picker",
+      "index": 74,
+      "text": "具体改法",
+      "hash": "#migration-picker",
+      "top": 80,
+      "ok": true
+    },
+    {
+      "href": "#migration-form",
+      "index": 76,
+      "text": "具体改法",
+      "hash": "#migration-form",
+      "top": 80,
+      "ok": true
+    },
+    {
+      "href": "#migration-controlled",
+      "index": 78,
+      "text": "具体改法",
+      "hash": "#migration-controlled",
+      "top": 80,
+      "ok": true
+    },
+    {
+      "href": "#migration-picker",
+      "index": 80,
+      "text": "具体改法",
+      "hash": "#migration-picker",
+      "top": 80,
+      "ok": true
+    },
+    {
+      "href": "#migration-controlled",
+      "index": 82,
+      "text": "具体改法",
+      "hash": "#migration-controlled",
+      "top": 80,
+      "ok": true
+    },
+    {
+      "href": "#migration-controlled",
+      "index": 87,
+      "text": "具体改法",
+      "hash": "#migration-controlled",
+      "top": 80,
+      "ok": true
+    },
+    {
+      "href": "#migration-controlled",
+      "index": 89,
+      "text": "具体改法",
+      "hash": "#migration-controlled",
+      "top": 80,
+      "ok": true
+    },
+    {
+      "href": "#migration-controlled",
+      "index": 91,
+      "text": "具体改法",
+      "hash": "#migration-controlled",
+      "top": 80,
+      "ok": true
+    },
+    {
+      "href": "#migration-upload",
+      "index": 94,
+      "text": "具体改法",
+      "hash": "#migration-upload",
+      "top": 80,
+      "ok": true
+    },
+    {
+      "href": "#migration-tabs",
+      "index": 107,
+      "text": "具体改法",
+      "hash": "#migration-tabs",
+      "top": 80,
+      "ok": true
+    },
+    {
+      "href": "#migration-overlay",
+      "index": 113,
+      "text": "具体改法",
+      "hash": "#migration-overlay",
+      "top": 80,
+      "ok": true
+    },
+    {
+      "href": "#migration-overlay",
+      "index": 120,
+      "text": "具体改法",
+      "hash": "#migration-overlay",
+      "top": 80,
+      "ok": true
+    },
+    {
+      "href": "#migration-overlay",
+      "index": 124,
+      "text": "具体改法",
+      "hash": "#migration-overlay",
+      "top": 80,
+      "ok": true
+    },
+    {
+      "href": "#migration-components",
+      "index": 129,
+      "text": "返回组件导航",
+      "hash": "#migration-components",
+      "top": 80,
+      "ok": true
+    },
+    {
+      "href": "#migration-components",
+      "index": 133,
+      "text": "返回组件导航",
+      "hash": "#migration-components",
+      "top": 80,
+      "ok": true
+    },
+    {
+      "href": "#migration-components",
+      "index": 137,
+      "text": "返回组件导航",
+      "hash": "#migration-components",
+      "top": 80,
+      "ok": true
+    },
+    {
+      "href": "#migration-components",
+      "index": 141,
+      "text": "返回组件导航",
+      "hash": "#migration-components",
+      "top": 80,
+      "ok": true
+    },
+    {
+      "href": "#migration-components",
+      "index": 145,
+      "text": "返回组件导航",
+      "hash": "#migration-components",
+      "top": 80,
+      "ok": true
+    },
+    {
+      "href": "#migration-components",
+      "index": 149,
+      "text": "返回组件导航",
+      "hash": "#migration-components",
+      "top": 80,
+      "ok": true
+    },
+    {
+      "href": "#migration-components",
+      "index": 154,
+      "text": "返回组件导航",
+      "hash": "#migration-components",
+      "top": 80,
+      "ok": true
+    },
+    {
+      "href": "#migration-components",
+      "index": 158,
+      "text": "返回组件导航",
+      "hash": "#migration-components",
+      "top": 80,
+      "ok": true
+    },
+    {
+      "href": "#migration-components",
+      "index": 161,
+      "text": "返回组件导航",
+      "hash": "#migration-components",
+      "top": 80,
+      "ok": true
+    },
+    {
+      "href": "#migration-components",
+      "index": 168,
+      "text": "返回组件导航",
+      "hash": "#migration-components",
+      "top": 80,
+      "ok": true
+    },
+    {
+      "href": "#migration-component-badge",
+      "index": 170,
+      "text": "具体改法",
+      "hash": "#migration-component-badge",
+      "top": 80,
+      "ok": true
+    },
+    {
+      "href": "#migration-component-calendar",
+      "index": 171,
+      "text": "具体改法",
+      "hash": "#migration-component-calendar",
+      "top": 80,
+      "ok": true
+    },
+    {
+      "href": "#migration-component-calendar",
+      "index": 172,
+      "text": "具体改法",
+      "hash": "#migration-component-calendar",
+      "top": 80,
+      "ok": true
+    },
+    {
+      "href": "#migration-component-calendar",
+      "index": 173,
+      "text": "具体改法",
+      "hash": "#migration-component-calendar",
+      "top": 80,
+      "ok": true
+    },
+    {
+      "href": "#migration-component-calendar",
+      "index": 174,
+      "text": "具体改法",
+      "hash": "#migration-component-calendar",
+      "top": 80,
+      "ok": true
+    },
+    {
+      "href": "#migration-component-cell",
+      "index": 175,
+      "text": "具体改法",
+      "hash": "#migration-component-cell",
+      "top": 80,
+      "ok": true
+    },
+    {
+      "href": "#migration-component-table",
+      "index": 176,
+      "text": "具体改法",
+      "hash": "#migration-component-table",
+      "top": 80,
+      "ok": true
+    },
+    {
+      "href": "#migration-component-input",
+      "index": 177,
+      "text": "具体改法",
+      "hash": "#migration-component-input",
+      "top": 80,
+      "ok": true
+    },
+    {
+      "href": "#migration-component-checkbox",
+      "index": 178,
+      "text": "具体改法",
+      "hash": "#migration-component-checkbox",
+      "top": 80,
+      "ok": true
+    },
+    {
+      "href": "#migration-component-date-time-picker",
+      "index": 179,
+      "text": "具体改法",
+      "hash": "#migration-component-date-time-picker",
+      "top": 80,
+      "ok": true
+    },
+    {
+      "href": "#migration-component-date-time-picker",
+      "index": 180,
+      "text": "具体改法",
+      "hash": "#migration-component-date-time-picker",
+      "top": 80,
+      "ok": true
+    },
+    {
+      "href": "#migration-component-calendar",
+      "index": 181,
+      "text": "具体改法",
+      "hash": "#migration-component-calendar",
+      "top": 80,
+      "ok": true
+    },
+    {
+      "href": "#migration-component-calendar",
+      "index": 182,
+      "text": "具体改法",
+      "hash": "#migration-component-calendar",
+      "top": 80,
+      "ok": true
+    },
+    {
+      "href": "#migration-component-date-time-picker",
+      "index": 183,
+      "text": "具体改法",
+      "hash": "#migration-component-date-time-picker",
+      "top": 80,
+      "ok": true
+    },
+    {
+      "href": "#migration-component-theme",
+      "index": 184,
+      "text": "具体改法",
+      "hash": "#migration-component-theme",
+      "top": 80,
+      "ok": true
+    },
+    {
+      "href": "#migration-component-indexes",
+      "index": 185,
+      "text": "具体改法",
+      "hash": "#migration-component-indexes",
+      "top": 80,
+      "ok": true
+    },
+    {
+      "href": "#migration-component-theme",
+      "index": 186,
+      "text": "具体改法",
+      "hash": "#migration-component-theme",
+      "top": 80,
+      "ok": true
+    },
+    {
+      "href": "#migration-component-theme",
+      "index": 187,
+      "text": "具体改法",
+      "hash": "#migration-component-theme",
+      "top": 80,
+      "ok": true
+    },
+    {
+      "href": "#migration-component-theme",
+      "index": 188,
+      "text": "具体改法",
+      "hash": "#migration-component-theme",
+      "top": 80,
+      "ok": true
+    },
+    {
+      "href": "#migration-component-form",
+      "index": 189,
+      "text": "具体改法",
+      "hash": "#migration-component-form",
+      "top": 80,
+      "ok": true
+    },
+    {
+      "href": "#migration-component-form",
+      "index": 190,
+      "text": "具体改法",
+      "hash": "#migration-component-form",
+      "top": 80,
+      "ok": true
+    },
+    {
+      "href": "#migration-component-radio",
+      "index": 191,
+      "text": "具体改法",
+      "hash": "#migration-component-radio",
+      "top": 80,
+      "ok": true
+    },
+    {
+      "href": "#migration-component-checkbox",
+      "index": 192,
+      "text": "具体改法",
+      "hash": "#migration-component-checkbox",
+      "top": 80,
+      "ok": true
+    },
+    {
+      "href": "#migration-component-toast",
+      "index": 193,
+      "text": "具体改法",
+      "hash": "#migration-component-toast",
+      "top": 80,
+      "ok": true
+    },
+    {
+      "href": "#migration-component-image",
+      "index": 194,
+      "text": "具体改法",
+      "hash": "#migration-component-image",
+      "top": 80,
+      "ok": true
+    },
+    {
+      "href": "#migration-component-picker",
+      "index": 195,
+      "text": "具体改法",
+      "hash": "#migration-component-picker",
+      "top": 80,
+      "ok": true
+    },
+    {
+      "href": "#migration-component-picker",
+      "index": 196,
+      "text": "具体改法",
+      "hash": "#migration-component-picker",
+      "top": 80,
+      "ok": true
+    },
+    {
+      "href": "#migration-component-dropdown-menu",
+      "index": 197,
+      "text": "具体改法",
+      "hash": "#migration-component-dropdown-menu",
+      "top": 80,
+      "ok": true
+    },
+    {
+      "href": "#migration-component-image-viewer",
+      "index": 198,
+      "text": "具体改法",
+      "hash": "#migration-component-image-viewer",
+      "top": 80,
+      "ok": true
+    },
+    {
+      "href": "#migration-component-cascader",
+      "index": 199,
+      "text": "具体改法",
+      "hash": "#migration-component-cascader",
+      "top": 80,
+      "ok": true
+    },
+    {
+      "href": "#migration-component-cascader",
+      "index": 200,
+      "text": "具体改法",
+      "hash": "#migration-component-cascader",
+      "top": 80,
+      "ok": true
+    },
+    {
+      "href": "#migration-component-link",
+      "index": 201,
+      "text": "具体改法",
+      "hash": "#migration-component-link",
+      "top": 80,
+      "ok": true
+    },
+    {
+      "href": "#migration-component-message",
+      "index": 202,
+      "text": "具体改法",
+      "hash": "#migration-component-message",
+      "top": 80,
+      "ok": true
+    },
+    {
+      "href": "#migration-component-message",
+      "index": 203,
+      "text": "具体改法",
+      "hash": "#migration-component-message",
+      "top": 80,
+      "ok": true
+    },
+    {
+      "href": "#migration-component-message",
+      "index": 204,
+      "text": "具体改法",
+      "hash": "#migration-component-message",
+      "top": 80,
+      "ok": true
+    },
+    {
+      "href": "#migration-component-cascader",
+      "index": 205,
+      "text": "具体改法",
+      "hash": "#migration-component-cascader",
+      "top": 80,
+      "ok": true
+    },
+    {
+      "href": "#migration-component-cascader",
+      "index": 206,
+      "text": "具体改法",
+      "hash": "#migration-component-cascader",
+      "top": 80,
+      "ok": true
+    },
+    {
+      "href": "#migration-component-picker",
+      "index": 207,
+      "text": "具体改法",
+      "hash": "#migration-component-picker",
+      "top": 80,
+      "ok": true
+    },
+    {
+      "href": "#migration-component-picker",
+      "index": 208,
+      "text": "具体改法",
+      "hash": "#migration-component-picker",
+      "top": 80,
+      "ok": true
+    },
+    {
+      "href": "#migration-component-table",
+      "index": 209,
+      "text": "具体改法",
+      "hash": "#migration-component-table",
+      "top": 80,
+      "ok": true
+    },
+    {
+      "href": "#migration-component-checkbox",
+      "index": 210,
+      "text": "具体改法",
+      "hash": "#migration-component-checkbox",
+      "top": 80,
+      "ok": true
+    },
+    {
+      "href": "#migration-component-checkbox",
+      "index": 211,
+      "text": "具体改法",
+      "hash": "#migration-component-checkbox",
+      "top": 80,
+      "ok": true
+    },
+    {
+      "href": "#migration-component-image-viewer",
+      "index": 212,
+      "text": "具体改法",
+      "hash": "#migration-component-image-viewer",
+      "top": 80,
+      "ok": true
+    },
+    {
+      "href": "#migration-component-image-viewer",
+      "index": 213,
+      "text": "具体改法",
+      "hash": "#migration-component-image-viewer",
+      "top": 80,
+      "ok": true
+    },
+    {
+      "href": "#migration-component-checkbox",
+      "index": 214,
+      "text": "具体改法",
+      "hash": "#migration-component-checkbox",
+      "top": 80,
+      "ok": true
+    },
+    {
+      "href": "#migration-component-image-viewer",
+      "index": 215,
+      "text": "具体改法",
+      "hash": "#migration-component-image-viewer",
+      "top": 80,
+      "ok": true
+    },
+    {
+      "href": "#migration-component-image-viewer",
+      "index": 216,
+      "text": "具体改法",
+      "hash": "#migration-component-image-viewer",
+      "top": 80,
+      "ok": true
+    },
+    {
+      "href": "#migration-component-image-viewer",
+      "index": 217,
+      "text": "具体改法",
+      "hash": "#migration-component-image-viewer",
+      "top": 80,
+      "ok": true
+    },
+    {
+      "href": "#migration-component-popover",
+      "index": 218,
+      "text": "具体改法",
+      "hash": "#migration-component-popover",
+      "top": 80,
+      "ok": true
+    },
+    {
+      "href": "#migration-component-radio",
+      "index": 219,
+      "text": "具体改法",
+      "hash": "#migration-component-radio",
+      "top": 80,
+      "ok": true
+    },
+    {
+      "href": "#migration-component-table",
+      "index": 220,
+      "text": "具体改法",
+      "hash": "#migration-component-table",
+      "top": 80,
+      "ok": true
+    },
+    {
+      "href": "#migration-component-table",
+      "index": 221,
+      "text": "具体改法",
+      "hash": "#migration-component-table",
+      "top": 80,
+      "ok": true
+    },
+    {
+      "href": "#migration-component-table",
+      "index": 222,
+      "text": "具体改法",
+      "hash": "#migration-component-table",
+      "top": 80,
+      "ok": true
+    },
+    {
+      "href": "#migration-component-slider",
+      "index": 223,
+      "text": "具体改法",
+      "hash": "#migration-component-slider",
+      "top": 80,
+      "ok": true
+    },
+    {
+      "href": "#migration-component-switch",
+      "index": 224,
+      "text": "具体改法",
+      "hash": "#migration-component-switch",
+      "top": 80,
+      "ok": true
+    },
+    {
+      "href": "#migration-component-popover",
+      "index": 225,
+      "text": "具体改法",
+      "hash": "#migration-component-popover",
+      "top": 80,
+      "ok": true
+    },
+    {
+      "href": "#migration-component-tab-bar",
+      "index": 226,
+      "text": "具体改法",
+      "hash": "#migration-component-tab-bar",
+      "top": 80,
+      "ok": true
+    },
+    {
+      "href": "#migration-component-rate",
+      "index": 227,
+      "text": "具体改法",
+      "hash": "#migration-component-rate",
+      "top": 80,
+      "ok": true
+    },
+    {
+      "href": "#migration-component-theme",
+      "index": 228,
+      "text": "具体改法",
+      "hash": "#migration-component-theme",
+      "top": 80,
+      "ok": true
+    },
+    {
+      "href": "#migration-component-tab-bar",
+      "index": 229,
+      "text": "具体改法",
+      "hash": "#migration-component-tab-bar",
+      "top": 80,
+      "ok": true
+    },
+    {
+      "href": "#migration-component-tab-bar",
+      "index": 230,
+      "text": "具体改法",
+      "hash": "#migration-component-tab-bar",
+      "top": 80,
+      "ok": true
+    },
+    {
+      "href": "#migration-component-popup",
+      "index": 231,
+      "text": "具体改法",
+      "hash": "#migration-component-popup",
+      "top": 80,
+      "ok": true
+    },
+    {
+      "href": "#migration-component-tab-bar",
+      "index": 232,
+      "text": "具体改法",
+      "hash": "#migration-component-tab-bar",
+      "top": 80,
+      "ok": true
+    },
+    {
+      "href": "#migration-component-tab-bar",
+      "index": 233,
+      "text": "具体改法",
+      "hash": "#migration-component-tab-bar",
+      "top": 80,
+      "ok": true
+    },
+    {
+      "href": "#migration-component-slider",
+      "index": 234,
+      "text": "具体改法",
+      "hash": "#migration-component-slider",
+      "top": 80,
+      "ok": true
+    },
+    {
+      "href": "#migration-component-progress",
+      "index": 235,
+      "text": "具体改法",
+      "hash": "#migration-component-progress",
+      "top": 80,
+      "ok": true
+    },
+    {
+      "href": "#migration-component-checkbox",
+      "index": 236,
+      "text": "具体改法",
+      "hash": "#migration-component-checkbox",
+      "top": 80,
+      "ok": true
+    },
+    {
+      "href": "#migration-component-checkbox",
+      "index": 237,
+      "text": "具体改法",
+      "hash": "#migration-component-checkbox",
+      "top": 80,
+      "ok": true
+    },
+    {
+      "href": "#migration-component-popup",
+      "index": 238,
+      "text": "具体改法",
+      "hash": "#migration-component-popup",
+      "top": 80,
+      "ok": true
+    },
+    {
+      "href": "#migration-component-image-viewer",
+      "index": 239,
+      "text": "具体改法",
+      "hash": "#migration-component-image-viewer",
+      "top": 80,
+      "ok": true
+    },
+    {
+      "href": "#migration-component-table",
+      "index": 240,
+      "text": "具体改法",
+      "hash": "#migration-component-table",
+      "top": 80,
+      "ok": true
+    },
+    {
+      "href": "#migration-component-slider",
+      "index": 241,
+      "text": "具体改法",
+      "hash": "#migration-component-slider",
+      "top": 80,
+      "ok": true
+    },
+    {
+      "href": "#migration-component-table",
+      "index": 242,
+      "text": "具体改法",
+      "hash": "#migration-component-table",
+      "top": 80,
+      "ok": true
+    },
+    {
+      "href": "#migration-component-side-bar",
+      "index": 243,
+      "text": "具体改法",
+      "hash": "#migration-component-side-bar",
+      "top": 80,
+      "ok": true
+    },
+    {
+      "href": "#migration-component-popup",
+      "index": 244,
+      "text": "具体改法",
+      "hash": "#migration-component-popup",
+      "top": 80,
+      "ok": true
+    },
+    {
+      "href": "#migration-component-slider",
+      "index": 245,
+      "text": "具体改法",
+      "hash": "#migration-component-slider",
+      "top": 80,
+      "ok": true
+    },
+    {
+      "href": "#migration-component-indexes",
+      "index": 246,
+      "text": "具体改法",
+      "hash": "#migration-component-indexes",
+      "top": 80,
+      "ok": true
+    },
+    {
+      "href": "#migration-component-indexes",
+      "index": 247,
+      "text": "具体改法",
+      "hash": "#migration-component-indexes",
+      "top": 80,
+      "ok": true
+    },
+    {
+      "href": "#migration-component-indexes",
+      "index": 248,
+      "text": "具体改法",
+      "hash": "#migration-component-indexes",
+      "top": 80,
+      "ok": true
+    },
+    {
+      "href": "#migration-component-indexes",
+      "index": 249,
+      "text": "具体改法",
+      "hash": "#migration-component-indexes",
+      "top": 80,
+      "ok": true
+    },
+    {
+      "href": "#migration-component-indexes",
+      "index": 250,
+      "text": "具体改法",
+      "hash": "#migration-component-indexes",
+      "top": 80,
+      "ok": true
+    },
+    {
+      "href": "#migration-component-swipe-cell",
+      "index": 251,
+      "text": "具体改法",
+      "hash": "#migration-component-swipe-cell",
+      "top": 80,
+      "ok": true
+    },
+    {
+      "href": "#migration-component-action-sheet",
+      "index": 252,
+      "text": "具体改法",
+      "hash": "#migration-component-action-sheet",
+      "top": 80,
+      "ok": true
+    },
+    {
+      "href": "#migration-component-action-sheet",
+      "index": 253,
+      "text": "具体改法",
+      "hash": "#migration-component-action-sheet",
+      "top": 80,
+      "ok": true
+    },
+    {
+      "href": "#migration-component-action-sheet",
+      "index": 254,
+      "text": "具体改法",
+      "hash": "#migration-component-action-sheet",
+      "top": 80,
+      "ok": true
+    },
+    {
+      "href": "#migration-component-action-sheet",
+      "index": 255,
+      "text": "具体改法",
+      "hash": "#migration-component-action-sheet",
+      "top": 80,
+      "ok": true
+    },
+    {
+      "href": "#migration-component-action-sheet",
+      "index": 256,
+      "text": "具体改法",
+      "hash": "#migration-component-action-sheet",
+      "top": 80,
+      "ok": true
+    },
+    {
+      "href": "#migration-component-dialog",
+      "index": 257,
+      "text": "具体改法",
+      "hash": "#migration-component-dialog",
+      "top": 80,
+      "ok": true
+    },
+    {
+      "href": "#migration-component-avatar",
+      "index": 258,
+      "text": "具体改法",
+      "hash": "#migration-component-avatar",
+      "top": 80,
+      "ok": true
+    },
+    {
+      "href": "#migration-component-avatar",
+      "index": 259,
+      "text": "具体改法",
+      "hash": "#migration-component-avatar",
+      "top": 80,
+      "ok": true
+    },
+    {
+      "href": "#migration-component-avatar",
+      "index": 260,
+      "text": "具体改法",
+      "hash": "#migration-component-avatar",
+      "top": 80,
+      "ok": true
+    },
+    {
+      "href": "#migration-component-avatar",
+      "index": 261,
+      "text": "具体改法",
+      "hash": "#migration-component-avatar",
+      "top": 80,
+      "ok": true
+    },
+    {
+      "href": "#migration-component-back-top",
+      "index": 262,
+      "text": "具体改法",
+      "hash": "#migration-component-back-top",
+      "top": 80,
+      "ok": true
+    },
+    {
+      "href": "#migration-component-back-top",
+      "index": 263,
+      "text": "具体改法",
+      "hash": "#migration-component-back-top",
+      "top": 80,
+      "ok": true
+    },
+    {
+      "href": "#migration-component-back-top",
+      "index": 264,
+      "text": "具体改法",
+      "hash": "#migration-component-back-top",
+      "top": 80,
+      "ok": true
+    },
+    {
+      "href": "#migration-component-badge",
+      "index": 265,
+      "text": "具体改法",
+      "hash": "#migration-component-badge",
+      "top": 80,
+      "ok": true
+    },
+    {
+      "href": "#migration-component-badge",
+      "index": 266,
+      "text": "具体改法",
+      "hash": "#migration-component-badge",
+      "top": 80,
+      "ok": true
+    },
+    {
+      "href": "#migration-component-badge",
+      "index": 267,
+      "text": "具体改法",
+      "hash": "#migration-component-badge",
+      "top": 80,
+      "ok": true
+    },
+    {
+      "href": "#migration-component-badge",
+      "index": 268,
+      "text": "具体改法",
+      "hash": "#migration-component-badge",
+      "top": 80,
+      "ok": true
+    },
+    {
+      "href": "#migration-component-navbar",
+      "index": 269,
+      "text": "具体改法",
+      "hash": "#migration-component-navbar",
+      "top": 80,
+      "ok": true
+    },
+    {
+      "href": "#migration-component-slider",
+      "index": 270,
+      "text": "具体改法",
+      "hash": "#migration-component-slider",
+      "top": 80,
+      "ok": true
+    },
+    {
+      "href": "#migration-component-tab-bar",
+      "index": 271,
+      "text": "具体改法",
+      "hash": "#migration-component-tab-bar",
+      "top": 80,
+      "ok": true
+    },
+    {
+      "href": "#migration-component-tab-bar",
+      "index": 272,
+      "text": "具体改法",
+      "hash": "#migration-component-tab-bar",
+      "top": 80,
+      "ok": true
+    },
+    {
+      "href": "#migration-component-tab-bar",
+      "index": 273,
+      "text": "具体改法",
+      "hash": "#migration-component-tab-bar",
+      "top": 80,
+      "ok": true
+    },
+    {
+      "href": "#migration-component-tab-bar",
+      "index": 274,
+      "text": "具体改法",
+      "hash": "#migration-component-tab-bar",
+      "top": 80,
+      "ok": true
+    },
+    {
+      "href": "#migration-component-tab-bar",
+      "index": 275,
+      "text": "具体改法",
+      "hash": "#migration-component-tab-bar",
+      "top": 80,
+      "ok": true
+    },
+    {
+      "href": "#migration-component-tab-bar",
+      "index": 276,
+      "text": "具体改法",
+      "hash": "#migration-component-tab-bar",
+      "top": 80,
+      "ok": true
+    },
+    {
+      "href": "#migration-component-tab-bar",
+      "index": 277,
+      "text": "具体改法",
+      "hash": "#migration-component-tab-bar",
+      "top": 80,
+      "ok": true
+    },
+    {
+      "href": "#migration-component-tab-bar",
+      "index": 278,
+      "text": "具体改法",
+      "hash": "#migration-component-tab-bar",
+      "top": 80,
+      "ok": true
+    },
+    {
+      "href": "#migration-component-tab-bar",
+      "index": 279,
+      "text": "具体改法",
+      "hash": "#migration-component-tab-bar",
+      "top": 80,
+      "ok": true
+    },
+    {
+      "href": "#migration-component-theme",
+      "index": 280,
+      "text": "具体改法",
+      "hash": "#migration-component-theme",
+      "top": 80,
+      "ok": true
+    },
+    {
+      "href": "#migration-component-button",
+      "index": 281,
+      "text": "具体改法",
+      "hash": "#migration-component-button",
+      "top": 80,
+      "ok": true
+    },
+    {
+      "href": "#migration-component-button",
+      "index": 282,
+      "text": "具体改法",
+      "hash": "#migration-component-button",
+      "top": 80,
+      "ok": true
+    },
+    {
+      "href": "#migration-component-button",
+      "index": 283,
+      "text": "具体改法",
+      "hash": "#migration-component-button",
+      "top": 80,
+      "ok": true
+    },
+    {
+      "href": "#migration-component-button",
+      "index": 284,
+      "text": "具体改法",
+      "hash": "#migration-component-button",
+      "top": 80,
+      "ok": true
+    },
+    {
+      "href": "#migration-component-button",
+      "index": 285,
+      "text": "具体改法",
+      "hash": "#migration-component-button",
+      "top": 80,
+      "ok": true
+    },
+    {
+      "href": "#migration-component-button",
+      "index": 286,
+      "text": "具体改法",
+      "hash": "#migration-component-button",
+      "top": 80,
+      "ok": true
+    },
+    {
+      "href": "#migration-component-button",
+      "index": 287,
+      "text": "具体改法",
+      "hash": "#migration-component-button",
+      "top": 80,
+      "ok": true
+    },
+    {
+      "href": "#migration-component-button",
+      "index": 288,
+      "text": "具体改法",
+      "hash": "#migration-component-button",
+      "top": 80,
+      "ok": true
+    },
+    {
+      "href": "#migration-component-button",
+      "index": 289,
+      "text": "具体改法",
+      "hash": "#migration-component-button",
+      "top": 80,
+      "ok": true
+    },
+    {
+      "href": "#migration-component-calendar",
+      "index": 290,
+      "text": "具体改法",
+      "hash": "#migration-component-calendar",
+      "top": 80,
+      "ok": true
+    },
+    {
+      "href": "#migration-component-calendar",
+      "index": 291,
+      "text": "具体改法",
+      "hash": "#migration-component-calendar",
+      "top": 80,
+      "ok": true
+    },
+    {
+      "href": "#migration-component-calendar",
+      "index": 292,
+      "text": "具体改法",
+      "hash": "#migration-component-calendar",
+      "top": 80,
+      "ok": true
+    },
+    {
+      "href": "#migration-component-calendar",
+      "index": 293,
+      "text": "具体改法",
+      "hash": "#migration-component-calendar",
+      "top": 80,
+      "ok": true
+    },
+    {
+      "href": "#migration-component-calendar",
+      "index": 294,
+      "text": "具体改法",
+      "hash": "#migration-component-calendar",
+      "top": 80,
+      "ok": true
+    },
+    {
+      "href": "#migration-component-calendar",
+      "index": 295,
+      "text": "具体改法",
+      "hash": "#migration-component-calendar",
+      "top": 80,
+      "ok": true
+    },
+    {
+      "href": "#migration-component-calendar",
+      "index": 296,
+      "text": "具体改法",
+      "hash": "#migration-component-calendar",
+      "top": 80,
+      "ok": true
+    },
+    {
+      "href": "#migration-component-slider",
+      "index": 297,
+      "text": "具体改法",
+      "hash": "#migration-component-slider",
+      "top": 80,
+      "ok": true
+    },
+    {
+      "href": "#migration-component-slider",
+      "index": 298,
+      "text": "具体改法",
+      "hash": "#migration-component-slider",
+      "top": 80,
+      "ok": true
+    },
+    {
+      "href": "#migration-component-slider",
+      "index": 299,
+      "text": "具体改法",
+      "hash": "#migration-component-slider",
+      "top": 80,
+      "ok": true
+    },
+    {
+      "href": "#migration-component-slider",
+      "index": 300,
+      "text": "具体改法",
+      "hash": "#migration-component-slider",
+      "top": 80,
+      "ok": true
+    },
+    {
+      "href": "#migration-component-slider",
+      "index": 301,
+      "text": "具体改法",
+      "hash": "#migration-component-slider",
+      "top": 80,
+      "ok": true
+    },
+    {
+      "href": "#migration-component-slider",
+      "index": 302,
+      "text": "具体改法",
+      "hash": "#migration-component-slider",
+      "top": 80,
+      "ok": true
+    },
+    {
+      "href": "#migration-component-slider",
+      "index": 303,
+      "text": "具体改法",
+      "hash": "#migration-component-slider",
+      "top": 80,
+      "ok": true
+    },
+    {
+      "href": "#migration-component-slider",
+      "index": 304,
+      "text": "具体改法",
+      "hash": "#migration-component-slider",
+      "top": 80,
+      "ok": true
+    },
+    {
+      "href": "#migration-component-slider",
+      "index": 305,
+      "text": "具体改法",
+      "hash": "#migration-component-slider",
+      "top": 80,
+      "ok": true
+    },
+    {
+      "href": "#migration-component-input",
+      "index": 306,
+      "text": "具体改法",
+      "hash": "#migration-component-input",
+      "top": 80,
+      "ok": true
+    },
+    {
+      "href": "#migration-component-cascader",
+      "index": 307,
+      "text": "具体改法",
+      "hash": "#migration-component-cascader",
+      "top": 80,
+      "ok": true
+    },
+    {
+      "href": "#migration-component-cascader",
+      "index": 308,
+      "text": "具体改法",
+      "hash": "#migration-component-cascader",
+      "top": 80,
+      "ok": true
+    },
+    {
+      "href": "#migration-component-cell",
+      "index": 309,
+      "text": "具体改法",
+      "hash": "#migration-component-cell",
+      "top": 80,
+      "ok": true
+    },
+    {
+      "href": "#migration-component-cell",
+      "index": 310,
+      "text": "具体改法",
+      "hash": "#migration-component-cell",
+      "top": 80,
+      "ok": true
+    },
+    {
+      "href": "#migration-component-cell",
+      "index": 311,
+      "text": "具体改法",
+      "hash": "#migration-component-cell",
+      "top": 80,
+      "ok": true
+    },
+    {
+      "href": "#migration-component-cell",
+      "index": 312,
+      "text": "具体改法",
+      "hash": "#migration-component-cell",
+      "top": 80,
+      "ok": true
+    },
+    {
+      "href": "#migration-component-cell",
+      "index": 313,
+      "text": "具体改法",
+      "hash": "#migration-component-cell",
+      "top": 80,
+      "ok": true
+    },
+    {
+      "href": "#migration-component-cell",
+      "index": 314,
+      "text": "具体改法",
+      "hash": "#migration-component-cell",
+      "top": 80,
+      "ok": true
+    },
+    {
+      "href": "#migration-component-checkbox",
+      "index": 315,
+      "text": "具体改法",
+      "hash": "#migration-component-checkbox",
+      "top": 80,
+      "ok": true
+    },
+    {
+      "href": "#migration-component-checkbox",
+      "index": 316,
+      "text": "具体改法",
+      "hash": "#migration-component-checkbox",
+      "top": 80,
+      "ok": true
+    },
+    {
+      "href": "#migration-component-checkbox",
+      "index": 317,
+      "text": "具体改法",
+      "hash": "#migration-component-checkbox",
+      "top": 80,
+      "ok": true
+    },
+    {
+      "href": "#migration-component-checkbox",
+      "index": 318,
+      "text": "具体改法",
+      "hash": "#migration-component-checkbox",
+      "top": 80,
+      "ok": true
+    },
+    {
+      "href": "#migration-component-checkbox",
+      "index": 319,
+      "text": "具体改法",
+      "hash": "#migration-component-checkbox",
+      "top": 80,
+      "ok": true
+    },
+    {
+      "href": "#migration-component-checkbox",
+      "index": 320,
+      "text": "具体改法",
+      "hash": "#migration-component-checkbox",
+      "top": 80,
+      "ok": true
+    },
+    {
+      "href": "#migration-component-checkbox",
+      "index": 321,
+      "text": "具体改法",
+      "hash": "#migration-component-checkbox",
+      "top": 80,
+      "ok": true
+    },
+    {
+      "href": "#migration-component-checkbox",
+      "index": 322,
+      "text": "具体改法",
+      "hash": "#migration-component-checkbox",
+      "top": 80,
+      "ok": true
+    },
+    {
+      "href": "#migration-component-checkbox",
+      "index": 323,
+      "text": "具体改法",
+      "hash": "#migration-component-checkbox",
+      "top": 80,
+      "ok": true
+    },
+    {
+      "href": "#migration-component-checkbox",
+      "index": 324,
+      "text": "具体改法",
+      "hash": "#migration-component-checkbox",
+      "top": 80,
+      "ok": true
+    },
+    {
+      "href": "#migration-component-loading",
+      "index": 325,
+      "text": "具体改法",
+      "hash": "#migration-component-loading",
+      "top": 80,
+      "ok": true
+    },
+    {
+      "href": "#migration-component-collapse",
+      "index": 326,
+      "text": "具体改法",
+      "hash": "#migration-component-collapse",
+      "top": 80,
+      "ok": true
+    },
+    {
+      "href": "#migration-component-collapse",
+      "index": 327,
+      "text": "具体改法",
+      "hash": "#migration-component-collapse",
+      "top": 80,
+      "ok": true
+    },
+    {
+      "href": "#migration-component-collapse",
+      "index": 328,
+      "text": "具体改法",
+      "hash": "#migration-component-collapse",
+      "top": 80,
+      "ok": true
+    },
+    {
+      "href": "#migration-component-collapse",
+      "index": 329,
+      "text": "具体改法",
+      "hash": "#migration-component-collapse",
+      "top": 80,
+      "ok": true
+    },
+    {
+      "href": "#migration-component-theme",
+      "index": 330,
+      "text": "具体改法",
+      "hash": "#migration-component-theme",
+      "top": 80,
+      "ok": true
+    },
+    {
+      "href": "#migration-component-dialog",
+      "index": 331,
+      "text": "具体改法",
+      "hash": "#migration-component-dialog",
+      "top": 80,
+      "ok": true
+    },
+    {
+      "href": "#migration-component-checkbox",
+      "index": 332,
+      "text": "具体改法",
+      "hash": "#migration-component-checkbox",
+      "top": 80,
+      "ok": true
+    },
+    {
+      "href": "#migration-component-cascader",
+      "index": 333,
+      "text": "具体改法",
+      "hash": "#migration-component-cascader",
+      "top": 80,
+      "ok": true
+    },
+    {
+      "href": "#migration-component-date-time-picker",
+      "index": 334,
+      "text": "具体改法",
+      "hash": "#migration-component-date-time-picker",
+      "top": 80,
+      "ok": true
+    },
+    {
+      "href": "#migration-component-dialog",
+      "index": 335,
+      "text": "具体改法",
+      "hash": "#migration-component-dialog",
+      "top": 80,
+      "ok": true
+    },
+    {
+      "href": "#migration-component-dialog",
+      "index": 336,
+      "text": "具体改法",
+      "hash": "#migration-component-dialog",
+      "top": 80,
+      "ok": true
+    },
+    {
+      "href": "#migration-component-dialog",
+      "index": 337,
+      "text": "具体改法",
+      "hash": "#migration-component-dialog",
+      "top": 80,
+      "ok": true
+    },
+    {
+      "href": "#migration-component-divider",
+      "index": 338,
+      "text": "具体改法",
+      "hash": "#migration-component-divider",
+      "top": 80,
+      "ok": true
+    },
+    {
+      "href": "#migration-component-drawer",
+      "index": 339,
+      "text": "具体改法",
+      "hash": "#migration-component-drawer",
+      "top": 80,
+      "ok": true
+    },
+    {
+      "href": "#migration-component-drawer",
+      "index": 340,
+      "text": "具体改法",
+      "hash": "#migration-component-drawer",
+      "top": 80,
+      "ok": true
+    },
+    {
+      "href": "#migration-component-drawer",
+      "index": 341,
+      "text": "具体改法",
+      "hash": "#migration-component-drawer",
+      "top": 80,
+      "ok": true
+    },
+    {
+      "href": "#migration-component-drawer",
+      "index": 342,
+      "text": "具体改法",
+      "hash": "#migration-component-drawer",
+      "top": 80,
+      "ok": true
+    },
+    {
+      "href": "#migration-component-drawer",
+      "index": 343,
+      "text": "具体改法",
+      "hash": "#migration-component-drawer",
+      "top": 80,
+      "ok": true
+    },
+    {
+      "href": "#migration-component-dropdown-menu",
+      "index": 344,
+      "text": "具体改法",
+      "hash": "#migration-component-dropdown-menu",
+      "top": 80,
+      "ok": true
+    },
+    {
+      "href": "#migration-component-dropdown-menu",
+      "index": 345,
+      "text": "具体改法",
+      "hash": "#migration-component-dropdown-menu",
+      "top": 80,
+      "ok": true
+    },
+    {
+      "href": "#migration-component-dropdown-menu",
+      "index": 346,
+      "text": "具体改法",
+      "hash": "#migration-component-dropdown-menu",
+      "top": 80,
+      "ok": true
+    },
+    {
+      "href": "#migration-component-dropdown-menu",
+      "index": 347,
+      "text": "具体改法",
+      "hash": "#migration-component-dropdown-menu",
+      "top": 80,
+      "ok": true
+    },
+    {
+      "href": "#migration-component-dropdown-menu",
+      "index": 348,
+      "text": "具体改法",
+      "hash": "#migration-component-dropdown-menu",
+      "top": 80,
+      "ok": true
+    },
+    {
+      "href": "#migration-component-dropdown-menu",
+      "index": 349,
+      "text": "具体改法",
+      "hash": "#migration-component-dropdown-menu",
+      "top": 80,
+      "ok": true
+    },
+    {
+      "href": "#migration-component-dropdown-menu",
+      "index": 350,
+      "text": "具体改法",
+      "hash": "#migration-component-dropdown-menu",
+      "top": 80,
+      "ok": true
+    },
+    {
+      "href": "#migration-component-dropdown-menu",
+      "index": 351,
+      "text": "具体改法",
+      "hash": "#migration-component-dropdown-menu",
+      "top": 80,
+      "ok": true
+    },
+    {
+      "href": "#migration-component-empty",
+      "index": 352,
+      "text": "具体改法",
+      "hash": "#migration-component-empty",
+      "top": 80,
+      "ok": true
+    },
+    {
+      "href": "#migration-component-empty",
+      "index": 353,
+      "text": "具体改法",
+      "hash": "#migration-component-empty",
+      "top": 80,
+      "ok": true
+    },
+    {
+      "href": "#migration-component-theme",
+      "index": 354,
+      "text": "具体改法",
+      "hash": "#migration-component-theme",
+      "top": 80,
+      "ok": true
+    },
+    {
+      "href": "#migration-component-fab",
+      "index": 355,
+      "text": "具体改法",
+      "hash": "#migration-component-fab",
+      "top": 80,
+      "ok": true
+    },
+    {
+      "href": "#migration-component-fab",
+      "index": 356,
+      "text": "具体改法",
+      "hash": "#migration-component-fab",
+      "top": 80,
+      "ok": true
+    },
+    {
+      "href": "#migration-component-fab",
+      "index": 357,
+      "text": "具体改法",
+      "hash": "#migration-component-fab",
+      "top": 80,
+      "ok": true
+    },
+    {
+      "href": "#migration-component-fab",
+      "index": 358,
+      "text": "具体改法",
+      "hash": "#migration-component-fab",
+      "top": 80,
+      "ok": true
+    },
+    {
+      "href": "#migration-component-theme",
+      "index": 359,
+      "text": "具体改法",
+      "hash": "#migration-component-theme",
+      "top": 80,
+      "ok": true
+    },
+    {
+      "href": "#migration-component-text",
+      "index": 360,
+      "text": "具体改法",
+      "hash": "#migration-component-text",
+      "top": 80,
+      "ok": true
+    },
+    {
+      "href": "#migration-component-text",
+      "index": 361,
+      "text": "具体改法",
+      "hash": "#migration-component-text",
+      "top": 80,
+      "ok": true
+    },
+    {
+      "href": "#migration-component-theme",
+      "index": 362,
+      "text": "具体改法",
+      "hash": "#migration-component-theme",
+      "top": 80,
+      "ok": true
+    },
+    {
+      "href": "#migration-component-footer",
+      "index": 363,
+      "text": "具体改法",
+      "hash": "#migration-component-footer",
+      "top": 80,
+      "ok": true
+    },
+    {
+      "href": "#migration-component-footer",
+      "index": 364,
+      "text": "具体改法",
+      "hash": "#migration-component-footer",
+      "top": 80,
+      "ok": true
+    },
+    {
+      "href": "#migration-component-form",
+      "index": 365,
+      "text": "具体改法",
+      "hash": "#migration-component-form",
+      "top": 80,
+      "ok": true
+    },
+    {
+      "href": "#migration-component-form",
+      "index": 366,
+      "text": "具体改法",
+      "hash": "#migration-component-form",
+      "top": 80,
+      "ok": true
+    },
+    {
+      "href": "#migration-component-form",
+      "index": 367,
+      "text": "具体改法",
+      "hash": "#migration-component-form",
+      "top": 80,
+      "ok": true
+    },
+    {
+      "href": "#migration-component-form",
+      "index": 368,
+      "text": "具体改法",
+      "hash": "#migration-component-form",
+      "top": 80,
+      "ok": true
+    },
+    {
+      "href": "#migration-component-swiper",
+      "index": 369,
+      "text": "具体改法",
+      "hash": "#migration-component-swiper",
+      "top": 80,
+      "ok": true
+    },
+    {
+      "href": "#migration-component-progress",
+      "index": 370,
+      "text": "具体改法",
+      "hash": "#migration-component-progress",
+      "top": 80,
+      "ok": true
+    },
+    {
+      "href": "#migration-component-icon",
+      "index": 371,
+      "text": "具体改法",
+      "hash": "#migration-component-icon",
+      "top": 80,
+      "ok": true
+    },
+    {
+      "href": "#migration-component-image",
+      "index": 372,
+      "text": "具体改法",
+      "hash": "#migration-component-image",
+      "top": 80,
+      "ok": true
+    },
+    {
+      "href": "#migration-component-dialog",
+      "index": 373,
+      "text": "具体改法",
+      "hash": "#migration-component-dialog",
+      "top": 80,
+      "ok": true
+    },
+    {
+      "href": "#migration-component-image",
+      "index": 374,
+      "text": "具体改法",
+      "hash": "#migration-component-image",
+      "top": 80,
+      "ok": true
+    },
+    {
+      "href": "#migration-component-image-viewer",
+      "index": 375,
+      "text": "具体改法",
+      "hash": "#migration-component-image-viewer",
+      "top": 80,
+      "ok": true
+    },
+    {
+      "href": "#migration-component-image-viewer",
+      "index": 376,
+      "text": "具体改法",
+      "hash": "#migration-component-image-viewer",
+      "top": 80,
+      "ok": true
+    },
+    {
+      "href": "#migration-component-indexes",
+      "index": 377,
+      "text": "具体改法",
+      "hash": "#migration-component-indexes",
+      "top": 80,
+      "ok": true
+    },
+    {
+      "href": "#migration-component-indexes",
+      "index": 378,
+      "text": "具体改法",
+      "hash": "#migration-component-indexes",
+      "top": 80,
+      "ok": true
+    },
+    {
+      "href": "#migration-component-indexes",
+      "index": 379,
+      "text": "具体改法",
+      "hash": "#migration-component-indexes",
+      "top": 80,
+      "ok": true
+    },
+    {
+      "href": "#migration-component-input",
+      "index": 380,
+      "text": "具体改法",
+      "hash": "#migration-component-input",
+      "top": 80,
+      "ok": true
+    },
+    {
+      "href": "#migration-component-dialog",
+      "index": 381,
+      "text": "具体改法",
+      "hash": "#migration-component-dialog",
+      "top": 80,
+      "ok": true
+    },
+    {
+      "href": "#migration-component-input",
+      "index": 382,
+      "text": "具体改法",
+      "hash": "#migration-component-input",
+      "top": 80,
+      "ok": true
+    },
+    {
+      "href": "#migration-component-input",
+      "index": 383,
+      "text": "具体改法",
+      "hash": "#migration-component-input",
+      "top": 80,
+      "ok": true
+    },
+    {
+      "href": "#migration-component-input",
+      "index": 384,
+      "text": "具体改法",
+      "hash": "#migration-component-input",
+      "top": 80,
+      "ok": true
+    },
+    {
+      "href": "#migration-component-input",
+      "index": 385,
+      "text": "具体改法",
+      "hash": "#migration-component-input",
+      "top": 80,
+      "ok": true
+    },
+    {
+      "href": "#migration-component-picker",
+      "index": 386,
+      "text": "具体改法",
+      "hash": "#migration-component-picker",
+      "top": 80,
+      "ok": true
+    },
+    {
+      "href": "#migration-component-progress",
+      "index": 387,
+      "text": "具体改法",
+      "hash": "#migration-component-progress",
+      "top": 80,
+      "ok": true
+    },
+    {
+      "href": "#migration-component-link",
+      "index": 388,
+      "text": "具体改法",
+      "hash": "#migration-component-link",
+      "top": 80,
+      "ok": true
+    },
+    {
+      "href": "#migration-component-link",
+      "index": 389,
+      "text": "具体改法",
+      "hash": "#migration-component-link",
+      "top": 80,
+      "ok": true
+    },
+    {
+      "href": "#migration-component-link",
+      "index": 390,
+      "text": "具体改法",
+      "hash": "#migration-component-link",
+      "top": 80,
+      "ok": true
+    },
+    {
+      "href": "#migration-component-link",
+      "index": 391,
+      "text": "具体改法",
+      "hash": "#migration-component-link",
+      "top": 80,
+      "ok": true
+    },
+    {
+      "href": "#migration-component-link",
+      "index": 392,
+      "text": "具体改法",
+      "hash": "#migration-component-link",
+      "top": 80,
+      "ok": true
+    },
+    {
+      "href": "#migration-component-link",
+      "index": 393,
+      "text": "具体改法",
+      "hash": "#migration-component-link",
+      "top": 80,
+      "ok": true
+    },
+    {
+      "href": "#migration-component-loading",
+      "index": 394,
+      "text": "具体改法",
+      "hash": "#migration-component-loading",
+      "top": 80,
+      "ok": true
+    },
+    {
+      "href": "#migration-component-loading",
+      "index": 395,
+      "text": "具体改法",
+      "hash": "#migration-component-loading",
+      "top": 80,
+      "ok": true
+    },
+    {
+      "href": "#migration-component-loading",
+      "index": 396,
+      "text": "具体改法",
+      "hash": "#migration-component-loading",
+      "top": 80,
+      "ok": true,
+      "retried": true
+    },
+    {
+      "href": "#migration-component-loading",
+      "index": 397,
+      "text": "具体改法",
+      "hash": "#migration-component-loading",
+      "top": 80,
+      "ok": true,
+      "retried": true
+    },
+    {
+      "href": "#migration-component-theme",
+      "index": 398,
+      "text": "具体改法",
+      "hash": "#migration-component-theme",
+      "top": 80,
+      "ok": true,
+      "retried": true
+    },
+    {
+      "href": "#migration-component-message",
+      "index": 399,
+      "text": "具体改法",
+      "hash": "#migration-component-message",
+      "top": 80,
+      "ok": true,
+      "retried": true
+    },
+    {
+      "href": "#migration-component-cascader",
+      "index": 400,
+      "text": "具体改法",
+      "hash": "#migration-component-cascader",
+      "top": 80,
+      "ok": true,
+      "retried": true
+    },
+    {
+      "href": "#migration-component-picker",
+      "index": 401,
+      "text": "具体改法",
+      "hash": "#migration-component-picker",
+      "top": 80,
+      "ok": true,
+      "retried": true
+    },
+    {
+      "href": "#migration-component-picker",
+      "index": 402,
+      "text": "具体改法",
+      "hash": "#migration-component-picker",
+      "top": 80,
+      "ok": true,
+      "retried": true
+    },
+    {
+      "href": "#migration-component-navbar",
+      "index": 403,
+      "text": "具体改法",
+      "hash": "#migration-component-navbar",
+      "top": 80,
+      "ok": true,
+      "retried": true
+    },
+    {
+      "href": "#migration-component-navbar",
+      "index": 404,
+      "text": "具体改法",
+      "hash": "#migration-component-navbar",
+      "top": 80,
+      "ok": true,
+      "retried": true
+    },
+    {
+      "href": "#migration-component-navbar",
+      "index": 405,
+      "text": "具体改法",
+      "hash": "#migration-component-navbar",
+      "top": 80,
+      "ok": true,
+      "retried": true
+    },
+    {
+      "href": "#migration-component-slider",
+      "index": 406,
+      "text": "具体改法",
+      "hash": "#migration-component-slider",
+      "top": 80,
+      "ok": true,
+      "retried": true
+    },
+    {
+      "href": "#migration-component-tabs",
+      "index": 407,
+      "text": "具体改法",
+      "hash": "#migration-component-tabs",
+      "top": 80,
+      "ok": true,
+      "retried": true
+    },
+    {
+      "href": "#migration-component-notice-bar",
+      "index": 408,
+      "text": "具体改法",
+      "hash": "#migration-component-notice-bar",
+      "top": 80,
+      "ok": true,
+      "retried": true
+    },
+    {
+      "href": "#migration-component-notice-bar",
+      "index": 409,
+      "text": "具体改法",
+      "hash": "#migration-component-notice-bar",
+      "top": 80,
+      "ok": true,
+      "retried": true
+    },
+    {
+      "href": "#migration-component-notice-bar",
+      "index": 410,
+      "text": "具体改法",
+      "hash": "#migration-component-notice-bar",
+      "top": 80,
+      "ok": true,
+      "retried": true
+    },
+    {
+      "href": "#migration-component-notice-bar",
+      "index": 411,
+      "text": "具体改法",
+      "hash": "#migration-component-notice-bar",
+      "top": 80,
+      "ok": true,
+      "retried": true
+    },
+    {
+      "href": "#migration-component-swiper",
+      "index": 412,
+      "text": "具体改法",
+      "hash": "#migration-component-swiper",
+      "top": 80,
+      "ok": true,
+      "retried": true
+    },
+    {
+      "href": "#migration-component-picker",
+      "index": 413,
+      "text": "具体改法",
+      "hash": "#migration-component-picker",
+      "top": 80,
+      "ok": true,
+      "retried": true
+    },
+    {
+      "href": "#migration-component-popover",
+      "index": 414,
+      "text": "具体改法",
+      "hash": "#migration-component-popover",
+      "top": 80,
+      "ok": true,
+      "retried": true
+    },
+    {
+      "href": "#migration-component-popover",
+      "index": 415,
+      "text": "具体改法",
+      "hash": "#migration-component-popover",
+      "top": 80,
+      "ok": true,
+      "retried": true
+    },
+    {
+      "href": "#migration-component-popover",
+      "index": 416,
+      "text": "具体改法",
+      "hash": "#migration-component-popover",
+      "top": 80,
+      "ok": true,
+      "retried": true
+    },
+    {
+      "href": "#migration-component-popover",
+      "index": 417,
+      "text": "具体改法",
+      "hash": "#migration-component-popover",
+      "top": 80,
+      "ok": true
+    },
+    {
+      "href": "#migration-component-popup",
+      "index": 418,
+      "text": "具体改法",
+      "hash": "#migration-component-popup",
+      "top": 80,
+      "ok": true
+    },
+    {
+      "href": "#migration-component-popup",
+      "index": 419,
+      "text": "具体改法",
+      "hash": "#migration-component-popup",
+      "top": 80,
+      "ok": true
+    },
+    {
+      "href": "#migration-component-popup",
+      "index": 420,
+      "text": "具体改法",
+      "hash": "#migration-component-popup",
+      "top": 80,
+      "ok": true
+    },
+    {
+      "href": "#migration-component-popup",
+      "index": 421,
+      "text": "具体改法",
+      "hash": "#migration-component-popup",
+      "top": 80,
+      "ok": true
+    },
+    {
+      "href": "#migration-component-progress",
+      "index": 422,
+      "text": "具体改法",
+      "hash": "#migration-component-progress",
+      "top": 80,
+      "ok": true
+    },
+    {
+      "href": "#migration-component-progress",
+      "index": 423,
+      "text": "具体改法",
+      "hash": "#migration-component-progress",
+      "top": 80,
+      "ok": true
+    },
+    {
+      "href": "#migration-component-progress",
+      "index": 424,
+      "text": "具体改法",
+      "hash": "#migration-component-progress",
+      "top": 80,
+      "ok": true
+    },
+    {
+      "href": "#migration-component-progress",
+      "index": 425,
+      "text": "具体改法",
+      "hash": "#migration-component-progress",
+      "top": 80,
+      "ok": true
+    },
+    {
+      "href": "#migration-component-radio",
+      "index": 426,
+      "text": "具体改法",
+      "hash": "#migration-component-radio",
+      "top": 80,
+      "ok": true
+    },
+    {
+      "href": "#migration-component-radio",
+      "index": 427,
+      "text": "具体改法",
+      "hash": "#migration-component-radio",
+      "top": 80,
+      "ok": true
+    },
+    {
+      "href": "#migration-component-radio",
+      "index": 428,
+      "text": "具体改法",
+      "hash": "#migration-component-radio",
+      "top": 80,
+      "ok": true
+    },
+    {
+      "href": "#migration-component-radio",
+      "index": 429,
+      "text": "具体改法",
+      "hash": "#migration-component-radio",
+      "top": 80,
+      "ok": true
+    },
+    {
+      "href": "#migration-component-radio",
+      "index": 430,
+      "text": "具体改法",
+      "hash": "#migration-component-radio",
+      "top": 80,
+      "ok": true
+    },
+    {
+      "href": "#migration-component-theme",
+      "index": 431,
+      "text": "具体改法",
+      "hash": "#migration-component-theme",
+      "top": 80,
+      "ok": true
+    },
+    {
+      "href": "#migration-component-slider",
+      "index": 432,
+      "text": "具体改法",
+      "hash": "#migration-component-slider",
+      "top": 80,
+      "ok": true
+    },
+    {
+      "href": "#migration-component-rate",
+      "index": 433,
+      "text": "具体改法",
+      "hash": "#migration-component-rate",
+      "top": 80,
+      "ok": true
+    },
+    {
+      "href": "#migration-component-pull-down-refresh",
+      "index": 434,
+      "text": "具体改法",
+      "hash": "#migration-component-pull-down-refresh",
+      "top": 80,
+      "ok": true
+    },
+    {
+      "href": "#migration-component-theme",
+      "index": 435,
+      "text": "具体改法",
+      "hash": "#migration-component-theme",
+      "top": 80,
+      "ok": true
+    },
+    {
+      "href": "#migration-component-theme",
+      "index": 436,
+      "text": "具体改法",
+      "hash": "#migration-component-theme",
+      "top": 80,
+      "ok": true
+    },
+    {
+      "href": "#migration-component-result",
+      "index": 437,
+      "text": "具体改法",
+      "hash": "#migration-component-result",
+      "top": 80,
+      "ok": true
+    },
+    {
+      "href": "#migration-component-result",
+      "index": 438,
+      "text": "具体改法",
+      "hash": "#migration-component-result",
+      "top": 80,
+      "ok": true
+    },
+    {
+      "href": "#migration-component-slider",
+      "index": 439,
+      "text": "具体改法",
+      "hash": "#migration-component-slider",
+      "top": 80,
+      "ok": true
+    },
+    {
+      "href": "#migration-component-slider",
+      "index": 440,
+      "text": "具体改法",
+      "hash": "#migration-component-slider",
+      "top": 80,
+      "ok": true
+    },
+    {
+      "href": "#migration-component-slider",
+      "index": 441,
+      "text": "具体改法",
+      "hash": "#migration-component-slider",
+      "top": 80,
+      "ok": true
+    },
+    {
+      "href": "#migration-component-slider",
+      "index": 442,
+      "text": "具体改法",
+      "hash": "#migration-component-slider",
+      "top": 80,
+      "ok": true
+    },
+    {
+      "href": "#migration-component-slider",
+      "index": 443,
+      "text": "具体改法",
+      "hash": "#migration-component-slider",
+      "top": 80,
+      "ok": true
+    },
+    {
+      "href": "#migration-component-slider",
+      "index": 444,
+      "text": "具体改法",
+      "hash": "#migration-component-slider",
+      "top": 80,
+      "ok": true
+    },
+    {
+      "href": "#migration-component-search",
+      "index": 445,
+      "text": "具体改法",
+      "hash": "#migration-component-search",
+      "top": 80,
+      "ok": true
+    },
+    {
+      "href": "#migration-component-search",
+      "index": 446,
+      "text": "具体改法",
+      "hash": "#migration-component-search",
+      "top": 80,
+      "ok": true
+    },
+    {
+      "href": "#migration-component-search",
+      "index": 447,
+      "text": "具体改法",
+      "hash": "#migration-component-search",
+      "top": 80,
+      "ok": true
+    },
+    {
+      "href": "#migration-component-search",
+      "index": 448,
+      "text": "具体改法",
+      "hash": "#migration-component-search",
+      "top": 80,
+      "ok": true
+    },
+    {
+      "href": "#migration-component-search",
+      "index": 449,
+      "text": "具体改法",
+      "hash": "#migration-component-search",
+      "top": 80,
+      "ok": true
+    },
+    {
+      "href": "#migration-component-search",
+      "index": 450,
+      "text": "具体改法",
+      "hash": "#migration-component-search",
+      "top": 80,
+      "ok": true
+    },
+    {
+      "href": "#migration-component-tree-select",
+      "index": 451,
+      "text": "具体改法",
+      "hash": "#migration-component-tree-select",
+      "top": 80,
+      "ok": true
+    },
+    {
+      "href": "#migration-component-tag",
+      "index": 452,
+      "text": "具体改法",
+      "hash": "#migration-component-tag",
+      "top": 80,
+      "ok": true
+    },
+    {
+      "href": "#migration-component-side-bar",
+      "index": 453,
+      "text": "具体改法",
+      "hash": "#migration-component-side-bar",
+      "top": 80,
+      "ok": true
+    },
+    {
+      "href": "#migration-component-side-bar",
+      "index": 454,
+      "text": "具体改法",
+      "hash": "#migration-component-side-bar",
+      "top": 80,
+      "ok": true
+    },
+    {
+      "href": "#migration-component-side-bar",
+      "index": 455,
+      "text": "具体改法",
+      "hash": "#migration-component-side-bar",
+      "top": 80,
+      "ok": true
+    },
+    {
+      "href": "#migration-component-side-bar",
+      "index": 456,
+      "text": "具体改法",
+      "hash": "#migration-component-side-bar",
+      "top": 80,
+      "ok": true
+    },
+    {
+      "href": "#migration-component-skeleton",
+      "index": 457,
+      "text": "具体改法",
+      "hash": "#migration-component-skeleton",
+      "top": 80,
+      "ok": true
+    },
+    {
+      "href": "#migration-component-skeleton",
+      "index": 458,
+      "text": "具体改法",
+      "hash": "#migration-component-skeleton",
+      "top": 80,
+      "ok": true
+    },
+    {
+      "href": "#migration-component-skeleton",
+      "index": 459,
+      "text": "具体改法",
+      "hash": "#migration-component-skeleton",
+      "top": 80,
+      "ok": true
+    },
+    {
+      "href": "#migration-component-skeleton",
+      "index": 460,
+      "text": "具体改法",
+      "hash": "#migration-component-skeleton",
+      "top": 80,
+      "ok": true
+    },
+    {
+      "href": "#migration-component-skeleton",
+      "index": 461,
+      "text": "具体改法",
+      "hash": "#migration-component-skeleton",
+      "top": 80,
+      "ok": true
+    },
+    {
+      "href": "#migration-component-skeleton",
+      "index": 462,
+      "text": "具体改法",
+      "hash": "#migration-component-skeleton",
+      "top": 80,
+      "ok": true
+    },
+    {
+      "href": "#migration-component-skeleton",
+      "index": 463,
+      "text": "具体改法",
+      "hash": "#migration-component-skeleton",
+      "top": 80,
+      "ok": true
+    },
+    {
+      "href": "#migration-component-popup",
+      "index": 464,
+      "text": "具体改法",
+      "hash": "#migration-component-popup",
+      "top": 80,
+      "ok": true
+    },
+    {
+      "href": "#migration-component-slider",
+      "index": 465,
+      "text": "具体改法",
+      "hash": "#migration-component-slider",
+      "top": 80,
+      "ok": true
+    },
+    {
+      "href": "#migration-component-slider",
+      "index": 466,
+      "text": "具体改法",
+      "hash": "#migration-component-slider",
+      "top": 80,
+      "ok": true
+    },
+    {
+      "href": "#migration-component-slider",
+      "index": 467,
+      "text": "具体改法",
+      "hash": "#migration-component-slider",
+      "top": 80,
+      "ok": true
+    },
+    {
+      "href": "#migration-component-theme",
+      "index": 468,
+      "text": "具体改法",
+      "hash": "#migration-component-theme",
+      "top": 80,
+      "ok": true
+    },
+    {
+      "href": "#migration-component-stepper",
+      "index": 469,
+      "text": "具体改法",
+      "hash": "#migration-component-stepper",
+      "top": 80,
+      "ok": true
+    },
+    {
+      "href": "#migration-component-stepper",
+      "index": 470,
+      "text": "具体改法",
+      "hash": "#migration-component-stepper",
+      "top": 80,
+      "ok": true
+    },
+    {
+      "href": "#migration-component-stepper",
+      "index": 471,
+      "text": "具体改法",
+      "hash": "#migration-component-stepper",
+      "top": 80,
+      "ok": true
+    },
+    {
+      "href": "#migration-component-stepper",
+      "index": 472,
+      "text": "具体改法",
+      "hash": "#migration-component-stepper",
+      "top": 80,
+      "ok": true
+    },
+    {
+      "href": "#migration-component-stepper",
+      "index": 473,
+      "text": "具体改法",
+      "hash": "#migration-component-stepper",
+      "top": 80,
+      "ok": true
+    },
+    {
+      "href": "#migration-component-stepper",
+      "index": 474,
+      "text": "具体改法",
+      "hash": "#migration-component-stepper",
+      "top": 80,
+      "ok": true
+    },
+    {
+      "href": "#migration-component-stepper",
+      "index": 475,
+      "text": "具体改法",
+      "hash": "#migration-component-stepper",
+      "top": 80,
+      "ok": true
+    },
+    {
+      "href": "#migration-component-stepper",
+      "index": 476,
+      "text": "具体改法",
+      "hash": "#migration-component-stepper",
+      "top": 80,
+      "ok": true
+    },
+    {
+      "href": "#migration-component-stepper",
+      "index": 477,
+      "text": "具体改法",
+      "hash": "#migration-component-stepper",
+      "top": 80,
+      "ok": true
+    },
+    {
+      "href": "#migration-component-steps",
+      "index": 478,
+      "text": "具体改法",
+      "hash": "#migration-component-steps",
+      "top": 80,
+      "ok": true
+    },
+    {
+      "href": "#migration-component-steps",
+      "index": 479,
+      "text": "具体改法",
+      "hash": "#migration-component-steps",
+      "top": 80,
+      "ok": true
+    },
+    {
+      "href": "#migration-component-steps",
+      "index": 480,
+      "text": "具体改法",
+      "hash": "#migration-component-steps",
+      "top": 80,
+      "ok": true
+    },
+    {
+      "href": "#migration-component-steps",
+      "index": 481,
+      "text": "具体改法",
+      "hash": "#migration-component-steps",
+      "top": 80,
+      "ok": true
+    },
+    {
+      "href": "#migration-component-swipe-cell",
+      "index": 482,
+      "text": "具体改法",
+      "hash": "#migration-component-swipe-cell",
+      "top": 80,
+      "ok": true
+    },
+    {
+      "href": "#migration-component-swipe-cell",
+      "index": 483,
+      "text": "具体改法",
+      "hash": "#migration-component-swipe-cell",
+      "top": 80,
+      "ok": true
+    },
+    {
+      "href": "#migration-component-swipe-cell",
+      "index": 484,
+      "text": "具体改法",
+      "hash": "#migration-component-swipe-cell",
+      "top": 80,
+      "ok": true
+    },
+    {
+      "href": "#migration-component-swipe-cell",
+      "index": 485,
+      "text": "具体改法",
+      "hash": "#migration-component-swipe-cell",
+      "top": 80,
+      "ok": true
+    },
+    {
+      "href": "#migration-component-swipe-cell",
+      "index": 486,
+      "text": "具体改法",
+      "hash": "#migration-component-swipe-cell",
+      "top": 80,
+      "ok": true
+    },
+    {
+      "href": "#migration-component-swiper",
+      "index": 487,
+      "text": "具体改法",
+      "hash": "#migration-component-swiper",
+      "top": 80,
+      "ok": true
+    },
+    {
+      "href": "#migration-component-swiper",
+      "index": 488,
+      "text": "具体改法",
+      "hash": "#migration-component-swiper",
+      "top": 80,
+      "ok": true
+    },
+    {
+      "href": "#migration-component-swiper",
+      "index": 489,
+      "text": "具体改法",
+      "hash": "#migration-component-swiper",
+      "top": 80,
+      "ok": true
+    },
+    {
+      "href": "#migration-component-switch",
+      "index": 490,
+      "text": "具体改法",
+      "hash": "#migration-component-switch",
+      "top": 80,
+      "ok": true
+    },
+    {
+      "href": "#migration-component-switch",
+      "index": 491,
+      "text": "具体改法",
+      "hash": "#migration-component-switch",
+      "top": 80,
+      "ok": true
+    },
+    {
+      "href": "#migration-component-switch",
+      "index": 492,
+      "text": "具体改法",
+      "hash": "#migration-component-switch",
+      "top": 80,
+      "ok": true
+    },
+    {
+      "href": "#migration-component-switch",
+      "index": 493,
+      "text": "具体改法",
+      "hash": "#migration-component-switch",
+      "top": 80,
+      "ok": true
+    },
+    {
+      "href": "#migration-component-theme",
+      "index": 494,
+      "text": "具体改法",
+      "hash": "#migration-component-theme",
+      "top": 80,
+      "ok": true
+    },
+    {
+      "href": "#migration-component-tabs",
+      "index": 495,
+      "text": "具体改法",
+      "hash": "#migration-component-tabs",
+      "top": 80,
+      "ok": true
+    },
+    {
+      "href": "#migration-component-tabs",
+      "index": 496,
+      "text": "具体改法",
+      "hash": "#migration-component-tabs",
+      "top": 80,
+      "ok": true
+    },
+    {
+      "href": "#migration-component-tabs",
+      "index": 497,
+      "text": "具体改法",
+      "hash": "#migration-component-tabs",
+      "top": 80,
+      "ok": true
+    },
+    {
+      "href": "#migration-component-tabs",
+      "index": 498,
+      "text": "具体改法",
+      "hash": "#migration-component-tabs",
+      "top": 80,
+      "ok": true
+    },
+    {
+      "href": "#migration-component-tabs",
+      "index": 499,
+      "text": "具体改法",
+      "hash": "#migration-component-tabs",
+      "top": 80,
+      "ok": true
+    },
+    {
+      "href": "#migration-component-tabs",
+      "index": 500,
+      "text": "具体改法",
+      "hash": "#migration-component-tabs",
+      "top": 80,
+      "ok": true
+    },
+    {
+      "href": "#migration-component-tabs",
+      "index": 501,
+      "text": "具体改法",
+      "hash": "#migration-component-tabs",
+      "top": 80,
+      "ok": true
+    },
+    {
+      "href": "#migration-component-tabs",
+      "index": 502,
+      "text": "具体改法",
+      "hash": "#migration-component-tabs",
+      "top": 80,
+      "ok": true
+    },
+    {
+      "href": "#migration-component-table",
+      "index": 503,
+      "text": "具体改法",
+      "hash": "#migration-component-table",
+      "top": 80,
+      "ok": true
+    },
+    {
+      "href": "#migration-component-table",
+      "index": 504,
+      "text": "具体改法",
+      "hash": "#migration-component-table",
+      "top": 80,
+      "ok": true
+    },
+    {
+      "href": "#migration-component-table",
+      "index": 505,
+      "text": "具体改法",
+      "hash": "#migration-component-table",
+      "top": 80,
+      "ok": true
+    },
+    {
+      "href": "#migration-component-table",
+      "index": 506,
+      "text": "具体改法",
+      "hash": "#migration-component-table",
+      "top": 80,
+      "ok": true
+    },
+    {
+      "href": "#migration-component-table",
+      "index": 507,
+      "text": "具体改法",
+      "hash": "#migration-component-table",
+      "top": 80,
+      "ok": true
+    },
+    {
+      "href": "#migration-component-table",
+      "index": 508,
+      "text": "具体改法",
+      "hash": "#migration-component-table",
+      "top": 80,
+      "ok": true
+    },
+    {
+      "href": "#migration-component-tag",
+      "index": 509,
+      "text": "具体改法",
+      "hash": "#migration-component-tag",
+      "top": 80,
+      "ok": true
+    },
+    {
+      "href": "#migration-component-tag",
+      "index": 510,
+      "text": "具体改法",
+      "hash": "#migration-component-tag",
+      "top": 80,
+      "ok": true
+    },
+    {
+      "href": "#migration-component-tag",
+      "index": 511,
+      "text": "具体改法",
+      "hash": "#migration-component-tag",
+      "top": 80,
+      "ok": true
+    },
+    {
+      "href": "#migration-component-tag",
+      "index": 512,
+      "text": "具体改法",
+      "hash": "#migration-component-tag",
+      "top": 80,
+      "ok": true
+    },
+    {
+      "href": "#migration-component-tag",
+      "index": 513,
+      "text": "具体改法",
+      "hash": "#migration-component-tag",
+      "top": 80,
+      "ok": true
+    },
+    {
+      "href": "#migration-component-empty",
+      "index": 514,
+      "text": "具体改法",
+      "hash": "#migration-component-empty",
+      "top": 80,
+      "ok": true
+    },
+    {
+      "href": "#migration-component-stepper",
+      "index": 515,
+      "text": "具体改法",
+      "hash": "#migration-component-stepper",
+      "top": 80,
+      "ok": true
+    },
+    {
+      "href": "#migration-component-text",
+      "index": 516,
+      "text": "具体改法",
+      "hash": "#migration-component-text",
+      "top": 80,
+      "ok": true
+    },
+    {
+      "href": "#migration-component-text",
+      "index": 517,
+      "text": "具体改法",
+      "hash": "#migration-component-text",
+      "top": 80,
+      "ok": true
+    },
+    {
+      "href": "#migration-component-progress",
+      "index": 518,
+      "text": "具体改法",
+      "hash": "#migration-component-progress",
+      "top": 80,
+      "ok": true
+    },
+    {
+      "href": "#migration-component-text",
+      "index": 519,
+      "text": "具体改法",
+      "hash": "#migration-component-text",
+      "top": 80,
+      "ok": true
+    },
+    {
+      "href": "#migration-component-text",
+      "index": 520,
+      "text": "具体改法",
+      "hash": "#migration-component-text",
+      "top": 80,
+      "ok": true
+    },
+    {
+      "href": "#migration-component-textarea",
+      "index": 521,
+      "text": "具体改法",
+      "hash": "#migration-component-textarea",
+      "top": 80,
+      "ok": true
+    },
+    {
+      "href": "#migration-component-textarea",
+      "index": 522,
+      "text": "具体改法",
+      "hash": "#migration-component-textarea",
+      "top": 80,
+      "ok": true
+    },
+    {
+      "href": "#migration-component-theme",
+      "index": 523,
+      "text": "具体改法",
+      "hash": "#migration-component-theme",
+      "top": 80,
+      "ok": true
+    },
+    {
+      "href": "#migration-component-theme",
+      "index": 524,
+      "text": "具体改法",
+      "hash": "#migration-component-theme",
+      "top": 80,
+      "ok": true
+    },
+    {
+      "href": "#migration-component-time-counter",
+      "index": 525,
+      "text": "具体改法",
+      "hash": "#migration-component-time-counter",
+      "top": 80,
+      "ok": true
+    },
+    {
+      "href": "#migration-component-time-counter",
+      "index": 526,
+      "text": "具体改法",
+      "hash": "#migration-component-time-counter",
+      "top": 80,
+      "ok": true
+    },
+    {
+      "href": "#migration-component-time-counter",
+      "index": 527,
+      "text": "具体改法",
+      "hash": "#migration-component-time-counter",
+      "top": 80,
+      "ok": true
+    },
+    {
+      "href": "#migration-component-time-counter",
+      "index": 528,
+      "text": "具体改法",
+      "hash": "#migration-component-time-counter",
+      "top": 80,
+      "ok": true
+    },
+    {
+      "href": "#migration-component-time-counter",
+      "index": 529,
+      "text": "具体改法",
+      "hash": "#migration-component-time-counter",
+      "top": 80,
+      "ok": true
+    },
+    {
+      "href": "#migration-component-time-counter",
+      "index": 530,
+      "text": "具体改法",
+      "hash": "#migration-component-time-counter",
+      "top": 80,
+      "ok": true
+    },
+    {
+      "href": "#migration-component-time-counter",
+      "index": 531,
+      "text": "具体改法",
+      "hash": "#migration-component-time-counter",
+      "top": 80,
+      "ok": true
+    },
+    {
+      "href": "#migration-component-toast",
+      "index": 532,
+      "text": "具体改法",
+      "hash": "#migration-component-toast",
+      "top": 80,
+      "ok": true
+    },
+    {
+      "href": "#migration-component-toast",
+      "index": 533,
+      "text": "具体改法",
+      "hash": "#migration-component-toast",
+      "top": 80,
+      "ok": true
+    },
+    {
+      "href": "#migration-component-tree-select",
+      "index": 534,
+      "text": "具体改法",
+      "hash": "#migration-component-tree-select",
+      "top": 80,
+      "ok": true
+    },
+    {
+      "href": "#migration-component-tree-select",
+      "index": 535,
+      "text": "具体改法",
+      "hash": "#migration-component-tree-select",
+      "top": 80,
+      "ok": true
+    },
+    {
+      "href": "#migration-component-tree-select",
+      "index": 536,
+      "text": "具体改法",
+      "hash": "#migration-component-tree-select",
+      "top": 80,
+      "ok": true
+    },
+    {
+      "href": "#migration-component-upload",
+      "index": 537,
+      "text": "具体改法",
+      "hash": "#migration-component-upload",
+      "top": 80,
+      "ok": true
+    },
+    {
+      "href": "#migration-component-upload",
+      "index": 538,
+      "text": "具体改法",
+      "hash": "#migration-component-upload",
+      "top": 80,
+      "ok": true
+    },
+    {
+      "href": "#migration-component-upload",
+      "index": 539,
+      "text": "具体改法",
+      "hash": "#migration-component-upload",
+      "top": 80,
+      "ok": true
+    },
+    {
+      "href": "#migration-component-upload",
+      "index": 540,
+      "text": "具体改法",
+      "hash": "#migration-component-upload",
+      "top": 80,
+      "ok": true
+    },
+    {
+      "href": "#migration-component-upload",
+      "index": 541,
+      "text": "具体改法",
+      "hash": "#migration-component-upload",
+      "top": 80,
+      "ok": true
+    },
+    {
+      "href": "#migration-component-upload",
+      "index": 542,
+      "text": "具体改法",
+      "hash": "#migration-component-upload",
+      "top": 80,
+      "ok": true
+    },
+    {
+      "href": "#migration-component-upload",
+      "index": 543,
+      "text": "具体改法",
+      "hash": "#migration-component-upload",
+      "top": 80,
+      "ok": true
+    },
+    {
+      "href": "#migration-component-upload",
+      "index": 544,
+      "text": "具体改法",
+      "hash": "#migration-component-upload",
+      "top": 80,
+      "ok": true
+    },
+    {
+      "href": "#migration-component-upload",
+      "index": 545,
+      "text": "具体改法",
+      "hash": "#migration-component-upload",
+      "top": 80,
+      "ok": true
+    },
+    {
+      "href": "#migration-component-upload",
+      "index": 546,
+      "text": "具体改法",
+      "hash": "#migration-component-upload",
+      "top": 80,
+      "ok": true
+    },
+    {
+      "href": "#migration-component-upload",
+      "index": 547,
+      "text": "具体改法",
+      "hash": "#migration-component-upload",
+      "top": 80,
+      "ok": true
+    },
+    {
+      "href": "#migration-component-calendar",
+      "index": 548,
+      "text": "具体改法",
+      "hash": "#migration-component-calendar",
+      "top": 80,
+      "ok": true
+    },
+    {
+      "href": "#migration-component-pull-down-refresh",
+      "index": 549,
+      "text": "具体改法",
+      "hash": "#migration-component-pull-down-refresh",
+      "top": 80,
+      "ok": true
+    },
+    {
+      "href": "#migration-component-pull-down-refresh",
+      "index": 550,
+      "text": "具体改法",
+      "hash": "#migration-component-pull-down-refresh",
+      "top": 80,
+      "ok": true
+    },
+    {
+      "href": "#migration-component-cascader",
+      "index": 551,
+      "text": "具体改法",
+      "hash": "#migration-component-cascader",
+      "top": 80,
+      "ok": true
+    },
+    {
+      "href": "#migration-component-divider",
+      "index": 552,
+      "text": "具体改法",
+      "hash": "#migration-component-divider",
+      "top": 80,
+      "ok": true
+    },
+    {
+      "href": "#migration-component-badge",
+      "index": 553,
+      "text": "具体改法",
+      "hash": "#migration-component-badge",
+      "top": 80,
+      "ok": true
+    },
+    {
+      "href": "#migration-component-radio",
+      "index": 554,
+      "text": "具体改法",
+      "hash": "#migration-component-radio",
+      "top": 80,
+      "ok": true
+    },
+    {
+      "href": "#migration-component-text",
+      "index": 555,
+      "text": "具体改法",
+      "hash": "#migration-component-text",
+      "top": 80,
+      "ok": true
+    },
+    {
+      "href": "#migration-component-text",
+      "index": 556,
+      "text": "具体改法",
+      "hash": "#migration-component-text",
+      "top": 80,
+      "ok": true
+    },
+    {
+      "href": "#migration-component-popup",
+      "index": 557,
+      "text": "具体改法",
+      "hash": "#migration-component-popup",
+      "top": 80,
+      "ok": true
+    }
+  ],
+  "headingAndLegacyTargets": [
+    {
+      "id": "从-0-2-7-升级到-1-0",
+      "hash": "#%E4%BB%8E-0-2-7-%E5%8D%87%E7%BA%A7%E5%88%B0-1-0",
+      "top": 80,
+      "ok": true
+    },
+    {
+      "id": "升级顺序",
+      "hash": "#%E5%8D%87%E7%BA%A7%E9%A1%BA%E5%BA%8F",
+      "top": 80,
+      "ok": true
+    },
+    {
+      "id": "按组件查找迁移方式",
+      "hash": "#%E6%8C%89%E7%BB%84%E4%BB%B6%E6%9F%A5%E6%89%BE%E8%BF%81%E7%A7%BB%E6%96%B9%E5%BC%8F",
+      "top": 80,
+      "ok": true
+    },
+    {
+      "id": "主题、文字与样式",
+      "hash": "#%E4%B8%BB%E9%A2%98%E3%80%81%E6%96%87%E5%AD%97%E4%B8%8E%E6%A0%B7%E5%BC%8F",
+      "top": 80,
+      "ok": true
+    },
+    {
+      "id": "主题与文字：1-0写法与注意事项",
+      "hash": "#%E4%B8%BB%E9%A2%98%E4%B8%8E%E6%96%87%E5%AD%97%EF%BC%9A1-0%E5%86%99%E6%B3%95%E4%B8%8E%E6%B3%A8%E6%84%8F%E4%BA%8B%E9%A1%B9",
+      "top": 80,
+      "ok": true
+    },
+    {
+      "id": "主题与文字：迁移后怎样确认",
+      "hash": "#%E4%B8%BB%E9%A2%98%E4%B8%8E%E6%96%87%E5%AD%97%EF%BC%9A%E8%BF%81%E7%A7%BB%E5%90%8E%E6%80%8E%E6%A0%B7%E7%A1%AE%E8%AE%A4",
+      "top": 80,
+      "ok": true
+    },
+    {
+      "id": "按钮与禁用语义",
+      "hash": "#%E6%8C%89%E9%92%AE%E4%B8%8E%E7%A6%81%E7%94%A8%E8%AF%AD%E4%B9%89",
+      "top": 80,
+      "ok": true
+    },
+    {
+      "id": "按钮：1-0写法与注意事项",
+      "hash": "#%E6%8C%89%E9%92%AE%EF%BC%9A1-0%E5%86%99%E6%B3%95%E4%B8%8E%E6%B3%A8%E6%84%8F%E4%BA%8B%E9%A1%B9",
+      "top": 80,
+      "ok": true
+    },
+    {
+      "id": "按钮：迁移后怎样确认",
+      "hash": "#%E6%8C%89%E9%92%AE%EF%BC%9A%E8%BF%81%E7%A7%BB%E5%90%8E%E6%80%8E%E6%A0%B7%E7%A1%AE%E8%AE%A4",
+      "top": 80,
+      "ok": true
+    },
+    {
+      "id": "受控值、输入与选择",
+      "hash": "#%E5%8F%97%E6%8E%A7%E5%80%BC%E3%80%81%E8%BE%93%E5%85%A5%E4%B8%8E%E9%80%89%E6%8B%A9",
+      "top": 80,
+      "ok": true
+    },
+    {
+      "id": "受控值：1-0写法与注意事项",
+      "hash": "#%E5%8F%97%E6%8E%A7%E5%80%BC%EF%BC%9A1-0%E5%86%99%E6%B3%95%E4%B8%8E%E6%B3%A8%E6%84%8F%E4%BA%8B%E9%A1%B9",
+      "top": 80,
+      "ok": true
+    },
+    {
+      "id": "受控值：迁移后怎样确认",
+      "hash": "#%E5%8F%97%E6%8E%A7%E5%80%BC%EF%BC%9A%E8%BF%81%E7%A7%BB%E5%90%8E%E6%80%8E%E6%A0%B7%E7%A1%AE%E8%AE%A4",
+      "top": 80,
+      "ok": true
+    },
+    {
+      "id": "表单改为字段树",
+      "hash": "#%E8%A1%A8%E5%8D%95%E6%94%B9%E4%B8%BA%E5%AD%97%E6%AE%B5%E6%A0%91",
+      "top": 80,
+      "ok": true
+    },
+    {
+      "id": "表单：1-0写法与注意事项",
+      "hash": "#%E8%A1%A8%E5%8D%95%EF%BC%9A1-0%E5%86%99%E6%B3%95%E4%B8%8E%E6%B3%A8%E6%84%8F%E4%BA%8B%E9%A1%B9",
+      "top": 80,
+      "ok": true
+    },
+    {
+      "id": "表单：迁移后怎样确认",
+      "hash": "#%E8%A1%A8%E5%8D%95%EF%BC%9A%E8%BF%81%E7%A7%BB%E5%90%8E%E6%80%8E%E6%A0%B7%E7%A1%AE%E8%AE%A4",
+      "top": 80,
+      "ok": true
+    },
+    {
+      "id": "picker、日期与浮层确认分离",
+      "hash": "#picker%E3%80%81%E6%97%A5%E6%9C%9F%E4%B8%8E%E6%B5%AE%E5%B1%82%E7%A1%AE%E8%AE%A4%E5%88%86%E7%A6%BB",
+      "top": 80,
+      "ok": true
+    },
+    {
+      "id": "picker-与日期：1-0写法与注意事项",
+      "hash": "#picker-%E4%B8%8E%E6%97%A5%E6%9C%9F%EF%BC%9A1-0%E5%86%99%E6%B3%95%E4%B8%8E%E6%B3%A8%E6%84%8F%E4%BA%8B%E9%A1%B9",
+      "top": 80,
+      "ok": true
+    },
+    {
+      "id": "picker-与日期：迁移后怎样确认",
+      "hash": "#picker-%E4%B8%8E%E6%97%A5%E6%9C%9F%EF%BC%9A%E8%BF%81%E7%A7%BB%E5%90%8E%E6%80%8E%E6%A0%B7%E7%A1%AE%E8%AE%A4",
+      "top": 80,
+      "ok": true
+    },
+    {
+      "id": "popup、dialog、toast",
+      "hash": "#popup%E3%80%81dialog%E3%80%81toast",
+      "top": 80,
+      "ok": true
+    },
+    {
+      "id": "浮层与提示：1-0写法与注意事项",
+      "hash": "#%E6%B5%AE%E5%B1%82%E4%B8%8E%E6%8F%90%E7%A4%BA%EF%BC%9A1-0%E5%86%99%E6%B3%95%E4%B8%8E%E6%B3%A8%E6%84%8F%E4%BA%8B%E9%A1%B9",
+      "top": 80,
+      "ok": true
+    },
+    {
+      "id": "浮层与提示：迁移后怎样确认",
+      "hash": "#%E6%B5%AE%E5%B1%82%E4%B8%8E%E6%8F%90%E7%A4%BA%EF%BC%9A%E8%BF%81%E7%A7%BB%E5%90%8E%E6%80%8E%E6%A0%B7%E7%A1%AE%E8%AE%A4",
+      "top": 80,
+      "ok": true
+    },
+    {
+      "id": "upload-与平台依赖",
+      "hash": "#upload-%E4%B8%8E%E5%B9%B3%E5%8F%B0%E4%BE%9D%E8%B5%96",
+      "top": 80,
+      "ok": true
+    },
+    {
+      "id": "旧参数和业务职责如何调整",
+      "hash": "#%E6%97%A7%E5%8F%82%E6%95%B0%E5%92%8C%E4%B8%9A%E5%8A%A1%E8%81%8C%E8%B4%A3%E5%A6%82%E4%BD%95%E8%B0%83%E6%95%B4",
+      "top": 80,
+      "ok": true
+    },
+    {
+      "id": "upload：1-0写法与注意事项",
+      "hash": "#upload%EF%BC%9A1-0%E5%86%99%E6%B3%95%E4%B8%8E%E6%B3%A8%E6%84%8F%E4%BA%8B%E9%A1%B9",
+      "top": 80,
+      "ok": true
+    },
+    {
+      "id": "upload：迁移后怎样确认",
+      "hash": "#upload%EF%BC%9A%E8%BF%81%E7%A7%BB%E5%90%8E%E6%80%8E%E6%A0%B7%E7%A1%AE%E8%AE%A4",
+      "top": 80,
+      "ok": true
+    },
+    {
+      "id": "两种-tabbar-与-swiper",
+      "hash": "#%E4%B8%A4%E7%A7%8D-tabbar-%E4%B8%8E-swiper",
+      "top": 80,
+      "ok": true
+    },
+    {
+      "id": "页签与轮播：1-0写法与注意事项",
+      "hash": "#%E9%A1%B5%E7%AD%BE%E4%B8%8E%E8%BD%AE%E6%92%AD%EF%BC%9A1-0%E5%86%99%E6%B3%95%E4%B8%8E%E6%B3%A8%E6%84%8F%E4%BA%8B%E9%A1%B9",
+      "top": 80,
+      "ok": true
+    },
+    {
+      "id": "页签与轮播：迁移后怎样确认",
+      "hash": "#%E9%A1%B5%E7%AD%BE%E4%B8%8E%E8%BD%AE%E6%92%AD%EF%BC%9A%E8%BF%81%E7%A7%BB%E5%90%8E%E6%80%8E%E6%A0%B7%E7%A1%AE%E8%AE%A4",
+      "top": 80,
+      "ok": true
+    },
+    {
+      "id": "找不到旧类型时怎样处理",
+      "hash": "#%E6%89%BE%E4%B8%8D%E5%88%B0%E6%97%A7%E7%B1%BB%E5%9E%8B%E6%97%B6%E6%80%8E%E6%A0%B7%E5%A4%84%E7%90%86",
+      "top": 80,
+      "ok": true
+    },
+    {
+      "id": "枚举值不能只替换前缀",
+      "hash": "#%E6%9E%9A%E4%B8%BE%E5%80%BC%E4%B8%8D%E8%83%BD%E5%8F%AA%E6%9B%BF%E6%8D%A2%E5%89%8D%E7%BC%80",
+      "top": 80,
+      "ok": true
+    },
+    {
+      "id": "编译通过后仍要检查",
+      "hash": "#%E7%BC%96%E8%AF%91%E9%80%9A%E8%BF%87%E5%90%8E%E4%BB%8D%E8%A6%81%E6%A3%80%E6%9F%A5",
+      "top": 80,
+      "ok": true
+    },
+    {
+      "id": "_1-0-0-之后的升级注意",
+      "hash": "#_1-0-0-%E4%B9%8B%E5%90%8E%E7%9A%84%E5%8D%87%E7%BA%A7%E6%B3%A8%E6%84%8F",
+      "top": 80,
+      "ok": true
+    },
+    {
+      "id": "已有文字槽遗漏修复",
+      "hash": "#%E5%B7%B2%E6%9C%89%E6%96%87%E5%AD%97%E6%A7%BD%E9%81%97%E6%BC%8F%E4%BF%AE%E5%A4%8D",
+      "top": 80,
+      "ok": true
+    },
+    {
+      "id": "自定义文字槽默认值统一",
+      "hash": "#%E8%87%AA%E5%AE%9A%E4%B9%89%E6%96%87%E5%AD%97%E6%A7%BD%E9%BB%98%E8%AE%A4%E5%80%BC%E7%BB%9F%E4%B8%80",
+      "top": 80,
+      "ok": true
+    },
+    {
+      "id": "popup-配置与关闭生命周期",
+      "hash": "#popup-%E9%85%8D%E7%BD%AE%E4%B8%8E%E5%85%B3%E9%97%AD%E7%94%9F%E5%91%BD%E5%91%A8%E6%9C%9F",
+      "top": 80,
+      "ok": true
+    },
+    {
+      "id": "附录：按旧类型名称查找",
+      "hash": "#%E9%99%84%E5%BD%95%EF%BC%9A%E6%8C%89%E6%97%A7%E7%B1%BB%E5%9E%8B%E5%90%8D%E7%A7%B0%E6%9F%A5%E6%89%BE",
+      "top": 80,
+      "ok": true
+    },
+    {
+      "id": "适用版本与阅读方式",
+      "hash": "#%E9%80%82%E7%94%A8%E7%89%88%E6%9C%AC%E4%B8%8E%E9%98%85%E8%AF%BB%E6%96%B9%E5%BC%8F",
+      "top": 80,
+      "ok": true
+    },
+    {
+      "id": "先判断需要做哪些工作",
+      "hash": "#%E5%85%88%E5%88%A4%E6%96%AD%E9%9C%80%E8%A6%81%E5%81%9A%E5%93%AA%E4%BA%9B%E5%B7%A5%E4%BD%9C",
+      "top": 80,
+      "ok": true
+    },
+    {
+      "id": "直接查看主要改法",
+      "hash": "#%E7%9B%B4%E6%8E%A5%E6%9F%A5%E7%9C%8B%E4%B8%BB%E8%A6%81%E6%94%B9%E6%B3%95",
+      "top": 80,
+      "ok": true
+    },
+    {
+      "id": "选择你正在迁移的组件",
+      "hash": "#%E9%80%89%E6%8B%A9%E4%BD%A0%E6%AD%A3%E5%9C%A8%E8%BF%81%E7%A7%BB%E7%9A%84%E7%BB%84%E4%BB%B6",
+      "top": 80,
+      "ok": true
+    },
+    {
+      "id": "先处理旧配置",
+      "hash": "#%E5%85%88%E5%A4%84%E7%90%86%E6%97%A7%E9%85%8D%E7%BD%AE",
+      "top": 80,
+      "ok": true
+    },
+    {
+      "id": "参数如何调整",
+      "hash": "#%E5%8F%82%E6%95%B0%E5%A6%82%E4%BD%95%E8%B0%83%E6%95%B4",
+      "top": 80,
+      "ok": true
+    },
+    {
+      "id": "值由谁更新",
+      "hash": "#%E5%80%BC%E7%94%B1%E8%B0%81%E6%9B%B4%E6%96%B0",
+      "top": 80,
+      "ok": true
+    },
+    {
+      "id": "旧版配置分别放到哪里",
+      "hash": "#%E6%97%A7%E7%89%88%E9%85%8D%E7%BD%AE%E5%88%86%E5%88%AB%E6%94%BE%E5%88%B0%E5%93%AA%E9%87%8C",
+      "top": 80,
+      "ok": true
+    },
+    {
+      "id": "将选择与提交分成两步",
+      "hash": "#%E5%B0%86%E9%80%89%E6%8B%A9%E4%B8%8E%E6%8F%90%E4%BA%A4%E5%88%86%E6%88%90%E4%B8%A4%E6%AD%A5",
+      "top": 80,
+      "ok": true
+    },
+    {
+      "id": "按原业务目的选择新入口",
+      "hash": "#%E6%8C%89%E5%8E%9F%E4%B8%9A%E5%8A%A1%E7%9B%AE%E7%9A%84%E9%80%89%E6%8B%A9%E6%96%B0%E5%85%A5%E5%8F%A3",
+      "top": 80,
+      "ok": true
+    },
+    {
+      "id": "先区分三种迁移路径",
+      "hash": "#%E5%85%88%E5%8C%BA%E5%88%86%E4%B8%89%E7%A7%8D%E8%BF%81%E7%A7%BB%E8%B7%AF%E5%BE%84",
+      "top": 80,
+      "ok": true
+    },
+    {
+      "id": "_1-0写法与注意事项",
+      "hash": "#_1-0%E5%86%99%E6%B3%95%E4%B8%8E%E6%B3%A8%E6%84%8F%E4%BA%8B%E9%A1%B9",
+      "top": 80,
+      "ok": true
+    },
+    {
+      "id": "_1-0写法与注意事项-1",
+      "hash": "#_1-0%E5%86%99%E6%B3%95%E4%B8%8E%E6%B3%A8%E6%84%8F%E4%BA%8B%E9%A1%B9-1",
+      "top": 80,
+      "ok": true
+    },
+    {
+      "id": "_1-0写法与注意事项-2",
+      "hash": "#_1-0%E5%86%99%E6%B3%95%E4%B8%8E%E6%B3%A8%E6%84%8F%E4%BA%8B%E9%A1%B9-2",
+      "top": 80,
+      "ok": true
+    },
+    {
+      "id": "_1-0写法与注意事项-3",
+      "hash": "#_1-0%E5%86%99%E6%B3%95%E4%B8%8E%E6%B3%A8%E6%84%8F%E4%BA%8B%E9%A1%B9-3",
+      "top": 80,
+      "ok": true
+    },
+    {
+      "id": "_1-0写法与注意事项-4",
+      "hash": "#_1-0%E5%86%99%E6%B3%95%E4%B8%8E%E6%B3%A8%E6%84%8F%E4%BA%8B%E9%A1%B9-4",
+      "top": 80,
+      "ok": true
+    },
+    {
+      "id": "_1-0写法与注意事项-5",
+      "hash": "#_1-0%E5%86%99%E6%B3%95%E4%B8%8E%E6%B3%A8%E6%84%8F%E4%BA%8B%E9%A1%B9-5",
+      "top": 80,
+      "ok": true
+    },
+    {
+      "id": "_1-0写法与注意事项-6",
+      "hash": "#_1-0%E5%86%99%E6%B3%95%E4%B8%8E%E6%B3%A8%E6%84%8F%E4%BA%8B%E9%A1%B9-6",
+      "top": 80,
+      "ok": true
+    },
+    {
+      "id": "_1-0写法与注意事项-7",
+      "hash": "#_1-0%E5%86%99%E6%B3%95%E4%B8%8E%E6%B3%A8%E6%84%8F%E4%BA%8B%E9%A1%B9-7",
+      "top": 80,
+      "ok": true
+    },
+    {
+      "id": "迁移后怎样确认",
+      "hash": "#%E8%BF%81%E7%A7%BB%E5%90%8E%E6%80%8E%E6%A0%B7%E7%A1%AE%E8%AE%A4",
+      "top": 80,
+      "ok": true
+    },
+    {
+      "id": "迁移后怎样确认-1",
+      "hash": "#%E8%BF%81%E7%A7%BB%E5%90%8E%E6%80%8E%E6%A0%B7%E7%A1%AE%E8%AE%A4-1",
+      "top": 80,
+      "ok": true
+    },
+    {
+      "id": "迁移后怎样确认-2",
+      "hash": "#%E8%BF%81%E7%A7%BB%E5%90%8E%E6%80%8E%E6%A0%B7%E7%A1%AE%E8%AE%A4-2",
+      "top": 80,
+      "ok": true
+    },
+    {
+      "id": "迁移后怎样确认-3",
+      "hash": "#%E8%BF%81%E7%A7%BB%E5%90%8E%E6%80%8E%E6%A0%B7%E7%A1%AE%E8%AE%A4-3",
+      "top": 80,
+      "ok": true
+    },
+    {
+      "id": "迁移后怎样确认-4",
+      "hash": "#%E8%BF%81%E7%A7%BB%E5%90%8E%E6%80%8E%E6%A0%B7%E7%A1%AE%E8%AE%A4-4",
+      "top": 80,
+      "ok": true
+    },
+    {
+      "id": "迁移后怎样确认-5",
+      "hash": "#%E8%BF%81%E7%A7%BB%E5%90%8E%E6%80%8E%E6%A0%B7%E7%A1%AE%E8%AE%A4-5",
+      "top": 80,
+      "ok": true
+    },
+    {
+      "id": "迁移后怎样确认-6",
+      "hash": "#%E8%BF%81%E7%A7%BB%E5%90%8E%E6%80%8E%E6%A0%B7%E7%A1%AE%E8%AE%A4-6",
+      "top": 80,
+      "ok": true
+    },
+    {
+      "id": "迁移后怎样确认-7",
+      "hash": "#%E8%BF%81%E7%A7%BB%E5%90%8E%E6%80%8E%E6%A0%B7%E7%A1%AE%E8%AE%A4-7",
+      "top": 80,
+      "ok": true
+    },
+    {
+      "id": "自定义文字槽默认值统一（patch）",
+      "hash": "#%E8%87%AA%E5%AE%9A%E4%B9%89%E6%96%87%E5%AD%97%E6%A7%BD%E9%BB%98%E8%AE%A4%E5%80%BC%E7%BB%9F%E4%B8%80%EF%BC%88patch%EF%BC%89",
+      "top": 80,
+      "ok": true
+    }
+  ],
+  "routes": [
+    {
+      "href": "/flutter/changelog",
+      "index": 36,
+      "text": "更新日志",
+      "url": "/flutter/changelog",
+      "ok": true
+    },
+    {
+      "href": "/flutter/getting-started",
+      "index": 38,
+      "text": "快速开始",
+      "url": "/flutter/getting-started",
+      "ok": true
+    },
+    {
+      "href": "/flutter/components/theme?tab=api",
+      "index": 48,
+      "text": "Theme 主题",
+      "apiLength": 29001,
+      "url": "/flutter/components/theme?tab=api",
+      "ok": true
+    },
+    {
+      "href": "/flutter/components/button?tab=api",
+      "index": 50,
+      "text": "Button 按钮",
+      "apiLength": 3426,
+      "url": "/flutter/components/button?tab=api",
+      "ok": true
+    },
+    {
+      "href": "/flutter/components/divider?tab=api",
+      "index": 52,
+      "text": "Divider 分割线",
+      "apiLength": 1392,
+      "url": "/flutter/components/divider?tab=api",
+      "ok": true
+    },
+    {
+      "href": "/flutter/components/fab?tab=api",
+      "index": 53,
+      "text": "Fab 悬浮按钮",
+      "apiLength": 2380,
+      "url": "/flutter/components/fab?tab=api",
+      "ok": true
+    },
+    {
+      "href": "/flutter/components/icon?tab=api",
+      "index": 54,
+      "text": "Icon 图标",
+      "apiLength": 818,
+      "url": "/flutter/components/icon?tab=api",
+      "ok": true
+    },
+    {
+      "href": "/flutter/components/link?tab=api",
+      "index": 55,
+      "text": "Link 链接",
+      "apiLength": 1246,
+      "url": "/flutter/components/link?tab=api",
+      "ok": true
+    },
+    {
+      "href": "/flutter/components/text?tab=api",
+      "index": 56,
+      "text": "Text 文本",
+      "apiLength": 4707,
+      "url": "/flutter/components/text?tab=api",
+      "ok": true
+    },
+    {
+      "href": "/flutter/components/back-top?tab=api",
+      "index": 58,
+      "text": "BackTop 返回顶部",
+      "apiLength": 2101,
+      "url": "/flutter/components/back-top?tab=api",
+      "ok": true
+    },
+    {
+      "href": "/flutter/components/drawer?tab=api",
+      "index": 59,
+      "text": "Drawer 抽屉",
+      "apiLength": 3065,
+      "url": "/flutter/components/drawer?tab=api",
+      "ok": true
+    },
+    {
+      "href": "/flutter/components/indexes?tab=api",
+      "index": 60,
+      "text": "Indexes 索引",
+      "apiLength": 7419,
+      "url": "/flutter/components/indexes?tab=api",
+      "ok": true
+    },
+    {
+      "href": "/flutter/components/navbar?tab=api",
+      "index": 61,
+      "text": "Navbar 导航栏",
+      "apiLength": 2244,
+      "url": "/flutter/components/navbar?tab=api",
+      "ok": true
+    },
+    {
+      "href": "/flutter/components/side-bar?tab=api",
+      "index": 62,
+      "text": "SideBar 侧边栏",
+      "apiLength": 1599,
+      "url": "/flutter/components/side-bar?tab=api",
+      "ok": true
+    },
+    {
+      "href": "/flutter/components/steps?tab=api",
+      "index": 63,
+      "text": "Steps 步骤条",
+      "apiLength": 2367,
+      "url": "/flutter/components/steps?tab=api",
+      "ok": true
+    },
+    {
+      "href": "/flutter/components/tab-bar?tab=api",
+      "index": 64,
+      "text": "TabBar 标签栏",
+      "apiLength": 4554,
+      "url": "/flutter/components/tab-bar?tab=api",
+      "ok": true
+    },
+    {
+      "href": "/flutter/components/tabs?tab=api",
+      "index": 66,
+      "text": "Tabs 选项卡",
+      "apiLength": 2607,
+      "url": "/flutter/components/tabs?tab=api",
+      "ok": true
+    },
+    {
+      "href": "/flutter/components/calendar?tab=api",
+      "index": 68,
+      "text": "Calendar 日历",
+      "apiLength": 5106,
+      "url": "/flutter/components/calendar?tab=api",
+      "ok": true
+    },
+    {
+      "href": "/flutter/components/cascader?tab=api",
+      "index": 70,
+      "text": "Cascader 级联选择器",
+      "apiLength": 1543,
+      "url": "/flutter/components/cascader?tab=api",
+      "ok": true
+    },
+    {
+      "href": "/flutter/components/checkbox?tab=api",
+      "index": 71,
+      "text": "CheckBox 多选框",
+      "apiLength": 3505,
+      "url": "/flutter/components/checkbox?tab=api",
+      "ok": true
+    },
+    {
+      "href": "/flutter/components/date-time-picker?tab=api",
+      "index": 73,
+      "text": "DateTimePicker 时间选择器",
+      "apiLength": 4326,
+      "url": "/flutter/components/date-time-picker?tab=api",
+      "ok": true
+    },
+    {
+      "href": "/flutter/components/form?tab=api",
+      "index": 75,
+      "text": "Form 表单",
+      "apiLength": 6035,
+      "url": "/flutter/components/form?tab=api",
+      "ok": true
+    },
+    {
+      "href": "/flutter/components/input?tab=api",
+      "index": 77,
+      "text": "Input 输入框",
+      "apiLength": 3530,
+      "url": "/flutter/components/input?tab=api",
+      "ok": true
+    },
+    {
+      "href": "/flutter/components/picker?tab=api",
+      "index": 79,
+      "text": "Picker 选择器",
+      "apiLength": 4180,
+      "url": "/flutter/components/picker?tab=api",
+      "ok": true
+    },
+    {
+      "href": "/flutter/components/radio?tab=api",
+      "index": 81,
+      "text": "Radio 单选框",
+      "apiLength": 3540,
+      "url": "/flutter/components/radio?tab=api",
+      "ok": true
+    },
+    {
+      "href": "/flutter/components/rate?tab=api",
+      "index": 83,
+      "text": "Rate 评分",
+      "apiLength": 1308,
+      "url": "/flutter/components/rate?tab=api",
+      "ok": true
+    },
+    {
+      "href": "/flutter/components/search?tab=api",
+      "index": 84,
+      "text": "Search 搜索框",
+      "apiLength": 2211,
+      "url": "/flutter/components/search?tab=api",
+      "ok": true
+    },
+    {
+      "href": "/flutter/components/slider?tab=api",
+      "index": 85,
+      "text": "Slider 滑动选择器",
+      "apiLength": 2672,
+      "url": "/flutter/components/slider?tab=api",
+      "ok": true
+    },
+    {
+      "href": "/flutter/components/stepper?tab=api",
+      "index": 86,
+      "text": "Stepper 步进器",
+      "apiLength": 2381,
+      "url": "/flutter/components/stepper?tab=api",
+      "ok": true
+    },
+    {
+      "href": "/flutter/components/switch?tab=api",
+      "index": 88,
+      "text": "Switch 开关",
+      "apiLength": 1747,
+      "url": "/flutter/components/switch?tab=api",
+      "ok": true
+    },
+    {
+      "href": "/flutter/components/textarea?tab=api",
+      "index": 90,
+      "text": "Textarea 多行文本框",
+      "apiLength": 1589,
+      "url": "/flutter/components/textarea?tab=api",
+      "ok": true
+    },
+    {
+      "href": "/flutter/components/tree-select?tab=api",
+      "index": 92,
+      "text": "TreeSelect 树形选择",
+      "apiLength": 1528,
+      "url": "/flutter/components/tree-select?tab=api",
+      "ok": true
+    },
+    {
+      "href": "/flutter/components/upload?tab=api",
+      "index": 93,
+      "text": "Upload 上传",
+      "apiLength": 4670,
+      "url": "/flutter/components/upload?tab=api",
+      "ok": true
+    },
+    {
+      "href": "/flutter/components/avatar?tab=api",
+      "index": 95,
+      "text": "Avatar 头像",
+      "apiLength": 2285,
+      "url": "/flutter/components/avatar?tab=api",
+      "ok": true
+    },
+    {
+      "href": "/flutter/components/badge?tab=api",
+      "index": 96,
+      "text": "Badge 徽标",
+      "apiLength": 4942,
+      "url": "/flutter/components/badge?tab=api",
+      "ok": true
+    },
+    {
+      "href": "/flutter/components/cell?tab=api",
+      "index": 97,
+      "text": "Cell 单元格",
+      "apiLength": 2952,
+      "url": "/flutter/components/cell?tab=api",
+      "ok": true
+    },
+    {
+      "href": "/flutter/components/collapse?tab=api",
+      "index": 98,
+      "text": "Collapse 折叠面板",
+      "apiLength": 3067,
+      "url": "/flutter/components/collapse?tab=api",
+      "ok": true
+    },
+    {
+      "href": "/flutter/components/empty?tab=api",
+      "index": 99,
+      "text": "Empty 空状态",
+      "apiLength": 505,
+      "url": "/flutter/components/empty?tab=api",
+      "ok": true
+    },
+    {
+      "href": "/flutter/components/footer?tab=api",
+      "index": 100,
+      "text": "Footer 页脚",
+      "apiLength": 449,
+      "url": "/flutter/components/footer?tab=api",
+      "ok": true
+    },
+    {
+      "href": "/flutter/components/image?tab=api",
+      "index": 101,
+      "text": "Image 图片",
+      "apiLength": 1816,
+      "url": "/flutter/components/image?tab=api",
+      "ok": true
+    },
+    {
+      "href": "/flutter/components/image-viewer?tab=api",
+      "index": 102,
+      "text": "ImageViewer 图片预览",
+      "apiLength": 1911,
+      "url": "/flutter/components/image-viewer?tab=api",
+      "ok": true
+    },
+    {
+      "href": "/flutter/components/progress?tab=api",
+      "index": 103,
+      "text": "Progress 进度条",
+      "apiLength": 6646,
+      "url": "/flutter/components/progress?tab=api",
+      "ok": true
+    },
+    {
+      "href": "/flutter/components/result?tab=api",
+      "index": 104,
+      "text": "Result 结果",
+      "apiLength": 842,
+      "url": "/flutter/components/result?tab=api",
+      "ok": true
+    },
+    {
+      "href": "/flutter/components/skeleton?tab=api",
+      "index": 105,
+      "text": "Skeleton 骨架屏",
+      "apiLength": 3438,
+      "url": "/flutter/components/skeleton?tab=api",
+      "ok": true
+    },
+    {
+      "href": "/flutter/components/swiper?tab=api",
+      "index": 106,
+      "text": "Swiper 轮播图",
+      "apiLength": 6180,
+      "url": "/flutter/components/swiper?tab=api",
+      "ok": true
+    },
+    {
+      "href": "/flutter/components/table?tab=api",
+      "index": 108,
+      "text": "Table 表格",
+      "apiLength": 4998,
+      "url": "/flutter/components/table?tab=api",
+      "ok": true
+    },
+    {
+      "href": "/flutter/components/tag?tab=api",
+      "index": 109,
+      "text": "Tag 标签",
+      "apiLength": 3323,
+      "url": "/flutter/components/tag?tab=api",
+      "ok": true
+    },
+    {
+      "href": "/flutter/components/time-counter?tab=api",
+      "index": 110,
+      "text": "TimeCounter 计时器",
+      "apiLength": 3049,
+      "url": "/flutter/components/time-counter?tab=api",
+      "ok": true
+    },
+    {
+      "href": "/flutter/components/action-sheet?tab=api",
+      "index": 111,
+      "text": "ActionSheet 动作面板",
+      "apiLength": 5340,
+      "url": "/flutter/components/action-sheet?tab=api",
+      "ok": true
+    },
+    {
+      "href": "/flutter/components/dialog?tab=api",
+      "index": 112,
+      "text": "Dialog 对话框",
+      "apiLength": 5331,
+      "url": "/flutter/components/dialog?tab=api",
+      "ok": true
+    },
+    {
+      "href": "/flutter/components/dropdown-menu?tab=api",
+      "index": 114,
+      "text": "DropdownMenu 下拉菜单",
+      "apiLength": 7234,
+      "url": "/flutter/components/dropdown-menu?tab=api",
+      "ok": true
+    },
+    {
+      "href": "/flutter/components/loading?tab=api",
+      "index": 115,
+      "text": "Loading 加载",
+      "apiLength": 1744,
+      "url": "/flutter/components/loading?tab=api",
+      "ok": true
+    },
+    {
+      "href": "/flutter/components/message?tab=api",
+      "index": 116,
+      "text": "Message 全局提示",
+      "apiLength": 3204,
+      "url": "/flutter/components/message?tab=api",
+      "ok": true
+    },
+    {
+      "href": "/flutter/components/notice-bar?tab=api",
+      "index": 117,
+      "text": "NoticeBar 消息提醒",
+      "apiLength": 2693,
+      "url": "/flutter/components/notice-bar?tab=api",
+      "ok": true
+    },
+    {
+      "href": "/flutter/components/popover?tab=api",
+      "index": 118,
+      "text": "Popover 弹出气泡",
+      "apiLength": 4507,
+      "url": "/flutter/components/popover?tab=api",
+      "ok": true
+    },
+    {
+      "href": "/flutter/components/popup?tab=api",
+      "index": 119,
+      "text": "Popup 弹出层",
+      "apiLength": 15904,
+      "url": "/flutter/components/popup?tab=api",
+      "ok": true
+    },
+    {
+      "href": "/flutter/components/pull-down-refresh?tab=api",
+      "index": 121,
+      "text": "PullDownRefresh 下拉刷新",
+      "apiLength": 3633,
+      "url": "/flutter/components/pull-down-refresh?tab=api",
+      "ok": true
+    },
+    {
+      "href": "/flutter/components/swipe-cell?tab=api",
+      "index": 122,
+      "text": "SwipeCell 滑动操作",
+      "apiLength": 2990,
+      "url": "/flutter/components/swipe-cell?tab=api",
+      "ok": true
+    },
+    {
+      "href": "/flutter/components/toast?tab=api",
+      "index": 123,
+      "text": "Toast 轻提示",
+      "apiLength": 7217,
+      "url": "/flutter/components/toast?tab=api",
+      "ok": true
+    },
+    {
+      "href": "/flutter/custom-theme",
+      "index": 127,
+      "text": "自定义主题",
+      "url": "/flutter/custom-theme",
+      "ok": true
+    },
+    {
+      "href": "/flutter/components/popup?tab=api",
+      "index": 167,
+      "text": "Popup API 与升级说明",
+      "apiLength": 15904,
+      "url": "/flutter/components/popup?tab=api",
+      "ok": true
+    }
+  ],
+  "earlierOfficialBrowserCheck": {
+    "checkedAt": "2026-10-26T11:24:04.269Z",
+    "results": [
+      {
+        "href": "/flutter/components/button?tab=api",
+        "index": 76,
+        "text": "Button 按钮",
+        "apiLength": 3216,
+        "apiVisible": true,
+        "title": "TButton\nTButtonColorPreset\nTButtonSize\nTButtonVariant\nTButtonIconPosition\nTButtonShape\nTButtonThemeData\nTButton \n构造方法 \nTButton\n名称\t类型\t默认值\t说明\t必传\nchild\tWidget?\t-\t内",
+        "url": "/flutter/components/button?tab=api",
+        "ok": true
+      },
+      {
+        "href": "/flutter/components/fab?tab=api",
+        "index": 79,
+        "text": "Fab 悬浮按钮",
+        "apiLength": 2380,
+        "apiVisible": true,
+        "title": "",
+        "url": "/flutter/components/fab?tab=api",
+        "ok": true
+      },
+      {
+        "href": "/flutter/components/link?tab=api",
+        "index": 81,
+        "text": "Link 链接",
+        "apiLength": 1246,
+        "apiVisible": true,
+        "title": "",
+        "url": "/flutter/components/link?tab=api",
+        "ok": true
+      },
+      {
+        "href": "/flutter/components/text?tab=api",
+        "index": 82,
+        "text": "Text 文本",
+        "apiLength": 4128,
+        "apiVisible": true,
+        "title": "",
+        "url": "/flutter/components/text?tab=api",
+        "ok": true
+      },
+      {
+        "href": "/flutter/changelog",
+        "index": 48,
+        "text": "更新日志",
+        "docLength": 40834,
+        "title": "更新日志",
+        "url": "/flutter/changelog",
+        "ok": true
+      },
+      {
+        "href": "/flutter/getting-started",
+        "index": 51,
+        "text": "快速开始",
+        "docLength": 741,
+        "title": "快速开始",
+        "url": "/flutter/getting-started",
+        "ok": true
+      },
+      {
+        "href": "/flutter/components/theme?tab=api",
+        "index": 74,
+        "text": "Theme 主题",
+        "apiLength": 28954,
+        "title": "Theme 主题",
+        "url": "/flutter/components/theme?tab=api",
+        "ok": true
+      },
+      {
+        "href": "/flutter/components/divider?tab=api",
+        "index": 78,
+        "text": "Divider 分割线",
+        "apiLength": 1392,
+        "title": "Divider 分割线",
+        "url": "/flutter/components/divider?tab=api",
+        "ok": true
+      },
+      {
+        "href": "/flutter/components/icon?tab=api",
+        "index": 80,
+        "text": "Icon 图标",
+        "apiLength": 818,
+        "title": "Icon 图标",
+        "url": "/flutter/components/icon?tab=api",
+        "ok": true
+      },
+      {
+        "href": "/flutter/components/back-top?tab=api",
+        "index": 84,
+        "text": "BackTop 返回顶部",
+        "apiLength": 1865,
+        "title": "BackTop 返回顶部",
+        "url": "/flutter/components/back-top?tab=api",
+        "ok": true
+      },
+      {
+        "href": "/flutter/components/drawer?tab=api",
+        "index": 85,
+        "text": "Drawer 抽屉",
+        "apiLength": 2974,
+        "title": "Drawer 抽屉",
+        "url": "/flutter/components/drawer?tab=api",
+        "ok": true
+      },
+      {
+        "href": "/flutter/components/indexes?tab=api",
+        "index": 86,
+        "text": "Indexes 索引",
+        "apiLength": 7419,
+        "title": "Indexes 索引",
+        "url": "/flutter/components/indexes?tab=api",
+        "ok": true
+      },
+      {
+        "href": "/flutter/components/navbar?tab=api",
+        "index": 87,
+        "text": "Navbar 导航栏",
+        "apiLength": 2198,
+        "title": "NavBar 导航栏",
+        "url": "/flutter/components/navbar?tab=api",
+        "ok": true
+      },
+      {
+        "href": "/flutter/components/side-bar?tab=api",
+        "index": 88,
+        "text": "SideBar 侧边栏",
+        "apiLength": 1599,
+        "title": "SideBar 侧边栏",
+        "url": "/flutter/components/side-bar?tab=api",
+        "ok": true
+      },
+      {
+        "href": "/flutter/components/steps?tab=api",
+        "index": 89,
+        "text": "Steps 步骤条",
+        "apiLength": 2230,
+        "title": "Steps 步骤条",
+        "url": "/flutter/components/steps?tab=api",
+        "ok": true
+      },
+      {
+        "href": "/flutter/components/tab-bar?tab=api",
+        "index": 90,
+        "text": "TabBar 标签栏",
+        "apiLength": 4406,
+        "title": "TabBar 标签栏",
+        "url": "/flutter/components/tab-bar?tab=api",
+        "ok": true
+      },
+      {
+        "href": "/flutter/components/tabs?tab=api",
+        "index": 92,
+        "text": "Tabs 选项卡",
+        "apiLength": 2607,
+        "title": "Tabs 选项卡",
+        "url": "/flutter/components/tabs?tab=api",
+        "ok": true
+      },
+      {
+        "href": "/flutter/components/calendar?tab=api",
+        "index": 94,
+        "text": "Calendar 日历",
+        "apiLength": 5106,
+        "title": "Calendar 日历",
+        "url": "/flutter/components/calendar?tab=api",
+        "ok": true
+      },
+      {
+        "href": "/flutter/components/cascader?tab=api",
+        "index": 96,
+        "text": "Cascader 级联选择器",
+        "apiLength": 1543,
+        "title": "Cascader 级联选择器",
+        "url": "/flutter/components/cascader?tab=api",
+        "ok": true
+      },
+      {
+        "href": "/flutter/components/checkbox?tab=api",
+        "index": 97,
+        "text": "CheckBox 多选框",
+        "apiLength": 3505,
+        "title": "Checkbox 多选框",
+        "url": "/flutter/components/checkbox?tab=api",
+        "ok": true
+      },
+      {
+        "href": "/flutter/components/date-time-picker?tab=api",
+        "index": 99,
+        "text": "DateTimePicker 时间选择器",
+        "apiLength": 4121,
+        "title": "DateTimePicker 时间选择器",
+        "url": "/flutter/components/date-time-picker?tab=api",
+        "ok": true
+      },
+      {
+        "href": "/flutter/components/form?tab=api",
+        "index": 101,
+        "text": "Form 表单",
+        "apiLength": 5892,
+        "title": "Form 表单",
+        "url": "/flutter/components/form?tab=api",
+        "ok": true
+      },
+      {
+        "href": "/flutter/components/input?tab=api",
+        "index": 103,
+        "text": "Input 输入框",
+        "apiLength": 3530,
+        "title": "Input 输入框",
+        "url": "/flutter/components/input?tab=api",
+        "ok": true
+      },
+      {
+        "href": "/flutter/components/picker?tab=api",
+        "index": 105,
+        "text": "Picker 选择器",
+        "apiLength": 3863,
+        "title": "Picker 选择器",
+        "url": "/flutter/components/picker?tab=api",
+        "ok": true
+      },
+      {
+        "href": "/flutter/components/radio?tab=api",
+        "index": 107,
+        "text": "Radio 单选框",
+        "apiLength": 3540,
+        "title": "Radio 单选框",
+        "url": "/flutter/components/radio?tab=api",
+        "ok": true
+      },
+      {
+        "href": "/flutter/components/rate?tab=api",
+        "index": 109,
+        "text": "Rate 评分",
+        "apiLength": 1308,
+        "title": "Rate 评分",
+        "url": "/flutter/components/rate?tab=api",
+        "ok": true
+      },
+      {
+        "href": "/flutter/components/search?tab=api",
+        "index": 110,
+        "text": "Search 搜索框",
+        "apiLength": 2211,
+        "title": "Search 搜索框",
+        "url": "/flutter/components/search?tab=api",
+        "ok": true
+      },
+      {
+        "href": "/flutter/components/slider?tab=api",
+        "index": 111,
+        "text": "Slider 滑动选择器",
+        "apiLength": 2672,
+        "title": "Slider 滑动选择器",
+        "url": "/flutter/components/slider?tab=api",
+        "ok": true
+      },
+      {
+        "href": "/flutter/components/stepper?tab=api",
+        "index": 112,
+        "text": "Stepper 步进器",
+        "apiLength": 2381,
+        "title": "Stepper 步进器",
+        "url": "/flutter/components/stepper?tab=api",
+        "ok": true
+      },
+      {
+        "href": "/flutter/components/switch?tab=api",
+        "index": 114,
+        "text": "Switch 开关",
+        "apiLength": 1747,
+        "title": "Switch 开关",
+        "url": "/flutter/components/switch?tab=api",
+        "ok": true
+      },
+      {
+        "href": "/flutter/components/tree-select?tab=api",
+        "index": 118,
+        "text": "TreeSelect 树形选择",
+        "apiLength": 1528,
+        "title": "TreeSelect 树形选择器",
+        "url": "/flutter/components/tree-select?tab=api",
+        "ok": true
+      },
+      {
+        "href": "/flutter/components/upload?tab=api",
+        "index": 119,
+        "text": "Upload 上传",
+        "apiLength": 4670,
+        "title": "Upload 上传",
+        "url": "/flutter/components/upload?tab=api",
+        "ok": true
+      },
+      {
+        "href": "/flutter/components/avatar?tab=api",
+        "index": 121,
+        "text": "Avatar 头像",
+        "apiLength": 2285,
+        "title": "Avatar 头像",
+        "url": "/flutter/components/avatar?tab=api",
+        "ok": true
+      },
+      {
+        "href": "/flutter/components/badge?tab=api",
+        "index": 122,
+        "text": "Badge 徽标",
+        "apiLength": 4942,
+        "title": "Badge 徽标",
+        "url": "/flutter/components/badge?tab=api",
+        "ok": true
+      },
+      {
+        "href": "/flutter/components/cell?tab=api",
+        "index": 123,
+        "text": "Cell 单元格",
+        "apiLength": 2868,
+        "title": "Cell 单元格",
+        "url": "/flutter/components/cell?tab=api",
+        "ok": true
+      },
+      {
+        "href": "/flutter/components/collapse?tab=api",
+        "index": 124,
+        "text": "Collapse 折叠面板",
+        "apiLength": 3067,
+        "title": "Collapse 折叠面板",
+        "url": "/flutter/components/collapse?tab=api",
+        "ok": true
+      },
+      {
+        "href": "/flutter/components/empty?tab=api",
+        "index": 125,
+        "text": "Empty 空状态",
+        "apiLength": 505,
+        "title": "Empty 空状态",
+        "url": "/flutter/components/empty?tab=api",
+        "ok": true
+      },
+      {
+        "href": "/flutter/components/footer?tab=api",
+        "index": 126,
+        "text": "Footer 页脚",
+        "apiLength": 449,
+        "title": "Footer 页脚",
+        "url": "/flutter/components/footer?tab=api",
+        "ok": true
+      },
+      {
+        "href": "/flutter/components/textarea?tab=api",
+        "index": 116,
+        "text": "Textarea 多行文本框",
+        "apiLength": 1589,
+        "title": "Textarea 多行文本框",
+        "url": "/flutter/components/textarea?tab=api",
+        "ok": true
+      },
+      {
+        "href": "/flutter/components/image?tab=api",
+        "index": 127,
+        "text": "Image 图片",
+        "apiLength": 1816,
+        "title": "Image 图片",
+        "url": "/flutter/components/image?tab=api",
+        "ok": true
+      },
+      {
+        "href": "/flutter/components/image-viewer?tab=api",
+        "index": 128,
+        "text": "ImageViewer 图片预览",
+        "apiLength": 1911,
+        "title": "ImageViewer 图片预览",
+        "url": "/flutter/components/image-viewer?tab=api",
+        "ok": true
+      },
+      {
+        "href": "/flutter/components/progress?tab=api",
+        "index": 129,
+        "text": "Progress 进度条",
+        "apiLength": 6646,
+        "title": "Progress 进度条",
+        "url": "/flutter/components/progress?tab=api",
+        "ok": true
+      },
+      {
+        "href": "/flutter/components/result?tab=api",
+        "index": 130,
+        "text": "Result 结果",
+        "apiLength": 842,
+        "title": "Result 结果",
+        "url": "/flutter/components/result?tab=api",
+        "ok": true
+      },
+      {
+        "href": "/flutter/components/skeleton?tab=api",
+        "index": 131,
+        "text": "Skeleton 骨架屏",
+        "ok": false,
+        "error": "Error: Error: Playwright selector deadline exceeded\nlocator.waitFor(visible) timed out for selector [name=\"API\"]\nLocator diagnostics: {\"kind\":\"no_matches\",\"acti"
+      },
+      {
+        "href": "/flutter/components/swiper?tab=api",
+        "index": 132,
+        "text": "Swiper 轮播图",
+        "apiLength": 6109,
+        "title": "Swiper 轮播图",
+        "url": "/flutter/components/swiper?tab=api",
+        "ok": true
+      },
+      {
+        "href": "/flutter/components/table?tab=api",
+        "index": 134,
+        "text": "Table 表格",
+        "apiLength": 4998,
+        "title": "Table 表格",
+        "url": "/flutter/components/table?tab=api",
+        "ok": true
+      },
+      {
+        "href": "/flutter/components/tag?tab=api",
+        "index": 135,
+        "text": "Tag 标签",
+        "apiLength": 3323,
+        "title": "Tag 标签",
+        "url": "/flutter/components/tag?tab=api",
+        "ok": true
+      },
+      {
+        "href": "/flutter/components/time-counter?tab=api",
+        "index": 136,
+        "text": "TimeCounter 计时器",
+        "apiLength": 3074,
+        "title": "TimeCounter 计时器",
+        "url": "/flutter/components/time-counter?tab=api",
+        "ok": true
+      },
+      {
+        "href": "/flutter/components/action-sheet?tab=api",
+        "index": 137,
+        "text": "ActionSheet 动作面板",
+        "apiLength": 5084,
+        "title": "ActionSheet 动作面板",
+        "url": "/flutter/components/action-sheet?tab=api",
+        "ok": true
+      },
+      {
+        "href": "/flutter/components/dialog?tab=api",
+        "index": 138,
+        "text": "Dialog 对话框",
+        "apiLength": 5307,
+        "title": "Dialog 对话框",
+        "url": "/flutter/components/dialog?tab=api",
+        "ok": true
+      },
+      {
+        "href": "/flutter/components/dropdown-menu?tab=api",
+        "index": 140,
+        "text": "DropdownMenu 下拉菜单",
+        "apiLength": 7084,
+        "title": "DropdownMenu 下拉筛选菜单",
+        "url": "/flutter/components/dropdown-menu?tab=api",
+        "ok": true
+      },
+      {
+        "href": "/flutter/components/loading?tab=api",
+        "index": 141,
+        "text": "Loading 加载",
+        "apiLength": 1689,
+        "title": "Loading 加载",
+        "url": "/flutter/components/loading?tab=api",
+        "ok": true
+      },
+      {
+        "href": "/flutter/components/message?tab=api",
+        "index": 142,
+        "text": "Message 全局提示",
+        "apiLength": 3204,
+        "title": "Message 消息通知",
+        "url": "/flutter/components/message?tab=api",
+        "ok": true
+      },
+      {
+        "href": "/flutter/components/notice-bar?tab=api",
+        "index": 143,
+        "text": "NoticeBar 消息提醒",
+        "apiLength": 2572,
+        "title": "NoticeBar 公告栏",
+        "url": "/flutter/components/notice-bar?tab=api",
+        "ok": true
+      },
+      {
+        "href": "/flutter/components/popover?tab=api",
+        "index": 144,
+        "text": "Popover 弹出气泡",
+        "apiLength": 4438,
+        "title": "Popover 弹出气泡",
+        "url": "/flutter/components/popover?tab=api",
+        "ok": true
+      },
+      {
+        "href": "/flutter/components/popup?tab=api",
+        "index": 200,
+        "text": "Popup API 与升级说明",
+        "apiLength": 14256,
+        "title": "Popup 弹出层",
+        "url": "/flutter/components/popup?tab=api",
+        "ok": true
+      },
+      {
+        "href": "/flutter/components/pull-down-refresh?tab=api",
+        "index": 147,
+        "text": "PullDownRefresh 下拉刷新",
+        "apiLength": 3499,
+        "title": "PullDownRefresh 下拉刷新",
+        "url": "/flutter/components/pull-down-refresh?tab=api",
+        "ok": true
+      },
+      {
+        "href": "/flutter/components/swipe-cell?tab=api",
+        "index": 148,
+        "text": "SwipeCell 滑动操作",
+        "apiLength": 2914,
+        "title": "SwipeCell 滑动操作",
+        "url": "/flutter/components/swipe-cell?tab=api",
+        "ok": true
+      },
+      {
+        "href": "/flutter/components/toast?tab=api",
+        "index": 149,
+        "text": "Toast 轻提示",
+        "apiLength": 7064,
+        "title": "Toast 轻提示",
+        "url": "/flutter/components/toast?tab=api",
+        "ok": true
+      },
+      {
+        "href": "/flutter/custom-theme",
+        "index": 154,
+        "text": "自定义主题",
+        "ok": false,
+        "error": "Error: Error: Playwright selector deadline exceeded\nlocator.waitFor(visible) timed out for selector [name=\"DOC\"]\nLocator diagnostics: {\"kind\":\"no_matches\",\"acti"
+      }
+    ],
+    "scope": "Earlier check of unchanged official URLs; not rerun after text simplification"
+  }
+}

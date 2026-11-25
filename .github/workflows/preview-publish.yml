@@ -22,23 +22,30 @@ jobs:
     steps:
       - name: Resolve source PR
         id: pr
-        # 固定 github-script v9.0.0：根据 Build run 的提交校验真实来源 PR，避免信任 Artifact 中的 PR 编号。
+        # 按来源分支查询 PR，并校验来源仓库和提交，避免信任 Artifact 中的 PR 编号。
         uses: actions/github-script@3a2844b7e9c422d3c10d287c895573f7108da1b3 # v9.0.0
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           result-encoding: string
           script: |
             const run = context.payload.workflow_run;
-            const { data: pulls } = await github.rest.repos.listPullRequestsAssociatedWithCommit({
+            const source = run.head_repository?.full_name;
+            if (!source || !run.head_branch || !run.head_sha) {
+              throw new Error('Source repository, branch, or SHA is missing');
+            }
+            const pulls = await github.paginate(github.rest.pulls.list, {
               owner: context.repo.owner,
               repo: context.repo.repo,
-              commit_sha: run.head_sha,
+              state: 'open',
+              head: `${source.split('/')[0]}:${run.head_branch}`,
+              per_page: 100,
             });
             const matches = pulls.filter((pull) =>
               pull.base.repo.full_name === `${context.repo.owner}/${context.repo.repo}` &&
               ['develop', 'main'].includes(pull.base.ref) &&
               pull.head.sha === run.head_sha &&
-              pull.head.repo?.full_name === run.head_repository.full_name
+              pull.head.repo?.full_name === source &&
+              pull.head.ref === run.head_branch
             );
             if (matches.length !== 1) {
               core.setFailed(`Expected one source PR for ${run.head_sha}, found ${matches.length}`);
@@ -203,7 +210,7 @@ jobs:
           body-include: "<!-- AUTO_PREVIEW_HOOK -->"
 
       - name: Report publish failure
-        if: failure() && steps.pr.outputs.result != ''
+        if: failure() && steps.pr.outcome == 'success'
         uses: TDesignOteam/workflows/actions/maintain-one-comment@4e2d1063b106761c54bf9bf58a7502f9017c4b4b
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
@@ -221,23 +228,30 @@ jobs:
     steps:
       - name: Resolve source PR
         id: pr
-        # 固定 github-script v9.0.0：Build 失败时仍按提交定位来源 PR，以便写入失败评论。
+        # 按来源分支查询 PR，并校验来源仓库和提交，以便写入失败评论。
         uses: actions/github-script@3a2844b7e9c422d3c10d287c895573f7108da1b3 # v9.0.0
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           result-encoding: string
           script: |
             const run = context.payload.workflow_run;
-            const { data: pulls } = await github.rest.repos.listPullRequestsAssociatedWithCommit({
+            const source = run.head_repository?.full_name;
+            if (!source || !run.head_branch || !run.head_sha) {
+              throw new Error('Source repository, branch, or SHA is missing');
+            }
+            const pulls = await github.paginate(github.rest.pulls.list, {
               owner: context.repo.owner,
               repo: context.repo.repo,
-              commit_sha: run.head_sha,
+              state: 'open',
+              head: `${source.split('/')[0]}:${run.head_branch}`,
+              per_page: 100,
             });
             const matches = pulls.filter((pull) =>
               pull.base.repo.full_name === `${context.repo.owner}/${context.repo.repo}` &&
               ['develop', 'main'].includes(pull.base.ref) &&
               pull.head.sha === run.head_sha &&
-              pull.head.repo?.full_name === run.head_repository.full_name
+              pull.head.repo?.full_name === source &&
+              pull.head.ref === run.head_branch
             );
             if (matches.length !== 1) {
               core.setFailed(`Expected one source PR for ${run.head_sha}, found ${matches.length}`);

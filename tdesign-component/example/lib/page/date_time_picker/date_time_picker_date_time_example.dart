@@ -85,6 +85,7 @@ class _DateTimePickerDateTimeExampleState
     void showPicker() {
       var draft = value;
       TPickerPopup.show(
+        useSafeArea: true,
         context,
         headerBuilder: (_, close) => TPopupHeader(
           cancelButton: TToolbarPressable(

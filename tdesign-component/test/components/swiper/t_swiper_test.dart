@@ -5,6 +5,52 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:tdesign_flutter/tdesign_flutter.dart';
 
 void main() {
+  testWidgets(
+    'Swiper rejects repeated invalid replacement and retains actual binding',
+    (tester) async {
+      final first = TSwiperController();
+      final second = TSwiperController();
+      TSwiper swiper(String id, TSwiperController controller) => TSwiper(
+        key: ValueKey(id),
+        controller: controller,
+        loop: false,
+        children: const [Text('page 0'), Text('page 1')],
+      );
+      await tester.pumpWidget(
+        MaterialApp(
+          home: Scaffold(
+            body: Column(
+              children: [
+                SizedBox(height: 100, child: swiper('first', first)),
+                SizedBox(height: 100, child: swiper('second', second)),
+              ],
+            ),
+          ),
+        ),
+      );
+      final element = tester.element(find.byKey(const ValueKey('second')));
+      expect(() => element.update(swiper('second', first)), throwsStateError);
+      expect(
+        () => element.owner!.buildScope(
+          tester.binding.rootElement!,
+          () => element.update(swiper('second', first)),
+        ),
+        throwsStateError,
+      );
+      expect(
+        tester.widget<TSwiper>(find.byKey(const ValueKey('second'))).controller,
+        same(first),
+      );
+      second.jumpTo(1);
+      await tester.pumpAndSettle();
+      expect(second.index, 1);
+      expect(first.index, 0);
+      await tester.pumpWidget(const SizedBox());
+      first.dispose();
+      second.dispose();
+    },
+  );
+
   Widget app(
     Widget child, {
     TSwiperThemeData? swiperTheme,

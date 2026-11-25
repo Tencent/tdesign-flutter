@@ -13,7 +13,7 @@ BackTop默认图标20→22、Dropdown24→20、Refresh24→25；22/25没有对�
 | 严格分析--fatal-infos | 无问题 | 无问题 |
 | 14组生产行覆盖率门禁 | 全部≥95% | 全部≥95% |
 
-每SDK运行57页×light/dark共114组，五类独立及组合切换；fixture中404个适用类别正向契约，不能将契约数当作独立属性数量。报告见fixed-results-<SDK>.json。Badge观察器原先只看TBadgeLabel，现纳入Material Badge实际dot分支并排除anchor child，防止内嵌按钮造成尺寸误报。
+每SDK运行57页×light/dark共114组，五类独立及组合切换；fixture中404个适用类别正向契约，不能将契约数当作独立属性数量。报告见[fixed-component-token-results.json](fixed-component-token-results.json)。Badge观察器原先只看TBadgeLabel，现纳入Material Badge实际dot分支并排除anchor child，防止内嵌按钮造成尺寸误报。
 
 Button尺寸断言在新旧SDK均等待300ms使图标主题过渡完成，不把动画首帧当作最终值。
 

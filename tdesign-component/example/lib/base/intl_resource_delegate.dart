@@ -2,13 +2,15 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 
 import '../l10n/app_localizations.dart';
 
+// documentation:intl-delegate:start
 /// 国际化资源代理
 class IntlResourceDelegate extends TResourceDelegate {
   IntlResourceDelegate(this.context);
 
   BuildContext context;
 
-  /// 国际化需要每次更新context
+  /// 复用同一个代理时，更新为当前 Localizations 子树的 context。
+  /// 使用 needAlwaysBuild: true 并每次新建代理时，无需调用此方法。
   updateContext(BuildContext context) {
     this.context = context;
   }
@@ -21,6 +23,24 @@ class IntlResourceDelegate extends TResourceDelegate {
 
   @override
   String get confirm => AppLocalizations.of(context)!.confirm;
+
+  @override
+  String get uploading => AppLocalizations.of(context)!.uploading;
+
+  @override
+  String get uploadSelect => AppLocalizations.of(context)!.uploadSelect;
+
+  @override
+  String get uploadPending => AppLocalizations.of(context)!.uploadPending;
+
+  @override
+  String get uploadFailed => AppLocalizations.of(context)!.uploadFailed;
+
+  @override
+  String get uploadRetry => AppLocalizations.of(context)!.uploadRetry;
+
+  @override
+  String get uploadSuccess => AppLocalizations.of(context)!.uploadSuccess;
 
   @override
   String get close => AppLocalizations.of(context)!.switchClose;
@@ -155,7 +175,7 @@ class IntlResourceDelegate extends TResourceDelegate {
   String get notRated => AppLocalizations.of(context)!.notRated;
 
   @override
-  String get cascadeLabel =>  AppLocalizations.of(context)!.cascadeLabel;
+  String get cascadeLabel => AppLocalizations.of(context)!.cascadeLabel;
 
   @override
   String get back => AppLocalizations.of(context)!.back;
@@ -173,3 +193,5 @@ class IntlResourceDelegate extends TResourceDelegate {
   String pickerColumn(int colIndex) =>
       AppLocalizations.of(context)!.pickerColumn(colIndex);
 }
+
+// documentation:intl-delegate:end

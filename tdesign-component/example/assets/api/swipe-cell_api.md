@@ -10,7 +10,7 @@
 | --- | --- | --- | --- | --- |
 | child | Widget | - | 要增强为可滑动单元格的内容。 | 是 |
 | closeOnScroll | bool | true | 祖先滚动容器开始滚动时是否关闭面板，默认为 true。 | 否 |
-| controller | TSwipeCellController? | - | 命令式控制器。 | 否 |
+| controller | TSwipeCellController? | - | 命令式控制器。 建议独立单元格分别使用 Controller；绑定规则见 `TSwipeCellController`。 | 否 |
 | enabled | bool | true | 是否允许用户拖动，默认为 true。 仅控制用户拖动，不阻止控制器命令。 | 否 |
 | end | TSwipeCellPanel? | - | 结束侧操作面板。 | 否 |
 | initialOpenSide | TSwipeCellSide? | - | 首次布局后默认展开的面板；为空时保持关闭。 | 否 |
@@ -23,7 +23,8 @@
 
 `TSwipeCell` 的命令式控制器。
 
-一个控制器同一时间只能绑定一个 `TSwipeCell`。通常无需使用控制器，用户拖动、
+一个控制器同一时间只能绑定一个 `TSwipeCell`，重复绑定其他实例会抛出
+`FlutterError`。通常无需使用控制器，用户拖动、
 点击操作项、点击单元格外部或滚动列表时，组件会自行管理展开状态。
 
 #### 构造方法

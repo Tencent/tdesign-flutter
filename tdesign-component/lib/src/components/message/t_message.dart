@@ -24,13 +24,13 @@ class TMessageMarquee {
     this.delay = Duration.zero,
   });
 
-  /// 单次滚动时长
+  /// 单向滚动时长；非循环滚动返回起点时使用相同时长。
   final Duration duration;
 
   /// 是否循环滚动
   final bool repeat;
 
-  /// 开始滚动前的延迟
+  /// 开始滚动前的延迟；重新满足滚动条件时再次等待。
   final Duration delay;
 }
 
@@ -103,7 +103,7 @@ class TMessage extends StatefulWidget {
   /// 自定义关闭按钮
   final Widget? closeButton;
 
-  /// 跑马灯配置
+  /// 跑马灯配置；文字未溢出时保持静止，系统禁用动画时溢出文字以省略号展示。
   final TMessageMarquee? marquee;
 
   /// 期望的屏幕绝对坐标。
@@ -193,8 +193,11 @@ class TMessage extends StatefulWidget {
         slot?.handle = null;
         _defaultSlots[overlay] = null;
       }
-      if (cause != _TMessageDismissCause.unmounted) {
-        entry.remove();
+      entry.remove();
+      if (cause == _TMessageDismissCause.unmounted) {
+        scheduleMicrotask(entry.dispose);
+      } else {
+        entry.dispose();
       }
       onDismissed?.call();
     }
@@ -234,6 +237,11 @@ class TMessage extends StatefulWidget {
     }
     entry.addListener(entryListener);
     overlay.insert(entry);
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (!overlay.mounted) {
+        dismissEntry(_TMessageDismissCause.unmounted);
+      }
+    });
     previousHandle?._dismiss?.call(_TMessageDismissCause.replaced);
     return handle;
   }
@@ -251,6 +259,9 @@ class _TMessageState extends State<TMessage>
   bool _isAnimationRunning = false;
   bool _closing = false;
   bool _didAnimateIn = false;
+  bool _textOverflows = false;
+  bool? _marqueeEligible;
+  int _marqueeRevision = 0;
   double _top = 0;
   Timer? _durationTimer;
   Timer? _closeTimer;
@@ -324,7 +335,6 @@ class _TMessageState extends State<TMessage>
       }
     });
     _scheduleDurationClose();
-    _scheduleMarqueeStart();
   }
 
   @override
@@ -345,10 +355,13 @@ class _TMessageState extends State<TMessage>
     if (oldWidget.duration != widget.duration) {
       _scheduleDurationClose();
     }
-    if (oldWidget.marquee != widget.marquee) {
+    if (oldWidget.marquee != widget.marquee ||
+        oldWidget.content != widget.content) {
+      _marqueeRevision++;
+      _marqueeEligible = null;
+      _marqueeDelayTimer?.cancel();
       _animationController.reset();
       _isAnimationRunning = false;
-      _scheduleMarqueeStart();
     }
     if (oldWidget.offset != widget.offset ||
         oldWidget.useSafeArea != widget.useSafeArea) {
@@ -408,8 +421,27 @@ class _TMessageState extends State<TMessage>
     if (marquee.delay > Duration.zero) {
       _marqueeDelayTimer = Timer(marquee.delay, _startAnimation);
     } else {
-      WidgetsBinding.instance.addPostFrameCallback((_) => _startAnimation());
+      _startAnimation();
     }
+  }
+
+  void _syncMarqueeEligibility(bool eligible) {
+    if (_marqueeEligible == eligible) {
+      return;
+    }
+    _marqueeEligible = eligible;
+    final revision = ++_marqueeRevision;
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (!mounted || _closing || revision != _marqueeRevision) {
+        return;
+      }
+      _marqueeDelayTimer?.cancel();
+      _animationController.reset();
+      _isAnimationRunning = false;
+      if (eligible) {
+        _scheduleMarqueeStart();
+      }
+    });
   }
 
   void _startAnimation() {
@@ -421,11 +453,20 @@ class _TMessageState extends State<TMessage>
         _closing) {
       return;
     }
+    // 文本未溢出时不滚动；系统禁用动画时跳过平移。
+    if (!_textOverflows || MediaQuery.disableAnimationsOf(context)) {
+      return;
+    }
     setState(() => _isAnimationRunning = true);
     if (marquee.repeat) {
       _animationController.repeat();
     } else {
-      _animationController.forward();
+      // 非循环：正向滚动到文本末尾后反向回到原位，避免停在空白区。
+      _animationController.forward().whenComplete(() {
+        if (mounted && !_closing) {
+          _animationController.reverse();
+        }
+      });
     }
   }
 
@@ -486,50 +527,74 @@ class _TMessageState extends State<TMessage>
       );
     }
 
-    // 测量与绘制共享最终 TD 文本配置，保留系统文字缩放和语言方向。
-    final text = TTextStyled(
-      widget.content,
-      style: style,
-      maxLines: 1,
-    ).getRawText(context: context);
-    final defaultTextStyle = DefaultTextStyle.of(context);
-    final effectiveStyle = MediaQuery.boldTextOf(context)
-        ? text.style!.merge(const TextStyle(fontWeight: FontWeight.bold))
-        : text.style;
-    final textPainter = TextPainter(
-      text: TextSpan(text: text.data, style: effectiveStyle),
-      textAlign:
-          text.textAlign ?? defaultTextStyle.textAlign ?? TextAlign.start,
-      maxLines: text.maxLines,
-      textDirection: text.textDirection ?? Directionality.of(context),
-      textScaler: text.textScaler ?? MediaQuery.textScalerOf(context),
-      locale: text.locale ?? Localizations.maybeLocaleOf(context),
-      strutStyle: text.strutStyle,
-      textWidthBasis: text.textWidthBasis ?? defaultTextStyle.textWidthBasis,
-      textHeightBehavior:
-          text.textHeightBehavior ??
-          defaultTextStyle.textHeightBehavior ??
-          DefaultTextHeightBehavior.maybeOf(context),
-    )..layout();
-    final tween = Tween<Offset>(
-      begin: Offset.zero,
-      end: Offset(-textPainter.width, 0),
-    );
-    textPainter.dispose();
-    return ClipRect(
-      child: AnimatedBuilder(
-        animation: _animationController,
-        builder: (context, child) => Transform.translate(
-          offset: tween.evaluate(_animationController),
-          child: OverflowBox(
-            minWidth: 0,
-            maxWidth: double.infinity,
-            alignment: Alignment.centerLeft,
-            child: child,
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        // 测量与绘制共享最终 TD 文本配置，保留系统文字缩放和语言方向。
+        final text = TTextStyled(
+          widget.content,
+          style: style,
+          maxLines: 1,
+        ).getRawText(context: context);
+        final defaultTextStyle = DefaultTextStyle.of(context);
+        final effectiveStyle = MediaQuery.boldTextOf(context)
+            ? text.style!.merge(const TextStyle(fontWeight: FontWeight.bold))
+            : text.style;
+        final textPainter = TextPainter(
+          text: TextSpan(text: text.data, style: effectiveStyle),
+          textAlign:
+              text.textAlign ?? defaultTextStyle.textAlign ?? TextAlign.start,
+          maxLines: text.maxLines,
+          textDirection: text.textDirection ?? Directionality.of(context),
+          textScaler: text.textScaler ?? MediaQuery.textScalerOf(context),
+          locale: text.locale ?? Localizations.maybeLocaleOf(context),
+          strutStyle: text.strutStyle,
+          textWidthBasis:
+              text.textWidthBasis ?? defaultTextStyle.textWidthBasis,
+          textHeightBehavior:
+              text.textHeightBehavior ??
+              defaultTextStyle.textHeightBehavior ??
+              DefaultTextHeightBehavior.maybeOf(context),
+        )..layout();
+        _textOverflows = textPainter.width > constraints.maxWidth;
+        final disabled = MediaQuery.disableAnimationsOf(context);
+        _syncMarqueeEligibility(_textOverflows && !disabled);
+        final tween = Tween<Offset>(
+          begin: Offset.zero,
+          end: Offset(
+            -math.max(0.0, textPainter.width - constraints.maxWidth),
+            0,
           ),
-        ),
-        child: text,
-      ),
+        );
+        textPainter.dispose();
+
+        // 文本未溢出或系统禁用动画时，不做 marquee，直接静态展示。
+        if (!_textOverflows || disabled) {
+          return Align(
+            alignment: Alignment.centerLeft,
+            child: TTextStyled(
+              widget.content,
+              style: style,
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+            ),
+          );
+        }
+        return ClipRect(
+          child: AnimatedBuilder(
+            animation: _animationController,
+            builder: (context, child) => Transform.translate(
+              offset: tween.evaluate(_animationController),
+              child: OverflowBox(
+                minWidth: 0,
+                maxWidth: double.infinity,
+                alignment: Alignment.centerLeft,
+                child: child,
+              ),
+            ),
+            child: text,
+          ),
+        );
+      },
     );
   }
 

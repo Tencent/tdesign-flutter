@@ -1,0 +1,30 @@
+{
+  "candidate": "33eba3b67803f52d2e5f2f35a4ee02b2e5d386ef",
+  "base": "071efaba0111d868efe0b6a7ce55f6f784069a62",
+  "file_sha256": {
+    "tdesign-component/lib/src/components/cell/t_cell_group.dart": "91f877ebafd16bb6c4e95ad4f32f66d0ea2cc8487b6c36ad9cb9c86dcff5462e",
+    "tdesign-component/test/components/cell/t_cell_test.dart": "ee1d74c2989cdf79856fef1619636f999ebc516fe2d7b941c182d4c7a975de7a"
+  },
+  "diff_from_develop_sha256": "9642077119152960c86149eab8d73fdf4c5545ff5fd23e70a76841f0c3636dff",
+  "log_sha256": {
+    "after-3.32.0.log": "6fec1ee380b47334f3b0b231bd63bdc2c8ca292c8a04f5a239e344b15a6450a3",
+    "after-3.47.7.log": "ad8b88103d44e96348de3728a8db1bd4ed0330b289c8543ee8b9804f0730b83f",
+    "analyze-3.32.0.log": "b01ec4d86ce662e79ed759c9ab24cd4866ecc7d94325e08488211e4d3fba5b01",
+    "analyze-3.47.7.log": "b6d346a0cb42442b56c155953555c55e290050853052df4adc22ecd5fccbe26a",
+    "before-3.47.7.log": "3011e5fcc6c4016223a7175c08ca55e8b4085550e6b7923b5411c523e7378a1a",
+    "coverage-3.32.0.log": "306277a3c2c0d85ca6bcbc617dc8fbf938b67f4ed7e56aa7926aeaf88c8b24d4",
+    "coverage-3.47.7.log": "306277a3c2c0d85ca6bcbc617dc8fbf938b67f4ed7e56aa7926aeaf88c8b24d4"
+  },
+  "results": {
+    "before_3.47.7": {
+      "passed": 37,
+      "failed": 2
+    },
+    "after_each_sdk": {
+      "passed": 39,
+      "failed": 0,
+      "coverage_hit": 229,
+      "coverage_found": 232
+    }
+  }
+}

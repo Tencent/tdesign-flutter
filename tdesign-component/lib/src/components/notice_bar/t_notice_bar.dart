@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:math' as math;
 
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:tdesign_flutter_icons/tdesign_flutter_icons.dart' show TIcons;
 
@@ -40,8 +41,14 @@ class TNoticeBar extends StatefulWidget {
     this.marquee = false,
     this.speed = 50,
     this.interval = const Duration(seconds: 2),
-    this.onPressed,
-  }) : assert(speed > 0, 'speed must be greater than zero'),
+    @Deprecated(
+      'Use onTargetTap instead. Deprecated in 1.1.0; remove in 2.0.0.',
+    )
+    ValueChanged<TNoticeBarTapTarget>? onPressed,
+    ValueChanged<TNoticeBarTapTarget>? onTargetTap,
+  }) : _onTargetTap = onTargetTap,
+       _onPressed = onTargetTap ?? onPressed,
+       assert(speed > 0, 'speed must be greater than zero'),
        assert(maxLines > 0, 'maxLines must be greater than zero');
 
   /// 单条公告内容。
@@ -89,8 +96,24 @@ class TNoticeBar extends StatefulWidget {
   /// 垂直轮播的切换间隔，仅在 [direction] 为 [Axis.vertical] 时生效。
   final Duration interval;
 
-  /// 点击事件
-  final ValueChanged<TNoticeBarTapTarget>? onPressed;
+  /// 公告栏区域点击通知。
+  ///
+  /// 自定义 [prefix] 和 [operation] 区域仅通知单指主按钮短按，过滤拖动、
+  /// 长按、取消、多指、非主按钮及按键组合；不阻止子组件自身的手势。
+  /// 内置前缀图标、正文和尾部图标保留原有点击手势，不受上述自定义区域
+  /// 过滤规则约束。
+  /// 与旧参数同时提供时优先使用本参数。
+  // ignore: deprecated_member_use_from_same_package
+  ValueChanged<TNoticeBarTapTarget>? get onTargetTap =>
+      // ignore: deprecated_member_use_from_same_package
+      _onTargetTap ?? onPressed;
+
+  final ValueChanged<TNoticeBarTapTarget>? _onTargetTap;
+  final ValueChanged<TNoticeBarTapTarget>? _onPressed;
+
+  /// 已废弃，此为兼容入口。请使用 [onTargetTap]；将在 2.0.0 删除。
+  @Deprecated('Use onTargetTap instead. Deprecated in 1.1.0; remove in 2.0.0.')
+  ValueChanged<TNoticeBarTapTarget>? get onPressed => _onPressed;
 
   @override
   State<StatefulWidget> createState() => _TNoticeBarState();
@@ -114,6 +137,24 @@ class _TNoticeBarState extends State<TNoticeBar> {
     super.initState();
     _scrollController = ScrollController();
     _scheduleMarqueeStart();
+  }
+
+  // Share the pointer session across regions without entering the gesture arena.
+  final Set<int> _tapPointers = {};
+  bool _multipleTapPointers = false;
+
+  void _trackPointerDown(PointerDownEvent event) {
+    if (_tapPointers.isNotEmpty) {
+      _multipleTapPointers = true;
+    }
+    _tapPointers.add(event.pointer);
+  }
+
+  void _trackPointerEnd(PointerEvent event) {
+    _tapPointers.remove(event.pointer);
+    if (_tapPointers.isEmpty) {
+      _multipleTapPointers = false;
+    }
   }
 
   TNoticeBarThemeData get _theme {
@@ -157,6 +198,10 @@ class _TNoticeBarState extends State<TNoticeBar> {
   @override
   void didUpdateWidget(covariant TNoticeBar oldWidget) {
     super.didUpdateWidget(oldWidget);
+    if (widget.onTargetTap == null) {
+      _tapPointers.clear();
+      _multipleTapPointers = false;
+    }
     if (oldWidget.content != widget.content ||
         oldWidget.items != widget.items ||
         oldWidget.direction != widget.direction ||
@@ -435,24 +480,25 @@ class _TNoticeBarState extends State<TNoticeBar> {
   }
 
   Widget _buildBuiltInTapTarget(TNoticeBarTapTarget target, Widget child) {
-    if (widget.onPressed == null) {
+    if (widget.onTargetTap == null) {
       return child;
     }
     return GestureDetector(
-      onTap: () => widget.onPressed!(target),
+      onTap: () => widget.onTargetTap!(target),
       child: child,
     );
   }
 
   Widget _buildCustomTapTarget(TNoticeBarTapTarget target, Widget child) {
-    if (widget.onPressed == null) {
+    if (widget.onTargetTap == null) {
       return child;
     }
-    // 自定义 Widget 内部可能拥有自己的手势识别器。使用原始指针
-    // 监听可在子组件处理业务点击的同时，稳定报告 NoticeBar 的自定义区域目标。
-    return Listener(
-      behavior: HitTestBehavior.opaque,
-      onPointerUp: (_) => widget.onPressed!(target),
+    return _NoticeBarTapObserver(
+      canNotify: (pointer) =>
+          !_multipleTapPointers &&
+          _tapPointers.length == 1 &&
+          _tapPointers.contains(pointer),
+      onTap: () => widget.onTargetTap?.call(target),
       child: child,
     );
   }
@@ -508,7 +554,7 @@ class _TNoticeBarState extends State<TNoticeBar> {
   Widget build(BuildContext context) {
     _init();
     final suffixIcon = widget.suffixIcon;
-    return Container(
+    final bar = Container(
       padding: _effectivePadding,
       color: _resolved.backgroundColor,
       child: Row(
@@ -557,5 +603,95 @@ class _TNoticeBarState extends State<TNoticeBar> {
         ],
       ),
     );
+    if (widget.onTargetTap == null) {
+      return bar;
+    }
+    return Listener(
+      onPointerDown: _trackPointerDown,
+      onPointerUp: _trackPointerEnd,
+      onPointerCancel: _trackPointerEnd,
+      child: bar,
+    );
   }
+}
+
+// 观察自定义区域的短按，保留子组件的手势识别和动作。
+class _NoticeBarTapObserver extends StatefulWidget {
+  const _NoticeBarTapObserver({
+    required this.onTap,
+    required this.canNotify,
+    required this.child,
+  });
+
+  final VoidCallback onTap;
+  final bool Function(int pointer) canNotify;
+  final Widget child;
+
+  @override
+  State<_NoticeBarTapObserver> createState() => _NoticeBarTapObserverState();
+}
+
+class _NoticeBarTapObserverState extends State<_NoticeBarTapObserver> {
+  final Set<int> _pointers = {};
+  Offset? _origin;
+  Timer? _deadline;
+  bool _valid = false;
+
+  void _down(PointerDownEvent event) {
+    if (_pointers.isEmpty) {
+      _origin = event.position;
+      _deadline?.cancel();
+      _deadline = Timer(kLongPressTimeout, () => _valid = false);
+      _valid = event.buttons == kPrimaryButton;
+    } else {
+      _valid = false;
+    }
+    _pointers.add(event.pointer);
+  }
+
+  void _move(PointerMoveEvent event) {
+    if (event.buttons != kPrimaryButton ||
+        (_origin != null &&
+            (event.position - _origin!).distance > kTouchSlop)) {
+      _valid = false;
+    }
+  }
+
+  void _up(PointerUpEvent event) {
+    final notify =
+        _valid &&
+        _pointers.length == 1 &&
+        _pointers.contains(event.pointer) &&
+        widget.canNotify(event.pointer) &&
+        _origin != null &&
+        (event.position - _origin!).distance <= kTouchSlop;
+    _pointers.remove(event.pointer);
+    _deadline?.cancel();
+    _valid = false;
+    if (notify) {
+      widget.onTap();
+    }
+  }
+
+  void _cancel(PointerCancelEvent event) {
+    _pointers.remove(event.pointer);
+    _deadline?.cancel();
+    _valid = false;
+  }
+
+  @override
+  void dispose() {
+    _deadline?.cancel();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) => Listener(
+    behavior: HitTestBehavior.opaque,
+    onPointerDown: _down,
+    onPointerMove: _move,
+    onPointerUp: _up,
+    onPointerCancel: _cancel,
+    child: widget.child,
+  );
 }

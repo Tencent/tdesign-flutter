@@ -3,7 +3,6 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { defineConfig, type ConfigEnv, type Plugin, type ViteDevServer } from 'vite';
 import vue from '@vitejs/plugin-vue';
-import vueJsx from '@vitejs/plugin-vue-jsx';
 import createTDesignPlugin from './plugin-tdoc';
 import { loadControllerBaseline, loadControllerExtraDefaults } from './utils/controllerBaseline.mjs';
 
@@ -96,7 +95,6 @@ export default ({ mode }: ConfigEnv) => {
           },
         },
       }),
-      vueJsx(),
       flutterExampleDevServer(),
       {
         name: 'flutter-controller-baseline',

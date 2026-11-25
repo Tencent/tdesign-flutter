@@ -82,3 +82,13 @@ showText / showLoading 的 customWidget 文案槽整个子树接入与各自内�
 跨组件配置职责见 [Theme 契约](../../engineering/048-Theme-configuration-contracts/spec.md)，视觉方法见 [Golden 规范](../../engineering/044-Testing-golden-regression/spec.md)。
 
 发布归类：本轮与 Button/NavBar 的默认文字槽调整采用同一 patch 策略。未配置、空样式或部分显式样式仍可能改变字体、颜色、换行、尺寸和省略位置；原生 Text 的字体也可能受新默认值影响，段落参数沿用既有语义。保留旧外观需在实例或内容内部主题中明确所需字段；不以参数签名不变或测试通过承诺零兼容风险。
+
+
+## 1.0.1 overlay-lifecycle
+
+所属 Overlay 卸载（含首次绘制前）清理实例、自动关闭与延迟销毁任务，旧 Entry 延迟回调不能删除同 ID 新实例；保持匿名替换、显式 ID 并存及持续时间默认值。
+
+
+### Review 边界补全
+
+遮挡后卸载也必须释放：以独立、零尺寸、无交互且 maintainState=true 的生命周期哨兵跟踪所属 Overlay，而非把内容 Entry 的 mounted 当作 owner 生命周期。Toast 内容不设置 maintainState，保留原有遮挡/重建及计时语义；清理时同时移除哨兵与内容，取消所有计时任务。首次绘制前卸载仍由 post-frame 检查兜底。Entry 卸载通知时祖先可能尚未结束 unmount，必须在微任务中复核 Overlay.mounted 后再清理，不能在通知时同步判定。

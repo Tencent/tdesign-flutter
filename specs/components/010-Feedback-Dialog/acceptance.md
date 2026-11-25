@@ -30,18 +30,15 @@
 
 <a id="record-083-baseline-matrix"></a>
 
-### 原基线与必要截图
+### 原基线与差异记录
 
 | 场景 | 原差异 | 最终记录 | 基线更新 |
 | --- | --- | --- | --- |
 | Dialog Popup | 4.00%/9996px | 匹配原基线 | 无 |
 | Theme自定义内容M2/M3 | 1.96%/6253px | 局部主题补齐后匹配原基线 | 无 |
 
-| 修复前实际渲染 | 修复后实际渲染 |
-| --- | --- |
-| ![修复前](evidence/text-slot-restoration/dialog-before.png) | ![修复后](evidence/text-slot-restoration/dialog-after.png) |
 
-截图为同环境实际渲染证据，不是Golden基线。文字槽阶段没有验证全57组件、设备或APK/Web/iOS；测试数不等于PNG数，既有快照不覆盖所有TText用法。
+原同环境对照截图已清理；后续视觉回归引用 [Dialog Golden](../../../tdesign-component/example/test/dialog/dialog_page_golden_test.dart)及其基线，历史结果不作为当前候选通过证明。文字槽阶段没有验证全57组件、设备或APK/Web/iOS；测试数不等于PNG数，既有快照不覆盖所有TText用法。
 
 当前待办见 [tasks.md](./tasks.md)；实际执行入口见[贡献规范](../../../CONTRIBUTING.md#组件测试与-ci-回归门禁)。
 

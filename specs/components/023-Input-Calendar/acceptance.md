@@ -23,3 +23,5 @@
 未绑定唯一候选的结果不作为当前通过证明；旧命令与流水由Git历史追溯。
 
 当前待办见 [tasks.md](./tasks.md)；实际执行入口见[贡献规范](../../../CONTRIBUTING.md#组件测试与-ci-回归门禁)。清理不关闭未完成项。
+
+原始 [Figma 设计参考](evidence/figma-calendar-demo-top.png)作为独有设计依据保留；运行截图不重复归档。视觉回归引用 [Calendar Golden](../../../tdesign-component/example/test/calendar/calendar_demo_golden_test.dart)及其基线，历史结果不作为本次执行证明。

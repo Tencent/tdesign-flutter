@@ -89,3 +89,7 @@ Picker 与 DateTimePicker 均在全部滚轮停止后恢复父级未接受的候
 验收标准描述应满足的行为，不表示已执行或通过；执行范围与证据见 [acceptance.md](./acceptance.md)，剩余事项只在 [tasks.md](./tasks.md) 维护。
 
 跨组件配置职责见 [Theme 契约](../../engineering/048-Theme-configuration-contracts/spec.md)，视觉方法见 [Golden 规范](../../engineering/044-Testing-golden-regression/spec.md)。
+
+## 示例的安全区职责
+
+九个日期时间选择器示例通过既有 `TPickerPopup.show(useSafeArea: true)` 显式避让底部系统区域；不改变组件或弹层公开默认值。弹层安全区布局与验证复用 [Picker 契约](../026-Input-Picker/spec.md#示例的安全区职责)，在已有确认流程测试中补充底部位置断言，不重复建立相同布局的 Golden 矩阵。

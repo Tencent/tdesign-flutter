@@ -1,0 +1,147 @@
+{
+  "validation_parent": "b5842f0565910d124c247bfe11c38303da957286",
+  "platform": "macOS arm64",
+  "changed_source_and_api_files": [
+    "tdesign-component/example/assets/api/dropdown-menu_api.md",
+    "tdesign-component/example/assets/api/form_api.md",
+    "tdesign-component/example/assets/api/pull-down-refresh_api.md",
+    "tdesign-component/example/assets/api/swipe-cell_api.md",
+    "tdesign-component/example/assets/api/swiper_api.md",
+    "tdesign-component/lib/src/components/dropdown_menu/t_dropdown_menu.dart",
+    "tdesign-component/lib/src/components/form/t_form.dart",
+    "tdesign-component/lib/src/components/refresh/t_pull_down_refresh.dart",
+    "tdesign-component/lib/src/components/refresh/t_pull_down_refresh_controller.dart",
+    "tdesign-component/lib/src/components/swipe_cell/t_swipe_cell.dart",
+    "tdesign-component/lib/src/components/swiper/t_swiper.dart"
+  ],
+  "path_nul_bytes_sha256": "799e3947381c0fd1747aaafd582dda9d3d78bf6eff716040b39d87b6b193ce2f",
+  "all_57_generated_apis_identical_between_sdks": true,
+  "six_changed_sources_executable_tokens_identical_to_parent": true,
+  "executable_token_comparison": [
+    "tdesign-component/lib/src/components/form/t_form.dart: identical executable tokens (2373)",
+    "tdesign-component/lib/src/components/swipe_cell/t_swipe_cell.dart: identical executable tokens (2305)",
+    "tdesign-component/lib/src/components/swiper/t_swiper.dart: identical executable tokens (4435)",
+    "tdesign-component/lib/src/components/refresh/t_pull_down_refresh.dart: identical executable tokens (2294)",
+    "tdesign-component/lib/src/components/refresh/t_pull_down_refresh_controller.dart: identical executable tokens (70)",
+    "tdesign-component/lib/src/components/dropdown_menu/t_dropdown_menu.dart: identical executable tokens (6615)"
+  ],
+  "verification": {
+    "low": {
+      "sdk": "Flutter 3.32.0",
+      "api_documents_generated_and_checked": 57,
+      "font_and_tool_tests_passed": 14,
+      "strict_analyze": "zero diagnostics",
+      "dependency_lock_sha256": "7deb49a80a8288c84280257591090c14c5fa1db08f8aabad6233b51a8a6e4d92",
+      "commands": [
+        {
+          "name": "pub-get",
+          "command": [
+            "/Users/rs/fvm/versions/3.32.0/bin/flutter",
+            "pub",
+            "get",
+            "--offline"
+          ],
+          "exit_code": 0,
+          "log_sha256": "0463a12f4fdbd1c3d4a2683c816c25e95c22d77ca8b3a6d54af873e3af3fda56"
+        },
+        {
+          "name": "api-generate",
+          "command": [
+            "/Users/rs/.nvm/versions/node/v24.15.0/bin/node",
+            "tool/generate_api.mjs"
+          ],
+          "exit_code": 0,
+          "log_sha256": "8c976976ae2cb0c1c05777c8ccc896bc26f158162634640b53e44a1adc40d659"
+        },
+        {
+          "name": "api-check",
+          "command": [
+            "/Users/rs/.nvm/versions/node/v24.15.0/bin/node",
+            "tool/generate_api.mjs",
+            "--check"
+          ],
+          "exit_code": 0,
+          "log_sha256": "d0946341189ee83aa0930e5bad0303c3a308c771e610c31f4f21cdfaf5c5ebcb"
+        },
+        {
+          "name": "font-and-tool-tests",
+          "command": [
+            "/Users/rs/fvm/versions/3.32.0/bin/flutter",
+            "test",
+            "--no-pub",
+            "test/tool/run_visual_regression_test.dart",
+            "--reporter",
+            "expanded"
+          ],
+          "exit_code": 0,
+          "log_sha256": "e01087dd737c231b6339183e4ef201d4a372dfac10d481e36ca8bd0998bd6a6b"
+        },
+        {
+          "name": "analyze",
+          "command": [
+            "/Users/rs/fvm/versions/3.32.0/bin/flutter",
+            "analyze",
+            "--no-pub",
+            "--fatal-infos"
+          ],
+          "exit_code": 0,
+          "log_sha256": "99597fb53072d5c5fa47e1143780e93b08c86f5678d56b66c4aa13f9afead7b0"
+        }
+      ]
+    },
+    "high": {
+      "sdk": "Flutter 3.47.7",
+      "api_documents_generated_and_checked": 57,
+      "font_and_tool_tests_passed": 14,
+      "strict_analyze": "zero diagnostics",
+      "dependency_lock_sha256": "f4fcd8d10e1ba7d89670e87509f87a6c0d359ceffd83dff9bf8ac58cc8ad59c2",
+      "commands": [
+        {
+          "name": "api-generate",
+          "command": [
+            "/Users/rs/.nvm/versions/node/v24.15.0/bin/node",
+            "tool/generate_api.mjs"
+          ],
+          "exit_code": 0,
+          "log_sha256": "f76da1b8272bca77f7c4758bf4f6efcde9bc341930b3b9cb1c42234e03bd7fac"
+        },
+        {
+          "name": "api-check",
+          "command": [
+            "/Users/rs/.nvm/versions/node/v24.15.0/bin/node",
+            "tool/generate_api.mjs",
+            "--check"
+          ],
+          "exit_code": 0,
+          "log_sha256": "94b4630f57520c70ca8cd2891cc64e87a507c5c39b684fce1baf657de67dde9b"
+        },
+        {
+          "name": "font-and-tool-tests",
+          "command": [
+            "/Users/rs/fvm/versions/3.47.7/bin/flutter",
+            "test",
+            "--no-pub",
+            "test/tool/run_visual_regression_test.dart",
+            "--reporter",
+            "expanded"
+          ],
+          "exit_code": 0,
+          "log_sha256": "376876aa0dd581bdf7b804f2d0a96dc2e78b6a6c59e3deb3d04e41ca16943825"
+        },
+        {
+          "name": "analyze",
+          "command": [
+            "/Users/rs/fvm/versions/3.47.7/bin/flutter",
+            "analyze",
+            "--no-pub",
+            "--fatal-infos"
+          ],
+          "exit_code": 0,
+          "log_sha256": "fa987f8672777ca902d7aa90545127ed8250cab1f6c126579cb5798b61dc77e7"
+        }
+      ]
+    }
+  },
+  "scope": "Chinese API comments and generated documentation only; no implementation, signature, default, ownership, binding rule, test, dependency declaration or font resource changes.",
+  "not_rerun": "Component Widget tests, Web release experiments and Android/iOS device runs; historical results retain their original candidate scope."
+}

@@ -9,6 +9,24 @@ class AppLocalizationsZh extends AppLocalizations {
   AppLocalizationsZh([String locale = 'zh']) : super(locale);
 
   @override
+  String get uploading => '上传中';
+
+  @override
+  String get uploadSelect => '选择文件';
+
+  @override
+  String get uploadPending => '待上传';
+
+  @override
+  String get uploadFailed => '上传失败';
+
+  @override
+  String get uploadRetry => '重新上传';
+
+  @override
+  String get uploadSuccess => '上传成功';
+
+  @override
   String get components => 'TDesign Flutter 组件库';
 
   @override

@@ -1,10 +1,8 @@
-# 运行截图比对
+# 视觉依据与验收范围
+
+以下保留原候选的设计依据、环境及结论，运行截图已清理。后续视觉回归引用 [Golden 测试](../../../tdesign-component/example/test/notice_bar/notice_bar_page_golden_test.dart)及[基线目录](../../../tdesign-component/example/test/notice_bar/goldens/)；已有基线不表示当前候选已执行或覆盖全部场景。
 
 基线：`tdesign-miniprogram@1.16.0`（`ae55fb050b7a9474c33752b45b71c741f37ed872`），统一使用 375dp 宽视口。Flutter 截图覆盖公开页面 light/dark；系统导航栏和字体栅格属于平台合理差异。
-
-| 小程序公开页面 | Flutter light | Flutter dark |
-| --- | --- | --- |
-| ![小程序页面](evidence/miniprogram-page.png) | ![Flutter 浅色页面](evidence/flutter-page-light.png) | ![Flutter 深色页面](evidence/flutter-page-dark.png) |
 
 人工核对结论：Flutter 公开页面已按小程序完整源码收敛为“组件类型 / 组件状态 / 可滚动公告栏”三个分组、8 个 Demo 块、14 个公告栏实例。逐项核对通过的内容包括：
 

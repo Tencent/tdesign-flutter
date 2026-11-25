@@ -43,6 +43,8 @@ Golden 覆盖和执行归属分散会使图片存在却未被 CI 运行，重复
 
 本 Spec 只维护 Golden 知识。功能测试、覆盖率和通用 CI 登记维护在 [贡献规范](../../../CONTRIBUTING.md#组件测试与-ci-回归门禁)，不再保留通用测试清单或阶段性测试修复 Spec。
 
+Golden PNG 是自动比较所需的测试资产，保留在测试目录，不复制到组件或工程 Spec 的 evidence/。组件 acceptance.md 引用测试、基线、场景、环境和实际结果；非组件 Spec 不归档页面截图。具体附件边界遵循[图片与 Golden 证据规则](../../README.md#spec-image-evidence)，不因图片清理删除有效基线或减少既有覆盖。
+
 ## 关键决策与取舍
 
 | 决策 | 理由与取舍 |

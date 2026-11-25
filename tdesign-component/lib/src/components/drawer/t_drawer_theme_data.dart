@@ -12,30 +12,6 @@ import '../../theme/t_token_double_lerp.dart';
 ///
 /// {@category ComponentTheme}
 class TDrawerThemeData extends ThemeExtension<TDrawerThemeData> {
-  TokenValueLerp<EdgeInsetsGeometry>? get _titlePaddingTransition => null;
-
-  @internal
-  EdgeInsetsGeometry resolveTitlePadding(EdgeInsetsGeometry fallback) =>
-      _titlePaddingTransition?.resolve(fallback) ?? titlePadding ?? fallback;
-
-  TokenValueLerp<EdgeInsetsGeometry>? get _itemPaddingTransition => null;
-
-  @internal
-  EdgeInsetsGeometry resolveItemPadding(EdgeInsetsGeometry fallback) =>
-      _itemPaddingTransition?.resolve(fallback) ?? itemPadding ?? fallback;
-
-  TokenValueLerp<double>? get _itemIconGapTransition => null;
-
-  @internal
-  double resolveItemIconGap(double fallback) =>
-      _itemIconGapTransition?.resolve(fallback) ?? itemIconGap ?? fallback;
-
-  TokenDoubleLerp? get _itemIconSizeLerp => null;
-
-  @internal
-  double resolveItemIconSize(double fallback) =>
-      _itemIconSizeLerp?.resolve(fallback) ?? itemIconSize ?? fallback;
-
   /// 默认宽度，默认 280。
   final double? width;
 
@@ -147,15 +123,17 @@ class TDrawerThemeData extends ThemeExtension<TDrawerThemeData> {
         dividerThickness: dividerThickness ?? this.dividerThickness,
         footerPadding: footerPadding ?? this.footerPadding,
       ),
-      itemIconSizeLerp: itemIconSize == null ? _itemIconSizeLerp : null,
+      itemIconSizeLerp: itemIconSize == null
+          ? _drawerTransition(this)?._itemIconSizeLerp
+          : null,
       titlePaddingTransition: titlePadding == null
-          ? _titlePaddingTransition
+          ? _drawerTransition(this)?._titlePaddingTransition
           : null,
       itemPaddingTransition: itemPadding == null
-          ? _itemPaddingTransition
+          ? _drawerTransition(this)?._itemPaddingTransition
           : null,
       itemIconGapTransition: itemIconGap == null
-          ? _itemIconGapTransition
+          ? _drawerTransition(this)?._itemIconGapTransition
           : null,
     );
   }
@@ -239,32 +217,32 @@ class TDrawerThemeData extends ThemeExtension<TDrawerThemeData> {
       ),
       itemIconSizeLerp: TokenDoubleLerp.between(
         itemIconSize,
-        _itemIconSizeLerp,
+        _drawerTransition(this)?._itemIconSizeLerp,
         other.itemIconSize,
-        other._itemIconSizeLerp,
+        _drawerTransition(other)?._itemIconSizeLerp,
         t,
       ),
       titlePaddingTransition: TokenValueLerp.between(
         titlePadding,
-        _titlePaddingTransition,
+        _drawerTransition(this)?._titlePaddingTransition,
         other.titlePadding,
-        other._titlePaddingTransition,
+        _drawerTransition(other)?._titlePaddingTransition,
         t,
         (a, b, t) => EdgeInsetsGeometry.lerp(a, b, t)!,
       ),
       itemPaddingTransition: TokenValueLerp.between(
         itemPadding,
-        _itemPaddingTransition,
+        _drawerTransition(this)?._itemPaddingTransition,
         other.itemPadding,
-        other._itemPaddingTransition,
+        _drawerTransition(other)?._itemPaddingTransition,
         t,
         (a, b, t) => EdgeInsetsGeometry.lerp(a, b, t)!,
       ),
       itemIconGapTransition: TokenValueLerp.between(
         itemIconGap,
-        _itemIconGapTransition,
+        _drawerTransition(this)?._itemIconGapTransition,
         other.itemIconGap,
-        other._itemIconGapTransition,
+        _drawerTransition(other)?._itemIconGapTransition,
         t,
         (a, b, t) => lerpDouble(a, b, t)!,
       ),
@@ -343,12 +321,55 @@ class _InterpolatedTDrawerThemeData extends TDrawerThemeData {
          footerPadding: data.footerPadding,
        );
 
-  @override
   final TokenValueLerp<EdgeInsetsGeometry>? _titlePaddingTransition;
-  @override
   final TokenValueLerp<EdgeInsetsGeometry>? _itemPaddingTransition;
-  @override
   final TokenValueLerp<double>? _itemIconGapTransition;
-  @override
   final TokenDoubleLerp? _itemIconSizeLerp;
+}
+
+// Only library-owned interpolation objects carry deferred token state.
+// External implements satisfy the historic public interface, not private getters.
+_InterpolatedTDrawerThemeData? _drawerTransition(TDrawerThemeData theme) =>
+    theme is _InterpolatedTDrawerThemeData ? theme : null;
+
+EdgeInsetsGeometry _resolveDrawerTitlePadding(
+  TDrawerThemeData theme,
+  EdgeInsetsGeometry fallback,
+) =>
+    _drawerTransition(theme)?._titlePaddingTransition?.resolve(fallback) ??
+    theme.titlePadding ??
+    fallback;
+
+EdgeInsetsGeometry _resolveDrawerItemPadding(
+  TDrawerThemeData theme,
+  EdgeInsetsGeometry fallback,
+) =>
+    _drawerTransition(theme)?._itemPaddingTransition?.resolve(fallback) ??
+    theme.itemPadding ??
+    fallback;
+
+double _resolveDrawerItemIconGap(TDrawerThemeData theme, double fallback) =>
+    _drawerTransition(theme)?._itemIconGapTransition?.resolve(fallback) ??
+    theme.itemIconGap ??
+    fallback;
+
+double _resolveDrawerItemIconSize(TDrawerThemeData theme, double fallback) =>
+    _drawerTransition(theme)?._itemIconSizeLerp?.resolve(fallback) ??
+    theme.itemIconSize ??
+    fallback;
+
+/// Internal resolution bridge; excluded from the package's public exports.
+@internal
+extension TDrawerThemeDataResolution on TDrawerThemeData {
+  EdgeInsetsGeometry resolveTitlePadding(EdgeInsetsGeometry fallback) =>
+      _resolveDrawerTitlePadding(this, fallback);
+
+  EdgeInsetsGeometry resolveItemPadding(EdgeInsetsGeometry fallback) =>
+      _resolveDrawerItemPadding(this, fallback);
+
+  double resolveItemIconGap(double fallback) =>
+      _resolveDrawerItemIconGap(this, fallback);
+
+  double resolveItemIconSize(double fallback) =>
+      _resolveDrawerItemIconSize(this, fallback);
 }

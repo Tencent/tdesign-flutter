@@ -14,7 +14,7 @@
 | button生产覆盖率 | 542/546，99.27% | 542/546，99.27% |
 | tag生产覆盖率 | 343/350，98.00% | 343/350，98.00% |
 
-报告见component-token-results-<SDK>.json（每份114个页面/模式键）及component-token-coverage-<SDK>.txt；指纹见component-token-source-fingerprint.json。矩阵覆盖57页明暗模式、适用类别与组合；不能把全局类别契约数当作每个组件新字段都已由控制器接入。本批新字段通过组件Widget/Theme测试验证，不经过CSS消息链路。
+报告见[fixed-component-token-results.json](fixed-component-token-results.json)（每份114个页面/模式键）及component-token-coverage-<SDK>.txt；指纹见component-token-source-fingerprint.json。矩阵覆盖57页明暗模式、适用类别与组合；不能把全局类别契约数当作每个组件新字段都已由控制器接入。本批新字段通过组件Widget/Theme测试验证，不经过CSS消息链路。
 
 组件测试覆盖Badge默认/方向圆角/非bubble隔离/原位更新/默认与显式插值；Button四档、大中档全局默认与18独立默认、普通/渐变、纯图标居中、实例ButtonStyle优先、有限非负约束、copy及中断插值；Tag四档和custom、所有variant、明暗、统一padding优先、显式不重复扣边框、TSelectTag继承、默认与统一/分档交叉/中断插值。测试沿用既有集中登记文件；3个调度器自测通过。
 

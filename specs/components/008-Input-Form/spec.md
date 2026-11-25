@@ -211,3 +211,10 @@ Demo 只通过现有组件 API、Theme 和基础布局组合表达设计；颜�
 验收标准描述应满足的行为，不表示已执行或通过；执行范围与证据见 [acceptance.md](./acceptance.md)，剩余事项只在 [tasks.md](./tasks.md) 维护。
 
 跨组件配置职责见 [Theme 契约](../../engineering/048-Theme-configuration-contracts/spec.md)，视觉方法见 [Golden 规范](../../engineering/044-Testing-golden-regression/spec.md)。
+
+
+## 1.0.1 controller-binding
+
+保留重复绑定的 assert 及发布模式行为，不改成 StateError；先尝试新绑定，成功后解绑旧对象。失败时保留实际旧绑定，卸载按实际绑定清理。
+
+Controller 不提供同时控制多个组件的能力，建议独立组件分别使用 Controller。为保持历史兼容，本版本保留本组件既有的重复绑定处理规则。断言开启时保留原有的重复绑定检查，release 下保留后绑定覆盖行为；本次不新增或收紧绑定限制。

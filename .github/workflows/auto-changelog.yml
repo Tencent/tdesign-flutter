@@ -17,7 +17,6 @@ jobs:
         uses: TDesignOteam/tdesign-changelog-action@next
         with:
           token: ${{ secrets.TDESIGN_BOT_TOKEN }}
-          mode: single
           manifest-path: tdesign-component/pubspec.yaml
 
   commit-changelog:
@@ -28,6 +27,5 @@ jobs:
         uses: TDesignOteam/tdesign-changelog-action@next
         with:
           token: ${{ secrets.TDESIGN_BOT_TOKEN }}
-          mode: single
           manifest-path: tdesign-component/pubspec.yaml
           changelog-path: tdesign-component/CHANGELOG.md

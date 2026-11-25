@@ -37,7 +37,7 @@ class _WeakTabBarsExampleState extends State<WeakTabBarsExample> {
             (index) => TTabBarItemConfig(
               tabText: labels[index],
               badge: badges[index],
-              allowMultipleTaps: true,
+              notifyOnReselect: true,
               onTap: () => TToast.showText(
                 '第 ${index + 1} 项',
                 context: context,
@@ -58,7 +58,7 @@ class _WeakTabBarsExampleState extends State<WeakTabBarsExample> {
               selectedIcon: Icon(icons[index]),
               unselectedIcon: Icon(icons[index]),
               badge: badges[index],
-              allowMultipleTaps: true,
+              notifyOnReselect: true,
               onTap: () => TToast.showText(
                 '第 ${index + 1} 项',
                 context: context,
@@ -80,7 +80,7 @@ class _WeakTabBarsExampleState extends State<WeakTabBarsExample> {
               selectedIcon: Icon(icons[index]),
               unselectedIcon: Icon(icons[index]),
               badge: badges[index],
-              allowMultipleTaps: true,
+              notifyOnReselect: true,
               onTap: () => TToast.showText(
                 '第 ${index + 1} 项',
                 context: context,

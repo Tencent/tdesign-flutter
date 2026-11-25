@@ -1,6 +1,6 @@
 # 本地修复复审
 
-结论：修复后通过，无未处理的阻塞问题。见acceptance.md与results.json当前validation。
+结论：修复后通过，无未处理的阻塞问题。见acceptance.md与[validation-snapshot.json](../engineering/044-ThemeController-import-and-preview/validation-snapshot.json)当前validation。
 
 | 原问题 | 根因及影响 | 最小修复与回归 |
 | --- | --- | --- |

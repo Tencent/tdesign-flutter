@@ -1,5 +1,6 @@
 import 'dart:math' as math;
 
+import 'package:flutter/foundation.dart' show precisionErrorTolerance;
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart' show OverflowBoxFit;
 import 'package:tdesign_flutter_icons/tdesign_flutter_icons.dart' show TIcons;
@@ -19,6 +20,7 @@ class TBackTop extends StatefulWidget {
     Key? key,
     this.controller,
     this.onPressed,
+    this.onCompleted,
     this.showText = false,
     this.visibilityOffset = 200,
     this.tooltip,
@@ -34,10 +36,23 @@ class TBackTop extends StatefulWidget {
   /// 控制器由调用方创建和释放，组件只管理自己的滚动监听。
   final ScrollController? controller;
 
-  /// 回顶动画完成后的通知。
+  /// 点击后触发的通知，具体时机取决于是否绑定滚动位置。
   ///
-  /// `null` 不表示禁用；只要提供 [controller]，组件仍可点击并执行回顶。
+  /// 未绑定滚动位置时立即触发；已绑定时，在回顶动画的 Future 结束后
+  /// 触发，动画中断也可能通知。
+  ///
+  /// 计划在 2.0 统一为点击时触发，成功回顶通知使用 [onCompleted]。
+  ///
+  /// `null` 不表示禁用；提供 [controller] 时仍可点击回顶。
   final VoidCallback? onPressed;
+
+  /// 配合 [controller] 使用，在本组件成功回顶后通知。
+  ///
+  /// 完成时，组件仍挂载，原滚动位置已到最小边界且仍绑定原控制器，
+  /// 该控制器仍为当前 [controller]。
+  ///
+  /// 在 [onPressed] 之后通知，成功结果按 [onPressed] 执行前的状态判断。
+  final VoidCallback? onCompleted;
 
   /// 是否显示设计内置文案。
   ///
@@ -62,9 +77,31 @@ class TBackTop extends StatefulWidget {
   State<TBackTop> createState() => _TBackTopState();
 }
 
-class _TBackTopState extends State<TBackTop> {
+/// 显隐切换的淡入淡出时长。
+const Duration _kBackTopFadeDuration = Duration(milliseconds: 250);
+
+class _TBackTopState extends State<TBackTop>
+    with SingleTickerProviderStateMixin {
   bool _isAnimating = false;
   bool _isVisible = false;
+
+  /// 是否仍在渲染树中；淡出结束前保持 true，避免突然消失。
+  bool _isInTree = false;
+
+  late final AnimationController _opacityController = AnimationController(
+    vsync: this,
+    duration: _kBackTopFadeDuration,
+  )..addStatusListener(_handleFadeStatus);
+  late final Animation<double> _opacityAnimation = CurvedAnimation(
+    parent: _opacityController,
+    curve: Curves.easeInOut,
+  );
+
+  void _handleFadeStatus(AnimationStatus status) {
+    if (status == AnimationStatus.dismissed && mounted) {
+      setState(() => _isInTree = false);
+    }
+  }
 
   TBackTopThemeData get _themeData =>
       Theme.of(context).extension<TBackTopThemeData>() ??
@@ -74,6 +111,8 @@ class _TBackTopState extends State<TBackTop> {
   void initState() {
     super.initState();
     _isVisible = widget.controller == null;
+    _isInTree = _isVisible;
+    _opacityController.value = _isVisible ? 1.0 : 0.0;
     _attachScrollListener(widget.controller);
     _scheduleVisibilitySync();
   }
@@ -95,6 +134,7 @@ class _TBackTopState extends State<TBackTop> {
   @override
   void dispose() {
     _detachScrollListener(widget.controller);
+    _opacityController.dispose();
     super.dispose();
   }
 
@@ -120,7 +160,17 @@ class _TBackTopState extends State<TBackTop> {
         ? true
         : controller.hasClients && controller.offset >= widget.visibilityOffset;
     if (shouldShow != _isVisible && mounted) {
-      setState(() => _isVisible = shouldShow);
+      setState(() {
+        _isVisible = shouldShow;
+        if (shouldShow) {
+          _isInTree = true;
+        }
+      });
+      if (shouldShow) {
+        _opacityController.forward();
+      } else {
+        _opacityController.reverse();
+      }
     }
   }
 
@@ -130,7 +180,7 @@ class _TBackTopState extends State<TBackTop> {
 
   @override
   Widget build(BuildContext context) {
-    if (!_isVisible) {
+    if (!_isInTree) {
       return const SizedBox.shrink();
     }
 
@@ -139,16 +189,23 @@ class _TBackTopState extends State<TBackTop> {
         ? _buildCircleWidget(context)
         : _buildHalfCircleWidget(context);
 
-    return Semantics(
-      button: true,
-      enabled: hasAction,
-      label: _resolveTooltip(context),
-      child: TInternalTooltip(
-        message: _resolveTooltip(context),
-        child: GestureDetector(
-          behavior: HitTestBehavior.opaque,
-          onTap: hasAction ? _handleTap : null,
-          child: child,
+    return FadeTransition(
+      opacity: _opacityAnimation,
+      // 淡出期间禁止点击，避免透明态误触。
+      child: IgnorePointer(
+        ignoring: !_isVisible,
+        child: Semantics(
+          button: true,
+          enabled: hasAction,
+          label: _resolveTooltip(context),
+          child: TInternalTooltip(
+            message: _resolveTooltip(context),
+            child: GestureDetector(
+              behavior: HitTestBehavior.opaque,
+              onTap: hasAction ? _handleTap : null,
+              child: child,
+            ),
+          ),
         ),
       ),
     );
@@ -160,11 +217,20 @@ class _TBackTopState extends State<TBackTop> {
     }
 
     final controller = widget.controller;
+    ScrollPosition? position;
+
+    bool isCurrentBinding() =>
+        mounted &&
+        identical(controller, widget.controller) &&
+        position != null &&
+        controller!.positions.contains(position);
+
     if (controller != null && controller.hasClients) {
+      position = controller.position;
       _isAnimating = true;
       try {
         await controller.animateTo(
-          controller.position.minScrollExtent,
+          position.minScrollExtent,
           duration: const Duration(milliseconds: 500),
           curve: Curves.easeIn,
         );
@@ -173,8 +239,17 @@ class _TBackTopState extends State<TBackTop> {
       }
     }
 
+    // The legacy callback may change scroll pixels. Record this operation's
+    // result first, while keeping the historical notification order/timing.
+    final completed =
+        isCurrentBinding() &&
+        (position!.pixels - position.minScrollExtent).abs() <=
+            precisionErrorTolerance;
     if (mounted) {
       widget.onPressed?.call();
+      if (completed && isCurrentBinding()) {
+        widget.onCompleted?.call();
+      }
     }
   }
 

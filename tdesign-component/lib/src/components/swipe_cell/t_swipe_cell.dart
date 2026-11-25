@@ -26,7 +26,8 @@ typedef TSwipeCellChanged = void Function(TSwipeCellSide side, bool isOpen);
 
 /// [TSwipeCell] 的命令式控制器。
 ///
-/// 一个控制器同一时间只能绑定一个 [TSwipeCell]。通常无需使用控制器，用户拖动、
+/// 一个控制器同一时间只能绑定一个 [TSwipeCell]，重复绑定其他实例会抛出
+/// [FlutterError]。通常无需使用控制器，用户拖动、
 /// 点击操作项、点击单元格外部或滚动列表时，组件会自行管理展开状态。
 class TSwipeCellController {
   _TSwipeCellControllerBinding? _binding;
@@ -107,6 +108,7 @@ class TSwipeCell extends StatefulWidget {
   final TSwipeCellChanged? onOpenChanged;
 
   /// 命令式控制器。
+  /// 建议独立单元格分别使用 Controller；绑定规则见 [TSwipeCellController]。
   final TSwipeCellController? controller;
 
   /// 首次布局后默认展开的面板；为空时保持关闭。
@@ -132,6 +134,7 @@ class _TSwipeCellState extends State<TSwipeCell>
   final _endPanelKey = GlobalKey();
 
   late final AnimationController _offsetController;
+  TSwipeCellController? _boundController;
   ScrollPosition? _scrollPosition;
   ModalRoute<dynamic>? _route;
   TextDirection? _textDirection;
@@ -160,6 +163,7 @@ class _TSwipeCellState extends State<TSwipeCell>
     super.initState();
     _offsetController = AnimationController.unbounded(vsync: this);
     widget.controller?._attach(this);
+    _boundController = widget.controller;
     WidgetsBinding.instance.addPostFrameCallback((_) async {
       if (!mounted) {
         return;
@@ -189,9 +193,10 @@ class _TSwipeCellState extends State<TSwipeCell>
   @override
   void didUpdateWidget(covariant TSwipeCell oldWidget) {
     super.didUpdateWidget(oldWidget);
-    if (oldWidget.controller != widget.controller) {
-      oldWidget.controller?._detach(this);
+    if (!identical(_boundController, widget.controller)) {
       widget.controller?._attach(this);
+      _boundController?._detach(this);
+      _boundController = widget.controller;
     }
     if (oldWidget.closeOnScroll != widget.closeOnScroll) {
       _bindScrollable();
@@ -202,7 +207,7 @@ class _TSwipeCellState extends State<TSwipeCell>
   @override
   void dispose() {
     _unbindRoute();
-    widget.controller?._detach(this);
+    _boundController?._detach(this);
     _unbindScrollable();
     _unregisterTapOutsideListener();
     _offsetController.dispose();

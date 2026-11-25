@@ -1,6 +1,9 @@
+import 'dart:async';
 import 'dart:math' as math;
 
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 
 import '../../theme/t_colors.dart';
 import '../../theme/t_fonts.dart';
@@ -9,6 +12,7 @@ import '../../theme/t_spacers.dart';
 import '../../theme/t_theme.dart';
 import '../text/t_text_resolve.dart';
 import '../text/t_text_styled.dart';
+import 't_slider_geometry.dart';
 import 't_slider_theme.dart';
 
 /// 格式化滑块提示文案。
@@ -18,20 +22,155 @@ import 't_slider_theme.dart';
 /// 显示在滑块提示中的格式化文案。
 typedef TSliderThumbFormatter = String Function(double value);
 
-/// Slider visual structure.
+/// 滑块视觉结构。
 enum TSliderVariant {
-  /// Standard thin track.
+  /// 标准细轨道。
   normal,
 
-  /// Capsule track with a 3px inset active segment and 20px thumbs.
+  /// 胶囊轨道，默认激活区四周内缩 3px，20px thumb 沿轨道方向两端各留 3px，默认横截面两侧各留 2px。
+  /// 空间充足时轨道高度至少为 24px；厚度受横轴约束，行程不足时按比例缩小。
   capsule,
 }
 
-const double _kScaleTickRadius = 3;
-const double _kCapsuleTrackInset = 3;
-const double _kCapsuleGapWidth = 2;
+const double _kThumbRadius = SliderGeometry.thumbDiameter / 2;
 
-SliderThemeData _sliderThemeFromTDesign(BuildContext context) {
+// Each component owns this size cache. Native track layout supplies the actual
+// RenderBox before painting the range thumb, whose API has no parentBox.
+class _SliderGeometryLayout {
+  _SliderGeometryLayout(this.geometry) : _size = geometry.preferredSize;
+  final SliderGeometry geometry;
+  Size _size;
+  _SliderPointerState pointer = _SliderPointerState();
+  RenderBox? viewport;
+  ValueChanged<Offset>? pointerMove;
+  void suppressUnavailableInteraction() {
+    pointer.suppressed = true;
+    final id = pointer.id;
+    if (id != null) {
+      GestureBinding.instance.cancelPointer(id);
+    }
+  }
+
+  SliderMetrics get metrics => geometry.forSize(_size);
+  SliderMetrics forConstraints(BoxConstraints constraints) {
+    _size = geometry.sizeForConstraints(constraints);
+    return metrics;
+  }
+
+  SliderMetrics forBox(RenderBox box) {
+    _size = box.size;
+    return metrics;
+  }
+}
+
+class _SliderPointerState {
+  int? id;
+  Offset? position;
+  bool singleActive = false;
+  bool nativeAction = false;
+  bool rangeActive = false;
+  bool suppressed = false;
+  double? singleValue;
+}
+
+// A disappearing viewport ends its pointer interaction. Positive resizes keep
+// the same native gesture; no zero-length coordinate division is dispatched.
+class _SliderGeometryViewport extends SingleChildRenderObjectWidget {
+  const _SliderGeometryViewport({required this.layout, required super.child});
+  final _SliderGeometryLayout layout;
+
+  @override
+  RenderObject createRenderObject(BuildContext context) =>
+      _RenderSliderGeometryViewport(layout);
+
+  @override
+  void updateRenderObject(
+    BuildContext context,
+    _RenderSliderGeometryViewport renderObject,
+  ) {
+    renderObject.updateLayoutMetrics(layout);
+  }
+}
+
+class _RenderSliderGeometryViewport extends RenderProxyBox {
+  _RenderSliderGeometryViewport(this._layout);
+  _SliderGeometryLayout _layout;
+  final _pointers = <int>{};
+
+  void updateLayoutMetrics(_SliderGeometryLayout value) {
+    value.pointer = _layout.pointer;
+    value.viewport = this;
+    _layout = value;
+    markNeedsLayout();
+  }
+
+  @override
+  double computeMinIntrinsicWidth(double height) =>
+      _layout.geometry.preferredSize.width;
+  @override
+  double computeMaxIntrinsicWidth(double height) =>
+      _layout.geometry.preferredSize.width;
+  @override
+  double computeMinIntrinsicHeight(double width) =>
+      _layout.geometry.preferredSize.height;
+  @override
+  double computeMaxIntrinsicHeight(double width) =>
+      _layout.geometry.preferredSize.height;
+  @override
+  Size computeDryLayout(BoxConstraints constraints) =>
+      _layout.geometry.sizeForConstraints(constraints);
+
+  // Like the native slider, this control has no text baseline. Do not ask
+  // the constraint builder to run a speculative layout for baseline queries.
+  @override
+  double? computeDryBaseline(
+    BoxConstraints constraints,
+    TextBaseline baseline,
+  ) => null;
+
+  @override
+  void performLayout() {
+    super.performLayout();
+    _layout.viewport = this;
+    if (!_layout.forBox(this).hasTravel &&
+        (_layout.pointer.singleActive || _layout.pointer.rangeActive)) {
+      for (final pointer in _pointers) {
+        GestureBinding.instance.cancelPointer(pointer);
+      }
+      _pointers.clear();
+    }
+  }
+
+  @override
+  void handleEvent(PointerEvent event, BoxHitTestEntry entry) {
+    if (event is PointerDownEvent) {
+      _pointers.add(event.pointer);
+      _layout.pointer.id ??= event.pointer;
+    }
+    final pointer = _layout.pointer;
+    if (pointer.id == event.pointer && event is! PointerCancelEvent) {
+      pointer.position = event.position;
+      if (event is PointerMoveEvent && pointer.singleActive) {
+        _layout.pointerMove?.call(event.position);
+      }
+    }
+    if (event is PointerUpEvent || event is PointerCancelEvent) {
+      _pointers.remove(event.pointer);
+      scheduleMicrotask(() {
+        if (pointer.id == event.pointer) {
+          pointer.id = null;
+        }
+      });
+    }
+    super.handleEvent(event, entry);
+  }
+}
+
+SliderThemeData _sliderThemeFromTDesign(
+  BuildContext context,
+  SliderGeometry geometry,
+  _SliderGeometryLayout layout,
+) {
   final token = context.tTheme;
   final theme = Theme.of(context).extension<TSliderThemeData>();
   final brand = token.brandColor;
@@ -49,8 +188,10 @@ SliderThemeData _sliderThemeFromTDesign(BuildContext context) {
     // Preserve current TD layout; zero padding would shrink the native render box.
     // ignore: deprecated_member_use
     year2023: true,
-    overlayShape: const RoundSliderOverlayShape(overlayRadius: 24),
-    minThumbSeparation: 8,
+    overlayShape: const RoundSliderOverlayShape(
+      overlayRadius: SliderGeometry.hitRadius,
+    ),
+    minThumbSeparation: SliderGeometry.minimumRangeSeparation,
     allowedInteraction: SliderInteraction.tapAndSlide,
     activeTrackColor: activeTrack,
     inactiveTrackColor: inactiveTrack,
@@ -62,19 +203,17 @@ SliderThemeData _sliderThemeFromTDesign(BuildContext context) {
     inactiveTickMarkColor: inactiveTrack,
     disabledActiveTickMarkColor: disabledBrand,
     disabledInactiveTickMarkColor: disabledComponent,
-    tickMarkShape: const RoundSliderTickMarkShape(
-      tickMarkRadius: _kScaleTickRadius,
-    ),
-    rangeTickMarkShape: const RoundRangeSliderTickMarkShape(
-      tickMarkRadius: _kScaleTickRadius,
-    ),
+    tickMarkShape: _TDesignSliderTickMarkShape(layout),
+    rangeTickMarkShape: _TDesignRangeSliderTickMarkShape(layout),
     thumbColor: theme?.thumbColor ?? token.textColorAnti,
     disabledThumbColor: theme?.disabledThumbColor ?? token.textColorAnti,
     thumbShape: _TDesignSliderThumbShape(
+      layout: layout,
       borderColor: thumbBorder,
       disabledBorderColor: disabledThumbBorder,
     ),
     rangeThumbShape: _TDesignRangeSliderThumbShape(
+      layout: layout,
       borderColor: thumbBorder,
       disabledBorderColor: disabledThumbBorder,
     ),
@@ -98,31 +237,32 @@ SliderThemeData _resolveSliderTheme(
   BuildContext context,
   TSliderVariant variant,
   int? divisions,
+  SliderGeometry geometry,
+  _SliderGeometryLayout layout,
 ) {
-  final componentTheme = Theme.of(context).extension<TSliderThemeData>();
-  final base = _sliderThemeFromTDesign(context);
-  final token = context.tTheme;
+  final base = _sliderThemeFromTDesign(context, geometry, layout);
   if (variant == TSliderVariant.normal) {
     return base.copyWith(
-      trackHeight: componentTheme?.trackHeight ?? 4.0,
-      trackShape: _TDesignSliderTrackShape(horizontalInset: token.spacer2),
+      trackHeight: geometry.trackHeight,
+      trackShape: _TDesignSliderTrackShape(geometry: geometry, layout: layout),
       rangeTrackShape: _TDesignRangeSliderTrackShape(
-        horizontalInset: token.spacer2,
+        geometry: geometry,
+        layout: layout,
       ),
     );
   }
   return base.copyWith(
-    trackHeight: token.spacer3,
+    trackHeight: geometry.trackHeight,
     trackShape: _CapsuleSliderTrackShape(
-      horizontalInset: token.spacer2,
-      outerColor: base.inactiveTrackColor ?? token.componentBorder,
-      disabledOuterColor: token.bgColorComponent,
+      layout: layout,
+      outerColor: base.inactiveTrackColor ?? context.tTheme.componentBorder,
+      disabledOuterColor: context.tTheme.bgColorComponent,
       divisions: divisions,
     ),
     rangeTrackShape: _CapsuleRangeSliderTrackShape(
-      horizontalInset: token.spacer2,
-      outerColor: base.inactiveTrackColor ?? token.componentBorder,
-      disabledOuterColor: token.bgColorComponent,
+      layout: layout,
+      outerColor: base.inactiveTrackColor ?? context.tTheme.componentBorder,
+      disabledOuterColor: context.tTheme.bgColorComponent,
       divisions: divisions,
     ),
     tickMarkShape: SliderTickMarkShape.noTickMark,
@@ -177,7 +317,7 @@ class TSlider extends StatelessWidget {
   final double max;
 
   /// 离散刻度数；null 表示连续。
-  /// 非 null 时必须大于 0。
+  /// 非 null 时必须大于 0；输入值吸附到最近刻度，显示数值使用吸附后的值。
   final int? divisions;
 
   /// 是否持续显示拇指上方数值。
@@ -197,20 +337,106 @@ class TSlider extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final effectiveValue = SliderGeometry.effectiveValue(
+      value,
+      min,
+      max,
+      divisions,
+    );
+    final geometry = SliderGeometry.resolve(
+      context,
+      capsule: variant == TSliderVariant.capsule,
+    );
     final label = showThumbValue
         ? (thumbFormatter?.call(value) ?? value.toStringAsFixed(2))
         : null;
+    final layout = _SliderGeometryLayout(geometry);
+    void pointerChanged(Offset position) {
+      final pointer = layout.pointer;
+      if (!pointer.singleActive || !layout.metrics.hasTravel) {
+        return;
+      }
+      final value = layout.metrics.valueAt(
+        layout.viewport!.globalToLocal(position).dx,
+        min: min,
+        max: max,
+        divisions: divisions,
+        direction: Directionality.of(context),
+      );
+      if (pointer.singleValue != value) {
+        pointer.singleValue = value;
+        onChanged?.call(value);
+      }
+    }
+
+    layout.pointerMove = pointerChanged;
     final slider = Slider(
-      value: value,
-      onChanged: onChanged,
-      onChangeStart: onChangeStart,
-      onChangeEnd: onChangeEnd,
+      value: effectiveValue,
+      onChanged: onChanged == null
+          ? null
+          : (value) {
+              // Pointer values come from the current geometry. Native values remain
+              // authoritative for keyboard and accessibility actions.
+              if (!layout.pointer.suppressed &&
+                  (!layout.pointer.singleActive ||
+                      layout.pointer.nativeAction)) {
+                if (layout.pointer.nativeAction) {
+                  layout.pointer.singleValue = value;
+                }
+                onChanged!(value);
+              }
+            },
+      onChangeStart: (value) {
+        final pointer = layout.pointer;
+        if (!layout.metrics.hasTravel) {
+          layout.suppressUnavailableInteraction();
+          return;
+        }
+        if (pointer.singleActive) {
+          pointer.nativeAction = true;
+          onChangeStart?.call(value);
+          return;
+        }
+        if (pointer.id != null) {
+          pointer.singleActive = true;
+          pointer.singleValue = effectiveValue;
+          onChangeStart?.call(effectiveValue);
+          pointerChanged(pointer.position!);
+        } else {
+          onChangeStart?.call(value);
+        }
+      },
+      onChangeEnd: (value) {
+        final pointer = layout.pointer;
+        if (pointer.suppressed) {
+          pointer.suppressed = false;
+          pointer.singleActive = false;
+          pointer.nativeAction = false;
+          return;
+        }
+        if (pointer.nativeAction) {
+          pointer.nativeAction = false;
+          onChangeEnd?.call(value);
+        } else if (pointer.singleActive) {
+          final last = pointer.singleValue!;
+          pointer.singleActive = false;
+          onChangeEnd?.call(last);
+        } else {
+          onChangeEnd?.call(value);
+        }
+      },
       min: min,
       max: max,
       divisions: divisions,
       label: label,
     );
-    final baseTheme = _resolveSliderTheme(context, variant, divisions);
+    final baseTheme = _resolveSliderTheme(
+      context,
+      variant,
+      divisions,
+      geometry,
+      layout,
+    );
     final sliderTheme = baseTheme.copyWith(
       showValueIndicator: showThumbValue ? ShowValueIndicator.never : null,
       thumbShape: label == null
@@ -226,7 +452,10 @@ class TSlider extends StatelessWidget {
     ).extension<TSliderThemeData>()?.decoration;
     final themedSlider = Theme(
       data: TInternalMaterialTheme.resolve(context),
-      child: SliderTheme(data: sliderTheme, child: slider),
+      child: _SliderGeometryViewport(
+        layout: layout,
+        child: SliderTheme(data: sliderTheme, child: slider),
+      ),
     );
     final sliderContent = showThumbValue
         ? Padding(
@@ -243,6 +472,7 @@ class TSlider extends StatelessWidget {
             max: max,
             divisions: safeDivisions,
             formatter: scaleFormatter,
+            geometry: geometry,
             slider: sliderContent,
           )
         : sliderContent;
@@ -273,6 +503,8 @@ class TRangeSlider extends StatelessWidget {
        assert(!showScaleValue || divisions != null);
 
   /// 受控范围值；两端值应处于 min 与 max 指定的范围内，父组件需回传新值。
+  /// 连续拖动在正常尺寸下保留 8 逻辑像素最小中心间距；空间不足时随几何缩小，且不超过当前区间行程。
+  /// 离散同刻度、直接传入的相等端点仍受支持。
   final RangeValues value;
 
   /// 范围变更回调；为 null 时禁用。
@@ -293,7 +525,7 @@ class TRangeSlider extends StatelessWidget {
   final double max;
 
   /// 离散刻度数；null 表示连续。
-  /// 非 null 时必须大于 0。
+  /// 非 null 时必须大于 0；输入值吸附到最近刻度，显示数值使用吸附后的值。
   final int? divisions;
 
   /// 是否持续显示拇指上方数值。
@@ -314,23 +546,66 @@ class TRangeSlider extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     assert(value.start >= min && value.end <= max);
+    final effectiveStart = SliderGeometry.effectiveValue(
+      value.start,
+      min,
+      max,
+      divisions,
+    );
+    final effectiveEnd = SliderGeometry.effectiveValue(
+      value.end,
+      min,
+      max,
+      divisions,
+    );
+    final geometry = SliderGeometry.resolve(
+      context,
+      capsule: variant == TSliderVariant.capsule,
+    );
     final labels = showThumbValue
         ? RangeLabels(
             thumbFormatter?.call(value.start) ?? value.start.toStringAsFixed(2),
             thumbFormatter?.call(value.end) ?? value.end.toStringAsFixed(2),
           )
         : null;
+    final layout = _SliderGeometryLayout(geometry);
     final slider = RangeSlider(
-      values: value,
-      onChanged: onChanged,
-      onChangeStart: onChangeStart,
-      onChangeEnd: onChangeEnd,
+      values: RangeValues(effectiveStart, effectiveEnd),
+      onChanged: onChanged == null
+          ? null
+          : (values) {
+              if (!layout.pointer.suppressed) {
+                onChanged!(values);
+              }
+            },
+      onChangeStart: (values) {
+        if (!layout.metrics.hasTravel) {
+          layout.suppressUnavailableInteraction();
+          return;
+        }
+        layout.pointer.rangeActive = true;
+        onChangeStart?.call(values);
+      },
+      onChangeEnd: (values) {
+        layout.pointer.rangeActive = false;
+        if (layout.pointer.suppressed) {
+          layout.pointer.suppressed = false;
+          return;
+        }
+        onChangeEnd?.call(values);
+      },
       min: min,
       max: max,
       divisions: divisions,
       labels: labels,
     );
-    final baseTheme = _resolveSliderTheme(context, variant, divisions);
+    final baseTheme = _resolveSliderTheme(
+      context,
+      variant,
+      divisions,
+      geometry,
+      layout,
+    );
     final sliderTheme = baseTheme.copyWith(
       showValueIndicator: showThumbValue ? ShowValueIndicator.never : null,
       rangeThumbShape: labels == null
@@ -346,7 +621,23 @@ class TRangeSlider extends StatelessWidget {
     ).extension<TSliderThemeData>()?.decoration;
     final themedSlider = Theme(
       data: TInternalMaterialTheme.resolve(context),
-      child: SliderTheme(data: sliderTheme, child: slider),
+      child: _SliderGeometryViewport(
+        layout: layout,
+        child: LayoutBuilder(
+          builder: (context, constraints) {
+            final metrics = layout.forConstraints(constraints);
+            return SliderTheme(
+              data: sliderTheme.copyWith(
+                minThumbSeparation: metrics.rangeSeparation(
+                  (effectiveStart - min) / (max - min),
+                  (effectiveEnd - min) / (max - min),
+                ),
+              ),
+              child: slider,
+            );
+          },
+        ),
+      ),
     );
     final sliderContent = showThumbValue
         ? Padding(
@@ -363,6 +654,7 @@ class TRangeSlider extends StatelessWidget {
             max: max,
             divisions: safeDivisions,
             formatter: scaleFormatter,
+            geometry: geometry,
             slider: sliderContent,
           )
         : sliderContent;
@@ -372,58 +664,12 @@ class TRangeSlider extends StatelessWidget {
   }
 }
 
-Rect _preferredTrackRect({
-  required RenderBox parentBox,
-  required Offset offset,
-  required SliderThemeData sliderTheme,
-  required double horizontalInset,
-}) {
-  final trackHeight = sliderTheme.trackHeight ?? 0;
-  final trackWidth = math.max(0.0, parentBox.size.width - 2 * horizontalInset);
-  return Rect.fromLTWH(
-    offset.dx + horizontalInset,
-    offset.dy + (parentBox.size.height - trackHeight) / 2,
-    trackWidth,
-    trackHeight,
-  );
-}
-
-Rect _capsuleMaterialTrackRect({
-  required RenderBox parentBox,
-  required Offset offset,
-  required SliderThemeData sliderTheme,
-  required double horizontalInset,
-}) {
-  final visualRect = _preferredTrackRect(
-    parentBox: parentBox,
-    offset: offset,
-    sliderTheme: sliderTheme,
-    horizontalInset: horizontalInset,
-  );
-  // Material reserves half a track height at each end for discrete values.
-  // Extend its coordinate track so values map across the visible inset track.
-  final extension = visualRect.height / 2 - _kCapsuleTrackInset;
-  return Rect.fromLTRB(
-    visualRect.left - extension,
-    visualRect.top,
-    visualRect.right + extension,
-    visualRect.bottom,
-  );
-}
-
-Rect _capsuleVisualTrackRect(Rect materialRect) {
-  final extension = materialRect.height / 2 - _kCapsuleTrackInset;
-  return Rect.fromLTRB(
-    materialRect.left + extension,
-    materialRect.top,
-    materialRect.right - extension,
-    materialRect.bottom,
-  );
-}
-
 void _paintCapsuleSegments(
   Canvas canvas, {
   required Rect trackRect,
+  required Rect thumbTrack,
+  required double innerInset,
+  required double gapWidth,
   required Color outerColor,
   required Color inactiveColor,
   required Color activeColor,
@@ -435,7 +681,7 @@ void _paintCapsuleSegments(
     RRect.fromRectAndRadius(trackRect, Radius.circular(trackRect.height / 2)),
     Paint()..color = outerColor,
   );
-  final innerRect = trackRect.deflate(_kCapsuleTrackInset);
+  final innerRect = trackRect.deflate(innerInset);
   if (innerRect.isEmpty) {
     return;
   }
@@ -445,23 +691,21 @@ void _paintCapsuleSegments(
     RRect.fromRectAndRadius(innerRect, Radius.circular(innerRect.height / 2)),
   );
   final count = divisions ?? 1;
-  // Figma spaces divider centers across the outer capsule's usable width;
-  // the painted inner track keeps its 3px inset on every side.
-  final dividerLeft = trackRect.left + _kCapsuleTrackInset / 2;
-  final dividerStep = (trackRect.width - _kCapsuleTrackInset) / count;
-  final gapHalf = dividerStep > _kCapsuleGapWidth ? _kCapsuleGapWidth / 2 : 0.0;
+  // 分段边界对齐 thumb 落点：分段在 thumb 行程上等分。
+  final dividerLeft = thumbTrack.left;
+  final dividerStep = thumbTrack.width / count;
+  final gapHalf = dividerStep > gapWidth ? gapWidth / 2 : 0.0;
   for (var index = 0; index < count; index++) {
     // Leave a 2px unpainted gap when the division is wide enough.
-    final left = math.max(
-      innerRect.left,
-      index == 0 ? innerRect.left : dividerLeft + index * dividerStep + gapHalf,
-    );
-    final right = math.min(
-      innerRect.right,
-      index == count - 1
-          ? innerRect.right
-          : dividerLeft + (index + 1) * dividerStep - gapHalf,
-    );
+    final left = index == 0
+        ? innerRect.left
+        : math.max(innerRect.left, dividerLeft + index * dividerStep + gapHalf);
+    final right = index == count - 1
+        ? innerRect.right
+        : math.min(
+            innerRect.right,
+            dividerLeft + (index + 1) * dividerStep - gapHalf,
+          );
     if (right <= left) {
       continue;
     }
@@ -477,10 +721,77 @@ void _paintCapsuleSegments(
   canvas.restore();
 }
 
-class _TDesignSliderTrackShape extends RoundedRectSliderTrackShape {
-  const _TDesignSliderTrackShape({required this.horizontalInset});
+void _paintNormalTrack(
+  Canvas canvas,
+  Rect rect,
+  SliderThemeData theme,
+  Animation<double> animation, {
+  required double activeLeft,
+  required double activeRight,
+}) {
+  if (rect.isEmpty) {
+    return;
+  }
+  final border = RRect.fromRectAndRadius(
+    rect,
+    Radius.circular(math.min(rect.width, rect.height) / 2),
+  );
+  final inactive = Color.lerp(
+    theme.disabledInactiveTrackColor,
+    theme.inactiveTrackColor,
+    animation.value,
+  )!;
+  final active = Color.lerp(
+    theme.disabledActiveTrackColor,
+    theme.activeTrackColor,
+    animation.value,
+  )!;
+  final left = activeLeft.clamp(rect.left, rect.right).toDouble();
+  final right = activeRight.clamp(left, rect.right).toDouble();
+  void segment(double start, double end, Color color) {
+    if (end <= start) {
+      return;
+    }
+    canvas.save();
+    canvas.clipRect(
+      Rect.fromLTRB(start, rect.top - 1, end, rect.bottom + 1),
+      doAntiAlias: false,
+    );
+    canvas.drawRRect(border, Paint()..color = color);
+    canvas.restore();
+  }
 
-  final double horizontalInset;
+  segment(rect.left, left, inactive);
+  segment(left, right, active);
+  segment(right, rect.right, inactive);
+}
+
+class _TDesignSliderTickMarkShape extends RoundSliderTickMarkShape {
+  const _TDesignSliderTickMarkShape(this.layout);
+  final _SliderGeometryLayout layout;
+  @override
+  double get tickMarkRadius => layout.metrics.tickRadius;
+}
+
+class _TDesignRangeSliderTickMarkShape extends RoundRangeSliderTickMarkShape {
+  const _TDesignRangeSliderTickMarkShape(this.layout);
+  final _SliderGeometryLayout layout;
+  @override
+  double get tickMarkRadius => layout.metrics.tickRadius;
+}
+
+class _TDesignSliderTrackShape extends SliderTrackShape {
+  const _TDesignSliderTrackShape({
+    required this.geometry,
+    required this.layout,
+  });
+
+  final _SliderGeometryLayout layout;
+
+  final SliderGeometry geometry;
+
+  @override
+  bool get isRounded => false;
 
   @override
   Rect getPreferredRect({
@@ -489,12 +800,7 @@ class _TDesignSliderTrackShape extends RoundedRectSliderTrackShape {
     required SliderThemeData sliderTheme,
     bool isEnabled = false,
     bool isDiscrete = false,
-  }) => _preferredTrackRect(
-    parentBox: parentBox,
-    offset: offset,
-    sliderTheme: sliderTheme,
-    horizontalInset: horizontalInset,
-  );
+  }) => layout.forBox(parentBox).coordinateRect(parentBox.size, offset);
 
   @override
   void paint(
@@ -510,26 +816,33 @@ class _TDesignSliderTrackShape extends RoundedRectSliderTrackShape {
     bool isEnabled = false,
     double additionalActiveTrackHeight = 2,
   }) {
-    super.paint(
-      context,
-      offset,
-      parentBox: parentBox,
-      sliderTheme: sliderTheme,
-      enableAnimation: enableAnimation,
-      textDirection: textDirection,
-      thumbCenter: thumbCenter,
-      secondaryOffset: secondaryOffset,
-      isDiscrete: isDiscrete,
-      isEnabled: isEnabled,
-      additionalActiveTrackHeight: 0,
+    final rect = layout.forBox(parentBox).visualRect(parentBox.size, offset);
+    _paintNormalTrack(
+      context.canvas,
+      rect,
+      sliderTheme,
+      enableAnimation,
+      activeLeft: textDirection == TextDirection.ltr
+          ? rect.left
+          : thumbCenter.dx,
+      activeRight: textDirection == TextDirection.ltr
+          ? thumbCenter.dx
+          : rect.right,
     );
   }
 }
 
-class _TDesignRangeSliderTrackShape extends RoundedRectRangeSliderTrackShape {
-  const _TDesignRangeSliderTrackShape({required this.horizontalInset});
+class _TDesignRangeSliderTrackShape extends RangeSliderTrackShape {
+  const _TDesignRangeSliderTrackShape({
+    required this.geometry,
+    required this.layout,
+  });
 
-  final double horizontalInset;
+  final SliderGeometry geometry;
+  final _SliderGeometryLayout layout;
+
+  @override
+  bool get isRounded => false;
 
   @override
   Rect getPreferredRect({
@@ -538,12 +851,7 @@ class _TDesignRangeSliderTrackShape extends RoundedRectRangeSliderTrackShape {
     required SliderThemeData sliderTheme,
     bool isEnabled = false,
     bool isDiscrete = false,
-  }) => _preferredTrackRect(
-    parentBox: parentBox,
-    offset: offset,
-    sliderTheme: sliderTheme,
-    horizontalInset: horizontalInset,
-  );
+  }) => layout.forBox(parentBox).coordinateRect(parentBox.size, offset);
 
   @override
   void paint(
@@ -559,34 +867,34 @@ class _TDesignRangeSliderTrackShape extends RoundedRectRangeSliderTrackShape {
     required TextDirection textDirection,
     double additionalActiveTrackHeight = 2,
   }) {
-    super.paint(
-      context,
-      offset,
-      parentBox: parentBox,
-      sliderTheme: sliderTheme,
-      enableAnimation: enableAnimation,
-      startThumbCenter: startThumbCenter,
-      endThumbCenter: endThumbCenter,
-      isEnabled: isEnabled,
-      isDiscrete: isDiscrete,
-      textDirection: textDirection,
-      additionalActiveTrackHeight: 0,
+    final rect = layout.forBox(parentBox).visualRect(parentBox.size, offset);
+    _paintNormalTrack(
+      context.canvas,
+      rect,
+      sliderTheme,
+      enableAnimation,
+      activeLeft: math.min(startThumbCenter.dx, endThumbCenter.dx),
+      activeRight: math.max(startThumbCenter.dx, endThumbCenter.dx),
     );
   }
 }
 
 class _CapsuleSliderTrackShape extends RoundedRectSliderTrackShape {
   const _CapsuleSliderTrackShape({
-    required this.horizontalInset,
+    required this.layout,
     required this.outerColor,
     required this.disabledOuterColor,
     required this.divisions,
   });
 
-  final double horizontalInset;
+  final _SliderGeometryLayout layout;
   final Color outerColor;
   final Color disabledOuterColor;
   final int? divisions;
+
+  // Geometry owns the complete travel in continuous and discrete modes.
+  @override
+  bool get isRounded => false;
 
   @override
   Rect getPreferredRect({
@@ -595,12 +903,7 @@ class _CapsuleSliderTrackShape extends RoundedRectSliderTrackShape {
     required SliderThemeData sliderTheme,
     bool isEnabled = false,
     bool isDiscrete = false,
-  }) => _capsuleMaterialTrackRect(
-    parentBox: parentBox,
-    offset: offset,
-    sliderTheme: sliderTheme,
-    horizontalInset: horizontalInset,
-  );
+  }) => layout.forBox(parentBox).coordinateRect(parentBox.size, offset);
 
   @override
   void paint(
@@ -616,15 +919,9 @@ class _CapsuleSliderTrackShape extends RoundedRectSliderTrackShape {
     bool isEnabled = false,
     double additionalActiveTrackHeight = 2,
   }) {
-    final trackRect = _capsuleVisualTrackRect(
-      getPreferredRect(
-        parentBox: parentBox,
-        offset: offset,
-        sliderTheme: sliderTheme,
-        isEnabled: isEnabled,
-        isDiscrete: isDiscrete,
-      ),
-    );
+    final metrics = layout.forBox(parentBox);
+    final trackRect = metrics.visualRect(parentBox.size, offset);
+    final innerInset = metrics.capsuleInset;
     if (trackRect.isEmpty) {
       return;
     }
@@ -638,10 +935,13 @@ class _CapsuleSliderTrackShape extends RoundedRectSliderTrackShape {
       sliderTheme.activeTrackColor,
       enableAnimation.value,
     )!;
-    final innerRect = trackRect.deflate(_kCapsuleTrackInset);
+    final innerRect = trackRect.deflate(innerInset);
     _paintCapsuleSegments(
       context.canvas,
       trackRect: trackRect,
+      thumbTrack: metrics.coordinateRect(parentBox.size, offset),
+      innerInset: innerInset,
+      gapWidth: metrics.capsuleGapWidth,
       outerColor: Color.lerp(
         disabledOuterColor,
         outerColor,
@@ -662,16 +962,20 @@ class _CapsuleSliderTrackShape extends RoundedRectSliderTrackShape {
 
 class _CapsuleRangeSliderTrackShape extends RoundedRectRangeSliderTrackShape {
   const _CapsuleRangeSliderTrackShape({
-    required this.horizontalInset,
+    required this.layout,
     required this.outerColor,
     required this.disabledOuterColor,
     required this.divisions,
   });
 
-  final double horizontalInset;
+  final _SliderGeometryLayout layout;
   final Color outerColor;
   final Color disabledOuterColor;
   final int? divisions;
+
+  /// 同 [_CapsuleSliderTrackShape]。
+  @override
+  bool get isRounded => false;
 
   @override
   Rect getPreferredRect({
@@ -680,12 +984,7 @@ class _CapsuleRangeSliderTrackShape extends RoundedRectRangeSliderTrackShape {
     required SliderThemeData sliderTheme,
     bool isEnabled = false,
     bool isDiscrete = false,
-  }) => _capsuleMaterialTrackRect(
-    parentBox: parentBox,
-    offset: offset,
-    sliderTheme: sliderTheme,
-    horizontalInset: horizontalInset,
-  );
+  }) => layout.forBox(parentBox).coordinateRect(parentBox.size, offset);
 
   @override
   void paint(
@@ -701,15 +1000,9 @@ class _CapsuleRangeSliderTrackShape extends RoundedRectRangeSliderTrackShape {
     required TextDirection textDirection,
     double additionalActiveTrackHeight = 2,
   }) {
-    final trackRect = _capsuleVisualTrackRect(
-      getPreferredRect(
-        parentBox: parentBox,
-        offset: offset,
-        sliderTheme: sliderTheme,
-        isEnabled: isEnabled,
-        isDiscrete: isDiscrete,
-      ),
-    );
+    final metrics = layout.forBox(parentBox);
+    final trackRect = metrics.visualRect(parentBox.size, offset);
+    final innerInset = metrics.capsuleInset;
     if (trackRect.isEmpty) {
       return;
     }
@@ -728,6 +1021,9 @@ class _CapsuleRangeSliderTrackShape extends RoundedRectRangeSliderTrackShape {
     _paintCapsuleSegments(
       context.canvas,
       trackRect: trackRect,
+      thumbTrack: metrics.coordinateRect(parentBox.size, offset),
+      innerInset: innerInset,
+      gapWidth: metrics.capsuleGapWidth,
       outerColor: Color.lerp(
         disabledOuterColor,
         outerColor,
@@ -767,16 +1063,18 @@ class _CapsuleRangeSliderTickMarkShape extends RangeSliderTickMarkShape {
 
 class _TDesignSliderThumbShape extends SliderComponentShape {
   const _TDesignSliderThumbShape({
+    required this.layout,
     required this.borderColor,
     required this.disabledBorderColor,
   });
 
+  final _SliderGeometryLayout layout;
   final Color borderColor;
   final Color disabledBorderColor;
 
   @override
   Size getPreferredSize(bool isEnabled, bool isDiscrete) =>
-      const Size.fromRadius(10);
+      layout.metrics.thumbSize;
 
   @override
   void paint(
@@ -796,6 +1094,7 @@ class _TDesignSliderThumbShape extends SliderComponentShape {
     _paintTDesignThumb(
       context.canvas,
       center,
+      radius: layout.forBox(parentBox).thumbRadius,
       enableAnimation: enableAnimation,
       activationAnimation: activationAnimation,
       sliderTheme: sliderTheme,
@@ -807,16 +1106,18 @@ class _TDesignSliderThumbShape extends SliderComponentShape {
 
 class _TDesignRangeSliderThumbShape extends RangeSliderThumbShape {
   const _TDesignRangeSliderThumbShape({
+    required this.layout,
     required this.borderColor,
     required this.disabledBorderColor,
   });
 
+  final _SliderGeometryLayout layout;
   final Color borderColor;
   final Color disabledBorderColor;
 
   @override
   Size getPreferredSize(bool isEnabled, bool isDiscrete) =>
-      const Size.fromRadius(10);
+      layout.metrics.thumbSize;
 
   @override
   void paint(
@@ -835,6 +1136,7 @@ class _TDesignRangeSliderThumbShape extends RangeSliderThumbShape {
     _paintTDesignThumb(
       context.canvas,
       center,
+      radius: layout.metrics.thumbRadius,
       enableAnimation: enableAnimation,
       activationAnimation: activationAnimation,
       sliderTheme: sliderTheme,
@@ -852,8 +1154,11 @@ void _paintTDesignThumb(
   required SliderThemeData sliderTheme,
   required Color borderColor,
   required Color disabledBorderColor,
+  required double radius,
 }) {
-  const radius = 10.0;
+  if (radius <= 0) {
+    return;
+  }
   final fill = Color.lerp(
     sliderTheme.disabledThumbColor,
     sliderTheme.thumbColor,
@@ -872,13 +1177,14 @@ void _paintTDesignThumb(
     true,
   );
   canvas.drawCircle(center, radius, Paint()..color = fill);
+  final strokeWidth = SliderGeometry.thumbBorderWidth * radius / _kThumbRadius;
   canvas.drawCircle(
     center,
-    radius,
+    math.max(0, radius - strokeWidth / 2),
     Paint()
       ..color = border
       ..style = PaintingStyle.stroke
-      ..strokeWidth = 1,
+      ..strokeWidth = strokeWidth,
   );
 }
 
@@ -1027,6 +1333,7 @@ class _SliderWithScaleLabels extends StatelessWidget {
     required this.max,
     required this.divisions,
     required this.formatter,
+    required this.geometry,
     required this.slider,
   });
 
@@ -1034,29 +1341,51 @@ class _SliderWithScaleLabels extends StatelessWidget {
   final double max;
   final int divisions;
   final TSliderThumbFormatter? formatter;
+  final SliderGeometry geometry;
   final Widget slider;
 
   @override
   Widget build(BuildContext context) {
+    final direction = Directionality.of(context) == TextDirection.ltr
+        ? 1.0
+        : -1.0;
     final labels = List<Widget>.generate(divisions + 1, (index) {
       final value = min + (max - min) * index / divisions;
       final text = formatter?.call(value) ?? value.toString();
       final isFirst = index == 0;
       final isLast = index == divisions;
+      final alignment = isFirst
+          ? AlignmentDirectional.centerStart
+          : isLast
+          ? AlignmentDirectional.centerEnd
+          : Alignment.center;
       return Expanded(
         flex: isFirst || isLast ? 1 : 2,
         child: Align(
-          alignment: isFirst
-              ? AlignmentDirectional.centerStart
-              : isLast
-              ? AlignmentDirectional.centerEnd
-              : Alignment.center,
-          child: TTextStyled(
-            text,
-            style: null,
-            maxLines: 1,
-            overflow: TextOverflow.ellipsis,
-            textAlign: TextAlign.center,
+          alignment: alignment,
+          child: OverflowBox(
+            fit: OverflowBoxFit.deferToChild,
+            minWidth: 0,
+            maxWidth: double.infinity,
+            alignment: alignment,
+            child: FractionalTranslation(
+              translation: Offset(
+                (isFirst
+                        ? -0.5
+                        : isLast
+                        ? 0.5
+                        : 0.0) *
+                    direction,
+                0,
+              ),
+              child: TTextStyled(
+                text,
+                style: null,
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+                textAlign: TextAlign.center,
+              ),
+            ),
           ),
         ),
       );
@@ -1064,15 +1393,91 @@ class _SliderWithScaleLabels extends StatelessWidget {
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
-        Padding(
-          padding: EdgeInsets.symmetric(horizontal: context.tTheme.spacer2),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: labels,
-          ),
+        _SliderLabelPadding(
+          geometry: geometry,
+          child: Row(children: labels),
         ),
         slider,
       ],
+    );
+  }
+}
+
+// Width-aware padding with intrinsic sizing, shared by single and range labels.
+class _SliderLabelPadding extends SingleChildRenderObjectWidget {
+  const _SliderLabelPadding({required this.geometry, required super.child});
+  final SliderGeometry geometry;
+  @override
+  RenderObject createRenderObject(BuildContext context) =>
+      _RenderSliderLabelPadding(geometry);
+  @override
+  void updateRenderObject(
+    BuildContext context,
+    _RenderSliderLabelPadding renderObject,
+  ) {
+    renderObject.geometry = geometry;
+  }
+}
+
+class _RenderSliderLabelPadding extends RenderShiftedBox {
+  _RenderSliderLabelPadding(this._geometry) : super(null);
+  SliderGeometry _geometry;
+  SliderGeometry get geometry => _geometry;
+  set geometry(SliderGeometry value) {
+    if (identical(value, _geometry)) {
+      return;
+    }
+    _geometry = value;
+    markNeedsLayout();
+  }
+
+  double get _intrinsicInset =>
+      _geometry.forWidth(_geometry.preferredSize.width).thumbInset;
+  @override
+  double computeMinIntrinsicWidth(double height) =>
+      child!.getMinIntrinsicWidth(height) + 2 * _intrinsicInset;
+  @override
+  double computeMaxIntrinsicWidth(double height) =>
+      child!.getMaxIntrinsicWidth(height) + 2 * _intrinsicInset;
+  @override
+  double computeMinIntrinsicHeight(double width) =>
+      child!.getMinIntrinsicHeight(
+        math.max(0.0, width - _geometry.forWidth(width).thumbInset * 2),
+      );
+  @override
+  double computeMaxIntrinsicHeight(double width) =>
+      child!.getMaxIntrinsicHeight(
+        math.max(0.0, width - _geometry.forWidth(width).thumbInset * 2),
+      );
+  double _inset(BoxConstraints constraints) => _geometry
+      .forWidth(
+        constraints.hasBoundedWidth
+            ? constraints.maxWidth
+            : computeMaxIntrinsicWidth(double.infinity),
+      )
+      .thumbInset;
+  @override
+  Size computeDryLayout(BoxConstraints constraints) {
+    final inset = _inset(constraints);
+    final size = child!.getDryLayout(
+      constraints.deflate(EdgeInsets.symmetric(horizontal: inset)),
+    );
+    return constraints.constrain(Size(size.width + 2 * inset, size.height));
+  }
+
+  @override
+  void performLayout() {
+    final inset = _inset(constraints);
+    child!.layout(
+      constraints.deflate(EdgeInsets.symmetric(horizontal: inset)),
+      parentUsesSize: true,
+    );
+    size = constraints.constrain(
+      Size(child!.size.width + 2 * inset, child!.size.height),
+    );
+    (child!.parentData! as BoxParentData).offset = Offset(
+      (size.width - child!.size.width) / 2,
+      0,
     );
   }
 }

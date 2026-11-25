@@ -25,7 +25,7 @@
 
 工具仅支持当前生成器的根规则，不是通用CSS解析器；未知Token/值沿用原转换器忽略行为。旧pub.dev 1.0.0解析器不支持本次小数输出，业务需使用含修复的组件版本。
 
-源码及测试指纹与验证摘要见results.json。本地日志及保留模板的PR描述草稿位于工作区review-artifacts/pr1173-local，不作为远端CI证据。
+源码及测试指纹与验证摘要见[validation-snapshot.json](../engineering/044-ThemeController-import-and-preview/validation-snapshot.json)。本地日志及保留模板的PR描述草稿位于工作区review-artifacts/pr1173-local，不作为远端CI证据。
 
 ## 本地复审后的结论
 
@@ -37,4 +37,9 @@
 
 多位小数在完整CSS→命名JSON→公共fromJson往返中保持double精度，不固定小数位、不取整。Font.withSize(int)的既有整数缩放与取整契约保持原样，不将本次JSON修复扩大为公开API变更。
 
-复审后的双SDK结果以上表及results.json当前validation为准，initialValidation为初次实现的历史结果。最新验证包括最终源码完整门禁、真实按钮样式与显式覆盖断言，以及未发布转换工具的实际命令执行。原有未跟踪token_migration/pubspec.lock未改动。实现通过独立PR交付；远端CI状态以当前PR head的Checks为准。
+复审后的双SDK结果以上表及[validation-snapshot.json](../engineering/044-ThemeController-import-and-preview/validation-snapshot.json)当前validation为准，initialValidation为初次实现的历史结果。最新验证包括最终源码完整门禁、真实按钮样式与显式覆盖断言，以及未发布转换工具的实际命令执行。原有未跟踪token_migration/pubspec.lock未改动。实现通过独立PR交付；远端CI状态以当前PR head的Checks为准。
+
+
+## 相同记录合并
+
+[validation-snapshot.json](../engineering/044-ThemeController-import-and-preview/validation-snapshot.json) 与原 `results.json` 逐字节相同，统一保留现行 Spec 中的快照。SHA-256：`e1b2faa7d40c85ca92556594856e493ce5e1e2765580aae12f386b0613537547`。仅合并附件，原候选、环境、观察和验证结论不变。

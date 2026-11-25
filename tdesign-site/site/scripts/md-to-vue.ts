@@ -2,9 +2,6 @@
 import fs from 'fs';
 import path from 'path';
 import matter from 'gray-matter';
-// import camelCase from 'camelcase';
-
-// import testCoverage from '../test-coverage';
 
 const componentPath = path.join(__dirname, '../plugin-tdoc/component.vue').replaceAll('\\', '/');
 
@@ -16,19 +13,12 @@ const DEFAULT_TABS = [
 
 export default function mdToVue(options: any) {
   const mdSegment = customRender(options);
-  const { demoCodesImportsStr = '', demoCodesDefsStr } = options;
-
-  // let coverage = '';
-  // if (mdSegment.isComponent) {
-  //   coverage = testCoverage[camelCase(mdSegment.componentName)] || '0%';
-  // }
 
   const sfc = `
     <template><tdesign-doc /></template>
     <script>
       import TdesignDoc from '${componentPath}';
       import { defineComponent } from 'vue';
-      ${demoCodesImportsStr}
 
       const info = ${JSON.stringify(mdSegment)};
       info.docMd = info.docMd.replaceAll('src="/assets/', 'src="' + import.meta.env.BASE_URL + 'assets/');
@@ -36,7 +26,7 @@ export default function mdToVue(options: any) {
       export default defineComponent({
         props: { docType: String },
         components: { TdesignDoc },
-        provide: { info, demos: { ${demoCodesDefsStr} } },
+        provide: { info, demos: {} },
       });
     </script>
   `;
@@ -63,6 +53,10 @@ function customRender({ source, file, md }: any) {
     ...data,
   };
 
+  const toc = pageData.toc
+    ? `${pageData.tocLevel ? `$<toc${JSON.stringify({ level: pageData.tocLevel })}>` : '[toc]'}\n`
+    : '';
+
   // md filename
   const reg = file.match(/docs\/components\/(\S*)(?=\/\S*.md)/);
   const componentName = reg && reg[1];
@@ -83,12 +77,12 @@ function customRender({ source, file, md }: any) {
     mdSegment.demoMd = md.render.call(md, `${demoMd.replace(/<!--[\s\S]+?-->/g, '')}`).html;
     mdSegment.apiMd = md.render.call(
       md,
-      `${pageData.toc ? '[toc]\n' : ''}${apiMd.replace(/<!--[\s\S]+?-->/g, '')}`,
+      `${toc}${apiMd.replace(/<!--[\s\S]+?-->/g, '')}`,
     ).html;
   } else {
     mdSegment.docMd = md.render.call(
       md,
-      `${pageData.toc ? '[toc]\n' : ''}${content.replace(/<!--[\s\S]+?-->/g, '')}`,
+      `${toc}${content.replace(/<!--[\s\S]+?-->/g, '')}`,
     ).html;
   }
 
@@ -98,9 +92,7 @@ function customRender({ source, file, md }: any) {
 
     if (fs.existsSync(designDocPath)) {
       const designMd = fs.readFileSync(designDocPath, 'utf-8');
-      mdSegment.designMd = md.render.call(md, `${pageData.toc ? '[toc]\n' : ''}${designMd}`).html;
-    } else {
-      // console.log(`[vite-plugin-tdoc]: 未找到 ${designDocPath} 文件`);
+      mdSegment.designMd = md.render.call(md, `${toc}${designMd}`).html;
     }
   }
 
