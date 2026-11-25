@@ -63,17 +63,17 @@ class _CalendarDescribedExampleState extends State<CalendarDescribedExample> {
       Navigator.of(context).context,
       options: TPopupOptions.bottom(
         height: MediaQuery.sizeOf(context).height * 0.85,
-        headerBuilder: (_, close) => SizedBox(
+        headerBuilder: (ctx, close) => SizedBox(
           height: TPopupHeader.headerHeight,
           child: Stack(
             alignment: Alignment.center,
             children: [
               TText(
                 localized ? 'Select Date' : '请选择日期',
-                font: context.tTheme.fontTitleLarge,
+                font: ctx.tTheme.fontTitleLarge,
               ),
               Positioned(
-                right: context.tTheme.spacer,
+                right: ctx.tTheme.spacer,
                 child: IconButton(
                   tooltip: localized ? 'Close' : '关闭',
                   onPressed: close,
@@ -145,7 +145,9 @@ class _CalendarDescribedExampleState extends State<CalendarDescribedExample> {
                                     draft.length != 2)
                             ? null
                             : () {
-                                onConfirm(List<DateTime>.of(draft));
+                                if (mounted) {
+                                  onConfirm(List<DateTime>.of(draft));
+                                }
                                 popup.close();
                               },
                         child: Text(localized ? 'Confirm' : '确定'),
