@@ -143,3 +143,9 @@ PR 拆分、重放、分支切换与重复推送记录已移除。影响最终�
 相对 1.0.0 的这两个 ThemeData 公共接口是兼容性修复，既有 implements 无需新增内部成员。直接调用 develop 新增 `@internal` 类方法的代码不在此兼容承诺内；本修复也不消除其他 PR 的独立 API / implements 风险。外部实现自行覆盖的 `lerp` / `copyWith` 仍由业务负责，本次不代理或重写业务规则。
 
 验证范围是 macOS 本地编译、Widget/工具/文档与布局断言；未执行 Android/iOS 真机、Web release 或 Linux Golden，不外推这些结果。绘制算法与基线未改，不在 macOS 生成或更新 Golden；本节不包含远端 CI 结果，提交 PR 后须按最新 head 另行核对。
+
+## 默认主题复制与明暗配对验收（#1236）
+
+实现候选为 PR #1236 的提交 `1eff69f`。Flutter 3.32.0 和 3.47.8 分别执行 `test/theme/theme_test.dart`、`test/theme/theme_copy_with_test.dart` 和 `test/components/button/t_button_test.dart`，各通过 252 项主题与按钮回归。最终移除测试中的冗余导入后，在 3.32.0 复跑专项与调度器用例，共 39 项通过，修改的 Dart 文件静态分析无诊断。
+
+专项测试覆盖九类覆盖映射各两个值、两个引用别名、默认主题两侧的副本与回指、直接复制暗色、无暗色配对和颜色同步。兼容性测试在复制后修改原映射，确认已复制条目仍读副本值，同时可回退读取后来新增的 Token 和别名。内存优化属于独立后续事项。
