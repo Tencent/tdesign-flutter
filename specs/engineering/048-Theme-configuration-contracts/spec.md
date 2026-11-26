@@ -115,6 +115,12 @@ TD 内置视觉和行为只接受受支持的实例参数/style、TD ThemeExtens
 
 组件实现、示例、公开注释、测试和工具随契约同步维护；删除入口或改变默认行为时明确 breaking 与迁移方法。隔离 Material 主题不能破坏原生交互、自定义内容或系统环境响应。
 
+### 默认主题复制的兼容与演进
+
+1.1.1 保留 `TThemeData.defaultData().copyWith(...)`，用于一次设置明暗共享的 TDesign Token。共享尺寸配置方便，但同一次调用也会原样同步具体颜色，调用方需要确认两种模式都适用。使用指南优先展示按模式构建 Flutter `ThemeData` 并分别调整 Flutter 样式。需要分别设置 TDesign Token 时，可使用主题 JSON 的明暗配置块。
+
+未来可评估逐步废弃并移除这条隐式同步用法。候选迁移方式包括显式配置各模式的主题 JSON，或提供基于已有 `TThemeData`、按模式修改 Token 的 Dart 入口。评估应覆盖共享覆盖、单侧覆盖和保留已有自定义 Token 的场景。Flutter 的 `ThemeData.copyWith` 适用于 Flutter 样式，TDesign 的 `sizeMap`、`colorMap` 仍需要对应的 Token 配置入口。在替代方式和迁移示例齐备后，再决定是否废弃及何时移除。此取舍仅涉及 `defaultData().copyWith(...)` 的共享覆盖用法，`defaultData()` 仍承担获取 TDesign 默认明暗主题的职责。
+
 ### 稀疏配置与中断插值的设计依据
 
 - 稀疏 `sizeMap` 不能直接把缺失端点取成另一端：默认 size8=24 向显式 40 过渡时，25% 应为 28，不能跳到 40。getter 与插值共用默认集合，只为尺寸映射补有效默认端点；其他映射保持各自解析规则。
