@@ -26,7 +26,9 @@
 - 所有可交互实例均由页面持有状态；禁用实例 callback 为 null。
 - 垂直组合仅旋转轨道和 thumb，数值与刻度文字保持正常阅读方向；最小值位于顶部，数值向下递增，与设计稿一致。
 - `TRangeSlider` 在构建时拒绝落在 `min/max` 外的范围值。
-- 双滑块指针交互保留原生焦点及 Tab 顺序，焦点光圈遵循 Flutter 的 `FocusHighlightMode`：触摸模式下交互结束不持续显示焦点光圈；传统模式下保留框架提供的焦点高亮。保留拖动反馈，不误清其他控件焦点；Flutter 3.32 的焦点和拖出反馈以其原生能力为限。
+- `FocusHighlightMode.touch` 下，按住或拖动时保留 Flutter 原生交互反馈。松手或取消触摸后，即使游标仍有焦点，光圈也应消退。应用进入 `inactive`、`paused` 或 `detached` 时清除尚未结束的按压状态。
+- `FocusHighlightMode.traditional` 下沿用 Flutter 的焦点高亮。鼠标移开后，仍持有焦点的游标可以继续显示高亮。
+- `TRangeSlider` 的游标焦点和 Tab 遍历由 Flutter 管理。Flutter 3.32 的焦点和拖出反馈以该版本原生 `RangeSlider` 的行为为准。
 - 双滑块兼容处理保留原有布局测量行为，无文字标签时查询基线返回空值，不抛出异常。
 - 不新增公开 API；修正既有 `showThumbValue` 语义和默认视觉属于缺陷修复。
 
