@@ -2,6 +2,7 @@ import 'dart:ui' as ui;
 
 import 'package:flutter/foundation.dart'
     show debugDefaultTargetPlatformOverride;
+import 'package:flutter/gestures.dart' show kPressTimeout;
 import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -1209,8 +1210,21 @@ void main() {
       addTearDown(() {
         tester.binding.focusManager.highlightStrategy =
             FocusHighlightStrategy.automatic;
-        tester.binding.handleAppLifecycleStateChanged(AppLifecycleState.resumed);
+        tester.binding.handleAppLifecycleStateChanged(
+          AppLifecycleState.resumed,
+        );
       });
+      // Track the overlay independently of the thumb's animated shadow.
+      const overlayColor = Color(0xffff00ff);
+      bool hasOverlay(List<int> pixels) {
+        for (var i = 0; i < pixels.length; i += 4) {
+          if (pixels[i] == 255 && pixels[i + 1] == 0 && pixels[i + 2] == 255) {
+            return true;
+          }
+        }
+        return false;
+      }
+
       final key = GlobalKey();
       await tester.pumpWidget(
         RepaintBoundary(
@@ -1222,11 +1236,13 @@ void main() {
               max: 100,
               onChanged: (_) {},
             ),
+            sliderTheme: const TSliderThemeData(overlayColor: overlayColor),
           ),
         ),
       );
       await tester.pumpAndSettle();
       final idle = (await tester.runAsync(() => captureSlider(tester, key)))!;
+      expect(hasOverlay(idle), isFalse);
 
       final touch = await tester.createGesture(
         kind: ui.PointerDeviceKind.touch,
@@ -1234,26 +1250,27 @@ void main() {
       await touch.down(
         tester.getCenter(find.byType(RangeSlider)) - const Offset(80, 0),
       );
-      await tester.pump();
-      final pressed = (await tester.runAsync(() => captureSlider(tester, key)))!;
+      await tester.pump(kPressTimeout);
+      await tester.pump(kRadialReactionDuration);
+      final pressed = (await tester.runAsync(
+        () => captureSlider(tester, key),
+      ))!;
       expect(
-        pixelDifferences(idle, pressed),
-        greaterThan(0),
+        hasOverlay(pressed),
+        isTrue,
         reason: 'pressed thumb must paint the overlay',
       );
 
       // Flutter 3.32's test binding suspends frame pumping in the paused
       // state. `inactive` exercises the same observer path while keeping the
       // scheduler alive; restore `resumed` before pumping for the same reason.
-      tester.binding.handleAppLifecycleStateChanged(
-        AppLifecycleState.inactive,
-      );
+      tester.binding.handleAppLifecycleStateChanged(AppLifecycleState.inactive);
       tester.binding.handleAppLifecycleStateChanged(AppLifecycleState.resumed);
       await tester.pump();
       final after = (await tester.runAsync(() => captureSlider(tester, key)))!;
       expect(
-        after,
-        orderedEquals(idle),
+        hasOverlay(after),
+        isFalse,
         reason: 'lifecycle change must drop pressed state and hide overlay',
       );
       await touch.up();
