@@ -575,6 +575,11 @@ class TThemeData extends ThemeExtension<TThemeData> {
 
   /// 复制主题配置。
   ///
+  /// 当前主题带有暗色配对时，传入的 Token 映射和扩展数据也应用到暗色副本。
+  /// 两份副本分别继承各自原主题的其余 Token。颜色会按传入值原样应用，
+  /// 例如将容器背景设为白色也会让暗色容器使用白色，可能影响文字对比度。
+  /// 直接复制默认暗色主题时，只覆盖暗色副本，其浅色引用指向原浅色主题。
+  ///
   /// ## 返回值
   /// 复制 Token 主题并合并传入的映射；未传入的映射值沿用当前配置。
   /// name 和 extraThemeData 为空时保留当前名称和扩展数据。
@@ -593,6 +598,54 @@ class TThemeData extends ThemeExtension<TThemeData> {
     Map<String, double>? spacerMap,
 
     /// 尺寸刻度的增量映射；未提供时保留当前值。
+    Map<String, double>? sizeMap,
+    TExtraThemeData? extraThemeData,
+  }) {
+    final result = _copyTokens(
+      name: name,
+      colorMap: colorMap,
+      fontMap: fontMap,
+      fontMetricMap: fontMetricMap,
+      radiusMap: radiusMap,
+      fontFamilyMap: fontFamilyMap,
+      shadowMap: shadowMap,
+      insetShadowMap: insetShadowMap,
+      spacerMap: spacerMap,
+      sizeMap: sizeMap,
+      extraThemeData: extraThemeData,
+    );
+    result.light = identical(light, this) ? result : light;
+    final darkCopy = dark?._copyTokens(
+      colorMap: colorMap,
+      fontMap: fontMap,
+      fontMetricMap: fontMetricMap,
+      radiusMap: radiusMap,
+      fontFamilyMap: fontFamilyMap,
+      shadowMap: shadowMap,
+      insetShadowMap: insetShadowMap,
+      spacerMap: spacerMap,
+      sizeMap: sizeMap,
+      extraThemeData: extraThemeData,
+    );
+    if (darkCopy != null) {
+      darkCopy.light = result.light;
+      result.dark = darkCopy;
+    }
+    return result;
+  }
+
+  TThemeData _copyTokens({
+    String? name,
+    Map<String, Color>? colorMap,
+    Map<String, Font>? fontMap,
+    Map<String, double>? fontMetricMap,
+    Map<String, double>? radiusMap,
+    Map<String, FontFamily>? fontFamilyMap,
+    Map<String, List<BoxShadow>>? shadowMap,
+    Map<String, BorderSide>? insetShadowMap,
+
+    Map<String, double>? spacerMap,
+
     Map<String, double>? sizeMap,
     TExtraThemeData? extraThemeData,
   }) {

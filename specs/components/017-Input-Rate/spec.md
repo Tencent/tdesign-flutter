@@ -87,3 +87,9 @@ Rate 初版对齐公开 Demo 后，仍存在文案状态由组件与 Theme 双�
 验收标准描述应满足的行为，不表示已执行或通过；执行范围与证据见 [acceptance.md](./acceptance.md)，剩余事项只在 [tasks.md](./tasks.md) 维护。
 
 跨组件配置职责见 [Theme 契约](../../engineering/048-Theme-configuration-contracts/spec.md)，视觉方法见 [Golden 规范](../../engineering/044-Testing-golden-regression/spec.md)。
+
+## 评分浮层释放
+
+评分组件在共用关闭路径中取消定时器，移除当前 `OverlayEntry`，随后释放该对象并清空引用。清理后可重新打开浮层，重复关闭不会重复移除或释放同一对象。公开接口、评分回调和浮层触发规则保持一致。
+
+验收标准见[评分浮层生命周期](./acceptance.md#rate-overlay-lifecycle)。
