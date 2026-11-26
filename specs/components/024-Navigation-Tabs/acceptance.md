@@ -3,7 +3,7 @@
 <a id="record-024-contract-alignment"></a>
 <a id="record-040-size-content-alignment"></a>
 
-## 本次范围
+## 历史记录范围
 
 2026-10-20 原记录整理；未重跑组件、Golden、设备或远端CI。以下结论仅限原候选与范围。
 
@@ -16,9 +16,12 @@
 
 各标识可能对应不同阶段，不能合成一次完整验证；候选或日志缺失时仍需复核。
 
-## 验证范围与未覆盖项
+## PR #1250 可滚动标签栏与完整 Tabs 快照
 
-以下保留各事项原有的文字验收结论与未覆盖项。本次未重新执行组件验收；历史截图及独立对比附件已移除。
+2026-11-26，[PR #1250](https://github.com/Tencent/tdesign-flutter/pull/1250) 候选 `1b4931e299dc1cf43b6cbd4fb8a403f51c3b67b5` 的 [CI / Validate](https://github.com/Tencent/tdesign-flutter/actions/runs/45796044806) 中，Flutter 3.32.0 与 latest 的组件测试和静态分析通过，Flutter 3.32.0 Linux 的两组 Golden 及视觉回归汇总通过。
+
+- [组件测试](../../../tdesign-component/test/components/tabs/t_tab_bar_test.dart)覆盖 390 逻辑像素的有界宽度、无界 `Row`、固有宽度测量及长标签拖动后的实际滚动偏移。
+- [Golden 测试](../../../tdesign-component/test/components/tabs/t_tag_padding_golden_test.dart)由 `dart run tool/run_visual_regression.dart --shard=1` 执行。[四张基线](../../../tdesign-component/test/components/tabs/goldens/)为 375 × 180，覆盖亮暗主题下的初始和切换后状态，同时展示标签栏分割线与对应的内容区。
 
 ## 必要证据与追溯
 

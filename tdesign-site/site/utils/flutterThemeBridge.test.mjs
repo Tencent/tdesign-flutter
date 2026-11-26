@@ -49,6 +49,9 @@ test('completion uses installed upstream declarations and preserves every mobile
   const web = declarations(extraDefaults);
   const completed = declarations(ensureFlutterThemeTokenCoverage(loadControllerBaseline().extra, extraDefaults));
   assert.ok(web.size > 0);
+  assert.ok(web.has('--td-radius-medium'));
+  assert.equal(completed.has('--td-radius-medium'), false);
+  web.delete('--td-radius-medium');
   for (const [name, value] of web) assert.equal(completed.get(name), mobile.get(name) ?? value, name);
   for (const [name, value] of mobile) assert.equal(completed.get(name), value, name);
   assert.equal(completed.has('--td-line-height-body-extraLarge'), false);
@@ -57,6 +60,14 @@ test('completion uses installed upstream declarations and preserves every mobile
 test('completion follows supplied dependency defaults without a stale local copy', () => {
   assert.equal(ensureFlutterThemeTokenCoverage('', ':root { --td-size-6: 17.5px; }'),
     '\n:root {\n  --td-size-6: 17.5px;\n}\n');
+});
+
+test('mobile preview skips the Web radius fallback and preserves explicit declarations', () => {
+  const baseline = loadControllerBaseline();
+  const css = { ...baseline, extra: `${baseline.extra}\n:root { --td-radius-medium: 10px; }` };
+  const message = createFlutterCssThemeMessage(css, 'dark', baseline, extraDefaults);
+  assert.match(message.css.extra, /--td-radius-medium: 10px;/);
+  assert.doesNotMatch(message.baseline.extra, /--td-radius-medium\s*:/);
 });
 
 test('all-component Flutter audit uses the current completed controller baseline', () => {

@@ -205,6 +205,38 @@ Widget documentationThemeApp(
 
 业务保存用户的外观选择，在切换时重建 `MaterialApp` 并传入新的 `mode`。自定义深色配色必须提供相应的深色主题配置，不能只把浅色颜色整体变暗。
 
+### 分别调整浅色和深色主题
+
+调整 Flutter 样式时，先构建指定模式的 `ThemeData`，再调用它的
+`copyWith`。例如，可以为普通图标分别设置浅色和深色尺寸：
+
+```dart
+final tokens = TThemeData.defaultData();
+final light = TThemeBuilder.light(tokens).copyWith(
+  iconTheme: const IconThemeData(size: 28),
+);
+final dark = TThemeBuilder.dark(tokens).copyWith(
+  iconTheme: const IconThemeData(size: 24),
+);
+
+MaterialApp(
+  theme: light,
+  darkTheme: dark,
+  themeMode: ThemeMode.system,
+);
+```
+
+这里的 `iconTheme.size` 是 Flutter 图标主题的默认尺寸。需要分别调整 TDesign
+的 `size8`、容器背景色等 Token 时，可在主题 JSON 的浅色和深色配置块中分别设置。
+
+已有的 `TThemeData.defaultData().copyWith(...)` 适用于明暗模式共享同一份
+TDesign Token 覆盖。带有暗色配对时，显式传入的值会应用到两个副本，其余值各自
+沿用原模式的配置。`colorMap` 中的具体颜色也会原样应用到两边。例如，把容器背景
+覆盖为纯白也会让暗色容器变白，可能降低文字对比度。
+
+从 1.1.0 升级后，复制带暗色配对的主题再构建暗色主题时，未覆盖的 Token 会来自
+配对的暗色配置。此前因暗色配对丢失而使用浅色 Token 的页面，升级后可能出现外观变化。
+
 ## 主题工具与色板预览
 
 [Theme 主题](/flutter/components/theme) 展示功能色、文字与图标颜色、中性色板，并提供主题 API 查询。页面中的色板会根据当前上下文重新读取主题。

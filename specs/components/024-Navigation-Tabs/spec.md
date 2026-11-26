@@ -18,6 +18,8 @@
 
 Tabs 公开 Demo 的内容区文字为默认黑色，且组件样式区缺少设计稿中的大小尺寸。本次补齐明确的 Flutter 尺寸契约和 Demo。
 
+[Issue #1246](https://github.com/Tencent/tdesign-flutter/issues/1246) 中，可滚动标签较短时，标签栏背景和底部分割线随标签内容收缩，未覆盖父容器提供的整段宽度。
+
 ## 范围与非目标
 
 ### 目标
@@ -59,6 +61,7 @@ Tabs 公开 Demo 的内容区文字为默认黑色，且组件样式区缺少设
 - 容器与指示器的具体视觉由 TTabsBarThemeData 对应字段覆盖 TD Token/内置默认；实例不再提供同义完整 decoration/indicator 入口。`TabBarThemeData`、Material `ColorScheme`、`disabledColor` 与 `IconTheme` 不参与 Tabs 默认视觉解析，避免底层 Material 默认值或应用级 Material 配置改变 TDesign 组件契约；调用方自定义文字保留自身环境；组件内置文字按 TD 配置链解析。
 - 底层可以复用 Material 的布局、动画、手势与 `TabController`，但默认不显示 Material splash/hover overlay，也不从内部 `THorizontalTabBar` 回读 `TabBarThemeData`。
 - `controller` 为空时从最近的 `DefaultTabController` 获取；显式控制器用于跨树协调、读取索引或命令式切换，两者不同时拥有状态。
+- `TTabsBar.isScrollable` 为 `true` 时，父级提供有限宽度则标签栏铺满可用宽度，背景和底部分割线随栏延伸。标签按内容定宽，超出视口时可横向滚动。横向无界时，例如位于 `Row` 的非 flex 子项内，标签栏按内容定宽，并支持 `IntrinsicWidth` 测量。
 - `TTabsBarView` 与 `TTabsBar` 可共享同一显式或继承控制器；其默认不可滑动语义保持不变。
 - Example 只选择 `variant`、`isScrollable`、Tab 内容和内容区，不传自定义指示器、颜色、圆角或尺寸以模拟默认设计。
 
@@ -79,6 +82,7 @@ Tabs 公开 Demo 的内容区文字为默认黑色，且组件样式区缺少设
 
 ### 设计演变中的关键理由
 
+- 可滚动标签栏只在父级宽度有限时收紧横向约束。直接使用 `double.infinity` 可让有界布局铺满，但会让无界父级传递无穷宽度并触发布局异常。
 - 默认 Line 从无指示器变为 TDesign 指示器，是预期的用户可感知默认行为变化。
 - 禁用态不再整体透明，显式指定颜色的自定义 `child` 仍被视为调用方完整样式逃逸，不强行改写。
 - Material 仍负责标准 Controller、动画和手势基础设施，但不再成为 Tabs 的视觉 Theme 来源；需要子树级视觉定制时统一使用 `TTabsBarThemeData`。
@@ -87,7 +91,7 @@ Tabs 公开 Demo 的内容区文字为默认黑色，且组件样式区缺少设
 
 ## 兼容性与迁移
 
-本次只整理设计记录，不据此新增 API、改变默认值或判断全部兼容。后续接口删除、类型收紧或默认行为变化按最终源码和迁移指南核对。
+[PR #1250](https://github.com/Tencent/tdesign-flutter/pull/1250) 沿用现有 API 和控制器用法。有限宽度内，短标签的标签栏背景和分割线会延伸到父容器边缘，标签位置和宽度保持原有布局。
 
 ## 验收标准
 
@@ -95,6 +99,8 @@ Tabs 公开 Demo 的内容区文字为默认黑色，且组件样式区缺少设
 - Example 不再持有可由 `DefaultTabController` 替代的控制器，也不再传默认指示器。
 - 公开分组、实例数量、顺序、状态和样式由 Demo 测试覆盖。
 - 组件测试覆盖三种形态、主题优先级、禁用态、显式与继承控制器。
+- 可滚动标签栏在有限宽度内铺满，在横向无界的 `Row` 中按内容定宽，且支持固有宽度测量。长标签超出有界视口时，拖动应增加实际滚动偏移。
+- Tag Golden 截取固定 375 × 180 的完整 Tabs 区域，包含标签栏、分割线及 `TTabsBarView` 的文字内容。浅色和深色分别覆盖初始状态与点击切换后的状态，图中应能确认分割线右端与内容区右边缘对齐。
 - Material `TabBarThemeData`、`disabledColor` 与 `IconTheme` 不改变 Tabs 的 TDesign 默认视觉。
 - Tabs 手写生产源码覆盖率达到 95%。
 - Flutter 3.32.0 与 latest 非视觉测试和 analyze 通过；Flutter 3.32.0 Linux Golden 通过。

@@ -60,7 +60,7 @@ class TTabsBar extends StatelessWidget {
     final backgroundColor =
         themeData.backgroundColor ?? context.tTheme.bgColorContainer;
     final resolvedIndicator = themeData.indicator ?? _defaultIndicator(context);
-    return Container(
+    final bar = Container(
       // Custom content keeps the original bounded toolbar slot; only owned labels grow.
       height: tabs.any((tab) => tab.child != null) ? 48 : null,
       constraints: const BoxConstraints(minHeight: 48),
@@ -108,6 +108,15 @@ class TTabsBar extends StatelessWidget {
         overlayColor: const WidgetStatePropertyAll<Color?>(Colors.transparent),
         onTap: onTap,
       ),
+    );
+    if (!isScrollable) {
+      return bar;
+    }
+    return ConstraintsTransformBox(
+      constraintsTransform: (constraints) => constraints.hasBoundedWidth
+          ? constraints.tighten(width: constraints.maxWidth)
+          : constraints,
+      child: bar,
     );
   }
 
