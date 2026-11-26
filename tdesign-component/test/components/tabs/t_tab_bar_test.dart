@@ -365,36 +365,68 @@ void main() {
       expect(find.byType(SingleChildScrollView), findsOneWidget);
     });
 
-    testWidgets('scrollable bar still spans the available width', (
-      tester,
-    ) async {
-      // 回归：isScrollable=true 时外层容器不得按内容收缩，
-      // 否则条形背景与分割线只覆盖首个标签（issue #1246）。
-      tester.view.devicePixelRatio = 1.0;
+    testWidgets('scrollable bar fills a bounded width', (tester) async {
+      tester.view.devicePixelRatio = 1;
       tester.view.physicalSize = const Size(390, 200);
       addTearDown(tester.view.reset);
 
       await tester.pumpWidget(
         wrapWithTheme(TTabsBar(tabs: tabs(), isScrollable: true)),
       );
-      await tester.pumpAndSettle();
 
-      final screenWidth = tester.view.physicalSize.width;
-      expect(tester.getSize(find.byType(TTabsBar)).width, screenWidth);
+      expect(tester.getSize(find.byType(TTabsBar)).width, 390);
     });
 
-    testWidgets('scrollable bar scrolls long tab strips', (tester) async {
+    testWidgets('scrollable bar wraps its content in a Row', (tester) async {
       await tester.pumpWidget(
         wrapWithTheme(
-          TTabsBar(tabs: tabs(12), isScrollable: true),
-          length: 12,
+          Row(children: [TTabsBar(tabs: tabs(), isScrollable: true)]),
         ),
+      );
+
+      expect(tester.takeException(), isNull);
+      final barWidth = tester.getSize(find.byType(TTabsBar)).width;
+      expect(barWidth, greaterThan(0));
+      expect(barWidth, lessThan(tester.getSize(find.byType(Row).first).width));
+    });
+
+    testWidgets('scrollable bar supports intrinsic width measurement', (
+      tester,
+    ) async {
+      await tester.pumpWidget(
+        wrapWithTheme(
+          IntrinsicWidth(child: TTabsBar(tabs: tabs(), isScrollable: true)),
+        ),
+      );
+
+      expect(tester.takeException(), isNull);
+      expect(tester.getSize(find.byType(TTabsBar)).width, greaterThan(0));
+    });
+
+    testWidgets('dragging a long tab strip changes its scroll offset', (
+      tester,
+    ) async {
+      tester.view.devicePixelRatio = 1;
+      tester.view.physicalSize = const Size(390, 200);
+      addTearDown(tester.view.reset);
+
+      await tester.pumpWidget(
+        wrapWithTheme(TTabsBar(tabs: tabs(12), isScrollable: true), length: 12),
       );
       await tester.pumpAndSettle();
 
-      await tester.drag(find.text('选项1'), const Offset(-300, 0));
+      final scrollable = find.descendant(
+        of: find.byType(TTabsBar),
+        matching: find.byType(Scrollable),
+      );
+      final position = tester.state<ScrollableState>(scrollable).position;
+      expect(position.maxScrollExtent, greaterThan(0));
+
+      final initialOffset = position.pixels;
+      await tester.drag(scrollable, const Offset(-250, 0));
       await tester.pumpAndSettle();
-      expect(find.text('选项12'), findsOneWidget);
+
+      expect(position.pixels, greaterThan(initialOffset));
     });
   });
 
