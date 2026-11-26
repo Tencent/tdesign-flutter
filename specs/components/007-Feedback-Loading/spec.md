@@ -156,3 +156,9 @@
 使用独立、零尺寸、无交互且 maintainState=true 的生命周期 Entry 跟踪 Overlay owner；内容 Entry 保持原有 maintainState=false，不改变遮挡时内容销毁和恢复重建规则。卸载通知中只调度微任务，待祖先 unmount 结束后复核 owner，再清空全局会话并移除、释放两个 Entry。首次绘制前卸载仍由 post-frame 检查兜底。旧会话的延迟检查必须按会话身份隔离，不得释放新的会话。
 
 验收不依赖后续 show/dismiss：监听 Flutter 的对象创建和销毁事件，记录本次 show 创建的 OverlayEntry；普通卸载、遮挡后卸载、首次绘制前/后均须全部 dispose 且每个只发生一次。保留没有 Overlay、重复 show 忽略、普通页面离开但 Overlay 存活时继续展示，以及重复 dismiss 无副作用的原有契约。
+
+## 圆形加载动画释放
+
+圆形加载指示器持有其创建的 `CurvedAnimation`。组件卸载时先释放曲线动画以注销父控制器上的状态监听器，再释放 `AnimationController` 以停止 ticker。挂载期间沿用原有曲线、循环和时长更新行为，公开接口与默认值保持一致。
+
+验收标准见[圆形加载动画生命周期](./acceptance.md#circle-indicator-lifecycle)。

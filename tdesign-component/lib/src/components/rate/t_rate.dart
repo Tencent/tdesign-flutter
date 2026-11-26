@@ -667,6 +667,7 @@ class _TRateState extends State<TRate> {
     _valueIndicatorTimer?.cancel();
     _valueIndicatorTimer = null;
     _valueIndicatorEntry?.remove();
+    _valueIndicatorEntry?.dispose();
     _valueIndicatorEntry = null;
     _pendingHalfChoiceValue = null;
     _valueIndicatorShowsHalfChoices = false;

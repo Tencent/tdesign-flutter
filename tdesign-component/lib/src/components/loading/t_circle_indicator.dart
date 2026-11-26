@@ -33,6 +33,7 @@ class TCircleIndicator extends StatefulWidget {
 class _TCircleIndicatorState extends State<TCircleIndicator>
     with SingleTickerProviderStateMixin {
   late AnimationController _controller;
+  late CurvedAnimation _curve;
   late Animation<double> _animation1;
 
   @override
@@ -46,12 +47,11 @@ class _TCircleIndicatorState extends State<TCircleIndicator>
           )
           ..addListener(() => setState(() {}))
           ..repeat();
-    _animation1 = Tween(begin: 0.0, end: 1.0).animate(
-      CurvedAnimation(
-        parent: _controller,
-        curve: const Interval(0.0, 1.0, curve: Curves.linear),
-      ),
+    _curve = CurvedAnimation(
+      parent: _controller,
+      curve: const Interval(0.0, 1.0, curve: Curves.linear),
     );
+    _animation1 = Tween<double>(begin: 0.0, end: 1.0).animate(_curve);
   }
 
   @override
@@ -65,6 +65,7 @@ class _TCircleIndicatorState extends State<TCircleIndicator>
 
   @override
   void dispose() {
+    _curve.dispose();
     _controller.dispose();
     super.dispose();
   }
