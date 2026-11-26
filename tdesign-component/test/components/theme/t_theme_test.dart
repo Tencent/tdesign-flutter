@@ -421,6 +421,25 @@ void main() {
   });
 
   group('TThemeData 拷贝与 Map', () {
+    test('copyWith 显式覆盖两侧扩展数据，省略时各自保留', () {
+      final theme = TThemeData.fromJson('app', '{"app":{},"appDark":{}}')!;
+      final lightExtra = _TestExtra();
+      final darkExtra = _TestExtra();
+      theme.extraThemeData = lightExtra;
+      theme.dark!.extraThemeData = darkExtra;
+
+      final shared = _TestExtra();
+      final overridden = theme.copyWith(extraThemeData: shared);
+      expect(overridden.extraThemeData, same(shared));
+      expect(overridden.dark!.extraThemeData, same(shared));
+      expect(theme.extraThemeData, same(lightExtra));
+      expect(theme.dark!.extraThemeData, same(darkExtra));
+
+      final retained = theme.copyWith();
+      expect(retained.extraThemeData, same(lightExtra));
+      expect(retained.dark!.extraThemeData, same(darkExtra));
+    });
+
     test('copyWith 统一所有 Token 映射并隔离原配置', () {
       final extra = _TestExtra();
       final base = TThemeData.defaultData().copyWith(
