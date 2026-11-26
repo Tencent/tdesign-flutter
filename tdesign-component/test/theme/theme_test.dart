@@ -108,6 +108,32 @@ void main() {
       expect(custom.radiusSmall, 3);
     });
 
+    test('copyWith 保留明暗配对实例，避免 dark 主题静默回退', () {
+      final token = TThemeData.defaultData();
+      expect(token.dark, isNotNull);
+
+      final custom = token.copyWith(colorMap: {'brandColor': const Color(0xFFE34D59)});
+      expect(custom.dark, isNotNull);
+      expect(custom.light, same(custom));
+
+      // 覆盖后的主题构建暗色 ThemeData 时应使用暗色 Token 而非浅色 Token。
+      final darkTheme = TThemeBuilder.dark(custom);
+      expect(darkTheme.colorScheme.surface, token.dark!.bgColorContainer);
+    });
+
+    test('copyWith 的覆盖同步应用到 dark 实例', () {
+      final token = TThemeData.defaultData();
+      final custom = token.copyWith(sizeMap: {'size8': 28});
+
+      // sizeMap 覆盖应同时反映到 dark 实例，避免暗色构建丢失覆盖。
+      expect(custom.size8, 28);
+      expect(custom.dark, isNotNull);
+      expect(custom.dark!.size8, 28);
+
+      final darkTheme = TThemeBuilder.dark(custom);
+      expect(darkTheme.colorScheme.surface, token.dark!.bgColorContainer);
+    });
+
     test('TThemeBuilder.light/dark 返回完整 ThemeData', () {
       final token = TThemeData.defaultData();
       final lightTheme = TThemeBuilder.light(token);
