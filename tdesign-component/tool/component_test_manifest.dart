@@ -1120,6 +1120,7 @@ const componentTestManifests = <ComponentTestManifest>[
     componentTests: [
       'test/acceptance/theme_acceptance_test.dart',
       'test/theme/theme_test.dart',
+      'test/theme/theme_copy_with_test.dart',
       'test/theme/font_json_test.dart',
       'test/theme/overlay_themes_test.dart',
       'test/theme/component_token_ownership_test.dart',
