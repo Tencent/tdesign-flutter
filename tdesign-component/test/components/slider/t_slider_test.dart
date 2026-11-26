@@ -1,6 +1,10 @@
 import 'dart:ui' as ui;
 
+import 'package:flutter/foundation.dart'
+    show debugDefaultTargetPlatformOverride;
+import 'package:flutter/gestures.dart' show kPressTimeout;
 import 'package:flutter/rendering.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:tdesign_flutter/tdesign_flutter.dart';
 
@@ -1036,6 +1040,705 @@ void main() {
       expect(changed, isNotNull);
       expect(started, isNotNull);
       expect(ended, isNotNull);
+    });
+
+    Future<List<int>> captureSlider(WidgetTester tester, GlobalKey key) async {
+      final boundary = tester.renderObject<RenderRepaintBoundary>(
+        find.byKey(key),
+      );
+      final image = await boundary.toImage();
+      final data = await image.toByteData(format: ui.ImageByteFormat.rawRgba);
+      image.dispose();
+      return data!.buffer.asUint8List();
+    }
+
+    int pixelDifferences(List<int> a, List<int> b) {
+      var changed = 0;
+      for (var i = 0; i < a.length; i += 4) {
+        if (a[i] != b[i] ||
+            a[i + 1] != b[i + 1] ||
+            a[i + 2] != b[i + 2] ||
+            a[i + 3] != b[i + 3]) {
+          changed++;
+        }
+      }
+      return changed;
+    }
+
+    testWidgets('click preserves thumb focus after pointer up', (tester) async {
+      await tester.pumpWidget(
+        wrap(
+          TRangeSlider(
+            value: const RangeValues(20, 60),
+            min: 0,
+            max: 100,
+            onChanged: (value) {},
+          ),
+        ),
+      );
+
+      final gesture = await tester.createGesture(
+        kind: ui.PointerDeviceKind.mouse,
+      );
+      await gesture.addPointer(location: Offset.zero);
+      addTearDown(gesture.removePointer);
+
+      // Newer SDKs focus the thumb on pointer down; older SDKs may not.
+      bool focusInsideSlider() {
+        final focus = FocusManager.instance.primaryFocus;
+        final focusContext = focus?.context;
+        if (focusContext == null) {
+          return false;
+        }
+        var inside = false;
+        focusContext.visitAncestorElements((element) {
+          if (identical(element, tester.element(find.byType(RangeSlider)))) {
+            inside = true;
+            return false;
+          }
+          return true;
+        });
+        return inside;
+      }
+
+      final center = tester.getCenter(find.byType(RangeSlider));
+      await gesture.down(center + const Offset(100, 0));
+      await tester.pump();
+      final hadSliderFocus = focusInsideSlider();
+      final focusedThumb = FocusManager.instance.primaryFocus;
+      await gesture.up();
+      await tester.pumpAndSettle();
+      expect(focusInsideSlider(), hadSliderFocus);
+      expect(FocusManager.instance.primaryFocus, same(focusedThumb));
+
+      // Moving the pointer away must not discard the focus.
+      await gesture.moveTo(center - const Offset(320, 0));
+      await tester.pumpAndSettle();
+      expect(focusInsideSlider(), hadSliderFocus);
+    });
+
+    for (final kind in [
+      ui.PointerDeviceKind.mouse,
+      ui.PointerDeviceKind.touch,
+    ]) {
+      testWidgets('pointer drag retains thumb focus: $kind', (tester) async {
+        RangeValues? changed;
+        await tester.pumpWidget(
+          wrap(
+            TRangeSlider(
+              value: const RangeValues(20, 60),
+              min: 0,
+              max: 100,
+              onChanged: (value) => changed = value,
+            ),
+          ),
+        );
+        final slider = find.byType(RangeSlider);
+        final gesture = await tester.createGesture(kind: kind);
+        final center = tester.getCenter(slider);
+        await gesture.addPointer(location: center - const Offset(80, 0));
+        await gesture.down(center - const Offset(80, 0));
+        await tester.pump();
+        await gesture.moveBy(const Offset(35, 0));
+        await tester.pump();
+        expect(changed, isNotNull);
+        final focusedThumb = FocusManager.instance.primaryFocus;
+        await gesture.up();
+        await tester.pumpAndSettle();
+        expect(FocusManager.instance.primaryFocus, same(focusedThumb));
+        await gesture.removePointer();
+      });
+    }
+
+    testWidgets('Android automatic mode hides touch focus overlay', (
+      tester,
+    ) async {
+      debugDefaultTargetPlatformOverride = TargetPlatform.android;
+      tester.binding.focusManager.highlightStrategy =
+          FocusHighlightStrategy.automatic;
+      addTearDown(() {
+        debugDefaultTargetPlatformOverride = null;
+        tester.binding.focusManager.highlightStrategy =
+            FocusHighlightStrategy.automatic;
+      });
+      final key = GlobalKey();
+      await tester.pumpWidget(
+        RepaintBoundary(
+          key: key,
+          child: wrap(
+            TRangeSlider(
+              value: const RangeValues(20, 60),
+              min: 0,
+              max: 100,
+              onChanged: (_) {},
+            ),
+          ),
+        ),
+      );
+      await tester.pumpAndSettle();
+
+      final idle = (await tester.runAsync(() => captureSlider(tester, key)))!;
+      final touch = await tester.createGesture(
+        kind: ui.PointerDeviceKind.touch,
+      );
+      await touch.down(
+        tester.getCenter(find.byType(RangeSlider)) - const Offset(80, 0),
+      );
+      await tester.pump();
+      final focusedThumb = FocusManager.instance.primaryFocus;
+      await touch.up();
+      await tester.pumpAndSettle();
+      expect(
+        tester.binding.focusManager.highlightMode,
+        FocusHighlightMode.touch,
+      );
+      expect(FocusManager.instance.primaryFocus, same(focusedThumb));
+      final after = (await tester.runAsync(() => captureSlider(tester, key)))!;
+      expect(
+        after,
+        orderedEquals(idle),
+        reason: 'touch must not leave a focus overlay',
+      );
+      debugDefaultTargetPlatformOverride = null;
+    });
+
+    testWidgets('app lifecycle clears pressed pointer and hides overlay', (
+      tester,
+    ) async {
+      tester.binding.focusManager.highlightStrategy =
+          FocusHighlightStrategy.alwaysTouch;
+      addTearDown(() {
+        tester.binding.focusManager.highlightStrategy =
+            FocusHighlightStrategy.automatic;
+        tester.binding.handleAppLifecycleStateChanged(
+          AppLifecycleState.resumed,
+        );
+      });
+      // Track the overlay independently of the thumb's animated shadow.
+      const overlayColor = Color(0xffff00ff);
+      bool hasOverlay(List<int> pixels) {
+        for (var i = 0; i < pixels.length; i += 4) {
+          if (pixels[i] == 255 && pixels[i + 1] == 0 && pixels[i + 2] == 255) {
+            return true;
+          }
+        }
+        return false;
+      }
+
+      final key = GlobalKey();
+      await tester.pumpWidget(
+        RepaintBoundary(
+          key: key,
+          child: wrap(
+            TRangeSlider(
+              value: const RangeValues(20, 60),
+              min: 0,
+              max: 100,
+              onChanged: (_) {},
+            ),
+            sliderTheme: const TSliderThemeData(overlayColor: overlayColor),
+          ),
+        ),
+      );
+      await tester.pumpAndSettle();
+      final idle = (await tester.runAsync(() => captureSlider(tester, key)))!;
+      expect(hasOverlay(idle), isFalse);
+
+      final touch = await tester.createGesture(
+        kind: ui.PointerDeviceKind.touch,
+      );
+      await touch.down(
+        tester.getCenter(find.byType(RangeSlider)) - const Offset(80, 0),
+      );
+      await tester.pump(kPressTimeout);
+      await tester.pump(kRadialReactionDuration);
+      final pressed = (await tester.runAsync(
+        () => captureSlider(tester, key),
+      ))!;
+      expect(
+        hasOverlay(pressed),
+        isTrue,
+        reason: 'pressed thumb must paint the overlay',
+      );
+
+      // Flutter 3.32's test binding suspends frame pumping in the paused
+      // state. `inactive` exercises the same observer path while keeping the
+      // scheduler alive; restore `resumed` before pumping for the same reason.
+      tester.binding.handleAppLifecycleStateChanged(AppLifecycleState.inactive);
+      tester.binding.handleAppLifecycleStateChanged(AppLifecycleState.resumed);
+      await tester.pump();
+      final after = (await tester.runAsync(() => captureSlider(tester, key)))!;
+      expect(
+        hasOverlay(after),
+        isFalse,
+        reason: 'lifecycle change must drop pressed state and hide overlay',
+      );
+      await touch.up();
+      await touch.removePointer();
+    });
+
+    testWidgets('touch drag keeps pressed feedback outside the slider', (
+      tester,
+    ) async {
+      final key = GlobalKey();
+      await tester.pumpWidget(
+        RepaintBoundary(
+          key: key,
+          child: wrap(
+            TRangeSlider(
+              value: const RangeValues(20, 60),
+              min: 0,
+              max: 100,
+              onChanged: (_) {},
+            ),
+          ),
+        ),
+      );
+      await tester.pumpAndSettle();
+
+      final idle = (await tester.runAsync(() => captureSlider(tester, key)))!;
+      final touch = await tester.createGesture(
+        kind: ui.PointerDeviceKind.touch,
+      );
+      await touch.down(
+        tester.getCenter(find.byType(RangeSlider)) - const Offset(80, 0),
+      );
+      await tester.pump(const Duration(milliseconds: 200));
+      await touch.moveBy(const Offset(400, 0));
+      await tester.pump(const Duration(milliseconds: 200));
+      final active = (await tester.runAsync(() => captureSlider(tester, key)))!;
+      final changed = pixelDifferences(idle, active);
+      // Flutter 3.32's native RangeSlider already loses this overlay when
+      // the pointer leaves. Newer SDKs must keep active drag feedback.
+      final legacyHover = find
+          .descendant(
+            of: find.byType(RangeSlider),
+            matching: find.byType(FocusableActionDetector),
+          )
+          .evaluate()
+          .isNotEmpty;
+      if (!legacyHover) {
+        expect(changed, greaterThan(0));
+      }
+      await touch.up();
+      await tester.pumpAndSettle();
+    });
+
+    testWidgets('drag outside retains focus and finishes interaction', (
+      tester,
+    ) async {
+      var ended = 0;
+      await tester.pumpWidget(
+        wrap(
+          TRangeSlider(
+            value: const RangeValues(20, 60),
+            min: 0,
+            max: 100,
+            onChanged: (_) {},
+            onChangeEnd: (_) => ended++,
+          ),
+        ),
+      );
+      final slider = find.byType(RangeSlider);
+      final mouse = await tester.createGesture(
+        kind: ui.PointerDeviceKind.mouse,
+      );
+      final center = tester.getCenter(slider);
+      await mouse.addPointer(location: center - const Offset(80, 0));
+      await mouse.down(center - const Offset(80, 0));
+      await tester.pump();
+      final focusedThumb = FocusManager.instance.primaryFocus;
+      await mouse.moveBy(const Offset(400, 0));
+      await tester.pump();
+      await mouse.up();
+      await tester.pumpAndSettle();
+      expect(FocusManager.instance.primaryFocus, same(focusedThumb));
+      expect(ended, 1);
+      await mouse.removePointer();
+    });
+
+    testWidgets('cancelled pointer retains slider focus', (tester) async {
+      await tester.pumpWidget(
+        wrap(
+          TRangeSlider(
+            value: const RangeValues(20, 60),
+            min: 0,
+            max: 100,
+            onChanged: (_) {},
+          ),
+        ),
+      );
+      final slider = find.byType(RangeSlider);
+      final gesture = await tester.createGesture(
+        kind: ui.PointerDeviceKind.touch,
+      );
+      await gesture.down(tester.getCenter(slider) - const Offset(80, 0));
+      await tester.pump();
+      final focusedThumb = FocusManager.instance.primaryFocus;
+      await gesture.cancel();
+      await tester.pumpAndSettle();
+      expect(FocusManager.instance.primaryFocus, same(focusedThumb));
+    });
+
+    testWidgets('mouse click keeps the native Tab traversal position', (
+      tester,
+    ) async {
+      Future<List<bool>> observe({required bool native}) async {
+        final slider = native
+            ? RangeSlider(values: const RangeValues(.2, .6), onChanged: (_) {})
+            : TRangeSlider(value: const RangeValues(.2, .6), onChanged: (_) {});
+        await tester.pumpWidget(
+          MaterialApp(
+            home: Scaffold(
+              body: Column(
+                children: [
+                  TextButton(onPressed: () {}, child: const Text('before')),
+                  SizedBox(width: 320, child: slider),
+                  TextButton(onPressed: () {}, child: const Text('after')),
+                ],
+              ),
+            ),
+          ),
+        );
+        await tester.pumpAndSettle();
+        final finder = find.byType(RangeSlider);
+        final point = tester.getCenter(finder) - const Offset(80, 0);
+        final mouse = await tester.createGesture(
+          kind: ui.PointerDeviceKind.mouse,
+        );
+        await mouse.addPointer(location: point);
+        await mouse.down(point);
+        await tester.pump();
+        await mouse.up();
+        await tester.pumpAndSettle();
+        bool focusInside() {
+          var inside = false;
+          FocusManager.instance.primaryFocus?.context?.visitAncestorElements((
+            element,
+          ) {
+            if (identical(element, tester.element(finder))) {
+              inside = true;
+            }
+            return true;
+          });
+          return inside;
+        }
+
+        final afterClick = focusInside();
+        await tester.sendKeyEvent(LogicalKeyboardKey.tab);
+        await tester.pumpAndSettle();
+        final afterTab = focusInside();
+        await mouse.removePointer();
+        await tester.pumpWidget(const SizedBox.shrink());
+        await tester.pumpAndSettle();
+        return [afterClick, afterTab];
+      }
+
+      final expected = await observe(native: true);
+      final actual = await observe(native: false);
+      expect(actual, expected);
+    });
+
+    for (final strategy in [
+      FocusHighlightStrategy.alwaysTouch,
+      FocusHighlightStrategy.alwaysTraditional,
+    ]) {
+      testWidgets('focus highlight obeys $strategy after touch and Tab', (
+        tester,
+      ) async {
+        tester.binding.focusManager.highlightStrategy = strategy;
+        addTearDown(
+          () => tester.binding.focusManager.highlightStrategy =
+              FocusHighlightStrategy.automatic,
+        );
+        final key = GlobalKey();
+        await tester.pumpWidget(
+          RepaintBoundary(
+            key: key,
+            child: wrap(
+              TRangeSlider(
+                value: const RangeValues(20, 60),
+                min: 0,
+                max: 100,
+                onChanged: (_) {},
+              ),
+            ),
+          ),
+        );
+        await tester.pumpAndSettle();
+
+        final idle = (await tester.runAsync(() => captureSlider(tester, key)))!;
+        final slider = find.byType(RangeSlider);
+        final touch = await tester.createGesture(
+          kind: ui.PointerDeviceKind.touch,
+        );
+        await touch.down(tester.getCenter(slider) - const Offset(80, 0));
+        await tester.pump();
+        final focusedThumb = FocusManager.instance.primaryFocus;
+        await touch.up();
+        await tester.pumpAndSettle();
+        expect(FocusManager.instance.primaryFocus, same(focusedThumb));
+        final touchPixels = pixelDifferences(
+          idle,
+          (await tester.runAsync(() => captureSlider(tester, key)))!,
+        );
+        await tester.sendKeyEvent(LogicalKeyboardKey.tab);
+        await tester.pumpAndSettle();
+        final tabPixels = pixelDifferences(
+          idle,
+          (await tester.runAsync(() => captureSlider(tester, key)))!,
+        );
+        final legacyFocus = find
+            .descendant(
+              of: slider,
+              matching: find.byType(FocusableActionDetector),
+            )
+            .evaluate()
+            .isNotEmpty;
+        if (strategy == FocusHighlightStrategy.alwaysTouch) {
+          expect(touchPixels, 0);
+          expect(tabPixels, 0);
+          tester.binding.focusManager.highlightStrategy =
+              FocusHighlightStrategy.alwaysTraditional;
+          await tester.pumpAndSettle();
+          if (!legacyFocus) {
+            expect(
+              pixelDifferences(
+                idle,
+                (await tester.runAsync(() => captureSlider(tester, key)))!,
+              ),
+              greaterThan(0),
+            );
+          }
+          tester.binding.focusManager.highlightStrategy =
+              FocusHighlightStrategy.alwaysTouch;
+          await tester.pumpAndSettle();
+          expect(
+            pixelDifferences(
+              idle,
+              (await tester.runAsync(() => captureSlider(tester, key)))!,
+            ),
+            0,
+          );
+        } else if (!legacyFocus) {
+          expect(touchPixels, greaterThan(0));
+          expect(tabPixels, greaterThan(0));
+        }
+      });
+    }
+
+    testWidgets('keyboard focus restores its visual highlight', (tester) async {
+      Future<int> focusPixels({required bool native}) async {
+        final key = GlobalKey();
+        final slider = native
+            ? RangeSlider(values: const RangeValues(.2, .6), onChanged: (_) {})
+            : TRangeSlider(value: const RangeValues(.2, .6), onChanged: (_) {});
+        await tester.pumpWidget(RepaintBoundary(key: key, child: wrap(slider)));
+        await tester.pumpAndSettle();
+
+        final before = (await tester.runAsync(
+          () => captureSlider(tester, key),
+        ))!;
+        await tester.sendKeyEvent(LogicalKeyboardKey.tab);
+        await tester.pumpAndSettle();
+        final after = (await tester.runAsync(
+          () => captureSlider(tester, key),
+        ))!;
+        final changed = pixelDifferences(before, after);
+        await tester.pumpWidget(const SizedBox.shrink());
+        await tester.pumpAndSettle();
+        return changed;
+      }
+
+      final native = await focusPixels(native: true);
+      final tdesign = await focusPixels(native: false);
+      if (native > 0) {
+        expect(tdesign, greaterThan(0));
+      }
+    });
+
+    testWidgets('mouse hover and focus follow traditional highlight policy', (
+      tester,
+    ) async {
+      tester.binding.focusManager.highlightStrategy =
+          FocusHighlightStrategy.alwaysTraditional;
+      addTearDown(
+        () => tester.binding.focusManager.highlightStrategy =
+            FocusHighlightStrategy.automatic,
+      );
+      final key = GlobalKey();
+      await tester.pumpWidget(
+        RepaintBoundary(
+          key: key,
+          child: wrap(
+            TRangeSlider(
+              value: const RangeValues(20, 60),
+              min: 0,
+              max: 100,
+              onChanged: (_) {},
+            ),
+          ),
+        ),
+      );
+      await tester.pumpAndSettle();
+
+      final idle = (await tester.runAsync(() => captureSlider(tester, key)))!;
+      final slider = find.byType(RangeSlider);
+      final center = tester.getCenter(slider);
+      final thumb = center - const Offset(80, 0);
+      final mouse = await tester.createGesture(
+        kind: ui.PointerDeviceKind.mouse,
+      );
+      await mouse.addPointer(location: Offset.zero);
+      await mouse.moveTo(thumb);
+      await tester.pumpAndSettle();
+      final hovered = (await tester.runAsync(
+        () => captureSlider(tester, key),
+      ))!;
+      // The older native slider uses a different hover path and does not
+      // paint this position in the baseline.
+      final legacyHover = find
+          .descendant(
+            of: slider,
+            matching: find.byType(FocusableActionDetector),
+          )
+          .evaluate()
+          .isNotEmpty;
+      if (!legacyHover) {
+        expect(pixelDifferences(idle, hovered), greaterThan(0));
+      }
+      await mouse.down(thumb);
+      await tester.pump();
+      await mouse.up();
+      await tester.pumpAndSettle();
+      await mouse.moveTo(center + const Offset(135, 0));
+      await tester.pumpAndSettle();
+      final away = (await tester.runAsync(() => captureSlider(tester, key)))!;
+      if (!legacyHover) {
+        expect(
+          pixelDifferences(idle, away),
+          greaterThan(0),
+          reason: 'traditional focus remains visible when the mouse leaves',
+        );
+      }
+      await mouse.removePointer();
+    });
+
+    testWidgets('Tab after touch shows keyboard focus feedback', (
+      tester,
+    ) async {
+      final key = GlobalKey();
+      await tester.pumpWidget(
+        RepaintBoundary(
+          key: key,
+          child: wrap(
+            TRangeSlider(
+              value: const RangeValues(20, 60),
+              min: 0,
+              max: 100,
+              onChanged: (_) {},
+            ),
+          ),
+        ),
+      );
+      await tester.pumpAndSettle();
+
+      final touch = await tester.createGesture(
+        kind: ui.PointerDeviceKind.touch,
+      );
+      await touch.down(
+        tester.getCenter(find.byType(RangeSlider)) - const Offset(80, 0),
+      );
+      await tester.pump();
+      await touch.up();
+      await tester.pumpAndSettle();
+      final pointerView = (await tester.runAsync(
+        () => captureSlider(tester, key),
+      ))!;
+      await tester.sendKeyEvent(LogicalKeyboardKey.tab);
+      await tester.pumpAndSettle();
+      final keyboardView = (await tester.runAsync(
+        () => captureSlider(tester, key),
+      ))!;
+      final changed = pixelDifferences(pointerView, keyboardView);
+      final legacyFocus = find
+          .descendant(
+            of: find.byType(RangeSlider),
+            matching: find.byType(FocusableActionDetector),
+          )
+          .evaluate()
+          .isNotEmpty;
+      if (!legacyFocus) {
+        expect(changed, greaterThan(0));
+      }
+    });
+
+    testWidgets('hover exit preserves keyboard focus', (tester) async {
+      await tester.pumpWidget(
+        wrap(
+          TRangeSlider(
+            value: const RangeValues(20, 60),
+            min: 0,
+            max: 100,
+            onChanged: (_) {},
+          ),
+        ),
+      );
+      await tester.sendKeyEvent(LogicalKeyboardKey.tab);
+      await tester.pumpAndSettle();
+      final focused = FocusManager.instance.primaryFocus;
+      expect(focused?.context, isNotNull);
+      var inside = false;
+      focused!.context!.visitAncestorElements((element) {
+        if (identical(element, tester.element(find.byType(RangeSlider)))) {
+          inside = true;
+        }
+        return true;
+      });
+      expect(inside, isTrue);
+      final mouse = await tester.createGesture(
+        kind: ui.PointerDeviceKind.mouse,
+      );
+      await mouse.addPointer(
+        location: tester.getCenter(find.byType(RangeSlider)),
+      );
+      await tester.pump();
+      await mouse.moveTo(Offset.zero);
+      await tester.pump();
+      expect(FocusManager.instance.primaryFocus, same(focused));
+      await mouse.removePointer();
+    });
+
+    testWidgets('pointer release does not clear another control focus', (
+      tester,
+    ) async {
+      final outsideFocus = FocusNode();
+      addTearDown(outsideFocus.dispose);
+      await tester.pumpWidget(
+        wrap(
+          Column(
+            children: [
+              TextField(focusNode: outsideFocus),
+              TRangeSlider(
+                value: const RangeValues(20, 60),
+                min: 0,
+                max: 100,
+                onChanged: (_) {},
+              ),
+            ],
+          ),
+        ),
+      );
+      final gesture = await tester.createGesture(
+        kind: ui.PointerDeviceKind.touch,
+      );
+      await gesture.down(tester.getCenter(find.byType(RangeSlider)));
+      await tester.pump();
+      outsideFocus.requestFocus();
+      await tester.pump();
+      await gesture.up();
+      await tester.pump();
+      expect(outsideFocus.hasFocus, isTrue);
     });
 
     testWidgets('onChanged null disables and decoration wraps range slider', (

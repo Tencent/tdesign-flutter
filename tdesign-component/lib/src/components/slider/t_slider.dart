@@ -619,23 +619,26 @@ class TRangeSlider extends StatelessWidget {
     final decoration = Theme.of(
       context,
     ).extension<TSliderThemeData>()?.decoration;
-    final themedSlider = Theme(
-      data: TInternalMaterialTheme.resolve(context),
-      child: _SliderGeometryViewport(
-        layout: layout,
-        child: LayoutBuilder(
-          builder: (context, constraints) {
-            final metrics = layout.forConstraints(constraints);
-            return SliderTheme(
-              data: sliderTheme.copyWith(
-                minThumbSeparation: metrics.rangeSeparation(
-                  (effectiveStart - min) / (max - min),
-                  (effectiveEnd - min) / (max - min),
+    final themedSlider = _SliderGeometryViewport(
+      layout: layout,
+      child: _RangeSliderFocusHighlight(
+        builder: (context, overlayShape) => Theme(
+          data: TInternalMaterialTheme.resolve(context),
+          child: LayoutBuilder(
+            builder: (context, constraints) {
+              final metrics = layout.forConstraints(constraints);
+              return SliderTheme(
+                data: sliderTheme.copyWith(
+                  overlayShape: overlayShape,
+                  minThumbSeparation: metrics.rangeSeparation(
+                    (effectiveStart - min) / (max - min),
+                    (effectiveEnd - min) / (max - min),
+                  ),
                 ),
-              ),
-              child: slider,
-            );
-          },
+                child: slider,
+              );
+            },
+          ),
         ),
       ),
     );
@@ -661,6 +664,182 @@ class TRangeSlider extends StatelessWidget {
     return decoration == null
         ? content
         : DecoratedBox(decoration: decoration, child: content);
+  }
+}
+
+// TODO(compatibility): Re-evaluate this workaround once all supported Flutter
+// versions include the native fix and its behavior has been verified.
+// https://github.com/flutter/flutter/issues/189205
+class _RangeSliderFocusHighlight extends StatefulWidget {
+  const _RangeSliderFocusHighlight({required this.builder});
+
+  final Widget Function(BuildContext, SliderComponentShape) builder;
+
+  @override
+  State<_RangeSliderFocusHighlight> createState() =>
+      _RangeSliderFocusHighlightState();
+}
+
+class _RangeSliderFocusHighlightState
+    extends State<_RangeSliderFocusHighlight> with WidgetsBindingObserver {
+  final Set<int> _pressedPointers = {};
+  late final ValueNotifier<_RangeSliderOverlayVisual> _overlayVisual;
+  late final _RangeSliderOverlayShape _overlayShape;
+
+  @override
+  void initState() {
+    super.initState();
+    _overlayVisual = ValueNotifier(
+      _RangeSliderOverlayVisual(
+        pointerActive: false,
+        showFocusHighlight:
+            FocusManager.instance.highlightMode ==
+            FocusHighlightMode.traditional,
+      ),
+    );
+    _overlayShape = _RangeSliderOverlayShape(_overlayVisual);
+    WidgetsBinding.instance.addObserver(this);
+    FocusManager.instance.addHighlightModeListener(_handleHighlightMode);
+  }
+
+  void _updateOverlayVisual() {
+    _overlayVisual.value = _RangeSliderOverlayVisual(
+      pointerActive: _pressedPointers.isNotEmpty,
+      showFocusHighlight:
+          FocusManager.instance.highlightMode ==
+          FocusHighlightMode.traditional,
+    );
+  }
+
+  void _handleHighlightMode(FocusHighlightMode mode) => _updateOverlayVisual();
+
+  void _handlePointerDown(PointerDownEvent event) {
+    _pressedPointers.add(event.pointer);
+    _updateOverlayVisual();
+  }
+
+  void _handlePointerUp(PointerUpEvent event) {
+    _pressedPointers.remove(event.pointer);
+    _updateOverlayVisual();
+  }
+
+  void _handlePointerCancel(PointerCancelEvent event) {
+    _pressedPointers.remove(event.pointer);
+    _updateOverlayVisual();
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    if (state == AppLifecycleState.inactive ||
+        state == AppLifecycleState.paused ||
+        state == AppLifecycleState.detached) {
+      // A pointer-up may never arrive when the app loses focus; drop the
+      // pressed state so the overlay cannot stay visible indefinitely.
+      _pressedPointers.clear();
+      _updateOverlayVisual();
+    }
+  }
+
+  @override
+  void dispose() {
+    FocusManager.instance.removeHighlightModeListener(_handleHighlightMode);
+    WidgetsBinding.instance.removeObserver(this);
+    _overlayShape.dispose();
+    _overlayVisual.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Listener(
+      onPointerDown: _handlePointerDown,
+      onPointerUp: _handlePointerUp,
+      onPointerCancel: _handlePointerCancel,
+      child: widget.builder(context, _overlayShape),
+    );
+  }
+}
+
+class _RangeSliderOverlayVisual {
+  const _RangeSliderOverlayVisual({
+    required this.pointerActive,
+    required this.showFocusHighlight,
+  });
+
+  final bool pointerActive;
+  final bool showFocusHighlight;
+}
+
+class _RangeSliderOverlayShape extends SliderComponentShape {
+  _RangeSliderOverlayShape(this._visual);
+
+  final ValueNotifier<_RangeSliderOverlayVisual> _visual;
+  RenderBox? _parentBox;
+  VoidCallback? _visualListener;
+
+  static const _delegate = RoundSliderOverlayShape(
+    overlayRadius: SliderGeometry.hitRadius,
+  );
+
+  void _attach(RenderBox parentBox) {
+    if (identical(_parentBox, parentBox)) {
+      return;
+    }
+    _detach();
+    _parentBox = parentBox;
+    _visualListener = parentBox.markNeedsPaint;
+    _visual.addListener(_visualListener!);
+  }
+
+  void _detach() {
+    final listener = _visualListener;
+    if (listener != null) {
+      _visual.removeListener(listener);
+      _visualListener = null;
+    }
+    _parentBox = null;
+  }
+
+  void dispose() => _detach();
+
+  @override
+  Size getPreferredSize(bool isEnabled, bool isDiscrete) =>
+      _delegate.getPreferredSize(isEnabled, isDiscrete);
+
+  @override
+  void paint(
+    PaintingContext context,
+    Offset center, {
+    required Animation<double> activationAnimation,
+    required Animation<double> enableAnimation,
+    required bool isDiscrete,
+    required TextPainter labelPainter,
+    required RenderBox parentBox,
+    required SliderThemeData sliderTheme,
+    required TextDirection textDirection,
+    required double value,
+    required double textScaleFactor,
+    required Size sizeWithOverflow,
+  }) {
+    _attach(parentBox);
+    final visual = _visual.value;
+    if (!visual.pointerActive && !visual.showFocusHighlight) {
+      return;
+    }
+    _delegate.paint(
+      context,
+      center,
+      activationAnimation: activationAnimation,
+      enableAnimation: enableAnimation,
+      isDiscrete: isDiscrete,
+      labelPainter: labelPainter,
+      parentBox: parentBox,
+      sliderTheme: sliderTheme,
+      textDirection: textDirection,
+      value: value,
+      textScaleFactor: textScaleFactor,
+      sizeWithOverflow: sizeWithOverflow,
+    );
   }
 }
 
