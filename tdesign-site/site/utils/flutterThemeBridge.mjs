@@ -2,7 +2,8 @@
 export function ensureFlutterThemeTokenCoverage(cssText, extraDefaults) {
   const variables = new Map([...cssText.matchAll(/(--td-[\w-]+)\s*:/g)].map((match) => [match[1], true]));
   const defaults = new Map([...extraDefaults.matchAll(/(--td-[\w-]+)\s*:\s*([^;]+);/g)].map((match) => [match[1], match[2].trim()]));
-  const missing = [...defaults].filter(([name]) => !variables.has(name));
+  // Mobile uses radius-default for the tier Web calls radius-medium.
+  const missing = [...defaults].filter(([name]) => name !== '--td-radius-medium' && !variables.has(name));
   if (missing.length === 0) return cssText;
   const declarations = missing.map(([name, value]) => `  ${name}: ${value};`).join('\n');
   return `${cssText || ''}\n:root {\n${declarations}\n}\n`;
