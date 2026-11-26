@@ -364,6 +364,70 @@ void main() {
       expect(tapped, 1);
       expect(find.byType(SingleChildScrollView), findsOneWidget);
     });
+
+    testWidgets('scrollable bar fills a bounded width', (tester) async {
+      tester.view.devicePixelRatio = 1;
+      tester.view.physicalSize = const Size(390, 200);
+      addTearDown(tester.view.reset);
+
+      await tester.pumpWidget(
+        wrapWithTheme(TTabsBar(tabs: tabs(), isScrollable: true)),
+      );
+
+      expect(tester.getSize(find.byType(TTabsBar)).width, 390);
+    });
+
+    testWidgets('scrollable bar wraps its content in a Row', (tester) async {
+      await tester.pumpWidget(
+        wrapWithTheme(
+          Row(children: [TTabsBar(tabs: tabs(), isScrollable: true)]),
+        ),
+      );
+
+      expect(tester.takeException(), isNull);
+      final barWidth = tester.getSize(find.byType(TTabsBar)).width;
+      expect(barWidth, greaterThan(0));
+      expect(barWidth, lessThan(tester.getSize(find.byType(Row).first).width));
+    });
+
+    testWidgets('scrollable bar supports intrinsic width measurement', (
+      tester,
+    ) async {
+      await tester.pumpWidget(
+        wrapWithTheme(
+          IntrinsicWidth(child: TTabsBar(tabs: tabs(), isScrollable: true)),
+        ),
+      );
+
+      expect(tester.takeException(), isNull);
+      expect(tester.getSize(find.byType(TTabsBar)).width, greaterThan(0));
+    });
+
+    testWidgets('dragging a long tab strip changes its scroll offset', (
+      tester,
+    ) async {
+      tester.view.devicePixelRatio = 1;
+      tester.view.physicalSize = const Size(390, 200);
+      addTearDown(tester.view.reset);
+
+      await tester.pumpWidget(
+        wrapWithTheme(TTabsBar(tabs: tabs(12), isScrollable: true), length: 12),
+      );
+      await tester.pumpAndSettle();
+
+      final scrollable = find.descendant(
+        of: find.byType(TTabsBar),
+        matching: find.byType(Scrollable),
+      );
+      final position = tester.state<ScrollableState>(scrollable).position;
+      expect(position.maxScrollExtent, greaterThan(0));
+
+      final initialOffset = position.pixels;
+      await tester.drag(scrollable, const Offset(-250, 0));
+      await tester.pumpAndSettle();
+
+      expect(position.pixels, greaterThan(initialOffset));
+    });
   });
 
   group('TTabsBarIndicator', () {
