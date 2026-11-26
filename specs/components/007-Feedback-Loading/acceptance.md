@@ -34,3 +34,13 @@
 - API 通过 AST 对比旧公开构造参数、属性、方法签名和默认值；仅 BackTop 允许新增可选 onCompleted。新测试均在原 manifest 登记的文件内，GitHub test-build.yml 调用公共组件和 Example runner，三份调度器自测确认清单一致。
 - 最终 Review 通过，无阻塞问题。核对 Message 重复 dismiss 与回调次数、Loading 普通/遮挡后卸载且无后续 show/dismiss 的直接 dispose 断言、Toast 遮挡/State 重建及同 ID 新旧会话隔离。内容 Entry 的 maintainState 未改变，独立哨兵不接收交互；卸载后的微任务复核 owner，过期清理按实例身份隔离。公开签名、原默认值、匿名替换及全局唯一规则保留。
 - 原始日志、LCOV、锁文件与独立补丁保存在工作区外层 `artifacts/pr1148-independent/01-overlay-lifecycle/`，与本记录的指纹绑定；摘要随分支保留在验证数据中。未执行设备、正式 Linux Golden 或远端 CI；改动不涉及绘制/布局/Theme/字体，未更新图片基线。历史视觉/设备任务继续按原 tasks 保留，不据本次功能验收核销。未推送、创建 PR 或发布。
+
+## 圆形加载动画生命周期
+
+<a id="circle-indicator-lifecycle"></a>
+
+1. 挂载圆形加载指示器，确认动画正在运行。
+2. 修改动画时长，确认动画继续运行，再移除组件。
+3. 重复挂载、修改时长和移除，逐轮核对资源释放。
+
+通过标准：每轮创建的曲线动画和控制器各释放一次。卸载后无残留 ticker、动画回调或异常。可通过 Flutter 调试事件核对释放次数。
