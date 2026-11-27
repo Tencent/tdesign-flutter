@@ -16,7 +16,7 @@ import 't_sidebar_theme_data.dart';
 /// 通常由侧边导航栏创建；直接使用时需要调用方同步提供选中和相邻项状态。
 class TWrapSideBarItem extends StatelessWidget {
   const TWrapSideBarItem({
-    Key? key,
+    super.key,
     this.badge,
     required this.disabled,
     this.icon,
@@ -32,7 +32,7 @@ class TWrapSideBarItem extends StatelessWidget {
     this.selectedBgColor,
     this.unSelectedBgColor,
     required this.variant,
-  }) : super(key: key);
+  });
 
   final TBadgeConfig? badge;
   final bool disabled;

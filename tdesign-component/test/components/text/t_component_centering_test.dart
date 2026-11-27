@@ -486,7 +486,7 @@ void _pickerGrowthTests() {
       await tester.pumpAndSettle();
       expect(tester.getSize(find.byType(TPicker)).height, 200);
       await tester.pumpWidget(
-        page(3, builder: (_, option, __, ___, ____) => Text(option.label)),
+        page(3, builder: (_, option, _, _, _) => Text(option.label)),
       );
       await tester.pumpAndSettle();
       expect(tester.getSize(find.byType(TPicker)).height, 200);

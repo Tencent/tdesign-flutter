@@ -1,18 +1,17 @@
 import 'package:tdesign_flutter/tdesign_flutter.dart';
 import '../../annotation/example_code.dart';
-import '../../base/example_widget.dart';
 
 @ExampleCode(group: 'button')
 class RectangleIconButtonExample extends StatelessWidget {
   const RectangleIconButtonExample({super.key});
   TButton _buildRectangleIconButton(BuildContext context) {
     return TButton(
-      child: const Text('填充按钮'),
       icon: const Icon(TIcons.app),
       size: TButtonSize.large,
       variant: TButtonVariant.fill,
       colorPreset: TButtonColorPreset.primary,
       onPressed: () => _onTap(context),
+      child: const Text('填充按钮'),
     );
   }
 
@@ -29,12 +28,12 @@ class RectangleIconButtonExample extends StatelessWidget {
 
   TButton _buildLoadingIconButton(BuildContext context) {
     return TButton(
-      child: const Text('加载中'),
       icon: const TLoading(size: 24, icon: TLoadingIcon.circle),
       size: TButtonSize.large,
       variant: TButtonVariant.fill,
       colorPreset: TButtonColorPreset.primary,
       onPressed: () => _onTap(context),
+      child: const Text('加载中'),
     );
   }
 

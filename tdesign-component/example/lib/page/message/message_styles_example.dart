@@ -1,6 +1,5 @@
 import 'package:tdesign_flutter/tdesign_flutter.dart';
 import '../../annotation/example_code.dart';
-import '../../base/example_widget.dart';
 
 @ExampleCode(group: 'message')
 class MessageStylesExample extends StatelessWidget {
@@ -87,11 +86,11 @@ class MessageStylesExample extends StatelessWidget {
     return SizedBox(
       width: double.infinity,
       child: TButton(
-        child: Text(text),
         size: TButtonSize.large,
         variant: TButtonVariant.outline,
         colorPreset: TButtonColorPreset.primary,
         onPressed: onPressed,
+        child: Text(text),
       ),
     );
   }

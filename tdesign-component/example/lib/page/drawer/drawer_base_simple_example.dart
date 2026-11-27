@@ -1,6 +1,5 @@
 import 'package:tdesign_flutter/tdesign_flutter.dart';
 import '../../annotation/example_code.dart';
-import '../../base/example_widget.dart';
 
 @ExampleCode(group: 'drawer')
 class DrawerBaseSimpleExample extends StatelessWidget {
@@ -36,7 +35,7 @@ Widget _buildBaseSimple(BuildContext context) {
         showTDrawer(
           context,
           placement: TDrawerPlacement.left,
-          drawer: TDrawer(items: items, onItemTap: (_, __) {}),
+          drawer: TDrawer(items: items, onItemTap: (_, _) {}),
         );
       },
       child: const TText('基础抽屉'),

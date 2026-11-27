@@ -153,7 +153,7 @@ class TCheckbox extends StatelessWidget {
             hasContent &&
             _contentUsesMultipleLines(context, availableContentWidth);
         final children = <Widget>[
-          if (indicator != null) indicator,
+          ?indicator,
           if (indicator != null && content != null) SizedBox(width: spacing),
           if (content != null)
             if (hasBoundedWidth) Expanded(child: content) else content,

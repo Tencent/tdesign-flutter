@@ -1,6 +1,5 @@
 import 'package:tdesign_flutter/tdesign_flutter.dart';
 import '../../annotation/example_code.dart';
-import '../../base/example_widget.dart';
 
 @ExampleCode(group: 'message')
 class MessageTypesExample extends StatelessWidget {
@@ -95,9 +94,9 @@ class MessageTypesExample extends StatelessWidget {
         content: '这是一条带操作的消息通知',
         duration: null,
         action: TLink(
-          child: const Text('链接'),
           colorPreset: TLinkColorPreset.primary,
           onPressed: () {},
+          child: const Text('链接'),
         ),
       ),
     );
@@ -118,11 +117,11 @@ class MessageTypesExample extends StatelessWidget {
     return SizedBox(
       width: double.infinity,
       child: TButton(
-        child: Text(text),
         size: TButtonSize.large,
         variant: TButtonVariant.outline,
         colorPreset: TButtonColorPreset.primary,
         onPressed: onPressed,
+        child: Text(text),
       ),
     );
   }

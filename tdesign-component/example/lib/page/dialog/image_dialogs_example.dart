@@ -1,6 +1,5 @@
 import 'package:tdesign_flutter/tdesign_flutter.dart';
 import '../../annotation/example_code.dart';
-import '../../base/example_widget.dart';
 
 @ExampleCode(group: 'dialog')
 class ImageDialogsExample extends StatelessWidget {
@@ -119,10 +118,10 @@ class ImageDialogsExample extends StatelessWidget {
       ),
       child: Column(
         children: [
-          if (title != null) title,
+          ?title,
           if (title != null && description != null)
             SizedBox(height: token.spacer),
-          if (description != null) description,
+          ?description,
         ],
       ),
     );

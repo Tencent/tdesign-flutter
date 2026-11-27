@@ -19,14 +19,14 @@ import 't_inset_divider.dart';
 
 class TCollapse<T extends Object> extends StatefulWidget {
   const TCollapse({
+    super.key,
     required this.children,
     required this.value,
     this.mode = TCollapseMode.multiple,
     this.variant,
     this.animationDuration,
     this.onChanged,
-    Key? key,
-  }) : super(key: key);
+  });
 
   /// 折叠面板列表的子组件
   final List<TCollapsePanel<T>> children;
@@ -250,8 +250,8 @@ class _TCollapseState<T extends Object> extends State<TCollapse<T>> {
                     child: titleWidget,
                   ),
                 ),
-                if (trailingWidget != null) trailingWidget,
-                if (expandIconWidget != null) expandIconWidget,
+                ?trailingWidget,
+                ?expandIconWidget,
               ],
             ),
           ),

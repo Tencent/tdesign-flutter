@@ -1,6 +1,5 @@
 import 'package:tdesign_flutter/tdesign_flutter.dart';
 import '../../annotation/example_code.dart';
-import '../../base/example_widget.dart';
 
 @ExampleCode(group: 'tabBar')
 class IconTabBarExample extends StatefulWidget {
@@ -27,10 +26,7 @@ class _IconTabBarExampleState extends State<IconTabBarExample> {
           selectedIcon: Icon(icons[index]),
           unselectedIcon: Icon(icons[index]),
           notifyOnReselect: true,
-          onTap: () => TToast.showText(
-            '第 ${index + 1} 项',
-            context: context,
-          ),
+          onTap: () => TToast.showText('第 ${index + 1} 项', context: context),
         ),
       ),
     );

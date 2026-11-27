@@ -16,7 +16,7 @@ import 'title_normal_navbar_example.dart';
 
 @ExampleCodeManifest()
 class TNavBarPage extends StatelessWidget {
-  const TNavBarPage({Key? key}) : super(key: key);
+  const TNavBarPage({super.key});
 
   @override
   Widget build(BuildContext context) {

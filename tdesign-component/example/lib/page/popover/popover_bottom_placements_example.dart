@@ -1,7 +1,5 @@
-import 'dart:async';
 import 'package:tdesign_flutter/tdesign_flutter.dart';
 import '../../annotation/example_code.dart';
-import '../../base/example_widget.dart';
 
 @ExampleCode(group: 'popover')
 class PopoverBottomPlacementsExample extends StatefulWidget {
@@ -22,7 +20,6 @@ class _PopoverBottomPlacementsExampleState
         builder: (popoverContext, constraints) {
           return TButton(
             size: TButtonSize.large,
-            child: const Text('底部左'),
             variant: TButtonVariant.outline,
             colorPreset: TButtonColorPreset.primary,
             onPressed: () {
@@ -33,6 +30,7 @@ class _PopoverBottomPlacementsExampleState
                 colorPreset: theme,
               );
             },
+            child: const Text('底部左'),
           );
         },
       ),
@@ -47,7 +45,6 @@ class _PopoverBottomPlacementsExampleState
         builder: (popoverContext, constraints) {
           return TButton(
             size: TButtonSize.large,
-            child: const Text('底部中'),
             variant: TButtonVariant.outline,
             colorPreset: TButtonColorPreset.primary,
             onPressed: () {
@@ -58,6 +55,7 @@ class _PopoverBottomPlacementsExampleState
                 colorPreset: theme,
               );
             },
+            child: const Text('底部中'),
           );
         },
       ),
@@ -72,7 +70,6 @@ class _PopoverBottomPlacementsExampleState
         builder: (popoverContext, constraints) {
           return TButton(
             size: TButtonSize.large,
-            child: const Text('底部右'),
             variant: TButtonVariant.outline,
             colorPreset: TButtonColorPreset.primary,
             onPressed: () {
@@ -83,6 +80,7 @@ class _PopoverBottomPlacementsExampleState
                 colorPreset: theme,
               );
             },
+            child: const Text('底部右'),
           );
         },
       ),

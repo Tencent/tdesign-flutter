@@ -52,7 +52,6 @@ class TLink extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context).extension<TLinkThemeData>();
     return _TLinkInteraction(
-      child: child,
       prefixIcon: prefixIcon,
       suffixIcon: suffixIcon,
       underline: underline ?? false,
@@ -62,6 +61,7 @@ class TLink extends StatelessWidget {
       semanticLabel: semanticLabel,
       tooltip: tooltip,
       theme: theme,
+      child: child,
     );
   }
 }

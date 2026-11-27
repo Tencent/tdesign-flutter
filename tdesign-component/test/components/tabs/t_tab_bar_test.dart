@@ -12,12 +12,7 @@ void main() {
     int length = 3,
   }) {
     return MaterialApp(
-      theme: ThemeData(
-        extensions: [
-          TThemeData.defaultData(),
-          if (tabsBarTheme != null) tabsBarTheme,
-        ],
-      ),
+      theme: ThemeData(extensions: [TThemeData.defaultData(), ?tabsBarTheme]),
       home: Scaffold(
         body: DefaultTabController(length: length, child: child),
       ),

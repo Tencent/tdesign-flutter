@@ -32,7 +32,7 @@ class _SideBarItemData {
 
 class TSideBar extends StatefulWidget {
   const TSideBar({
-    Key? key,
+    super.key,
     required this.value,
     this.children = const [],
     this.onChanged,
@@ -42,8 +42,7 @@ class TSideBar extends StatefulWidget {
     this.loading = false,
     this.loadingWidget,
   }) : assert(width > 0),
-       assert(height == null || height >= 0),
-       super(key: key);
+       assert(height == null || height >= 0);
 
   /// 当前选中项值。
   final int value;
@@ -133,7 +132,7 @@ class _TSideBarState extends State<TSideBar> {
         return;
       }
       final resolved = item.key.currentContext;
-      if (resolved != null) {
+      if (resolved != null && resolved.mounted) {
         await _ensureItemVisible(resolved);
         return;
       }

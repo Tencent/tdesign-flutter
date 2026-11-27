@@ -1,4 +1,10 @@
 include: package:lints/recommended.yaml
+
+analyzer:
+  exclude:
+    - build/**
+
+# https://dart.dev/tools/linter-rules
 linter:
   rules:
     public_member_api_docs: true

@@ -235,7 +235,7 @@ class TTabBarItemConfig {
 
 class TTabBar extends StatefulWidget {
   TTabBar({
-    Key? key,
+    super.key,
     required this.type,
     required this.navigationTabs,
     this.itemStyle = TTabBarItemStyle.label,
@@ -291,8 +291,7 @@ class TTabBar extends StatefulWidget {
            );
          }
          return true;
-       }()),
-       super(key: key);
+       }());
 
   /// 标签栏内容类型。
   final TTabBarType type;
@@ -798,7 +797,6 @@ class _TTabBarState extends State<TTabBar> with SingleTickerProviderStateMixin {
 /// 带徽标的底部标签栏单项
 class _TTabBarItemWithBadge extends StatelessWidget {
   const _TTabBarItemWithBadge({
-    Key? key,
     required this.basicType,
     required this.componentType,
     required this.selectionType,
@@ -813,7 +811,7 @@ class _TTabBarItemWithBadge extends StatelessWidget {
     this.onLongPress,
     this.needInkWell = false,
     this.showItemBackground = true,
-  }) : super(key: key);
+  });
 
   /// tab基本类型
   final _TTabBarBasicType basicType;
@@ -1057,7 +1055,7 @@ class _TTabBarItemWithBadge extends StatelessWidget {
     );
   }
 
-  _buildItem(BuildContext context) {
+  StatelessWidget _buildItem(BuildContext context) {
     var isInOrOutCapsule =
         componentType == TTabBarItemStyle.label ||
         selectionType == TTabBarStyle.capsule;
@@ -1221,11 +1219,11 @@ class TTabBarPopUpShapeConfig {
 /// 弹窗菜单item
 class TTabBarMenuItem extends StatelessWidget {
   const TTabBarMenuItem({
-    Key? key,
+    super.key,
     this.itemWidget,
     required this.value,
     this.alignment = AlignmentDirectional.center,
-  }) : super(key: key);
+  });
 
   /// 自定义选项内容；优先于 value 的内置文案。
   ///
@@ -1321,12 +1319,11 @@ class _TabBarPopupDialog extends StatefulWidget {
 
   const _TabBarPopupDialog(
     this.defaultPopUpWidth, {
-    Key? key,
     required this.btnContext,
     required this.onClickMenu,
     required this.items,
     required this.config,
-  }) : super(key: key);
+  });
 
   @override
   _TabBarPopupDialogState createState() => _TabBarPopupDialogState();

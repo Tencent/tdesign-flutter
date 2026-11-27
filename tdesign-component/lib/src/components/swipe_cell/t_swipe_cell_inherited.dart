@@ -3,10 +3,10 @@ import 'package:flutter/widgets.dart';
 /// 向操作项传递当前滑动单元格关闭能力。
 class TSwipeCellInherited extends InheritedWidget {
   const TSwipeCellInherited({
-    Key? key,
-    required Widget child,
+    super.key,
+    required super.child,
     required this.close,
-  }) : super(child: child, key: key);
+  });
 
   /// 关闭当前滑动单元格。
   final Future<void> Function() close;

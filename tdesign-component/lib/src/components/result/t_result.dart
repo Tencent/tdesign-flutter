@@ -26,12 +26,12 @@ enum TResultStatus {
 
 class TResult extends StatelessWidget {
   const TResult({
-    Key? key,
+    super.key,
     this.description,
     this.icon,
     this.status = TResultStatus.info,
     this.title = '',
-  }) : super(key: key);
+  });
 
   /// 描述文本，用于提供额外信息；为空时不占布局空间。
   final String? description;

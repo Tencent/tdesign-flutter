@@ -1,7 +1,5 @@
-import 'dart:async';
 import 'package:tdesign_flutter/tdesign_flutter.dart';
 import '../../annotation/example_code.dart';
-import '../../base/example_widget.dart';
 
 @ExampleCode(group: 'popover')
 class PopoverArrowExample extends StatefulWidget {
@@ -19,7 +17,6 @@ class _PopoverArrowExampleState extends State<PopoverArrowExample> {
         builder: (popoverContext, constraints) {
           return TButton(
             size: TButtonSize.large,
-            child: const Text('带箭头'),
             variant: TButtonVariant.outline,
             colorPreset: TButtonColorPreset.primary,
             onPressed: () {
@@ -29,6 +26,7 @@ class _PopoverArrowExampleState extends State<PopoverArrowExample> {
                 colorPreset: theme,
               );
             },
+            child: const Text('带箭头'),
           );
         },
       ),

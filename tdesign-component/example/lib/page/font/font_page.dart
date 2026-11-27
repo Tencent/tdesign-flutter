@@ -7,7 +7,7 @@ import 'font_token_module_example.dart';
 @ExampleCodeManifest()
 /// 字体示例页面
 class TFontPage extends StatelessWidget {
-  const TFontPage({Key? key}) : super(key: key);
+  const TFontPage({super.key});
 
   @override
   Widget build(BuildContext context) {

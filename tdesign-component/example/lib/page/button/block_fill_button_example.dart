@@ -1,6 +1,5 @@
 import 'package:tdesign_flutter/tdesign_flutter.dart';
 import '../../annotation/example_code.dart';
-import '../../base/example_widget.dart';
 
 @ExampleCode(group: 'button')
 class BlockFillButtonExample extends StatelessWidget {
@@ -11,11 +10,11 @@ class BlockFillButtonExample extends StatelessWidget {
       child: SizedBox(
         width: double.infinity,
         child: TButton(
-          child: const Text('填充按钮'),
           size: TButtonSize.large,
           variant: TButtonVariant.fill,
           colorPreset: TButtonColorPreset.primary,
           onPressed: () => _onTap(context),
+          child: const Text('填充按钮'),
         ),
       ),
     );

@@ -25,7 +25,7 @@ void main() {
       start: TSwipeCellPanel(
         children: [TSwipeCellAction(label: 'action', onPressed: (_) {})],
       ),
-      onOpenChanged: (_, __) {
+      onOpenChanged: (_, _) {
         if (id == 'second') {
           events++;
         }

@@ -14,18 +14,17 @@ typedef OnLocaleChange = Function(Locale locale);
 
 /// 示例首页
 class MyHomePage extends StatefulWidget {
-  const MyHomePage({Key? key, required this.title, this.onThemeChange})
-    : super(key: key);
+  const MyHomePage({super.key, required this.title, this.onThemeChange});
 
   final String title;
 
   final OnThemeChange? onThemeChange;
 
   @override
-  _MyHomePageState createState() => _MyHomePageState();
+  MyHomePageState createState() => MyHomePageState();
 }
 
-class _MyHomePageState extends State<MyHomePage> {
+class MyHomePageState extends State<MyHomePage> {
   bool useConch = false;
   String searchText = '';
   FocusNode focusNode = FocusNode();
@@ -86,15 +85,15 @@ class _MyHomePageState extends State<MyHomePage> {
                           context,
                         ).mergeExtension(TThemeData.defaultData()),
                         child: TButton(
-                          child: Text(
-                            AppLocalizations.of(context)?.defaultTheme ?? '',
-                          ),
                           colorPreset: TButtonColorPreset.primary,
                           onPressed: () async {
                             widget.onThemeChange?.call(
                               TThemeData.defaultData(),
                             );
                           },
+                          child: Text(
+                            AppLocalizations.of(context)?.defaultTheme ?? '',
+                          ),
                         ),
                       ),
                       Theme(
@@ -103,9 +102,6 @@ class _MyHomePageState extends State<MyHomePage> {
                               TThemeData.defaultData(),
                         ),
                         child: TButton(
-                          child: Text(
-                            AppLocalizations.of(context)?.greenTheme ?? '',
-                          ),
                           colorPreset: TButtonColorPreset.primary,
                           onPressed: () async {
                             var jsonString = await rootBundle.loadString(
@@ -120,6 +116,9 @@ class _MyHomePageState extends State<MyHomePage> {
                                 TThemeData.defaultData();
                             widget.onThemeChange?.call(themeData);
                           },
+                          child: Text(
+                            AppLocalizations.of(context)?.greenTheme ?? '',
+                          ),
                         ),
                       ),
                       Theme(
@@ -128,9 +127,6 @@ class _MyHomePageState extends State<MyHomePage> {
                               TThemeData.defaultData(),
                         ),
                         child: TButton(
-                          child: Text(
-                            AppLocalizations.of(context)?.redTheme ?? '',
-                          ),
                           colorPreset: TButtonColorPreset.primary,
                           onPressed: () async {
                             var jsonString = await rootBundle.loadString(
@@ -145,6 +141,9 @@ class _MyHomePageState extends State<MyHomePage> {
                                 TThemeData.defaultData();
                             widget.onThemeChange?.call(themeData);
                           },
+                          child: Text(
+                            AppLocalizations.of(context)?.redTheme ?? '',
+                          ),
                         ),
                       ),
                     ],
@@ -181,11 +180,11 @@ class _MyHomePageState extends State<MyHomePage> {
     // 添加切换主题的按钮
     exampleMap.forEach((key, value) {
       var cells = <TCell>[];
-      value.forEach((model) {
+      for (var model in value) {
         if (searchText.isNotEmpty &&
             !model.text.toLowerCase().contains(searchText.toLowerCase())) {
           // 如果有搜索文案,不再搜索中的组件不展示
-          return;
+          continue;
         }
         cells.add(
           TCell(
@@ -197,7 +196,7 @@ class _MyHomePageState extends State<MyHomePage> {
             },
           ),
         );
-      });
+      }
       if (cells.isNotEmpty) {
         children.add(
           Container(

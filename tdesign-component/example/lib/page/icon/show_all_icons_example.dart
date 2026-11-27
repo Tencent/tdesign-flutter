@@ -3,7 +3,6 @@ import 'package:tdesign_flutter/tdesign_flutter.dart' hide TIcons;
 import 'package:tdesign_flutter_icons/tdesign_flutter_icons.dart';
 import 'package:url_launcher/link.dart';
 import '../../annotation/example_code.dart';
-import '../../base/example_widget.dart';
 
 @ExampleCode(group: 'icon')
 class ShowAllIconsExample extends StatefulWidget {
@@ -30,12 +29,12 @@ class _ShowAllIconsExampleState extends State<ShowAllIconsExample> {
                 uri: Uri.parse('https://tdesign.tencent.com/icons'),
                 target: LinkTarget.blank,
                 builder: (context, followLink) => TLink(
-                  child: const Text('https://tdesign.tencent.com/icons'),
                   prefixIcon: const Icon(TIcons.link),
                   suffixIcon: const Icon(TIcons.jump),
                   colorPreset: TLinkColorPreset.primary,
                   semanticLabel: '打开 TDesign 图标官网',
                   onPressed: followLink,
+                  child: const Text('https://tdesign.tencent.com/icons'),
                 ),
               ),
             ),

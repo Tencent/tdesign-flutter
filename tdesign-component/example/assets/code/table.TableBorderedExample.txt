@@ -15,7 +15,7 @@ class TableBorderedExample extends StatelessWidget {
       (index) => TTableColumn<List<String>>(
         id: 'title${index + 1}',
         header: const Text('标题'),
-        cellBuilder: (_, row, __) => Text(row[index]),
+        cellBuilder: (_, row, _) => Text(row[index]),
       ),
     );
     return TTable(columns: columns, data: _rows, bordered: true);

@@ -10,7 +10,7 @@ import 't_calendar_theme_data.dart';
 /// 日历滚动主体（月份列表 + 日期格）。
 class TCalendarBody extends StatefulWidget {
   const TCalendarBody({
-    Key? key,
+    super.key,
     required this.type,
     this.value,
     required this.firstDayOfWeek,
@@ -29,7 +29,7 @@ class TCalendarBody extends StatefulWidget {
     this.anchorDate,
     this.onCellGenerated,
     this.onCacheInvalidated,
-  }) : super(key: key);
+  });
 
   final TCalendarVariant type;
 
@@ -370,7 +370,7 @@ class _TCalendarBodyState extends State<TCalendarBody> {
                     ],
                   ),
                 ],
-              ).expand((element) => element).toList(),
+              ).expand((element) => element),
               SizedBox(
                 height: index == _months.length - 1 ? 0 : widget.bodyPadding,
               ),

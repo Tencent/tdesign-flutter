@@ -587,12 +587,12 @@ class TRadioGroup<T> extends StatelessWidget {
       return TSelectionCardGroupLayout(
         direction: _direction,
         columns: _columns,
-        children: List.generate(options.length, (index) {
-          return _buildItem(context, options[index], index);
-        }),
         itemHasSubtitles: [
           for (final option in options) option.subTitle?.isNotEmpty == true,
         ],
+        children: List.generate(options.length, (index) {
+          return _buildItem(context, options[index], index);
+        }),
       );
     }
     if (_direction == Axis.vertical && _columns == 1) {

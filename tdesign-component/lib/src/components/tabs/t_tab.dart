@@ -32,7 +32,7 @@ class TTab extends Tab {
   /// [TabBar.tabs] 时只会呈现禁用样式，不会阻止其切换。
   final bool enabled;
 
-  const TTab({Key? key, this.text, this.child, this.icon, this.enabled = true})
+  const TTab({super.key, this.text, this.child, this.icon, this.enabled = true})
     : assert(
         text == null || child == null,
         'text and child cannot be provided together.',
@@ -41,7 +41,7 @@ class TTab extends Tab {
         text != null || child != null || icon != null,
         'Provide text, child, or icon.',
       ),
-      super(key: key, text: text, child: child, icon: icon);
+      super(text: text, child: child, icon: icon);
 
   @override
   Size get preferredSize => const Size.fromHeight(46);

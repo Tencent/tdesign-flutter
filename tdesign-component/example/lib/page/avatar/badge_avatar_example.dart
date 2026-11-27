@@ -1,6 +1,5 @@
 import 'package:tdesign_flutter/tdesign_flutter.dart';
 import '../../annotation/example_code.dart';
-import '../../base/example_widget.dart';
 
 @ExampleCode(group: 'avatar')
 class BadgeAvatarExample extends StatelessWidget {
@@ -12,9 +11,9 @@ class BadgeAvatarExample extends StatelessWidget {
       // spacing: 32,
       children: [
         Theme(
-          data: Theme.of(context).mergeExtension(
-            const TBadgeThemeData(dotSize: 10),
-          ),
+          data: Theme.of(
+            context,
+          ).mergeExtension(const TBadgeThemeData(dotSize: 10)),
           child: const TBadge(
             variant: TBadgeVariant.dot,
             offset: Offset(-1, 2),

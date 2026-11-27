@@ -2,7 +2,6 @@ import 'dart:ui' as ui show TextHeightBehavior;
 
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 
 import '../../theme/basic.dart';
 import '../../theme/t_colors.dart';
@@ -192,45 +191,70 @@ class TText extends StatelessWidget {
 ///
 /// 未显式配置的字段保持为空，并继承父 Span 样式。
 class TTextSpan extends TextSpan {
+  /// 透传至 [TextSpan.text]。
+  @override
+  final String? text;
+
+  /// 透传至 [TextSpan.children]。
+  @override
+  final List<InlineSpan>? children;
+
+  /// Span 的唯一文字样式入口；未设置的字段继承父 Span。
+  @override
+  final TextStyle? style;
+
+  /// 透传至 [TextSpan.recognizer]。
+  @override
+  final GestureRecognizer? recognizer;
+
+  /// 透传至 [TextSpan.mouseCursor]。
+  @override
+  final MouseCursor mouseCursor;
+
+  /// 透传至 [TextSpan.onEnter]。
+  @override
+  final void Function(PointerEnterEvent)? onEnter;
+
+  /// 透传至 [TextSpan.onExit]。
+  @override
+  final void Function(PointerExitEvent)? onExit;
+
+  /// 透传至 [TextSpan.semanticsLabel]。
+  @override
+  final String? semanticsLabel;
+
+  /// 透传至 [TextSpan.semanticsIdentifier]。
+  @override
+  final String? semanticsIdentifier;
+
+  /// 透传至 [TextSpan.locale]。
+  @override
+  final Locale? locale;
+
+  /// 透传至 [TextSpan.spellOut]。
+  @override
+  final bool? spellOut;
+
   const TTextSpan({
-    /// 透传至 [TextSpan.text]。
-    String? text,
-
-    /// 透传至 [TextSpan.children]。
-    List<InlineSpan>? children,
-
-    /// Span 的唯一文字样式入口；未设置的字段继承父 Span。
-    TextStyle? style,
-
-    /// 透传至 [TextSpan.recognizer]。
-    GestureRecognizer? recognizer,
-
-    /// 透传至 [TextSpan.mouseCursor]。
+    this.text,
+    this.children,
+    this.style,
+    this.recognizer,
     MouseCursor? mouseCursor,
-
-    /// 透传至 [TextSpan.onEnter]。
-    PointerEnterEventListener? onEnter,
-
-    /// 透传至 [TextSpan.onExit]。
-    PointerExitEventListener? onExit,
-
-    /// 透传至 [TextSpan.semanticsLabel]。
-    String? semanticsLabel,
-
-    /// 透传至 [TextSpan.semanticsIdentifier]。
-    String? semanticsIdentifier,
-
-    /// 透传至 [TextSpan.locale]。
-    Locale? locale,
-
-    /// 透传至 [TextSpan.spellOut]。
-    bool? spellOut,
-  }) : super(
+    this.onEnter,
+    this.onExit,
+    this.semanticsLabel,
+    this.semanticsIdentifier,
+    this.locale,
+    this.spellOut,
+  }) : mouseCursor =
+           mouseCursor ??
+           (recognizer == null ? MouseCursor.defer : SystemMouseCursors.click),
+       super(
          text: text,
          children: children,
          style: style,
          recognizer: recognizer,
-         mouseCursor: mouseCursor,
          onEnter: onEnter,
          onExit: onExit,
          semanticsLabel: semanticsLabel,

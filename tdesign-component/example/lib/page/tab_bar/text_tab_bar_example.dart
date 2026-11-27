@@ -1,6 +1,5 @@
 import 'package:tdesign_flutter/tdesign_flutter.dart';
 import '../../annotation/example_code.dart';
-import '../../base/example_widget.dart';
 
 @ExampleCode(group: 'tabBar')
 class TextTabBarExample extends StatefulWidget {
@@ -26,10 +25,7 @@ class _TextTabBarExampleState extends State<TextTabBarExample> {
         (index) => TTabBarItemConfig(
           tabText: labels[index],
           notifyOnReselect: true,
-          onTap: () => TToast.showText(
-            '第 ${index + 1} 项',
-            context: context,
-          ),
+          onTap: () => TToast.showText('第 ${index + 1} 项', context: context),
         ),
       ),
     );

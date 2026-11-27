@@ -154,7 +154,7 @@ class _CalendarDoubleDescribedExampleState
               subtitleBuilder: subtitleBuilder,
               cellBuilder: cellBuilder,
               monthTitleBuilder: showMonthSwitcher
-                  ? (_, __) => const SizedBox.shrink()
+                  ? (_, _) => const SizedBox.shrink()
                   : localized
                   ? (_, month) => TText(
                       '${_englishMonths[month.month - 1]} ${month.year}',

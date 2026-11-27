@@ -17,7 +17,7 @@ import 'theme_demo_example.dart';
 
 @ExampleCodeManifest()
 class TTextPage extends StatelessWidget {
-  const TTextPage({Key? key}) : super(key: key);
+  const TTextPage({super.key});
 
   @override
   Widget build(BuildContext context) {

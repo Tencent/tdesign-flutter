@@ -5,12 +5,7 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 
 void main() {
   Widget app(Widget child, {TImageThemeData? imageTheme}) => MaterialApp(
-    theme: ThemeData(
-      extensions: [
-        TThemeData.defaultData(),
-        if (imageTheme != null) imageTheme,
-      ],
-    ),
+    theme: ThemeData(extensions: [TThemeData.defaultData(), ?imageTheme]),
     home: Scaffold(body: Center(child: child)),
   );
 

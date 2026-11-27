@@ -14,12 +14,12 @@ import '../../theme/t_theme.dart';
 /// 环形加载指示器。
 class TCircleIndicator extends StatefulWidget {
   const TCircleIndicator({
-    Key? key,
+    super.key,
     this.color,
     this.size = 20.0,
     this.lineWidth = 3.0,
     this.duration = 1000,
-  }) : super(key: key);
+  });
 
   final Color? color;
   final double size;
@@ -27,10 +27,10 @@ class TCircleIndicator extends StatefulWidget {
   final int duration;
 
   @override
-  _TCircleIndicatorState createState() => _TCircleIndicatorState();
+  TCircleIndicatorState createState() => TCircleIndicatorState();
 }
 
-class _TCircleIndicatorState extends State<TCircleIndicator>
+class TCircleIndicatorState extends State<TCircleIndicator>
     with SingleTickerProviderStateMixin {
   late AnimationController _controller;
   late CurvedAnimation _curve;

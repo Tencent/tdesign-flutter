@@ -1,6 +1,5 @@
 import 'package:tdesign_flutter/tdesign_flutter.dart';
 import '../../annotation/example_code.dart';
-import '../../base/example_widget.dart';
 
 @ExampleCode(group: 'picker')
 class PickerAreaExample extends StatefulWidget {
@@ -43,7 +42,7 @@ class _PickerAreaExampleState extends State<PickerAreaExample> {
     required ValueChanged<List<Object?>> onConfirm,
     String? popupTitle,
   }) {
-    String _label(TPickerItems items, List<Object?> values) {
+    String label(TPickerItems items, List<Object?> values) {
       if (items is TPickerColumns) {
         final labels = <String>[];
         for (var index = 0; index < items.columns.length; index++) {
@@ -74,7 +73,7 @@ class _PickerAreaExampleState extends State<PickerAreaExample> {
           .join(' ');
     }
 
-    void _showPicker({
+    void showPicker({
       required BuildContext context,
       required TPickerItems items,
       required List<Object?> value,
@@ -124,9 +123,9 @@ class _PickerAreaExampleState extends State<PickerAreaExample> {
     return TCell(
       key: ValueKey('picker-$id-trigger'),
       title: TText(title),
-      note: TText(_label(items, value)),
+      note: TText(label(items, value)),
       arrow: true,
-      onTap: () => _showPicker(
+      onTap: () => showPicker(
         context: context,
         items: items,
         value: value,

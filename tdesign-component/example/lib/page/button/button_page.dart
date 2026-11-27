@@ -13,7 +13,7 @@ import 'rectangle_shape_button_example.dart';
 
 @ExampleCodeManifest()
 class TButtonPage extends StatefulWidget {
-  const TButtonPage({Key? key}) : super(key: key);
+  const TButtonPage({super.key});
 
   @override
   State<StatefulWidget> createState() => _TButtonPageState();
@@ -118,39 +118,39 @@ class _TButtonPageState extends State<TButtonPage> {
                   SizedBox(
                     width: double.infinity,
                     child: TButton(
-                      child: const Text('填充通栏按钮'),
                       colorPreset: TButtonColorPreset.primary,
                       onPressed: _onTap,
+                      child: const Text('填充通栏按钮'),
                     ),
                   ),
                   const SizedBox(height: 16),
                   SizedBox(
                     width: double.infinity,
                     child: TButton(
-                      child: const Text('描边通栏按钮'),
                       variant: TButtonVariant.outline,
                       colorPreset: TButtonColorPreset.primary,
                       onPressed: _onTap,
+                      child: const Text('描边通栏按钮'),
                     ),
                   ),
                   const SizedBox(height: 16),
                   SizedBox(
                     width: double.infinity,
                     child: TButton(
-                      child: const Text('文字通栏按钮'),
                       variant: TButtonVariant.text,
                       colorPreset: TButtonColorPreset.primary,
                       onPressed: _onTap,
+                      child: const Text('文字通栏按钮'),
                     ),
                   ),
                   const SizedBox(height: 16),
                   SizedBox(
                     width: double.infinity,
                     child: TButton(
-                      child: const Text('幽灵通栏按钮'),
                       variant: TButtonVariant.ghost,
                       colorPreset: TButtonColorPreset.primary,
                       onPressed: _onTap,
+                      child: const Text('幽灵通栏按钮'),
                     ),
                   ),
                 ],
@@ -168,15 +168,15 @@ class _TButtonPageState extends State<TButtonPage> {
           desc: '按钮中路由跳转',
           builder: (context) {
             return TButton(
-              child: const Text('点击跳转'),
               size: TButtonSize.large,
               onPressed: () async {
                 var result = await Navigator.of(context)
                     .pushNamedAndRemoveUntil('divider', (router) {
                       return true;
                     });
-                print('pushNamedAndRemoveUntil result: $result');
+                debugPrint('pushNamedAndRemoveUntil result: $result');
               },
+              child: const Text('点击跳转'),
             );
           },
         ),
@@ -217,7 +217,7 @@ class _TButtonPageState extends State<TButtonPage> {
   }
 
   Widget _buildChildTestButton(BuildContext context) {
-    return TButton(child: Container(), onPressed: null);
+    return TButton(onPressed: null, child: Container());
   }
 
   Widget _buildRightIconButton(BuildContext context) {
@@ -227,13 +227,13 @@ class _TButtonPageState extends State<TButtonPage> {
       alignment: WrapAlignment.center,
       children: [
         TButton(
+          icon: const Icon(TIcons.app),
+          size: TButtonSize.large,
+          variant: TButtonVariant.fill,
+          colorPreset: TButtonColorPreset.primary,
+          iconPosition: TButtonIconPosition.right,
+          onPressed: _onTap,
           child: const Text('填充按钮'),
-          icon: const Icon(TIcons.app),
-          size: TButtonSize.large,
-          variant: TButtonVariant.fill,
-          colorPreset: TButtonColorPreset.primary,
-          iconPosition: TButtonIconPosition.right,
-          onPressed: _onTap,
         ),
         TButton(
           icon: const Icon(TIcons.app),
@@ -244,13 +244,13 @@ class _TButtonPageState extends State<TButtonPage> {
           onPressed: _onTap,
         ),
         TButton(
+          icon: const Icon(TIcons.app),
+          size: TButtonSize.large,
+          variant: TButtonVariant.fill,
+          colorPreset: TButtonColorPreset.primary,
+          iconPosition: TButtonIconPosition.right,
+          onPressed: _onTap,
           child: const Text('间距20'),
-          icon: const Icon(TIcons.app),
-          size: TButtonSize.large,
-          variant: TButtonVariant.fill,
-          colorPreset: TButtonColorPreset.primary,
-          iconPosition: TButtonIconPosition.right,
-          onPressed: _onTap,
         ),
       ],
     );
@@ -270,13 +270,13 @@ class _TButtonPageState extends State<TButtonPage> {
             ),
           ),
           child: TButton(
-            child: const Text('填充按钮'),
             icon: const Icon(TIcons.app),
             size: TButtonSize.large,
             variant: TButtonVariant.fill,
             colorPreset: TButtonColorPreset.primary,
             iconPosition: TButtonIconPosition.right,
             onPressed: _onTap,
+            child: const Text('填充按钮'),
           ),
         ),
         Theme(
@@ -311,13 +311,13 @@ class _TButtonPageState extends State<TButtonPage> {
             ),
           ),
           child: TButton(
-            child: const Text('间距20'),
             icon: const Icon(TIcons.app),
             size: TButtonSize.large,
             variant: TButtonVariant.fill,
             colorPreset: TButtonColorPreset.primary,
             iconPosition: TButtonIconPosition.right,
             onPressed: _onTap,
+            child: const Text('间距20'),
           ),
         ),
       ],
@@ -334,36 +334,36 @@ class _TButtonPageState extends State<TButtonPage> {
         _buildStatusRow(
           const TButton(
             icon: Icon(TIcons.app),
-            child: Text('Button'),
             variant: TButtonVariant.fill,
             colorPreset: TButtonColorPreset.primary,
+            child: Text('Button'),
           ),
           context,
         ),
         _buildStatusRow(
           const TButton(
             icon: Icon(TIcons.app),
-            child: Text('Button'),
             variant: TButtonVariant.fill,
             colorPreset: TButtonColorPreset.light,
+            child: Text('Button'),
           ),
           context,
         ),
         _buildStatusRow(
           const TButton(
             icon: Icon(TIcons.app),
-            child: Text('Button'),
             variant: TButtonVariant.fill,
             colorPreset: TButtonColorPreset.defaultTheme,
+            child: Text('Button'),
           ),
           context,
         ),
         _buildStatusRow(
           const TButton(
             icon: Icon(TIcons.app),
-            child: Text('Button'),
             variant: TButtonVariant.fill,
             colorPreset: TButtonColorPreset.danger,
+            child: Text('Button'),
           ),
           context,
         ),
@@ -372,36 +372,36 @@ class _TButtonPageState extends State<TButtonPage> {
         _buildStatusRow(
           const TButton(
             icon: Icon(TIcons.app),
-            child: Text('Button'),
             variant: TButtonVariant.outline,
             colorPreset: TButtonColorPreset.primary,
+            child: Text('Button'),
           ),
           context,
         ),
         _buildStatusRow(
           const TButton(
             icon: Icon(TIcons.app),
-            child: Text('Button'),
             variant: TButtonVariant.outline,
             colorPreset: TButtonColorPreset.light,
+            child: Text('Button'),
           ),
           context,
         ),
         _buildStatusRow(
           const TButton(
             icon: Icon(TIcons.app),
-            child: Text('Button'),
             variant: TButtonVariant.outline,
             colorPreset: TButtonColorPreset.defaultTheme,
+            child: Text('Button'),
           ),
           context,
         ),
         _buildStatusRow(
           const TButton(
             icon: Icon(TIcons.app),
-            child: Text('Button'),
             variant: TButtonVariant.outline,
             colorPreset: TButtonColorPreset.danger,
+            child: Text('Button'),
           ),
           context,
         ),
@@ -410,36 +410,36 @@ class _TButtonPageState extends State<TButtonPage> {
         _buildStatusRow(
           const TButton(
             icon: Icon(TIcons.app),
-            child: Text('Button'),
             variant: TButtonVariant.text,
             colorPreset: TButtonColorPreset.primary,
+            child: Text('Button'),
           ),
           context,
         ),
         _buildStatusRow(
           const TButton(
             icon: Icon(TIcons.app),
-            child: Text('Button'),
             variant: TButtonVariant.text,
             colorPreset: TButtonColorPreset.light,
+            child: Text('Button'),
           ),
           context,
         ),
         _buildStatusRow(
           const TButton(
             icon: Icon(TIcons.app),
-            child: Text('Button'),
             variant: TButtonVariant.text,
             colorPreset: TButtonColorPreset.defaultTheme,
+            child: Text('Button'),
           ),
           context,
         ),
         _buildStatusRow(
           const TButton(
             icon: Icon(TIcons.app),
-            child: Text('Button'),
             variant: TButtonVariant.text,
             colorPreset: TButtonColorPreset.danger,
+            child: Text('Button'),
           ),
           context,
         ),
@@ -461,30 +461,30 @@ class _TButtonPageState extends State<TButtonPage> {
           // 默认启用态
           TButton(
             icon: template.icon,
-            child: template.child,
             variant: template.variant,
             colorPreset: template.colorPreset,
             size: template.size,
             onPressed: _onTap,
+            child: template.child,
           ),
 
           // 可交互态（按压由 Material WidgetState 自动处理）
           TButton(
             icon: template.icon,
-            child: template.child,
             variant: template.variant,
             colorPreset: template.colorPreset,
             size: template.size,
             onPressed: _onTap,
+            child: template.child,
           ),
           // 禁用态
           TButton(
             icon: template.icon,
-            child: template.child,
             variant: template.variant,
             colorPreset: template.colorPreset,
             size: template.size,
             onPressed: null,
+            child: template.child,
           ),
         ],
       ),
@@ -508,18 +508,18 @@ class _TButtonPageState extends State<TButtonPage> {
           children: [
             const TButton(
               icon: Icon(TIcons.app),
-              child: Text('Button'),
               variant: TButtonVariant.ghost,
+              child: Text('Button'),
             ).copyWithColorPreset(scheme, onPressed: _onTap),
             const TButton(
               icon: Icon(TIcons.app),
-              child: Text('Button'),
               variant: TButtonVariant.ghost,
+              child: Text('Button'),
             ).copyWithColorPreset(scheme, onPressed: _onTap),
             const TButton(
               icon: Icon(TIcons.app),
-              child: Text('Button'),
               variant: TButtonVariant.ghost,
+              child: Text('Button'),
             ).copyWithColorPreset(scheme, onPressed: null),
           ],
         ),
@@ -535,12 +535,12 @@ extension _TButtonCopy on TButton {
   }) {
     return TButton(
       icon: icon,
-      child: child,
       variant: variant,
       colorPreset: scheme,
       size: size,
       iconPosition: iconPosition,
       onPressed: onPressed,
+      child: child,
     );
   }
 }

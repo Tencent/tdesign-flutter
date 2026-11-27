@@ -13,7 +13,7 @@ import 'radius_small_example.dart';
 @ExampleCodeManifest()
 /// 圆角示例页面
 class TRadiusPage extends StatelessWidget {
-  const TRadiusPage({Key? key}) : super(key: key);
+  const TRadiusPage({super.key});
 
   @override
   Widget build(BuildContext context) {

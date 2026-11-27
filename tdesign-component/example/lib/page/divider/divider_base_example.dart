@@ -15,9 +15,9 @@ class DividerBaseExample extends StatelessWidget {
         children: [
           const TDivider(),
           _sectionTitle(context, '带文字水平分割线'),
-          const TDivider(child: Text('文字信息'), align: TDividerAlign.left),
+          const TDivider(align: TDividerAlign.left, child: Text('文字信息')),
           const TDivider(child: Text('文字信息')),
-          const TDivider(child: Text('文字信息'), align: TDividerAlign.right),
+          const TDivider(align: TDividerAlign.right, child: Text('文字信息')),
           _sectionTitle(context, '垂直分割线'),
           const Padding(
             padding: EdgeInsetsDirectional.only(start: 16),

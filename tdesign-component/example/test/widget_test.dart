@@ -308,7 +308,7 @@ void main() {
     final model = ExamplePageModel(
       text: 'Calendar 日历',
       name: 'calendar',
-      pageBuilder: (_, __) => const TCalendarPage(),
+      pageBuilder: (_, _) => const TCalendarPage(),
     );
     await tester.pumpWidget(
       ChangeNotifierProvider(

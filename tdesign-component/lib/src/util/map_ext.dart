@@ -176,11 +176,12 @@ extension MapExt<K, V> on Map<K, V> {
   /// -  divider 分割符
   /// -
   ///
-  String join2(
-      {String divider = ', ',
-      String? prefix,
-      String? suffix,
-      String Function(K key, V? value)? convert}) {
+  String join2({
+    String divider = ', ',
+    String? prefix,
+    String? suffix,
+    String Function(K key, V? value)? convert,
+  }) {
     var sb = StringBuffer();
     if (prefix != null) {
       sb.write(prefix);
@@ -236,7 +237,7 @@ extension MapExt<K, V> on Map<K, V> {
     final it = keys.iterator;
     while (it.moveNext()) {
       final k = it.current;
-      if (action(k, this[k]!)) {
+      if (action(k, this[k] as V)) {
         break;
       }
     }

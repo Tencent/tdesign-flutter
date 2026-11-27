@@ -1,6 +1,5 @@
 import 'package:tdesign_flutter/tdesign_flutter.dart';
 import '../../annotation/example_code.dart';
-import '../../base/example_widget.dart';
 
 @ExampleCode(group: 'input')
 class InputActionExample extends StatelessWidget {
@@ -24,13 +23,13 @@ class InputActionExample extends StatelessWidget {
         TFormItem(
           label: '标签文字',
           verticalAlignment: TFormItemVerticalAlignment.center,
-          child: const TInput(borderless: true, hintText: '请输入文字'),
           extra: TButton(
             size: TButtonSize.extraSmall,
             colorPreset: TButtonColorPreset.primary,
             onPressed: () {},
             child: const Text('操作按钮'),
           ),
+          child: const TInput(borderless: true, hintText: '请输入文字'),
         ),
         const SizedBox(height: 16),
         const TFormItem(

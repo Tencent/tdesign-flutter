@@ -1,5 +1,3 @@
-
-/// 组件库相关的，只需要引入这个文件，里面暴露td前缀所有需要的类
 import 'package:tdesign_flutter/tdesign_flutter.dart';
 import '../../annotation/example_code.dart';
 import '../../base/example_widget.dart';
@@ -10,13 +8,13 @@ import 'theme_text_color_example.dart';
 @ExampleCodeManifest()
 /// 主题颜色示例页
 class TThemeColorsPage extends StatefulWidget {
-  const TThemeColorsPage({Key? key}) : super(key: key);
+  const TThemeColorsPage({super.key});
 
   @override
-  _TThemeColorsPageState createState() => _TThemeColorsPageState();
+  TThemeColorsPageState createState() => TThemeColorsPageState();
 }
 
-class _TThemeColorsPageState extends State<TThemeColorsPage> {
+class TThemeColorsPageState extends State<TThemeColorsPage> {
   final brandMap = <String, Color>{};
   final errorMap = <String, Color>{};
   final warningMap = <String, Color>{};
@@ -148,7 +146,7 @@ class _TThemeColorsPageState extends State<TThemeColorsPage> {
 
 /// 测试控件
 class TestWidget extends StatelessWidget {
-  const TestWidget({Key? key}) : super(key: key);
+  const TestWidget({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -172,8 +170,8 @@ class TestWidget extends StatelessWidget {
             ), // 明确使用内层主题，必须传context
           ),
           const TButton(
-            child: Text('使用内层赋值主题'),
             colorPreset: TButtonColorPreset.primary,
+            child: Text('使用内层赋值主题'),
           ),
           TText(
             '使用默认主题',

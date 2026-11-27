@@ -17,7 +17,7 @@ import 'text_icon_vertical_loading_example.dart';
 
 @ExampleCodeManifest()
 class TLoadingPage extends StatefulWidget {
-  const TLoadingPage({Key? key}) : super(key: key);
+  const TLoadingPage({super.key});
 
   @override
   State<StatefulWidget> createState() => _TLoadingPageState();
@@ -168,17 +168,17 @@ class _TLoadingPageState extends State<TLoadingPage> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 TButton(
-                  child: const Text('展示Loading'),
                   colorPreset: TButtonColorPreset.primary,
                   onPressed: () {
                     TLoadingController.show(context);
                   },
+                  child: const Text('展示Loading'),
                 ),
                 const SizedBox(width: 36),
                 const TButton(
-                  child: Text('隐藏Loading'),
                   colorPreset: TButtonColorPreset.primary,
                   onPressed: TLoadingController.dismiss,
+                  child: Text('隐藏Loading'),
                 ),
               ],
             );

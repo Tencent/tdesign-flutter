@@ -10,7 +10,7 @@ import 'shadows_top_example.dart';
 @ExampleCodeManifest()
 /// 圆角示例页面
 class TShadowsPage extends StatelessWidget {
-  const TShadowsPage({Key? key}) : super(key: key);
+  const TShadowsPage({super.key});
 
   @override
   Widget build(BuildContext context) {

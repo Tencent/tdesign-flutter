@@ -16,7 +16,7 @@ import 't_indexes_theme_data.dart';
 /// 索引
 class TIndexesList extends StatefulWidget {
   const TIndexesList({
-    Key? key,
+    super.key,
     required this.indexList,
     this.indexListMaxHeight = 0.8,
     required this.activeIndex,
@@ -25,8 +25,7 @@ class TIndexesList extends StatefulWidget {
   }) : assert(
          indexListMaxHeight > 0 && indexListMaxHeight <= 1,
          'indexListMaxHeight must be greater than 0 and no greater than 1.',
-       ),
-       super(key: key);
+       );
 
   /// 索引字符列表，需显式传入实际展示的索引序列。本组件不自带默认值；通常由 TIndexes 装配并透传（TIndexes 未指定时默认使用 A-Z）
   final List<String> indexList;

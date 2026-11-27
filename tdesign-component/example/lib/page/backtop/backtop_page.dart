@@ -8,7 +8,7 @@ import 'backtop_skeleton_content_example.dart';
 
 @ExampleCodeManifest()
 class TBackTopPage extends StatefulWidget {
-  const TBackTopPage({Key? key}) : super(key: key);
+  const TBackTopPage({super.key});
 
   @override
   State<TBackTopPage> createState() => _TBackTopPageState();

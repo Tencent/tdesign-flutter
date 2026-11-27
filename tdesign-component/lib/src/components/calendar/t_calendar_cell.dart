@@ -92,7 +92,7 @@ class TCalendarCellModel {
 /// 默认渲染日期与副标题；可通过日历的 cell builder 覆盖整格内容。
 class TCalendarCell extends StatefulWidget {
   const TCalendarCell({
-    Key? key,
+    super.key,
     this.cell,
     this.onTap,
     required this.height,
@@ -107,7 +107,7 @@ class TCalendarCell extends StatefulWidget {
     this.subtitleStyle,
     this.cellDecoration,
     this.centreColor,
-  }) : super(key: key);
+  });
 
   final TCalendarCellModel? cell;
 

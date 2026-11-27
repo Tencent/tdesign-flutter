@@ -1,6 +1,5 @@
 import 'package:tdesign_flutter/tdesign_flutter.dart';
 import '../../annotation/example_code.dart';
-import '../../base/example_widget.dart';
 
 @ExampleCode(group: 'noticeBar')
 class CustomContentNoticeBarExample extends StatelessWidget {
@@ -16,9 +15,9 @@ Widget _customContentNoticeBar(BuildContext context) {
   return TNoticeBar(
     content: '提示文字描述提示文字描述提示文字描述提示文字描述提示文字描述提示文字描述',
     operation: TLink(
-      child: const Text('详情'),
       colorPreset: TLinkColorPreset.primary,
       onPressed: () => TToast.showText('点击了详情', context: context),
+      child: const Text('详情'),
     ),
     suffixIcon: TIcons.close,
   );

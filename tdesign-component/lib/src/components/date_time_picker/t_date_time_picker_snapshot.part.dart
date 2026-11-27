@@ -284,7 +284,7 @@ class DateTimePickerSnapshot {
         changed.add(i);
         continue;
       }
-      final ob = columnBounds(
+      final ob = _columnBounds(
         col,
         current: other.current,
         start: start,
@@ -292,7 +292,7 @@ class DateTimePickerSnapshot {
         yearAnchor: yearAnchor,
         columns: columns,
       );
-      final tb = columnBounds(
+      final tb = _columnBounds(
         col,
         current: current,
         start: start,
@@ -408,7 +408,7 @@ class DateTimePickerSnapshot {
     DateTimePickerSteps? steps,
   }) {
     if (col == DateTimeColumn.day) {
-      final bounds = columnBounds(
+      final bounds = _columnBounds(
         col,
         current: current,
         start: start,
@@ -443,7 +443,7 @@ class DateTimePickerSnapshot {
       );
     }
 
-    final bounds = columnBounds(
+    final bounds = _columnBounds(
       col,
       current: current,
       start: start,

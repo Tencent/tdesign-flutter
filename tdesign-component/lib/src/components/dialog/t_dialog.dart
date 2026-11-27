@@ -117,17 +117,10 @@ class TDialog extends StatelessWidget {
     this.closeButtonResult,
     this.semanticLabel,
 
-    /// 操作区内边距。未设置时使用主题 token 默认值。
-    ///
-    /// 一到两个操作全部显式使用 [TButtonVariant.text] 时，默认仅保留 32dp
-    /// 顶部间距，使文字按钮 Footer 横向贴边；显式设置后使用传入的内边距。
-    EdgeInsetsGeometry? actionsPadding,
+    this.actionsPadding,
 
-    /// 操作之间的间距。未设置时使用主题 token 默认值。
-    double? actionSpacing,
-  }) : actionsPadding = actionsPadding,
-       actionSpacing = actionSpacing,
-       assert(
+    this.actionSpacing,
+  }) : assert(
          actionsWidget == null || actions.length == 0,
          'actions and actionsWidget cannot be used together.',
        );

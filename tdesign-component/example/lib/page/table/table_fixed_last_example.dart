@@ -20,14 +20,14 @@ class TableFixedLastExample extends StatelessWidget {
             id: 'title$index',
             header: const Text('标题'),
             width: 120,
-            cellBuilder: (_, __, ___) => const Text('内容'),
+            cellBuilder: (_, _, _) => const Text('内容'),
           ),
         TTableColumn<List<String>>(
           id: 'actions',
           header: const Text('标题'),
           width: 116,
           fixed: TTableColumnFixed.right,
-          cellBuilder: (context, _, __) => Row(
+          cellBuilder: (context, _, _) => Row(
             mainAxisSize: MainAxisSize.min,
             children: [
               Flexible(

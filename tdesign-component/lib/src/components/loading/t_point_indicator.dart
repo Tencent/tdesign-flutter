@@ -10,12 +10,12 @@ import 'package:flutter/material.dart';
 /// 点状弹跳加载指示器。
 class TPointBounceIndicator extends StatefulWidget {
   const TPointBounceIndicator({
-    Key? key,
+    super.key,
     this.color,
     this.size = 20.0,
     this.duration = 1400,
     this.controller,
-  }) : super(key: key);
+  });
 
   final Color? color;
   final double size;
@@ -23,10 +23,10 @@ class TPointBounceIndicator extends StatefulWidget {
   final AnimationController? controller;
 
   @override
-  _TPointBounceIndicatorState createState() => _TPointBounceIndicatorState();
+  TPointBounceIndicatorState createState() => TPointBounceIndicatorState();
 }
 
-class _TPointBounceIndicatorState extends State<TPointBounceIndicator>
+class TPointBounceIndicatorState extends State<TPointBounceIndicator>
     with SingleTickerProviderStateMixin {
   late AnimationController _controller;
 
@@ -93,8 +93,7 @@ class _TPointBounceIndicatorState extends State<TPointBounceIndicator>
 }
 
 class DelayTween extends Tween<double> {
-  DelayTween({double? begin, double? end, required this.delay})
-    : super(begin: begin, end: end);
+  DelayTween({super.begin, super.end, required this.delay});
 
   final double delay;
 

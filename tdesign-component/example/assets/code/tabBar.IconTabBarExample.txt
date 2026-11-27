@@ -24,10 +24,7 @@ class _IconTabBarExampleState extends State<IconTabBarExample> {
           selectedIcon: Icon(icons[index]),
           unselectedIcon: Icon(icons[index]),
           notifyOnReselect: true,
-          onTap: () => TToast.showText(
-            '第 ${index + 1} 项',
-            context: context,
-          ),
+          onTap: () => TToast.showText('第 ${index + 1} 项', context: context),
         ),
       ),
     );

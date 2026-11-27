@@ -16,7 +16,7 @@ void main() {
       children: [
         TCollapsePanel(
           value: 1,
-          headerBuilder: (_, __) => child,
+          headerBuilder: (_, _) => child,
           body: const Text('body'),
         ),
       ],
@@ -36,7 +36,7 @@ void main() {
       children: [
         TCollapsePanel(
           value: 1,
-          headerBuilder: (_, __) => const Text('header'),
+          headerBuilder: (_, _) => const Text('header'),
           body: child,
         ),
       ],
@@ -56,8 +56,8 @@ void main() {
       children: [
         TCollapsePanel(
           value: 1,
-          headerBuilder: (_, __) => const Text('header'),
-          trailingBuilder: (_, __) => child,
+          headerBuilder: (_, _) => const Text('header'),
+          trailingBuilder: (_, _) => child,
           body: const Text('body'),
         ),
       ],
@@ -71,7 +71,7 @@ void main() {
       children: [
         TCollapsePanel(
           value: 1,
-          headerBuilder: (_, __) => child,
+          headerBuilder: (_, _) => child,
           body: const Text('body'),
         ),
       ],
@@ -87,7 +87,7 @@ void main() {
       children: [
         TCollapsePanel(
           value: 1,
-          headerBuilder: (_, __) => child,
+          headerBuilder: (_, _) => child,
           body: const Text('body'),
         ),
       ],
@@ -106,7 +106,7 @@ void main() {
       children: [
         TCollapsePanel(
           value: 1,
-          headerBuilder: (_, __) => const Text('header'),
+          headerBuilder: (_, _) => const Text('header'),
           body: child,
         ),
       ],
@@ -125,8 +125,8 @@ void main() {
       children: [
         TCollapsePanel(
           value: 1,
-          headerBuilder: (_, __) => const Text('header'),
-          trailingBuilder: (_, __) => child,
+          headerBuilder: (_, _) => const Text('header'),
+          trailingBuilder: (_, _) => child,
           body: const Text('body'),
         ),
       ],
@@ -139,7 +139,7 @@ void main() {
       children: [
         TCollapsePanel(
           value: 1,
-          headerBuilder: (_, __) => child,
+          headerBuilder: (_, _) => child,
           body: const Text('body'),
         ),
       ],
@@ -148,12 +148,7 @@ void main() {
 
   Widget wrapWithTheme(Widget child, {TCollapseThemeData? collapseTheme}) {
     return MaterialApp(
-      theme: ThemeData(
-        extensions: [
-          TThemeData.defaultData(),
-          if (collapseTheme != null) collapseTheme,
-        ],
-      ),
+      theme: ThemeData(extensions: [TThemeData.defaultData(), ?collapseTheme]),
       home: Scaffold(body: SingleChildScrollView(child: child)),
     );
   }
@@ -782,7 +777,7 @@ void main() {
       TCollapsePanel<String> statefulPanel(String id) {
         return TCollapsePanel<String>(
           value: id,
-          headerBuilder: (_, __) => Text('标题$id'),
+          headerBuilder: (_, _) => Text('标题$id'),
           body: _StatefulPanelBody(id: id),
         );
       }

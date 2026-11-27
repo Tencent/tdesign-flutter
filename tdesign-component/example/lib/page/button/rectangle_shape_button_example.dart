@@ -1,6 +1,5 @@
 import 'package:tdesign_flutter/tdesign_flutter.dart';
 import '../../annotation/example_code.dart';
-import '../../base/example_widget.dart';
 
 @ExampleCode(group: 'button')
 class RectangleShapeButtonExample extends StatelessWidget {
@@ -8,11 +7,11 @@ class RectangleShapeButtonExample extends StatelessWidget {
   Widget _buildRectangleShapeButton(BuildContext context) {
     return TButton(
       shape: TButtonShape.rectangle,
-      child: const Text('填充按钮'),
       size: TButtonSize.large,
       variant: TButtonVariant.fill,
       colorPreset: TButtonColorPreset.primary,
       onPressed: () => _onTap(context),
+      child: const Text('填充按钮'),
     );
   }
 
@@ -30,11 +29,11 @@ class RectangleShapeButtonExample extends StatelessWidget {
   Widget _buildRoundButton(BuildContext context) {
     return TButton(
       shape: TButtonShape.round,
-      child: const Text('填充按钮'),
       size: TButtonSize.large,
       variant: TButtonVariant.fill,
       colorPreset: TButtonColorPreset.primary,
       onPressed: () => _onTap(context),
+      child: const Text('填充按钮'),
     );
   }
 
@@ -53,7 +52,6 @@ class RectangleShapeButtonExample extends StatelessWidget {
     return SizedBox(
       width: double.infinity,
       child: TButton(
-        child: const Text('填充按钮'),
         size: TButtonSize.large,
         variant: TButtonVariant.fill,
         colorPreset: TButtonColorPreset.primary,
@@ -63,6 +61,7 @@ class RectangleShapeButtonExample extends StatelessWidget {
           ),
         ),
         onPressed: () => _onTap(context),
+        child: const Text('填充按钮'),
       ),
     );
   }

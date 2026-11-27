@@ -212,7 +212,7 @@ class IntlResourceDelegate extends TResourceDelegate {
 
   /// 复用同一个代理时，更新为当前 Localizations 子树的 context。
   /// 使用 needAlwaysBuild: true 并每次新建代理时，无需调用此方法。
-  updateContext(BuildContext context) {
+  void updateContext(BuildContext context) {
     this.context = context;
   }
 

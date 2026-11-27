@@ -24,12 +24,7 @@ void main() {
 
   Widget wrap(Widget child, {TCascaderThemeData? cascaderTheme}) {
     return MaterialApp(
-      theme: ThemeData(
-        extensions: [
-          TThemeData.defaultData(),
-          if (cascaderTheme != null) cascaderTheme,
-        ],
-      ),
+      theme: ThemeData(extensions: [TThemeData.defaultData(), ?cascaderTheme]),
       home: Scaffold(body: child),
     );
   }
@@ -611,9 +606,7 @@ void main() {
       expect(find.text('District'), findsNothing);
     });
 
-    testWidgets('omits an empty subtitle', (
-      tester,
-    ) async {
+    testWidgets('omits an empty subtitle', (tester) async {
       await tester.pumpWidget(
         wrap(
           TCascader(

@@ -13,10 +13,7 @@ void main() {
     return MaterialApp(
       theme: ThemeData(
         colorScheme: colorScheme,
-        extensions: [
-          token ?? TThemeData.defaultData(),
-          if (rateTheme != null) rateTheme,
-        ],
+        extensions: [token ?? TThemeData.defaultData(), ?rateTheme],
       ),
       home: Scaffold(body: Center(child: child)),
     );

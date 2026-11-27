@@ -1,6 +1,5 @@
 import 'package:tdesign_flutter/tdesign_flutter.dart';
 import '../../annotation/example_code.dart';
-import '../../base/example_widget.dart';
 
 @ExampleCode(group: 'toast')
 class HideToastExample extends StatelessWidget {
@@ -11,13 +10,13 @@ class HideToastExample extends StatelessWidget {
     return SizedBox(
       width: double.infinity,
       child: TButton(
-        child: const Text('关闭提示'),
         size: TButtonSize.large,
         variant: TButtonVariant.outline,
         colorPreset: TButtonColorPreset.primary,
         onPressed: () {
           TToast.dismissToast('manual-close-demo');
         },
+        child: const Text('关闭提示'),
       ),
     );
   }

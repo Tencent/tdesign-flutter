@@ -29,7 +29,6 @@ const double _kTabIconSize = 18.0;
 
 class _TabStyle extends AnimatedWidget {
   const _TabStyle({
-    Key? key,
     required Animation<double> animation,
     required this.selected,
     required this.labelColor,
@@ -37,7 +36,7 @@ class _TabStyle extends AnimatedWidget {
     required this.labelStyle,
     required this.unselectedLabelStyle,
     required this.child,
-  }) : super(key: key, listenable: animation);
+  }) : super(listenable: animation);
 
   final TextStyle? labelStyle;
   final TextStyle? unselectedLabelStyle;
@@ -118,7 +117,7 @@ class THorizontalTabBar extends StatefulWidget implements PreferredSizeWidget {
   /// If [indicator] is not null,
   /// then [indicatorWeight], [indicatorPadding], and [indicatorColor] are ignored.
   const THorizontalTabBar({
-    Key? key,
+    super.key,
     required this.tabs,
     this.controller,
     this.isScrollable = false,
@@ -144,8 +143,7 @@ class THorizontalTabBar extends StatefulWidget implements PreferredSizeWidget {
     this.selectedTagBackgroundColor,
     this.tagBackgroundColor,
     this.tabAlignment,
-  }) : assert(indicator != null || (indicatorWeight > 0.0)),
-       super(key: key);
+  }) : assert(indicator != null || (indicatorWeight > 0.0));
 
   /// Typically a list of two or more [Tab] widgets.
   ///
@@ -1106,16 +1104,11 @@ class _TabBarScrollController extends ScrollController {
 // pixels value) after the TabBar viewport width and scroll limits are known.
 class _TabBarScrollPosition extends ScrollPositionWithSingleContext {
   _TabBarScrollPosition({
-    required ScrollPhysics physics,
-    required ScrollContext context,
-    required ScrollPosition? oldPosition,
+    required super.physics,
+    required super.context,
+    required super.oldPosition,
     required this.tabBar,
-  }) : super(
-         physics: physics,
-         context: context,
-         initialPixels: null,
-         oldPosition: oldPosition,
-       );
+  }) : super(initialPixels: null);
 
   final _THorizontalTabBarState tabBar;
 
@@ -1149,23 +1142,14 @@ class _TabBarScrollPosition extends ScrollPositionWithSingleContext {
 
 class _TabLabelBarRenderer extends RenderFlex {
   _TabLabelBarRenderer({
-    List<RenderBox>? children,
-    required Axis direction,
-    required MainAxisSize mainAxisSize,
-    required MainAxisAlignment mainAxisAlignment,
-    required CrossAxisAlignment crossAxisAlignment,
-    required TextDirection textDirection,
-    required VerticalDirection verticalDirection,
+    required super.direction,
+    required super.mainAxisSize,
+    required super.mainAxisAlignment,
+    required super.crossAxisAlignment,
+    required TextDirection super.textDirection,
+    required super.verticalDirection,
     required this.onPerformLayout,
-  }) : super(
-         children: children,
-         direction: direction,
-         mainAxisSize: mainAxisSize,
-         mainAxisAlignment: mainAxisAlignment,
-         crossAxisAlignment: crossAxisAlignment,
-         textDirection: textDirection,
-         verticalDirection: verticalDirection,
-       );
+  });
 
   _LayoutCallback onPerformLayout;
 
@@ -1202,13 +1186,10 @@ class _TabLabelBarRenderer extends RenderFlex {
 // or in response to input.
 class _TabLabelBar extends Flex {
   const _TabLabelBar({
-    Key? key,
-    List<Widget> children = const <Widget>[],
+    super.children,
     required this.onPerformLayout,
     required super.mainAxisSize,
   }) : super(
-         key: key,
-         children: children,
          direction: Axis.horizontal,
          mainAxisAlignment: MainAxisAlignment.start,
          crossAxisAlignment: CrossAxisAlignment.center,
@@ -1295,12 +1276,12 @@ class THorizontalTabBarView extends StatefulWidget {
   ///
   /// The length of [children] must be the same as the [controller]'s length.
   const THorizontalTabBarView({
-    Key? key,
+    super.key,
     required this.children,
     this.controller,
     this.physics,
     this.dragStartBehavior = DragStartBehavior.start,
-  }) : super(key: key);
+  });
 
   /// This widget's selection and animation state.
   ///
@@ -1551,11 +1532,11 @@ class TabPageSelectorIndicator extends StatelessWidget {
   ///
   /// The [backgroundColor], [borderColor], and [size] parameters must not be null.
   const TabPageSelectorIndicator({
-    Key? key,
+    super.key,
     required this.backgroundColor,
     required this.borderColor,
     required this.size,
-  }) : super(key: key);
+  });
 
   /// The indicator circle's background color.
   final Color backgroundColor;
@@ -1591,13 +1572,12 @@ class TabPageSelectorIndicator extends StatelessWidget {
 class TabPageSelector extends StatelessWidget {
   /// Creates a compact widget that indicates which tab has been selected.
   const TabPageSelector({
-    Key? key,
+    super.key,
     this.controller,
     this.indicatorSize = 12.0,
     this.color,
     this.selectedColor,
-  }) : assert(indicatorSize > 0.0),
-       super(key: key);
+  }) : assert(indicatorSize > 0.0);
 
   /// This widget's selection and animation state.
   ///

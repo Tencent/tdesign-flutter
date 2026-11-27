@@ -79,9 +79,9 @@ class TDrawer extends StatelessWidget {
       footer: footer,
       items: items,
       showLastDivider: showLastDivider,
-      child: child,
       title: title,
       onItemTap: onItemTap,
+      child: child,
     );
   }
 }

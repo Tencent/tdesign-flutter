@@ -17,7 +17,7 @@ import 't_button_types.dart';
 
 class TButton extends StatefulWidget {
   const TButton({
-    Key? key,
+    super.key,
     this.child,
     this.size,
     this.variant,
@@ -28,7 +28,7 @@ class TButton extends StatefulWidget {
     this.onPressed,
     this.onLongPress,
     this.style,
-  }) : super(key: key);
+  });
 
   /// 按钮内容，纯文案可使用 `Text('...')` 或 `TText('...')`。
   ///

@@ -1,6 +1,5 @@
 import 'package:tdesign_flutter/tdesign_flutter.dart';
 import '../../annotation/example_code.dart';
-import '../../base/example_widget.dart';
 
 @ExampleCode(group: 'date-time-picker')
 class DateTimePickerMonthDayExample extends StatefulWidget {
@@ -59,7 +58,7 @@ class _DateTimePickerMonthDayExampleState
     bool showWeek = false,
     bool showTitle = true,
   }) {
-    String _format(TDateTimePickerValue value, {bool showWeek = false}) {
+    String format(TDateTimePickerValue value, {bool showWeek = false}) {
       String two(int? part) => part?.toString().padLeft(2, '0') ?? '';
       final date = [
         if (value.year != null) '${value.year}',
@@ -133,7 +132,7 @@ class _DateTimePickerMonthDayExampleState
         TCell(
           key: ValueKey('date-time-picker-$id-trigger'),
           title: TText(title),
-          note: TText(_format(value, showWeek: showWeek)),
+          note: TText(format(value, showWeek: showWeek)),
           arrow: true,
           onTap: showPicker,
         ),

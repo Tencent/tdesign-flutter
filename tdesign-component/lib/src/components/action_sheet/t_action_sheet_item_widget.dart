@@ -123,7 +123,6 @@ class TActionSheetItemWidget<T> extends StatelessWidget {
         ? icon
         : TBadgeFromConfig(
             config: badge,
-            child: icon,
             fallbackAlignment: AlignmentDirectional.topEnd,
             fallbackOffset: resolveBadgeFallbackOffset(
               context,
@@ -131,6 +130,7 @@ class TActionSheetItemWidget<T> extends StatelessWidget {
               alignment: badge.alignment,
               fallbackAlignment: AlignmentDirectional.topEnd,
             ),
+            child: icon,
           );
   }
 }

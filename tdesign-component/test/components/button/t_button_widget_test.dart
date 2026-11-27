@@ -15,7 +15,7 @@ void main() {
             extensions: [TThemeData.defaultData()],
           ),
           home: const Scaffold(
-            body: TButton(child: Text('Button'), onPressed: _noop),
+            body: TButton(onPressed: _noop, child: Text('Button')),
           ),
         ),
       );
@@ -32,10 +32,10 @@ void main() {
       await tester.pumpWidget(
         wrap(
           const TButton(
-            child: Text('填充'),
             variant: TButtonVariant.fill,
             colorPreset: TButtonColorPreset.primary,
             onPressed: _noop,
+            child: Text('填充'),
           ),
         ),
       );
@@ -48,19 +48,19 @@ void main() {
           const Column(
             children: [
               TButton(
-                child: Text('描边'),
                 variant: TButtonVariant.outline,
                 onPressed: _noop,
+                child: Text('描边'),
               ),
               TButton(
-                child: Text('文字'),
                 variant: TButtonVariant.text,
                 onPressed: _noop,
+                child: Text('文字'),
               ),
               TButton(
-                child: Text('幽灵'),
                 variant: TButtonVariant.ghost,
                 onPressed: _noop,
+                child: Text('幽灵'),
               ),
             ],
           ),
@@ -75,22 +75,22 @@ void main() {
           const Column(
             children: [
               TButton(
-                child: Text('小'),
                 size: TButtonSize.small,
                 colorPreset: TButtonColorPreset.danger,
                 onPressed: _noop,
+                child: Text('小'),
               ),
               TButton(
                 icon: Icon(Icons.add),
-                child: Text('左图标'),
                 iconPosition: TButtonIconPosition.left,
                 onPressed: _noop,
+                child: Text('左图标'),
               ),
               TButton(
                 icon: Icon(Icons.add),
-                child: Text('右图标'),
                 iconPosition: TButtonIconPosition.right,
                 onPressed: _noop,
+                child: Text('右图标'),
               ),
             ],
           ),
@@ -101,7 +101,7 @@ void main() {
 
     testWidgets('禁用态（onPressed 为 null）可构建', (tester) async {
       await tester.pumpWidget(
-        wrap(const TButton(child: Text('禁用'), onPressed: null)),
+        wrap(const TButton(onPressed: null, child: Text('禁用'))),
       );
       expect(find.byType(TButton), findsOneWidget);
     });
@@ -191,8 +191,8 @@ void main() {
           home: const Scaffold(
             body: TButton(
               icon: Icon(Icons.add),
-              child: Text('间距'),
               onPressed: _noop,
+              child: Text('间距'),
             ),
           ),
         ),
@@ -214,8 +214,8 @@ void main() {
           home: const Scaffold(
             body: TButton(
               icon: Icon(Icons.add),
-              child: Text('间距'),
               onPressed: _noop,
+              child: Text('间距'),
             ),
           ),
         ),
@@ -234,11 +234,11 @@ void main() {
       await tester.pumpWidget(
         wrap(
           TButton(
-            child: const Text('覆盖'),
             style: ButtonStyle(
               backgroundColor: WidgetStateProperty.all(Colors.amber),
             ),
             onPressed: _noop,
+            child: const Text('覆盖'),
           ),
         ),
       );

@@ -1,6 +1,5 @@
 import 'package:tdesign_flutter/tdesign_flutter.dart';
 import '../../annotation/example_code.dart';
-import '../../base/example_widget.dart';
 
 @ExampleCode(group: 'button')
 class CombinationButtonsExample extends StatelessWidget {
@@ -12,21 +11,21 @@ class CombinationButtonsExample extends StatelessWidget {
         children: [
           Expanded(
             child: TButton(
-              child: const Text('填充按钮'),
               size: TButtonSize.large,
               variant: TButtonVariant.fill,
               colorPreset: TButtonColorPreset.light,
               onPressed: () => _onTap(context),
+              child: const Text('填充按钮'),
             ),
           ),
           const SizedBox(width: 16),
           Expanded(
             child: TButton(
-              child: const Text('填充按钮'),
               size: TButtonSize.large,
               variant: TButtonVariant.fill,
               colorPreset: TButtonColorPreset.primary,
               onPressed: () => _onTap(context),
+              child: const Text('填充按钮'),
             ),
           ),
         ],

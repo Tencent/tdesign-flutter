@@ -123,12 +123,12 @@ class TCheckboxGroup<T> extends StatelessWidget {
       return TSelectionCardGroupLayout(
         direction: direction,
         columns: columns,
-        children: List.generate(options.length, (index) {
-          return _buildItem(context, options[index], index);
-        }),
         itemHasSubtitles: [
           for (final option in options) option.subTitle?.isNotEmpty == true,
         ],
+        children: List.generate(options.length, (index) {
+          return _buildItem(context, options[index], index);
+        }),
       );
     }
     if (direction == Axis.vertical && columns == 1) {

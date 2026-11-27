@@ -11,7 +11,7 @@ void main() {
     final model = ExamplePageModel(
       text: 'Search 搜索框',
       name: 'search',
-      pageBuilder: (_, __) => const TSearchBarPage(),
+      pageBuilder: (_, _) => const TSearchBarPage(),
     );
     return ChangeNotifierProvider(
       create: (_) => ThemeModeProvider(),

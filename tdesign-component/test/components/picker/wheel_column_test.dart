@@ -19,10 +19,9 @@ void main() {
     expect(WheelColumnState.nearestEnabledIndex(values, 1), 2);
     expect(WheelColumnState.nearestEnabledIndex(values, 2), 0);
     expect(
-      WheelColumnState.nearestEnabledIndex(
-        const [TPickerOption(label: 'A', value: 0, disabled: true)],
-        0,
-      ),
+      WheelColumnState.nearestEnabledIndex(const [
+        TPickerOption(label: 'A', value: 0, disabled: true),
+      ], 0),
       -1,
     );
   });
@@ -31,20 +30,22 @@ void main() {
     final key = GlobalKey<WheelColumnState>();
     final controller = FixedExtentScrollController();
     var selected = -1;
-    await tester.pumpWidget(MaterialApp(
-      home: SizedBox(
-        height: 200,
-        child: WheelColumn(
-          key: key,
-          colIndex: 0,
-          options: options,
-          controller: controller,
-          itemHeight: 40,
-          disabled: false,
-          onItemSelected: (_, index, __) => selected = index,
+    await tester.pumpWidget(
+      MaterialApp(
+        home: SizedBox(
+          height: 200,
+          child: WheelColumn(
+            key: key,
+            colIndex: 0,
+            options: options,
+            controller: controller,
+            itemHeight: 40,
+            disabled: false,
+            onItemSelected: (_, index, _) => selected = index,
+          ),
         ),
       ),
-    ));
+    );
 
     expect(key.currentState?.nudge(-1), isFalse);
     expect(key.currentState?.nudge(1), isTrue);
@@ -53,25 +54,28 @@ void main() {
     controller.dispose();
   });
 
-  testWidgets('updates options and controller without owning disposal',
-      (tester) async {
+  testWidgets('updates options and controller without owning disposal', (
+    tester,
+  ) async {
     final key = GlobalKey<WheelColumnState>();
     final first = FixedExtentScrollController();
     final second = FixedExtentScrollController(initialItem: 1);
-    await tester.pumpWidget(MaterialApp(
-      home: SizedBox(
-        height: 200,
-        child: WheelColumn(
-          key: key,
-          colIndex: 0,
-          options: options,
-          controller: first,
-          itemHeight: 40,
-          disabled: false,
-          onItemSelected: (_, __, ___) {},
+    await tester.pumpWidget(
+      MaterialApp(
+        home: SizedBox(
+          height: 200,
+          child: WheelColumn(
+            key: key,
+            colIndex: 0,
+            options: options,
+            controller: first,
+            itemHeight: 40,
+            disabled: false,
+            onItemSelected: (_, _, _) {},
+          ),
         ),
       ),
-    ));
+    );
     key.currentState?.applyColumnUpdate(options: options, controller: first);
     key.currentState?.applyColumnUpdate(
       options: const [
@@ -90,17 +94,19 @@ void main() {
   testWidgets('empty and disabled columns do not move', (tester) async {
     final key = GlobalKey<WheelColumnState>();
     final controller = FixedExtentScrollController();
-    await tester.pumpWidget(MaterialApp(
-      home: WheelColumn(
-        key: key,
-        colIndex: 0,
-        options: const [],
-        controller: controller,
-        itemHeight: 40,
-        disabled: true,
-        onItemSelected: (_, __, ___) {},
+    await tester.pumpWidget(
+      MaterialApp(
+        home: WheelColumn(
+          key: key,
+          colIndex: 0,
+          options: const [],
+          controller: controller,
+          itemHeight: 40,
+          disabled: true,
+          onItemSelected: (_, _, _) {},
+        ),
       ),
-    ));
+    );
 
     expect(find.byType(ListWheelScrollView), findsNothing);
     expect(key.currentState?.nudge(1), isFalse);
@@ -157,7 +163,7 @@ void _customScrollRegression() {
                   controller: wheel,
                   itemHeight: 40,
                   disabled: false,
-                  onItemSelected: (_, index, __) => selected = index,
+                  onItemSelected: (_, index, _) => selected = index,
                   itemBuilder: (context, option, column, index, distance) {
                     seen.add(Theme.of(context));
                     if (index != 0) {

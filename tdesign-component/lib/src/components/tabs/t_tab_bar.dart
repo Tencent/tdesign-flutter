@@ -19,14 +19,14 @@ enum TTabsBarSize {
 
 class TTabsBar extends StatelessWidget {
   const TTabsBar({
-    Key? key,
+    super.key,
     required this.tabs,
     this.controller,
     this.isScrollable = false,
     this.onTap,
     this.size = TTabsBarSize.small,
     this.variant = TTabsBarVariant.line,
-  }) : super(key: key);
+  });
 
   /// tab数组
   final List<TTab> tabs;

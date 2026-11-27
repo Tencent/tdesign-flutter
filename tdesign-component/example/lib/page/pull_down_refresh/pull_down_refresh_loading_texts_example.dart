@@ -1,7 +1,6 @@
 import 'dart:async';
 import 'package:tdesign_flutter/tdesign_flutter.dart';
 import '../../annotation/example_code.dart';
-import '../../base/example_widget.dart';
 
 @ExampleCode(group: 'PullDownRefresh')
 class PullDownRefreshLoadingTextsExample extends StatefulWidget {
@@ -38,7 +37,7 @@ class _PullDownRefreshLoadingTextsExampleState
           children: [
             _demoHint(context, '下拉刷新'),
             const SizedBox(height: 16),
-            _demoHint(context, '自定义提示语刷新次数：${loadingTextsCount}'),
+            _demoHint(context, '自定义提示语刷新次数：$loadingTextsCount'),
           ],
         ),
       ),

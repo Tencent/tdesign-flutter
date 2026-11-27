@@ -47,7 +47,7 @@ void main() {
 
   test('native listener is inert and cleanup can be repeated', () {
     var updates = 0;
-    final stop = listenToWebThemeUpdates(onUpdate: (_, __) => updates++);
+    final stop = listenToWebThemeUpdates(onUpdate: (_, _) => updates++);
     stop();
     stop();
     expect(updates, 0);

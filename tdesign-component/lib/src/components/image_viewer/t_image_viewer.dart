@@ -596,7 +596,7 @@ class _TImageViewerPageState extends State<_TImageViewerPage>
             child: Image(
               image: widget.image,
               fit: BoxFit.contain,
-              errorBuilder: (_, __, ___) => TInternalIcon(
+              errorBuilder: (_, _, _) => TInternalIcon(
                 TIcons.close,
                 key: const ValueKey('image-viewer-error-placeholder'),
                 size: context.tTheme.spacer3,

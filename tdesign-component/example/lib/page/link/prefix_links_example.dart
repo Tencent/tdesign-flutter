@@ -1,6 +1,5 @@
 import 'package:tdesign_flutter/tdesign_flutter.dart';
 import '../../annotation/example_code.dart';
-import '../../base/example_widget.dart';
 
 @ExampleCode(group: 'link')
 class PrefixLinksExample extends StatelessWidget {
@@ -38,13 +37,13 @@ class PrefixLinksExample extends StatelessWidget {
     bool disabled = false,
   }) {
     return TLink(
-      child: Text(label),
       colorPreset: colorPreset,
       size: size,
       underline: underline,
       prefixIcon: prefixIcon,
       suffixIcon: suffixIcon,
       onPressed: disabled ? null : () => _onLinkPressed(context),
+      child: Text(label),
     );
   }
 

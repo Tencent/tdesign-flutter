@@ -15,12 +15,7 @@ void main() {
     TextDirection direction = TextDirection.ltr,
   }) {
     return MaterialApp(
-      theme: ThemeData(
-        extensions: [
-          TThemeData.defaultData(),
-          if (switchTheme != null) switchTheme,
-        ],
-      ),
+      theme: ThemeData(extensions: [TThemeData.defaultData(), ?switchTheme]),
       home: Directionality(
         textDirection: direction,
         child: Scaffold(body: Center(child: child)),

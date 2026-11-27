@@ -1,6 +1,5 @@
 import 'package:tdesign_flutter/tdesign_flutter.dart';
 import '../../annotation/example_code.dart';
-import '../../base/example_widget.dart';
 
 @ExampleCode(group: 'toast')
 class SuccessToastExample extends StatelessWidget {
@@ -10,7 +9,6 @@ class SuccessToastExample extends StatelessWidget {
     return SizedBox(
       width: double.infinity,
       child: TButton(
-        child: const Text('成功提示'),
         size: TButtonSize.large,
         variant: TButtonVariant.outline,
         colorPreset: TButtonColorPreset.primary,
@@ -21,6 +19,7 @@ class SuccessToastExample extends StatelessWidget {
             context: context,
           );
         },
+        child: const Text('成功提示'),
       ),
     );
   }

@@ -405,7 +405,7 @@ class _TInputState extends State<TInput> {
             Expanded(child: shell)
           else
             shell,
-          if (error != null) error,
+          ?error,
         ],
       ),
     );

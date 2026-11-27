@@ -24,8 +24,8 @@ class TTag extends StatelessWidget {
     this.enabled = true,
     this.onTap,
     this.onCloseTap,
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   /// 标签内容
   final String text;

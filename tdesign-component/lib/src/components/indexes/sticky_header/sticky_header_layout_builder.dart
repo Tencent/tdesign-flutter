@@ -44,12 +44,8 @@ class StickyHeaderValueLayoutBuilder<T>
     extends ConstrainedLayoutBuilder<StickyHeaderBoxValueConstraints<T>> {
   const StickyHeaderValueLayoutBuilder({
     super.key,
-    required Widget Function(
-      BuildContext context,
-      StickyHeaderBoxValueConstraints<T> constraints,
-    )
-    builder,
-  }) : super(builder: builder);
+    required super.builder,
+  });
 
   @override
   // ignore: library_private_types_in_public_api

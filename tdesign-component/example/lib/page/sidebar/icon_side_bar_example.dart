@@ -1,4 +1,3 @@
-import 'dart:math';
 import 'package:tdesign_flutter/tdesign_flutter.dart';
 import '../../annotation/example_code.dart';
 import 'sidebar_anchor_example.dart';
@@ -27,11 +26,11 @@ class IconSideBarExample extends StatelessWidget {
     return SizedBox(
       width: double.infinity,
       child: TButton(
-        child: Text(text),
         size: TButtonSize.large,
         variant: TButtonVariant.outline,
         colorPreset: TButtonColorPreset.primary,
         onPressed: () => _openSideBarDemo(context, routeName),
+        child: Text(text),
       ),
     );
   }

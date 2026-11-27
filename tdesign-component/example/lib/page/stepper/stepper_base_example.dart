@@ -1,6 +1,5 @@
 import 'package:tdesign_flutter/tdesign_flutter.dart';
 import '../../annotation/example_code.dart';
-import '../../base/example_widget.dart';
 
 /// 在已配置 TDesign 主题的应用中使用 `StepperBaseExample()`。
 @ExampleCode(group: 'stepper')

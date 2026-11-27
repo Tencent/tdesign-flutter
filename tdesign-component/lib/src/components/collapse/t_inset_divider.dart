@@ -10,7 +10,7 @@ import '../../theme/t_theme.dart';
 
 /// 带水平缩进的折叠面板分隔线。
 class TInsetDivider extends StatelessWidget {
-  const TInsetDivider({this.color, this.indent, Key? key}) : super(key: key);
+  const TInsetDivider({this.color, this.indent, super.key});
 
   final Color? color;
   final double? indent;

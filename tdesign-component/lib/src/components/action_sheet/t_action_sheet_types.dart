@@ -81,45 +81,27 @@ sealed class TActionSheetGridLayout {
 
 /// 普通固定宫格布局
 final class _TActionSheetFixedGridLayout extends TActionSheetGridLayout {
-  const _TActionSheetFixedGridLayout({this.count = 8, this.rows = 2})
-    : super._(mode: TActionSheetGridMode.fixed, count: count, rows: rows);
-
-  @override
-  final int count;
-
-  @override
-  final int rows;
+  const _TActionSheetFixedGridLayout({super.count = 8, super.rows = 2})
+    : super._(mode: TActionSheetGridMode.fixed);
 }
 
 /// 分页宫格布局
 final class _TActionSheetPagedGridLayout extends TActionSheetGridLayout {
-  const _TActionSheetPagedGridLayout({this.count = 8, this.rows = 2})
-    : super._(mode: TActionSheetGridMode.paged, count: count, rows: rows);
-
-  @override
-  final int count;
-
-  @override
-  final int rows;
+  const _TActionSheetPagedGridLayout({super.count = 8, super.rows = 2})
+    : super._(mode: TActionSheetGridMode.paged);
 }
 
 /// 横向滚动宫格布局
 final class _TActionSheetScrollGridLayout extends TActionSheetGridLayout {
   const _TActionSheetScrollGridLayout({
-    this.count = 8,
-    this.rows = 2,
+    super.count = 8,
+    super.rows = 2,
     this.itemMinWidth,
   }) : assert(
          itemMinWidth == null || itemMinWidth > 0,
          'itemMinWidth must be greater than 0',
        ),
-       super._(mode: TActionSheetGridMode.scroll, count: count, rows: rows);
-
-  @override
-  final int count;
-
-  @override
-  final int rows;
+       super._(mode: TActionSheetGridMode.scroll);
 
   @override
   final double? itemMinWidth;

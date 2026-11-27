@@ -12,7 +12,7 @@ import 'underline_links_example.dart';
 
 @ExampleCodeManifest()
 class TLinkViewPage extends StatefulWidget {
-  const TLinkViewPage({Key? key}) : super(key: key);
+  const TLinkViewPage({super.key});
 
   @override
   State<TLinkViewPage> createState() => _TLinkViewPageState();

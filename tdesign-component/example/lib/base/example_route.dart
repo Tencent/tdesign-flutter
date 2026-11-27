@@ -18,19 +18,19 @@ class TExampleRoute {
 
   static void init() {
     exampleMap.forEach((key, value) {
-      value.forEach((model) {
+      for (var model in value) {
         pageModelList[model.name] = model;
-      });
+      }
     });
     pageModelList['getting-started'] = ExamplePageModel(
       text: '快速开始',
       name: 'getting-started',
-      pageBuilder: (_, __) => const CounterPage(),
+      pageBuilder: (_, _) => const CounterPage(),
     );
     pageModelList['custom-theme'] = ExamplePageModel(
       text: '自定义主题',
       name: 'custom-theme',
-      pageBuilder: (_, __) => const DocumentationThemeGuidePage(),
+      pageBuilder: (_, _) => const DocumentationThemeGuidePage(),
     );
     // 指南运行效果使用独立路由，不加入组件清单或 API 生成。
     for (final scene in DocumentationThemeScene.values) {
@@ -38,7 +38,7 @@ class TExampleRoute {
       pageModelList[name] = ExamplePageModel(
         text: '自定义主题',
         name: name,
-        pageBuilder: (_, __) => DocumentationThemeDemo(scene: scene),
+        pageBuilder: (_, _) => DocumentationThemeDemo(scene: scene),
       );
     }
     // 添加关于页路由
@@ -73,7 +73,7 @@ class TExampleRoute {
     var paramsMap = <String, String>{};
     if (strings.length > 1) {
       var params = strings[1].split('&');
-      params.forEach((element) {
+      for (var element in params) {
         var kv = element.split('=');
         var key = kv[0];
         var value = '';
@@ -81,7 +81,7 @@ class TExampleRoute {
           value = kv[1];
         }
         paramsMap[key] = value;
-      });
+      }
     }
     if (model != null) {
       if (paramsMap['showAction'] == '1') {
@@ -105,7 +105,7 @@ class TExampleRoute {
       }
       return MaterialPageRoute(
         settings: settings,
-        builder: (context) => Center(child: Text('error, url:${url}')),
+        builder: (context) => Center(child: Text('error, url:$url')),
       );
     }
   }

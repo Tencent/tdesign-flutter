@@ -2,7 +2,6 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 
 import '../../annotation/example_code.dart';
 import '../../base/example_widget.dart';
-import '../../l10n/app_localizations.dart';
 import 'calendar_described_example.dart';
 import 'calendar_double_described_example.dart';
 import 'calendar_inline_example.dart';

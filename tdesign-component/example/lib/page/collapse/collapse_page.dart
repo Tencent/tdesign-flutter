@@ -9,7 +9,7 @@ import 'collapse_with_operation_text_example.dart';
 
 @ExampleCodeManifest()
 class TCollapsePage extends StatefulWidget {
-  const TCollapsePage({Key? key}) : super(key: key);
+  const TCollapsePage({super.key});
 
   @override
   TCollapsePageState createState() => TCollapsePageState();

@@ -1017,7 +1017,7 @@ void main() {
             options: TPopupOptions(
               placement: TPopupPlacement.bottom,
               height: 200,
-              headerBuilder: (_, __) => const TPopupHeader(
+              headerBuilder: (_, _) => const TPopupHeader(
                 cancelButton: Text('自定义取消'),
                 confirmButton: Text('自定义确认'),
               ),

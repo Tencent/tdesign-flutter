@@ -394,7 +394,6 @@ class _TPopoverPage extends State<TPopoverPage> {
         builder: (popoverContext, constraints) {
           return TButton(
             size: TButtonSize.medium,
-            child: const Text('多行内容'),
             variant: TButtonVariant.outline,
             colorPreset: TButtonColorPreset.primary,
             onPressed: () {
@@ -404,6 +403,7 @@ class _TPopoverPage extends State<TPopoverPage> {
                 colorPreset: theme,
               );
             },
+            child: const Text('多行内容'),
           );
         },
       ),
@@ -424,7 +424,6 @@ class _TPopoverPage extends State<TPopoverPage> {
           builder: (popoverContext) {
             return TButton(
               size: TButtonSize.medium,
-              child: const Text('自定义圆角'),
               variant: TButtonVariant.outline,
               colorPreset: TButtonColorPreset.primary,
               onPressed: () {
@@ -434,6 +433,7 @@ class _TPopoverPage extends State<TPopoverPage> {
                   content: const Text('弹出气泡内容弹出气泡内容弹出气泡内容弹出气泡内容'),
                 );
               },
+              child: const Text('自定义圆角'),
             );
           },
         ),

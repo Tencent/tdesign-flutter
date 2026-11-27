@@ -29,10 +29,7 @@ void main() {
   }) {
     return MaterialApp(
       theme: ThemeData(
-        extensions: [
-          TThemeData.defaultData(),
-          if (sliderTheme != null) sliderTheme,
-        ],
+        extensions: [TThemeData.defaultData(), ?sliderTheme],
         sliderTheme:
             materialSliderTheme ?? const SliderThemeData(trackHeight: 6),
       ),

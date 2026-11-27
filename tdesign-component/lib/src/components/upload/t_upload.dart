@@ -388,7 +388,7 @@ class _TUploadState extends State<_TUploadView> {
       return Image.network(
         file.url!,
         fit: BoxFit.cover,
-        errorBuilder: (_, __, ___) => _placeholder(context, theme),
+        errorBuilder: (_, _, _) => _placeholder(context, theme),
       );
     }
     return _filePreview(context, file, theme);

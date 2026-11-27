@@ -7,7 +7,7 @@ import 'example_base.dart';
 
 /// API展示页面
 class ApiPage extends StatelessWidget {
-  const ApiPage({Key? key, this.model}) : super(key: key);
+  const ApiPage({super.key, this.model});
 
   final ExamplePageModel? model;
 
@@ -26,7 +26,7 @@ class ApiPage extends StatelessWidget {
 }
 
 class ApiWidget extends StatefulWidget {
-  const ApiWidget({Key? key, required this.apiName}) : super(key: key);
+  const ApiWidget({super.key, required this.apiName});
 
   final String? apiName;
 

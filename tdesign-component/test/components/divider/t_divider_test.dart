@@ -26,6 +26,7 @@ void main() {
   /// 用 TTheme 包裹以提供基础 Token
   Widget wrapWithTheme(Widget child, {TDividerThemeData? dividerTheme}) {
     final themeExtensions = <ThemeExtension>[
+      // ignore: use_null_aware_elements
       if (dividerTheme != null) dividerTheme,
     ];
     // 注意：必须通过 MaterialApp.theme 传递 extensions，
@@ -97,7 +98,7 @@ void main() {
     testWidgets('align: left', (tester) async {
       await tester.pumpWidget(
         wrapWithTheme(
-          const TDivider(child: Text('左对齐'), align: TDividerAlign.left),
+          const TDivider(align: TDividerAlign.left, child: Text('左对齐')),
         ),
       );
       expect(find.text('左对齐'), findsOneWidget);
@@ -111,7 +112,7 @@ void main() {
     testWidgets('align: right', (tester) async {
       await tester.pumpWidget(
         wrapWithTheme(
-          const TDivider(child: Text('右对齐'), align: TDividerAlign.right),
+          const TDivider(align: TDividerAlign.right, child: Text('右对齐')),
         ),
       );
       expect(find.text('右对齐'), findsOneWidget);
@@ -123,7 +124,7 @@ void main() {
           wrapWithTheme(
             SizedBox(
               width: 600,
-              child: TDivider(child: const Text('文字信息'), align: align),
+              child: TDivider(align: align, child: const Text('文字信息')),
             ),
           ),
         );

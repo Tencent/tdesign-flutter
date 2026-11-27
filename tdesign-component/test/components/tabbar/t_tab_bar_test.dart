@@ -50,7 +50,7 @@ void main() {
                   ),
                 },
               ),
-          if (tabBarTheme != null) tabBarTheme,
+          ?tabBarTheme,
         ],
       ),
       home: Scaffold(body: child),

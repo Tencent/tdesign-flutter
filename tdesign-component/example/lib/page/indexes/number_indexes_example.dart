@@ -1,6 +1,5 @@
 import 'package:tdesign_flutter/tdesign_flutter.dart';
 import '../../annotation/example_code.dart';
-import '../../base/example_widget.dart';
 
 @ExampleCode(group: 'indexes')
 class NumberIndexesExample extends StatelessWidget {
@@ -18,7 +17,6 @@ Widget _buildNumberIndexes(BuildContext context) {
     width: double.infinity,
     child: TButton(
       key: const ValueKey('indexes-number-trigger'),
-      child: const TText('数字索引'),
       size: TButtonSize.large,
       colorPreset: TButtonColorPreset.primary,
       variant: TButtonVariant.outline,
@@ -44,6 +42,7 @@ Widget _buildNumberIndexes(BuildContext context) {
           ),
         );
       },
+      child: const TText('数字索引'),
     ),
   );
 }

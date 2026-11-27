@@ -115,7 +115,7 @@ class _MergedTable extends StatelessWidget {
       (columnIndex) => TTableColumn<_GoldenRow>(
         id: 'merged-$columnIndex',
         header: Text('Column ${columnIndex + 1}'),
-        cellBuilder: (_, row, __) => Text(row.values[columnIndex]),
+        cellBuilder: (_, row, _) => Text(row.values[columnIndex]),
       ),
     );
     return TTable<_GoldenRow>(
@@ -144,26 +144,26 @@ class _OverflowTable extends StatelessWidget {
           header: const Text('ID'),
           width: 56,
           fixed: TTableColumnFixed.left,
-          cellBuilder: (_, row, __) => Text(row.values[0]),
+          cellBuilder: (_, row, _) => Text(row.values[0]),
         ),
         TTableColumn<_GoldenRow>(
           id: 'name',
           header: const Text('Name'),
           minWidth: 160,
-          cellBuilder: (_, row, __) => Text(row.values[1]),
+          cellBuilder: (_, row, _) => Text(row.values[1]),
         ),
         TTableColumn<_GoldenRow>(
           id: 'detail',
           header: const Text('Detail'),
           minWidth: 160,
-          cellBuilder: (_, row, __) => Text(row.values[2]),
+          cellBuilder: (_, row, _) => Text(row.values[2]),
         ),
         TTableColumn<_GoldenRow>(
           id: 'right',
           header: const Text('State'),
           width: 72,
           fixed: TTableColumnFixed.right,
-          cellBuilder: (_, row, __) => Text(row.values[3]),
+          cellBuilder: (_, row, _) => Text(row.values[3]),
         ),
       ],
       data: const [
@@ -186,13 +186,13 @@ class _HeightTable extends StatelessWidget {
         TTableColumn<_GoldenRow>(
           id: 'item',
           header: const Text('Item'),
-          cellBuilder: (_, row, __) => Text(row.values[0]),
+          cellBuilder: (_, row, _) => Text(row.values[0]),
         ),
         TTableColumn<_GoldenRow>(
           id: 'value',
           header: const Text('Value'),
           align: TTableColumnAlign.right,
-          cellBuilder: (_, row, __) => Text(row.values[1]),
+          cellBuilder: (_, row, _) => Text(row.values[1]),
         ),
       ],
       data: const [

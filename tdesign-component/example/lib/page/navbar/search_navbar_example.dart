@@ -1,6 +1,5 @@
 import 'package:tdesign_flutter/tdesign_flutter.dart';
 import '../../annotation/example_code.dart';
-import '../../base/example_widget.dart';
 
 @ExampleCode(group: 'navbar')
 class SearchNavbarExample extends StatelessWidget {
@@ -18,7 +17,7 @@ class SearchNavbarExample extends StatelessWidget {
           variant: TSearchBarVariant.round,
           hintText: '搜索预设文案',
           onChanged: (String text) {
-            print('input：$text');
+            debugPrint('input：$text');
           },
         ),
         actions: [

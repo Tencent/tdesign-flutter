@@ -2,13 +2,12 @@ import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:tdesign_flutter/tdesign_flutter.dart';
 
-import 'tabbar_test.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
   var jsonString = await rootBundle.loadString('assets/theme.json');
-  print('jsonString:$jsonString');
+  debugPrint('jsonString:$jsonString');
   var themeData =
       TThemeData.fromJson('greenLight', jsonString) ?? TThemeData.defaultData();
   await TFontLoader.load(
@@ -56,7 +55,10 @@ Padding body(BuildContext context) {
         ),
         TText(
           '测试文案',
-          style: TextStyle(color: context.tTheme.brandColor, fontFamily: 'test1'),
+          style: TextStyle(
+            color: context.tTheme.brandColor,
+            fontFamily: 'test1',
+          ),
         ),
         const TFormItem(
           label: '标签文字',
@@ -100,7 +102,7 @@ PreferredSizeWidget _buildAppBar(BuildContext context) {
           variant: TSearchBarVariant.round,
           hintText: '搜索预设文案',
           onChanged: (String text) {
-            print('input：$text');
+            debugPrint('input：$text');
           },
         ),
         actions: [

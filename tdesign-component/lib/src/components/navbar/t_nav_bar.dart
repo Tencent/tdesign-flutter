@@ -12,7 +12,7 @@ import 't_nav_bar_theme_data.dart';
 
 class TNavBar extends StatelessWidget implements PreferredSizeWidget {
   const TNavBar({
-    Key? key,
+    super.key,
     this.title,
     this.leading,
     this.actions,
@@ -24,7 +24,7 @@ class TNavBar extends StatelessWidget implements PreferredSizeWidget {
     this.height = 48,
     this.useBorderStyle = false,
     this.useSafeArea = false,
-  }) : super(key: key);
+  });
 
   /// 标题控件。
   ///
@@ -125,7 +125,7 @@ class TNavBar extends StatelessWidget implements PreferredSizeWidget {
         );
       }
     }
-    var child = Row(children: children, mainAxisSize: MainAxisSize.min);
+    var child = Row(mainAxisSize: MainAxisSize.min, children: children);
     return Container(
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(border.radius),
@@ -194,14 +194,14 @@ class TNavBar extends StatelessWidget implements PreferredSizeWidget {
         .toList();
 
     return Row(
+      mainAxisSize: MainAxisSize.min,
       children: [
         if (isLeading && useDefaultBack) _buildBackButton(context),
         if (children.isNotEmpty)
           useBorderStyle
               ? _addBorder(context, children)
-              : Row(children: children, mainAxisSize: MainAxisSize.min),
+              : Row(mainAxisSize: MainAxisSize.min, children: children),
       ],
-      mainAxisSize: MainAxisSize.min,
     );
   }
 

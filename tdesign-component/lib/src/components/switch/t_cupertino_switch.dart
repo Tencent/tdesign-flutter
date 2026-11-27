@@ -61,7 +61,7 @@ class TCupertinoSwitch extends StatefulWidget {
   /// The [value] parameter must not be null.
   /// The [dragStartBehavior] parameter defaults to [DragStartBehavior.start] and must not be null.
   const TCupertinoSwitch({
-    Key? key,
+    super.key,
     required this.value,
     required this.onChanged,
     this.activeColor,
@@ -71,8 +71,7 @@ class TCupertinoSwitch extends StatefulWidget {
     this.trackWidth = _kTrackWidth,
     this.disabledOpacity = _kTDCupertinoSwitchDisabledOpacity,
     this.dragStartBehavior = DragStartBehavior.start,
-  }) : assert(disabledOpacity >= 0 && disabledOpacity <= 1),
-       super(key: key);
+  }) : assert(disabledOpacity >= 0 && disabledOpacity <= 1);
 
   /// Whether this switch is on or off.
   ///
@@ -385,7 +384,7 @@ class _TCupertinoSwitchState extends State<TCupertinoSwitch>
 class _TCupertinoSwitchRenderObjectWidget
     extends SingleChildRenderObjectWidget {
   const _TCupertinoSwitchRenderObjectWidget({
-    required this.child,
+    required super.child,
     required this.value,
     required this.activeColor,
     required this.trackColor,
@@ -404,12 +403,6 @@ class _TCupertinoSwitchRenderObjectWidget
   final _TCupertinoSwitchState state;
   final TextDirection textDirection;
   final double trackWidth;
-
-  /// The widget below this widget in the tree.
-  ///
-  /// {@macro flutter.widgets.ProxyWidget.child}
-  @override
-  final Widget? child;
 
   @override
   _RenderTDCupertinoSwitch createRenderObject(BuildContext context) {

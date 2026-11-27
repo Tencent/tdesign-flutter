@@ -9,14 +9,14 @@ import '../text/t_text_styled.dart';
 /// 日历的星期标题栏。
 class TCalendarHeader extends StatelessWidget {
   const TCalendarHeader({
-    Key? key,
+    super.key,
     required this.firstDayOfWeek,
     required this.weekdayGap,
     required this.padding,
     this.weekdayStyle,
     required this.weekdayHeight,
     required this.weekdayNames,
-  }) : super(key: key);
+  });
 
   /// 第一天从星期几开始，0 = 周日，1 = 周一，…，6 = 周六。
   final int firstDayOfWeek;

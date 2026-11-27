@@ -1,9 +1,7 @@
 import 'package:tdesign_flutter/tdesign_flutter.dart';
 
-import 'api_widget.dart';
-
-typedef PageBuilder = Widget Function(
-    BuildContext context, ExamplePageModel model);
+typedef PageBuilder =
+    Widget Function(BuildContext context, ExamplePageModel model);
 
 /// 示例页面数据
 class ExamplePageModel {
@@ -29,9 +27,9 @@ class ExamplePageInheritedTheme extends InheritedWidget {
 
   const ExamplePageInheritedTheme({
     required this.model,
-    Key? key,
-    required Widget child,
-  }) : super(key: key, child: child);
+    super.key,
+    required super.child,
+  });
 
   @override
   bool updateShouldNotify(covariant ExamplePageInheritedTheme oldWidget) {

@@ -6,7 +6,7 @@ void main() {
     testWidgets('TPopupOptions 各方向工厂可构造', (tester) async {
       final bottom = TPopupOptions.bottom(
         child: const Text('body'),
-        headerBuilder: (_, __) => const TPopupHeader(title: Text('标题')),
+        headerBuilder: (_, _) => const TPopupHeader(title: Text('标题')),
       );
       final top = TPopupOptions.top(child: const Text('top'));
       final left = TPopupOptions.left(child: const Text('left'));

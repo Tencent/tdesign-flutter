@@ -18,7 +18,7 @@ export 't_indexes_list.dart';
 
 class TIndexes extends StatefulWidget {
   const TIndexes({
-    Key? key,
+    super.key,
     this.indexList,
     this.initialIndex,
     this.useSafeArea = false,
@@ -32,7 +32,7 @@ class TIndexes extends StatefulWidget {
     required this.builderContent,
     this.builderAnchor,
     this.builderIndex,
-  }) : super(key: key);
+  });
 
   /// 索引字符列表，字符必须唯一。不传默认 A-Z；默认值要求 builderContent 能处理 A-Z 全部索引，自定义数据建议显式传入。
   ///
@@ -87,7 +87,7 @@ class TIndexes extends StatefulWidget {
   builderIndex;
 
   @override
-  _TIndexesState createState() => _TIndexesState();
+  State<TIndexes> createState() => _TIndexesState();
 }
 
 class _TIndexesState extends State<TIndexes> {
@@ -203,11 +203,13 @@ class _TIndexesState extends State<TIndexes> {
     final theme = _resolveTheme();
     Widget child = Stack(
       children: [
-        TInternalScrollScope(child: CustomScrollView(
-          controller: _scrollController,
-          reverse: widget.reverse,
-          slivers: _slivers(),
-        )),
+        TInternalScrollScope(
+          child: CustomScrollView(
+            controller: _scrollController,
+            reverse: widget.reverse,
+            slivers: _slivers(),
+          ),
+        ),
         TIndexesList(
           indexList: _indexList,
           activeIndex: _activeIndex,

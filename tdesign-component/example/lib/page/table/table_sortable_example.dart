@@ -24,7 +24,7 @@ class _TableSortableExampleState extends State<TableSortableExample> {
           id: 'title${index + 1}',
           header: const Text('标题'),
           comparator: (first, second) => first[index].compareTo(second[index]),
-          cellBuilder: (_, row, __) => Text(row[index]),
+          cellBuilder: (_, row, _) => Text(row[index]),
         ),
       );
 

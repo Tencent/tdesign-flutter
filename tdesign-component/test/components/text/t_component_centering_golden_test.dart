@@ -308,7 +308,7 @@ void _calendarIndexesScenes() {
                                     (i) => String.fromCharCode(65 + i),
                                   ),
                                   activeIndex: active,
-                                  onSelect: (_, __) {},
+                                  onSelect: (_, _) {},
                                 ),
                               ],
                             ),

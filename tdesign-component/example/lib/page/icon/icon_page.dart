@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:tdesign_flutter/tdesign_flutter.dart' hide TIcons;
 import 'package:tdesign_flutter_icons/tdesign_flutter_icons.dart';
-import 'package:url_launcher/link.dart';
 
 import '../../annotation/example_code.dart';
 import '../../base/example_widget.dart';
@@ -15,7 +13,7 @@ import 'theme_demo_example.dart';
 
 @ExampleCodeManifest()
 class TIconPage extends StatefulWidget {
-  const TIconPage({Key? key}) : super(key: key);
+  const TIconPage({super.key});
 
   @override
   State<StatefulWidget> createState() => _TIconPageState();

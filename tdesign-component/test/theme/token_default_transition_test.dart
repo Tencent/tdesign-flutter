@@ -60,7 +60,7 @@ void main() {
               TTableColumn<String>(
                 id: 'a',
                 header: const Text('head'),
-                cellBuilder: (_, value, __) => Text(value),
+                cellBuilder: (_, value, _) => Text(value),
               ),
             ],
             data: const ['cell'],

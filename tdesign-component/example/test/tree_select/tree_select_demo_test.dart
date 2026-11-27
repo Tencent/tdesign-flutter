@@ -128,7 +128,7 @@ void main() {
     final model = ExamplePageModel(
       text: 'TreeSelect 树形选择器',
       name: 'tree_select',
-      pageBuilder: (_, __) => const TTreeSelectPage(),
+      pageBuilder: (_, _) => const TTreeSelectPage(),
     )..showAction = true;
     await tester.pumpWidget(
       ChangeNotifierProvider(

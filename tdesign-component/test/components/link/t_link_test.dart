@@ -26,7 +26,7 @@ void main() {
   testWidgets('默认为 medium / default 且不自动生成图标', (tester) async {
     final token = TThemeData.defaultData();
     await tester.pumpWidget(
-      wrap(const TLink(child: Text('跳转链接'), onPressed: _noop)),
+      wrap(const TLink(onPressed: _noop, child: Text('跳转链接'))),
     );
 
     final style = linkStyle(tester, '跳转链接');
@@ -40,11 +40,11 @@ void main() {
     await tester.pumpWidget(
       wrap(
         const TLink(
-          child: Text('组合链接'),
           prefixIcon: Icon(Icons.link),
           suffixIcon: Icon(Icons.open_in_new),
           underline: true,
           onPressed: _noop,
+          child: Text('组合链接'),
         ),
       ),
     );
@@ -65,14 +65,14 @@ void main() {
         const Column(
           children: [
             TLink(
-              child: Text('前置'),
               prefixIcon: Icon(Icons.arrow_back),
               onPressed: _noop,
+              child: Text('前置'),
             ),
             TLink(
-              child: Text('后置'),
               suffixIcon: Icon(Icons.arrow_forward),
               onPressed: _noop,
+              child: Text('后置'),
             ),
           ],
         ),
@@ -88,11 +88,11 @@ void main() {
     await tester.pumpWidget(
       wrap(
         const TLink(
-          child: Text('图标链接'),
           prefixIcon: Icon(Icons.link),
           suffixIcon: Icon(Icons.open_in_new),
           size: TLinkSize.small,
           onPressed: _noop,
+          child: Text('图标链接'),
         ),
       ),
     );
@@ -134,7 +134,7 @@ void main() {
         Column(
           children: [
             TLink(child: const Text('可点击'), onPressed: () => taps += 1),
-            const TLink(child: Text('禁用'), onPressed: null),
+            const TLink(onPressed: null, child: Text('禁用')),
           ],
         ),
       ),
@@ -154,9 +154,9 @@ void main() {
     await tester.pumpWidget(
       wrap(
         const TLink(
-          child: Text('交互链接'),
           colorPreset: TLinkColorPreset.primary,
           onPressed: _noop,
+          child: Text('交互链接'),
         ),
       ),
     );
@@ -195,11 +195,11 @@ void main() {
     await tester.pumpWidget(
       wrap(
         const TLink(
-          child: Text('优先级'),
           size: TLinkSize.small,
           colorPreset: TLinkColorPreset.danger,
           underline: false,
           onPressed: _noop,
+          child: Text('优先级'),
         ),
         linkTheme: const TLinkThemeData(
           textStyle: TextStyle(fontWeight: FontWeight.w700),
@@ -218,8 +218,8 @@ void main() {
     await tester.pumpWidget(
       wrap(
         const TLink(
-          child: Text('自定义', style: TextStyle(color: Colors.purple)),
           onPressed: _noop,
+          child: Text('自定义', style: TextStyle(color: Colors.purple)),
         ),
       ),
     );
@@ -231,10 +231,10 @@ void main() {
     await tester.pumpWidget(
       wrap(
         const TLink(
-          child: Text('官网'),
           semanticLabel: '打开官网',
           tooltip: '查看官网',
           onPressed: _noop,
+          child: Text('官网'),
         ),
       ),
     );

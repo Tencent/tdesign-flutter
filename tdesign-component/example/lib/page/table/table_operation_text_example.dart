@@ -18,12 +18,12 @@ class TableOperationTextExample extends StatelessWidget {
           TTableColumn<List<String>>(
             id: 'title${index + 1}',
             header: const Text('标题'),
-            cellBuilder: (_, row, __) => Text(row[index]),
+            cellBuilder: (_, row, _) => Text(row[index]),
           ),
         TTableColumn<List<String>>(
           id: 'actions',
           header: const Text('标题'),
-          cellBuilder: (context, _, __) => Row(
+          cellBuilder: (context, _, _) => Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Flexible(

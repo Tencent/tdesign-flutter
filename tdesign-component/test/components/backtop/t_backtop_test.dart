@@ -93,7 +93,7 @@ void main() {
             themeAnimationDuration: Duration.zero,
             theme: TThemeBuilder.light(
               token,
-            ).copyWith(extensions: [token, if (component != null) component]),
+            ).copyWith(extensions: [token, ?component]),
             home: const Scaffold(body: TBackTop()),
           ),
         );
@@ -125,9 +125,7 @@ void main() {
 
   /// 用 TTheme 包裹以提供基础 Token
   Widget wrapWithTheme(Widget child, {TBackTopThemeData? backTopTheme}) {
-    final themeExtensions = <ThemeExtension>[
-      if (backTopTheme != null) backTopTheme,
-    ];
+    final themeExtensions = <ThemeExtension>[?backTopTheme];
     return MaterialApp(
       theme: ThemeData(
         extensions: [TThemeData.defaultData(), ...themeExtensions],

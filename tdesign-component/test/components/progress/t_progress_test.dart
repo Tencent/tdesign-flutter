@@ -56,9 +56,7 @@ void main() {
     ThemeData? materialTheme,
     TThemeData? tokenTheme,
   }) {
-    final themeExtensions = <ThemeExtension>[
-      if (progressTheme != null) progressTheme,
-    ];
+    final themeExtensions = <ThemeExtension>[?progressTheme];
     // 注意：必须通过 MaterialApp.theme 传递 extensions，
     // 用外层 Theme 包 MaterialApp 会被 MaterialApp 默认 ThemeData.light() 覆盖，导致 extension 丢失。
     return MaterialApp(

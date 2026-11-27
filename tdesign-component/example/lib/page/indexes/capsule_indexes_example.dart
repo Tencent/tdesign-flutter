@@ -1,6 +1,5 @@
 import 'package:tdesign_flutter/tdesign_flutter.dart';
 import '../../annotation/example_code.dart';
-import '../../base/example_widget.dart';
 
 @ExampleCode(group: 'indexes')
 class CapsuleIndexesExample extends StatelessWidget {
@@ -18,7 +17,6 @@ Widget _buildCapsuleIndexes(BuildContext context) {
     width: double.infinity,
     child: TButton(
       key: const ValueKey('indexes-capsule-trigger'),
-      child: const TText('胶囊索引'),
       size: TButtonSize.large,
       colorPreset: TButtonColorPreset.primary,
       variant: TButtonVariant.outline,
@@ -44,6 +42,7 @@ Widget _buildCapsuleIndexes(BuildContext context) {
           ),
         );
       },
+      child: const TText('胶囊索引'),
     ),
   );
 }

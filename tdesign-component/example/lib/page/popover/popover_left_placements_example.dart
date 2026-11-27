@@ -1,7 +1,5 @@
-import 'dart:async';
 import 'package:tdesign_flutter/tdesign_flutter.dart';
 import '../../annotation/example_code.dart';
-import '../../base/example_widget.dart';
 
 @ExampleCode(group: 'popover')
 class PopoverLeftPlacementsExample extends StatefulWidget {
@@ -24,7 +22,6 @@ class _PopoverLeftPlacementsExampleState
             width: 223,
             child: TButton(
               size: TButtonSize.large,
-              child: const Text('左侧上'),
               variant: TButtonVariant.outline,
               colorPreset: TButtonColorPreset.primary,
               onPressed: () {
@@ -35,6 +32,7 @@ class _PopoverLeftPlacementsExampleState
                   colorPreset: theme,
                 );
               },
+              child: const Text('左侧上'),
             ),
           );
         },
@@ -52,7 +50,6 @@ class _PopoverLeftPlacementsExampleState
             width: 223,
             child: TButton(
               size: TButtonSize.large,
-              child: const Text('左侧中'),
               variant: TButtonVariant.outline,
               colorPreset: TButtonColorPreset.primary,
               onPressed: () {
@@ -63,6 +60,7 @@ class _PopoverLeftPlacementsExampleState
                   colorPreset: theme,
                 );
               },
+              child: const Text('左侧中'),
             ),
           );
         },
@@ -80,7 +78,6 @@ class _PopoverLeftPlacementsExampleState
             width: 223,
             child: TButton(
               size: TButtonSize.large,
-              child: const Text('左侧下'),
               variant: TButtonVariant.outline,
               colorPreset: TButtonColorPreset.primary,
               onPressed: () {
@@ -91,6 +88,7 @@ class _PopoverLeftPlacementsExampleState
                   colorPreset: theme,
                 );
               },
+              child: const Text('左侧下'),
             ),
           );
         },

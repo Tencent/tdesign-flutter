@@ -13,7 +13,7 @@ void main() {
           TTableColumn(
             id: 'value',
             header: child,
-            cellBuilder: (_, __, ___) => const Text('body'),
+            cellBuilder: (_, _, _) => const Text('body'),
           ),
         ],
         data: const [1],
@@ -30,7 +30,7 @@ void main() {
           TTableColumn(
             id: 'value',
             header: const Text('head'),
-            cellBuilder: (_, __, ___) => child,
+            cellBuilder: (_, _, _) => child,
           ),
         ],
         data: const [1],
@@ -48,7 +48,7 @@ void main() {
           TTableColumn(
             id: 'value',
             header: child,
-            cellBuilder: (_, __, ___) => const Text('body'),
+            cellBuilder: (_, _, _) => const Text('body'),
           ),
         ],
         data: const [1],
@@ -64,7 +64,7 @@ void main() {
           TTableColumn(
             id: 'value',
             header: const Text('head'),
-            cellBuilder: (_, __, ___) => child,
+            cellBuilder: (_, _, _) => child,
           ),
         ],
         data: const [1],
@@ -78,13 +78,13 @@ void main() {
     TTableColumn<_Row>(
       id: 'name',
       header: const Text('Name'),
-      cellBuilder: (_, row, __) => Text(row.name),
+      cellBuilder: (_, row, _) => Text(row.name),
       comparator: (a, b) => a.name.compareTo(b.name),
     ),
     TTableColumn<_Row>(
       id: 'age',
       header: const Text('Age'),
-      cellBuilder: (_, row, __) => Text('${row.age}'),
+      cellBuilder: (_, row, _) => Text('${row.age}'),
       comparator: (a, b) => a.age.compareTo(b.age),
       align: TTableColumnAlign.right,
     ),
@@ -273,20 +273,20 @@ void main() {
           header: const Text('Left'),
           fixed: TTableColumnFixed.left,
           width: 60,
-          cellBuilder: (_, row, __) => Text('L-${row.name}'),
+          cellBuilder: (_, row, _) => Text('L-${row.name}'),
         ),
         TTableColumn<_Row>(
           id: 'center',
           header: const Text('Center'),
           width: 200,
-          cellBuilder: (_, row, __) => Text('C-${row.name}'),
+          cellBuilder: (_, row, _) => Text('C-${row.name}'),
         ),
         TTableColumn<_Row>(
           id: 'right',
           header: const Text('Right'),
           fixed: TTableColumnFixed.right,
           width: 60,
-          cellBuilder: (_, row, __) => Text('R-${row.name}'),
+          cellBuilder: (_, row, _) => Text('R-${row.name}'),
         ),
       ];
       await tester.pumpWidget(app(TTable(columns: fixedColumns, data: rows)));
@@ -302,26 +302,26 @@ void main() {
           header: const Text('Left'),
           fixed: TTableColumnFixed.left,
           width: 60,
-          cellBuilder: (_, row, __) => Text('L-${row.name}'),
+          cellBuilder: (_, row, _) => Text('L-${row.name}'),
         ),
         TTableColumn<_Row>(
           id: 'first',
           header: const Text('Center A'),
           width: 160,
-          cellBuilder: (_, row, __) => Text('A-${row.name}'),
+          cellBuilder: (_, row, _) => Text('A-${row.name}'),
         ),
         TTableColumn<_Row>(
           id: 'second',
           header: const Text('Center B'),
           width: 160,
-          cellBuilder: (_, row, __) => Text('B-${row.name}'),
+          cellBuilder: (_, row, _) => Text('B-${row.name}'),
         ),
         TTableColumn<_Row>(
           id: 'right',
           header: const Text('Right'),
           fixed: TTableColumnFixed.right,
           width: 60,
-          cellBuilder: (_, row, __) => Text('R-${row.name}'),
+          cellBuilder: (_, row, _) => Text('R-${row.name}'),
         ),
       ];
       await tester.pumpWidget(app(TTable(columns: fixedColumns, data: rows)));
@@ -348,7 +348,7 @@ void main() {
             id: align.name,
             header: Text(align.name),
             align: align,
-            cellBuilder: (_, __, ___) => Text('cell-${align.name}'),
+            cellBuilder: (_, _, _) => Text('cell-${align.name}'),
           ),
       ];
       await tester.pumpWidget(app(TTable(columns: alignColumns, data: rows)));
@@ -471,7 +471,7 @@ void main() {
         TTableColumn<_Row>(
           id: 'name',
           header: const Text('Name'),
-          cellBuilder: (_, row, __) => Text(row.name),
+          cellBuilder: (_, row, _) => Text(row.name),
         ),
       ];
       await tester.pumpWidget(
@@ -594,7 +594,7 @@ void main() {
         TTableColumn<_Row>(
           id: 'name',
           header: const Text('Name'),
-          cellBuilder: (_, row, __) => _StatefulCell(label: row.name),
+          cellBuilder: (_, row, _) => _StatefulCell(label: row.name),
         ),
       ];
       await tester.pumpWidget(
@@ -803,20 +803,20 @@ void main() {
           header: const Text('Left'),
           fixed: TTableColumnFixed.left,
           width: 60,
-          cellBuilder: (_, row, __) => Text('L-${row.name}'),
+          cellBuilder: (_, row, _) => Text('L-${row.name}'),
         ),
         TTableColumn<_Row>(
           id: 'age',
           header: const Text('Age'),
           comparator: (a, b) => a.age.compareTo(b.age),
-          cellBuilder: (_, row, __) => Text('A-${row.name}'),
+          cellBuilder: (_, row, _) => Text('A-${row.name}'),
         ),
         TTableColumn<_Row>(
           id: 'right',
           header: const Text('Right'),
           fixed: TTableColumnFixed.right,
           width: 60,
-          cellBuilder: (_, row, __) => Text('R-${row.name}'),
+          cellBuilder: (_, row, _) => Text('R-${row.name}'),
         ),
       ];
       await tester.pumpWidget(
@@ -928,20 +928,20 @@ void main() {
           id: 'name',
           header: const Text('Wide name'),
           minWidth: 240,
-          cellBuilder: (_, row, __) => Text(row.name),
+          cellBuilder: (_, row, _) => Text(row.name),
         ),
         TTableColumn<_Row>(
           id: 'age',
           header: const Text('Wide age'),
           minWidth: 160,
-          cellBuilder: (_, row, __) => Text('${row.age}'),
+          cellBuilder: (_, row, _) => Text('${row.age}'),
         ),
         TTableColumn<_Row>(
           id: 'score',
           header: const Text('Wide score'),
           width: 40,
           minWidth: 80,
-          cellBuilder: (_, row, __) => Text('${row.age}'),
+          cellBuilder: (_, row, _) => Text('${row.age}'),
         ),
       ];
       await tester.pumpWidget(app(TTable(columns: widthColumns, data: rows)));
@@ -982,7 +982,7 @@ void main() {
           id: 'column-$columnIndex',
           header: Text('Column $columnIndex'),
           width: 100,
-          cellBuilder: (_, __, rowIndex) {
+          cellBuilder: (_, _, rowIndex) {
             final value = '$rowIndex-$columnIndex';
             built.add(value);
             return Text(value);
@@ -1043,12 +1043,12 @@ void main() {
           id: 'left',
           header: const Text('Left'),
           fixed: TTableColumnFixed.left,
-          cellBuilder: (_, row, __) => Text(row.name),
+          cellBuilder: (_, row, _) => Text(row.name),
         ),
         TTableColumn<_Row>(
           id: 'center',
           header: const Text('Center'),
-          cellBuilder: (_, row, __) => Text('${row.age}'),
+          cellBuilder: (_, row, _) => Text('${row.age}'),
         ),
       ];
       await tester.pumpWidget(
@@ -1072,7 +1072,7 @@ void main() {
         (index) => TTableColumn<_Row>(
           id: 'column-$index',
           header: Text('Column $index'),
-          cellBuilder: (_, row, __) => Text('${row.name}-$index'),
+          cellBuilder: (_, row, _) => Text('${row.name}-$index'),
         ),
       );
       await tester.pumpWidget(
@@ -1282,7 +1282,7 @@ void main() {
           id: 'bad',
           header: const Text('Bad'),
           width: 0,
-          cellBuilder: (_, __, ___) => const Text('bad'),
+          cellBuilder: (_, _, _) => const Text('bad'),
         ),
         throwsAssertionError,
       );
@@ -1312,7 +1312,7 @@ void main() {
           id: 'bad-min',
           header: const Text('Bad'),
           minWidth: 0,
-          cellBuilder: (_, __, ___) => const Text('bad'),
+          cellBuilder: (_, _, _) => const Text('bad'),
         ),
         throwsAssertionError,
       );

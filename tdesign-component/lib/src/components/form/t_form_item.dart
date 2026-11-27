@@ -251,7 +251,7 @@ class TFormItem extends StatelessWidget {
                   SizedBox(width: token.spacer2),
                 ],
                 Expanded(child: content),
-                if (extra != null) extra!,
+                ?extra,
               ],
             )
           : Row(
@@ -280,7 +280,7 @@ class TFormItem extends StatelessWidget {
                     ],
                   ),
                 ),
-                if (extra != null) extra!,
+                ?extra,
               ],
             ),
     );

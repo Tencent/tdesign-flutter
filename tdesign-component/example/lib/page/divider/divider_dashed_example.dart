@@ -16,14 +16,14 @@ class DividerDashedExample extends StatelessWidget {
           TDivider(dashed: true),
           TDivider(
             dashed: true,
-            child: Text('文字信息'),
             align: TDividerAlign.left,
+            child: Text('文字信息'),
           ),
           TDivider(dashed: true, child: Text('文字信息')),
           TDivider(
             dashed: true,
-            child: Text('文字信息'),
             align: TDividerAlign.right,
+            child: Text('文字信息'),
           ),
         ],
       ),

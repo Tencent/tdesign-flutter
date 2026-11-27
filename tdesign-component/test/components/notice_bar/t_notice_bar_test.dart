@@ -284,9 +284,7 @@ void main() {
     TNoticeBarThemeData? noticeBarTheme,
     TThemeData? themeData,
   }) {
-    final themeExtensions = <ThemeExtension>[
-      if (noticeBarTheme != null) noticeBarTheme,
-    ];
+    final themeExtensions = <ThemeExtension>[?noticeBarTheme];
     // 注意：必须通过 MaterialApp.theme 传递 extensions
     return MaterialApp(
       theme: ThemeData(

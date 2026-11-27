@@ -3,12 +3,7 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 
 void main() {
   Widget wrap(Widget child, {TSideBarThemeData? sideBarTheme}) => MaterialApp(
-    theme: ThemeData(
-      extensions: [
-        TThemeData.defaultData(),
-        if (sideBarTheme != null) sideBarTheme,
-      ],
-    ),
+    theme: ThemeData(extensions: [TThemeData.defaultData(), ?sideBarTheme]),
     home: Scaffold(body: child),
   );
 

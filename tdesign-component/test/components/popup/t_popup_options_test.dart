@@ -537,7 +537,7 @@ void main() {
           onInit: () => created++,
           onDispose: () => disposed++,
         ),
-        headerBuilder: (_, __) => const TPopupHeader(title: Text('header')),
+        headerBuilder: (_, _) => const TPopupHeader(title: Text('header')),
         destroyOnClose: destroy,
       );
       await tester.pumpAndSettle();
@@ -788,7 +788,7 @@ void main() {
           final handle = TPickerPopup.show(
             context,
             child: content,
-            headerBuilder: (_, __) => const TPopupHeader(title: Text('header')),
+            headerBuilder: (_, _) => const TPopupHeader(title: Text('header')),
             destroyOnClose: destroy,
           );
           close = handle.close;
@@ -1346,7 +1346,7 @@ void main() {
           MaterialApp(
             home: ValueListenableBuilder<int>(
               valueListenable: page,
-              builder: (_, value, __) => Navigator(
+              builder: (_, value, _) => Navigator(
                 key: navigatorKey,
                 pages: [
                   const MaterialPage<void>(
@@ -1662,7 +1662,7 @@ void main() {
       final options = TPopupOptions(
         child: const SizedBox(),
         placement: TPopupPlacement.bottom,
-        headerBuilder: (_, __) => const SizedBox(),
+        headerBuilder: (_, _) => const SizedBox(),
       ).normalized();
       expect(options.headerBuilder, isNotNull);
     });
@@ -1671,7 +1671,7 @@ void main() {
       final options = TPopupOptions(
         child: const SizedBox(),
         placement: TPopupPlacement.bottom,
-        closeBuilder: (_, __) => const Text('x'),
+        closeBuilder: (_, _) => const Text('x'),
       ).normalized();
       expect(options.closeBuilder, isNull);
     });
@@ -1697,7 +1697,7 @@ void main() {
       final options = TPopupOptions(
         child: const SizedBox(),
         placement: TPopupPlacement.top,
-        headerBuilder: (_, __) => const Text('h'),
+        headerBuilder: (_, _) => const Text('h'),
       ).normalized();
       expect(options.headerBuilder, isNull);
     });
@@ -1706,7 +1706,7 @@ void main() {
       final left = TPopupOptions(
         child: const SizedBox(),
         placement: TPopupPlacement.left,
-        closeBuilder: (_, __) => const Text('x'),
+        closeBuilder: (_, _) => const Text('x'),
       ).normalized();
       expect(left.closeBuilder, isNull);
     });
@@ -1726,7 +1726,7 @@ void main() {
         () => TPopupOptions(
           child: const SizedBox(),
           placement: TPopupPlacement.center,
-          headerBuilder: (_, __) => const Text('x'),
+          headerBuilder: (_, _) => const Text('x'),
         ).assertPlacementParams(),
         throwsA(isA<FlutterError>()),
       );
@@ -1898,7 +1898,7 @@ TPopupHandle _showReuseSession(
     ? TPickerPopup.show(
         context,
         child: child,
-        headerBuilder: (_, __) => const TPopupHeader(title: Text('header')),
+        headerBuilder: (_, _) => const TPopupHeader(title: Text('header')),
         destroyOnClose: destroyOnClose,
       )
     : TPopup.show(

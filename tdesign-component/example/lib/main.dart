@@ -18,21 +18,22 @@ Future<void> main() async {
   // 禁止横屏
   await SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
 
-  Log.setCustomLogPrinter((level, tag, msg) => print('[$level] $tag ==> $msg'));
+  Log.setCustomLogPrinter(
+    (level, tag, msg) => debugPrint('[$level] $tag ==> $msg'),
+  );
   exampleMap.forEach((key, value) {
-    value.forEach((model) {
+    for (var model in value) {
       examplePageList.add(model);
-    });
+    }
   });
   sideBarExamplePage.forEach(examplePageList.add);
   TExampleRoute.init();
 
   runApp(const MyApp());
-
 }
 
 class MyApp extends StatefulWidget {
-  const MyApp({Key? key}) : super(key: key);
+  const MyApp({super.key});
 
   @override
   State<MyApp> createState() => _MyAppState();
@@ -49,8 +50,9 @@ class _MyAppState extends State<MyApp> {
     _themeData = TThemeData.defaultData();
     _themeModeProvider = ThemeModeProvider();
     WidgetsBinding.instance.addPostFrameCallback(_initializeTheme);
-    print(
-        '_darkThemeData.bgColorPage： ${_themeData.bgColorPage}，_themeData.dark?.bgColorPage: ${_themeData.dark?.bgColorPage}');
+    debugPrint(
+      '_darkThemeData.bgColorPage： ${_themeData.bgColorPage}，_themeData.dark?.bgColorPage: ${_themeData.dark?.bgColorPage}',
+    );
   }
 
   @override
@@ -138,28 +140,29 @@ class _MyAppState extends State<MyApp> {
     if (PlatformUtil.isWeb) {
       return {
         for (var model in examplePageList)
-          model.name: (context) => model.pageBuilder.call(context, model)
+          model.name: (context) => model.pageBuilder.call(context, model),
       }..putIfAbsent('/', () {
-          // Web 模式下通过路由创建 MyHomePage，需要传入 onThemeChange 回调
-          // 并设置文案代理（与非 Web 模式保持一致）
-          return (context) => Builder(
-                builder: (context) {
-                  setTResourceBuilder(
-                    (context) => delegate..updateContext(context),
-                    needAlwaysBuild: true,
-                  );
-                  return MyHomePage(
-                    title: AppLocalizations.of(context)?.components ??
-                        'TDesign Flutter 组件库',
-                    onThemeChange: (themeData) {
-                      setState(() {
-                        _themeData = themeData;
-                      });
-                    },
-                  );
-                },
-              );
-        });
+        // Web 模式下通过路由创建 MyHomePage，需要传入 onThemeChange 回调
+        // 并设置文案代理（与非 Web 模式保持一致）
+        return (context) => Builder(
+          builder: (context) {
+            setTResourceBuilder(
+              (context) => delegate..updateContext(context),
+              needAlwaysBuild: true,
+            );
+            return MyHomePage(
+              title:
+                  AppLocalizations.of(context)?.components ??
+                  'TDesign Flutter 组件库',
+              onThemeChange: (themeData) {
+                setState(() {
+                  _themeData = themeData;
+                });
+              },
+            );
+          },
+        );
+      });
     } else {
       return const {};
     }

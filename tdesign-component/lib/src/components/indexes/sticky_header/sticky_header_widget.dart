@@ -42,8 +42,7 @@ class StickyHeaderController with ChangeNotifier {
 /// headers are created by a stateless parent widget or by different parent
 /// widgets.
 class DefaultStickyHeaderController extends StatefulWidget {
-  const DefaultStickyHeaderController({Key? key, required this.child})
-    : super(key: key);
+  const DefaultStickyHeaderController({super.key, required this.child});
 
   /// The widget below this widget in the tree.
   ///
@@ -71,7 +70,7 @@ class DefaultStickyHeaderController extends StatefulWidget {
   }
 
   @override
-  _DefaultStickyHeaderControllerState createState() =>
+  State<DefaultStickyHeaderController> createState() =>
       _DefaultStickyHeaderControllerState();
 }
 
@@ -101,11 +100,7 @@ class _DefaultStickyHeaderControllerState
 }
 
 class _StickyHeaderControllerScope extends InheritedWidget {
-  const _StickyHeaderControllerScope({
-    Key? key,
-    this.controller,
-    required Widget child,
-  }) : super(key: key, child: child);
+  const _StickyHeaderControllerScope({this.controller, required super.child});
 
   final StickyHeaderController? controller;
 
@@ -160,14 +155,14 @@ class SliverStickyHeader extends RenderObjectWidget {
   /// If a [StickyHeaderController] is not provided, then the value of
   /// [DefaultStickyHeaderController.of] will be used.
   const SliverStickyHeader({
-    Key? key,
+    super.key,
     this.header,
     this.sliver,
     this.overlapsContent = false,
     this.sticky = true,
     this.pinnedOffset = 0.0,
     this.controller,
-  }) : super(key: key);
+  });
 
   /// Creates a widget that builds the header of a [SliverStickyHeader]
   /// each time its scroll percentage changes.
@@ -255,8 +250,8 @@ class SliverStickyHeaderRenderObjectElement extends RenderObjectElement {
   /// Creates an element that uses the given widget as its configuration.
   SliverStickyHeaderRenderObjectElement(
     /// 用于配置吸顶标题和内容 Sliver 的组件。
-    SliverStickyHeader widget,
-  ) : super(widget);
+    SliverStickyHeader super.widget,
+  );
 
   @override
   SliverStickyHeader get widget => super.widget as SliverStickyHeader;

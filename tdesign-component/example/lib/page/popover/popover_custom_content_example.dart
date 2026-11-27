@@ -1,7 +1,5 @@
-import 'dart:async';
 import 'package:tdesign_flutter/tdesign_flutter.dart';
 import '../../annotation/example_code.dart';
-import '../../base/example_widget.dart';
 
 @ExampleCode(group: 'popover')
 class PopoverCustomContentExample extends StatefulWidget {
@@ -87,10 +85,10 @@ class _PopoverCustomContentExampleState
           return TButton(
             key: const Key('popover-custom-content-trigger'),
             size: TButtonSize.large,
-            child: const Text('自定义内容'),
             variant: TButtonVariant.outline,
             colorPreset: TButtonColorPreset.primary,
             onPressed: controller.open,
+            child: const Text('自定义内容'),
           );
         },
       ),

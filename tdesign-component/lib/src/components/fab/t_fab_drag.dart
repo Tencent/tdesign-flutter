@@ -34,12 +34,12 @@ Widget buildFabPositioned({
   }
   return _FabDraggable(
     layout: layout,
-    child: child,
     dragTapSlop: dragTapSlop,
     onPressed: onPressed,
     onDragStart: onDragStart,
     onDragEnd: onDragEnd,
     magnetAnimationDuration: magnetAnimationDuration,
+    child: child,
   );
 }
 

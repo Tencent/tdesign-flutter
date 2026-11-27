@@ -19,7 +19,7 @@ import 'tabs_item_with_tag_example.dart';
 
 @ExampleCodeManifest()
 class TTabsPage extends StatelessWidget {
-  const TTabsPage({Key? key}) : super(key: key);
+  const TTabsPage({super.key});
 
   @override
   Widget build(BuildContext context) {
