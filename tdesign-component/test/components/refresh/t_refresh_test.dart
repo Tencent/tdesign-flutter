@@ -700,8 +700,8 @@ void main() {
       );
       await tester.pump(const Duration(seconds: 1));
       final gesture = await tester.startGesture(const Offset(200, 150));
-      for (var i = 0; i < 15; i++) {
-        await gesture.moveBy(const Offset(0, 10));
+      for (var i = 0; i < 25; i++) {
+        await gesture.moveBy(const Offset(0, 12));
         await tester.pump(const Duration(milliseconds: 20));
       }
       await gesture.up();
@@ -925,5 +925,53 @@ void main() {
       expect(states, contains(TPullDownRefreshState.timeout));
       await tester.pump(const Duration(seconds: 1));
     }, tags: 'demo');
+  });
+
+  // issue #1239: TPullDownRefresh.builder 提供 physics 的自定义滚动内容
+  group('TPullDownRefresh.builder', () {
+    testWidgets('builder 提供 physics 且刷新回调正常触发', (tester) async {
+      var physicsSeen = false;
+      var refreshCalled = false;
+      await tester.pumpWidget(
+        wrap(
+          SizedBox(
+            height: 300,
+            child: TPullDownRefresh.builder(
+              onRefresh: () async {
+                refreshCalled = true;
+              },
+              builder: (context, physics) {
+                physicsSeen = true;
+                return ListView.builder(
+                  physics: physics,
+                  itemCount: 5,
+                  itemBuilder: (context, index) =>
+                      ListTile(title: Text('builder$index')),
+                );
+              },
+            ),
+          ),
+        ),
+      );
+      await tester.pumpAndSettle();
+      expect(find.text('builder0'), findsOneWidget);
+      expect(find.text('builder4'), findsOneWidget);
+      // physics 已提供给 builder 使用
+      expect(physicsSeen, isTrue);
+      // 下拉触发刷新
+      // 分步下拉触发刷新（对齐仓库既有手势测试的推进模式）
+      final gesture = await tester.startGesture(const Offset(200, 150));
+      for (var i = 0; i < 15; i++) {
+        await gesture.moveBy(const Offset(0, 10));
+        await tester.pump(const Duration(milliseconds: 20));
+      }
+      await gesture.up();
+      for (var i = 0; i < 10; i++) {
+        await tester.pump(const Duration(milliseconds: 100));
+      }
+      expect(refreshCalled, isTrue);
+      // 清理残留计时器
+      await tester.pump(const Duration(seconds: 1));
+    });
   });
 }
