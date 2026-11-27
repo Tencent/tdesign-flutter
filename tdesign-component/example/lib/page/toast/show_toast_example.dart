@@ -11,7 +11,6 @@ class ShowToastExample extends StatelessWidget {
     return SizedBox(
       width: double.infinity,
       child: TButton(
-        child: const Text('显示提示'),
         size: TButtonSize.large,
         variant: TButtonVariant.outline,
         colorPreset: TButtonColorPreset.primary,
@@ -23,6 +22,7 @@ class ShowToastExample extends StatelessWidget {
             toastId: 'manual-close-demo',
           );
         },
+        child: const Text('显示提示'),
       ),
     );
   }

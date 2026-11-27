@@ -97,7 +97,7 @@ class TAvatar extends StatelessWidget {
                 Image(
                   image: image!,
                   fit: fit,
-                  errorBuilder: (_, __, ___) => const SizedBox.shrink(),
+                  errorBuilder: (_, _, _) => const SizedBox.shrink(),
                 ),
             ],
           ),

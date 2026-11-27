@@ -7,7 +7,7 @@ import 'divider_dashed_example.dart';
 
 @ExampleCodeManifest()
 class TDividerPage extends StatelessWidget {
-  const TDividerPage({Key? key}) : super(key: key);
+  const TDividerPage({super.key});
 
   @override
   Widget build(BuildContext context) {

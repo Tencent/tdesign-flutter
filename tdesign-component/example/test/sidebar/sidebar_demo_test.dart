@@ -107,7 +107,7 @@ void main() {
     final model = ExamplePageModel(
       text: '代码资源测试',
       name: 'missing_code',
-      pageBuilder: (_, __) => const SizedBox(),
+      pageBuilder: (_, _) => const SizedBox(),
     )..codePath = 'missing';
     model.apiVisible = true;
 

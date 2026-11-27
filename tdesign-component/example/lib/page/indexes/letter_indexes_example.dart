@@ -22,7 +22,6 @@ Widget _buildLetterIndexes(BuildContext context) {
     width: double.infinity,
     child: TButton(
       key: const ValueKey('indexes-letter-trigger'),
-      child: const TText('字母索引'),
       size: TButtonSize.large,
       colorPreset: TButtonColorPreset.primary,
       variant: TButtonVariant.outline,
@@ -50,6 +49,7 @@ Widget _buildLetterIndexes(BuildContext context) {
           ),
         );
       },
+      child: const TText('字母索引'),
     ),
   );
 }

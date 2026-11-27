@@ -9,8 +9,7 @@ import '../text/t_text_styled.dart';
 import 't_footer_theme_data.dart';
 
 class TFooter extends StatelessWidget {
-  const TFooter({Key? key, this.logo, this.text = '', this.links = const []})
-    : super(key: key);
+  const TFooter({super.key, this.logo, this.text = '', this.links = const []});
 
   /// 品牌内容；可与 [text] 组合展示，非空时不展示 [links]。
   final Widget? logo;

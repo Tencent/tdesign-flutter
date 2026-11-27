@@ -10,7 +10,6 @@ class HorizontalIconToastExample extends StatelessWidget {
     return SizedBox(
       width: double.infinity,
       child: TButton(
-        child: const Text('带横向图标'),
         size: TButtonSize.large,
         variant: TButtonVariant.outline,
         colorPreset: TButtonColorPreset.primary,
@@ -22,6 +21,7 @@ class HorizontalIconToastExample extends StatelessWidget {
             context: context,
           );
         },
+        child: const Text('带横向图标'),
       ),
     );
   }

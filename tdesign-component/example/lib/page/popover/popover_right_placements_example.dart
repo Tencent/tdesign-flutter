@@ -24,7 +24,6 @@ class _PopoverRightPlacementsExampleState
             width: 223,
             child: TButton(
               size: TButtonSize.large,
-              child: const Text('右侧上'),
               variant: TButtonVariant.outline,
               colorPreset: TButtonColorPreset.primary,
               onPressed: () {
@@ -35,6 +34,7 @@ class _PopoverRightPlacementsExampleState
                   colorPreset: theme,
                 );
               },
+              child: const Text('右侧上'),
             ),
           );
         },
@@ -52,7 +52,6 @@ class _PopoverRightPlacementsExampleState
             width: 223,
             child: TButton(
               size: TButtonSize.large,
-              child: const Text('右侧中'),
               variant: TButtonVariant.outline,
               colorPreset: TButtonColorPreset.primary,
               onPressed: () {
@@ -63,6 +62,7 @@ class _PopoverRightPlacementsExampleState
                   colorPreset: theme,
                 );
               },
+              child: const Text('右侧中'),
             ),
           );
         },
@@ -80,7 +80,6 @@ class _PopoverRightPlacementsExampleState
             width: 223,
             child: TButton(
               size: TButtonSize.large,
-              child: const Text('右侧下'),
               variant: TButtonVariant.outline,
               colorPreset: TButtonColorPreset.primary,
               onPressed: () {
@@ -91,6 +90,7 @@ class _PopoverRightPlacementsExampleState
                   colorPreset: theme,
                 );
               },
+              child: const Text('右侧下'),
             ),
           );
         },

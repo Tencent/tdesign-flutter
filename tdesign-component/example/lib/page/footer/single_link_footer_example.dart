@@ -14,9 +14,9 @@ class SingleLinkFooterExample extends StatelessWidget {
 
 Widget _buildSingleLinkFooter(BuildContext context) {
   TLink link(String text) => TLink(
-    child: Text(text),
     colorPreset: TLinkColorPreset.primary,
     onPressed: () {},
+    child: Text(text),
   );
   return Column(
     children: [

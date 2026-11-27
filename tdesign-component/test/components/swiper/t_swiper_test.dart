@@ -1536,7 +1536,7 @@ void main() {
         throwsArgumentError,
       );
       expect(
-        () => TSwiper(itemCount: 0, itemBuilder: (_, __) => const Text('x')),
+        () => TSwiper(itemCount: 0, itemBuilder: (_, _) => const Text('x')),
         throwsAssertionError,
       );
       expect(() => TSwiperController(initialIndex: -1), throwsArgumentError);

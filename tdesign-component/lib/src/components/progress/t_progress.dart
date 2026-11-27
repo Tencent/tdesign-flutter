@@ -458,7 +458,6 @@ class _ProgressIndicator extends StatefulWidget {
   final double indeterminateCircularValue;
 
   const _ProgressIndicator({
-    Key? key,
     this.value,
     required this.status,
     this.label,
@@ -481,7 +480,7 @@ class _ProgressIndicator extends StatefulWidget {
         TProgressDefaults.indeterminateLinearSegmentFraction,
     this.indeterminateCircularValue =
         TProgressDefaults.indeterminateCircularValue,
-  }) : super(key: key);
+  });
 
   @override
   _ProgressIndicatorState createState() => _ProgressIndicatorState();

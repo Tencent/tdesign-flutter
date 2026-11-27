@@ -941,12 +941,12 @@ void main() {
 
     test('TAvatarGroup 拒绝非正 maxCount', () {
       expect(
-        () => TAvatarGroup(children: const [], maxCount: 0),
+        () => TAvatarGroup(maxCount: 0, children: const []),
         throwsAssertionError,
       );
       expect(() => TAvatarThemeData(dimension: 0), throwsAssertionError);
       expect(
-        () => TAvatarGroup(children: const [], spacing: -1),
+        () => TAvatarGroup(spacing: -1, children: const []),
         throwsAssertionError,
       );
       expect(

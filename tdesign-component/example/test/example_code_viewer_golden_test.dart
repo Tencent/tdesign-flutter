@@ -32,7 +32,7 @@ void main() {
           text: _spec.title,
           name: 'fab',
           showAction: true,
-          pageBuilder: (_, __) => const TFabPage(),
+          pageBuilder: (_, _) => const TFabPage(),
         );
         await tester.pumpWidget(
           RepaintBoundary(

@@ -25,7 +25,7 @@ class _CalendarDescribedExampleState extends State<CalendarDescribedExample> {
           value: _describedSingleValue,
           minDate: DateTime(2021, 3),
           maxDate: DateTime(2030, 3, 2),
-          subtitleBuilder: (_, __) => const Text('¥60'),
+          subtitleBuilder: (_, _) => const Text('¥60'),
           onConfirm: (value) => setState(() => _describedSingleValue = value),
         ),
       ),
@@ -99,7 +99,7 @@ class _CalendarDescribedExampleState extends State<CalendarDescribedExample> {
               subtitleBuilder: subtitleBuilder,
               cellBuilder: cellBuilder,
               monthTitleBuilder: showMonthSwitcher
-                  ? (_, __) => const SizedBox.shrink()
+                  ? (_, _) => const SizedBox.shrink()
                   : localized
                   ? (_, month) => TText(
                       '${_englishMonths[month.month - 1]} ${month.year}',

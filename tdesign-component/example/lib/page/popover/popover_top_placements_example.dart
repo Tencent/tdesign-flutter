@@ -22,7 +22,6 @@ class _PopoverTopPlacementsExampleState
         builder: (popoverContext, constraints) {
           return TButton(
             size: TButtonSize.large,
-            child: const Text('顶部左'),
             variant: TButtonVariant.outline,
             colorPreset: TButtonColorPreset.primary,
             onPressed: () {
@@ -33,6 +32,7 @@ class _PopoverTopPlacementsExampleState
                 colorPreset: theme,
               );
             },
+            child: const Text('顶部左'),
           );
         },
       ),
@@ -47,7 +47,6 @@ class _PopoverTopPlacementsExampleState
         builder: (popoverContext, constraints) {
           return TButton(
             size: TButtonSize.large,
-            child: const Text('顶部中'),
             variant: TButtonVariant.outline,
             colorPreset: TButtonColorPreset.primary,
             onPressed: () {
@@ -58,6 +57,7 @@ class _PopoverTopPlacementsExampleState
                 colorPreset: theme,
               );
             },
+            child: const Text('顶部中'),
           );
         },
       ),
@@ -72,7 +72,6 @@ class _PopoverTopPlacementsExampleState
         builder: (popoverContext, constraints) {
           return TButton(
             size: TButtonSize.large,
-            child: const Text('顶部右'),
             variant: TButtonVariant.outline,
             colorPreset: TButtonColorPreset.primary,
             onPressed: () {
@@ -83,6 +82,7 @@ class _PopoverTopPlacementsExampleState
                 colorPreset: theme,
               );
             },
+            child: const Text('顶部右'),
           );
         },
       ),

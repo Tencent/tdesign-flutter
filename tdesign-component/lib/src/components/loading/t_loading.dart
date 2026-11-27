@@ -31,14 +31,13 @@ enum TLoadingIcon {
 
 class TLoading extends StatelessWidget {
   const TLoading({
-    Key? key,
+    super.key,
     this.size = 20,
     this.icon = TLoadingIcon.circle,
     this.text,
     this.customIcon,
     this.refreshWidget,
-  }) : assert(size > 0),
-       super(key: key);
+  }) : assert(size > 0);
 
   /// 加载指示器的外部尺寸，单位为逻辑像素，默认为 20，必须大于 0。
   final double size;

@@ -10,7 +10,6 @@ class FailToastExample extends StatelessWidget {
     return SizedBox(
       width: double.infinity,
       child: TButton(
-        child: const Text('错误提示'),
         size: TButtonSize.large,
         variant: TButtonVariant.outline,
         colorPreset: TButtonColorPreset.primary,
@@ -21,6 +20,7 @@ class FailToastExample extends StatelessWidget {
             context: context,
           );
         },
+        child: const Text('错误提示'),
       ),
     );
   }

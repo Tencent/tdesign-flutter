@@ -56,8 +56,8 @@ class _TestPageState extends State<TestPage> {
       appBar: AppBar(title: const Text('TConfirmDialog测试')),
       body: Center(
         child: TButton(
-          child: const Text('显示问题弹窗'),
           onPressed: _showProblemDialog,
+          child: const Text('显示问题弹窗'),
         ),
       ),
     );

@@ -25,11 +25,11 @@ class ActionSheetScrollGridExample extends StatelessWidget {
     return SizedBox(
       width: double.infinity,
       child: TButton(
-        child: Text(label),
         size: TButtonSize.large,
         variant: TButtonVariant.outline,
         colorPreset: TButtonColorPreset.primary,
         onPressed: onPressed,
+        child: Text(label),
       ),
     );
   }

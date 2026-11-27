@@ -18,7 +18,7 @@ import 'pull_down_refresh_timeout_example.dart';
 
 @ExampleCodeManifest()
 class TPullDownRefreshPage extends StatefulWidget {
-  const TPullDownRefreshPage({Key? key}) : super(key: key);
+  const TPullDownRefreshPage({super.key});
 
   @override
   State<StatefulWidget> createState() => _TPullDownRefreshPageState();

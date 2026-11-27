@@ -46,9 +46,7 @@ void main() {
         double height = 250,
         TIndexesThemeData? theme,
       }) => MaterialApp(
-        theme: ThemeData(
-          extensions: [TThemeData.defaultData(), if (theme != null) theme],
-        ),
+        theme: ThemeData(extensions: [TThemeData.defaultData(), ?theme]),
         home: MediaQuery(
           data: MediaQueryData(textScaler: TextScaler.linear(scale)),
           child: Scaffold(
@@ -64,7 +62,7 @@ void main() {
                         (i) => String.fromCharCode(65 + i),
                       ),
                       activeIndex: active,
-                      onSelect: (_, __) => callbacks++,
+                      onSelect: (_, _) => callbacks++,
                     ),
                   ],
                 ),
@@ -159,7 +157,7 @@ void main() {
                   TIndexesList(
                     indexList: const ['A', 'B'],
                     activeIndex: active,
-                    onSelect: (_, __) {},
+                    onSelect: (_, _) {},
                     builderIndex: custom
                         ? (context, index, _) => Text(
                             'custom $index',

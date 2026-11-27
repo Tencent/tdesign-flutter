@@ -105,7 +105,7 @@ void main() {
             options: TPopupOptions(
               placement: TPopupPlacement.bottom,
               height: 160,
-              headerBuilder: (_, __) =>
+              headerBuilder: (_, _) =>
                   const TPopupHeader(title: TText('仅标题行')),
               child: const SizedBox(height: 60),
             ),
@@ -127,7 +127,7 @@ void main() {
             options: TPopupOptions(
               placement: TPopupPlacement.bottom,
               height: 160,
-              headerBuilder: (_, __) =>
+              headerBuilder: (_, _) =>
                   const TPopupHeader(title: TText('左对齐标题')),
               child: const SizedBox(height: 60),
             ),
@@ -147,7 +147,7 @@ void main() {
             options: TPopupOptions(
               placement: TPopupPlacement.bottom,
               height: 160,
-              headerBuilder: (_, __) =>
+              headerBuilder: (_, _) =>
                   const TPopupHeader(cancelButton: Text('取消')),
               child: const SizedBox(height: 60),
             ),
@@ -168,7 +168,7 @@ void main() {
             options: TPopupOptions(
               placement: TPopupPlacement.bottom,
               height: 160,
-              headerBuilder: (_, __) =>
+              headerBuilder: (_, _) =>
                   const TPopupHeader(confirmButton: Text('确定')),
               child: const SizedBox(height: 60),
             ),
@@ -392,7 +392,7 @@ void main() {
       final custom = TPopupOptions(
         child: const SizedBox(),
         placement: TPopupPlacement.bottom,
-        headerBuilder: (_, __) => const Text('h'),
+        headerBuilder: (_, _) => const Text('h'),
       );
       expect(custom.headerBuilder, isNotNull);
     });
@@ -494,7 +494,7 @@ void main() {
             options: TPopupOptions(
               placement: TPopupPlacement.bottom,
               height: 160,
-              headerBuilder: (_, __) => const TPopupHeader(
+              headerBuilder: (_, _) => const TPopupHeader(
                 cancelButton: Text('自定义左'),
                 confirmButton: Text('自定义右'),
               ),
@@ -861,7 +861,7 @@ void main() {
           color: Color(0x80000000),
         ),
         destroyOnClose: true,
-        onVisibleChange: (_, __) => visibleChanges++,
+        onVisibleChange: (_, _) => visibleChanges++,
       );
       expect(opts.animationDuration, const Duration(milliseconds: 500));
       expect(opts.overlayConfig.showOverlay, isFalse);
@@ -895,7 +895,7 @@ void main() {
 
     test('传自定义 builder → 替换为自定义', () {
       const base = TPopupOptions(child: SizedBox());
-      TPopupHeaderBuilder builder = (_, __) => const Text('t');
+      Widget builder(BuildContext _, VoidCallback _) => const Text('t');
       final next = base.copyWith(headerBuilder: builder);
       expect(next.headerBuilder, same(builder));
     });
@@ -918,7 +918,7 @@ void main() {
     });
 
     test('回调字段同样支持三态', () {
-      hookA(bool _, TPopupTrigger __) {}
+      hookA(bool _, TPopupTrigger _) {}
       final base = TPopupOptions(
         child: const SizedBox(),
         onVisibleChange: hookA,
@@ -942,7 +942,7 @@ void main() {
             options: TPopupOptions(
               placement: TPopupPlacement.bottom,
               height: 160,
-              headerBuilder: (_, __) => const TPopupHeader(title: Text('再开测试')),
+              headerBuilder: (_, _) => const TPopupHeader(title: Text('再开测试')),
               child: const SizedBox(height: 60),
             ),
           );

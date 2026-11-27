@@ -17,7 +17,7 @@ import 't_backtop_theme_data.dart';
 
 class TBackTop extends StatefulWidget {
   const TBackTop({
-    Key? key,
+    super.key,
     this.controller,
     this.onPressed,
     this.onCompleted,
@@ -26,8 +26,7 @@ class TBackTop extends StatefulWidget {
     this.tooltip,
     this.shape = TBackTopShape.circle,
     this.colorPreset = TBackTopColorPreset.light,
-  }) : assert(visibilityOffset >= 0),
-       super(key: key);
+  }) : assert(visibilityOffset >= 0);
 
   /// 页面滚动控制器。
   ///

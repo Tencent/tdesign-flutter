@@ -14,8 +14,8 @@ class TEmpty extends StatelessWidget {
     this.image,
     this.emptyText,
     this.operation,
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   /// 默认图标；image 非空时不显示，显式 null 仍回退为 info_circle_filled。
   final IconData? icon;

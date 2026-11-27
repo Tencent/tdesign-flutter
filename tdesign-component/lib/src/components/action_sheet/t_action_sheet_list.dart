@@ -311,9 +311,9 @@ class TActionSheetList<T> extends StatelessWidget {
     final offset = _badgeOffset(context, badge);
     final badgeLabel = TBadgeFromConfig(
       config: badge,
-      child: label,
       fallbackAlignment: AlignmentDirectional.topEnd,
       fallbackOffset: offset,
+      child: label,
     );
     final overflow = _badgeHorizontalOverflow(context, badge, offset);
     if (overflow == 0) {

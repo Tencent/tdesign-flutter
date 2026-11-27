@@ -15,7 +15,6 @@ class PopoverColorPresetsExample extends StatelessWidget {
         builder: (popoverContext, constraints) {
           return TButton(
             size: TButtonSize.large,
-            child: const Text('深色'),
             variant: TButtonVariant.outline,
             colorPreset: TButtonColorPreset.primary,
             onPressed: () {
@@ -24,6 +23,7 @@ class PopoverColorPresetsExample extends StatelessWidget {
                 content: const Text('弹出气泡内容'),
               );
             },
+            child: const Text('深色'),
           );
         },
       ),
@@ -38,7 +38,6 @@ class PopoverColorPresetsExample extends StatelessWidget {
         builder: (popoverContext, constraints) {
           return TButton(
             size: TButtonSize.large,
-            child: const Text('浅色'),
             variant: TButtonVariant.outline,
             colorPreset: TButtonColorPreset.primary,
             onPressed: () {
@@ -48,6 +47,7 @@ class PopoverColorPresetsExample extends StatelessWidget {
                 colorPreset: TPopoverColorPreset.light,
               );
             },
+            child: const Text('浅色'),
           );
         },
       ),
@@ -62,7 +62,6 @@ class PopoverColorPresetsExample extends StatelessWidget {
         builder: (popoverContext, constraints) {
           return TButton(
             size: TButtonSize.large,
-            child: const Text('品牌色'),
             variant: TButtonVariant.outline,
             colorPreset: TButtonColorPreset.primary,
             onPressed: () {
@@ -72,6 +71,7 @@ class PopoverColorPresetsExample extends StatelessWidget {
                 colorPreset: TPopoverColorPreset.primary,
               );
             },
+            child: const Text('品牌色'),
           );
         },
       ),
@@ -86,7 +86,6 @@ class PopoverColorPresetsExample extends StatelessWidget {
         builder: (popoverContext, constraints) {
           return TButton(
             size: TButtonSize.large,
-            child: const Text('成功色'),
             variant: TButtonVariant.outline,
             colorPreset: TButtonColorPreset.primary,
             onPressed: () {
@@ -96,6 +95,7 @@ class PopoverColorPresetsExample extends StatelessWidget {
                 colorPreset: TPopoverColorPreset.success,
               );
             },
+            child: const Text('成功色'),
           );
         },
       ),
@@ -110,7 +110,6 @@ class PopoverColorPresetsExample extends StatelessWidget {
         builder: (popoverContext, constraints) {
           return TButton(
             size: TButtonSize.large,
-            child: const Text('警告色'),
             variant: TButtonVariant.outline,
             colorPreset: TButtonColorPreset.primary,
             onPressed: () {
@@ -120,6 +119,7 @@ class PopoverColorPresetsExample extends StatelessWidget {
                 colorPreset: TPopoverColorPreset.warning,
               );
             },
+            child: const Text('警告色'),
           );
         },
       ),
@@ -134,7 +134,6 @@ class PopoverColorPresetsExample extends StatelessWidget {
         builder: (popoverContext, constraints) {
           return TButton(
             size: TButtonSize.large,
-            child: const Text('错误色'),
             variant: TButtonVariant.outline,
             colorPreset: TButtonColorPreset.primary,
             onPressed: () {
@@ -144,6 +143,7 @@ class PopoverColorPresetsExample extends StatelessWidget {
                 colorPreset: TPopoverColorPreset.danger,
               );
             },
+            child: const Text('错误色'),
           );
         },
       ),

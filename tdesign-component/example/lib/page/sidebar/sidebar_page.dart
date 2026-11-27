@@ -11,7 +11,7 @@ import 'style_side_bar_example.dart';
 /// TSideBarPage演示
 ///
 class TSideBarPage extends StatefulWidget {
-  const TSideBarPage({Key? key}) : super(key: key);
+  const TSideBarPage({super.key});
 
   @override
   State<StatefulWidget> createState() {

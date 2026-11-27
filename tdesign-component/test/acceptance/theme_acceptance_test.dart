@@ -36,9 +36,9 @@ void main() {
       await tester.pumpWidget(
         wrapWithTheme(
           const TButton(
-            child: Text('Token测试'),
             variant: TButtonVariant.fill,
             colorPreset: TButtonColorPreset.primary,
+            child: Text('Token测试'),
           ),
         ),
       );
@@ -80,9 +80,9 @@ void main() {
       await tester.pumpWidget(
         wrapWithTheme(
           const TButton(
-            child: Text('优先级'),
             variant: TButtonVariant.fill,
             colorPreset: TButtonColorPreset.primary,
+            child: Text('优先级'),
           ),
           buttonTheme: const TButtonThemeData(),
         ),
@@ -102,9 +102,9 @@ void main() {
       await tester.pumpWidget(
         wrapWithTheme(
           const TButton(
-            child: Text('Theme覆盖'),
             variant: TButtonVariant.outline,
             colorPreset: TButtonColorPreset.primary,
+            child: Text('Theme覆盖'),
           ),
           buttonTheme: const TButtonThemeData(),
         ),
@@ -124,8 +124,8 @@ void main() {
       await tester.pumpWidget(
         wrapWithTheme(
           const TButton(
-            child: Text('默认'),
             colorPreset: TButtonColorPreset.primary,
+            child: Text('默认'),
           ),
         ),
       );
@@ -167,9 +167,9 @@ void main() {
                     child: TButton(
                       key: buttonKey,
                       shape: TButtonShape.circle,
-                      child: const Text('merge'),
                       variant: TButtonVariant.fill,
                       colorPreset: TButtonColorPreset.primary,
+                      child: const Text('merge'),
                     ),
                   );
                 },
@@ -200,9 +200,9 @@ void main() {
                       context,
                     ).mergeExtension(const TButtonThemeData()),
                     child: const TButton(
-                      child: Text('实例优先'),
                       variant: TButtonVariant.fill,
                       colorPreset: TButtonColorPreset.primary,
+                      child: Text('实例优先'),
                     ),
                   );
                 },
@@ -227,9 +227,9 @@ void main() {
       await tester.pumpWidget(
         wrapWithTheme(
           const TButton(
-            child: Text('light'),
             variant: TButtonVariant.fill,
             colorPreset: TButtonColorPreset.primary,
+            child: Text('light'),
           ),
         ),
       );
@@ -247,9 +247,9 @@ void main() {
       await tester.pumpWidget(
         wrapWithTheme(
           const TButton(
-            child: Text('custom'),
             variant: TButtonVariant.fill,
             colorPreset: TButtonColorPreset.primary,
+            child: Text('custom'),
           ),
           tThemeData: customTheme,
         ),
@@ -283,7 +283,6 @@ void main() {
       await tester.pumpWidget(
         wrapSwipe(
           TSwipeCell(
-            child: const SizedBox(width: 300, height: 60, child: Text('Row')),
             end: TSwipeCellPanel(
               children: const [
                 TSwipeCellAction(
@@ -293,6 +292,7 @@ void main() {
               ],
             ),
             initialOpenSide: TSwipeCellSide.end,
+            child: const SizedBox(width: 300, height: 60, child: Text('Row')),
           ),
         ),
       );
@@ -309,13 +309,13 @@ void main() {
       await tester.pumpWidget(
         wrapSwipe(
           TSwipeCell(
-            child: const SizedBox(width: 300, height: 60, child: Text('Row')),
             end: TSwipeCellPanel(
               children: const [
                 TSwipeCellAction(label: 'Action', backgroundColor: Colors.red),
               ],
             ),
             initialOpenSide: TSwipeCellSide.end,
+            child: const SizedBox(width: 300, height: 60, child: Text('Row')),
           ),
           swipeTheme: const TSwipeCellThemeData(
             actionPadding: EdgeInsets.all(12),
@@ -335,7 +335,6 @@ void main() {
       await tester.pumpWidget(
         wrapSwipe(
           TSwipeCell(
-            child: const SizedBox(width: 300, height: 60, child: Text('Row')),
             end: TSwipeCellPanel(
               children: const [
                 TSwipeCellAction(
@@ -346,6 +345,7 @@ void main() {
               ],
             ),
             initialOpenSide: TSwipeCellSide.end,
+            child: const SizedBox(width: 300, height: 60, child: Text('Row')),
           ),
         ),
       );
@@ -358,7 +358,6 @@ void main() {
       await tester.pumpWidget(
         wrapSwipe(
           TSwipeCell(
-            child: const SizedBox(width: 300, height: 60, child: Text('Row')),
             end: TSwipeCellPanel(
               children: const [
                 TSwipeCellAction(
@@ -372,6 +371,7 @@ void main() {
               ],
             ),
             initialOpenSide: TSwipeCellSide.end,
+            child: const SizedBox(width: 300, height: 60, child: Text('Row')),
           ),
         ),
       );
@@ -385,13 +385,13 @@ void main() {
       await tester.pumpWidget(
         wrapSwipe(
           TSwipeCell(
-            child: const SizedBox(width: 300, height: 60, child: Text('Row')),
             end: TSwipeCellPanel(
               children: const [
                 TSwipeCellAction(icon: Icons.edit, iconSize: 28),
               ],
             ),
             initialOpenSide: TSwipeCellSide.end,
+            child: const SizedBox(width: 300, height: 60, child: Text('Row')),
           ),
         ),
       );
@@ -404,7 +404,6 @@ void main() {
       await tester.pumpWidget(
         wrapSwipe(
           TSwipeCell(
-            child: const SizedBox(width: 300, height: 60, child: Text('Row')),
             end: TSwipeCellPanel(
               children: const [
                 TSwipeCellAction(
@@ -415,6 +414,7 @@ void main() {
               ],
             ),
             initialOpenSide: TSwipeCellSide.end,
+            child: const SizedBox(width: 300, height: 60, child: Text('Row')),
           ),
         ),
       );
@@ -429,11 +429,11 @@ void main() {
       await tester.pumpWidget(
         wrapSwipe(
           TSwipeCell(
-            child: const SizedBox(width: 300, height: 60, child: Text('Row')),
             end: TSwipeCellPanel(
               children: const [TSwipeCellAction(icon: Icons.edit)],
             ),
             initialOpenSide: TSwipeCellSide.end,
+            child: const SizedBox(width: 300, height: 60, child: Text('Row')),
           ),
         ),
       );

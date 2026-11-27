@@ -36,7 +36,7 @@ Widget _buildBaseSimple(BuildContext context) {
         showTDrawer(
           context,
           placement: TDrawerPlacement.left,
-          drawer: TDrawer(items: items, onItemTap: (_, __) {}),
+          drawer: TDrawer(items: items, onItemTap: (_, _) {}),
         );
       },
       child: const TText('基础抽屉'),

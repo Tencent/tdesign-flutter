@@ -8,7 +8,7 @@ import 'single_link_footer_example.dart';
 
 @ExampleCodeManifest()
 class TFooterPage extends StatelessWidget {
-  const TFooterPage({Key? key}) : super(key: key);
+  const TFooterPage({super.key});
 
   @override
   Widget build(BuildContext context) {

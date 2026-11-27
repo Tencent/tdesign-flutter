@@ -21,7 +21,7 @@ var navBarkey = GlobalKey();
 /// 示例页面控件，建议每个页面返回一个ExampleWidget即可，不用独自封装
 class ExamplePage extends StatefulWidget {
   const ExamplePage({
-    Key? key,
+    super.key,
     this.navBarKey,
     required this.title,
     this.navBarTitle,
@@ -37,8 +37,7 @@ class ExamplePage extends StatefulWidget {
     this.floatingActionButtonLocation,
     this.floatingActionButtonAnimator,
     this.showTestModule = true,
-  }) : assert(children.length > 0, 'children must have at least one'),
-       super(key: key);
+  }) : assert(children.length > 0, 'children must have at least one');
 
   /// 标题
   final String title;
@@ -462,10 +461,7 @@ class _ExamplePageState extends State<ExamplePage> with WidgetsBindingObserver {
         ),
       );
       rightBarItems.add(
-        TNavBarItem(
-          icon: TIcons.code,
-          onTap: _showExampleCode,
-        ),
+        TNavBarItem(icon: TIcons.code, onTap: _showExampleCode),
       );
     }
     if (!PlatformUtil.isWeb) {
@@ -673,8 +669,7 @@ enum CompactExampleSurface {
 
 /// 组件示例
 class ExampleItemWidget extends StatefulWidget {
-  const ExampleItemWidget({required this.data, Key? key, required this.index})
-    : super(key: key);
+  const ExampleItemWidget({required this.data, super.key, required this.index});
 
   final ExampleItem data;
   final int index;
@@ -736,11 +731,11 @@ class _ExampleItemWidgetState extends State<ExampleItemWidget> {
 
 class CodeWrapper extends StatefulWidget {
   const CodeWrapper({
-    Key? key,
+    super.key,
     required this.builder,
     this.methodName,
     this.isCenter = false,
-  }) : super(key: key);
+  });
 
   final WidgetBuilder builder;
 
@@ -842,7 +837,7 @@ class _CodeWrapperState extends State<CodeWrapper> {
     }
     if (methodName.isNotEmpty && exampleCodeGroup.isNotEmpty) {
       debugPrint('example code methodName: $methodName');
-      return 'assets/code/${exampleCodeGroup}.$methodName.txt';
+      return 'assets/code/$exampleCodeGroup.$methodName.txt';
     }
     return '';
   }

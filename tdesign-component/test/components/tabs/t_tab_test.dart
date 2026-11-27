@@ -5,12 +5,7 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 void main() {
   Widget wrapWithTheme(Widget child, {TTabsBarThemeData? tabsBarTheme}) {
     return MaterialApp(
-      theme: ThemeData(
-        extensions: [
-          TThemeData.defaultData(),
-          if (tabsBarTheme != null) tabsBarTheme,
-        ],
-      ),
+      theme: ThemeData(extensions: [TThemeData.defaultData(), ?tabsBarTheme]),
       home: Scaffold(body: child),
     );
   }
@@ -21,7 +16,7 @@ void main() {
       expect(textTab.text, '文本');
       expect(textTab.enabled, isTrue);
 
-      const childTab = TTab(child: Text('自定义'), enabled: false);
+      const childTab = TTab(enabled: false, child: Text('自定义'));
       expect(childTab.child, isA<Text>());
       expect(childTab.enabled, isFalse);
 

@@ -195,7 +195,7 @@ class _ControlColumn extends StatelessWidget {
               const SizedBox(height: 12),
               const Row(
                 children: [
-                  TLink(child: Text('Link'), onPressed: _tapNoop),
+                  TLink(onPressed: _tapNoop, child: Text('Link')),
                   SizedBox(width: 12),
                   TTag('Tag'),
                   SizedBox(width: 12),
@@ -542,7 +542,6 @@ class _ButtonGeometryColumn extends StatelessWidget {
                 size: TButtonSize.extraSmall,
                 variant: TButtonVariant.outline,
                 onPressed: _tapNoop,
-                child: const Text('Press'),
                 style: ButtonStyle(
                   backgroundColor: WidgetStatePropertyAll(
                     token.bgColorContainer,
@@ -557,6 +556,7 @@ class _ButtonGeometryColumn extends StatelessWidget {
                     ),
                   ),
                 ),
+                child: const Text('Press'),
               ),
             ),
           ),

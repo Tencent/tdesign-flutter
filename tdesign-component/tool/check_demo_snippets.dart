@@ -26,7 +26,7 @@ Future<void> main() async {
 
   final errors = <String>[];
   final auditDirectory = Directory(
-    '$_exampleDirectory/lib/.snippet_audit_tmp_${pid}',
+    '$_exampleDirectory/lib/.snippet_audit_tmp_$pid',
   );
   if (auditDirectory.existsSync()) {
     stderr.writeln('Audit directory already exists: ${auditDirectory.path}');

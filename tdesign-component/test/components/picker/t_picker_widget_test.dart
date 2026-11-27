@@ -25,12 +25,7 @@ void main() {
   _textSlotRegression();
   Widget wrap(Widget child, {TPickerThemeData? pickerTheme}) {
     return MaterialApp(
-      theme: ThemeData(
-        extensions: [
-          TThemeData.defaultData(),
-          if (pickerTheme != null) pickerTheme,
-        ],
-      ),
+      theme: ThemeData(extensions: [TThemeData.defaultData(), ?pickerTheme]),
       home: Scaffold(body: child),
     );
   }
@@ -54,12 +49,7 @@ void main() {
     TPopupHandle? handle;
     await tester.pumpWidget(
       MaterialApp(
-        theme: ThemeData(
-          extensions: [
-            TThemeData.defaultData(),
-            if (pickerTheme != null) pickerTheme,
-          ],
-        ),
+        theme: ThemeData(extensions: [TThemeData.defaultData(), ?pickerTheme]),
         home: Builder(
           builder: (context) => TextButton(
             onPressed: () {
@@ -153,7 +143,7 @@ void main() {
                 ),
                 disabled: true,
                 itemHeight: 40,
-                itemBuilder: (_, option, __, ___, ____) =>
+                itemBuilder: (_, option, _, _, _) =>
                     Text('custom-${option.label}'),
               ),
             ),
@@ -509,7 +499,7 @@ void main() {
             itemBuilder: (context, option, column, index, distance) {
               return distance == 0 ? Text('selected-${option.label}') : null;
             },
-            onColumnScrollEnd: (_, __) => ended = true,
+            onColumnScrollEnd: (_, _) => ended = true,
             onChanged: (_) {},
           ),
         ),

@@ -18,9 +18,9 @@ Widget _entranceNoticeBar(BuildContext context) {
       TNoticeBar(
         content: '这是一条普通的通知信息',
         operation: TLink(
-          child: const Text('详情'),
           colorPreset: TLinkColorPreset.primary,
           onPressed: () => TToast.showText('点击了详情', context: context),
+          child: const Text('详情'),
         ),
         suffixIcon: TIcons.chevron_right,
       ),

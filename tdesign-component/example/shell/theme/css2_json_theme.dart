@@ -1,9 +1,11 @@
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:flutter/foundation.dart';
+
 void main() {
   final currentDirectory = Directory.current;
-  print('当前运行文件所在的路径：${currentDirectory.path}');
+  debugPrint('当前运行文件所在的路径：${currentDirectory.path}');
   var basePath = '${currentDirectory.path}/shell/theme/';
   final greenFilePath = '${basePath}green.css';
   final redFilePath = '${basePath}red.css';
@@ -32,11 +34,11 @@ void genThemeJson({required List<ThemeItem> items, required String output}) {
   for (var item in items) {
     final cssFile = File(item.cssPath);
     // final jsonFile = File(jsonFilePath);
-    print('cssFilePath：${item.cssPath}');
+    debugPrint('cssFilePath：${item.cssPath}');
     // print('jsonFilePath：${jsonFilePath}');
 
     if (!cssFile.existsSync()) {
-      print('CSS file does not exist.');
+      debugPrint('CSS file does not exist.');
       return;
     }
 
@@ -123,7 +125,7 @@ Map<dynamic, dynamic> parseCss(String cssContentLight) {
 
             filterMap[newKey] = hexColor.toUpperCase();
           } catch (e) {
-            print('颜色转换错误: $valueString, 错误: $e');
+            debugPrint('颜色转换错误: $valueString, 错误: $e');
             filterMap[newKey] = '#FFFFFFFF'; // 默认白色
           }
         }
@@ -142,9 +144,9 @@ Map<dynamic, dynamic> parseCss(String cssContentLight) {
     }
   });
   // 清除已处理的Key
-  removeKey.forEach((key) {
+  for (var key in removeKey) {
     filterMap.remove(key);
-  });
+  }
   var themeMap = {};
   themeMap['ref'] = refMap;
   themeMap['color'] = filterMap;

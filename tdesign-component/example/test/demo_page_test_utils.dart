@@ -281,7 +281,7 @@ Widget _buildPage(DemoPageTestSpec spec, ThemeMode mode) {
   final model = ExamplePageModel(
     text: spec.title,
     name: spec.name,
-    pageBuilder: (_, __) => spec.page,
+    pageBuilder: (_, _) => spec.page,
   );
   return ChangeNotifierProvider(
     create: (_) => ThemeModeProvider(),
@@ -309,7 +309,7 @@ ThemeData withDemoGoldenFonts(ThemeData theme, DemoPageTestSpec spec) {
     if (spec.useFeedbackGoldenFont) _feedbackGoldenCjkFontFamily,
     _goldenCjkFontFamily,
     if (spec.useAlignmentCjkFont) _alignmentCjkFontFamily,
-    if (spec.supplementalCjkFontFamily case final family?) family,
+    ?spec.supplementalCjkFontFamily,
   ];
   final token = theme.extension<TThemeData>() ?? TThemeData.defaultData();
   final goldenToken = token.copyWith(

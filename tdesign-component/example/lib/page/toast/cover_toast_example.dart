@@ -10,7 +10,6 @@ class CoverToastExample extends StatelessWidget {
     return SizedBox(
       width: double.infinity,
       child: TButton(
-        child: const Text('禁止滑动和点击'),
         size: TButtonSize.large,
         variant: TButtonVariant.outline,
         colorPreset: TButtonColorPreset.primary,
@@ -25,6 +24,7 @@ class CoverToastExample extends StatelessWidget {
             ),
           );
         },
+        child: const Text('禁止滑动和点击'),
       ),
     );
   }

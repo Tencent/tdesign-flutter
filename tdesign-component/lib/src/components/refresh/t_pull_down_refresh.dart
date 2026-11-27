@@ -477,7 +477,7 @@ class _TPullDownRefreshHeader extends Header {
   _TPullDownRefreshHeader({
     required double extent,
     required double triggerDistance,
-    required double maxOverOffset,
+    required super.maxOverOffset,
     required Duration successDuration,
     required this.texts,
     this.onStateChanged,
@@ -492,7 +492,6 @@ class _TPullDownRefreshHeader extends Header {
          // 只在其上方绘制刷新头，不符合 PullDownRefresh 的交互表现。
          clamping: false,
          processedDuration: successDuration,
-         maxOverOffset: maxOverOffset,
        );
 
   @override
@@ -581,12 +580,11 @@ class _TPullDownRefreshHeader extends Header {
 ///
 /// 触底加载只提供事件，不绘制 loading/no-more 文案。
 class _TPullDownRefreshFooter extends Footer {
-  _TPullDownRefreshFooter({required double triggerOffset})
+  _TPullDownRefreshFooter({required super.triggerOffset})
     : super(
         // Footer 默认 infiniteOffset=0（非 null），而 Indicator 断言
         // `infiniteOffset == null || !clamping`，故触底加载 Footer 不能开启
         // clamping，必须置 false，否则运行期抛「Cannot scroll indefinitely when clamping」。
-        triggerOffset: triggerOffset,
         clamping: false,
       );
 

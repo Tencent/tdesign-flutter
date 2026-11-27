@@ -23,7 +23,7 @@ void main() {
             rowIndex: 0,
             colIndex: 0,
             dateList: [model],
-            subtitleBuilder: (_, __) => child,
+            subtitleBuilder: (_, _) => child,
           ),
         );
       },
@@ -48,7 +48,7 @@ void main() {
           rowIndex: 0,
           colIndex: 0,
           dateList: [model],
-          subtitleBuilder: (_, __) => child,
+          subtitleBuilder: (_, _) => child,
         ),
       );
     });
@@ -106,7 +106,7 @@ void main() {
     );
     await tester.pumpWidget(cell());
     final before = tester.getCenter(find.text('18'));
-    await tester.pumpWidget(cell(subtitle: (_, __) => const Text('¥60')));
+    await tester.pumpWidget(cell(subtitle: (_, _) => const Text('¥60')));
     expect(tester.getCenter(find.text('18')), before);
     expect(
       tester.getCenter(find.text('¥60')).dy,

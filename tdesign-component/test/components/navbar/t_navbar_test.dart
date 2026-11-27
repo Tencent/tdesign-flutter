@@ -17,7 +17,7 @@ void main() {
   /// 用 TTheme 包裹以提供基础 Token
   Widget wrapWithTheme(Widget child, {TNavBarThemeData? navBarTheme}) {
     final themeExtensions = <ThemeExtension>[
-      if (navBarTheme != null) navBarTheme,
+      ?navBarTheme,
     ];
     return MaterialApp(
       theme: ThemeData(

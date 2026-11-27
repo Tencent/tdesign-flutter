@@ -789,12 +789,12 @@ class TThemeData extends ThemeExtension<TThemeData> {
       } else {
         Log.e(
           'TTheme',
-          'load theme error ,not found the theme with name:${name}',
+          'load theme error ,not found the theme with name:$name',
         );
         return null;
       }
     } catch (e) {
-      Log.e('TTheme', 'parse theme data error:${e}');
+      Log.e('TTheme', 'parse theme data error:$e');
       return null;
     }
   }
@@ -818,7 +818,7 @@ class TThemeData extends ThemeExtension<TThemeData> {
     bool preferDarkDefaults = false,
   }) {
     var theme = _emptyData(name, preferDarkDefaults: preferDarkDefaults);
-    Map<String, dynamic>? curThemeMap = themeConfig['$name'];
+    Map<String, dynamic>? curThemeMap = themeConfig[name];
     if (curThemeMap?.isEmpty ?? true) {
       return theme;
     }
@@ -866,7 +866,7 @@ class TThemeData extends ThemeExtension<TThemeData> {
     Map<String, dynamic>? shadowMap = curThemeMap?['shadow'];
     shadowMap?.forEach((key, value) {
       var list = <BoxShadow>[];
-      (value as List).forEach((element) {
+      for (var element in (value as List)) {
         list.add(
           BoxShadow(
             color: toColor(element['color']) ?? Colors.black,
@@ -878,7 +878,7 @@ class TThemeData extends ThemeExtension<TThemeData> {
             ),
           ),
         );
-      });
+      }
 
       theme.shadowMap[key] = list;
     });

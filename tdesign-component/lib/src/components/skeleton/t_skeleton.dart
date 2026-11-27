@@ -36,20 +36,18 @@ enum TSkeletonVariant {
 class TSkeleton extends StatefulWidget {
   const TSkeleton({
     super.key,
-    TSkeletonVariant variant = TSkeletonVariant.text,
+    TSkeletonVariant this.variant = TSkeletonVariant.text,
     this.animation,
     this.delay = Duration.zero,
-  }) : variant = variant,
-       layout = null;
+  }) : layout = null;
 
   /// 使用自定义行列布局创建骨架屏。
   const TSkeleton.custom({
     super.key,
-    required TSkeletonLayout layout,
+    required TSkeletonLayout this.layout,
     this.animation,
     this.delay = Duration.zero,
-  }) : layout = layout,
-       variant = null;
+  }) : variant = null;
 
   /// 预设形态；自定义布局时为空。
   final TSkeletonVariant? variant;

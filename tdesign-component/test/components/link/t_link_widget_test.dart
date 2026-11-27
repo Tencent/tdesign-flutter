@@ -56,17 +56,17 @@ void main() {
       wrap(
         const Column(
           children: [
-            TLink(child: Text('基础'), onPressed: _noop),
-            TLink(child: Text('下划线'), underline: true, onPressed: _noop),
+            TLink(onPressed: _noop, child: Text('基础')),
+            TLink(underline: true, onPressed: _noop, child: Text('下划线')),
             TLink(
-              child: Text('前置'),
               prefixIcon: Icon(Icons.arrow_back),
               onPressed: _noop,
+              child: Text('前置'),
             ),
             TLink(
-              child: Text('后置'),
               suffixIcon: Icon(Icons.arrow_forward),
               onPressed: _noop,
+              child: Text('后置'),
             ),
           ],
         ),
@@ -85,12 +85,12 @@ void main() {
           children: [
             for (final scheme in TLinkColorPreset.values)
               TLink(
-                child: Text(scheme.name),
                 colorPreset: scheme,
                 onPressed: _noop,
+                child: Text(scheme.name),
               ),
             for (final size in TLinkSize.values)
-              TLink(child: Text(size.name), size: size, onPressed: _noop),
+              TLink(size: size, onPressed: _noop, child: Text(size.name)),
             const TLink(child: Text('禁用')),
           ],
         ),

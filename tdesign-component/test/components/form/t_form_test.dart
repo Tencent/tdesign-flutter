@@ -33,7 +33,7 @@ void main() {
       theme: ThemeData(
         extensions: [
           TThemeData.defaultData(),
-          if (formTheme != null) formTheme,
+          ?formTheme,
         ],
       ),
       home: Scaffold(body: SizedBox(width: 400, child: child)),
@@ -2074,13 +2074,13 @@ void main() {
                 label: 'Label',
                 help: 'Help',
                 verticalAlignment: alignment,
-                child: const SizedBox(key: fieldKey, height: 40),
                 extra: TButton(
                   key: extraKey,
                   size: TButtonSize.extraSmall,
                   onPressed: () {},
                   child: const Text('Action'),
                 ),
+                child: const SizedBox(key: fieldKey, height: 40),
               ),
             ),
           );

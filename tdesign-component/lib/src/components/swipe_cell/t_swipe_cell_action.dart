@@ -17,7 +17,7 @@ import 't_swipe_cell_theme_data.dart';
 /// [builder] 自行绘制操作项，不能同时传入内置背景、图文或图文样式字段。
 class TSwipeCellAction extends StatelessWidget {
   const TSwipeCellAction({
-    Key? key,
+    super.key,
     this.backgroundColor,
     this.onPressed,
     this.icon,
@@ -41,8 +41,7 @@ class TSwipeCellAction extends StatelessWidget {
                  label == null &&
                  labelStyle == null),
          'builder cannot be combined with built-in action visuals',
-       ),
-       super(key: key);
+       );
 
   /// 当前操作项背景颜色。
   final Color? backgroundColor;

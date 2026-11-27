@@ -9,7 +9,7 @@ import 'operation_empty_example.dart';
 
 @ExampleCodeManifest()
 class TEmptyPage extends StatelessWidget {
-  const TEmptyPage({Key? key}) : super(key: key);
+  const TEmptyPage({super.key});
   @override
   Widget build(BuildContext context) {
     return ExamplePage(

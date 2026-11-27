@@ -7,41 +7,41 @@ class LargeButtonExample extends StatelessWidget {
   const LargeButtonExample({super.key});
   TButton _buildLargeButton(BuildContext context) {
     return TButton(
-      child: const Text('按钮48'),
       size: TButtonSize.large,
       variant: TButtonVariant.fill,
       colorPreset: TButtonColorPreset.primary,
       onPressed: () => _onTap(context),
+      child: const Text('按钮48'),
     );
   }
 
   TButton _buildMediumButton(BuildContext context) {
     return TButton(
-      child: const Text('按钮40'),
       size: TButtonSize.medium,
       variant: TButtonVariant.fill,
       colorPreset: TButtonColorPreset.primary,
       onPressed: () => _onTap(context),
+      child: const Text('按钮40'),
     );
   }
 
   TButton _buildSmallButton(BuildContext context) {
     return TButton(
-      child: const Text('按钮32'),
       size: TButtonSize.small,
       variant: TButtonVariant.fill,
       colorPreset: TButtonColorPreset.primary,
       onPressed: () => _onTap(context),
+      child: const Text('按钮32'),
     );
   }
 
   TButton _buildExtraSmallButton(BuildContext context) {
     return TButton(
-      child: const Text('按钮28'),
       size: TButtonSize.extraSmall,
       variant: TButtonVariant.fill,
       colorPreset: TButtonColorPreset.primary,
       onPressed: () => _onTap(context),
+      child: const Text('按钮28'),
     );
   }
 

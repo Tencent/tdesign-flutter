@@ -38,13 +38,13 @@ class SuffixLinksExample extends StatelessWidget {
     bool disabled = false,
   }) {
     return TLink(
-      child: Text(label),
       colorPreset: colorPreset,
       size: size,
       underline: underline,
       prefixIcon: prefixIcon,
       suffixIcon: suffixIcon,
       onPressed: disabled ? null : () => _onLinkPressed(context),
+      child: Text(label),
     );
   }
 

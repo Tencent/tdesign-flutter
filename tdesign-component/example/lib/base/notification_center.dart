@@ -39,15 +39,14 @@ class TNotification {
   static void postNotification(String eventName, dynamic arguments) {
     if (eventName.isNotEmpty) {
       var handlerArguments = {
-        'eventName':eventName,
-        'argumentsObj':arguments
+        'eventName': eventName,
+        'argumentsObj': arguments,
       };
       _postNotificationCallHandler(handlerArguments);
     }
   }
 
-  static void _postNotificationCallHandler(arguments) {
-
+  static void _postNotificationCallHandler(dynamic arguments) {
     var observerMap = _eventMap[arguments['eventName']];
     observerMap?.forEach((key, observer) {
       try {

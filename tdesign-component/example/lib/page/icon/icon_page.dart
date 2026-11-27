@@ -15,7 +15,7 @@ import 'theme_demo_example.dart';
 
 @ExampleCodeManifest()
 class TIconPage extends StatefulWidget {
-  const TIconPage({Key? key}) : super(key: key);
+  const TIconPage({super.key});
 
   @override
   State<StatefulWidget> createState() => _TIconPageState();

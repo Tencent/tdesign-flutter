@@ -19,7 +19,7 @@ void main() {
             model: ExamplePageModel(
               text: 'Upload 上传',
               name: 'upload',
-              pageBuilder: (_, __) => const TUploadPage(),
+              pageBuilder: (_, _) => const TUploadPage(),
             ),
             child: const TUploadPage(),
           ),

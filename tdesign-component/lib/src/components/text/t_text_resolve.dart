@@ -151,8 +151,8 @@ class TTextResolve {
 // 区分组件默认支柱与显式原生配置，并完整比较默认支柱的排版字段，避免
 // Theme 更新时 RenderParagraph 将新配置误认为旧值；不重建文字或选择状态。
 class _TDefaultSingleLineStrut extends StrutStyle {
-  _TDefaultSingleLineStrut(TextStyle style)
-    : super.fromTextStyle(style, forceStrutHeight: true);
+  _TDefaultSingleLineStrut(super.style)
+    : super.fromTextStyle(forceStrutHeight: true);
 
   @override
   bool operator ==(Object other) =>

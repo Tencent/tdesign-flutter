@@ -7,8 +7,8 @@ class TNonAnimatedExpandIcon extends StatelessWidget {
     required this.isExpanded,
     required this.padding,
     required this.color,
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   final bool isExpanded;
   final EdgeInsetsGeometry padding;

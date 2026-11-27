@@ -14,12 +14,12 @@ import '../../theme/t_theme.dart';
 /// 环形加载指示器。
 class TCircleIndicator extends StatefulWidget {
   const TCircleIndicator({
-    Key? key,
+    super.key,
     this.color,
     this.size = 20.0,
     this.lineWidth = 3.0,
     this.duration = 1000,
-  }) : super(key: key);
+  });
 
   final Color? color;
   final double size;

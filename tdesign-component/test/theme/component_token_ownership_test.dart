@@ -22,7 +22,7 @@ void main() {
     MaterialApp(
       themeAnimationDuration: Duration.zero,
       theme: (dark ? TThemeBuilder.dark(token) : TThemeBuilder.light(token))
-          .copyWith(extensions: [token, if (component != null) component]),
+          .copyWith(extensions: [token, ?component]),
       home: Scaffold(body: Center(child: child)),
     ),
   );
@@ -121,7 +121,7 @@ void main() {
           TTableColumn<String>(
             id: 'value',
             header: const Text('表头'),
-            cellBuilder: (_, value, __) => Text(value),
+            cellBuilder: (_, value, _) => Text(value),
           ),
         ],
         data: const ['单元格'],
@@ -479,7 +479,7 @@ void approvedFixedTokenTests() {
             items: [
               TDropdownMenuItem(
                 label: '排序',
-                panelBuilder: (_, __) => const Text('选项'),
+                panelBuilder: (_, _) => const Text('选项'),
               ),
             ],
           ),
@@ -494,7 +494,7 @@ void approvedFixedTokenTests() {
             items: [
               TDropdownMenuItem(
                 label: '排序',
-                panelBuilder: (_, __) => const Text('选项'),
+                panelBuilder: (_, _) => const Text('选项'),
               ),
             ],
           ),
@@ -577,7 +577,7 @@ void approvedFixedTokenTests() {
               theme:
                   (dark ? TThemeBuilder.dark(data) : TThemeBuilder.light(data))
                       .copyWith(
-                        extensions: [data, if (component != null) component],
+                        extensions: [data, ?component],
                       ),
               home: Scaffold(body: Center(child: entry.$2)),
             ),

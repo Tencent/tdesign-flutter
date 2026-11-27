@@ -10,13 +10,13 @@ class MultipleTextToastExample extends StatelessWidget {
     return SizedBox(
       width: double.infinity,
       child: TButton(
-        child: const Text('多行文字'),
         size: TButtonSize.large,
         variant: TButtonVariant.outline,
         colorPreset: TButtonColorPreset.primary,
         onPressed: () {
           TToast.showText('最多一行展示十个汉字宽度限制最多不超过三行文字', context: context);
         },
+        child: const Text('多行文字'),
       ),
     );
   }

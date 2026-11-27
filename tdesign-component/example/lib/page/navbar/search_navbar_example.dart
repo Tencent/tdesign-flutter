@@ -18,7 +18,7 @@ class SearchNavbarExample extends StatelessWidget {
           variant: TSearchBarVariant.round,
           hintText: '搜索预设文案',
           onChanged: (String text) {
-            print('input：$text');
+            debugPrint('input：$text');
           },
         ),
         actions: [

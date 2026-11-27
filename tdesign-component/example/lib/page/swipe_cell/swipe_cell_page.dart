@@ -9,7 +9,7 @@ import 'swipe_cell_swiper_right_left_cell_example.dart';
 
 @ExampleCodeManifest()
 class TSwipeCellPage extends StatelessWidget {
-  const TSwipeCellPage({Key? key}) : super(key: key);
+  const TSwipeCellPage({super.key});
 
   @override
   Widget build(BuildContext context) {

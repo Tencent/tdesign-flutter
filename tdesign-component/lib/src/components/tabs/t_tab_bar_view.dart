@@ -18,11 +18,11 @@ class TTabsBarView extends StatelessWidget {
   final ScrollPhysics? physics;
 
   const TTabsBarView({
-    Key? key,
+    super.key,
     required this.children,
     this.controller,
     this.physics,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

@@ -69,6 +69,12 @@ class TFabResolve {
     final effectiveShape = TFabDefaults.shapeForText(hasText);
 
     final tButton = TButton(
+      icon: effectiveIcon,
+      size: TFabDefaults.defaultSize,
+      variant: TFabDefaults.defaultVariant,
+      colorPreset: TFabDefaults.defaultColorPreset,
+      shape: effectiveShape,
+      onPressed: onPressed,
       child: hasText
           ? Builder(
               builder: (context) => TTextStyled(
@@ -81,12 +87,6 @@ class TFabResolve {
               ),
             )
           : null,
-      icon: effectiveIcon,
-      size: TFabDefaults.defaultSize,
-      variant: TFabDefaults.defaultVariant,
-      colorPreset: TFabDefaults.defaultColorPreset,
-      shape: effectiveShape,
-      onPressed: onPressed,
     );
 
     // TFab 默认动作层拥有完整规格；完整自定义通过 TFab.child 组合，避免父级

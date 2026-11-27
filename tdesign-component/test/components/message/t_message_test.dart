@@ -103,9 +103,9 @@ void main() {
             content: '带链接',
             duration: null,
             action: TLink(
-              child: const Text('详情'),
               colorPreset: TLinkColorPreset.danger,
               onPressed: () => pressed = true,
+              child: const Text('详情'),
             ),
           ),
         ),

@@ -11,13 +11,13 @@ import 't_indexes_theme_data.dart';
 /// 索引锚点
 class TIndexesAnchor extends StatelessWidget {
   const TIndexesAnchor({
-    Key? key,
+    super.key,
     required this.sticky,
     required this.text,
     required this.capsuleTheme,
     this.builderAnchor,
     required this.activeIndex,
-  }) : super(key: key);
+  });
 
   /// 索引是否吸顶
   final bool sticky;

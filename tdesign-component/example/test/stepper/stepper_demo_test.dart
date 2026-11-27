@@ -143,7 +143,7 @@ void main() {
       final model = ExamplePageModel(
         text: 'Stepper 步进器',
         name: 'stepper',
-        pageBuilder: (_, __) => const TStepperPage(),
+        pageBuilder: (_, _) => const TStepperPage(),
       )..showAction = true;
       await tester.pumpWidget(
         ChangeNotifierProvider(

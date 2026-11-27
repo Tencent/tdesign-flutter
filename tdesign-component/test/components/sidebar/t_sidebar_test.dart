@@ -21,7 +21,7 @@ void main() {
             token.dark ?? token
           else
             token.light,
-          if (sideBarTheme != null) sideBarTheme,
+          ?sideBarTheme,
         ],
       ),
       home: Scaffold(body: child),

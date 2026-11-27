@@ -9,10 +9,7 @@ void main() {
   }) {
     return MaterialApp(
       theme: ThemeData(
-        extensions: [
-          token ?? TThemeData.defaultData(),
-          if (skeletonTheme != null) skeletonTheme,
-        ],
+        extensions: [token ?? TThemeData.defaultData(), ?skeletonTheme],
       ),
       home: Scaffold(body: child),
     );

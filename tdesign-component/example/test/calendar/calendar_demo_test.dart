@@ -54,7 +54,7 @@ void main() {
               home: Scaffold(
                 body: ValueListenableBuilder<bool>(
                   valueListenable: visible,
-                  builder: (_, shown, __) =>
+                  builder: (_, shown, _) =>
                       shown ? example : const SizedBox.shrink(),
                 ),
               ),

@@ -13,7 +13,7 @@ import 'tag_select_variants_example.dart';
 
 @ExampleCodeManifest()
 class TTagPage extends StatefulWidget {
-  const TTagPage({Key? key}) : super(key: key);
+  const TTagPage({super.key});
 
   @override
   State<TTagPage> createState() => _TTagPageState();

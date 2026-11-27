@@ -693,7 +693,7 @@ void main() {
         wrapWithTheme(
           TIndexes(
             indexList: const ['A', 'A'],
-            builderContent: (_, __) => const SizedBox(),
+            builderContent: (_, _) => const SizedBox(),
           ),
         ),
       );
@@ -708,7 +708,7 @@ void main() {
           TIndexes(
             indexList: const ['A', 'B'],
             initialIndex: 'C',
-            builderContent: (_, __) => const SizedBox(),
+            builderContent: (_, _) => const SizedBox(),
           ),
         ),
       );

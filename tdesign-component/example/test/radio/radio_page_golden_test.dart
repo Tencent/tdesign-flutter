@@ -50,7 +50,7 @@ void main() {
             model: ExamplePageModel(
               text: 'Radio 单选框',
               name: 'radio',
-              pageBuilder: (_, __) => const TRadioPage(),
+              pageBuilder: (_, _) => const TRadioPage(),
             ),
             child: const TRadioPage(),
           ),

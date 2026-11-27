@@ -187,11 +187,11 @@ void main() {
       await tester.pumpWidget(
         wrapWithTheme(
           TFab(
+            onPressed: null,
             child: GestureDetector(
               onTap: () => tapped = true,
               child: Container(width: 56, height: 56, color: Colors.grey),
             ),
-            onPressed: null,
           ),
         ),
       );
@@ -897,9 +897,9 @@ void main() {
       await tester.pumpWidget(
         wrapWithTheme(
           TFab(
-            child: Container(width: 56, height: 56, color: Colors.red),
             draggable: TFabDragAxis.all,
             onPressed: () => tapped = true,
+            child: Container(width: 56, height: 56, color: Colors.red),
           ),
         ),
       );
@@ -963,10 +963,10 @@ void main() {
       await tester.pumpWidget(
         wrapWithTheme(
           TFab(
-            child: Container(width: 56, height: 56, color: Colors.red),
             draggable: TFabDragAxis.all,
             magnet: TFabMagnet.right,
             onPressed: () {},
+            child: Container(width: 56, height: 56, color: Colors.red),
           ),
         ),
       );

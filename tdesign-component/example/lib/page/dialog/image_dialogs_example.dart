@@ -119,10 +119,10 @@ class ImageDialogsExample extends StatelessWidget {
       ),
       child: Column(
         children: [
-          if (title != null) title,
+          ?title,
           if (title != null && description != null)
             SizedBox(height: token.spacer),
-          if (description != null) description,
+          ?description,
         ],
       ),
     );

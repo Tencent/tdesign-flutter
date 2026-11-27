@@ -8,7 +8,7 @@ import 'provider/locale_provider.dart';
 import 'provider/theme_mode_provider.dart';
 
 class SettingPage extends StatefulWidget {
-  const SettingPage({Key? key}) : super(key: key);
+  const SettingPage({super.key});
 
   @override
   State<SettingPage> createState() => _SettingPageState();
@@ -135,7 +135,7 @@ class _SettingPageState extends State<SettingPage> {
     );
   }
 
-  enabledModeCheckIcon(ThemeMode mode) {
+  IconData? enabledModeCheckIcon(ThemeMode mode) {
     return themeModeProvider.themeMode == mode ||
             (themeModeProvider.themeMode == ThemeMode.system &&
                 systemBrightness ==

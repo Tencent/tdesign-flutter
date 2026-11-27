@@ -18,14 +18,13 @@ const double _kDefaultIndicatorRadius = 10.0;
 class TCupertinoActivityIndicator extends StatefulWidget {
   /// Creates an iOS-style activity indicator that spins clockwise.
   const TCupertinoActivityIndicator({
-    Key? key,
+    super.key,
     this.animating = true,
     this.radius = _kDefaultIndicatorRadius,
     this.activeColor,
     this.duration = 2000,
   })  : assert(radius > 0.0),
-        progress = 1.0,
-        super(key: key);
+        progress = 1.0;
 
   /// Whether the activity indicator is running its animation.
   ///

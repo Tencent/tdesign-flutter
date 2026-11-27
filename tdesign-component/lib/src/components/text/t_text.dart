@@ -2,7 +2,6 @@ import 'dart:ui' as ui show TextHeightBehavior;
 
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 
 import '../../theme/basic.dart';
 import '../../theme/t_colors.dart';
@@ -194,48 +193,36 @@ class TText extends StatelessWidget {
 class TTextSpan extends TextSpan {
   const TTextSpan({
     /// 透传至 [TextSpan.text]。
-    String? text,
+    super.text,
 
     /// 透传至 [TextSpan.children]。
-    List<InlineSpan>? children,
+    super.children,
 
     /// Span 的唯一文字样式入口；未设置的字段继承父 Span。
-    TextStyle? style,
+    super.style,
 
     /// 透传至 [TextSpan.recognizer]。
-    GestureRecognizer? recognizer,
+    super.recognizer,
 
     /// 透传至 [TextSpan.mouseCursor]。
-    MouseCursor? mouseCursor,
+    super.mouseCursor,
 
     /// 透传至 [TextSpan.onEnter]。
-    PointerEnterEventListener? onEnter,
+    super.onEnter,
 
     /// 透传至 [TextSpan.onExit]。
-    PointerExitEventListener? onExit,
+    super.onExit,
 
     /// 透传至 [TextSpan.semanticsLabel]。
-    String? semanticsLabel,
+    super.semanticsLabel,
 
     /// 透传至 [TextSpan.semanticsIdentifier]。
-    String? semanticsIdentifier,
+    super.semanticsIdentifier,
 
     /// 透传至 [TextSpan.locale]。
-    Locale? locale,
+    super.locale,
 
     /// 透传至 [TextSpan.spellOut]。
-    bool? spellOut,
-  }) : super(
-         text: text,
-         children: children,
-         style: style,
-         recognizer: recognizer,
-         mouseCursor: mouseCursor,
-         onEnter: onEnter,
-         onExit: onExit,
-         semanticsLabel: semanticsLabel,
-         semanticsIdentifier: semanticsIdentifier,
-         locale: locale,
-         spellOut: spellOut,
-       );
+    super.spellOut,
+  });
 }

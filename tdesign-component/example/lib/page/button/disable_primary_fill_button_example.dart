@@ -8,51 +8,51 @@ class DisablePrimaryFillButtonExample extends StatelessWidget {
 
   TButton _buildDisablePrimaryFillButton(BuildContext context) {
     return const TButton(
-      child: Text('填充按钮'),
       size: TButtonSize.large,
       variant: TButtonVariant.fill,
       colorPreset: TButtonColorPreset.primary,
       onPressed: null,
+      child: Text('填充按钮'),
     );
   }
 
   TButton _buildDisableLightFillButton(BuildContext context) {
     return const TButton(
-      child: Text('填充按钮'),
       size: TButtonSize.large,
       variant: TButtonVariant.fill,
       colorPreset: TButtonColorPreset.light,
       onPressed: null,
+      child: Text('填充按钮'),
     );
   }
 
   TButton _buildDisableDefaultFillButton(BuildContext context) {
     return const TButton(
-      child: Text('填充按钮'),
       size: TButtonSize.large,
       variant: TButtonVariant.fill,
       colorPreset: TButtonColorPreset.defaultTheme,
       onPressed: null,
+      child: Text('填充按钮'),
     );
   }
 
   TButton _buildDisablePrimaryStrokeButton(BuildContext context) {
     return const TButton(
-      child: Text('描边按钮'),
       size: TButtonSize.large,
       variant: TButtonVariant.outline,
       colorPreset: TButtonColorPreset.primary,
       onPressed: null,
+      child: Text('描边按钮'),
     );
   }
 
   TButton _buildDisablePrimaryTextButton(BuildContext context) {
     return const TButton(
-      child: Text('文字按钮'),
       size: TButtonSize.large,
       variant: TButtonVariant.text,
       colorPreset: TButtonColorPreset.primary,
       onPressed: null,
+      child: Text('文字按钮'),
     );
   }
 

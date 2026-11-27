@@ -20,7 +20,7 @@ void main() {
           model: ExamplePageModel(
             text: 'Switch 开关',
             name: 'switch',
-            pageBuilder: (_, __) => const TSwitchPage(),
+            pageBuilder: (_, _) => const TSwitchPage(),
           ),
           child: const TSwitchPage(),
         ),

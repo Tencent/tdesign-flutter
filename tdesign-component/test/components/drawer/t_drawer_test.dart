@@ -549,7 +549,7 @@ void main() {
         wrapWithTheme(
           TDrawer(
             items: const [TDrawerItem(title: '菜单1')],
-            onItemClick: (_, __) {},
+            onItemClick: (_, _) {},
           ),
           drawerTheme: const TDrawerThemeData(
             itemBackgroundColor: Colors.white,
@@ -575,7 +575,7 @@ void main() {
           TDrawer(
             enableFeedback: false,
             items: const [TDrawerItem(title: '菜单1')],
-            onItemClick: (_, __) {},
+            onItemClick: (_, _) {},
           ),
           drawerTheme: const TDrawerThemeData(
             itemBackgroundColor: Colors.white,
@@ -642,8 +642,8 @@ void main() {
       await tester.pumpWidget(
         wrapWithTheme(
           const TDrawer(
-            child: Text('自定义', key: childKey),
             items: [TDrawerItem(title: '菜单1')],
+            child: Text('自定义', key: childKey),
           ),
         ),
       );

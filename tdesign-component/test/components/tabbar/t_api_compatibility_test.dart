@@ -16,12 +16,12 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 void _target(TNoticeBarTapTarget _) {}
 void _void() {}
 void _index(int _) {}
-void _item(int _, TDrawerItem __) {}
+void _item(int _, TDrawerItem _) {}
 
 void _otherVoid() {}
 void _otherTarget(TNoticeBarTapTarget _) {}
 void _otherIndex(int _) {}
-void _otherItem(int _, TDrawerItem __) {}
+void _otherItem(int _, TDrawerItem _) {}
 void _string(String _) {}
 void _otherString(String _) {}
 Widget _anchor(
@@ -224,7 +224,7 @@ void main() {
     var calls = 0;
     await tester.pumpWidget(
       MaterialApp(
-        home: Scaffold(body: _LegacyDrawer(callback: (_, __) => calls++)),
+        home: Scaffold(body: _LegacyDrawer(callback: (_, _) => calls++)),
       ),
     );
     await tester.tap(find.text('legacy item'));
@@ -375,7 +375,7 @@ void main() {
         home: Scaffold(
           body: TDrawer(
             items: const [item],
-            onItemClick: (_, __) => oldCalls++,
+            onItemClick: (_, _) => oldCalls++,
             onItemTap: (index, value) {
               indexes.add(index);
               expect(value, same(item));

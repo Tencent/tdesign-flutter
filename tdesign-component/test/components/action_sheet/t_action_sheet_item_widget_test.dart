@@ -10,10 +10,7 @@ void main() {
   }) {
     return MaterialApp(
       theme: ThemeData(
-        extensions: [
-          TThemeData.defaultData(),
-          if (actionSheetTheme != null) actionSheetTheme,
-        ],
+        extensions: [TThemeData.defaultData(), ?actionSheetTheme],
       ),
       home: Scaffold(body: child),
     );

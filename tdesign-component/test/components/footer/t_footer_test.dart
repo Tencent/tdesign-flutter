@@ -18,10 +18,7 @@ void main() {
   Widget app(Widget child, {TFooterThemeData? theme, TThemeData? token}) =>
       MaterialApp(
         theme: ThemeData(
-          extensions: [
-            token ?? TThemeData.defaultData(),
-            if (theme != null) theme,
-          ],
+          extensions: [token ?? TThemeData.defaultData(), ?theme],
         ),
         home: Scaffold(body: child),
       );

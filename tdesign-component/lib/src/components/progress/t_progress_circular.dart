@@ -11,14 +11,13 @@ class TProgressCircular extends StatelessWidget {
   final double circleRadius;
 
   const TProgressCircular({
-    Key? key,
+    super.key,
     required double value,
     required this.strokeWidth,
     required this.backgroundColor,
     required this.valueColor,
     required this.circleRadius,
-  })  : _value = value,
-        super(key: key);
+  }) : _value = value;
 
   double get value => _value.clamp(0.0, 1.0);
 

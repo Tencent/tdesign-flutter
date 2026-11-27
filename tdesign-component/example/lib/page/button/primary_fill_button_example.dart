@@ -7,51 +7,51 @@ class PrimaryFillButtonExample extends StatelessWidget {
   const PrimaryFillButtonExample({super.key});
   TButton _buildPrimaryFillButton(BuildContext context) {
     return TButton(
-      child: const Text('填充按钮'),
       size: TButtonSize.large,
       variant: TButtonVariant.fill,
       colorPreset: TButtonColorPreset.primary,
       onPressed: () => _onTap(context),
+      child: const Text('填充按钮'),
     );
   }
 
   TButton _buildLightFillButton(BuildContext context) {
     return TButton(
-      child: const Text('填充按钮'),
       size: TButtonSize.large,
       variant: TButtonVariant.fill,
       colorPreset: TButtonColorPreset.light,
       onPressed: () => _onTap(context),
+      child: const Text('填充按钮'),
     );
   }
 
   TButton _buildDefaultFillButton(BuildContext context) {
     return TButton(
-      child: const Text('填充按钮'),
       size: TButtonSize.large,
       variant: TButtonVariant.fill,
       colorPreset: TButtonColorPreset.defaultTheme,
       onPressed: () => _onTap(context),
+      child: const Text('填充按钮'),
     );
   }
 
   TButton _buildPrimaryStrokeButton(BuildContext context) {
     return TButton(
-      child: const Text('描边按钮'),
       size: TButtonSize.large,
       variant: TButtonVariant.outline,
       colorPreset: TButtonColorPreset.primary,
       onPressed: () => _onTap(context),
+      child: const Text('描边按钮'),
     );
   }
 
   TButton _buildPrimaryTextButton(BuildContext context) {
     return TButton(
-      child: const Text('文字按钮'),
       size: TButtonSize.large,
       variant: TButtonVariant.text,
       colorPreset: TButtonColorPreset.primary,
       onPressed: () => _onTap(context),
+      child: const Text('文字按钮'),
     );
   }
 

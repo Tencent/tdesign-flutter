@@ -15,7 +15,7 @@ const _avatarItemPadding = EdgeInsets.symmetric(horizontal: 16);
 
 @ExampleCodeManifest()
 class TAvatarPage extends StatefulWidget {
-  const TAvatarPage({Key? key}) : super(key: key);
+  const TAvatarPage({super.key});
 
   @override
   State<StatefulWidget> createState() => _TAvatarPageState();

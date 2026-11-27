@@ -38,7 +38,7 @@ class _PullDownRefreshLoadingTextsExampleState
           children: [
             _demoHint(context, '下拉刷新'),
             const SizedBox(height: 16),
-            _demoHint(context, '自定义提示语刷新次数：${loadingTextsCount}'),
+            _demoHint(context, '自定义提示语刷新次数：$loadingTextsCount'),
           ],
         ),
       ),

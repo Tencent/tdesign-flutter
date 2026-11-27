@@ -79,7 +79,7 @@ abstract interface class _TSwipeCellControllerBinding {
 
 class TSwipeCell extends StatefulWidget {
   const TSwipeCell({
-    Key? key,
+    super.key,
     required this.child,
     this.enabled = true,
     this.start,
@@ -88,7 +88,7 @@ class TSwipeCell extends StatefulWidget {
     this.controller,
     this.initialOpenSide,
     this.closeOnScroll = true,
-  }) : super(key: key);
+  });
 
   /// 要增强为可滑动单元格的内容。
   final Widget child;

@@ -107,7 +107,7 @@ void main() {
 
           Widget nestedNavigator() => ValueListenableBuilder<bool>(
             valueListenable: showNavigator,
-            builder: (_, visible, __) => visible
+            builder: (_, visible, _) => visible
                 ? Navigator(
                     key: navigatorKey,
                     observers: [observer],
@@ -128,7 +128,7 @@ void main() {
                   )
                 : ValueListenableBuilder<bool>(
                     valueListenable: showNavigator,
-                    builder: (_, visible, __) => visible
+                    builder: (_, visible, _) => visible
                         ? MaterialApp(
                             navigatorKey: navigatorKey,
                             navigatorObservers: [observer],
@@ -142,7 +142,7 @@ void main() {
             builder: (_) => Scaffold(
               body: ValueListenableBuilder<bool>(
                 valueListenable: showTab,
-                builder: (_, visible, __) => visible
+                builder: (_, visible, _) => visible
                     ? TTabBar(
                         type: TTabBarType.text,
                         value: 0,

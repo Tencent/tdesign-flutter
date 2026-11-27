@@ -104,7 +104,7 @@ void main() {
                 controller: controller,
                 items: latestItems,
                 onOpened: (_) => opened++,
-                onClosed: (_, __) => closed++,
+                onClosed: (_, _) => closed++,
               ),
             ],
           ),
@@ -236,7 +236,7 @@ void main() {
                         oldToggle = state.toggle;
                         return const Text('old');
                       },
-                      panelBuilder: (_, __) =>
+                      panelBuilder: (_, _) =>
                           const SizedBox(height: 80, child: Text('old panel')),
                     ),
                   ],
@@ -389,7 +389,7 @@ void main() {
                     controller: c,
                     items: [item('latest')],
                     onOpened: (_) => opened++,
-                    onClosed: (_, __) => closed++,
+                    onClosed: (_, _) => closed++,
                   ),
                 ],
               ),
@@ -460,7 +460,7 @@ void main() {
         () => TDropdownMenuItem(
           label: 'invalid',
           flex: 0,
-          panelBuilder: (_, __) => const SizedBox.shrink(),
+          panelBuilder: (_, _) => const SizedBox.shrink(),
         ),
         throwsAssertionError,
       );
@@ -666,7 +666,7 @@ void main() {
                       onTap: state.toggle,
                       child: Text(state.isOpen ? '自定义已打开' : '自定义'),
                     ),
-                    panelBuilder: (_, __) => const Text('custom panel'),
+                    panelBuilder: (_, _) => const Text('custom panel'),
                   ),
                   TDropdownMenuItem.custom(
                     width: 140,
@@ -675,7 +675,7 @@ void main() {
                       onTap: state.toggle,
                       child: Text(state.enabled ? '可用自定义' : '禁用自定义'),
                     ),
-                    panelBuilder: (_, __) =>
+                    panelBuilder: (_, _) =>
                         const Text('disabled custom panel'),
                   ),
                   item('更多'),
@@ -1369,7 +1369,7 @@ void main() {
         wrap(
           TDropdownMenu(
             animationDuration: Duration.zero,
-            onClosed: (_, __) => closed++,
+            onClosed: (_, _) => closed++,
             items: [item('筛选')],
           ),
         ),

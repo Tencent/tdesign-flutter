@@ -558,17 +558,15 @@ void main() {
         await tester.pumpWidget(
           ValueListenableBuilder<TThemeData>(
             valueListenable: tokens,
-            builder: (_, token, __) => ValueListenableBuilder<TToastThemeData?>(
+            builder: (_, token, _) => ValueListenableBuilder<TToastThemeData?>(
               valueListenable: component,
-              builder: (_, config, __) => MaterialApp(
+              builder: (_, config, _) => MaterialApp(
                 themeAnimationDuration: Duration.zero,
                 theme:
                     (dark
                             ? TThemeBuilder.dark(token)
                             : TThemeBuilder.light(token))
-                        .copyWith(
-                          extensions: [token, if (config != null) config],
-                        ),
+                        .copyWith(extensions: [token, ?config]),
                 home: const Scaffold(
                   body: SizedBox(key: ValueKey('fixed-toast-host')),
                 ),
@@ -703,7 +701,7 @@ void main() {
                 themeAnimationDuration: Duration.zero,
                 theme: TThemeBuilder.light(
                   token,
-                ).copyWith(extensions: [token, if (custom != null) custom]),
+                ).copyWith(extensions: [token, ?custom]),
                 home: Scaffold(
                   body: Builder(
                     key: const Key('toast_host'),

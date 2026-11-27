@@ -1,6 +1,7 @@
 import 'package:extended_nested_scroll_view/extended_nested_scroll_view.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:tdesign_flutter/tdesign_flutter.dart';
+
 // import 'package:xjy_study/utils/color_util.dart';
 
 class StudyDetail extends StatefulWidget {
@@ -25,11 +26,6 @@ class _StudyDetailState extends State with SingleTickerProviderStateMixin {
   void didChangeDependencies() {
     super.didChangeDependencies();
     _getQueryParams();
-  }
-
-  @override
-  void dispose() {
-    super.dispose();
   }
 
   void _getQueryParams() {
