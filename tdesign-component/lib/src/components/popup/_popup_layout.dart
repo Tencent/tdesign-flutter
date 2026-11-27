@@ -2,12 +2,22 @@ part of 't_popup.dart';
 
 /// 按 [TPopupPlacement] 计算 [Positioned]；center 仅居中，尺寸由 [PopupShell] 约束。
 class PopupLayout {
-  PopupLayout({required this.placement, this.inset, this.width, this.height});
+  PopupLayout({
+    required this.placement,
+    this.inset,
+    this.width,
+    this.height,
+    this.fullHeightSides = false,
+  });
 
   final TPopupPlacement placement;
   final TPopupInset? inset;
   final double? width;
   final double? height;
+
+  /// left / right 面板是否按全高铺满。为 true 时垂直方向只由显式 inset
+  /// 决定，不再叠加系统安全区（issue #1225）。
+  final bool fullHeightSides;
 
   /// top / bottom 未指定高度时的默认面板高度。
   static const double defaultEdgeHeight = 240;
@@ -75,9 +85,13 @@ class PopupLayout {
         final inset = this.inset is TPopupLeftInset
             ? this.inset as TPopupLeftInset
             : null;
+        // fullHeightSides 为 true 时按全高铺满，垂直方向只由显式 inset
+        // 决定，避免面板上下出现空白条（issue #1225）。
+        final verticalTop = fullHeightSides ? 0.0 : safePadding.top;
+        final verticalBottom = fullHeightSides ? 0.0 : safePadding.bottom;
         return Positioned(
-          top: (inset?.top ?? 0) + safePadding.top,
-          bottom: (inset?.bottom ?? 0) + safePadding.bottom,
+          top: (inset?.top ?? 0) + verticalTop,
+          bottom: (inset?.bottom ?? 0) + verticalBottom,
           left: safePadding.left,
           width: clampWidth(width ?? defaultDrawerWidth),
           child: child,
@@ -86,9 +100,12 @@ class PopupLayout {
         final inset = this.inset is TPopupRightInset
             ? this.inset as TPopupRightInset
             : null;
+        // 与 left 一致。
+        final verticalTop = fullHeightSides ? 0.0 : safePadding.top;
+        final verticalBottom = fullHeightSides ? 0.0 : safePadding.bottom;
         return Positioned(
-          top: (inset?.top ?? 0) + safePadding.top,
-          bottom: (inset?.bottom ?? 0) + safePadding.bottom,
+          top: (inset?.top ?? 0) + verticalTop,
+          bottom: (inset?.bottom ?? 0) + verticalBottom,
           right: safePadding.right,
           width: clampWidth(width ?? defaultDrawerWidth),
           child: child,
