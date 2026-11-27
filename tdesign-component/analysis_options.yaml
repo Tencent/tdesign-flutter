@@ -6,6 +6,7 @@ analyzer:
     # 全仓迁移属于长线工程；先降级该 info，避免 --fatal-infos 卡死所有 PR 的 CI。
     deprecated_member_use: ignore
     depend_on_referenced_packages: ignore
+    overridden_fields: ignore
   exclude:
     - build/**
     - android/**

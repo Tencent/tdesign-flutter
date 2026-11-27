@@ -70,11 +70,11 @@ class DefaultStickyHeaderController extends StatefulWidget {
   }
 
   @override
-  DefaultStickyHeaderControllerState createState() =>
-      DefaultStickyHeaderControllerState();
+  State<DefaultStickyHeaderController> createState() =>
+      _DefaultStickyHeaderControllerState();
 }
 
-class DefaultStickyHeaderControllerState
+class _DefaultStickyHeaderControllerState
     extends State<DefaultStickyHeaderController> {
   StickyHeaderController? _controller;
 

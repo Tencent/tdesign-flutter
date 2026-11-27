@@ -179,10 +179,10 @@ class TCalendar extends StatefulWidget {
   List<DateTime> get _value => _normalizeDateList(value);
 
   @override
-  TCalendarState createState() => TCalendarState();
+  State<TCalendar> createState() => _TCalendarState();
 }
 
-class TCalendarState extends State<TCalendar> {
+class _TCalendarState extends State<TCalendar> {
   late List<String> weekdayNames;
   late List<String> monthNames;
   late TCalendarStyle _style;

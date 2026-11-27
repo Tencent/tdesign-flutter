@@ -122,17 +122,17 @@ MediaQuery 缩放、方向及已有段落环境行为保持。
 
 | 名称 | 类型 | 默认值 | 说明 | 必传 |
 | --- | --- | --- | --- | --- |
-| children | - | - | 透传至 `TextSpan.children`。 | 否 |
-| locale | - | - | 透传至 `TextSpan.locale`。 | 否 |
-| mouseCursor | - | - | 透传至 `TextSpan.mouseCursor`。 | 否 |
-| onEnter | - | - | 透传至 `TextSpan.onEnter`。 | 否 |
-| onExit | - | - | 透传至 `TextSpan.onExit`。 | 否 |
-| recognizer | - | - | 透传至 `TextSpan.recognizer`。 | 否 |
-| semanticsIdentifier | - | - | 透传至 `TextSpan.semanticsIdentifier`。 | 否 |
-| semanticsLabel | - | - | 透传至 `TextSpan.semanticsLabel`。 | 否 |
-| spellOut | - | - | 透传至 `TextSpan.spellOut`。 | 否 |
-| style | - | - | Span 的唯一文字样式入口；未设置的字段继承父 Span。 | 否 |
-| text | - | - | 透传至 `TextSpan.text`。 | 否 |
+| children | List&lt;InlineSpan&gt;? | - | 透传至 `TextSpan.children`。 | 否 |
+| locale | Locale? | - | 透传至 `TextSpan.locale`。 | 否 |
+| mouseCursor | MouseCursor? | - | 透传至 `TextSpan.mouseCursor`。 | 否 |
+| onEnter | void Function(PointerEnterEvent)? | - | 透传至 `TextSpan.onEnter`。 | 否 |
+| onExit | void Function(PointerExitEvent)? | - | 透传至 `TextSpan.onExit`。 | 否 |
+| recognizer | GestureRecognizer? | - | 透传至 `TextSpan.recognizer`。 | 否 |
+| semanticsIdentifier | String? | - | 透传至 `TextSpan.semanticsIdentifier`。 | 否 |
+| semanticsLabel | String? | - | 透传至 `TextSpan.semanticsLabel`。 | 否 |
+| spellOut | bool? | - | 透传至 `TextSpan.spellOut`。 | 否 |
+| style | TextStyle? | - | Span 的唯一文字样式入口；未设置的字段继承父 Span。 | 否 |
+| text | String? | - | 透传至 `TextSpan.text`。 | 否 |
 
 
 ### TFontLoader

@@ -87,10 +87,10 @@ class TIndexes extends StatefulWidget {
   builderIndex;
 
   @override
-  TIndexesState createState() => TIndexesState();
+  State<TIndexes> createState() => _TIndexesState();
 }
 
-class TIndexesState extends State<TIndexes> {
+class _TIndexesState extends State<TIndexes> {
   late List<String> _indexList;
   late ValueNotifier<String> _activeIndex;
   late ScrollController _scrollController;

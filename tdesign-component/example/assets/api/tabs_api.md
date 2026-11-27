@@ -29,11 +29,11 @@ TDesign 选项卡标签，通常作为 `TTabsBar.tabs` 的子项使用。
 
 | 名称 | 类型 | 默认值 | 说明 | 必传 |
 | --- | --- | --- | --- | --- |
-| child | - | - | - | 否 |
+| child | Widget? | - | 自定义标签内容；与 text 互斥，可与 icon 同时提供。 | 否 |
 | enabled | bool | true | 是否可用，默认 true。 设为 `false` 时使用禁用样式，并由 `TTabsBar` 阻止该项被选择。 Material `TabBar` 不识别此扩展字段；直接将 `TTab` 用作 Material `TabBar.tabs` 时只会呈现禁用样式，不会阻止其切换。 | 否 |
-| icon | - | - | - | 否 |
+| icon | Widget? | - | 图标 | 否 |
 | key | Key? | - | 组件标识，用于区分或保留组件状态。 | 否 |
-| text | - | - | - | 否 |
+| text | String? | - | 文字内容；与 child 互斥，text、child、icon 至少提供一个。 | 否 |
 
 
 ### TTabsBarView
