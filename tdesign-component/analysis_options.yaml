@@ -39,15 +39,9 @@ analyzer:
 
 linter:
   rules:
-    - avoid_unnecessary_containers
-    - no_logic_in_create_state
     - prefer_const_constructors
-    - prefer_const_constructors_in_immutables
     - prefer_const_declarations
     - prefer_const_literals_to_create_immutables
-    - sized_box_for_whitespace
-    - use_full_hex_values_for_flutter_colors
-    - use_key_in_widget_constructors
     # 1.11 使用大驼峰命名类型
     - camel_case_types
     # 1.11 使用大驼峰命名拓展
@@ -116,8 +110,6 @@ linter:
     - avoid_slow_async_io
     # 避免参数名和类型名相同
     - avoid_types_as_parameter_names
-    # 避免使用web的库在flutter终端中，这些库不支持在web以外使用
-    - avoid_web_libraries_in_flutter
     # dart.async.StreamSubscription的实例不用时，触发cancel方法
     - cancel_subscriptions
     # dart.core.Sink的实例不用时,触发cancel方法
