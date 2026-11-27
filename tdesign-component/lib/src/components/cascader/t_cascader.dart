@@ -51,6 +51,9 @@ class TCascader extends StatefulWidget {
     this.variant = TCascaderVariant.tab,
     this.placeholder = '请选择',
     this.subtitles = const [],
+    this.multiple = false,
+    this.multipleValue = const [],
+    this.onMultipleChanged,
   });
 
   /// 根选项列表。
@@ -75,6 +78,23 @@ class TCascader extends StatefulWidget {
   /// 组件按内部活动层级读取对应内容，因此调用方无需持有或控制层级状态；
   /// 列表没有对应层级或对应内容为空时不显示次级标题。
   final List<String> subtitles;
+
+  /// 是否开启多选；开启后叶子选项切换勾选而不推进关闭，[value] 仍驱动层级导航。
+  ///
+  /// 与 Web 端 Cascader 的 multiple 语义一致；默认 false 保持单选行为不变。
+  final bool multiple;
+
+  /// 多选受控路径集合；每个元素是一条根到叶的完整路径。
+  ///
+  /// 仅在 [multiple] 为 true 时生效；路径顺序保持调用方回写顺序，
+  /// 组件内部不重排、不去重（重复路径由调用方维护时勾选态以包含判断为准）。
+  final List<List<Object?>> multipleValue;
+
+  /// 多选勾选变化回调；为 null 时多选面板禁用勾选交互。
+  ///
+  /// 点击叶子选项时发出新的路径集合（原集合追加或移除被点击路径后的完整列表），
+  /// 调用方需回写 [multipleValue] 才会更新勾选态。
+  final ValueChanged<List<List<Object?>>>? onMultipleChanged;
 
   @override
   State<TCascader> createState() => _TCascaderState();
@@ -143,6 +163,47 @@ class _TCascaderState extends State<TCascader> {
       options = selected.first.children;
     }
     return options;
+  }
+
+  /// 当前活动层级到根的完整路径前缀（用于构造叶子完整路径）。
+  List<Object?> _pathPrefix() => widget.value.take(_activeLevel).toList();
+
+  bool _isMultiplePathSelected(List<Object?> path) {
+    for (final selected in widget.multipleValue) {
+      if (_pathsEqual(selected, path)) {
+        return true;
+      }
+    }
+    return false;
+  }
+
+  List<List<Object?>> _toggleMultiplePath(List<Object?> path) {
+    if (_isMultiplePathSelected(path)) {
+      return [
+        for (final selected in widget.multipleValue)
+          if (!_pathsEqual(selected, path)) selected,
+      ];
+    }
+    return [...widget.multipleValue, path];
+  }
+
+  bool _pathsEqual(List<Object?> a, List<Object?> b) {
+    if (a.length != b.length) {
+      return false;
+    }
+    for (var index = 0; index < a.length; index++) {
+      if (!_valueEquals(a[index], b[index])) {
+        return false;
+      }
+    }
+    return true;
+  }
+
+  bool _valueEquals(Object? a, Object? b) {
+    if (identical(a, b)) {
+      return true;
+    }
+    return a == b;
   }
 
   @override
@@ -500,22 +561,40 @@ class _TCascaderState extends State<TCascader> {
         _activeLevel < widget.value.length &&
         widget.value[_activeLevel] == option.value;
     final isLeaf = option.children.isEmpty;
+    final multipleLeaf = widget.multiple && isLeaf;
+    final leafPath = multipleLeaf ? [..._pathPrefix(), option.value] : null;
+    final checked = multipleLeaf && _isMultiplePathSelected(leafPath!);
+    final multipleEnabled = multipleLeaf && widget.onMultipleChanged != null;
     final iconColor = context.tTheme.brandColor;
     final indicatorColor = theme?.indicatorColor ?? iconColor;
-    final onTap = !_enabled || option.disabled
-        ? null
-        : () {
-            final next = <Object?>[
-              ...widget.value.take(_activeLevel),
-              option.value,
-            ];
-            widget.onChanged?.call(List.unmodifiable(next));
-          };
+    final VoidCallback? onTap;
+    if (!_enabled || option.disabled) {
+      onTap = null;
+    } else if (multipleLeaf) {
+      onTap = multipleEnabled
+          ? () {
+              final next = _toggleMultiplePath(leafPath!);
+              widget.onMultipleChanged?.call(
+                List.unmodifiable(
+                  next.map(List<Object?>.unmodifiable),
+                ),
+              );
+            }
+          : null;
+    } else {
+      onTap = () {
+        final next = <Object?>[
+          ...widget.value.take(_activeLevel),
+          option.value,
+        ];
+        widget.onChanged?.call(List.unmodifiable(next));
+      };
+    }
     return _CascaderPressable(
       pressableKey: ValueKey('cascader-${option.value}'),
       onTap: onTap,
-      enabled: _enabled && !option.disabled,
-      selected: selected,
+      enabled: onTap != null,
+      selected: multipleLeaf ? checked : selected,
       child: ConstrainedBox(
         constraints: const BoxConstraints(minHeight: 56),
         child: Padding(
@@ -528,12 +607,22 @@ class _TCascaderState extends State<TCascader> {
                   centerLeading: true,
                   style: option.disabled
                       ? styles.disabled
-                      : selected
+                      : (multipleLeaf ? checked : selected)
                       ? styles.selected
                       : styles.normal,
                 ),
               ),
-              if (isLeaf && selected)
+              if (multipleLeaf)
+                TIcon(
+                  checked ? TIcons.check_circle_filled : TIcons.circle,
+                  size: 22,
+                  color: option.disabled
+                      ? context.tTheme.brandColorDisabled
+                      : checked
+                      ? indicatorColor
+                      : context.tTheme.componentBorder,
+                )
+              else if (isLeaf && selected)
                 TIcon(TIcons.check, size: 24, color: indicatorColor)
               else if (!isLeaf)
                 TIcon(

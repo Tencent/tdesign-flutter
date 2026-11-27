@@ -9,7 +9,10 @@
 | 名称 | 类型 | 默认值 | 说明 | 必传 |
 | --- | --- | --- | --- | --- |
 | key | Key? | - | 组件标识，用于区分或保留组件状态。 | 否 |
+| multiple | bool | false | 是否开启多选；开启后叶子选项切换勾选而不推进关闭，`value` 仍驱动层级导航。 与 Web 端 Cascader 的 multiple 语义一致；默认 false 保持单选行为不变。 | 否 |
+| multipleValue | List&lt;List&lt;Object?&gt;&gt; | const [] | 多选受控路径集合；每个元素是一条根到叶的完整路径。 仅在 `multiple` 为 true 时生效；路径顺序保持调用方回写顺序， 组件内部不重排、不去重（重复路径由调用方维护时勾选态以包含判断为准）。 | 否 |
 | onChanged | ValueChanged&lt;List&lt;Object?&gt;&gt;? | - | 选中路径变化回调；为 null 时禁用。 分支点击只发出候选路径；调用方需回写 `value`，组件才会推进活动层级。 | 否 |
+| onMultipleChanged | ValueChanged&lt;List&lt;List&lt;Object?&gt;&gt;&gt;? | - | 多选勾选变化回调；为 null 时多选面板禁用勾选交互。 点击叶子选项时发出新的路径集合（原集合追加或移除被点击路径后的完整列表）， 调用方需回写 `multipleValue` 才会更新勾选态。 | 否 |
 | options | List&lt;TCascaderOption&gt; | - | 根选项列表。 | 是 |
 | placeholder | String | '请选择' | 未选择层级的占位文案。 | 否 |
 | subtitles | List&lt;String&gt; | const [] | 各层级的次级标题。 组件按内部活动层级读取对应内容，因此调用方无需持有或控制层级状态； 列表没有对应层级或对应内容为空时不显示次级标题。 | 否 |
