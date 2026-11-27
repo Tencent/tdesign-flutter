@@ -5,6 +5,26 @@ toc: false
 docClass: timeline
 ---
 
+## 🌈 1.1.1 `2026-11-27`
+
+### 🚀 Features
+
+- `TBackTop`: 添加淡入淡出动画 @runoob-coder ([#1207](https://github.com/Tencent/tdesign-flutter/pull/1207))
+
+### 🐞 Bug Fixes
+
+- `Icon`: 修复 usb 原始图标的图层 ID 错误,在深色模式下渲染错误 @uyarn ([icons#298](https://github.com/Tencent/tdesign-icons/pull/298))
+- `TCircleIndicator`: 修复反复挂载和移除圆形加载指示器时，曲线动画未完整释放的问题。 @jiechic ([#1249](https://github.com/Tencent/tdesign-flutter/pull/1249))
+- `TMessage`: 修复跑马灯短文本仍滚动、非循环文字消失以及禁用动画时显示异常的问题 @lnuxe ([#1238](https://github.com/Tencent/tdesign-flutter/pull/1238))
+- `TRangeSlider`: 修复触摸点击或拖动结束后游标光圈残留的问题 @runoob-coder ([#1211](https://github.com/Tencent/tdesign-flutter/pull/1211))
+- `TRate`: 修复关闭评分提示或移除评分组件时，浮层条目未完整释放的问题。 @jiechic ([#1249](https://github.com/Tencent/tdesign-flutter/pull/1249))
+- `TTabsBar`: 修复可滚动标签栏在有限宽度下随内容收缩的问题，使背景和底部分割线铺满可用宽度。 @lnuxe ([#1250](https://github.com/Tencent/tdesign-flutter/pull/1250))
+- `TTheme`: 修复复制 TDesign 主题后暗色模式误用浅色 Token 的问题。 @lnuxe ([#1236](https://github.com/Tencent/tdesign-flutter/pull/1236))
+
+### 🚧 Others
+
+- Revert "chore(release): release 1.1.1" @RSS1102 ([#1263](https://github.com/Tencent/tdesign-flutter/pull/1263))
+
 ## 🌈 1.1.0 `2026-10-28`
 
 ### 🚨 Breaking Changes
