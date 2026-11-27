@@ -20,7 +20,7 @@ class TableHorizontalScrollExample extends StatelessWidget {
             id: 'title${index + 1}',
             header: const Text('标题'),
             width: 160,
-            cellBuilder: (_, row, __) => Text(row[index]),
+            cellBuilder: (_, row, _) => Text(row[index]),
           ),
       ],
       data: _rows,

@@ -84,10 +84,10 @@ class _PopoverCustomContentExampleState
           return TButton(
             key: const Key('popover-custom-content-trigger'),
             size: TButtonSize.large,
-            child: const Text('自定义内容'),
             variant: TButtonVariant.outline,
             colorPreset: TButtonColorPreset.primary,
             onPressed: controller.open,
+            child: const Text('自定义内容'),
           );
         },
       ),

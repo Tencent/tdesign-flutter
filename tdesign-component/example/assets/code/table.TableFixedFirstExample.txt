@@ -18,14 +18,14 @@ class TableFixedFirstExample extends StatelessWidget {
           header: const Text('标题'),
           width: 94,
           fixed: TTableColumnFixed.left,
-          cellBuilder: (_, row, __) => Text(row.first),
+          cellBuilder: (_, row, _) => Text(row.first),
         ),
         for (var index = 2; index <= 6; index++)
           TTableColumn<List<String>>(
             id: 'title$index',
             header: const Text('标题'),
             width: 120,
-            cellBuilder: (_, __, ___) => const Text('内容'),
+            cellBuilder: (_, _, _) => const Text('内容'),
           ),
       ],
       data: _rows,
