@@ -1,6 +1,5 @@
 import 'dart:ui' as ui show TextHeightBehavior;
 
-import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 
 import '../../theme/basic.dart';

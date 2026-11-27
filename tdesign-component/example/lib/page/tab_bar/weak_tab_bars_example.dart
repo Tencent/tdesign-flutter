@@ -1,6 +1,5 @@
 import 'package:tdesign_flutter/tdesign_flutter.dart';
 import '../../annotation/example_code.dart';
-import '../../base/example_widget.dart';
 
 @ExampleCode(group: 'tabBar')
 class WeakTabBarsExample extends StatefulWidget {
@@ -38,10 +37,8 @@ class _WeakTabBarsExampleState extends State<WeakTabBarsExample> {
               tabText: labels[index],
               badge: badges[index],
               notifyOnReselect: true,
-              onTap: () => TToast.showText(
-                '第 ${index + 1} 项',
-                context: context,
-              ),
+              onTap: () =>
+                  TToast.showText('第 ${index + 1} 项', context: context),
             ),
           ),
         ),
@@ -59,10 +56,8 @@ class _WeakTabBarsExampleState extends State<WeakTabBarsExample> {
               unselectedIcon: Icon(icons[index]),
               badge: badges[index],
               notifyOnReselect: true,
-              onTap: () => TToast.showText(
-                '第 ${index + 1} 项',
-                context: context,
-              ),
+              onTap: () =>
+                  TToast.showText('第 ${index + 1} 项', context: context),
             ),
           ),
         ),
@@ -81,10 +76,8 @@ class _WeakTabBarsExampleState extends State<WeakTabBarsExample> {
               unselectedIcon: Icon(icons[index]),
               badge: badges[index],
               notifyOnReselect: true,
-              onTap: () => TToast.showText(
-                '第 ${index + 1} 项',
-                context: context,
-              ),
+              onTap: () =>
+                  TToast.showText('第 ${index + 1} 项', context: context),
             ),
           ),
         ),

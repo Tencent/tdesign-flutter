@@ -2,32 +2,9 @@ include: package:flutter_lints/flutter.yaml
 
 analyzer:
   errors:
-    unused_import: ignore
     # Flutter 3.50 将 material/cupertino 收敛到独立包并标记旧入口为废弃，
     # 全仓迁移属于长线工程；先降级该 info，避免 --fatal-infos 卡死所有 PR 的 CI。
     deprecated_member_use: ignore
-    camel_case_types: warning
-    missing_required_param: error
-    missing_return: warning
-    non_constant_identifier_names: warning
-    constant_identifier_names: warning
-    library_names: warning
-    file_names: warning
-    avoid_setters_without_getters: warning
-    avoid_return_types_on_setters: warning
-    avoid_returning_null: warning
-    avoid_returning_this: warning
-    prefer_generic_function_type_aliases: warning
-    always_declare_return_types: warning
-    hash_and_equals: warning
-    avoid_equals_and_hash_code_on_mutable_classes: warning
-    avoid_null_checks_in_equality_operators: warning
-    prefer_interpolation_to_compose_strings: warning
-    prefer_collection_literals: warning
-    prefer_is_empty: warning
-    unnecessary_lambdas: warning
-    prefer_equal_for_default_values: warning
-    avoid_init_to_null: warning
     depend_on_referenced_packages: ignore
     implementation_imports: ignore
   exclude:

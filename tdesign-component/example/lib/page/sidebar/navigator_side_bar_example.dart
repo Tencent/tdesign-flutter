@@ -1,4 +1,3 @@
-import 'dart:math';
 import 'package:tdesign_flutter/tdesign_flutter.dart';
 import '../../annotation/example_code.dart';
 import 'sidebar_anchor_example.dart';

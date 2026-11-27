@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:tdesign_flutter/tdesign_flutter.dart' hide TIcons;
 import 'package:tdesign_flutter_icons/tdesign_flutter_icons.dart';
-import 'package:url_launcher/link.dart';
 
 import '../../annotation/example_code.dart';
 import '../../base/example_widget.dart';

@@ -1,7 +1,5 @@
 import 'package:tdesign_flutter/tdesign_flutter.dart';
 
-import 'api_widget.dart';
-
 typedef PageBuilder =
     Widget Function(BuildContext context, ExamplePageModel model);
 

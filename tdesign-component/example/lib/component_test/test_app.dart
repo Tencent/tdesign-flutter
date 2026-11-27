@@ -2,7 +2,6 @@ import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:tdesign_flutter/tdesign_flutter.dart';
 
-import 'tabbar_test.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
