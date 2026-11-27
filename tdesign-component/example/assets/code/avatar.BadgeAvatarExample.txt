@@ -9,9 +9,9 @@ class BadgeAvatarExample extends StatelessWidget {
       // spacing: 32,
       children: [
         Theme(
-          data: Theme.of(context).mergeExtension(
-            const TBadgeThemeData(dotSize: 10),
-          ),
+          data: Theme.of(
+            context,
+          ).mergeExtension(const TBadgeThemeData(dotSize: 10)),
           child: const TBadge(
             variant: TBadgeVariant.dot,
             offset: Offset(-1, 2),

@@ -35,10 +35,8 @@ class _WeakTabBarsExampleState extends State<WeakTabBarsExample> {
               tabText: labels[index],
               badge: badges[index],
               notifyOnReselect: true,
-              onTap: () => TToast.showText(
-                '第 ${index + 1} 项',
-                context: context,
-              ),
+              onTap: () =>
+                  TToast.showText('第 ${index + 1} 项', context: context),
             ),
           ),
         ),
@@ -56,10 +54,8 @@ class _WeakTabBarsExampleState extends State<WeakTabBarsExample> {
               unselectedIcon: Icon(icons[index]),
               badge: badges[index],
               notifyOnReselect: true,
-              onTap: () => TToast.showText(
-                '第 ${index + 1} 项',
-                context: context,
-              ),
+              onTap: () =>
+                  TToast.showText('第 ${index + 1} 项', context: context),
             ),
           ),
         ),
@@ -78,10 +74,8 @@ class _WeakTabBarsExampleState extends State<WeakTabBarsExample> {
               unselectedIcon: Icon(icons[index]),
               badge: badges[index],
               notifyOnReselect: true,
-              onTap: () => TToast.showText(
-                '第 ${index + 1} 项',
-                context: context,
-              ),
+              onTap: () =>
+                  TToast.showText('第 ${index + 1} 项', context: context),
             ),
           ),
         ),

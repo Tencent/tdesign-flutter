@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart' show CupertinoIcons;
 import 'package:tdesign_flutter/tdesign_flutter.dart';
 
 class RateSizeExample extends StatelessWidget {
