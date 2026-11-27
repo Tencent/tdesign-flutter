@@ -704,6 +704,7 @@ void main() {
       pressedColor: Colors.black,
       padding: EdgeInsets.all(2),
       cardBorderRadius: BorderRadius.all(Radius.circular(2)),
+      cardBackgroundColor: Colors.amber,
       cardPadding: EdgeInsets.all(3),
       titlePadding: EdgeInsets.all(4),
       showBottomBorder: true,
@@ -724,6 +725,7 @@ void main() {
       pressedColor: Colors.white,
       padding: EdgeInsets.all(4),
       cardBorderRadius: BorderRadius.all(Radius.circular(4)),
+      cardBackgroundColor: Colors.cyan,
       cardPadding: EdgeInsets.all(5),
       titlePadding: EdgeInsets.all(6),
       showBottomBorder: false,
@@ -749,6 +751,7 @@ void main() {
       expect(value.pressedColor, isNotNull);
       expect(value.padding, const EdgeInsets.all(3));
       expect(value.cardBorderRadius, BorderRadius.circular(3));
+      expect(value.cardBackgroundColor, isNotNull);
       expect(value.cardPadding, const EdgeInsets.all(4));
       expect(value.titlePadding, const EdgeInsets.all(5));
       expect(value.showBottomBorder, false);
@@ -756,6 +759,73 @@ void main() {
       expect(value.groupBordered, false);
       expect(value.showLastDivider, true);
       expect(a.lerp(null, 0.5), same(a));
+    });
+
+    testWidgets('card 变体容器自身绘制背景色，默认 cardPadding 下圆角仍可见', (
+      tester,
+    ) async {
+      const radius = BorderRadius.all(Radius.circular(12));
+      BoxDecoration decorationOf() {
+        final container = tester
+            .widgetList<Container>(find.byType(Container))
+            .firstWhere((c) {
+              final d = c.decoration;
+              return d is BoxDecoration && d.borderRadius != null;
+            });
+        return container.decoration! as BoxDecoration;
+      }
+
+      for (final padding in <EdgeInsetsGeometry?>[null, EdgeInsets.zero]) {
+        await tester.pumpWidget(
+          app(
+            const TCellGroup(
+              variant: TCellGroupVariant.card,
+              cells: [TCell(title: Text('a'))],
+            ),
+            cellTheme: TCellThemeData(
+              cardBackgroundColor: Colors.amber,
+              cardPadding: padding,
+              cardBorderRadius: radius,
+            ),
+          ),
+        );
+        final decoration = decorationOf();
+        expect(decoration.color, Colors.amber);
+        expect(decoration.borderRadius, radius);
+      }
+
+      // 通栏形态不受影响，容器仍然不绘制背景
+      await tester.pumpWidget(
+        app(const TCellGroup(cells: [TCell(title: Text('a'))])),
+      );
+      final standard = tester
+          .widgetList<Container>(find.byType(Container))
+          .firstWhere((c) {
+            final d = c.decoration;
+            return d is BoxDecoration && d.color != null;
+          });
+      expect((standard.decoration! as BoxDecoration).color, isNot(Colors.amber));
+    });
+
+    testWidgets('未配置 cardBackgroundColor 时回退到 bgColorContainer', (tester) async {
+      await tester.pumpWidget(
+        app(
+          const TCellGroup(
+            variant: TCellGroupVariant.card,
+            cells: [TCell(title: Text('a'))],
+          ),
+        ),
+      );
+      final container = tester
+          .widgetList<Container>(find.byType(Container))
+          .firstWhere((c) {
+            final d = c.decoration;
+            return d is BoxDecoration && d.borderRadius != null;
+          });
+      expect(
+        (container.decoration! as BoxDecoration).color,
+        TThemeData.defaultData().bgColorContainer,
+      );
     });
   });
 }

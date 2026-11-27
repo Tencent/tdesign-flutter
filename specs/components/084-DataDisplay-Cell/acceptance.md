@@ -28,3 +28,23 @@ dart run tool/check_component_coverage.dart cell
 ## 证据边界
 
 原始日志位于本地工作区外层 `review-artifacts/pr1162-fix/`，不随仓库提交；本目录保存可随代码追溯的结果和指纹摘要。未执行公开 Demo 测试、设备人工走查或 Golden；未检查最终远端 CI。上述结果仅证明指定候选的自动化布局/交互、静态分析及生产行覆盖率，不代表全部视觉或发布门禁通过。后续事项集中在 tasks.md。
+
+## 2026-11-27 卡片形态背景色（issue #1240）
+
+证据文件位于仓库根 `.evidence/`（`cell_radius_before.png` / `cell_radius_after.png` / `cell_radius_compare.png` / `cell_radius_before_after.gif`），为 iPhone 17 Pro 模拟器（iOS 26.1，逻辑 402x874）实机截图。
+
+| 检查 | 结果 |
+| --- | --- |
+| Cell 组件测试（`flutter test test/components/cell`） | 43 项通过 |
+| 严格 analyze（`flutter analyze lib/src/components/cell test/components/cell`） | 零诊断 |
+| card golden（light / dark） | 更新后通过，diff 7.66% / 7.70%，bbox (16,16)-(359,146) 限于卡片矩形 |
+| 全量测试（macOS） | 4418 通过 / 97 失败；同环境未打补丁基线 4414 通过 / 99 失败，失败项均为 macOS 与 Linux golden 基线差异，补丁净消除 2 项 |
+
+实机截图判读（`cardRadius=12`、默认 `cardPadding`，取卡片左上角首行白色像素的 x 坐标）：
+
+| 版本 | 卡片顶部起 x | 判读 |
+| --- | --- | --- |
+| 修复前 | 恒为 96（16 逻辑像素内缩处的直角） | 圆角不可见 |
+| 修复后 | 72 → 64 → 59 → 56 → 53 → 51 → 50 收敛 | 12 逻辑像素圆弧 |
+
+未覆盖：真实设备（非模拟器）、Linux golden CI 之外的平台、深浅色以外的主题模式。

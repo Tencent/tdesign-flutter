@@ -37,3 +37,27 @@
 - 原有 Cell 测试保持通过，双版本严格分析与组件生产覆盖率满足仓库门禁。
 
 实际结果见 [acceptance.md](./acceptance.md)，未覆盖事项见 [tasks.md](./tasks.md)。
+
+## 卡片形态背景色
+
+本节记录 issue #1240 的修复：`TCellGroup(variant: TCellGroupVariant.card)` 的圆角一直画在组容器上，但容器本身没有 `color`；视觉上的白色来自内部 `TCell` 的 `bgColorContainer`。`cardPadding` 默认左右各 16 逻辑像素，使单元格内缩，圆角弧线所在的这一圈没有任何可填充的内容，表现即为"改了 `cardBorderRadius` 但看不到圆角"；把 `cardPadding` 设为 `EdgeInsets.zero` 时单元格贴到边缘，圆角才有可见的裁切结果。圆角与裁切本身从未失效，缺的是容器自身背景。
+
+|
+配置 | 组容器装饰 | 圆角可见性 |
+| --- | --- | --- |
+| 卡片形态，未配置 `cardBackgroundColor` | `color` 回退 `bgColorContainer` Token，`borderRadius` 取 `resolveCardBorderRadius`，`clipBehavior: Clip.antiAlias` | 默认 `cardPadding` 下可见 |
+| 卡片形态，配置 `cardBackgroundColor` | `color` 取配置值，其余同上 | 可见 |
+| 通栏形态 | 不绘制 `color` | 与修复前一致 |
+
+`cardPadding` 的语义收敛为卡片内边距，不再隐含"决定圆角是否可见"。圆角解析、裁切与分隔线职责不变。
+
+## 兼容性（卡片背景色）
+
+仅新增可选字段 `TCellThemeData.cardBackgroundColor`，未配置时行为在通栏形态下与修复前完全一致；卡片形态在默认 `cardPadding` 下由"边缘露出页面底色"变为"完整白色卡片"，属于缺陷修复，同步更新 `cell_card_default_radius_light.png` / `cell_card_default_radius_dark.png` 两张 golden，差异区域限于卡片矩形内部。
+
+## 验收标准（卡片背景色）
+
+- 卡片形态容器自身绘制背景色，默认 `cardPadding` 与 `EdgeInsets.zero` 下 `borderRadius` 均来自主题；
+- 通栏形态容器不绘制 `color`，行为不变；
+- 未配置 `cardBackgroundColor` 时回退 `bgColorContainer` Token；
+- iOS 真机（模拟器）截图对比：默认 `cardPadding` 下圆角可见。

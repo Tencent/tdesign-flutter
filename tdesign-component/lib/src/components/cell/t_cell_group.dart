@@ -78,6 +78,9 @@ class TCellGroup extends StatelessWidget {
             ? theme?.cardPadding ?? const EdgeInsets.symmetric(horizontal: 16)
             : null,
         decoration: BoxDecoration(
+          color: resolvedVariant == TCellGroupVariant.card
+              ? theme?.cardBackgroundColor ?? context.tTheme.bgColorContainer
+              : null,
           border: theme?.groupBordered ?? false
               ? Border.all(
                   color:

@@ -42,6 +42,7 @@ class TCellThemeData extends ThemeExtension<TCellThemeData> {
     this.pressedColor,
     this.padding,
     this.cardBorderRadius,
+    this.cardBackgroundColor,
     this.cardPadding,
     this.titlePadding,
     this.showBottomBorder,
@@ -97,6 +98,14 @@ class TCellThemeData extends ThemeExtension<TCellThemeData> {
   /// 仅卡片形态生效，未配置时使用 radiusLarge Token，默认 9 逻辑像素。
   final BorderRadius? cardBorderRadius;
 
+  /// 卡片组背景色。
+  /// 仅卡片形态生效，未配置时使用 bgColorContainer Token。
+  ///
+  /// 卡片圆角绘制在组容器上，而未配置该字段时容器是透明的，
+  /// 可见的白色来自内部单元格，单元格一旦被 [cardPadding] 内缩，
+  /// 圆角弧线所在的这圈区域就没有可填充的内容，视觉上等同于圆角失效。
+  final Color? cardBackgroundColor;
+
   /// 卡片组内边距。
   /// 仅卡片形态生效，未配置时为左右 16 逻辑像素。
   final EdgeInsetsGeometry? cardPadding;
@@ -139,6 +148,7 @@ class TCellThemeData extends ThemeExtension<TCellThemeData> {
     Color? pressedColor,
     EdgeInsetsGeometry? padding,
     BorderRadius? cardBorderRadius,
+    Color? cardBackgroundColor,
     EdgeInsetsGeometry? cardPadding,
     EdgeInsetsGeometry? titlePadding,
     bool? showBottomBorder,
@@ -160,6 +170,7 @@ class TCellThemeData extends ThemeExtension<TCellThemeData> {
         pressedColor: pressedColor ?? this.pressedColor,
         padding: padding ?? this.padding,
         cardBorderRadius: cardBorderRadius ?? this.cardBorderRadius,
+        cardBackgroundColor: cardBackgroundColor ?? this.cardBackgroundColor,
         cardPadding: cardPadding ?? this.cardPadding,
         titlePadding: titlePadding ?? this.titlePadding,
         showBottomBorder: showBottomBorder ?? this.showBottomBorder,
@@ -215,6 +226,11 @@ class TCellThemeData extends ThemeExtension<TCellThemeData> {
           other.cardBorderRadius,
           t,
         ),
+        cardBackgroundColor: Color.lerp(
+          cardBackgroundColor,
+          other.cardBackgroundColor,
+          t,
+        ),
         cardPadding: EdgeInsetsGeometry.lerp(cardPadding, other.cardPadding, t),
         titlePadding: EdgeInsetsGeometry.lerp(
           titlePadding,
@@ -256,6 +272,7 @@ class _InterpolatedTCellThemeData extends TCellThemeData {
          pressedColor: data.pressedColor,
          padding: data.padding,
          cardBorderRadius: data.cardBorderRadius,
+         cardBackgroundColor: data.cardBackgroundColor,
          cardPadding: data.cardPadding,
          titlePadding: data.titlePadding,
          showBottomBorder: data.showBottomBorder,
