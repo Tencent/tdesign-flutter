@@ -11,10 +11,10 @@ class TThemeColorsPage extends StatefulWidget {
   const TThemeColorsPage({super.key});
 
   @override
-  _TThemeColorsPageState createState() => _TThemeColorsPageState();
+  TThemeColorsPageState createState() => TThemeColorsPageState();
 }
 
-class _TThemeColorsPageState extends State<TThemeColorsPage> {
+class TThemeColorsPageState extends State<TThemeColorsPage> {
   final brandMap = <String, Color>{};
   final errorMap = <String, Color>{};
   final warningMap = <String, Color>{};

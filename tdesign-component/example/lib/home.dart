@@ -21,10 +21,10 @@ class MyHomePage extends StatefulWidget {
   final OnThemeChange? onThemeChange;
 
   @override
-  _MyHomePageState createState() => _MyHomePageState();
+  MyHomePageState createState() => MyHomePageState();
 }
 
-class _MyHomePageState extends State<MyHomePage> {
+class MyHomePageState extends State<MyHomePage> {
   bool useConch = false;
   String searchText = '';
   FocusNode focusNode = FocusNode();

@@ -23,10 +23,10 @@ class TPointBounceIndicator extends StatefulWidget {
   final AnimationController? controller;
 
   @override
-  _TPointBounceIndicatorState createState() => _TPointBounceIndicatorState();
+  TPointBounceIndicatorState createState() => TPointBounceIndicatorState();
 }
 
-class _TPointBounceIndicatorState extends State<TPointBounceIndicator>
+class TPointBounceIndicatorState extends State<TPointBounceIndicator>
     with SingleTickerProviderStateMixin {
   late AnimationController _controller;
 

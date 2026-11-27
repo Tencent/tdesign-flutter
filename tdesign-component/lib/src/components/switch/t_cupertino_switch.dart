@@ -384,7 +384,7 @@ class _TCupertinoSwitchState extends State<TCupertinoSwitch>
 class _TCupertinoSwitchRenderObjectWidget
     extends SingleChildRenderObjectWidget {
   const _TCupertinoSwitchRenderObjectWidget({
-    required this.child,
+    required super.child,
     required this.value,
     required this.activeColor,
     required this.trackColor,
@@ -403,12 +403,6 @@ class _TCupertinoSwitchRenderObjectWidget
   final _TCupertinoSwitchState state;
   final TextDirection textDirection;
   final double trackWidth;
-
-  /// The widget below this widget in the tree.
-  ///
-  /// {@macro flutter.widgets.ProxyWidget.child}
-  @override
-  final Widget? child;
 
   @override
   _RenderTDCupertinoSwitch createRenderObject(BuildContext context) {

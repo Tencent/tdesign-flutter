@@ -13,18 +13,6 @@ import 't_tab_bar_theme_data.dart';
 ///
 /// TDesign 选项卡标签，通常作为 `TTabsBar.tabs` 的子项使用。
 class TTab extends Tab {
-  /// 文字内容；与 child 互斥，text、child、icon 至少提供一个。
-  @override
-  final String? text;
-
-  /// 自定义标签内容；与 text 互斥，可与 icon 同时提供。
-  @override
-  final Widget? child;
-
-  /// 图标
-  @override
-  final Widget? icon;
-
   /// 是否可用，默认 true。
   ///
   /// 设为 `false` 时使用禁用样式，并由 `TTabsBar` 阻止该项被选择。
@@ -32,16 +20,20 @@ class TTab extends Tab {
   /// [TabBar.tabs] 时只会呈现禁用样式，不会阻止其切换。
   final bool enabled;
 
-  const TTab({super.key, this.text, this.child, this.icon, this.enabled = true})
-    : assert(
-        text == null || child == null,
-        'text and child cannot be provided together.',
-      ),
-      assert(
-        text != null || child != null || icon != null,
-        'Provide text, child, or icon.',
-      ),
-      super(text: text, child: child, icon: icon);
+  const TTab({
+    super.key,
+    super.text,
+    super.child,
+    super.icon,
+    this.enabled = true,
+  }) : assert(
+         text == null || child == null,
+         'text and child cannot be provided together.',
+       ),
+       assert(
+         text != null || child != null || icon != null,
+         'Provide text, child, or icon.',
+       );
 
   @override
   Size get preferredSize => const Size.fromHeight(46);

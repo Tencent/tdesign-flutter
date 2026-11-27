@@ -27,10 +27,10 @@ class TCircleIndicator extends StatefulWidget {
   final int duration;
 
   @override
-  _TCircleIndicatorState createState() => _TCircleIndicatorState();
+  TCircleIndicatorState createState() => TCircleIndicatorState();
 }
 
-class _TCircleIndicatorState extends State<TCircleIndicator>
+class TCircleIndicatorState extends State<TCircleIndicator>
     with SingleTickerProviderStateMixin {
   late AnimationController _controller;
   late CurvedAnimation _curve;

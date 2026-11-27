@@ -35,7 +35,7 @@ bool _isTimeOnlyColumns(List<DateTimeColumn> columns) =>
     !columns.contains(DateTimeColumn.day);
 
 /// 在 `[start, end]` 与当前选中上下文下，计算单列的 min/max（闭区间）。
-_IntRange columnBounds(
+_IntRange _columnBounds(
   DateTimeColumn col, {
   required DateTime current,
   required DateTime? start,
@@ -183,7 +183,7 @@ DateTime normalizePickerDateTime(
   var s = result.second;
 
   for (final col in columns) {
-    final bounds = columnBounds(
+    final bounds = _columnBounds(
       col,
       current: result,
       start: start,

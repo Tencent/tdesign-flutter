@@ -1,6 +1,8 @@
 analyzer:
   errors:
     implementation_imports: error
+  exclude:
+    - build/**
 linter:
   rules:
     - implementation_imports

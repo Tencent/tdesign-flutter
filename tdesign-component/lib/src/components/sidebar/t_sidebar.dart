@@ -132,7 +132,7 @@ class _TSideBarState extends State<TSideBar> {
         return;
       }
       final resolved = item.key.currentContext;
-      if (resolved != null) {
+      if (resolved != null && resolved.mounted) {
         await _ensureItemVisible(resolved);
         return;
       }
