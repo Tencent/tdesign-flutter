@@ -670,6 +670,7 @@
         "names": [
           "TImage",
           "TImageShape",
+          "TImageCacheMode",
           "TImageThemeData"
         ],
         "getComments": true
